@@ -418,8 +418,8 @@
                                                 <img src="{{ asset('assets/img/d3.jpg') }}" class="rounded-circle profile-image" alt="avatar">
                                             </span>
                                             <div class="info-card-text">
-                                                <div class="fs-lg text-truncate text-truncate-lg">Prajak Sopha</div>
-                                                <span class="text-truncate text-truncate-md opacity-80">dalorkee@gmail.com</span>
+                                                <div class="fs-lg text-truncate text-truncate-lg">{{ auth()->user()->name }}</div>
+                                                <span class="text-truncate text-truncate-md opacity-80">{{ auth()->user()->email }}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -440,10 +440,13 @@
                                         <i class="float-right text-muted fw-n">Ctrl + P</i>
                                     </a>
                                     <div class="dropdown-divider m-0"></div>
-                                    <a class="dropdown-item fw-500 pt-3 pb-3" href="page_login-alt.html">
-                                        <span data-i18n="drpdwn.page-logout">Logout</span>
-                                        <span class="float-right fw-n">&commat;pj</span>
-                                    </a>
+                                    <form method="POST" action="{{ route('logout') }}">
+                                        @csrf
+                                        <a class="dropdown-item fw-500 pt-3 pb-3" href="href="{{ route('logout') }}" onclick="event.preventDefault(); this.closest('form').submit();">
+                                            <span data-i18n="drpdwn.page-logout">Logout</span>
+                                            <span class="float-right fw-n">&commat;{{ auth()->user()->username }}</span>
+                                        </a>
+                                    </form>
                                 </div>
                             </div>
                         </div>
