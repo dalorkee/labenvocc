@@ -1,0 +1,1 @@
+<a href="#"><img src="{{ URL::asset('assets/img/moph-logo-120x120.svg') }}" alt="logo" /></a>
