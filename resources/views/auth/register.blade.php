@@ -1,691 +1,581 @@
 @extends('layouts.guest.index')
 @section('style')
+
+      <!-- Telephone Input CSS -->
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/12.1.2/css/intlTelInput.css'>
+      <!-- Icons CSS -->
+    <link rel='stylesheet' href='https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css'>
+      <!-- Nice Select CSS -->
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/css/nice-select.min.css'>
 <style>
-li.active > a.hidden-xs {
- display: block!important;
+.multi_step_form {
+  background: #f6f9fb;
+  display: block;
+  overflow-x: hidden;
 }
-li.active > a.visible-xs {
-	display: none!important; 
-}
-.nav-pills.nav-wizard > li {
+.multi_step_form #msform {
+  text-align: center;
   position: relative;
-  overflow: visible;
-  border-right: 10px solid #fff;
-  border-left: 10px solid #fff;
+  padding-top: 50px;
+  min-height: 820px;
+    height: auto;
+  max-width: 820px;
+  margin: 0 auto;
+  background: #ffffff;
+  z-index: 1;
 }
-.nav-pills.nav-wizard > li:first-child {
-  border-left: 0;
+.multi_step_form #msform .tittle {
+  text-align: center;
+  padding-bottom: 55px;
 }
-.nav-pills.nav-wizard > li:first-child a {
-  border-radius: 5px 0 0 5px;
+.multi_step_form #msform .tittle h2 {
+  font: 500 24px/35px "Roboto", sans-serif;
+  color: #3f4553;
+  padding-bottom: 5px;
 }
-.nav-pills.nav-wizard > li:last-child {
-  border-right: 0;
+.multi_step_form #msform .tittle p {
+  font: 400 16px/28px "Roboto", sans-serif;
+  color: #5f6771;
 }
-.nav-pills.nav-wizard > li:last-child a {
-  border-radius: 0 5px 5px 0;
+.multi_step_form #msform fieldset {
+  border: 0;
+  padding: 20px 105px 0;
+  position: relative;
+  width: 100%;
+  left: 0;
+  right: 0;
 }
-.nav-pills.nav-wizard > li a {
+.multi_step_form #msform fieldset:not(:first-of-type) {
+  display: none;
+}
+.multi_step_form #msform fieldset h3 {
+  font: 500 18px/35px "Roboto", sans-serif;
+  color: #3f4553;
+}
+.multi_step_form #msform fieldset h6 {
+  font: 400 15px/28px "Roboto", sans-serif;
+  color: #5f6771;
+  padding-bottom: 30px;
+}
+.multi_step_form #msform fieldset .intl-tel-input {
+  display: block;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  outline: none;
+}
+.multi_step_form #msform fieldset .intl-tel-input .flag-container .selected-flag {
+  padding: 0 20px;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  outline: none;
+  width: 65px;
+}
+.multi_step_form #msform fieldset .intl-tel-input .flag-container .selected-flag .iti-arrow {
+  border: 0;
+}
+.multi_step_form #msform fieldset .intl-tel-input .flag-container .selected-flag .iti-arrow:after {
+  content: "\f35f";
+  position: absolute;
+  top: 0;
+  right: 0;
+  font: normal normal normal 24px/7px Ionicons;
+  color: #5f6771;
+}
+.multi_step_form #msform fieldset #phone {
+  padding-left: 80px;
+}
+.multi_step_form #msform fieldset .form-group {
+  padding: 0 10px;
+}
+.multi_step_form #msform fieldset .fg_2, .multi_step_form #msform fieldset .fg_3 {
+  padding-top: 10px;
+  display: block;
+  overflow: hidden;
+}
+.multi_step_form #msform fieldset .fg_3 {
+  padding-bottom: 70px;
+}
+.multi_step_form #msform fieldset .form-control, .multi_step_form #msform fieldset .product_select {
+  border-radius: 3px;
+  border: 1px solid #d8e1e7;
+  padding: 0 20px;
+  height: auto;
+  font: 400 15px/48px "Roboto", sans-serif;
+  color: #5f6771;
+  box-shadow: none;
+  outline: none;
+  width: 100%;
+}
+.multi_step_form #msform fieldset .form-control.placeholder, .multi_step_form #msform fieldset .product_select.placeholder {
+  color: #5f6771;
+}
+.multi_step_form #msform fieldset .form-control:-moz-placeholder, .multi_step_form #msform fieldset .product_select:-moz-placeholder {
+  color: #5f6771;
+}
+.multi_step_form #msform fieldset .form-control::-moz-placeholder, .multi_step_form #msform fieldset .product_select::-moz-placeholder {
+  color: #5f6771;
+}
+.multi_step_form #msform fieldset .form-control::-webkit-input-placeholder, .multi_step_form #msform fieldset .product_select::-webkit-input-placeholder {
+  color: #5f6771;
+}
+.multi_step_form #msform fieldset .form-control:hover, .multi_step_form #msform fieldset .form-control:focus, .multi_step_form #msform fieldset .product_select:hover, .multi_step_form #msform fieldset .product_select:focus {
+  border-color: #5cb85c;
+}
+.multi_step_form #msform fieldset .form-control:focus.placeholder, .multi_step_form #msform fieldset .product_select:focus.placeholder {
+  color: transparent;
+}
+.multi_step_form #msform fieldset .form-control:focus:-moz-placeholder, .multi_step_form #msform fieldset .product_select:focus:-moz-placeholder {
+  color: transparent;
+}
+.multi_step_form #msform fieldset .form-control:focus::-moz-placeholder, .multi_step_form #msform fieldset .product_select:focus::-moz-placeholder {
+  color: transparent;
+}
+.multi_step_form #msform fieldset .form-control:focus::-webkit-input-placeholder, .multi_step_form #msform fieldset .product_select:focus::-webkit-input-placeholder {
+  color: transparent;
+}
+.multi_step_form #msform fieldset .product_select:after {
+  display: none;
+}
+.multi_step_form #msform fieldset .product_select:before {
+  content: "\f35f";
+  position: absolute;
+  top: 0;
+  right: 20px;
+  font: normal normal normal 24px/48px Ionicons;
+  color: #5f6771;
+}
+.multi_step_form #msform fieldset .product_select .list {
+  width: 100%;
+}
+.multi_step_form #msform fieldset .done_text {
+  padding-top: 40px;
+}
+.multi_step_form #msform fieldset .done_text .don_icon {
+  height: 36px;
+  width: 36px;
+  line-height: 36px;
+  font-size: 22px;
+  margin-bottom: 10px;
+  background: #5cb85c;
+  display: inline-block;
+  border-radius: 50%;
+  color: #ffffff;
+  text-align: center;
+}
+.multi_step_form #msform fieldset .done_text h6 {
+  line-height: 23px;
+}
+.multi_step_form #msform fieldset .code_group {
+  margin-bottom: 60px;
+}
+.multi_step_form #msform fieldset .code_group .form-control {
+  border: 0;
+  border-bottom: 1px solid #a1a7ac;
   border-radius: 0;
-  background-color: #eee;
-  padding: 10px;
+  display: inline-block;
+  width: 30px;
+  font-size: 30px;
+  color: #5f6771;
+  padding: 0;
+  margin-right: 7px;
+  text-align: center;
+  line-height: 1;
 }
-.nav-pills.nav-wizard > li .nav-arrow {
+.multi_step_form #msform fieldset .passport {
+  margin-top: -10px;
+  padding-bottom: 30px;
+  position: relative;
+}
+.multi_step_form #msform fieldset .passport .don_icon {
+  height: 36px;
+  width: 36px;
+  line-height: 36px;
+  font-size: 22px;
   position: absolute;
-  top: 0px;
-  right: -20px;
-  width: 0px;
-  height: 0px;
-  border-style: solid;
-  border-width: 20px 0 20px 20px;
-  border-color: transparent transparent transparent #eee;
-  z-index: 150;
+  top: 4px;
+  right: 0;
+  background: #5cb85c;
+  display: inline-block;
+  border-radius: 50%;
+  color: #ffffff;
+  text-align: center;
 }
-.nav-pills.nav-wizard > li .nav-wedge {
-  position: absolute;
-  top: 0px;
-  left: -20px;
-  width: 0px;
-  height: 0px;
-  border-style: solid;
-  border-width: 20px 0 20px 20px;
-  border-color: #eee #eee #eee transparent;
-  z-index: 150;
+.multi_step_form #msform fieldset .passport h4 {
+  font: 500 15px/23px "Roboto", sans-serif;
+  color: #5f6771;
+  padding: 0;
 }
-.nav-pills.nav-wizard > li:hover .nav-arrow {
-  border-color: transparent transparent transparent #aaa;
+.multi_step_form #msform fieldset .input-group {
+  padding-bottom: 40px;
 }
-.nav-pills.nav-wizard > li:hover .nav-wedge {
-  border-color: #aaa #aaa #aaa transparent;
+.multi_step_form #msform fieldset .input-group .custom-file {
+  width: 100%;
+  height: auto;
 }
-.nav-pills.nav-wizard > li:hover a {
-  background-color: #aaa;
+.multi_step_form #msform fieldset .input-group .custom-file .custom-file-label {
+  width: 168px;
+  border-radius: 5px;
+  cursor: pointer;
+  font: 700 14px/40px "Roboto", sans-serif;
+  border: 1px solid #99a2a8;
+  text-align: center;
+  transition: all 300ms linear 0s;
+  color: #5f6771;
+}
+.multi_step_form #msform fieldset .input-group .custom-file .custom-file-label i {
+  font-size: 20px;
+  padding-right: 10px;
+}
+.multi_step_form #msform fieldset .input-group .custom-file .custom-file-label:hover, .multi_step_form #msform fieldset .input-group .custom-file .custom-file-label:focus {
+  background: #5cb85c;
+  border-color: #5cb85c;
   color: #fff;
 }
-.nav-pills.nav-wizard > li.active .nav-arrow {
-  border-color: transparent transparent transparent #428bca;
+.multi_step_form #msform fieldset .input-group .custom-file input {
+  display: none;
 }
-.nav-pills.nav-wizard > li.active .nav-wedge {
-  border-color: #428bca #428bca #428bca transparent;
+.multi_step_form #msform fieldset .file_added {
+  text-align: left;
+  padding-left: 190px;
+  padding-bottom: 60px;
 }
-.nav-pills.nav-wizard > li.active a {
-  background-color: #428bca;
+.multi_step_form #msform fieldset .file_added li {
+  font: 400 15px/28px "Roboto", sans-serif;
+  color: #5f6771;
 }
-/* CSS for Credit Card Payment form */
-.credit-card-box .panel-title {
-    display: inline;
-    font-weight: bold;	
+.multi_step_form #msform fieldset .file_added li a {
+  color: #5cb85c;
+  font-weight: 500;
+  display: inline-block;
+  position: relative;
+  padding-left: 15px;
 }
-.credit-card-box .form-control.error {
-    border-color: red;
-    outline: 0;
-    box-shadow: inset 0 1px 1px rgba(0,0,0,0.075),0 0 8px rgba(255,0,0,0.6);
+.multi_step_form #msform fieldset .file_added li a i {
+  font-size: 22px;
+  padding-right: 8px;
+  position: absolute;
+  left: 0;
+  transform: rotate(20deg);
 }
-.credit-card-box label.error {
-  font-weight: bold;
-  color: red;
-  padding: 2px 8px;
-  margin-top: 2px;
+.multi_step_form #msform #progressbar {
+  margin-bottom: 30px;
+  overflow: hidden;
 }
-.credit-card-box .payment-errors {
-  font-weight: bold;
-  color: red;
-  padding: 2px 8px;
-  margin-top: 2px;
+.multi_step_form #msform #progressbar li {
+  list-style-type: none;
+  color: #99a2a8;
+  font-size: 9px;
+  width: calc(100%/3);
+  float: left;
+  position: relative;
+  font: 500 13px/1 "Roboto", sans-serif;
 }
-.credit-card-box label {
-    display: block;
+.multi_step_form #msform #progressbar li:nth-child(2):before {
+  content: "\f12f";
 }
-
-.credit-card-box .display-tr {
-    display: table-row;
+.multi_step_form #msform #progressbar li:nth-child(3):before {
+  content: "\f457";
 }
-.credit-card-box .display-td {
-    display: table-cell;
-    vertical-align: middle;
-    width: 50%;
+.multi_step_form #msform #progressbar li:before {
+  content: "\f1fa";
+  font: normal normal normal 30px/50px Ionicons;
+  width: 50px;
+  height: 50px;
+  line-height: 50px;
+  display: block;
+  background: #eaf0f4;
+  border-radius: 50%;
+  margin: 0 auto 10px auto;
 }
-/* Just looks nicer */
-.credit-card-box .panel-heading img {
-    min-width: 180px;
+.multi_step_form #msform #progressbar li:after {
+  content: '';
+  width: 100%;
+  height: 10px;
+  background: #eaf0f4;
+  position: absolute;
+  left: -50%;
+  top: 21px;
+  z-index: -1;
+}
+.multi_step_form #msform #progressbar li:last-child:after {
+  width: 150%;
+}
+.multi_step_form #msform #progressbar li.active {
+  color: #5cb85c;
+}
+.multi_step_form #msform #progressbar li.active:before, .multi_step_form #msform #progressbar li.active:after {
+  background: #5cb85c;
+  color: white;
+}
+.multi_step_form #msform .action-button {
+  background: #5cb85c;
+  color: white;
+  border: 0 none;
+  border-radius: 5px;
+  cursor: pointer;
+  min-width: 130px;
+  font: 700 14px/40px "Roboto", sans-serif;
+  border: 1px solid #5cb85c;
+  margin: 0 5px;
+  text-transform: uppercase;
+  display: inline-block;
+}
+.multi_step_form #msform .action-button:hover, .multi_step_form #msform .action-button:focus {
+  background: #405867;
+  border-color: #405867;
+}
+.multi_step_form #msform .previous_button {
+  background: transparent;
+  color: #99a2a8;
+  border-color: #99a2a8;
+}
+.multi_step_form #msform .previous_button:hover, .multi_step_form #msform .previous_button:focus {
+  background: #405867;
+  border-color: #405867;
+  color: #fff;
 }
 </style>
 @endsection
 @section('content')
-<div class="container bg-white" id="myWizard">
-  <div class="row">
-      <div class="col-xs-10 col-md-10">
-        <h3><span class="glyphicon glyphicon-lock"></span>&nbsp;ลงทะเบียน</h3>
+<article>
+  <section class="multi_step_form">  
+  <form id="msform"> 
+    <div class="tittle">
+      <h2>ลงทะเบียน</h2>
+      <p>โปรดกรอกข้อมูลและตรวจสอบให้ถูกต้องทุกขั้นตอน</p>
+    </div>
+    <!-- progressbar -->
+    <ul id="progressbar">
+      <li class="active">Verify Phone</li>  
+      <li>Upload Documents</li> 
+      <li>Security Questions</li>
+      <li>PJ na ja</li>
+    </ul>
+    <!-- fieldsets -->
+    <fieldset>
+      <h3>Setup your phone</h3>
+      <h6>We will send you a SMS. Input the code to verify.</h6> 
+      <div class="form-row"> 
+        <div class="form-group col-md-6">  
+          <input type="tel" id="phone" class="form-control" placeholder="+880"> 
+        </div>  
+        <div class="form-group col-md-6"> 
+          <input type="text" class="form-control" placeholder="+8801123456789">
+        </div> 
+      </div> 
+      <div class="done_text"> 
+        <a href="#" class="don_icon"><i class="ion-android-done"></i></a> 
+        <h6>A secret code is sent to your phone. <br>Please enter it here.</h6> 
+      </div>  
+      <div class="code_group"> 
+        <input type="text" class="form-control" placeholder="0">
+        <input type="text" class="form-control" placeholder="0">
+        <input type="text" class="form-control" placeholder="0">
+        <input type="text" class="form-control" placeholder="0">
+      </div>  
+      <button type="button" class="action-button previous_button">Back</button>
+      <button type="button" class="next action-button">Continue</button>  
+    </fieldset>
+
+    <fieldset>
+      <h3>Verify Your Identity</h3>
+      <h6>Please upload any of these documents to verify your Identity.</h6>
+      <div class="passport">
+        <h4>Govt. ID card <br>PassPort <br>Driving License.</h4> 
+        <a href="#" class="don_icon"><i class="ion-android-done"></i></a> 
       </div>
-    <div class="col-xs-2 col-md-2 pull-right"><img src="https://trustsealinfo.websecurity.norton.com/images/vseal.gif"></div>
-  </div>
-  <hr>
-  <div class="progress">
-    <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="1" aria-valuemin="1" aria-valuemax="4" style="width: 25%;">
-      Step 1 of 4
-    </div>
-  </div>
-  <div class="navbar">
-    <div class="navbar-inner">
-            <ul class="nav nav-pills nav-wizard">
-                <li class="active">
-                    <a class="d-none d-sm-block" href="#step1" data-toggle="tab" data-step="1">1. ข้อมูลหน่วยงาน</a>
-                    <a class="d-block d-sm-none" href="#step1" data-toggle="tab" data-step="1">1.</a>
-                    <div class="nav-arrow"></div>
-                </li>
-                <li class="disabled">
-                    <div class="nav-wedge"></div>
-                    <a class="d-none d-sm-block" href="#step2" data-toggle="tab" data-step="2">2. ข้อมูลผู้รับบริการ
-                    </a>
-                    <a class="d-block d-sm-none" href="#step2" data-toggle="tab" data-step="2">2.</a>
-                    <div class="nav-arrow"></div>
-                </li>
-                <li class="disabled">
-                    <div class="nav-wedge"></div>
-                    <a class="d-none d-sm-block" href="#step3" data-toggle="tab" data-step="3">3. ข้อมูลติดต่อ
-                    </a>
-                    <a class="d-block d-sm-none" href="#step3" data-toggle="tab" data-step="3">3.</a>
-                    <div class="nav-arrow"></div>
-                </li>
-                <li class="disabled">
-                    <div class="nav-wedge"></div>
-                    <a class="d-none d-sm-block" href="#step4" data-toggle="tab" data-step="4">4. บัญชีผู้ใช้
-                    </a>
-                    <a class="d-block d-sm-none" href="#step4" data-toggle="tab" data-step="4">4.</a>
-                </li>
-            </ul>
+      <div class="input-group"> 
+        <div class="custom-file">
+          <input type="file" class="custom-file-input" id="upload">
+          <label class="custom-file-label" for="upload"><i class="ion-android-cloud-outline"></i>Choose file</label>
         </div>
-    </div>
-    <div class="tab-content">
-        <div class="tab-pane fade in active" id="step1">
-            <h3>1. Details</h3>
-            <div class="well">
-                <div class="row">
-                    <div class="col-xs-12 col-md-12">
-                        <div class="form-group ">
-                            <label>Email</label>
-                            <input class="form-control input-lg" placeholder="Email">
-                            <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
-                            <span id="inputError2Status" class="sr-only">(error)</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-xs-6 col-md-6">
-                        <div class="form-group">
-                            <label>First Name</label>
-                            <input class="form-control input-lg">
-                        </div>
-                    </div>
-                    <div class="col-xs-6 col-md-6 pull-right">
-                        <div class="form-group">
-                            <label>Last Name</label>
-                            <input class="form-control input-lg">
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-xs-12 col-md-13">
-                        <div class="form-group">
-                            <label>Address</label>
-                            <input class="form-control input-lg">
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-xs-7 col-md-7">
-                        <div class="form-group">
-                            <label>Suburb</label>
-                            <input class="form-control input-lg">
-                        </div>
-                    </div>
-                    <div class="col-xs-5 col-md-5 pull-right">
-                        <div class="form-group">
-                            <label>Postcode</label>
-                            <input class="form-control input-lg">
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-xs-7 col-md-7">
-                        <div class="form-group">
-                            <label>State</label>
-                            <select id="billing:region_id" name="billing[region_id]" title="State/Province" class="form-control  input-lg validate-select required-entry" defaultvalue="">
-                                <option value="">Please select region, state or province</option>
-                                <option value="485">Australia Capital Territory</option>
-                                <option value="486">New South Wales</option>
-                                <option value="487">Northern Territory</option>
-                                <option value="488">Queensland</option>
-                                <option value="489">South Australia</option>
-                                <option value="490">Tasmania</option>
-                                <option value="491">Victoria</option>
-                                <option value="492">Western Australia</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-xs-5 col-md-5 pull-right">
-                        <div class="form-group">
-                            <label>Phone</label>
-                            <input type="tel" class="form-control input-lg" placeholder="(  ) ">
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-xs-12">
-                        <button class="btn btn-primary btn-lg btn-block next" type="submit">Continue&nbsp;<span class="glyphicon glyphicon-chevron-right"></span></button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="tab-pane fade" id="step2">
-            <h3>2. Shipping</h3>
-            <div class="well">
-                <div class="row">
-                    <div class="col-xs-12 col-md-12">
-                        <h3>Shipping To</h3>
-                        <address>
-                            <strong id="customer-name"></strong><br>
-                            <div id="address-line1"></div>
-                            <div id="address-line2"></div>
-                            <abbr title="Phone">P:</abbr> ( ) 
-                            <a href="mailto:#"></a>
-                        </address>
-                    </div>
-                </div>
-                <div>
-                    <dl class="sp-methods">
-                        <dt>Express Shipping</dt>
-                        <dd>
-                            <ul>
-                                <li>
-                                    <input name="shipping_method" type="radio" value="flatrate2_flatrate2" id="s_method_flatrate2_flatrate2" class="radio">
-                                    <label for="s_method_flatrate2_flatrate2">1-2 Business Days                                                                                                 <span class="price">$14.95</span>                                                            </label>
-                                </li>
-                            </ul>
-                        </dd>
-                        <dt>Standard Shipping </dt>
-                        <dd>
-                            <ul>
-                                <li>
-                                    <input name="shipping_method" type="radio" value="flatrate_flatrate" id="s_method_flatrate_flatrate" class="radio">
-                                    <label for="s_method_flatrate_flatrate">2-4 Business Days                                                                                                 <span class="price">$9.95</span>                                                            </label>
-                                </li>
-                            </ul>
-                        </dd>
-                    </dl>
-                </div>
-                <div class="row">
-                    <div class="col-xs-12 col-md-12">
-                        <p>It is our priority to deliver your order as quickly as possible, which is why we offer same day dispatch on orders placed before 12:00pm AEST Monday to Friday.<br>
-                            Any order placed after 12:00pm AEST or on a weekend will be dispatched the next business day.</p>
-                    </div>
-                </div>
-              <div class="btn-group btn-group-justified" role="group" aria-label="">
-                      <div class="btn-group btn-group-lg" role="group" aria-label="">
-                        <button class="btn btn-default back" type="button"><span class="glyphicon glyphicon-chevron-left">&nbsp;Back</span></button>
-                    
-                      </div>
-                <div class="btn-group btn-group-lg" role="group" aria-label="">
-                        <button class="btn btn-primary btn-lg btn-block next" type="submit">Continue&nbsp;<span class="glyphicon glyphicon-chevron-right"></span></button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="tab-pane fade" id="step3">
-            <div class="row">
-                <div class="panel panel-default credit-card-box">
-                    <div class="panel-heading display-table">
-                        <div class="row display-tr">
-                            <h3 class="panel-title display-td">Payment Details</h3>
-                            <div class="display-td">
-                                <img class="img-responsive pull-right" src="http://i76.imgup.net/accepted_c22e0.png">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="panel-body">
-                        <form role="form" id="payment-form">
-                            <div class="row">
-                                <div class="col-xs-12">
-                                    <div class="form-group">
-                                        <label for="cardNumber">CARD NUMBER</label>
-                                        <div class="input-group">
-                                            <input type="tel" class="form-control" name="cardNumber" placeholder="Valid Card Number" autocomplete="cc-number" required="" autofocus="">
-                                            <span class="input-group-addon">
-                                                <i class="fa fa-credit-card"></i>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-xs-7 col-md-7">
-                                    <div class="form-group">
-                                        <label for="cardExpiry">
-                                            <span class="hidden-xs">EXPIRATION</span>
-                                            <span class="visible-xs-inline">EXP</span> DATE
-                                        </label>
-                                        <input type="tel" class="form-control" name="cardExpiry" placeholder="MM / YY" autocomplete="cc-exp" required="">
-                                    </div>
-                                </div>
-                                <div class="col-xs-5 col-md-5 pull-right">
-                                    <div class="form-group">
-                                        <label for="cardCVC">CV CODE</label>
-                                        <input type="tel" class="form-control" name="cardCVC" placeholder="CVC" autocomplete="cc-csc" required="">
-                                    </div>
-                                </div>
-                            </div>
-              <div class="btn-group btn-group-justified" role="group" aria-label="">
-                      <div class="btn-group btn-group-lg" role="group" aria-label="">
-                        <button class="btn btn-default back" type="button">Back</button>
-                    
-                      </div>
-                <div class="btn-group btn-group-lg" role="group" aria-label="">
-                                    <button class="btn btn-primary btn-lg btn-block next" type="submit">Continue</button>
-                                </div>
-                            </div>
-                            <div class="row" style="display:none;">
-                                <div class="col-xs-12">
-                                    <p class="payment-errors"></p>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="tab-pane fade" id="step4">
-            <div class="well">
-                <h3>4. Review Order</h3> Add another almost done step here..
-                <div class="row">
-                    <div class="col-xs-12 col-md-12">
-                        <table class="table">
-                            <colgroup><col>
-                                <col width="1">
-                                <col width="1">
-                            </colgroup><thead>
-                                <tr>
-                                    <th class="name">Product Name</th>
-                                    <th class="qty">Qty</th>
-                                    <th class="total">Subtotal</th>
-                                </tr>
-                            </thead>
-                            <tfoot>
-                                <tr>
-                                    <td style="" class="a-right" colspan="2">
-                                        Tax            </td>
-                                    <td style="" class="a-right"><span class="price">$3.18</span></td>
-                                </tr>
-                                <tr>
-                                    <td style="" class="a-right" colspan="2">
-                                        Subtotal    </td>
-                                    <td style="" class="a-right">
-                                        <span class="price">$18.18</span>    </td>
-                                </tr>
-                                <tr>
-                                    <td style="" class="a-right" colspan="2">
-                                        Shipping &amp; Handling (Express Shipping - 1-2 Business Days)    </td>
-                                    <td style="" class="a-right">
-                                        <span class="price">$14.95</span>    </td>
-                                </tr>
-                            </tfoot>
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <h3 class="product-name">Hulk Singlet Black </h3>
-                                        <dl class="item-options">
-                                            <dt>Size</dt>
-                                            <dd>M                                    </dd>
-                                        </dl>
-                                    </td>
-                                    <td class="a-center">1</td>
-                                    <td>
-                                        <span class="cart-price">
-                                            <span class="price">$20.00</span>                            </span>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-xs-12 col-md-12">
-                        <div class="form-group ">
-                            <label>Gift Cards</label>
-                            <input class="form-control input-lg" placeholder="XXXXX-XXXX-XXXXX">
-                            <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
-                            <span id="inputError2Status" class="sr-only">(error)</span>
-                        </div>
-                    </div>
+      </div>
+      <ul class="file_added">
+        <li>File Added:</li>
+        <li><a href="#"><i class="ion-paperclip"></i>national_id_card.png</a></li>
+        <li><a href="#"><i class="ion-paperclip"></i>national_id_card_back.png</a></li>
+      </ul>
+      <button type="button" class="action-button previous previous_button">Back</button>
+      <button type="button" class="next action-button">Continue</button>  
+    </fieldset>
 
-                </div>
-    <div class="row">
-                  <div class="col-xs-12 col-md-12">
-                    <div class="form-group">
-                      <label>Sign up for Newsletter</label>
-                      <input type="checkbox">
-                    </div>
-                  </div>
-                </div>
-              <div class="btn-group btn-group-justified" role="group" aria-label="">
-                      <div class="btn-group btn-group-lg" role="group" aria-label="">
-                        <button class="btn btn-default back" type="button">Back</button>
-                    
-                      </div>
-                <div class="btn-group btn-group-lg" role="group" aria-label="">
-                    <button class="btn btn-success next" type="submit">Place Order</button>
-                </div>
-              </div>
-            </div>
-
+        <fieldset>
+      <h3>PJ Na ja</h3>
+      <h6>Please upload any of these documents to verify your Identity.</h6>
+      <div class="passport">
+        <h4>Govt. ID card <br>PassPort <br>Driving License.</h4> 
+        <a href="#" class="don_icon"><i class="ion-android-done"></i></a> 
+      </div>
+      <div class="input-group"> 
+        <div class="custom-file">
+          <input type="file" class="custom-file-input" id="upload">
+          <label class="custom-file-label" for="upload"><i class="ion-android-cloud-outline"></i>Choose file</label>
         </div>
-    </div></div>
+      </div>
+      <ul class="file_added">
+        <li>File Added:</li>
+        <li><a href="#"><i class="ion-paperclip"></i>national_id_card.png</a></li>
+        <li><a href="#"><i class="ion-paperclip"></i>national_id_card_back.png</a></li>
+      </ul>
+      <button type="button" class="action-button previous previous_button">Back</button>
+      <button type="button" class="next action-button">Continue</button>  
+    </fieldset>  
+
+    <fieldset>
+      <h3>Create Security Questions</h3>
+      <h6>Please update your account with security questions</h6> 
+      <div class="form-group"> 
+        <select class="product_select">
+          <option data-display="1. Choose A Question">1. Choose A Question</option> 
+          <option>2. Choose A Question</option>
+          <option>3. Choose A Question</option> 
+        </select>
+      </div> 
+      <div class="form-group fg_2"> 
+        <input type="text" class="form-control" placeholder="Anwser here:">
+      </div> 
+      <div class="form-group"> 
+        <select class="product_select">
+          <option data-display="1. Choose A Question">1. Choose A Question</option> 
+          <option>2. Choose A Question</option>
+          <option>3. Choose A Question</option> 
+        </select>
+      </div> 
+      <div class="form-group fg_3"> 
+        <input type="text" class="form-control" placeholder="Anwser here:">
+      </div> 
+      <button type="button" class="action-button previous previous_button">Back</button> 
+      <a href="#" class="action-button">Finish</a> 
+    </fieldset>  
 
 
-<div id="push"></div>
+  </form>  
+</section> 
+      <!-- END Multiform HTML -->
+  </article>
 @endsection
 @section('script')
+
 <script>
-$('.next').click(function(){
+ (function($) {
+    "use strict";  
+    
+    //* Form js
+    function verificationForm(){
+        //jQuery time
+        var current_fs, next_fs, previous_fs; //fieldsets
+        var left, opacity, scale; //fieldset properties which we will animate
+        var animating; //flag to prevent quick multi-click glitches
 
-var nextId = $(this).parents('.tab-pane').next().attr("id");
-$('[href=#'+nextId+']').tab('show');
-return false;
+        $(".next").click(function () {
+            if (animating) return false;
+            animating = true;
 
-})
+            current_fs = $(this).parent();
+            next_fs = $(this).parent().next();
 
-$('.back').click(function(){
+            //activate next step on progressbar using the index of next_fs
+            $("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
 
-var prevId = $(this).parents('.tab-pane').prev().attr("id");
-$('[href=#'+prevId+']').tab('show');
-return false;
+            //show the next fieldset
+            next_fs.show();
+            //hide the current fieldset with style
+            current_fs.animate({
+                opacity: 0
+            }, {
+                step: function (now, mx) {
+                    //as the opacity of current_fs reduces to 0 - stored in "now"
+                    //1. scale current_fs down to 80%
+                    scale = 1 - (1 - now) * 0.2;
+                    //2. bring next_fs from the right(50%)
+                    left = (now * 50) + "%";
+                    //3. increase opacity of next_fs to 1 as it moves in
+                    opacity = 1 - now;
+                    current_fs.css({
+                        'transform': 'scale(' + scale + ')',
+                        'position': 'absolute'
+                    });
+                    next_fs.css({
+                        'left': left,
+                        'opacity': opacity
+                    });
+                },
+                duration: 800,
+                complete: function () {
+                    current_fs.hide();
+                    animating = false;
+                },
+                //this comes from the custom easing plugin
+                easing: 'easeInOutBack'
+            });
+        });
 
-})
+        $(".previous").click(function () {
+            if (animating) return false;
+            animating = true;
 
-$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+            current_fs = $(this).parent();
+            previous_fs = $(this).parent().prev();
 
-//update progress
-var step = $(e.target).data('step');
-var percent = (parseInt(step) / 4) * 100;
+            //de-activate current step on progressbar
+            $("#progressbar li").eq($("fieldset").index(current_fs)).removeClass("active");
 
-$('.progress-bar').css({width: percent + '%'});
-$('.progress-bar').text("Step " + step + " of 5");
+            //show the previous fieldset
+            previous_fs.show();
+            //hide the current fieldset with style
+            current_fs.animate({
+                opacity: 0
+            }, {
+                step: function (now, mx) {
+                    //as the opacity of current_fs reduces to 0 - stored in "now"
+                    //1. scale previous_fs from 80% to 100%
+                    scale = 0.8 + (1 - now) * 0.2;
+                    //2. take current_fs to the right(50%) - from 0%
+                    left = ((1 - now) * 50) + "%";
+                    //3. increase opacity of previous_fs to 1 as it moves in
+                    opacity = 1 - now;
+                    current_fs.css({
+                        'left': left
+                    });
+                    previous_fs.css({
+                        'transform': 'scale(' + scale + ')',
+                        'opacity': opacity
+                    });
+                },
+                duration: 800,
+                complete: function () {
+                    current_fs.hide();
+                    animating = false;
+                },
+                //this comes from the custom easing plugin
+                easing: 'easeInOutBack'
+            });
+        });
 
-//e.relatedTarget // previous tab
-
-})
-
-$('.first').click(function(){
-
-$('#myWizard a:first').tab('show')
-
-})
-// Generated by CoffeeScript 1.8.0
-
-/*
-jQuery Credit Card Validator 1.0
-
-Copyright 2012-2015 Pawel Decowski
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software
-is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included
-in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
-THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
-IN THE SOFTWARE.
-*/
-
-(function() {
-var $,
-  __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
-
-$ = jQuery;
-
-$.fn.validateCreditCard = function(callback, options) {
-  var bind, card, card_type, card_types, get_card_type, is_valid_length, is_valid_luhn, normalize, validate, validate_number, _i, _len, _ref;
-  card_types = [
-    {
-      name: 'amex',
-      pattern: /^3[47]/,
-      valid_length: [15]
-    }, {
-      name: 'diners_club_carte_blanche',
-      pattern: /^30[0-5]/,
-      valid_length: [14]
-    }, {
-      name: 'diners_club_international',
-      pattern: /^36/,
-      valid_length: [14]
-    }, {
-      name: 'jcb',
-      pattern: /^35(2[89]|[3-8][0-9])/,
-      valid_length: [16]
-    }, {
-      name: 'laser',
-      pattern: /^(6304|670[69]|6771)/,
-      valid_length: [16, 17, 18, 19]
-    }, {
-      name: 'visa_electron',
-      pattern: /^(4026|417500|4508|4844|491(3|7))/,
-      valid_length: [16]
-    }, {
-      name: 'visa',
-      pattern: /^4/,
-      valid_length: [16]
-    }, {
-      name: 'mastercard',
-      pattern: /^5[1-5]/,
-      valid_length: [16]
-    }, {
-      name: 'maestro',
-      pattern: /^(5018|5020|5038|6304|6759|676[1-3])/,
-      valid_length: [12, 13, 14, 15, 16, 17, 18, 19]
-    }, {
-      name: 'discover',
-      pattern: /^(6011|622(12[6-9]|1[3-9][0-9]|[2-8][0-9]{2}|9[0-1][0-9]|92[0-5]|64[4-9])|65)/,
-      valid_length: [16]
-    }
-  ];
-  bind = false;
-  if (callback) {
-    if (typeof callback === 'object') {
-      options = callback;
-      bind = false;
-      callback = null;
-    } else if (typeof callback === 'function') {
-      bind = true;
-    }
-  }
-  if (options == null) {
-    options = {};
-  }
-  if (options.accept == null) {
-    options.accept = (function() {
-      var _i, _len, _results;
-      _results = [];
-      for (_i = 0, _len = card_types.length; _i < _len; _i++) {
-        card = card_types[_i];
-        _results.push(card.name);
-      }
-      return _results;
-    })();
-  }
-  _ref = options.accept;
-  for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-    card_type = _ref[_i];
-    if (__indexOf.call((function() {
-      var _j, _len1, _results;
-      _results = [];
-      for (_j = 0, _len1 = card_types.length; _j < _len1; _j++) {
-        card = card_types[_j];
-        _results.push(card.name);
-      }
-      return _results;
-    })(), card_type) < 0) {
-      throw "Credit card type '" + card_type + "' is not supported";
-    }
-  }
-  get_card_type = function(number) {
-    var _j, _len1, _ref1;
-    _ref1 = (function() {
-      var _k, _len1, _ref1, _results;
-      _results = [];
-      for (_k = 0, _len1 = card_types.length; _k < _len1; _k++) {
-        card = card_types[_k];
-        if (_ref1 = card.name, __indexOf.call(options.accept, _ref1) >= 0) {
-          _results.push(card);
-        }
-      }
-      return _results;
-    })();
-    for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-      card_type = _ref1[_j];
-      if (number.match(card_type.pattern)) {
-        return card_type;
-      }
-    }
-    return null;
-  };
-  is_valid_luhn = function(number) {
-    var digit, n, sum, _j, _len1, _ref1;
-    sum = 0;
-    _ref1 = number.split('').reverse();
-    for (n = _j = 0, _len1 = _ref1.length; _j < _len1; n = ++_j) {
-      digit = _ref1[n];
-      digit = +digit;
-      if (n % 2) {
-        digit *= 2;
-        if (digit < 10) {
-          sum += digit;
-        } else {
-          sum += digit - 9;
-        }
-      } else {
-        sum += digit;
-      }
-    }
-    return sum % 10 === 0;
-  };
-  is_valid_length = function(number, card_type) {
-    var _ref1;
-    return _ref1 = number.length, __indexOf.call(card_type.valid_length, _ref1) >= 0;
-  };
-  validate_number = (function(_this) {
-    return function(number) {
-      var length_valid, luhn_valid;
-      card_type = get_card_type(number);
-      luhn_valid = false;
-      length_valid = false;
-      if (card_type != null) {
-        luhn_valid = is_valid_luhn(number);
-        length_valid = is_valid_length(number, card_type);
-      }
-      return {
-        card_type: card_type,
-        valid: luhn_valid && length_valid,
-        luhn_valid: luhn_valid,
-        length_valid: length_valid
-      };
-    };
-  })(this);
-  validate = (function(_this) {
-    return function() {
-      var number;
-      number = normalize($(_this).val());
-      return validate_number(number);
-    };
-  })(this);
-  normalize = function(number) {
-    return number.replace(/[ -]/g, '');
-  };
-  if (!bind) {
-    return validate();
-  }
-  this.on('input.jccv', (function(_this) {
-    return function() {
-      $(_this).off('keyup.jccv');
-      return callback.call(_this, validate());
-    };
-  })(this));
-  this.on('keyup.jccv', (function(_this) {
-    return function() {
-      return callback.call(_this, validate());
-    };
-  })(this));
-  callback.call(this, validate());
-  return this;
-};
-
-}).call(this);    
+        $(".submit").click(function () {
+            return false;
+        })
+    }; 
+    
+    //* Add Phone no select
+    function phoneNoselect(){
+        if ( $('#msform').length ){   
+            $("#phone").intlTelInput(); 
+            $("#phone").intlTelInput("setNumber", "+880"); 
+        };
+    }; 
+    //* Select js
+    function nice_Select(){
+        if ( $('.product_select').length ){ 
+            $('select').niceSelect();
+        };
+    }; 
+    /*Function Calls*/  
+    verificationForm ();
+    phoneNoselect ();
+    nice_Select ();
+})(jQuery);
 </script>
 @endsection
