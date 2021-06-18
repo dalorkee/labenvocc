@@ -1,45 +1,42 @@
 @extends('layouts.guest.index')
 @section('style')
-
-      <!-- Telephone Input CSS -->
-    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/12.1.2/css/intlTelInput.css'>
-      <!-- Icons CSS -->
-    <link rel='stylesheet' href='https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css'>
-      <!-- Nice Select CSS -->
-    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/css/nice-select.min.css'>
+<!-- Telephone Input CSS -->
+<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/12.1.2/css/intlTelInput.css'>
+<!-- Icons CSS -->
+<link rel="stylesheet" href="{{ URL::asset('assets/css/ionicons.min.css') }}">
+<link rel="stylesheet" href="{{ URL::asset('assets/css/nice-select.css') }}">
 <style>
 .multi_step_form {
-  background: #f6f9fb;
+  background: #ccc;
   display: block;
   overflow-x: hidden;
+  font-family: "sukhumvit", sans-serif;
 }
 .multi_step_form #msform {
-  text-align: center;
   position: relative;
-  padding-top: 50px;
+  padding: 40px 0 10px 0;
   min-height: 820px;
-    height: auto;
-  max-width: 820px;
+  height: auto;
   margin: 0 auto;
   background: #ffffff;
   z-index: 1;
 }
 .multi_step_form #msform .tittle {
   text-align: center;
-  padding-bottom: 55px;
+  padding-bottom: 40px;
 }
 .multi_step_form #msform .tittle h2 {
-  font: 500 24px/35px "Roboto", sans-serif;
+  font: 400 24px/28px "sukhumvit", sans-serif;
   color: #3f4553;
   padding-bottom: 5px;
 }
 .multi_step_form #msform .tittle p {
-  font: 400 16px/28px "Roboto", sans-serif;
-  color: #5f6771;
+    font: 400 18px/24px "sukhumvit", sans-serif;
+    color: #5f6771;
 }
 .multi_step_form #msform fieldset {
   border: 0;
-  padding: 20px 105px 0;
+  padding: 20px;
   position: relative;
   width: 100%;
   left: 0;
@@ -49,13 +46,13 @@
   display: none;
 }
 .multi_step_form #msform fieldset h3 {
-  font: 500 18px/35px "Roboto", sans-serif;
+  /* font: 500 18px/35px "sukhumvit", sans-serif; */
   color: #3f4553;
 }
 .multi_step_form #msform fieldset h6 {
-  font: 400 15px/28px "Roboto", sans-serif;
+  /* font: 400 15px/28px "sukhumvit", sans-serif; */
   color: #5f6771;
-  padding-bottom: 30px;
+  padding-bottom: 0px;
 }
 .multi_step_form #msform fieldset .intl-tel-input {
   display: block;
@@ -262,24 +259,28 @@
 .multi_step_form #msform #progressbar {
   margin-bottom: 30px;
   overflow: hidden;
+  text-align: center;
 }
 .multi_step_form #msform #progressbar li {
   list-style-type: none;
   color: #99a2a8;
   font-size: 9px;
-  width: calc(100%/3);
+  width: calc(100%/4);
   float: left;
   position: relative;
-  font: 500 13px/1 "Roboto", sans-serif;
+  font: 500 13px/1 "sukhumvit", sans-serif;
 }
 .multi_step_form #msform #progressbar li:nth-child(2):before {
-  content: "\f12f";
+  content: "\f2d9";
 }
 .multi_step_form #msform #progressbar li:nth-child(3):before {
-  content: "\f457";
+  content: "\f2eb";
+}
+.multi_step_form #msform #progressbar li:nth-child(4):before {
+  content: "\f39f";
 }
 .multi_step_form #msform #progressbar li:before {
-  content: "\f1fa";
+  content: "\f376";
   font: normal normal normal 30px/50px Ionicons;
   width: 50px;
   height: 50px;
@@ -340,47 +341,48 @@
 @endsection
 @section('content')
 <article>
-  <section class="multi_step_form">  
-  <form id="msform"> 
-    <div class="tittle">
-      <h2>ลงทะเบียน</h2>
-      <p>โปรดกรอกข้อมูลและตรวจสอบให้ถูกต้องทุกขั้นตอน</p>
-    </div>
-    <!-- progressbar -->
-    <ul id="progressbar">
-      <li class="active">Verify Phone</li>  
-      <li>Upload Documents</li> 
-      <li>Security Questions</li>
-      <li>PJ na ja</li>
-    </ul>
-    <!-- fieldsets -->
-    <fieldset>
-      <h3>Setup your phone</h3>
-      <h6>We will send you a SMS. Input the code to verify.</h6> 
-      <div class="form-row"> 
-        <div class="form-group col-md-6">  
-          <input type="tel" id="phone" class="form-control" placeholder="+880"> 
-        </div>  
-        <div class="form-group col-md-6"> 
-          <input type="text" class="form-control" placeholder="+8801123456789">
-        </div> 
-      </div> 
-      <div class="done_text"> 
-        <a href="#" class="don_icon"><i class="ion-android-done"></i></a> 
-        <h6>A secret code is sent to your phone. <br>Please enter it here.</h6> 
-      </div>  
-      <div class="code_group"> 
-        <input type="text" class="form-control" placeholder="0">
-        <input type="text" class="form-control" placeholder="0">
-        <input type="text" class="form-control" placeholder="0">
-        <input type="text" class="form-control" placeholder="0">
-      </div>  
-      <button type="button" class="action-button previous_button">Back</button>
-      <button type="button" class="next action-button">Continue</button>  
-    </fieldset>
+    <section class="multi_step_form">
+        <div class="panel-container show">
+            <div class="panel-content">
+                <form id="msform"> 
+                    <div class="tittle">
+                        <h2>ลงทะเบียนใช้งาน</h2>
+                        <p>โปรดกรอกข้อมูลและตรวจสอบให้ถูกต้องทุกขั้นตอน</p>
+                    </div>
+                    <ul id="progressbar">
+                        <li class="active">ข้อมูลหน่วยงาน</li>  
+                        <li>ข้อมูลผู้รับบริการ</li>
+                        <li>ข้อมูลติดต่อ</li>
+                        <li>บัญชีผู้ใช้</li>
+                    </ul>
+                    <!-- fieldsets -->
+                    <fieldset>
+                        <h3>ข้อมูลหน่วยงาน</h3>
+                        <h6>1. ข้อมูลทั่วไปของผู้รับบริการ</h6> 
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label" for="simpleinput">ประเภทหน่วยงาน</label>
+                                <div class="frame-wrap">
+                                    <div class="custom-control custom-checkbox custom-control-inline">
+                                        <input type="checkbox" class="custom-control-input" id="defaultInline1">
+                                        <label class="custom-control-label" for="defaultInline1">หน่วยงานภาครัฐ</label>
+                                    </div>
+                                    <div class="custom-control custom-checkbox custom-control-inline">
+                                        <input type="checkbox" class="custom-control-input" id="defaultInline2">
+                                        <label class="custom-control-label" for="defaultInline2">หน่วยงานรัฐวิสาหกิจ</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> 
+                        <button type="button" class="action-button previous_button">Back</button>
+                        <button type="button" class="next action-button">Continue</button>  
+                    </fieldset>
+                </div>
+            </div>
+        </div>
 
     <fieldset>
-      <h3>Verify Your Identity</h3>
+      <h3>ข้อมูลผู้รับบริการ</h3>
       <h6>Please upload any of these documents to verify your Identity.</h6>
       <div class="passport">
         <h4>Govt. ID card <br>PassPort <br>Driving License.</h4> 
@@ -402,7 +404,7 @@
     </fieldset>
 
         <fieldset>
-      <h3>PJ Na ja</h3>
+      <h3>ข้อมูลติดต่อ</h3>
       <h6>Please upload any of these documents to verify your Identity.</h6>
       <div class="passport">
         <h4>Govt. ID card <br>PassPort <br>Driving License.</h4> 
@@ -424,7 +426,7 @@
     </fieldset>  
 
     <fieldset>
-      <h3>Create Security Questions</h3>
+      <h3>บัญชีผู้ใช้</h3>
       <h6>Please update your account with security questions</h6> 
       <div class="form-group"> 
         <select class="product_select">
@@ -457,7 +459,7 @@
   </article>
 @endsection
 @section('script')
-
+<script src="{{ URL::asset('assets/js/jquery.nice-select.min.js') }}"></script>
 <script>
  (function($) {
     "use strict";  
