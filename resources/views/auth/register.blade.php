@@ -11,6 +11,9 @@
 .select2-selection__rendered{line-height:38px!important;}
 .select2-container .select2-selection--single{height:37px!important;border:1px solid #e1e1e1;}
 .select2-selection__arrow{height:36px!important;}
+.custom-control-label {
+	font-size: 1.175em;
+}
 </style>
 @endsection
 @section('content')
@@ -30,175 +33,303 @@
 			<fieldset>
 				<h3>ข้อมูลหน่วยงาน</h3>
 				<h4>1. ข้อมูลทั่วไปของผู้รับบริการ</h4>
-				<div class="mt-10 sm:mt-0">
-					<div class="md:grid md:grid-cols-1 md:gap-6">
-						<div class="mt-5 md:mt-0 md:col-span-2">
+				<div class="mt-0 sm:mt-0">
+					<div class="md:grid md:grid-cols-1">
+						<div class="mt-2 md:mt-0 md:col-span-2">
 							<div class="shadow overflow-hidden sm:rounded-md">
-							<div class="px-4 py-5 bg-white sm:p-6">
-								<div class="col-span-6 sm:col-span-3 mb-4">
-									<label for="simpleinput" class="block text-sm font-medium text-gray-700">ประเภทหน่วยงาน <span class="text-red-600">*</span></label>
-									<div class="frame-wrap">
-										<div class="custom-control custom-checkbox custom-control-inline">
-											<input type="checkbox" class="custom-control-input" id="defaultInline1">
-											<label class="custom-control-label" for="defaultInline1">หน่วยงานภาครัฐ</label>
-										</div>
-										<div class="custom-control custom-checkbox custom-control-inline">
-											<input type="checkbox" class="custom-control-input" id="defaultInline2">
-											<label class="custom-control-label" for="defaultInline2">หน่วยงานรัฐวิสาหกิจ</label>
-										</div>
-										<div class="custom-control custom-checkbox custom-control-inline">
-											<input type="checkbox" class="custom-control-input" id="defaultInline3">
-											<label class="custom-control-label" for="defaultInline3">หน่วยงานเอกชน</label>
-										</div>
-										{{-- <div class="custom-control custom-checkbox custom-control-inline">
-											<input type="checkbox" class="custom-control-input" id="defaultInline4">
-											<label class="custom-control-label" for="defaultInline4">สถานประกอบการ</label>
-										</div> --}}
-									</div>
-								</div>
-
-								<div class="grid grid-cols-6 gap-6">
-									<div class="col-span-6 sm:col-span-6">
-										<label for="simpleinput" class="block text-sm font-medium text-gray-700">ชนิดหน่วยงาน <span class="text-red-600">*</span></label>
-										<div class="frame-wrap">
-											<div class="custom-control custom-checkbox custom-control-inline">
-												<input type="checkbox" class="custom-control-input" id="defaultInline4">
-												<label class="custom-control-label" for="defaultInline4">สถานประกอบการ</label>
+								<div class="px-4 py-5 bg-white sm:p-6">
+									<div class="grid grid-cols-6 gap-6">
+										<div class="col-span-6 sm:col-span-3 mb-4">
+											<label for="simpleinput" class="block text-base font-medium text-gray-700">ประเภทหน่วยงาน <span class="text-red-600">*</span></label>
+											<div class="frame-wrap">
+												<div class="custom-control custom-checkbox custom-control-inline">
+													<input type="checkbox" class="custom-control-input" id="defaultInline1">
+													<label class="custom-control-label" for="defaultInline1">หน่วยงานภาครัฐ</label>
+												</div>
+												<div class="custom-control custom-checkbox custom-control-inline">
+													<input type="checkbox" class="custom-control-input" id="defaultInline2">
+													<label class="custom-control-label" for="defaultInline2">หน่วยงานรัฐวิสาหกิจ</label>
+												</div>
+												<div class="custom-control custom-checkbox custom-control-inline">
+													<input type="checkbox" class="custom-control-input" id="defaultInline3">
+													<label class="custom-control-label" for="defaultInline3">หน่วยงานเอกชน</label>
+												</div>
 											</div>
 										</div>
-									</div>
-									<div class="col-span-6 sm:col-span-3 md:ml-4">
-										<label for="first_name" class="block text-sm font-medium text-gray-700">ชื่อหน่วยงาน</label>
-										<input type="text" name="first_name" id="first_name" autocomplete="given-name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-									</div>
-									<div class="col-span-6 sm:col-span-3 md:mr-4">
-										<label for="last_name" class="block text-sm font-medium text-gray-700">รหัสหน่วยงาน</label>
-										<input type="text" name="last_name" id="last_name" autocomplete="family-name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-									</div>
-									<div class="col-span-6 sm:col-span-6">
-										<div class="frame-wrap">
-											<div class="custom-control custom-checkbox custom-control-inline">
-												<input type="checkbox" class="custom-control-input" id="defaultInline5">
-												<label class="custom-control-label" for="defaultInline5">สถานพยาบาล</label>
+										<div class="col-span-6 sm:col-span-6">
+											<label for="simpleinput" class="block text-base font-medium text-gray-700">ชนิดหน่วยงาน <span class="text-red-600">*</span></label>
+											<div class="frame-wrap">
+												<div class="custom-control custom-checkbox custom-control-inline">
+													<input type="checkbox" class="custom-control-input" id="defaultInline4">
+													<label class="custom-control-label" for="defaultInline4">สถานประกอบการ</label>
+												</div>
 											</div>
 										</div>
-									</div>
-									<div class="col-span-6 sm:col-span-6 md:mx-4">
-										<label for="country" class="block text-sm font-medium text-gray-700">เลือกสถานพยาบาล</label>
-										<select id="country" name="country" autocomplete="country" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-											<option>-- โปรดเลือก --</option>
-											<option>Canada</option>
-										</select>
-									</div>
-
-									<div class="col-span-6 sm:col-span-6">
-										<div class="frame-wrap">
-											<div class="custom-control custom-checkbox custom-control-inline">
-												<input type="checkbox" class="custom-control-input" id="defaultInline5">
-												<label class="custom-control-label" for="defaultInline5">ด่านควบคุมโรค</label>
+										<div class="col-span-6 sm:col-span-3 md:ml-4">
+											<label for="first_name" class="block text-sm font-medium text-gray-700">ชื่อหน่วยงาน</label>
+											<input type="text" name="first_name" id="first_name" autocomplete="given-name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+										</div>
+										<div class="col-span-6 sm:col-span-3 md:mr-4">
+											<label for="last_name" class="block text-sm font-medium text-gray-700">รหัสหน่วยงาน</label>
+											<input type="text" name="last_name" id="last_name" autocomplete="family-name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+										</div>
+										<div class="col-span-6 sm:col-span-6">
+											<div class="frame-wrap">
+												<div class="custom-control custom-checkbox custom-control-inline">
+													<input type="checkbox" class="custom-control-input" id="defaultInline5">
+													<label class="custom-control-label" for="defaultInline5">สถานพยาบาล</label>
+												</div>
 											</div>
 										</div>
-									</div>
-									<div class="col-span-6 sm:col-span-6 md:mx-4">
-										<label for="country" class="block text-sm font-medium text-gray-700">เลือกด่านควบคุมโรค</label>
-										<select id="country" name="country" autocomplete="country" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-											<option>-- โปรดเลือก --</option>
-											<option>Canada</option>
-										</select>
-									</div>
+										<div class="col-span-6 sm:col-span-6 md:mx-4">
+											<label for="country" class="block text-sm font-medium text-gray-700">เลือกสถานพยาบาล</label>
+											<select id="mySelect" name="country" autocomplete="country" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+												<option>-- โปรดเลือก --</option>
+												<option>Canada</option>
+											</select>
+										</div>
 
-									<div class="col-span-6 sm:col-span-6">
-										<div class="frame-wrap">
-											<div class="custom-control custom-checkbox custom-control-inline">
-												<input type="checkbox" class="custom-control-input" id="defaultInline5">
-												<label class="custom-control-label" for="defaultInline5">อื่นๆ โปรดระบุ</label>
+										<div class="col-span-6 sm:col-span-6">
+											<div class="frame-wrap">
+												<div class="custom-control custom-checkbox custom-control-inline">
+													<input type="checkbox" class="custom-control-input" id="defaultInline5">
+													<label class="custom-control-label" for="defaultInline5">ด่านควบคุมโรค</label>
+												</div>
 											</div>
 										</div>
-									</div>
-									<div class="col-span-6 sm:col-span-6 md:mx-4">
-										<label for="last_name" class="block text-sm font-medium text-gray-700">อื่นๆ ระบุ</label>
-										<input type="text" name="last_name" id="last_name" autocomplete="family-name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-									</div>
+										<div class="col-span-6 sm:col-span-6 md:mx-4">
+											<label for="country" class="block text-sm font-medium text-gray-700">เลือกด่านควบคุมโรค</label>
+											<select id="country" name="country" autocomplete="country" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+												<option>-- โปรดเลือก --</option>
+												<option>Canada</option>
+											</select>
+										</div>
 
-									<div class="col-span-6 sm:col-span-3">
-										<label for="last_name" class="block text-sm font-medium text-gray-700">หมายเลขผู้เสียภาษี</label>
-										<input type="text" name="last_name" id="last_name" autocomplete="family-name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-									</div>
+										<div class="col-span-6 sm:col-span-6">
+											<div class="frame-wrap">
+												<div class="custom-control custom-checkbox custom-control-inline">
+													<input type="checkbox" class="custom-control-input" id="defaultInline5">
+													<label class="custom-control-label" for="defaultInline5">อื่นๆ โปรดระบุ</label>
+												</div>
+											</div>
+										</div>
+										<div class="col-span-6 sm:col-span-6 md:mx-4">
+											<label for="last_name" class="block text-sm font-medium text-gray-700">อื่นๆ ระบุ</label>
+											<input type="text" name="last_name" id="last_name" autocomplete="family-name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+										</div>
 
-									
-									<div class="col-span-6 sm:col-span-3">
-										<label for="last_name" class="block text-sm font-medium text-gray-700">ที่อยู่</label>
-										<input type="text" name="last_name" id="last_name" autocomplete="family-name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-									</div>
+										<div class="col-span-6 sm:col-span-3">
+											<label for="last_name" class="block text-sm font-medium text-gray-700">หมายเลขผู้เสียภาษี</label>
+											<input type="text" name="last_name" id="last_name" autocomplete="family-name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+										</div>
 
-									<div class="col-span-6 sm:col-span-3">
-										<label for="country" class="block text-sm font-medium text-gray-700">จังหวัด</label>
-										<select id="country" name="country" autocomplete="country" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-											<option>-- โปรดเลือก --</option>
-											<option>Canada</option>
-										</select>
-									</div>
-									<div class="col-span-6 sm:col-span-3">
-										<label for="country" class="block text-sm font-medium text-gray-700">อำเภอ</label>
-										<select id="country" name="country" autocomplete="country" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-											<option>-- โปรดเลือก --</option>
-											<option>Canada</option>
-										</select>
-									</div>
+										
+										<div class="col-span-6 sm:col-span-3">
+											<label for="last_name" class="block text-sm font-medium text-gray-700">ที่อยู่</label>
+											<input type="text" name="last_name" id="last_name" autocomplete="family-name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+										</div>
 
-				  
-								<div class="col-span-6">
-								  <label for="street_address" class="block text-sm font-medium text-gray-700">Street address</label>
-								  <input type="text" name="street_address" id="street_address" autocomplete="street-address" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+										<div class="col-span-6 sm:col-span-3">
+											<label for="country" class="block text-sm font-medium text-gray-700">จังหวัด</label>
+											<select id="country" name="country" autocomplete="country" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+												<option>-- โปรดเลือก --</option>
+												<option>Canada</option>
+											</select>
+										</div>
+										<div class="col-span-6 sm:col-span-3">
+											<label for="country" class="block text-sm font-medium text-gray-700">เขต/อำเภอ</label>
+											<select id="country" name="country" autocomplete="country" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+												<option>-- โปรดเลือก --</option>
+												<option>Canada</option>
+											</select>
+										</div>
+										<div class="col-span-6 sm:col-span-3">
+											<label for="country" class="block text-sm font-medium text-gray-700">แขวง/ตำบล</label>
+											<select id="country" name="country" autocomplete="country" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+												<option>-- โปรดเลือก --</option>
+												<option>Canada</option>
+											</select>
+										</div>
+										<div class="col-span-6 sm:col-span-3 md:mr-4">
+											<label for="last_name" class="block text-sm font-medium text-gray-700">รหัสไปรษณีย์</label>
+											<input type="text" name="last_name" id="last_name" autocomplete="family-name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+										</div>
+									</div>
 								</div>
-				  
-								<div class="col-span-6 sm:col-span-6 lg:col-span-2">
-								  <label for="city" class="block text-sm font-medium text-gray-700">City</label>
-								  <input type="text" name="city" id="city" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-								</div>
-				  
-								<div class="col-span-6 sm:col-span-3 lg:col-span-2">
-								  <label for="state" class="block text-sm font-medium text-gray-700">State / Province</label>
-								  <input type="text" name="state" id="state" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-								</div>
-				  
-								<div class="col-span-6 sm:col-span-3 lg:col-span-2">
-								  <label for="postal_code" class="block text-sm font-medium text-gray-700">ZIP / Postal</label>
-								  <input type="text" name="postal_code" id="postal_code" autocomplete="postal-code" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-								</div>
-							  </div>
 							</div>
-							<div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
-							  <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-								Save
-							  </button>
-							</div>
-						  </div>
-						
-					  </div>
+						</div>
 					</div>
-				  </div>
-
-				<button type="button" class="action-button previous_button">Back</button>
-				<button type="button" class="next action-button">Continue</button>
+				</div>
+				<button type="button" class="action-button previous_button">ก่อนหน้า</button>
+				<button type="button" class="next action-button">ถัดไป</button>
 			</fieldset>
 
 			<fieldset>
 				<h3>ข้อมูลผู้รับบริการ</h3>
-				<button type="button" class="action-button previous previous_button">Back</button>
-				<button type="button" class="next action-button">Continue</button>  
+				<h4>2. ข้อมูลผู้รับบริการ</h4>
+				<div class="mt-0 sm:mt-0">
+					<div class="md:grid md:grid-cols-1">
+						<div class="mt-2 md:mt-0 md:col-span-2">
+							<div class="shadow overflow-hidden sm:rounded-md">
+								<div class="px-4 py-5 bg-white sm:p-6">
+									<div class="grid grid-cols-6 gap-6">
+										<div class="col-span-6 sm:col-span-6">
+											<label for="simpleinput" class="block text-base font-medium text-gray-700">คำนำหน้าชื่อ <span class="text-red-600">*</span></label>
+											<div class="frame-wrap">
+												<div class="custom-control custom-checkbox custom-control-inline">
+													<input type="checkbox" class="custom-control-input" id="defaultInline1">
+													<label class="custom-control-label" for="defaultInline1">นาย</label>
+												</div>
+												<div class="custom-control custom-checkbox custom-control-inline">
+													<input type="checkbox" class="custom-control-input" id="defaultInline2">
+													<label class="custom-control-label" for="defaultInline2">นาง</label>
+												</div>
+												<div class="custom-control custom-checkbox custom-control-inline">
+													<input type="checkbox" class="custom-control-input" id="defaultInline3">
+													<label class="custom-control-label" for="defaultInline3">นางสาว</label>
+												</div>
+											</div>
+										</div>
+
+										<div class="col-span-6 sm:col-span-3">
+											<label for="last_name" class="block text-sm font-medium text-gray-700">ชื่อ</label>
+											<input type="text" name="last_name" id="last_name" autocomplete="family-name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+										</div>
+										<div class="col-span-6 sm:col-span-3">
+											<label for="last_name" class="block text-sm font-medium text-gray-700">นามสกุล</label>
+											<input type="text" name="last_name" id="last_name" autocomplete="family-name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+										</div>
+
+										<div class="col-span-6 sm:col-span-3">
+											<label for="last_name" class="block text-sm font-medium text-gray-700">ตำแหน่ง</label>
+											<input type="text" name="last_name" id="last_name" autocomplete="family-name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+										</div>
+										<div class="col-span-6 sm:col-span-3">
+											<label for="last_name" class="block text-sm font-medium text-gray-700">เบอร์โทรศัพท์มือถือ</label>
+											<input type="text" name="last_name" id="last_name" autocomplete="family-name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+										</div>
+										<div class="col-span-6 sm:col-span-3 md:mr-4">
+											<label for="last_name" class="block text-sm font-medium text-gray-700">อีเมล์</label>
+											<input type="text" name="last_name" id="last_name" autocomplete="family-name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<button type="button" class="action-button previous previous_button">ก่อนหน้า</button>
+				<button type="button" class="next action-button">ถัดไป</button>  
 			</fieldset> 
 
 			<fieldset>
 				<h3>ข้อมูลติดต่อ</h3>
-				<button type="button" class="action-button previous previous_button">Back</button>
-				<button type="button" class="next action-button">Continue</button>  
+				<h4>3. ข้อมูลติดต่อ</h4>
+				<div class="mt-0 sm:mt-0">
+					<div class="md:grid md:grid-cols-1">
+						<div class="mt-2 md:mt-0 md:col-span-2">
+							<div class="shadow overflow-hidden sm:rounded-md">
+								<div class="px-4 py-5 bg-white sm:p-6">
+									<div class="grid grid-cols-6 gap-6">
+										<div class="col-span-6 sm:col-span-6">
+											<label for="simpleinput" class="block text-base font-medium text-gray-700">ที่อยู่สำหรับส่งรายงานผลการตรวจ <span class="text-red-600">*</span></label>
+											<div class="frame-wrap">
+												<div class="custom-control custom-checkbox custom-control-inline">
+													<input type="checkbox" class="custom-control-input" id="defaultInline4">
+													<label class="custom-control-label" for="defaultInline4">ที่อยู่เดียวกับผู้รับบริการ</label>
+												</div>
+											</div>
+										</div>
+										<div class="col-span-6 sm:col-span-6">
+											<div class="frame-wrap">
+												<div class="custom-control custom-checkbox custom-control-inline">
+													<input type="checkbox" class="custom-control-input" id="defaultInline5">
+													<label class="custom-control-label" for="defaultInline5">ที่อยู่ใหม่</label>
+												</div>
+											</div>
+										</div>
+
+										<div class="col-span-6 sm:col-span-6 md:mx-4">
+											<label for="simpleinput" class="block text-base font-medium text-gray-700">คำนำหน้าชื่อ <span class="text-red-600">*</span></label>
+											<div class="frame-wrap">
+												<div class="custom-control custom-checkbox custom-control-inline">
+													<input type="checkbox" class="custom-control-input" id="defaultInline1">
+													<label class="custom-control-label" for="defaultInline1">นาย</label>
+												</div>
+												<div class="custom-control custom-checkbox custom-control-inline">
+													<input type="checkbox" class="custom-control-input" id="defaultInline2">
+													<label class="custom-control-label" for="defaultInline2">นาง</label>
+												</div>
+												<div class="custom-control custom-checkbox custom-control-inline">
+													<input type="checkbox" class="custom-control-input" id="defaultInline3">
+													<label class="custom-control-label" for="defaultInline3">นางสาว</label>
+												</div>
+											</div>
+										</div>
+
+										<div class="col-span-6 sm:col-span-3 md:mx-4">
+											<label for="last_name" class="block text-sm font-medium text-gray-700">ชื่อ</label>
+											<input type="text" name="last_name" id="last_name" autocomplete="family-name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+										</div>
+										<div class="col-span-6 sm:col-span-3 md:mx-4">
+											<label for="last_name" class="block text-sm font-medium text-gray-700">นามสกุล</label>
+											<input type="text" name="last_name" id="last_name" autocomplete="family-name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+										</div>
+
+										<div class="col-span-6 sm:col-span-3 md:mx-4">
+											<label for="last_name" class="block text-sm font-medium text-gray-700">ตำแหน่ง</label>
+											<input type="text" name="last_name" id="last_name" autocomplete="family-name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+										</div>
+										<div class="col-span-6 sm:col-span-3 md:mx-4">
+											<label for="last_name" class="block text-sm font-medium text-gray-700">เบอร์โทรศัพท์มือถือ</label>
+											<input type="text" name="last_name" id="last_name" autocomplete="family-name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+										</div>
+										<div class="col-span-6 sm:col-span-3 md:mx-4">
+											<label for="last_name" class="block text-sm font-medium text-gray-700">อีเมล์</label>
+											<input type="text" name="last_name" id="last_name" autocomplete="family-name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<button type="button" class="action-button previous previous_button">ก่อนหน้า</button>
+				<button type="button" class="next action-button">ถัดไป</button>  
 			</fieldset>
 
 			<fieldset>
 				<h3>บัญชีผู้ใช้</h3>
-				<button type="button" class="action-button previous previous_button">Back</button> 
-				<a href="#" class="action-button">Finish</a> 
+				<h4>4. บัญชีผู้ใช้</h4>
+				<div class="mt-0 sm:mt-0">
+					<div class="md:grid md:grid-cols-1">
+						<div class="mt-2 md:mt-0 md:col-span-2">
+							<div class="shadow overflow-hidden sm:rounded-md">
+								<div class="px-4 py-5 bg-white sm:p-6">
+									<div class="grid grid-cols-6 gap-6">
+										<div class="col-span-6 sm:col-span-6">
+											<label for="last_name" class="block text-sm font-medium text-gray-700">อีเมล์ (Email)</label>
+											<input type="text" name="last_name" id="last_name" autocomplete="family-name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+										</div>
+
+										<div class="col-span-6 sm:col-span-6">
+											<label for="last_name" class="block text-sm font-medium text-gray-700">รหัสผ่าน (Password)</label>
+											<input type="text" name="last_name" id="last_name" autocomplete="family-name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+										</div>
+
+										
+										<div class="col-span-6 sm:col-span-6">
+											<label for="last_name" class="block text-sm font-medium text-gray-700">ยืนยันรหัสผ่าน (Confirm password)</label>
+											<input type="text" name="last_name" id="last_name" autocomplete="family-name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<button type="button" class="action-button previous previous_button">ก่อนหน้า</button> 
+				<a href="#" class="action-button">ตรวจสอบข้อมูล</a> 
 			</fieldset>
 		</form>
 	</section> 
@@ -240,33 +371,31 @@ $(document).ready(function(){
 });
 </script>
 <script>
- (function($) {
-		"use strict";  
-		
-		//* Form js
-		function verificationForm(){
-				//jQuery time
-				var current_fs, next_fs, previous_fs; //fieldsets
-				var left, opacity, scale; //fieldset properties which we will animate
-				var animating; //flag to prevent quick multi-click glitches
+(function($) {
+	"use strict";  
+	function verificationForm(){
+	//jQuery time
+		var current_fs, next_fs, previous_fs; //fieldsets
+		var left, opacity, scale; //fieldset properties which we will animate
+		var animating; //flag to prevent quick multi-click glitches
 
-				$(".next").click(function () {
-						if (animating) return false;
-						animating = true;
+		$(".next").click(function () {
+			if (animating) return false;
+			animating = true;
 
-						current_fs = $(this).parent();
-						next_fs = $(this).parent().next();
+			current_fs = $(this).parent();
+			next_fs = $(this).parent().next();
 
-						//activate next step on progressbar using the index of next_fs
-						$("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
+			//activate next step on progressbar using the index of next_fs
+			$("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
 
-						//show the next fieldset
-						next_fs.show();
-						//hide the current fieldset with style
-						current_fs.animate({
-								opacity: 0
-						}, {
-								step: function (now, mx) {
+			//show the next fieldset
+			next_fs.show();
+			//hide the current fieldset with style
+			current_fs.animate({
+				opacity: 0
+			}, {
+			step: function (now, mx) {
 										//as the opacity of current_fs reduces to 0 - stored in "now"
 										//1. scale current_fs down to 80%
 										scale = 1 - (1 - now) * 0.2;
@@ -291,6 +420,7 @@ $(document).ready(function(){
 								//this comes from the custom easing plugin
 								easing: 'easeInOutBack'
 						});
+						$("html, body").animate({ scrollTop: 0 }, "slow");
 				});
 
 				$(".previous").click(function () {
