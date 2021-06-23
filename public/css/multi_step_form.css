@@ -1,5 +1,5 @@
 .multi_step_form {
-	background: #ccc;
+	background: #cccccc;
 	display: block;
 	overflow-x: hidden;
 	font-family: "sukhumvit", sans-serif;
@@ -18,13 +18,15 @@
 	padding-bottom: 40px;
 }
 .multi_step_form #msform .tittle h2 {
-	font: 400 24px/28px "sukhumvit", sans-serif;
-	color: #3f4553;
+	font: 400 24px/28px "sukhumvit";
+    color: #1D59A1;
+	/* color: #3f4553; */
 	padding-bottom: 5px;
 }
 .multi_step_form #msform .tittle p {
-	font: 400 18px/24px "sukhumvit", sans-serif;
-	color: #5f6771;
+	font: 400 18px/24px "sukhumvit";
+	/* color: #5f6771; */
+    color: #1B589D;
 }
 .multi_step_form #msform fieldset {
 	border: 0;
@@ -43,7 +45,7 @@
     font-weight: 400;
 	font-size: 1.475em;
 	color: #3f4553;
-	padding-bottom: 10px;
+	padding-bottom: 20px;
 }
 .multi_step_form #msform fieldset h4 {
     font-size: 1.275em;

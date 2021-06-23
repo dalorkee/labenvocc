@@ -3,14 +3,14 @@
 <link href="{{ URL::asset('css/app.css') }}" rel="stylesheet">
 <link href="{{ URL::asset('assets/css/ionicons.min.css') }}" rel="stylesheet">
 <link href="{{ URL::asset('css/multi_step_form.css') }}" rel="stylesheet">
-<link href="{{ URL::asset('vendor/select2/css/select2.min.css') }}" rel="stylesheet">
+<link href="{{ URL::asset('assets/css/formplugins/select2/select2.bundle.css') }}" rel="stylesheet">
 <style>
 .select2{width:100%!important;}
 .select2-selection{overflow:hidden;}
 .select2-selection__rendered{white-space:normal;word-break:break-all;}
-.select2-selection__rendered{line-height:38px!important;}
-.select2-container .select2-selection--single{height:37px!important;border:1px solid #e1e1e1;}
-.select2-selection__arrow{height:36px!important;}
+.select2-selection__rendered{line-height:39px!important;}
+.select2-container .select2-selection--single{height:38px!important;border:1px solid #cccccc;border-radius:0;}
+.select2-selection__arrow{height:37px!important;}
 .custom-control-label {
 	font-size: 1.175em;
 }
@@ -56,6 +56,8 @@
 												</div>
 											</div>
 										</div>
+									</div>
+									<div class="grid grid-cols-6 gap-6 mt-4">
 										<div class="col-span-6 sm:col-span-6">
 											<label for="simpleinput" class="block text-base font-medium text-gray-700">ชนิดหน่วยงาน <span class="text-red-600">*</span></label>
 											<div class="frame-wrap">
@@ -67,44 +69,42 @@
 										</div>
 										<div class="col-span-6 sm:col-span-3 md:ml-4">
 											<label for="first_name" class="block text-sm font-medium text-gray-700">ชื่อหน่วยงาน</label>
-											<input type="text" name="first_name" id="first_name" autocomplete="given-name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+											<input type="text" name="first_name" id="first_name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300">
 										</div>
 										<div class="col-span-6 sm:col-span-3 md:mr-4">
 											<label for="last_name" class="block text-sm font-medium text-gray-700">รหัสหน่วยงาน</label>
-											<input type="text" name="last_name" id="last_name" autocomplete="family-name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+											<input type="text" name="last_name" id="last_name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300">
 										</div>
 										<div class="col-span-6 sm:col-span-6">
 											<div class="frame-wrap">
 												<div class="custom-control custom-checkbox custom-control-inline">
-													<input type="checkbox" class="custom-control-input" id="defaultInline5">
-													<label class="custom-control-label" for="defaultInline5">สถานพยาบาล</label>
+													<input type="checkbox" id="health_place" class="custom-control-input">
+													<label class="custom-control-label" for="health_place">สถานพยาบาล</label>
 												</div>
 											</div>
 										</div>
 										<div class="col-span-6 sm:col-span-6 md:mx-4">
-											<label for="country" class="block text-sm font-medium text-gray-700">เลือกสถานพยาบาล</label>
-											<select id="mySelect" name="country" autocomplete="country" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+											<label for="health_place_id" class="block text-sm font-medium text-gray-700">เลือกสถานพยาบาล</label>
+											<select id="health_place_id" name="health_place_id" class="select2-placeholder mt-1 block w-full py-2 px-3 border border-gray-400 bg-white shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
 												<option>-- โปรดเลือก --</option>
 												<option>Canada</option>
 											</select>
 										</div>
-
 										<div class="col-span-6 sm:col-span-6">
 											<div class="frame-wrap">
 												<div class="custom-control custom-checkbox custom-control-inline">
-													<input type="checkbox" class="custom-control-input" id="defaultInline5">
-													<label class="custom-control-label" for="defaultInline5">ด่านควบคุมโรค</label>
+													<input type="checkbox" name="border_check_point" id="border_check_point" class="custom-control-input">
+													<label class="custom-control-label" for="border_check_point">ด่านควบคุมโรค</label>
 												</div>
 											</div>
 										</div>
 										<div class="col-span-6 sm:col-span-6 md:mx-4">
-											<label for="country" class="block text-sm font-medium text-gray-700">เลือกด่านควบคุมโรค</label>
-											<select id="country" name="country" autocomplete="country" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+											<label for="border_check_point_id" class="block text-sm font-medium text-gray-700">เลือกด่านควบคุมโรค</label>
+											<select id="border_check_point_id" name="border_check_point_id" class="select2-placeholder mt-1 block w-full py-2 px-3 border border-gray-800 bg-white shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
 												<option>-- โปรดเลือก --</option>
 												<option>Canada</option>
 											</select>
 										</div>
-
 										<div class="col-span-6 sm:col-span-6">
 											<div class="frame-wrap">
 												<div class="custom-control custom-checkbox custom-control-inline">
@@ -115,44 +115,45 @@
 										</div>
 										<div class="col-span-6 sm:col-span-6 md:mx-4">
 											<label for="last_name" class="block text-sm font-medium text-gray-700">อื่นๆ ระบุ</label>
-											<input type="text" name="last_name" id="last_name" autocomplete="family-name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+											<input type="text" name="last_name" id="last_name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-200">
 										</div>
-
+									</div>
+									<div class="grid grid-cols-6 gap-6 mt-6">
 										<div class="col-span-6 sm:col-span-3">
-											<label for="last_name" class="block text-sm font-medium text-gray-700">หมายเลขผู้เสียภาษี</label>
-											<input type="text" name="last_name" id="last_name" autocomplete="family-name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+											<label for="tax_id" class="block text-sm font-medium text-gray-700">หมายเลขผู้เสียภาษี</label>
+											<input type="text" name="tax_id" id="tax_id" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-200">
 										</div>
 
 										
 										<div class="col-span-6 sm:col-span-3">
-											<label for="last_name" class="block text-sm font-medium text-gray-700">ที่อยู่</label>
-											<input type="text" name="last_name" id="last_name" autocomplete="family-name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+											<label for="address" class="block text-sm font-medium text-gray-700">ที่อยู่</label>
+											<input type="text" name="address" id="address" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-200">
 										</div>
 
 										<div class="col-span-6 sm:col-span-3">
-											<label for="country" class="block text-sm font-medium text-gray-700">จังหวัด</label>
-											<select id="country" name="country" autocomplete="country" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+											<label for="province" class="block text-sm font-medium text-gray-700">จังหวัด</label>
+											<select id="province" name="province" class="select2-placeholder mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
 												<option>-- โปรดเลือก --</option>
 												<option>Canada</option>
 											</select>
 										</div>
 										<div class="col-span-6 sm:col-span-3">
-											<label for="country" class="block text-sm font-medium text-gray-700">เขต/อำเภอ</label>
-											<select id="country" name="country" autocomplete="country" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+											<label for="district" class="block text-sm font-medium text-gray-700">เขต/อำเภอ</label>
+											<select id="district" name="district" class="select2-placeholder mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
 												<option>-- โปรดเลือก --</option>
 												<option>Canada</option>
 											</select>
 										</div>
 										<div class="col-span-6 sm:col-span-3">
-											<label for="country" class="block text-sm font-medium text-gray-700">แขวง/ตำบล</label>
-											<select id="country" name="country" autocomplete="country" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+											<label for="sub_district" class="block text-sm font-medium text-gray-700">แขวง/ตำบล</label>
+											<select id="sub_district" name="sub_district" class="select2-placeholder form-control mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
 												<option>-- โปรดเลือก --</option>
 												<option>Canada</option>
 											</select>
 										</div>
-										<div class="col-span-6 sm:col-span-3 md:mr-4">
+										<div class="col-span-6 sm:col-span-3">
 											<label for="last_name" class="block text-sm font-medium text-gray-700">รหัสไปรษณีย์</label>
-											<input type="text" name="last_name" id="last_name" autocomplete="family-name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+											<input type="text" name="last_name" id="last_name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-200">
 										</div>
 									</div>
 								</div>
@@ -336,7 +337,7 @@
 </article>
 @endsection
 @section('script')
-<script src="{{ URL::asset('vendor/select2/js/select2.min.js') }}"></script>
+<script src="{{ URL::asset('assets/js/formplugins/select2/select2.bundle.js') }}"></script>
 <script>
 function matchCustom(params, data) {
 	// If there are no search terms, return all of the data
@@ -365,10 +366,106 @@ function matchCustom(params, data) {
 }
 </script>
 <script>
-$(document).ready(function(){
-	$("#mySelect").select2();
-	$("#mySelect1").select2();
-});
+$(document).ready(function() {
+	$(function() {
+		$('.select2').select2();
+		$(".select2-placeholder-multiple").select2({
+			placeholder: "-- โปรดระบุ --"
+		});
+		$(".js-hide-search").select2({
+			minimumResultsForSearch: 1 / 0
+		});
+		$(".js-max-length").select2({
+			maximumSelectionLength: 2,
+			placeholder: "Select maximum 2 items"
+		});
+		$(".select2-placeholder").select2({
+			placeholder: "-- โปรดระบุ --",
+			allowClear: true
+		});
+
+		$(".js-select2-icons").select2({
+			minimumResultsForSearch: 1 / 0,
+			templateResult: icon,
+			templateSelection: icon,
+			escapeMarkup: function(elm){
+				return elm
+			}
+		});
+
+		function icon(elm){
+			elm.element;
+			return elm.id ? "<i class='" + $(elm.element).data("icon") + " mr-2'></i>" + elm.text : elm.text
+		}
+
+		$(".js-data-example-ajax").select2({
+			ajax:{
+				url: "https://api.github.com/search/repositories",
+				dataType: 'json',
+				delay: 250,
+				data: function(params)
+				{
+					return {
+						q: params.term, // search term
+						page: params.page
+					};
+				},
+				processResults: function(data, params) {
+					// parse the results into the format expected by Select2
+					// since we are using custom formatting functions we do not need to
+					// alter the remote JSON data, except to indicate that infinite
+					// scrolling can be used
+					params.page = params.page || 1;
+
+					return {
+						results: data.items,
+						pagination:
+						{
+							more: (params.page * 30) < data.total_count
+						}
+					};
+				},
+				cache: true
+			},
+			placeholder: 'Search for a repository',
+			escapeMarkup: function(markup) {
+				return markup;
+			}, // let our custom formatter work
+			minimumInputLength: 1,
+			templateResult: formatRepo,
+			templateSelection: formatRepoSelection
+			});
+
+			function formatRepo(repo) {
+				if (repo.loading) {
+					return repo.text;
+				}
+
+				var markup = "<div class='select2-result-repository clearfix d-flex'>" +
+					"<div class='select2-result-repository__avatar mr-2'><img src='" + repo.owner.avatar_url + "' class='width-2 height-2 mt-1 rounded' /></div>" +
+					"<div class='select2-result-repository__meta'>" +
+					"<div class='select2-result-repository__title fs-lg fw-500'>" + repo.full_name + "</div>";
+
+				if (repo.description) {
+					markup += "<div class='select2-result-repository__description fs-xs opacity-80 mb-1'>" + repo.description + "</div>";
+				}
+
+				markup += "<div class='select2-result-repository__statistics d-flex fs-sm'>" +
+					"<div class='select2-result-repository__forks mr-2'><i class='fal fa-lightbulb'></i> " + repo.forks_count + " Forks</div>" +
+					"<div class='select2-result-repository__stargazers mr-2'><i class='fal fa-star'></i> " + repo.stargazers_count + " Stars</div>" +
+					"<div class='select2-result-repository__watchers mr-2'><i class='fal fa-eye'></i> " + repo.watchers_count + " Watchers</div>" +
+					"</div>" +
+					"</div></div>";
+
+				return markup;
+			}
+
+			function formatRepoSelection(repo) {
+				return repo.full_name || repo.text;
+			}
+		});
+	});
+
 </script>
 <script>
 (function($) {
