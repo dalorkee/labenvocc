@@ -987,9 +987,9 @@ h6 small,
 
 /* text-gradient */
 .text-gradient {
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(25%, #0c7ed5), color-stop(50%, #0a70bd), color-stop(75%, #9d0ad2), to(#7908a1));
-  background: linear-gradient(180deg, #0c7ed5 25%, #0a70bd 50%, #9d0ad2 75%, #7908a1 100%);
-  color: #2198F3;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(25%, #0087b9), color-stop(50%, #0074a0), color-stop(75%, #3787a4), to(#2a687e));
+  background: linear-gradient(180deg, #0087b9 25%, #0074a0 50%, #3787a4 75%, #2a687e 100%);
+  color: #00ACEC;
   background-clip: text;
   text-fill-color: transparent;
   -webkit-background-clip: text;
@@ -1068,7 +1068,7 @@ RESULT:
 .irs--flat .irs-to,
 .irs--flat .irs-single,
 .irs--flat .irs-handle > i:first-child {
-  background-color: #2198F3; }
+  background-color: #00ACEC; }
 
 .irs--flat .irs-from,
 .irs--flat .irs-to,
@@ -1078,37 +1078,37 @@ RESULT:
 .irs--flat .irs-from:before,
 .irs--flat .irs-to:before,
 .irs--flat .irs-single:before {
-  border-top-color: #2198F3; }
+  border-top-color: #00ACEC; }
 
 .irs--flat .irs-handle.state_hover > i:first-child,
 .irs--flat .irs-handle:hover > i:first-child {
-  background-color: #0d8cee; }
+  background-color: #0099d3; }
 
 .irs--big .irs-bar {
-  background-color: #51aef6;
-  border-color: #2198F3;
-  background: -webkit-gradient(linear, left top, left bottom, from(#ffffff), color-stop(30%, #51aef6), to(#2198F3));
-  background: linear-gradient(to bottom, #ffffff 0%, #51aef6 30%, #2198F3 100%); }
+  background-color: #20c3ff;
+  border-color: #00ACEC;
+  background: -webkit-gradient(linear, left top, left bottom, from(#ffffff), color-stop(30%, #20c3ff), to(#00ACEC));
+  background: linear-gradient(to bottom, #ffffff 0%, #20c3ff 30%, #00ACEC 100%); }
 
 .irs--big .irs-from,
 .irs--big .irs-to,
 .irs--big .irs-single {
-  background: #2198F3; }
+  background: #00ACEC; }
 
 .irs--modern .irs-bar {
-  background: #5cf004;
-  background: -webkit-gradient(linear, left top, left bottom, from(#79fb2c), to(#5cf004));
-  background: linear-gradient(to bottom, #79fb2c 0%, #5cf004 100%); }
+  background: #029e6b;
+  background: -webkit-gradient(linear, left top, left bottom, from(#02d08d), to(#029e6b));
+  background: linear-gradient(to bottom, #02d08d 0%, #029e6b 100%); }
 
 .irs--modern .irs-from,
 .irs--modern .irs-to,
 .irs--modern .irs-single {
-  background-color: #69FB13; }
+  background-color: #02B77C; }
 
 .irs--modern .irs-from:before,
 .irs--modern .irs-to:before,
 .irs--modern .irs-single:before {
-  border-top-color: #69FB13; }
+  border-top-color: #02B77C; }
 
 .irs--modern .irs-handle > i:nth-child(1) {
   width: 8px;
@@ -1119,30 +1119,30 @@ RESULT:
 .irs--sharp .irs-from,
 .irs--sharp .irs-to,
 .irs--sharp .irs-single {
-  background-color: #FC1349; }
+  background-color: #FF346A; }
 
 .irs--sharp .irs-handle > i:first-child,
 .irs--sharp .irs-from:before,
 .irs--sharp .irs-to:before,
 .irs--sharp .irs-single:before {
-  border-top-color: #FC1349; }
+  border-top-color: #FF346A; }
 
 .irs--sharp .irs-min,
 .irs--sharp .irs-max {
-  background-color: #c0022e; }
+  background-color: #e7003d; }
 
 .irs--round .irs-handle {
-  border-color: #BB1BF4; }
+  border-color: #4BA3C3; }
 
 .irs--round .irs-bar,
 .irs--round .irs-from,
 .irs--round .irs-to,
 .irs--round .irs-single {
-  background-color: #BB1BF4; }
+  background-color: #4BA3C3; }
 
 .irs--round .irs-from:before,
 .irs--round .irs-to:before,
 .irs--round .irs-single:before {
-  border-top-color: #BB1BF4; }
+  border-top-color: #4BA3C3; }
 
 /*# sourceMappingURL=ion-rangeslider.css.map */

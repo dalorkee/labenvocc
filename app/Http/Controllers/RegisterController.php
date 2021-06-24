@@ -4,34 +4,41 @@ namespace App\Http\Controllers;
 
 use App\Models\Register;
 use Illuminate\Http\Request;
+use App\Traits\RefTrait;
 
 class RegisterController extends Controller
 {
-    public function index() {
-        return view('auth.pre-register');
-    }
+	use RefTrait;
 
-    public function create() {
-        return view('auth.register');
-    }
+	public function index() {
 
-    public function store(Request $request) {
-        //
-    }
+		return view('auth.pre-register');
+	}
 
-    public function show(Register $register) {
-        //
-    }
+	public function create() {
+		$agency_type = self::agencyType();
+		return view('auth.register', [
+			'agency_type' => $agency_type
+		]);
+	}
 
-    public function edit(Register $register) {
-        //
-    }
+	public function store(Request $request) {
+		//
+	}
 
-    public function update(Request $request, Register $register) {
-        //
-    }
+	public function show(Register $register) {
+		//
+	}
 
-    public function destroy(Register $register) {
-        //
-    }
+	public function edit(Register $register) {
+		//
+	}
+
+	public function update(Request $request, Register $register) {
+		//
+	}
+
+	public function destroy(Register $register) {
+		//
+	}
 }

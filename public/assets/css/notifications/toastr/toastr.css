@@ -384,7 +384,7 @@ aside.page-sidebar ($nav-width, $nav-background)
 ========================================================================== */
 /* ACCESSIBILITIES */
 .toast {
-  background-color: #2198F3;
+  background-color: #00ACEC;
   background-image: none !important; }
   .toast:before {
     content: "\f05a";
@@ -402,22 +402,22 @@ aside.page-sidebar ($nav-width, $nav-background)
             align-items: center; }
 
 .toast-success {
-  background-color: #5cf004; }
+  background-color: #029e6b; }
   .toast-success:before {
     content: "\f2f7"; }
 
 .toast-error {
-  background-color: #FC1349; }
+  background-color: #FF346A; }
   .toast-error:before {
     content: "\f2f0"; }
 
 .toast-info {
-  background-color: #BB1BF4; }
+  background-color: #4BA3C3; }
   .toast-info:before {
     content: "\f05a"; }
 
 .toast-warning {
-  background-color: #df8000; }
+  background-color: #ff672e; }
   .toast-warning > div,
   .toast-warning .toast-close-button {
     color: #000; }
