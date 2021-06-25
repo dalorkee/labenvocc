@@ -21,56 +21,57 @@ themeSettings = (localStorage.getItem('themeSettings')) ? JSON.parse(localStorag
 themeURL = themeSettings.themeURL || '',
 themeOptions = themeSettings.themeOptions || '';
 if (themeSettings.themeOptions) {
-    classHolder.className = themeSettings.themeOptions;
-    console.log("%c✔ Theme settings loaded", "color: #148f32");
+	classHolder.className = themeSettings.themeOptions;
+	console.log("%c✔ Theme settings loaded", "color: #148f32");
 } else {
-    console.log("Heads up! Theme settings is empty or does not exist, loading default settings...");
+	console.log("Heads up! Theme settings is empty or does not exist, loading default settings...");
 }
 if (themeSettings.themeURL && !document.getElementById('mytheme')) {
-    var cssfile = document.createElement('link');
-    cssfile.id = 'mytheme';
-    cssfile.rel = 'stylesheet';
-    cssfile.href = themeURL;
-    document.getElementsByTagName('head')[0].appendChild(cssfile);
+	var cssfile = document.createElement('link');
+	cssfile.id = 'mytheme';
+	cssfile.rel = 'stylesheet';
+	cssfile.href = themeURL;
+	document.getElementsByTagName('head')[0].appendChild(cssfile);
 }
 var saveSettings = function() {
-    themeSettings.themeOptions = String(classHolder.className).split(/[^\w-]+/).filter(function(item) {
-    return /^(nav|header|mod|display)-/i.test(item);
-    }).join(' ');
-    if (document.getElementById('mytheme')) {
-        themeSettings.themeURL = document.getElementById('mytheme').getAttribute("href");
-    };
-    localStorage.setItem('themeSettings', JSON.stringify(themeSettings));
+	themeSettings.themeOptions = String(classHolder.className).split(/[^\w-]+/).filter(function(item) {
+	return /^(nav|header|mod|display)-/i.test(item);
+	}).join(' ');
+	if (document.getElementById('mytheme')) {
+		themeSettings.themeURL = document.getElementById('mytheme').getAttribute("href");
+	};
+	localStorage.setItem('themeSettings', JSON.stringify(themeSettings));
 }
 var resetSettings = function() {
-    localStorage.setItem("themeSettings", "");
+	localStorage.setItem("themeSettings", "");
 }
 </script>
 <!-- BEGIN Page Wrapper -->
 <div class="page-wrapper">
-    <div class="page-inner">
-        <aside class="page-sidebar">
-            @include('layouts.aside')
-        </aside>
-        <div class="page-content-wrapper">
-            <header class="page-header" role="banner">
-                @include('layouts.header')
-            </header>
-            <main id="js-page-content" role="main" class="page-content">
-                @yield('content')
-            </main>
-            <div class="page-content-overlay" data-action="toggle" data-class="mobile-nav-on"></div>
-            <footer class="page-footer" role="contentinfo">
-                @include('layouts.footer')
-            </footer>
-            @include('components.modal-shortcut')
-        </div>
-    </div>
+	<div class="page-inner">
+		<aside class="page-sidebar">
+			@include('layouts.aside')
+		</aside>
+		<div class="page-content-wrapper">
+			<header class="page-header" role="banner">
+				@include('layouts.header')
+			</header>
+			<main id="js-page-content" role="main" class="page-content">
+				@yield('content')
+			</main>
+			<div class="page-content-overlay" data-action="toggle" data-class="mobile-nav-on"></div>
+			<footer class="page-footer" role="contentinfo">
+				@include('layouts.footer')
+			</footer>
+			@include('components.modal-shortcut')
+		</div>
+	</div>
 </div>
 <!-- END Page Wrapper -->
 @include('components.quick-menu')
 @include('components.messenger')
 @include('components.page-settings')
 @include('layouts.script')
+@yield('script')
 </body>
 </html>

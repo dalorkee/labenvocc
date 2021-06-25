@@ -8,14 +8,15 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no, minimal-ui">
 	<meta name="apple-mobile-web-app-capable" content="yes" />
 	<meta name="msapplication-tap-highlight" content="no">
-	<link rel="stylesheet" media="screen, print" href="{{ URL::asset('assets/css/vendors.bundle.css') }}">
-	<link rel="stylesheet" media="screen, print" href="{{ URL::asset('assets/css/app.bundle.css') }}">
-	<link rel="apple-touch-icon" sizes="180x180" href="{{ URL::asset('assets/img/favicon/apple-touch-icon.png') }}">
 	<link rel="icon" type="image/png" sizes="32x32" href="{{ URL::asset('assets/img/favicon/favicon-32x32.png') }}">
 	<link rel="mask-icon" href="{{ URL::asset('assets/img/favicon/safari-pinned-tab.svg') }}" color="#5bbad5">
-	<link rel="stylesheet" media="screen, print" href="{{ URL::asset('assets/css/fa-brands.css') }}">
-	<link rel="stylesheet" media="screen, print" href="{{ URL::asset('css/fonts.css') }}">
-	<style type="text/css">.font-sukhumvit {font-family: "sukhumvit"};</style>
+	<link rel="apple-touch-icon" sizes="180x180" href="{{ URL::asset('assets/img/favicon/apple-touch-icon.png') }}">
+	<link rel="stylesheet" href="{{ URL::asset('assets/css/vendors.bundle.css') }}" media="screen, print" >
+	<link rel="stylesheet" href="{{ URL::asset('assets/css/app.bundle.css') }}" media="screen, print">
+	<link rel="stylesheet" href="{{ URL::asset('css/app.css') }}">
+	<link rel="stylesheet" href="{{ URL::asset('assets/css/fa-brands.css') }}" media="screen, print">
+	<link rel="stylesheet" href="{{ URL::asset('css/fonts.css') }}" media="screen, print">
+	<style type="text/css">.font-sukhumvit {font-family: "sukhumvit";}</style>
 	@yield('style')
 </head>
 <body>

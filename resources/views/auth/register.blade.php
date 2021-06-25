@@ -1,6 +1,5 @@
 @extends('layouts.guest.index')
 @section('style')
-<link href="{{ URL::asset('css/app.css') }}" rel="stylesheet">
 <link href="{{ URL::asset('assets/css/ionicons.min.css') }}" rel="stylesheet">
 <link href="{{ URL::asset('css/multi_step_form.css') }}" rel="stylesheet">
 <link href="{{ URL::asset('assets/css/formplugins/select2/select2.bundle.css') }}" rel="stylesheet">
@@ -40,12 +39,12 @@
 										<div class="col-span-6 sm:col-span-3 mb-4">
 											<label for="agency_type" class="block text-base font-medium text-gray-700">ประเภทหน่วยงาน <span class="text-red-600">*</span></label>
 											<div class="frame-wrap">
-                                                @foreach ($agency_type as $key => $value)
+												@foreach ($agency_type as $key => $value)
 												<div class="custom-control custom-checkbox custom-control-inline">
 													<input type="checkbox" name="agency_type" value="{{ $key }}" id="{{ $key }}" class="custom-control-input">
 													<label class="custom-control-label" for="{{ $key }}">{{ $value }}</label>
 												</div>
-                                                @endforeach
+												@endforeach
 											</div>
 										</div>
 									</div>
@@ -100,52 +99,52 @@
 										<div class="col-span-6 sm:col-span-6">
 											<div class="frame-wrap">
 												<div class="custom-control custom-switch custom-control-inline">
-													<input type="checkbox" name="agency_type" class="custom-control-input" id="defaultInline5">
-													<label class="custom-control-label" for="defaultInline5">อื่นๆ โปรดระบุ</label>
+													<input type="checkbox" name="agency_type" id="agency_type_other" class="custom-control-input agency_type">
+													<label class="custom-control-label" for="agency_type_other">อื่นๆ โปรดระบุ</label>
 												</div>
 											</div>
 										</div>
 										<div class="col-span-6 sm:col-span-6 md:mx-4">
-											<label for="last_name" class="block text-sm font-medium text-gray-700">อื่นๆ ระบุ</label>
-											<input type="text" name="last_name" id="last_name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-200">
+											<label for="agency_type_other_text" class="block text-sm font-medium text-gray-700">อื่นๆ ระบุ</label>
+											<input type="text" name="agency_type_other_text" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-200">
 										</div>
 									</div>
 									<div class="grid grid-cols-6 gap-6 mt-6">
 										<div class="col-span-6 sm:col-span-3">
-											<label for="tax_id" class="block text-sm font-medium text-gray-700">หมายเลขผู้เสียภาษี</label>
-											<input type="text" name="tax_id" id="tax_id" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-200">
+											<label for="taxpayer_no" class="block text-sm font-medium text-gray-700">หมายเลขผู้เสียภาษี</label>
+											<input type="text" name="taxpayer_no" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-200">
 										</div>
 
 										
 										<div class="col-span-6 sm:col-span-3">
 											<label for="address" class="block text-sm font-medium text-gray-700">ที่อยู่</label>
-											<input type="text" name="address" id="address" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-200">
+											<input type="text" name="address" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-200">
 										</div>
 
 										<div class="col-span-6 sm:col-span-3">
 											<label for="province" class="block text-sm font-medium text-gray-700">จังหวัด</label>
-											<select id="province" name="province" class="select2-placeholder mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+											<select id="province" name="province" id="province" class="select2-placeholder mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
 												<option>-- โปรดเลือก --</option>
 												<option>Canada</option>
 											</select>
 										</div>
 										<div class="col-span-6 sm:col-span-3">
 											<label for="district" class="block text-sm font-medium text-gray-700">เขต/อำเภอ</label>
-											<select id="district" name="district" class="select2-placeholder mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+											<select id="district" name="district" id="district" class="select2-placeholder mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
 												<option>-- โปรดเลือก --</option>
 												<option>Canada</option>
 											</select>
 										</div>
 										<div class="col-span-6 sm:col-span-3">
 											<label for="sub_district" class="block text-sm font-medium text-gray-700">แขวง/ตำบล</label>
-											<select id="sub_district" name="sub_district" class="select2-placeholder form-control mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+											<select id="sub_district" name="sub_district" id="subdistrict" class="select2-placeholder form-control mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
 												<option>-- โปรดเลือก --</option>
 												<option>Canada</option>
 											</select>
 										</div>
 										<div class="col-span-6 sm:col-span-3">
-											<label for="last_name" class="block text-sm font-medium text-gray-700">รหัสไปรษณีย์</label>
-											<input type="text" name="last_name" id="last_name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-200">
+											<label for="zip_code" class="block text-sm font-medium text-gray-700">รหัสไปรษณีย์</label>
+											<input type="text" name="zip_code" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-200">
 										</div>
 									</div>
 								</div>
@@ -415,10 +414,10 @@ $(document).ready(function() {
 			}
 		});
 
-        /* check box pj pj pj */
-        $('input[type="checkbox"]').on('change', function() {
-            $('input[name="' + this.name + '"]').not(this).prop('checked', false);
-        });
+		/* check box pj pj pj */
+		$('input[type="checkbox"]').on('change', function() {
+			$('input[name="' + this.name + '"]').not(this).prop('checked', false);
+		});
 	});
 
 </script>
