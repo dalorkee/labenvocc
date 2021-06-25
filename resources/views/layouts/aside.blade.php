@@ -38,6 +38,14 @@
                 <span class="nav-link-text" data-i18n="nav.application_intel">หน้าหลัก</span>
             </a>
         </li>
+        {{-- Aung Edit --}}
+        <li>
+            <a href="{{ route('customerList.index') }}" title="Application Intel" data-filter-tags="application intel">
+                <i class="fal fa-vial"></i>
+                <span class="nav-link-text" data-i18n="nav.application_intel">คำขอส่งตัวอย่าง</span>
+            </a>
+        </li>
+        {{-- End Aung Edit --}}
         <li>
             <a href="#" title="Application Intel" data-filter-tags="application intel">
                 <i class="fal fa-download"></i>
