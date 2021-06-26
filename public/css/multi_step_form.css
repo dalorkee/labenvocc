@@ -105,21 +105,21 @@
 	width: 150%;
 }
 .multi_step_form #msform #progressbar li.active {
-	color: #5cb85c;
+	color: #01937C;
 }
 .multi_step_form #msform #progressbar li.active:before, .multi_step_form #msform #progressbar li.active:after {
-	background: #5cb85c;
-	color: white;
+	background: #01937C;
+	color:#ffffff;
 }
 .multi_step_form #msform .action-button {
-	background: #5cb85c;
+	background: #01937C;
 	color: white;
 	border: 0 none;
 	border-radius: 5px;
 	cursor: pointer;
 	min-width: 130px;
 	font: 700 14px/40px "sukhumvit", Roboto, sans-serif;
-	border: 1px solid #5cb85c;
+	border: 1px solid #01937C;
 	margin: 30px 5px 10px 5px;
 	text-transform: uppercase;
 	display: inline-block;

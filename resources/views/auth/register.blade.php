@@ -166,43 +166,41 @@
 								<div class="px-4 py-5 bg-white sm:p-6">
 									<div class="grid grid-cols-6 gap-6">
 										<div class="col-span-6 sm:col-span-6">
-											<label for="simpleinput" class="block text-base font-medium text-gray-700">คำนำหน้าชื่อ <span class="text-red-600">*</span></label>
+											<label for="title_name" class="block text-base font-medium text-gray-700">คำนำหน้าชื่อ <span class="text-red-600">*</span></label>
 											<div class="frame-wrap">
 												<div class="custom-control custom-checkbox custom-control-inline">
-													<input type="checkbox" class="custom-control-input" id="defaultInline1">
-													<label class="custom-control-label" for="defaultInline1">นาย</label>
+													<input type="checkbox" name="title_name" value="mr" id="mister" class="custom-control-input">
+													<label class="custom-control-label" for="mister">นาย</label>
 												</div>
 												<div class="custom-control custom-checkbox custom-control-inline">
-													<input type="checkbox" class="custom-control-input" id="defaultInline2">
-													<label class="custom-control-label" for="defaultInline2">นาง</label>
+													<input type="checkbox" name="title_name" value="mrs" id="mistress" class="custom-control-input">
+													<label class="custom-control-label" for="mistress">นาง</label>
 												</div>
 												<div class="custom-control custom-checkbox custom-control-inline">
-													<input type="checkbox" class="custom-control-input" id="defaultInline3">
-													<label class="custom-control-label" for="defaultInline3">นางสาว</label>
+													<input type="checkbox" name="title_name" value="miss" id="miss" class="custom-control-input">
+													<label class="custom-control-label" for="miss">นางสาว</label>
 												</div>
 											</div>
 										</div>
-
 										<div class="col-span-6 sm:col-span-3">
-											<label for="last_name" class="block text-sm font-medium text-gray-700">ชื่อ</label>
-											<input type="text" name="last_name" id="last_name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-200">
+											<label for="first_name" class="block text-sm font-medium text-gray-700">ชื่อ <span class="text-red-600">*</span></label>
+											<input type="text" name="first_name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-200">
 										</div>
 										<div class="col-span-6 sm:col-span-3">
-											<label for="last_name" class="block text-sm font-medium text-gray-700">นามสกุล</label>
-											<input type="text" name="last_name" id="last_name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-200">
-										</div>
-
-										<div class="col-span-6 sm:col-span-3">
-											<label for="last_name" class="block text-sm font-medium text-gray-700">ตำแหน่ง</label>
-											<input type="text" name="last_name" id="last_name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-200">
+											<label for="last_name" class="block text-sm font-medium text-gray-700">นามสกุล <span class="text-red-600">*</span></label>
+											<input type="text" name="last_name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-200">
 										</div>
 										<div class="col-span-6 sm:col-span-3">
-											<label for="last_name" class="block text-sm font-medium text-gray-700">เบอร์โทรศัพท์มือถือ</label>
-											<input type="text" name="last_name" id="last_name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-200">
+											<label for="position" class="block text-sm font-medium text-gray-700">ตำแหน่ง <span class="text-red-600">*</span></label>
+											<input type="text" name="position" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-200">
 										</div>
 										<div class="col-span-6 sm:col-span-3">
-											<label for="last_name" class="block text-sm font-medium text-gray-700">อีเมล์</label>
-											<input type="text" name="last_name" id="last_name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-200">
+											<label for="mobile" class="block text-sm font-medium text-gray-700">เบอร์โทรศัพท์มือถือ <span class="text-red-600">*</span></label>
+											<input type="text" name="mobile" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-200">
+										</div>
+										<div class="col-span-6 sm:col-span-3">
+											<label for="email" class="block text-sm font-medium text-gray-700">อีเมล์ <span class="text-red-600">*</span></label>
+											<input type="text" name="email" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-200">
 										</div>
 									</div>
 								</div>
@@ -223,24 +221,19 @@
 							<div class="shadow overflow-hidden sm:rounded-md">
 								<div class="px-4 py-5 bg-white sm:p-6">
 									<div class="grid grid-cols-6 gap-6">
-										<div class="col-span-6 sm:col-span-6">
-											<label for="simpleinput" class="block text-base font-medium text-gray-700">ที่อยู่สำหรับส่งรายงานผลการตรวจ <span class="text-red-600">*</span></label>
+										<div class="col-span-6 sm:col-span-3">
+											<label for="send_address" class="block text-base font-medium text-gray-700">ที่อยู่สำหรับส่งรายงานผลการตรวจ <span class="text-red-600">*</span></label>
 											<div class="frame-wrap">
-												<div class="custom-control custom-checkbox custom-control-inline">
-													<input type="checkbox" class="custom-control-input" id="defaultInline4">
-													<label class="custom-control-label" for="defaultInline4">ที่อยู่เดียวกับผู้รับบริการ</label>
+												<div class="custom-control custom-switch custom-control-inline">
+													<input type="checkbox" name="send_result_addr" id="old_addr" class="custom-control-input">
+													<label class="custom-control-label" for="old_addr">ที่อยู่เดียวกับผู้รับบริการ</label>
+												</div>
+												<div class="custom-control custom-switch custom-control-inline">
+													<input type="checkbox" name="send_result_addr" id="new_addr" class="custom-control-input">
+													<label class="custom-control-label" for="new_addr">ที่อยู่ใหม่</label>
 												</div>
 											</div>
 										</div>
-										<div class="col-span-6 sm:col-span-6">
-											<div class="frame-wrap">
-												<div class="custom-control custom-checkbox custom-control-inline">
-													<input type="checkbox" class="custom-control-input" id="defaultInline5">
-													<label class="custom-control-label" for="defaultInline5">ที่อยู่ใหม่</label>
-												</div>
-											</div>
-										</div>
-
 										<div class="col-span-6 sm:col-span-6 md:mx-4">
 											<label for="simpleinput" class="block text-base font-medium text-gray-700">คำนำหน้าชื่อ <span class="text-red-600">*</span></label>
 											<div class="frame-wrap">
@@ -279,6 +272,10 @@
 										<div class="col-span-6 sm:col-span-3 md:mx-4">
 											<label for="last_name" class="block text-sm font-medium text-gray-700">อีเมล์</label>
 											<input type="text" name="last_name" id="last_name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-200">
+										</div>
+										<div class="col-span-6 sm:col-span-3 md:mx-4">
+											<label for="new_addr" class="block text-sm font-medium text-gray-700">ที่อยู่ใหม่</label>
+											<input type="text" name="new_addr" id="last_name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-200">
 										</div>
 									</div>
 								</div>
