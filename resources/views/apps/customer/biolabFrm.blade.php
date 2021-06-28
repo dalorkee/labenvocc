@@ -1,409 +1,752 @@
 @extends('layouts.index')
 @section('style')
-<link href="{{ URL::asset('assets/css/ionicons.min.css') }}" rel="stylesheet">
-<link href="{{ URL::asset('css/multi_step_form.css') }}" rel="stylesheet">
-<link href="{{ URL::asset('assets/css/formplugins/select2/select2.bundle.css') }}" rel="stylesheet">
-<style>
-.select2{width:100%!important;}
-.select2-selection{overflow:hidden;}
-.select2-selection__rendered{white-space:normal;word-break:break-all;}
-.select2-selection__rendered{line-height:39px!important;}
-.select2-container .select2-selection--single{height:38px!important;border:1px solid #cccccc;border-radius:0;}
-.select2-selection__arrow{height:37px!important;}
-.custom-control-label{font-size: 1.175em;}
-</style>
+<link href="{{ URL::asset('vendor/jquery-smartwizard/css/smart_wizard_arrows.min.css') }}" rel="stylesheet" type="text/css">
+<link href="{{ URL::asset('assets/css/formplugins/bootstrap-datepicker/bootstrap-datepicker.css') }}" rel="stylesheet" media="screen, print">
 @endsection
 @section('content')
 <ol class="breadcrumb page-breadcrumb">
     <li class="breadcrumb-item"><a href="javascript:void(0);">Home</a></li>
-    <li class="breadcrumb-item active">คำขอส่งตัวอย่าง</li>
-    <li class="position-absolute pos-top pos-right d-none d-sm-block"><span class="js-get-date"></span></li>
+    <li class="breadcrumb-item">คำขอส่งตัวอย่าง</li>
+    {{-- <li class="position-absolute pos-top pos-right d-none d-sm-block"><span class="js-get-date"></span></li> --}}
 </ol>
 <div class="subheader">
-    <h1 class="subheader-title"><i class='fal fa-clipboard-list'></i> สร้างคำขอส่งตัวอย่างชีวภาพ<small></small></h1>
+    <h1 class="subheader-title"><i class='fal fa-home'></i> สร้างคำขอส่งตัวอย่างชีวภาพ<small></small></h1>
 </div>
 <div class="fs-lg fw-300 p-5 bg-white border-faded rounded mb-g">
-  <article>
-  	<section class="multi_step_form">
-  		<form id="msform" class="w-full">
-  			<ul id="progressbar">
-  				<li class="active">ข้อมูลทั่วไป</li>
-  				<li>พารามิเตอร์</li>
-  				<li>ข้อมูลตัวอย่าง</li>
-  				<li>ตรวจสอบข้อมูล</li>
-  			</ul>
-  			<fieldset>
-  				{{-- <h3>ข้อมูลหน่วยงาน</h3> --}}
-  				<h4>1. ข้อมูลทั่วไป</h4>
-          <div class="mt-0 sm:mt-0">
-            <div class="md:grid md:grid-cols-1">
-              <div class="mt-2 md:mt-0 md:col-span-2">
-                <div class="shadow overflow-hidden sm:rounded-md">
-                  <div class="px-4 py-5 bg-white sm:p-6">
-                    <div class="grid grid-cols-6 gap-6">
-                      <div class="col-span-6 sm:col-span-3">
-                        <label for="last_name" class="block text-sm font-medium text-gray-700">หน่วยงานที่ส่งตัวอย่าง</label>
-                        <input type="text" name="last_name" id="last_name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-200">
-                      </div>
-                      <div class="col-span-6 sm:col-span-6">
-                        <label for="simpleinput" class="block text-base font-medium text-gray-700">ประเภทงาน <span class="text-red-600">*</span></label>
-                        <div class="frame-wrap">
-                          <div class="custom-control custom-checkbox custom-control-inline">
-                            <input type="checkbox" class="custom-control-input" id="defaultInline1">
-                            <label class="custom-control-label" for="defaultInline1">บริการ</label>
-                          </div>
-                          <div class="custom-control custom-checkbox custom-control-inline">
-                            <input type="checkbox" class="custom-control-input" id="defaultInline2">
-                            <label class="custom-control-label" for="defaultInline2">วิจัย</label>
-                          </div>
-                          <div class="custom-control custom-checkbox custom-control-inline">
-                            <input type="checkbox" class="custom-control-input" id="defaultInline3">
-                            <label class="custom-control-label" for="defaultInline3">เฝ้าระวัง</label>
-                          </div>
-                          <div class="custom-control custom-checkbox custom-control-inline">
-                            <input type="checkbox" class="custom-control-input" id="defaultInline4">
-                            <label class="custom-control-label" for="defaultInline4">SRRT/สอบสวนโรค</label>
-                          </div>
-                          <div class="custom-control custom-checkbox custom-control-inline">
-                            <input type="checkbox" class="custom-control-input" id="defaultInline5">
-                            <label class="custom-control-label" for="defaultInline5">อื่นๆ ระบุ</label>
-                          </div>
+    <div id="smartwizard">
+        <ul class="nav">
+            <li class="nav-item">
+                <a class="nav-link" href="#step-1">
+                    <strong>ข้อมูลทั่วไป</strong>
+                    {{-- <p>UX คืออะไร และอะไรคือ UX ที่ดีที่สุด</p> --}}
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#step-2">
+                    <strong>พารามิเตอร์</strong>
+                    {{-- <p>อยากเปลี่ยนแนว มาทำ UX</p> --}}
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#step-3">
+                    <strong>ข้อมูลตัวอย่าง</strong>
+                    {{-- <p>ถ้าเลือกได้ อย่า *, padding 0, margin 0</p> --}}
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#step-4">
+                    <strong>ตรวจสอบข้อมูล</strong>
+                    {{-- <p>12 ข้อคิดสำหรับผู้ที่กลัว CSS และ Standards</p> --}}
+                </a>
+            </li>
+        </ul>
+        <article class="tab-content">
+            <div id="step-1" class="tab-pane" role="tabpanel" aria-labelledby="step-1">
+                <h3>กรุณาระบุข้อมูลทั่วไป</h3>
+                <section>
+                    <div class="panel-content p-0">
+                        <div class="panel-content">
+                            <div class="form-row">
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label" for="validationCustom01">หน่วยงานที่ส่งตัวอย่าง <span class="text-danger">*</span> </label>
+                                    <input type="text" class="form-control" id="validationCustom01" placeholder="" autocomplete="off" required>
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col-xl-6">
+                                    <label class="form-label" for="validationCustom01">ประเภทงาน <span class="text-danger">*</span> </label>
+                                    <div class="frame-wrap">
+                                        <div class="demo">
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="defaultUncheckedRadio1" name="defaultExampleRadios" checked="">
+                                                <label class="custom-control-label" for="defaultUncheckedRadio1">บริการ</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="defaultCheckedRadio2" name="defaultExampleRadios">
+                                                <label class="custom-control-label" for="defaultCheckedRadio2">วิจัย</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="defaultUncheckedRadio3" name="defaultExampleRadios">
+                                                <label class="custom-control-label" for="defaultUncheckedRadio3">เฝ้าระวัง</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="defaultUncheckedRadio4" name="defaultExampleRadios">
+                                                <label class="custom-control-label" for="defaultUncheckedRadio4">SRRT/สอบสวนโรค</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="defaultUncheckedRadio5" name="defaultExampleRadios">
+                                                <label class="custom-control-label" for="defaultUncheckedRadio5">อื่นๆ ระบุ</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label" for="validationCustom01">หนังสือนำส่งเลขที่ื <span class="text-danger">*</span> </label>
+                                    <input type="text" class="form-control" id="validationCustom01" placeholder="" autocomplete="off" required>
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label" for="validationCustom02">ลงวันที่ <span class="text-danger">*</span></label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control " readonly placeholder="ระบุวันที่" id="datepicker-biolab-1" autocomplete="off">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text fs-xl">
+                                                <i class="fal fa-calendar"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label" for="validationCustom01">แนบไฟล์หนังสือนำส่ง <span class="text-danger">*</span> </label>
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="customFile" autocomplete="off">
+                                        <label class="custom-file-label" for="customFile"> ยังไม่มีไฟล์แนบ</label>
+                                    </div>
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                      </div>
-
-                      <div class="col-span-6 sm:col-span-3">
-                        <label for="last_name" class="block text-sm font-medium text-gray-700">หนังสือนำส่งเลขที่ื</label>
-                        <input type="text" name="last_name" id="last_name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-200">
-                      </div>
-                      <div class="col-span-6 sm:col-span-3">
-                        <label for="last_name" class="block text-sm font-medium text-gray-700">ลงวันที่</label>
-                        <input type="text" name="last_name" id="last_name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-200">
-                      </div>
-
-                      <div class="col-span-6 sm:col-span-3">
-                        <label for="last_name" class="block text-sm font-medium text-gray-700">แนบไฟล์หนังสือนำส่ง</label>
-                        <input type="text" name="last_name" id="last_name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-200">
-                      </div>
                     </div>
-                  </div>
-                </div>
-              </div>
+                </section>
             </div>
-          </div>
-  				<button type="button" class="action-button previous_button">ก่อนหน้า</button>
-  				<button type="button" class="next action-button">ถัดไป</button>
-  			</fieldset>
-
-  			<fieldset>
-  				{{-- <h3>ข้อมูลผู้รับบริการ</h3> --}}
-  				<h4>2. ข้อมูลผู้รับบริการ</h4>
-  				<div class="mt-0 sm:mt-0">
-  					<div class="md:grid md:grid-cols-1">
-  						<div class="mt-2 md:mt-0 md:col-span-2">
-  							<div class="shadow overflow-hidden sm:rounded-md">
-  								<div class="px-4 py-5 bg-white sm:p-6">
-                    <table id="" class="table table-bordered table-hover table-striped w-100">
-                        <thead>
-                            <tr>
-                                <th>รหัสตัวอย่าง</th>
-                                <th>ชื่อ-สกุล</th>
-                                <th>อายุ(ปี)</th>
-                                <th>แผนก</th>
-                                <th>อายุงาน(ปี)</th>
-                                <th>วันที่เก็บตัวอย่าง</th>
-                                <th>พารามิเตอร์</th>
-                                <th>หน่วย</th>
-                                <th>หมายเหตุ</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Tiger Nixon</td>
-                                <td>System Architect</td>
-                                <td>Edinburgh</td>
-                                <td>61</td>
-                                <td>2011/04/25</td>
-                                <td>System Architect</td>
-                                <td>Edinburgh</td>
-                                <td>61</td>
-                                <td>2011/04/25</td>
-                            </tr>
-                            <tr>
-                                <td>Garrett Winters</td>
-                                <td>Accountant</td>
-                                <td>Tokyo</td>
-                                <td>63</td>
-                                <td>2011/07/25</td>
-                                <td>System Architect</td>
-                                <td>Edinburgh</td>
-                                <td>61</td>
-                                <td>2011/04/25</td>
-                            </tr>
-                            <tr>
-                                <td>Ashton Cox</td>
-                                <td>Junior Technical Author</td>
-                                <td>San Francisco</td>
-                                <td>66</td>
-                                <td>2009/01/12</td>
-                                <td>System Architect</td>
-                                <td>Edinburgh</td>
-                                <td>61</td>
-                                <td>2011/04/25</td>
-                            </tr>
-                            <tr>
-                                <td>Cedric Kelly</td>
-                                <td>Senior Javascript Developer</td>
-                                <td>Edinburgh</td>
-                                <td>22</td>
-                                <td>2012/03/29</td>
-                                <td>System Architect</td>
-                                <td>Edinburgh</td>
-                                <td>61</td>
-                                <td>2011/04/25</td>
-                            </tr>
-                            <tr>
-                                <td>Airi Satou</td>
-                                <td>Accountant</td>
-                                <td>Tokyo</td>
-                                <td>33</td>
-                                <td>2008/11/28</td>
-                                <td>System Architect</td>
-                                <td>Edinburgh</td>
-                                <td>61</td>
-                                <td>2011/04/25</td>
-                            </tr>
-                            <tr>
-                                <td>Brielle Williamson</td>
-                                <td>Integration Specialist</td>
-                                <td>New York</td>
-                                <td>61</td>
-                                <td>2012/12/02</td>
-                                <td>System Architect</td>
-                                <td>Edinburgh</td>
-                                <td>61</td>
-                                <td>2011/04/25</td>
-                            </tr>
-                        </tbody>
-                    </table>
-  								</div>
-  							</div>
-  						</div>
-  					</div>
-  				</div>
-  				<button type="button" class="action-button previous previous_button">ก่อนหน้า</button>
-  				<button type="button" class="next action-button">ถัดไป</button>
-  			</fieldset>
-
-  			<fieldset>
-  				{{-- <h3>ข้อมูลติดต่อ</h3> --}}
-  				<h4>3. ข้อมูลติดต่อ</h4>
-  				<div class="mt-0 sm:mt-0">
-  					<div class="md:grid md:grid-cols-1">
-  						<div class="mt-2 md:mt-0 md:col-span-2">
-  							<div class="shadow overflow-hidden sm:rounded-md">
-  								<div class="px-4 py-5 bg-white sm:p-6">
-  									<div class="grid grid-cols-6 gap-6">
-  										<div class="col-span-6 sm:col-span-6">
-  											<label for="simpleinput" class="block text-base font-medium text-gray-700">ที่อยู่สำหรับส่งรายงานผลการตรวจ <span class="text-red-600">*</span></label>
-  											<div class="frame-wrap">
-  												<div class="custom-control custom-checkbox custom-control-inline">
-  													<input type="checkbox" class="custom-control-input" id="defaultInline4">
-  													<label class="custom-control-label" for="defaultInline4">ที่อยู่เดียวกับผู้รับบริการ</label>
-  												</div>
-  											</div>
-  										</div>
-  										<div class="col-span-6 sm:col-span-6">
-  											<div class="frame-wrap">
-  												<div class="custom-control custom-checkbox custom-control-inline">
-  													<input type="checkbox" class="custom-control-input" id="defaultInline5">
-  													<label class="custom-control-label" for="defaultInline5">ที่อยู่ใหม่</label>
-  												</div>
-  											</div>
-  										</div>
-
-  										<div class="col-span-6 sm:col-span-6 md:mx-4">
-  											<label for="simpleinput" class="block text-base font-medium text-gray-700">คำนำหน้าชื่อ <span class="text-red-600">*</span></label>
-  											<div class="frame-wrap">
-  												<div class="custom-control custom-checkbox custom-control-inline">
-  													<input type="checkbox" class="custom-control-input" id="defaultInline1">
-  													<label class="custom-control-label" for="defaultInline1">นาย</label>
-  												</div>
-  												<div class="custom-control custom-checkbox custom-control-inline">
-  													<input type="checkbox" class="custom-control-input" id="defaultInline2">
-  													<label class="custom-control-label" for="defaultInline2">นาง</label>
-  												</div>
-  												<div class="custom-control custom-checkbox custom-control-inline">
-  													<input type="checkbox" class="custom-control-input" id="defaultInline3">
-  													<label class="custom-control-label" for="defaultInline3">นางสาว</label>
-  												</div>
-  											</div>
-  										</div>
-
-  										<div class="col-span-6 sm:col-span-3 md:mx-4">
-  											<label for="last_name" class="block text-sm font-medium text-gray-700">ชื่อ</label>
-  											<input type="text" name="last_name" id="last_name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-200">
-  										</div>
-  										<div class="col-span-6 sm:col-span-3 md:mx-4">
-  											<label for="last_name" class="block text-sm font-medium text-gray-700">นามสกุล</label>
-  											<input type="text" name="last_name" id="last_name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-200">
-  										</div>
-
-  										<div class="col-span-6 sm:col-span-3 md:mx-4">
-  											<label for="last_name" class="block text-sm font-medium text-gray-700">ตำแหน่ง</label>
-  											<input type="text" name="last_name" id="last_name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-200">
-  										</div>
-  										<div class="col-span-6 sm:col-span-3 md:mx-4">
-  											<label for="last_name" class="block text-sm font-medium text-gray-700">เบอร์โทรศัพท์มือถือ</label>
-  											<input type="text" name="last_name" id="last_name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-200">
-  										</div>
-  										<div class="col-span-6 sm:col-span-3 md:mx-4">
-  											<label for="last_name" class="block text-sm font-medium text-gray-700">อีเมล์</label>
-  											<input type="text" name="last_name" id="last_name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-200">
-  										</div>
-  									</div>
-  								</div>
-  							</div>
-  						</div>
-  					</div>
-  				</div>
-  				<button type="button" class="action-button previous previous_button">ก่อนหน้า</button>
-  				<button type="button" class="next action-button">ถัดไป</button>
-  			</fieldset>
-
-  			<fieldset>
-  				{{-- <h3>บัญชีผู้ใช้</h3> --}}
-  				<h4>4. บัญชีผู้ใช้</h4>
-  				<div class="mt-0 sm:mt-0">
-  					<div class="md:grid md:grid-cols-1">
-  						<div class="mt-2 md:mt-0 md:col-span-2">
-  							<div class="shadow overflow-hidden sm:rounded-md">
-  								<div class="px-4 py-5 bg-white sm:p-6">
-  									<div class="grid grid-cols-6 gap-6">
-  										<div class="col-span-6 sm:col-span-6">
-  											<label for="last_name" class="block text-sm font-medium text-gray-700">อีเมล์ (Email)</label>
-  											<input type="text" name="last_name" id="last_name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-200">
-  										</div>
-
-  										<div class="col-span-6 sm:col-span-6">
-  											<label for="last_name" class="block text-sm font-medium text-gray-700">รหัสผ่าน (Password)</label>
-  											<input type="text" name="last_name" id="last_name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-200">
-  										</div>
-  										<div class="col-span-6 sm:col-span-6">
-  											<label for="last_name" class="block text-sm font-medium text-gray-700">ยืนยันรหัสผ่าน (Confirm password)</label>
-  											<input type="text" name="last_name" id="last_name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-200">
-  										</div>
-  									</div>
-  								</div>
-  							</div>
-  						</div>
-  					</div>
-  				</div>
-  				<button type="button" class="action-button previous previous_button">ก่อนหน้า</button>
-  				<a href="#" class="action-button">ตรวจสอบข้อมูล</a>
-  			</fieldset>
-  		</form>
-  	</section>
-  </article>
+            <div id="step-2" class="tab-pane" role="tabpanel" aria-labelledby="step-2">
+                <h3>กรุณาระบุพารามิเตอร์</h3>
+                <section>
+                    <div class="panel-content p-0">
+                        <div class="panel-content">
+                            <div class="form-row">
+                                <table id="" class="table table-bordered table-hover table-striped w-100">
+                                    <thead>
+                                        <tr>
+                                            <th>รหัสตัวอย่าง</th>
+                                            <th>ชื่อ-สกุล</th>
+                                            <th>อายุ(ปี)</th>
+                                            <th>แผนก</th>
+                                            <th>อายุงาน(ปี)</th>
+                                            <th>วันที่เก็บตัวอย่าง</th>
+                                            <th>พารามิเตอร์</th>
+                                            <th>หน่วย</th>
+                                            <th>หมายเหตุ</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Tiger Nixon</td>
+                                            <td>System Architect</td>
+                                            <td>Edinburgh</td>
+                                            <td>61</td>
+                                            <td>2011/04/25</td>
+                                            <td>System Architect</td>
+                                            <td>Edinburgh</td>
+                                            <td>61</td>
+                                            <td>
+                                              <p class="demo">
+                                                <a href="javascript:void(0);" class="btn btn-outline-success btn-icon">
+                                                    <i class="fal fa-plus"></i>
+                                                </a>
+                                                <a href="javascript:void(0);" class="btn btn-outline-warning btn-icon">
+                                                    <i class="fal fa-pen"></i>
+                                                </a>
+                                                <a href="javascript:void(0);" class="btn btn-outline-danger btn-icon">
+                                                    <i class="fal fa-times"></i>
+                                                </a>
+                                            </p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Garrett Winters</td>
+                                            <td>Accountant</td>
+                                            <td>Tokyo</td>
+                                            <td>63</td>
+                                            <td>2011/07/25</td>
+                                            <td>System Architect</td>
+                                            <td>Edinburgh</td>
+                                            <td>61</td>
+                                            <td>
+                                              <p class="demo">
+                                                <a href="javascript:void(0);" class="btn btn-outline-success btn-icon">
+                                                    <i class="fal fa-plus"></i>
+                                                </a>
+                                                <a href="javascript:void(0);" class="btn btn-outline-warning btn-icon">
+                                                    <i class="fal fa-pen"></i>
+                                                </a>
+                                                <a href="javascript:void(0);" class="btn btn-outline-danger btn-icon">
+                                                    <i class="fal fa-times"></i>
+                                                </a>
+                                            </p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Ashton Cox</td>
+                                            <td>Junior Technical Author</td>
+                                            <td>San Francisco</td>
+                                            <td>66</td>
+                                            <td>2009/01/12</td>
+                                            <td>System Architect</td>
+                                            <td>Edinburgh</td>
+                                            <td>61</td>
+                                            <td>
+                                              <p class="demo">
+                                                <a href="javascript:void(0);" class="btn btn-outline-success btn-icon">
+                                                    <i class="fal fa-plus"></i>
+                                                </a>
+                                                <a href="javascript:void(0);" class="btn btn-outline-warning btn-icon">
+                                                    <i class="fal fa-pen"></i>
+                                                </a>
+                                                <a href="javascript:void(0);" class="btn btn-outline-danger btn-icon">
+                                                    <i class="fal fa-times"></i>
+                                                </a>
+                                            </p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Cedric Kelly</td>
+                                            <td>Senior Javascript Developer</td>
+                                            <td>Edinburgh</td>
+                                            <td>22</td>
+                                            <td>2012/03/29</td>
+                                            <td>System Architect</td>
+                                            <td>Edinburgh</td>
+                                            <td>61</td>
+                                            <td>
+                                              <p class="demo">
+                                                <a href="javascript:void(0);" class="btn btn-outline-success btn-icon">
+                                                    <i class="fal fa-plus"></i>
+                                                </a>
+                                                <a href="javascript:void(0);" class="btn btn-outline-warning btn-icon">
+                                                    <i class="fal fa-pen"></i>
+                                                </a>
+                                                <a href="javascript:void(0);" class="btn btn-outline-danger btn-icon">
+                                                    <i class="fal fa-times"></i>
+                                                </a>
+                                            </p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Airi Satou</td>
+                                            <td>Accountant</td>
+                                            <td>Tokyo</td>
+                                            <td>33</td>
+                                            <td>2008/11/28</td>
+                                            <td>System Architect</td>
+                                            <td>Edinburgh</td>
+                                            <td>61</td>
+                                            <td>
+                                              <p class="demo">
+                                                <a href="javascript:void(0);" class="btn btn-outline-success btn-icon">
+                                                    <i class="fal fa-plus"></i>
+                                                </a>
+                                                <a href="javascript:void(0);" class="btn btn-outline-warning btn-icon">
+                                                    <i class="fal fa-pen"></i>
+                                                </a>
+                                                <a href="javascript:void(0);" class="btn btn-outline-danger btn-icon">
+                                                    <i class="fal fa-times"></i>
+                                                </a>
+                                            </p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Brielle Williamson</td>
+                                            <td>Integration Specialist</td>
+                                            <td>New York</td>
+                                            <td>61</td>
+                                            <td>2012/12/02</td>
+                                            <td>System Architect</td>
+                                            <td>Edinburgh</td>
+                                            <td>61</td>
+                                            <td>
+                                              <p class="demo">
+                                                <a href="javascript:void(0);" class="btn btn-outline-success btn-icon">
+                                                    <i class="fal fa-plus"></i>
+                                                </a>
+                                                <a href="javascript:void(0);" class="btn btn-outline-warning btn-icon">
+                                                    <i class="fal fa-pen"></i>
+                                                </a>
+                                                <a href="javascript:void(0);" class="btn btn-outline-danger btn-icon">
+                                                    <i class="fal fa-times"></i>
+                                                </a>
+                                            </p>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <div id="step-3" class="tab-pane" role="tabpanel" aria-labelledby="step-3">
+                <h3>กรุณาระบุข้อมูลตัวอย่าง</h3>
+                <section>
+                    <div class="panel-content p-0">
+                        <div class="panel-content">
+                            <div class="form-row">
+                                <div class="col-md-6 mb-6">
+                                    <table id="" class="table table-bordered table-hover table-striped w-100">
+                                        <thead>
+                                            <tr>
+                                                <th>รหัสตัวอย่าง</th>
+                                                <th>ชื่อ-สกุล</th>
+                                                <th>อายุ(ปี)</th>
+                                                <th>แผนก</th>
+                                                <th>อายุงาน(ปี)</th>
+                                                <th>วันที่เก็บตัวอย่าง</th>
+                                                <th>พารามิเตอร์</th>
+                                                <th>หน่วย</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Tiger Nixon</td>
+                                                <td>System Architect</td>
+                                                <td>Edinburgh</td>
+                                                <td>61</td>
+                                                <td>2011/04/25</td>
+                                                <td>System Architect</td>
+                                                <td>Edinburgh</td>
+                                                <td>61</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Garrett Winters</td>
+                                                <td>Accountant</td>
+                                                <td>Tokyo</td>
+                                                <td>63</td>
+                                                <td>2011/07/25</td>
+                                                <td>System Architect</td>
+                                                <td>Edinburgh</td>
+                                                <td>61</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Ashton Cox</td>
+                                                <td>Junior Technical Author</td>
+                                                <td>San Francisco</td>
+                                                <td>66</td>
+                                                <td>2009/01/12</td>
+                                                <td>System Architect</td>
+                                                <td>Edinburgh</td>
+                                                <td>61</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Cedric Kelly</td>
+                                                <td>Senior Javascript Developer</td>
+                                                <td>Edinburgh</td>
+                                                <td>22</td>
+                                                <td>2012/03/29</td>
+                                                <td>System Architect</td>
+                                                <td>Edinburgh</td>
+                                                <td>61</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Airi Satou</td>
+                                                <td>Accountant</td>
+                                                <td>Tokyo</td>
+                                                <td>33</td>
+                                                <td>2008/11/28</td>
+                                                <td>System Architect</td>
+                                                <td>Edinburgh</td>
+                                                <td>61</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Brielle Williamson</td>
+                                                <td>Integration Specialist</td>
+                                                <td>New York</td>
+                                                <td>61</td>
+                                                <td>2012/12/02</td>
+                                                <td>System Architect</td>
+                                                <td>Edinburgh</td>
+                                                <td>61</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="col-md-6 mb-6">
+                                    <div class="form-row">
+                                        <div class="col-md-4 mb-3">
+                                            <label class="form-label" for="validationCustom01">ตัวอย่างที่ <span class="text-danger">*</span> </label>
+                                            <input type="text" class="form-control" id="validationCustom01" placeholder="" autocomplete="off" required>
+                                            <div class="valid-feedback">
+                                                Looks good!
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label class="form-label" for="validationCustom02">ถึง <span class="text-danger">*</span></label>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control " readonly placeholder="ระบุวันที่" id="datepicker-biolab-1" autocomplete="off">
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text fs-xl">
+                                                        <i class="fal fa-calendar"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="valid-feedback">
+                                                Looks good!
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-md-4 mb-3">
+                                            <label class="form-label" for="validationCustom01">ประเด็นมลพิษ <span class="text-danger">*</span> </label>
+                                            <input type="text" class="form-control" id="validationCustom01" placeholder="" autocomplete="off" required>
+                                            <div class="valid-feedback">
+                                                Looks good!
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label class="form-label" for="validationCustom01">สถานที่เก็บตัวอย่าง <span class="text-danger">*</span> </label>
+                                            <input type="text" class="form-control" id="validationCustom01" placeholder="" autocomplete="off" required>
+                                            <div class="valid-feedback">
+                                                Looks good!
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-md-4 mb-3">
+                                            <div class="frame-wrap">
+                                                <div class="demo">
+                                                     <div class="custom-control custom-checkbox">
+                                                        <input type="checkbox" class="custom-control-input" id="defaultIndeterminate11">
+                                                        <label class="custom-control-label" for="defaultIndeterminate11">สถานที่เดียวกับหน่วยงานที่ส่งตัวอย่าง</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-md-2 mb-2">
+                                            <div class="frame-wrap">
+                                                <div class="demo">
+                                                    <div class="custom-control custom-radio">
+                                                        <input type="radio" class="custom-control-input" id="defaultUncheckedRadio7" name="defaultExampleRadios" checked="">
+                                                        <label class="custom-control-label" for="defaultUncheckedRadio7">สถานประกอบการ</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <input type="text" class="form-control" id="validationCustom01" placeholder="ชื่อหน่วยงาน" autocomplete="off" required>
+                                            <div class="valid-feedback">
+                                                Looks good!
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <input type="text" class="form-control" id="validationCustom01" placeholder="รหัสสถานประกอบการ" autocomplete="off" required>
+                                            <div class="valid-feedback">
+                                                Looks good!
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-md-2 mb-3">
+                                            <div class="frame-wrap">
+                                                <div class="demo">
+                                                    <div class="custom-control custom-radio">
+                                                        <input type="radio" class="custom-control-input" id="defaultUncheckedRadio8" name="defaultExampleRadios">
+                                                        <label class="custom-control-label" for="defaultUncheckedRadio8">สถานพยาบาล</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <input type="text" class="form-control" id="validationCustom01" placeholder="สถานพยาบาล" autocomplete="off" required>
+                                            <div class="valid-feedback">
+                                                Looks good!
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-md-2 mb-3">
+                                            <div class="frame-wrap">
+                                                <div class="demo">
+                                                    <div class="custom-control custom-radio">
+                                                        <input type="radio" class="custom-control-input" id="defaultUncheckedRadio9" name="defaultExampleRadios">
+                                                        <label class="custom-control-label" for="defaultUncheckedRadio9">ด่านควบคุมโรค</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <input type="text" class="form-control" id="validationCustom01" placeholder="ด่านควบคุมโรค" autocomplete="off" required>
+                                            <div class="valid-feedback">
+                                                Looks good!
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-md-2 mb-3">
+                                            <div class="frame-wrap">
+                                                <div class="demo">
+                                                    <div class="custom-control custom-radio">
+                                                        <input type="radio" class="custom-control-input" id="defaultUncheckedRadio10" name="defaultExampleRadios">
+                                                        <label class="custom-control-label" for="defaultUncheckedRadio10">อื่น ๆ ระบุ</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <input type="text" class="form-control" id="validationCustom01" placeholder="อื่น ๆ ระบุ" autocomplete="off" required>
+                                            <div class="valid-feedback">
+                                                Looks good!
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <div id="step-4" class="tab-pane" role="tabpanel" aria-labelledby="step-4">
+                <h3>กรุณาตรวจสอบข้อมูล</h3>
+                <section>
+                    <div class="panel-content p-0">
+                        <div class="panel-content">
+                            <div class="form-row">
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label" for="validationCustom01">หน่วยงานที่ส่งตัวอย่าง <span class="text-danger">*</span> : </label>
+                                </div>
+                                <div class="col-xl-6">
+                                    <label class="form-label" for="validationCustom01">ประเภทงาน <span class="text-danger">*</span> : บริการ</label>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label" for="validationCustom01">หนังสือนำส่งเลขที่ื <span class="text-danger">*</span> : 00000000</label>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label" for="validationCustom02">ลงวันที่ <span class="text-danger">*</span> : 28/06/2564</label>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label" for="validationCustom01">แนบไฟล์หนังสือนำส่ง <span class="text-danger">*</span> : BioLab.pdf</label>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <h3>2. ข้อมูลตัวอย่างและพารามิเตอร์</h3>
+                                <table id="" class="table table-bordered table-hover table-striped w-100">
+                                    <thead>
+                                        <tr>
+                                            <th>รหัสตัวอย่าง</th>
+                                            <th>ชื่อ-สกุล</th>
+                                            <th>อายุ(ปี)</th>
+                                            <th>แผนก</th>
+                                            <th>อายุงาน(ปี)</th>
+                                            <th>วันที่เก็บตัวอย่าง</th>
+                                            <th>พารามิเตอร์</th>
+                                            <th>หน่วย</th>
+                                            <th>หมายเหตุ</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Tiger Nixon</td>
+                                            <td>System Architect</td>
+                                            <td>Edinburgh</td>
+                                            <td>61</td>
+                                            <td>2011/04/25</td>
+                                            <td>System Architect</td>
+                                            <td>Edinburgh</td>
+                                            <td>61</td>
+                                            <td>2011/04/25</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Garrett Winters</td>
+                                            <td>Accountant</td>
+                                            <td>Tokyo</td>
+                                            <td>63</td>
+                                            <td>2011/07/25</td>
+                                            <td>System Architect</td>
+                                            <td>Edinburgh</td>
+                                            <td>61</td>
+                                            <td>2011/04/25</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="form-row">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="validationTooltipAgreement" required>
+                                    <label class="custom-control-label" for="validationTooltipAgreement">Agree to terms and conditions <span class="text-danger">*</span></label>
+                                    <div class="invalid-tooltip">
+                                        You must agree before submitting.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </article>
+    </div>
 </div>
 @endsection
 @section('script')
-<script src="{{ URL::asset('assets/js/datagrid/datatables/datatables.bundle.js') }}"></script>
+<script src="{{ URL::asset('vendor/jquery-smartwizard/js/jquery.smartWizard.min.js') }}" type="text/javascript"></script>
+<script src="{{ URL::asset('assets/js/formplugins/bootstrap-datepicker/bootstrap-datepicker.js') }}"></script>
 <script>
-(function($) {
-	"use strict";
-	function verificationForm() {
-	//jQuery time
-		var current_fs, next_fs, previous_fs; //fieldsets
-		var left, opacity, scale; //fieldset properties which we will animate
-		var animating; //flag to prevent quick multi-click glitches
+    $(document).ready(function() {
+        // Toolbar extra buttons
+        var btnFinish = $('<button></button>').text('บันทึก')
+            .addClass('btn btn-info')
+            .on('click', function() {
+                alert('Finish Clicked');
+            });
+        var btnCancel = $('<button></button>').text('ยกเลิก')
+            .addClass('btn btn-danger')
+            .on('click', function() {
+                $('#smartwizard').smartWizard("reset");
+            });
 
-		$(".next").click(function () {
-			if (animating) return false;
-			animating = true;
+        // Step show event
+        $("#smartwizard").on("showStep", function(e, anchorObject, stepNumber, stepDirection, stepPosition) {
+            $("#prev-btn").removeClass('disabled');
+            $("#next-btn").removeClass('disabled');
+            if (stepPosition === 'first') {
+                $("#prev-btn").addClass('disabled');
+            } else if (stepPosition === 'last') {
+                $("#next-btn").addClass('disabled');
+            } else {
+                $("#prev-btn").removeClass('disabled');
+                $("#next-btn").removeClass('disabled');
+            }
+        });
 
-			current_fs = $(this).parent();
-			next_fs = $(this).parent().next();
+        // Smart Wizard
+        $('#smartwizard').smartWizard({
+            selected: 0,
+            theme: 'arrows',
+            justified: true,
+            darkMode: false,
+            autoAdjustHeight: true,
+            cycleSteps: false,
+            backButtonSupport: true,
+            enableURLhash: true,
+            transition: {
+                animation: 'slide-horizontal',
+            },
+            toolbarSettings: {
+                toolbarPosition: 'bottom',
+                toolbarExtraButtons: [btnFinish, btnCancel]
+            },
+            lang: {
+                next: 'ต่อไป',
+                previous: 'ก่อนหน้า'
+            },
+        });
 
-			//activate next step on progressbar using the index of next_fs
-			$("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
+        // External Button Events
+        $("#reset-btn").on("click", function() {
+            $('#smartwizard').smartWizard("reset");
+            return true;
+        });
+        $("#prev-btn").on("click", function() {
+            $('#smartwizard').smartWizard("prev");
+            return true;
+        });
+        $("#next-btn").on("click", function() {
+            $('#smartwizard').smartWizard("next");
+            return true;
+        });
+    });
+    var controls = {
+        leftArrow: '<i class="fal fa-angle-left" style="font-size: 1.25rem"></i>',
+        rightArrow: '<i class="fal fa-angle-right" style="font-size: 1.25rem"></i>'
+    }
 
-			//show the next fieldset
-			next_fs.show();
-			//hide the current fieldset with style
-			current_fs.animate({
-				opacity: 0
-			}, {
-				step: function (now, mx) {
-					//as the opacity of current_fs reduces to 0 - stored in "now"
-					//1. scale current_fs down to 80%
-					scale = 1 - (1 - now) * 0.2;
-					//2. bring next_fs from the right(50%)
-					left = (now * 50) + "%";
-					//3. increase opacity of next_fs to 1 as it moves in
-					opacity = 1 - now;
-					current_fs.css({
-						'transform': 'scale(' + scale + ')',
-						'position': 'absolute'
-					});
-					next_fs.css({
-						'left': left,
-						'opacity': opacity
-					});
-				},
-				duration: 800,
-				complete: function () {
-					current_fs.hide();
-					animating = false;
-				},
-				//this comes from the custom easing plugin
-				easing: 'easeInOutBack'
-			});
-			$("html, body").animate({ scrollTop: 0 }, "slow");
-		});
-		$(".previous").click(function () {
-			if (animating) return false;
-			animating = true;
-			current_fs = $(this).parent();
-			previous_fs = $(this).parent().prev();
-			//de-activate current step on progressbar
-			$("#progressbar li").eq($("fieldset").index(current_fs)).removeClass("active");
-			//show the previous fieldset
-			previous_fs.show();
-			//hide the current fieldset with style
-			current_fs.animate({
-				opacity: 0
-			}, {
-				step: function (now, mx) {
-					//as the opacity of current_fs reduces to 0 - stored in "now"
-					//1. scale previous_fs from 80% to 100%
-					scale = 0.8 + (1 - now) * 0.2;
-					//2. take current_fs to the right(50%) - from 0%
-					left = ((1 - now) * 50) + "%";
-					//3. increase opacity of previous_fs to 1 as it moves in
-					opacity = 1 - now;
-					current_fs.css({
-						'left': left
-					});
-					previous_fs.css({
-						'transform': 'scale(' + scale + ')',
-						'opacity': opacity
-					});
-				},
-				duration: 800,
-				complete: function () {
-					current_fs.hide();
-					animating = false;
-				},
-				//this comes from the custom easing plugin
-				easing: 'easeInOutBack'
-			});
-		});
-		$(".submit").click(function () {
-				return false;
-		})
-	};
-	/*Function Calls*/
-	verificationForm ();
-})(jQuery);
+    var runDatePicker = function() {
+
+        // minimum setup
+        $('#datepicker-1').datepicker({
+            todayHighlight: true,
+            orientation: "bottom left",
+            templates: controls
+        });
+
+
+        // input group layout
+        $('#datepicker-biolab-1').datepicker({
+            todayHighlight: true,
+            orientation: "bottom left",
+            templates: controls
+        });
+
+        // input group layout for modal demo
+        $('#datepicker-modal-2').datepicker({
+            todayHighlight: true,
+            orientation: "bottom left",
+            templates: controls
+        });
+
+        // enable clear button
+        $('#datepicker-3').datepicker({
+            todayBtn: "linked",
+            clearBtn: true,
+            todayHighlight: true,
+            templates: controls
+        });
+
+        // enable clear button for modal demo
+        $('#datepicker-modal-3').datepicker({
+            todayBtn: "linked",
+            clearBtn: true,
+            todayHighlight: true,
+            templates: controls
+        });
+
+        // orientation
+        $('#datepicker-4-1').datepicker({
+            orientation: "top left",
+            todayHighlight: true,
+            templates: controls
+        });
+
+        $('#datepicker-4-2').datepicker({
+            orientation: "top right",
+            todayHighlight: true,
+            templates: controls
+        });
+
+        $('#datepicker-4-3').datepicker({
+            orientation: "bottom left",
+            todayHighlight: true,
+            templates: controls
+        });
+
+        $('#datepicker-4-4').datepicker({
+            orientation: "bottom right",
+            todayHighlight: true,
+            templates: controls
+        });
+
+        // range picker
+        $('#datepicker-5').datepicker({
+            todayHighlight: true,
+            templates: controls
+        });
+
+        // inline picker
+        $('#datepicker-6').datepicker({
+            todayHighlight: true,
+            templates: controls
+        });
+    }
+
+    $(document).ready(function() {
+        runDatePicker();
+    });
 </script>
 @endsection
