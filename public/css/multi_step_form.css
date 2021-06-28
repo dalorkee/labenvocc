@@ -44,7 +44,8 @@
     text-align: center;
     font-weight: 400;
 	font-size: 1.475em;
-	color: #3f4553;
+    color: #01937C;
+	/* color: #3f4553; */
 	padding-bottom: 20px;
 }
 .multi_step_form #msform fieldset h4 {

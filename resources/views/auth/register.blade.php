@@ -238,16 +238,16 @@
 											<label for="simpleinput" class="block text-base font-medium text-gray-700">คำนำหน้าชื่อ <span class="text-red-600">*</span></label>
 											<div class="frame-wrap">
 												<div class="custom-control custom-checkbox custom-control-inline">
-													<input type="checkbox" class="custom-control-input" id="defaultInline1">
-													<label class="custom-control-label" for="defaultInline1">นาย</label>
+													<input type="checkbox" name="send_title_name" id="send_title_name_mr" class="custom-control-input">
+													<label class="custom-control-label" for="send_title_name_mr">นาย</label>
 												</div>
 												<div class="custom-control custom-checkbox custom-control-inline">
-													<input type="checkbox" class="custom-control-input" id="defaultInline2">
-													<label class="custom-control-label" for="defaultInline2">นาง</label>
+													<input type="checkbox" name="send_title_name" id="send_title_name_mrs" class="custom-control-input">
+													<label class="custom-control-label" for="send_title_name_mrs">นาง</label>
 												</div>
 												<div class="custom-control custom-checkbox custom-control-inline">
-													<input type="checkbox" class="custom-control-input" id="defaultInline3">
-													<label class="custom-control-label" for="defaultInline3">นางสาว</label>
+													<input type="checkbox" name="send_title_name" id="send_title_name_ms" class="custom-control-input">
+													<label class="custom-control-label" for="send_title_name_ms">นางสาว</label>
 												</div>
 											</div>
 										</div>
@@ -316,7 +316,7 @@
 					</div>
 				</div>
 				<button type="button" class="action-button previous previous_button">ก่อนหน้า</button> 
-				<a href="#" class="action-button">ตรวจสอบข้อมูล</a> 
+				<button type="button" class="action-button">ตรวจสอบข้อมูล</button> 
 			</fieldset>
 		</form>
 	</section> 
