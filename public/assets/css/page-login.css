@@ -298,9 +298,9 @@ h6 small,
 
 /* text-gradient */
 .text-gradient {
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(25%, #0087b9), color-stop(50%, #0074a0), color-stop(75%, #3787a4), to(#2a687e));
-  background: linear-gradient(180deg, #0087b9 25%, #0074a0 50%, #3787a4 75%, #2a687e 100%);
-  color: #00ACEC;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(25%, #488354), color-stop(50%, #3f7349), color-stop(75%, #0c7cd5), to(#0960a5));
+  background: linear-gradient(180deg, #488354 25%, #3f7349 50%, #0c7cd5 75%, #0960a5 100%);
+  color: #5AA469;
   background-clip: text;
   text-fill-color: transparent;
   -webkit-background-clip: text;
@@ -377,7 +377,7 @@ RESULT:
 /* Page Layout Starts below...
 ========================================================================== */
 html body {
-  background: #c3eefd;
+  background: #e4efe6;
   /* NEW*/ }
   html body .blankpage-logo {
     padding: 20px 0 30px; }
@@ -402,7 +402,7 @@ html body {
   html body .blankpage-footer {
     padding: 10px 0;
     font-size: 0.75rem;
-    color: #058bbd; }
+    color: #50835b; }
   html body .login-footer {
     color: rgba(255, 255, 255, 0.9);
     font-size: 0.6875rem; }

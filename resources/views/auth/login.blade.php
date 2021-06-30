@@ -1,81 +1,115 @@
 @extends('layouts.guest.index')
 @section('content')
-<div class="flex-1" style="background: url(img/svg/pattern-1.svg) no-repeat center bottom fixed; background-size: cover;">
-	<div class="container py-4 py-lg-5 my-lg-5 px-4 px-sm-0">
-		<div class="row">
-			<div class="col-sm-12 col-md-6 col-lg-5 col-xl-4 ml-auto">
-				<h1 class="text-white fw-300 mb-3 d-sm-block d-md-none">App Sing in</h1>
-				<div class="card p-4 rounded-plus bg-faded">
-					<form method="POST" action="{{ route('login') }}">
-						@csrf
-						<div class="form-group">
-							<label class="form-label" for="username">Username/Email</label>
-							<input name="identity" type="text" id="username" class="form-control form-control-lg" required>
-							<div class="invalid-feedback">No, you missed this one.</div>
-							<div class="help-block">Your unique username to app</div>
+<div class="row bg-white">
+	<div class="col-md-6">
+		<div class="card p-4 border-0 shadow-0">
+			<form method="POST" action="{{ route('login') }}">
+				<fieldset style="padding:30px; border: 2px solid #4AD3C5">
+					<legend style="width:auto;padding:2px;color:#39675D">ลงชื่อเข้าใช้</legend>
+					@csrf
+					<div class="form-group">
+						<label class="form-label" for="username">ชื่อผู้ใช้/อีเมล์</label>
+						<input name="identity" type="text" id="username" class="form-control form-control-lg" required>
+						<div class="invalid-feedback">No, you missed this one.</div>
+						<div class="help-block">สามารถใช้อีเมล์แทนชื่อผู้ใช้ได้</div>
+					</div>
+					<div class="form-group">
+						<label class="form-label" for="password">รหัสผ่าน</label>
+						<input name="password" type="password" id="password" class="form-control form-control-lg" required>
+						<div class="invalid-feedback">Sorry, you missed this one.</div>
+						<div class="help-block">รหัสผ่านของคุณ</div>
+					</div>
+					<div class="form-group text-left">
+						<div class="custom-control custom-checkbox">
+							<input type="checkbox" class="custom-control-input" id="rememberme">
+							<label class="custom-control-label" for="rememberme"> จดจำผู้ใช้</label>
 						</div>
-						<div class="form-group">
-							<label class="form-label" for="password">Password</label>
-							<input name="password" type="password" id="password" class="form-control form-control-lg" required>
-							<div class="invalid-feedback">Sorry, you missed this one.</div>
-							<div class="help-block">Your password</div>
+					</div>
+					<div class="row no-gutters">
+						<div class="col-lg-6 pr-lg-1 my-2">
+							<button type="reset" class="btn btn-warning btn-block btn-lg text-white">ล้าง</button>
 						</div>
-						<div class="form-group text-left">
-							<div class="custom-control custom-checkbox">
-								<input type="checkbox" class="custom-control-input" id="rememberme">
-								<label class="custom-control-label" for="rememberme"> Remember me</label>
+						<div class="col-lg-6 pl-lg-1 my-2">
+							<button id="js-login-btn" type="submit" class="btn btn-info btn-block btn-lg"> เข้าสู่ระบบ</button>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="row mt-4">
+							<div class="col-lg-6">
+								<span><i class="fal fa-key"></i> ลืมรหัสผ่าน ?</span>
+							</div>
+							<div class="col-lg-6">
+								<a href="#"><i class="fal fa-book"></i> คู่มือการใช้งาน</a>
 							</div>
 						</div>
-						<div class="row no-gutters">
-							<div class="col-lg-6 pr-lg-1 my-2">
-								<button type="reset" class="btn btn-warning btn-block btn-lg text-white">Clear</button>
-							</div>
-							<div class="col-lg-6 pl-lg-1 my-2">
-								<button id="js-login-btn" type="submit" class="btn btn-info btn-block btn-lg"> Sign in</button>
-							</div>
-						</div>
-					</form>
+					</div>
+				</fieldset>
+			</form>
+		</div>
+		<div class="col-md-6">
+			<div class="row">
+				<div class="col-lg-6">
+					<span>ยังไม่มีบัญชีผู้ใช้ ?</span>
 				</div>
-				<div class="d-sm-flex flex-column align-items-center justify-content-center d-md-block">
-					<div class="px-0 py-1 mt-5 text-white fs-nano opacity-50">
-						Env-Occ social media
-					</div>
-					<div class="d-flex flex-row opacity-70">
-						<a href="#" class="mr-2 fs-xxl text-white">
-							<i class="fab fa-facebook-square"></i>
-						</a>
-						<a href="#" class="mr-2 fs-xxl text-white">
-							<i class="fab fa-twitter-square"></i>
-						</a>
-					</div>
+				<div class="col-lg-6 pl-lg-1 my-2">
+					<a href="#" class="btn btn-sm"> ลงทะเบียนใช้งาน</a>
 				</div>
 			</div>
-			<div class="col col-md-6 col-lg-7 hidden-sm-down font-sukhumvit">
-				<div class="panel" style="min-height: 398px;">
-					<div class="panel-hdr">
-						<h2>ข่าวสารประชาสัมพันธ์</h2>
-						<div class="panel-toolbar">
-							<button class="btn btn-panel" data-action="panel-fullscreen" data-toggle="tooltip" data-offset="0,10" data-original-title="Fullscreen"></button>
-							<button class="btn btn-panel" data-action="panel-close" data-toggle="tooltip" data-offset="0,10" data-original-title="Close"></button>
+		</div>
+	</div>
+	<div class="col-md-6">
+		<div class="row mt-4 mb-4">
+			<div class="col-md-12">
+				<form method="POST" action="{{ route('login') }}">
+					<fieldset style="padding:10px 30px; border: 2px solid #4AD3C5">
+						<legend style="width:auto;padding:2px;color:#39675D">ข่าวสารประชาสัมพันธ์</legend>
+						<div class="card m-0 p-0 shadow-0" style="border:none;background: none;">
+							<div class="card-body p-0">
+								<div class="custom-scroll" style="height: 220px">
+									<div class="px-4 py-3">
+										<div class="fs-xl fw-500 mb-3">
+											ขณะนี้ศูนย์อ้างอิงทางห้องปฏิบัติการและพิษวิทยาไม่สามารถให้บริการตรวจวิเคราะห์สารแปรรูปของเบนซีน (trans,trans-Muconic acid) ได้ชั่วคราว
+										</div>
+										<div class="fs-xl fw-500 mb-3">
+											ขณะนี้ศูนย์อ้างอิงทางห้องปฏิบัติการและพิษวิทยาไม่สามารถให้บริการตรวจวิเคราะห์สารแปรรูปของเบนซีน (trans,trans-Muconic acid) ได้ชั่วคราว
+										</div>
+										<div class="fs-xl fw-500 mb-3">
+											ขณะนี้ศูนย์อ้างอิงทางห้องปฏิบัติการและพิษวิทยาไม่สามารถให้บริการตรวจวิเคราะห์สารแปรรูปของเบนซีน (trans,trans-Muconic acid) ได้ชั่วคราว
+										</div>
+										<div class="fs-xl fw-500 mb-3">
+											ขณะนี้ศูนย์อ้างอิงทางห้องปฏิบัติการและพิษวิทยาไม่สามารถให้บริการตรวจวิเคราะห์สารแปรรูปของเบนซีน (trans,trans-Muconic acid) ได้ชั่วคราว
+										</div>
+									</div>
+								</div>
+							</div>
+
 						</div>
-					</div>
-					<div class="panel-container show">
-						<div class="panel-content">
-							<div class="panel-tag">
-								คำแนะนำการปฏิบัติตนสำหรับเจ้าหน้าที่หน่วยงานอื่นๆ (ไม่ใช่เจ้าหน้าที่สาธารณสุข) 
-								ที่เข้าไปปฏิบัติงานในพื้นที่ที่เกิดการระบาดของโรคติดเชื้อไวรัสโคโรนา 2019
-							</div>
-							<div class="panel-tag">
-								คำแนะนำการปฏิบัติตนสำหรับเจ้าหน้าที่หน่วยงานอื่นๆ (ไม่ใช่เจ้าหน้าที่สาธารณสุข) 
-								ที่เข้าไปปฏิบัติงานในพื้นที่ที่เกิดการระบาดของโรคติดเชื้อไวรัสโคโรนา 2019    
-							</div>
-							<div class="panel-tag">
-								ขณะนี้ศูนย์อ้างอิงทางห้องปฏิบัติการและพิษวิทยาไม่สามารถให้บริการตรวจวิเคราะห์สารแปรรูปของเบนซีน 
-								(trans,trans-Muconic acid) ได้ชั่วคราว
-							</div>
-						</div>
-					</div>
-				</div>
+					</fieldset>
+				</form>
+			</div>
+			<div class="col-md-12 mt-4">
+				<form method="POST" action="{{ route('login') }}">
+					<fieldset style="padding:30px; border: 2px solid #4AD3C5">
+						<legend style="width:auto;padding:2px;color:#39675D">มาตรฐานคุณภาพ</legend>
+						ขณะนี้ศูนย์อ้างอิงทางห้องปฏิบัติการและพิษวิทยาไม่สามารถให้บริการตรวจวิเคราะห์สารแปรรูปของเบนซีน (trans,trans-Muconic acid) ได้ชั่วคราว
+
+					</fieldset>
+				</form>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-6">
+		<div class="d-sm-flex flex-column align-items-center justify-content-center d-md-block">
+			<div class="px-0 py-1 mt-5 text-white fs-nano opacity-50">
+				Env-Occ social media
+			</div>
+			<div class="d-flex flex-row opacity-70">
+				<a href="#" class="mr-2 fs-xxl text-white">
+					<i class="fab fa-facebook-square"></i>
+				</a>
+				<a href="#" class="mr-2 fs-xxl text-white">
+					<i class="fab fa-twitter-square"></i>
+				</a>
 			</div>
 		</div>
 	</div>

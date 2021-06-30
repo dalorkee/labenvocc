@@ -795,8 +795,20 @@ p {
 						<label class="form-label" for="fname">ตำแหน่ง</label>
 						<input type="text" id="lname" class="form-control" placeholder="Last Name" required>
 						<div class="invalid-feedback">No, you missed this one.</div>
+					</div>
 				</div>
-
+				<div class="form-row">
+					<div class="form-group col-md-6">
+						<label class="form-label" for="fname">ชื่อ</label>
+						<input type="text" id="lname" class="form-control" placeholder="Last Name" required>
+						<div class="invalid-feedback">No, you missed this one.</div>
+					</div>
+					<div class="form-group col-md-6">
+						<label class="form-label" for="fname">นามสกุล</label>
+						<input type="text" id="lname" class="form-control" placeholder="Last Name" required>
+						<div class="invalid-feedback">No, you missed this one.</div>
+					</div>
+				</div>
 				<div class="form-group">
 					<label class="form-label" for="emailverify">Email will be needed for verification and account recovery</label>
 					<input type="email" id="emailverify" class="form-control" placeholder="Email for verification" required>

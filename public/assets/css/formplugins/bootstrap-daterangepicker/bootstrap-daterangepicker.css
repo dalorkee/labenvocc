@@ -618,9 +618,9 @@ h6 small,
 
 /* text-gradient */
 .text-gradient {
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(25%, #0087b9), color-stop(50%, #0074a0), color-stop(75%, #3787a4), to(#2a687e));
-  background: linear-gradient(180deg, #0087b9 25%, #0074a0 50%, #3787a4 75%, #2a687e 100%);
-  color: #00ACEC;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(25%, #488354), color-stop(50%, #3f7349), color-stop(75%, #0c7cd5), to(#0960a5));
+  background: linear-gradient(180deg, #488354 25%, #3f7349 50%, #0c7cd5 75%, #0960a5 100%);
+  color: #5AA469;
   background-clip: text;
   text-fill-color: transparent;
   -webkit-background-clip: text;
@@ -701,7 +701,7 @@ RESULT:
 
 .daterangepicker table tr td.old,
 .daterangepicker table tr td.new {
-  color: #7996a6; }
+  color: #999999; }
 
 .daterangepicker table tr td.active:active,
 .daterangepicker table tr td.active.highlighted:active,
@@ -711,7 +711,7 @@ RESULT:
 .daterangepicker table tr td.selected.highlighted,
 .daterangepicker table tr td span.active.active,
 .daterangepicker table tr td span.focused {
-  background-color: #07bcff;
+  background-color: #6aad78;
   color: #fff; }
 
 .daterangepicker table tr td.active:active:hover,
@@ -740,7 +740,7 @@ RESULT:
 .daterangepicker table tr td.selected.highlighted.active.focus,
 .daterangepicker table tr td.selected:hover,
 .daterangepicker table tr td.selected.highlighted:hover {
-  background-color: #0099d3;
+  background-color: #51945e;
   color: #fff; }
 
 .daterangepicker .calendar-table .next,
@@ -758,13 +758,13 @@ RESULT:
     border-color: #a1a8c3; }
 
 .daterangepicker .in-range.available {
-  background-color: #ffd6c7; }
+  background-color: #ffe3a7; }
 
 .daterangepicker .off.ends.in-range.available {
-  background-color: #ffe9e1; }
+  background-color: #ffebc1; }
 
 .daterangepicker td.available:hover, .daterangepicker th.available:hover {
-  background-color: #ffb194; }
+  background-color: #ffd274; }
 
 .daterangepicker td.start-date {
   border-radius: 10px 0 0 10px; }
@@ -786,6 +786,6 @@ RESULT:
   font-size: 0.8125rem;
   padding: 0.75rem 1rem; }
   .daterangepicker .ranges li.active {
-    background-color: #00ACEC; }
+    background-color: #5AA469; }
 
 /*# sourceMappingURL=bootstrap-daterangepicker.css.map */
