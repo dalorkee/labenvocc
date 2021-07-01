@@ -11,14 +11,19 @@ use App\Http\Controllers\
 };
 
 Route::impersonate();
-Route::any('/', [HomeController::class, 'index']);
-Route::any('/login', [HomeController::class, 'index'])->name('login');
-Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function() {return view('dashboard');})->name('dashboard');
+Route::get('/', [HomeController::class, 'index']);
+Route::get('/login', [HomeController::class, 'index'])->name('login')->middleware('throttle:60,1');
 Route::resources([
 	'home' => HomeController::class,
 	'register' => RegisterController::class,
 	'register/staff' => RegisterStaffController::class
 ]);
+
+Route::middleware(['auth:sanctum', 'verified'])->group(function() {
+	Route::get('/dashboard', function() {
+		return view('dashboard');
+	})->name('dashboard');
+});
 
 // Aung SendSampleReq Routh
 Route::resources([

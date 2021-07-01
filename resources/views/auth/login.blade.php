@@ -2,58 +2,50 @@
 @section('content')
 <div class="row bg-white">
 	<div class="col-md-6">
-		<div class="card p-4 border-0 shadow-0">
-			<form method="POST" action="{{ route('login') }}">
-				<fieldset style="padding:30px; border: 2px solid #4AD3C5">
-					<legend style="width:auto;padding:2px;color:#39675D">ลงชื่อเข้าใช้</legend>
+		<div class="row mt-4 mb-4">
+			<div class="col-md-12">
+				<form method="POST" action="{{ route('login') }}">
 					@csrf
-					<div class="form-group">
-						<label class="form-label" for="username">ชื่อผู้ใช้/อีเมล์</label>
-						<input name="identity" type="text" id="username" class="form-control form-control-lg" required>
-						<div class="invalid-feedback">No, you missed this one.</div>
-						<div class="help-block">สามารถใช้อีเมล์แทนชื่อผู้ใช้ได้</div>
-					</div>
-					<div class="form-group">
-						<label class="form-label" for="password">รหัสผ่าน</label>
-						<input name="password" type="password" id="password" class="form-control form-control-lg" required>
-						<div class="invalid-feedback">Sorry, you missed this one.</div>
-						<div class="help-block">รหัสผ่านของคุณ</div>
-					</div>
-					<div class="form-group text-left">
-						<div class="custom-control custom-checkbox">
-							<input type="checkbox" class="custom-control-input" id="rememberme">
-							<label class="custom-control-label" for="rememberme"> จดจำผู้ใช้</label>
-						</div>
-					</div>
-					<div class="row no-gutters">
-						<div class="col-lg-6 pr-lg-1 my-2">
-							<button type="reset" class="btn btn-warning btn-block btn-lg text-white">ล้าง</button>
-						</div>
-						<div class="col-lg-6 pl-lg-1 my-2">
-							<button id="js-login-btn" type="submit" class="btn btn-info btn-block btn-lg"> เข้าสู่ระบบ</button>
-						</div>
-					</div>
-					<div class="col-md-6">
-						<div class="row mt-4">
-							<div class="col-lg-6">
-								<span><i class="fal fa-key"></i> ลืมรหัสผ่าน ?</span>
+					<fieldset style="height:505px;padding:10px 30px; border: 2px solid #4AD3C5">
+						<legend style="width:auto;padding:2px;color:#39675D">ลงชื่อเข้าใช้</legend>
+						<div class="col-md-12">
+							<div class="form-group">
+								<label for="username" class="form-label">ชื่อผู้ใช้/อีเมล์</label>
+								<input name="identity" type="text" id="username" class="form-control form-control-lg" required>
+								<div class="invalid-feedback">No, you missed this one.</div>
+								<div class="help-block">สามารถใช้อีเมล์แทนชื่อผู้ใช้ได้</div>
 							</div>
-							<div class="col-lg-6">
-								<a href="#"><i class="fal fa-book"></i> คู่มือการใช้งาน</a>
+							<div class="form-group">
+								<label class="form-label" for="password">รหัสผ่าน</label>
+								<input name="password" type="password" id="password" class="form-control form-control-lg" required>
+								<div class="invalid-feedback">Sorry, you missed this one.</div>
+								<div class="help-block">รหัสผ่านของคุณ</div>
+							</div>
+							<div class="form-group text-left">
+								<div class="custom-control custom-checkbox">
+									<input type="checkbox" name="remember" id="remember_me" class="custom-control-input">
+									<label class="custom-control-label" for="rememberme">จดจำผู้ใช้</label>
+								</div>
 							</div>
 						</div>
-					</div>
-				</fieldset>
-			</form>
-		</div>
-		<div class="col-md-6">
-			<div class="row">
-				<div class="col-lg-6">
-					<span>ยังไม่มีบัญชีผู้ใช้ ?</span>
-				</div>
-				<div class="col-lg-6 pl-lg-1 my-2">
-					<a href="#" class="btn btn-sm"> ลงทะเบียนใช้งาน</a>
-				</div>
+						<div class="col-md-12 mt-4">
+							<button id="js-login-btn" type="submit" class="btn btn-info btn-block btn-lg">เข้าสู่ระบบ</button>
+						</div>
+						<div class="col-md-12">
+							<nav class="row mt-4 text-sm">
+								<div class="col-sm-3">
+									<a href="#"><i class="fal fa-key"></i> ลืมรหัสผ่าน ?</a>
+								</div>
+								<div class="col-sm-3">
+									<a href="#"><i class="fal fa-book"></i> คู่มือการใช้งาน</a>
+								</div>
+								<div class="col-sm-6">
+									<span><i class="fal fa-user"></i> ยังไม่มีบัญชีผู้ใช้ ?</span>&nbsp;&nbsp;&nbsp;<a href="#">ลงทะเบียนใช้งาน</a>
+								</div>
+							</nav>
+						</div>
+					</fieldset>
+				</form>
 			</div>
 		</div>
 	</div>
@@ -66,23 +58,52 @@
 						<div class="card m-0 p-0 shadow-0" style="border:none;background: none;">
 							<div class="card-body p-0">
 								<div class="custom-scroll" style="height: 220px">
-									<div class="px-4 py-3">
-										<div class="fs-xl fw-500 mb-3">
-											ขณะนี้ศูนย์อ้างอิงทางห้องปฏิบัติการและพิษวิทยาไม่สามารถให้บริการตรวจวิเคราะห์สารแปรรูปของเบนซีน (trans,trans-Muconic acid) ได้ชั่วคราว
+									<section>
+										<div class="alert border-faded bg-transparent text-secondary fade show" role="alert">
+											<div class="d-flex align-items-center">
+												<div class="alert-icon">
+													<span class="icon-stack icon-stack-md">
+														<i class="base-7 icon-stack-3x color-success-600"></i>
+														<i class="fal fa-info icon-stack-1x text-white"></i>
+													</span>
+												</div>
+												<div class="flex-1">
+													<span class="h5 color-success-600">ขณะนี้ศูนย์อ้างอิงทางห้องปฏิบัติการและพิษวิทยาไม่สามารถให้บริการตรวจวิเคราะห์สารแปรรูปของเบนซีน (trans,trans-Muconic acid) ได้ชั่วคราว</span>
+												</div>
+												<a href="#" class="btn btn-outline-success btn-sm btn-w-m">รายละเอียด</a>
+											</div>
 										</div>
-										<div class="fs-xl fw-500 mb-3">
-											ขณะนี้ศูนย์อ้างอิงทางห้องปฏิบัติการและพิษวิทยาไม่สามารถให้บริการตรวจวิเคราะห์สารแปรรูปของเบนซีน (trans,trans-Muconic acid) ได้ชั่วคราว
+										<div class="alert border-faded bg-transparent text-secondary fade show" role="alert">
+											<div class="d-flex align-items-center">
+												<div class="alert-icon">
+													<span class="icon-stack icon-stack-md">
+														<i class="base-7 icon-stack-3x color-success-600"></i>
+														<i class="fal fa-info icon-stack-1x text-white"></i>
+													</span>
+												</div>
+												<div class="flex-1">
+													<span class="h5 color-success-600">ขณะนี้ศูนย์อ้างอิงทางห้องปฏิบัติการและพิษวิทยาไม่สามารถให้บริการตรวจวิเคราะห์สารแปรรูปของเบนซีน (trans,trans-Muconic acid) ได้ชั่วคราว</span>
+												</div>
+												<a href="#" class="btn btn-outline-success btn-sm btn-w-m">รายละเอียด</a>
+											</div>
 										</div>
-										<div class="fs-xl fw-500 mb-3">
-											ขณะนี้ศูนย์อ้างอิงทางห้องปฏิบัติการและพิษวิทยาไม่สามารถให้บริการตรวจวิเคราะห์สารแปรรูปของเบนซีน (trans,trans-Muconic acid) ได้ชั่วคราว
+										<div class="alert border-faded bg-transparent text-secondary fade show" role="alert">
+											<div class="d-flex align-items-center">
+												<div class="alert-icon">
+													<span class="icon-stack icon-stack-md">
+														<i class="base-7 icon-stack-3x color-success-600"></i>
+														<i class="fal fa-info icon-stack-1x text-white"></i>
+													</span>
+												</div>
+												<div class="flex-1">
+													<span class="h5 color-success-600">ขณะนี้ศูนย์อ้างอิงทางห้องปฏิบัติการและพิษวิทยาไม่สามารถให้บริการตรวจวิเคราะห์สารแปรรูปของเบนซีน (trans,trans-Muconic acid) ได้ชั่วคราว</span>
+												</div>
+												<a href="#" class="btn btn-outline-success btn-sm btn-w-m">รายละเอียด</a>
+											</div>
 										</div>
-										<div class="fs-xl fw-500 mb-3">
-											ขณะนี้ศูนย์อ้างอิงทางห้องปฏิบัติการและพิษวิทยาไม่สามารถให้บริการตรวจวิเคราะห์สารแปรรูปของเบนซีน (trans,trans-Muconic acid) ได้ชั่วคราว
-										</div>
-									</div>
+									</section>
 								</div>
 							</div>
-
 						</div>
 					</fieldset>
 				</form>
@@ -91,8 +112,17 @@
 				<form method="POST" action="{{ route('login') }}">
 					<fieldset style="padding:30px; border: 2px solid #4AD3C5">
 						<legend style="width:auto;padding:2px;color:#39675D">มาตรฐานคุณภาพ</legend>
-						ขณะนี้ศูนย์อ้างอิงทางห้องปฏิบัติการและพิษวิทยาไม่สามารถให้บริการตรวจวิเคราะห์สารแปรรูปของเบนซีน (trans,trans-Muconic acid) ได้ชั่วคราว
-
+						<div class="card m-0 p-0 shadow-0" style="border:none;background: none;">
+							<div class="card-body p-0">
+								<div class="custom-scroll" style="height: 80px">
+									<section>
+										<div class="fs-xl fw-500 color-success-600">
+											ขณะนี้ศูนย์อ้างอิงทางห้องปฏิบัติการและพิษวิทยาไม่สามารถให้บริการตรวจวิเคราะห์สารแปรรูปของเบนซีน (trans,trans-Muconic acid) ได้ชั่วคราว
+										</div>
+									</section>
+								</div>
+							</div>
+						</div>
 					</fieldset>
 				</form>
 			</div>

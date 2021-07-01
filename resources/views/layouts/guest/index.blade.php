@@ -65,7 +65,7 @@
 				<div class="d-flex align-items-center container p-0">
 					<div class="">
 						<a href="javascript:void(0)" class="page-logo-link press-scale-down d-flex align-items-center">
-							<img src="{{ URL::asset('assets/img/moph-logo-120x120.png') }}" alt="logo" aria-roledescription="logo">
+							<img src="{{ URL::asset('assets/img/moph-logo-160x154.png') }}" alt="logo" aria-roledescription="logo">
 							<div class="page-logo-text mr-1 text-4xl">ระบบห้องปฏิบัติการกองโรคจากการประกอบอาชีพและสิ่งแวดล้อม</div>
 						</a>
 					</div>
