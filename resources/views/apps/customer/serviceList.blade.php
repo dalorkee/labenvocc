@@ -37,46 +37,106 @@
                                                 </thead>
                                                 <tbody>
                                                     <tr>
-                                                        <td>Tiger Nixon</td>
-                                                        <td>System Architect</td>
-                                                        <td>Edinburgh</td>
-                                                        <td>61</td>
-                                                        <td>2011/04/25</td>
+                                                        <td>00000000</td>
+                                                        <td>03/07/64</td>
+                                                        <td>ศูนย์ระยอง</td>
+                                                        <td>
+                                                          <li><code>รับตัวอย่างแล้ว</code></li>
+                                                          <li><code>ชำระเงินแล้ว</code></li>
+                                                        </td>
+                                                        <td>
+                                                          <p class="demo">
+                                                            <a href="#" class="btn btn-info">
+                                                                <span class="fal fa-print mr-1"></span>
+                                                                ใบปะนำส่ง
+                                                            </a>
+                                                          </p>
+                                                        </td>
                                                     </tr>
                                                     <tr>
-                                                        <td>Garrett Winters</td>
-                                                        <td>Accountant</td>
-                                                        <td>Tokyo</td>
-                                                        <td>63</td>
-                                                        <td>2011/07/25</td>
+                                                        <td>00000001</td>
+                                                        <td>01/07/64</td>
+                                                        <td>ศูนย์ระยอง</td>
+                                                        <td>
+                                                          <li><code>รับตัวอย่างแล้ว</code></li>
+                                                          <li><code>ชำระเงินแล้ว</code></li>
+                                                        </td>
+                                                        <td>
+                                                          <p class="demo">
+                                                            <a href="#" class="btn btn-info">
+                                                                <span class="fal fa-print mr-1"></span>
+                                                                ใบปะนำส่ง
+                                                            </a>
+                                                          </p>
+                                                        </td>
                                                     </tr>
                                                     <tr>
-                                                        <td>Ashton Cox</td>
-                                                        <td>Junior Technical Author</td>
-                                                        <td>San Francisco</td>
-                                                        <td>66</td>
-                                                        <td>2009/01/12</td>
+                                                        <td>00000002</td>
+                                                        <td>01/07/64</td>
+                                                        <td>ศูนย์ระยอง</td>
+                                                        <td>
+                                                          <li><code>เสร็จสิ้น</code></li>
+                                                          <li><code>ชำระเงินแล้ว</code></li>
+                                                        </td>
+                                                        <td>
+                                                          <p class="demo">
+                                                            <a href="#" class="btn btn-info">
+                                                                <span class="fal fa-print mr-1"></span>
+                                                                รายงานผล
+                                                            </a>
+                                                          </p>
+                                                        </td>
                                                     </tr>
                                                     <tr>
-                                                        <td>Cedric Kelly</td>
-                                                        <td>Senior Javascript Developer</td>
-                                                        <td>Edinburgh</td>
-                                                        <td>22</td>
-                                                        <td>2012/03/29</td>
+                                                        <td>00000003</td>
+                                                        <td>22/06/64</td>
+                                                        <td>ศูนย์ระยอง</td>
+                                                        <td>
+                                                          <li><code>รับตัวอย่างแล้ว</code></li>
+                                                          <li><code>ชำระเงินแล้ว</code></li>
+                                                        </td>
+                                                        <td>
+                                                          <p class="demo">
+                                                            <a href="#" class="btn btn-info">
+                                                                <span class="fal fa-print mr-1"></span>
+                                                                ใบปะนำส่ง
+                                                            </a>
+                                                          </p>
+                                                        </td>
                                                     </tr>
                                                     <tr>
-                                                        <td>Airi Satou</td>
-                                                        <td>Accountant</td>
-                                                        <td>Tokyo</td>
-                                                        <td>33</td>
-                                                        <td>2008/11/28</td>
+                                                        <td>00000004</td>
+                                                        <td>20/06/64</td>
+                                                        <td>ศูนย์ระยอง</td>
+                                                        <td>
+                                                          <li><code>เสร็จสิ้น</code></li>
+                                                          <li><code>ชำระเงินแล้ว</code></li>
+                                                        </td>
+                                                        <td>
+                                                          <p class="demo">
+                                                            <a href="#" class="btn btn-info">
+                                                                <span class="fal fa-print mr-1"></span>
+                                                                รายงานผล
+                                                            </a>
+                                                          </p>
+                                                        </td>
                                                     </tr>
                                                     <tr>
-                                                        <td>Brielle Williamson</td>
-                                                        <td>Integration Specialist</td>
-                                                        <td>New York</td>
-                                                        <td>61</td>
-                                                        <td>2012/12/02</td>
+                                                        <td>00000005</td>
+                                                        <td>15/06/64</td>
+                                                        <td>ศูนย์ระยอง</td>
+                                                        <td>
+                                                          <li><code>เสร็จสิ้น</code></li>
+                                                          <li><code>ชำระเงินแล้ว</code></li>
+                                                        </td>
+                                                        <td>
+                                                          <p class="demo">
+                                                            <a href="#" class="btn btn-info">
+                                                                <span class="fal fa-print mr-1"></span>
+                                                                รายงานผล
+                                                            </a>
+                                                          </p>
+                                                        </td>
                                                     </tr>
                                                 </tbody>
                                             </table>
