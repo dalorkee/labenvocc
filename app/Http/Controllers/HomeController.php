@@ -9,8 +9,7 @@ use Spatie\Permission\Traits\HasRoles;
 
 class HomeController extends Controller
 {
-	#[Route("/login", methods: ["GET"])]
-	public function index(): mixed {
+	public function index(): object {
 		if (Auth::check()) {
 			switch ($this->userRole()) {
 				case 'Superadmin':

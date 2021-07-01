@@ -18,7 +18,6 @@ Route::resources([
 	'register' => RegisterController::class,
 	'register/staff' => RegisterStaffController::class
 ]);
-
 Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 	Route::get('/dashboard', function() {
 		return view('dashboard');
