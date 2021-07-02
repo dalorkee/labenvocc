@@ -44,7 +44,7 @@
 											<div class="frame-wrap">
 												@foreach ($agency_type as $key => $value)
 												<div class="custom-control custom-checkbox custom-control-inline">
-													<input type="checkbox" name="agency_type" value="{{ $key }}" id="{{ $key }}" class="custom-control-input">
+													<input type="checkbox" name="agency" value="{{ $key }}" id="{{ $key }}" class="custom-control-input">
 													<label class="custom-control-label" for="{{ $key }}">{{ $value }}</label>
 												</div>
 												@endforeach
@@ -79,7 +79,7 @@
 										</div>
 										<div class="col-span-6 sm:col-span-6 md:mx-4">
 											<label for="health_place_id" class="block text-base font-medium text-gray-700">เลือกสถานพยาบาล</label>
-											<select id="health_place_id" name="health_place_id" class="select2-placeholder mt-1 block w-full py-2 px-3 border border-gray-400 bg-white shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+											<select data-placeholder="Select a state..." id="select2-ajax" name="health_place_id" class="js-data-example-ajax mt-1 block w-full py-2 px-3 border border-gray-400 bg-white shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
 												<option>-- โปรดเลือก --</option>
 												<option>Canada</option>
 											</select>
