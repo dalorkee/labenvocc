@@ -147,7 +147,7 @@
 										</div>
 										<div class="col-span-6 sm:col-span-3">
 											<label for="zip_code" class="block text-sm font-medium text-gray-700">รหัสไปรษณีย์</label>
-											<input type="text" name="zip_code" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-200">
+											<input type="text" name="postcode" id="postcode" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-200">
 										</div>
 									</div>
 								</div>
@@ -357,21 +357,26 @@ $(document).ready(function() {
 				data: {id:id},
 				success: function(response) {
 					$('#sub_district').html(response);
-					$.ajax({
-						method: "POST",
-						url: "{{ route('register.postcode') }}",
-						dataType: "HTML",
-						data: {id:id},
-						success: function(res) {
-							$('#postcode').html(res);
-						},
-						error: function(xhr, st, error) {
-							alert('Post code error: ' + xhr.status + error);
-						}
-					})
 				},
 				error: function(jqXhr, textStatus, errorMessage) {
 					alert('Sub district error: ' + jqXhr.status + errorMessage);
+				}
+			});
+		}
+	});
+	$('#sub_district').change(function() {
+		if ($(this).val() != '') {
+			var id = $(this).val();
+			$.ajax({
+				method: "POST",
+				url: "{{ route('register.postcode') }}",
+				dataType: "HTML",
+				data: {id:id},
+				success: function(response) {
+					$('#postcode').val(response);
+				},
+				error: function(jqXhr, textStatus, errorMessage) {
+					alert('Postcode error: ' + jqXhr.status + errorMessage);
 				}
 			});
 		}

@@ -14,7 +14,6 @@ class RegisterController extends Controller
 	}
 
 	protected function create(): object {
-		dd(self::getPostCodeBySubDistrict());
 		$agency_type = self::agencyType();
 		$provinces = self::getMinProvince();
 		return view('auth.register', [

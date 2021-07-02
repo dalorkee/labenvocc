@@ -21,6 +21,7 @@ Route::resources([
 Route::name('register.')->group(function() {
 	Route::post('province/district', [RegisterController::class, 'renderDistrictToHtmlSelect'])->name('district');
 	Route::post('province/district/subdistrict', [RegisterController::class, 'renderSubDistrictToHtmlSelect'])->name('subDistrict');
+	Route::post('province/subdistrict/postcode', [RegisterController::class, 'getPostCodeBySubDistrict'])->name('postcode');
 });
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function() {
