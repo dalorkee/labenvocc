@@ -20,7 +20,7 @@
                                                   </button>
                                                   <div class="dropdown-menu" aria-labelledby="btnGroupVerticalDrop1">
                                                       <a class="dropdown-item" href="{{ route('biolabFrm.index') }}">ตัวอย่างชีวภาพ</a>
-                                                      <a class="dropdown-item" href="#">ตัวอย่างสิ่งแวดล้อม</a>
+                                                      <a class="dropdown-item" href="{{ route('envlabFrm.index')}}">ตัวอย่างสิ่งแวดล้อม</a>
                                                   </div>
                                               </div>
                                             </div>
