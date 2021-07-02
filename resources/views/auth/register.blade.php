@@ -36,11 +36,11 @@
 				<div class="mt-0 sm:mt-0">
 					<div class="md:grid md:grid-cols-1">
 						<div class="mt-2 md:mt-0 md:col-span-2">
-							<div class="shadow overflow-hidden sm:rounded-md">
-								<div class="px-4 py-5 bg-white sm:p-6">
+							<div class="overflow-hidden">
+								<div class="px-6 pt-5 pb-16" style="border:1px solid #ccc">
 									<div class="grid grid-cols-6 gap-6">
 										<div class="col-span-6 sm:col-span-3 mb-4">
-											<label for="agency_type" class="block text-base font-medium text-gray-700">ประเภทหน่วยงาน <span class="text-red-600">*</span></label>
+											<label for="agency_type" class="block form-label">ประเภทหน่วยงาน <span class="text-red-600">*</span></label>
 											<div class="frame-wrap">
 												@foreach ($agency_type as $key => $value)
 												<div class="custom-control custom-checkbox custom-control-inline">
@@ -53,7 +53,7 @@
 									</div>
 									<div class="grid grid-cols-6 gap-6 mt-4">
 										<div class="col-span-6 sm:col-span-6">
-											<label for="simpleinput" class="block text-base font-medium text-gray-700">ชนิดหน่วยงาน <span class="text-red-600">*</span></label>
+											<label for="simpleinput" class="block form-label">ชนิดหน่วยงาน <span class="text-red-600">*</span></label>
 											<div class="frame-wrap">
 												<div class="custom-control custom-switch custom-control-inline">
 													<input type="checkbox" name="agency_type" id="agency_type_establishment" class="custom-control-input agency_type">
@@ -62,11 +62,11 @@
 											</div>
 										</div>
 										<div class="col-span-6 sm:col-span-3 md:ml-4">
-											<label for="first_name" class="block text-sm font-medium text-gray-700">ชื่อหน่วยงาน</label>
+											<label for="first_name" class="block text-base font-medium text-gray-700">ชื่อหน่วยงาน</label>
 											<input type="text" name="first_name" id="first_name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300">
 										</div>
 										<div class="col-span-6 sm:col-span-3 md:mr-4">
-											<label for="last_name" class="block text-sm font-medium text-gray-700">รหัสหน่วยงาน</label>
+											<label for="last_name" class="block text-base font-medium text-gray-700">รหัสหน่วยงาน</label>
 											<input type="text" name="last_name" id="last_name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300">
 										</div>
 										<div class="col-span-6 sm:col-span-6">
@@ -78,7 +78,7 @@
 											</div>
 										</div>
 										<div class="col-span-6 sm:col-span-6 md:mx-4">
-											<label for="health_place_id" class="block text-sm font-medium text-gray-700">เลือกสถานพยาบาล</label>
+											<label for="health_place_id" class="block text-base font-medium text-gray-700">เลือกสถานพยาบาล</label>
 											<select id="health_place_id" name="health_place_id" class="select2-placeholder mt-1 block w-full py-2 px-3 border border-gray-400 bg-white shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
 												<option>-- โปรดเลือก --</option>
 												<option>Canada</option>
@@ -93,7 +93,7 @@
 											</div>
 										</div>
 										<div class="col-span-6 sm:col-span-6 md:mx-4">
-											<label for="border_check_point_id" class="block text-sm font-medium text-gray-700">เลือกด่านควบคุมโรค</label>
+											<label for="border_check_point_id" class="block text-base font-medium text-gray-700">เลือกด่านควบคุมโรค</label>
 											<select id="border_check_point_id" name="border_check_point_id" class="select2-placeholder mt-1 block w-full py-2 px-3 border border-gray-800 bg-white shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
 												<option>-- โปรดเลือก --</option>
 												<option>Canada</option>
@@ -108,24 +108,24 @@
 											</div>
 										</div>
 										<div class="col-span-6 sm:col-span-6 md:mx-4">
-											<label for="agency_type_other_text" class="block text-sm font-medium text-gray-700">อื่นๆ ระบุ</label>
+											<label for="agency_type_other_text" class="block text-base font-medium text-gray-700">อื่นๆ ระบุ</label>
 											<input type="text" name="agency_type_other_text" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-200">
 										</div>
 									</div>
 									<div class="grid grid-cols-6 gap-6 mt-6">
 										<div class="col-span-6 sm:col-span-3">
-											<label for="taxpayer_no" class="block text-sm font-medium text-gray-700">หมายเลขผู้เสียภาษี</label>
+											<label for="taxpayer_no" class="block form-label">หมายเลขผู้เสียภาษี</label>
 											<input type="text" name="taxpayer_no" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-200">
 										</div>
 
 										
 										<div class="col-span-6 sm:col-span-3">
-											<label for="address" class="block text-sm font-medium text-gray-700">ที่อยู่</label>
+											<label for="address" class="block form-label">ที่อยู่</label>
 											<input type="text" name="address" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-200">
 										</div>
 
 										<div class="col-span-6 sm:col-span-3">
-											<label for="province" class="block text-sm font-medium text-gray-700">จังหวัด</label>
+											<label for="province" class="block form-label">จังหวัด</label>
 											<select id="province" name="province" id="province" class="select2-placeholder mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
 												<option value="">-- โปรดเลือก --</option>
 												@foreach ($provinces as $key => $val)
@@ -134,19 +134,19 @@
 											</select>
 										</div>
 										<div class="col-span-6 sm:col-span-3">
-											<label for="district" class="block text-sm font-medium text-gray-700">เขต/อำเภอ</label>
+											<label for="district" class="block form-label">เขต/อำเภอ</label>
 											<select name="district" id="district" class="select2-placeholder mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
 												<option value="">-- โปรดเลือก --</option>
 											</select>
 										</div>
 										<div class="col-span-6 sm:col-span-3">
-											<label for="sub_district" class="block text-sm font-medium text-gray-700">แขวง/ตำบล</label>
+											<label for="sub_district" class="block form-label">แขวง/ตำบล</label>
 											<select name="sub_district" id="sub_district" class="select2-placeholder form-control mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
 												<option>-- โปรดเลือก --</option>
 											</select>
 										</div>
 										<div class="col-span-6 sm:col-span-3">
-											<label for="zip_code" class="block text-sm font-medium text-gray-700">รหัสไปรษณีย์</label>
+											<label for="zip_code" class="block form-label">รหัสไปรษณีย์</label>
 											<input type="text" name="postcode" id="postcode" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-200">
 										</div>
 									</div>
@@ -165,8 +165,8 @@
 				<div class="mt-0 sm:mt-0">
 					<div class="md:grid md:grid-cols-1">
 						<div class="mt-2 md:mt-0 md:col-span-2">
-							<div class="shadow overflow-hidden sm:rounded-md">
-								<div class="px-4 py-5 bg-white sm:p-6">
+							<div class="overflow-hidden">
+								<div class="px-6 pt-5 pb-16" style="border:1px solid #ccc">
 									<div class="grid grid-cols-6 gap-6">
 										<div class="col-span-6 sm:col-span-6">
 											<label for="title_name" class="block text-base font-medium text-gray-700">คำนำหน้าชื่อ <span class="text-red-600">*</span></label>
@@ -221,8 +221,8 @@
 				<div class="mt-0 sm:mt-0">
 					<div class="md:grid md:grid-cols-1">
 						<div class="mt-2 md:mt-0 md:col-span-2">
-							<div class="shadow overflow-hidden sm:rounded-md">
-								<div class="px-4 py-5 bg-white sm:p-6">
+							<div class="overflow-hidden">
+								<div class="px-6 pt-5 pb-16" style="border:1px solid #ccc">
 									<div class="grid grid-cols-6 gap-6">
 										<div class="col-span-6 sm:col-span-3">
 											<label for="send_address" class="block text-base font-medium text-gray-700">ที่อยู่สำหรับส่งรายงานผลการตรวจ <span class="text-red-600">*</span></label>
@@ -296,8 +296,8 @@
 				<div class="mt-0 sm:mt-0">
 					<div class="md:grid md:grid-cols-1">
 						<div class="mt-2 md:mt-0 md:col-span-2">
-							<div class="shadow overflow-hidden sm:rounded-md">
-								<div class="px-4 py-5 bg-white sm:p-6">
+							<div class="overflow-hidden">
+								<div class="px-6 pt-5 pb-16" style="border:1px solid #ccc">
 									<div class="grid grid-cols-6 gap-6">
 										<div class="col-span-6 sm:col-span-6">
 											<label for="last_name" class="block text-sm font-medium text-gray-700">อีเมล์ (Email)</label>
@@ -527,7 +527,7 @@ $(document).ready(function() {
 				//this comes from the custom easing plugin
 				easing: 'easeInOutBack'
 			});
-			$("html, body").animate({ scrollTop: 0 }, "slow");
+			//$("html, body").animate({ scrollTop: 0 }, "slow");
 		});
 		$(".previous").click(function () {
 			if (animating) return false;
