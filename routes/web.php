@@ -7,7 +7,8 @@ use App\Http\Controllers\
 	RegisterController,
 	RegisterStaffController,
 	CustomerLstController,
-	CustomerBiolabController
+	CustomerBiolabController,
+    CustomerEnvLabController
 };
 
 Route::impersonate();
@@ -34,5 +35,6 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 // Aung SendSampleReq Routh
 Route::resources([
 	'customerList' => CustomerLstController::class,
-  'biolabFrm' => CustomerBiolabController::class
+    'biolabFrm' => CustomerBiolabController::class,
+    'envlabFrm' => CustomerEnvLabController::class,
 ]);
