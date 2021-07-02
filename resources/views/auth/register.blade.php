@@ -1,9 +1,12 @@
 @extends('layouts.guest.index')
+@section('meta-token')
+<meta name="csrf-token" content="{{ csrf_token() }}">
+@endsection
 @section('style')
 <link href="{{ URL::asset('assets/css/ionicons.min.css') }}" rel="stylesheet">
 <link href="{{ URL::asset('css/multi_step_form.css') }}" rel="stylesheet">
 <link href="{{ URL::asset('assets/css/formplugins/select2/select2.bundle.css') }}" rel="stylesheet">
-<style>
+<style type="text/css">
 .select2{width:100%!important;}
 .select2-selection{overflow:hidden;}
 .select2-selection__rendered{white-space:normal;word-break:break-all;}
@@ -124,22 +127,22 @@
 										<div class="col-span-6 sm:col-span-3">
 											<label for="province" class="block text-sm font-medium text-gray-700">จังหวัด</label>
 											<select id="province" name="province" id="province" class="select2-placeholder mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-												<option>-- โปรดเลือก --</option>
-												<option>Canada</option>
+												<option value="">-- โปรดเลือก --</option>
+												@foreach ($provinces as $key => $val)
+													<option value="{{ $key }}">{{ $val }}</option>
+												@endforeach
 											</select>
 										</div>
 										<div class="col-span-6 sm:col-span-3">
 											<label for="district" class="block text-sm font-medium text-gray-700">เขต/อำเภอ</label>
-											<select id="district" name="district" id="district" class="select2-placeholder mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-												<option>-- โปรดเลือก --</option>
-												<option>Canada</option>
+											<select name="district" id="district" class="select2-placeholder mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+												<option value="">-- โปรดเลือก --</option>
 											</select>
 										</div>
 										<div class="col-span-6 sm:col-span-3">
 											<label for="sub_district" class="block text-sm font-medium text-gray-700">แขวง/ตำบล</label>
-											<select id="sub_district" name="sub_district" id="subdistrict" class="select2-placeholder form-control mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+											<select name="sub_district" id="sub_district" class="select2-placeholder form-control mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
 												<option>-- โปรดเลือก --</option>
-												<option>Canada</option>
 											</select>
 										</div>
 										<div class="col-span-6 sm:col-span-3">
@@ -324,6 +327,57 @@
 @endsection
 @section('script')
 <script src="{{ URL::asset('assets/js/formplugins/select2/select2.bundle.js') }}"></script>
+<script>
+$(document).ready(function() {
+	$.ajaxSetup({headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}});
+	$('#province').change(function() {
+		if ($(this).val() != '') {
+			var id = $(this).val();
+			$.ajax({
+				method: "POST",
+				url: "{{ route('register.district') }}",
+				dataType: "html",
+				data: {id:id},
+				success: function(response) {
+					$('#district').html(response);
+				},
+				error: function(jqXhr, textStatus, errorMessage) {
+					alert('Error code: ' + jqXhr.status + errorMessage);
+				}
+			});
+		}
+	});
+	$('#district').change(function() {
+		if ($(this).val() != '') {
+			var id = $(this).val();
+			$.ajax({
+				method: "POST",
+				url: "{{ route('register.subDistrict') }}",
+				dataType: "HTML",
+				data: {id:id},
+				success: function(response) {
+					$('#sub_district').html(response);
+					$.ajax({
+						method: "POST",
+						url: "{{ route('register.postcode') }}",
+						dataType: "HTML",
+						data: {id:id},
+						success: function(res) {
+							$('#postcode').html(res);
+						},
+						error: function(xhr, st, error) {
+							alert('Post code error: ' + xhr.status + error);
+						}
+					})
+				},
+				error: function(jqXhr, textStatus, errorMessage) {
+					alert('Sub district error: ' + jqXhr.status + errorMessage);
+				}
+			});
+		}
+	});
+});
+</script>
 <script>
 $(document).ready(function() {
 	$(function() {
@@ -516,4 +570,5 @@ $(document).ready(function() {
 	verificationForm ();
 })(jQuery);
 </script>
+
 @endsection

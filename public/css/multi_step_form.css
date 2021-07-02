@@ -1,8 +1,8 @@
-/* .multi_step_form {
+.multi_step_form {
 	background: #cccccc;
 	display: block;
 	overflow-x: hidden;
-	font-family: "sukhumvit", sans-serif;
+	font-family: "sarabunextralight", sans-serif;
 }
 .multi_step_form #msform {
 	position: relative;
@@ -18,13 +18,13 @@
 	padding-bottom: 40px;
 }
 .multi_step_form #msform .tittle h2 {
-	font: 400 24px/28px "sukhumvit";
-    color: #1D59A1;
+	font: 400 24px/28px "sarabunextralight";
+	color: #1D59A1;
 	padding-bottom: 5px;
 }
 .multi_step_form #msform .tittle p {
-	font: 400 18px/24px "sukhumvit";
-    color: #1B589D;
+	font: 400 18px/24px "sarabunextralight";
+	color: #1B589D;
 }
 .multi_step_form #msform fieldset {
 	border: 0;
@@ -39,14 +39,14 @@
 }
 .multi_step_form #msform fieldset h3 {
 	width: 100%;
-    text-align: center;
-    font-weight: 400;
+	text-align: center;
+	font-weight: 400;
 	font-size: 1.475em;
-    color: #01937C;
+	color: #01937C;
 	padding-bottom: 20px;
 }
 .multi_step_form #msform fieldset h4 {
-    font-size: 1.275em;
+	font-size: 1.275em;
 	color: #5f6771;
 	padding-bottom: 5px;
 }
@@ -67,7 +67,7 @@
 	width: calc(100%/4);
 	float: left;
 	position: relative;
-	font: 500 13px/1 "sukhumvit", sans-serif;
+	font: 500 13px/1 "sarabunextralight", sans-serif;
 }
 .multi_step_form #msform #progressbar li:nth-child(2):before {
 	content: "\f2d9";
@@ -116,7 +116,7 @@
 	border-radius: 5px;
 	cursor: pointer;
 	min-width: 130px;
-	font: 700 14px/40px "sukhumvit", Roboto, sans-serif;
+	font: 700 14px/40px "sarabunextralight", Roboto, sans-serif;
 	border: 1px solid #01937C;
 	margin: 30px 5px 10px 5px;
 	text-transform: uppercase;
@@ -136,4 +136,3 @@
 	border-color: #405867;
 	color: #fff;
 } 
-*/

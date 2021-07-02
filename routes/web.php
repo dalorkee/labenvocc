@@ -18,11 +18,17 @@ Route::resources([
 	'register' => RegisterController::class,
 	'register/staff' => RegisterStaffController::class
 ]);
+Route::name('register.')->group(function() {
+	Route::post('province/district', [RegisterController::class, 'renderDistrictToHtmlSelect'])->name('district');
+	Route::post('province/district/subdistrict', [RegisterController::class, 'renderSubDistrictToHtmlSelect'])->name('subDistrict');
+});
+
 Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 	Route::get('/dashboard', function() {
 		return view('dashboard');
 	})->name('dashboard');
 });
+
 
 // Aung SendSampleReq Routh
 Route::resources([

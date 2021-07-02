@@ -69,8 +69,11 @@
 	font-style: normal;
 
 }
-html, body {
-	font-family: 'sarabunextralight', sans-serif;
+.font-sarabun-medium {
+	font-family: 'sarabunextralight' !important;
+}
+html, body, .page-wrapper {
+	font-family: 'sarabunextralight' !important;
 	font-size: 1rem;
 }
 
