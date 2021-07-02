@@ -1,16 +1,15 @@
 .multi_step_form {
-	background: #cccccc;
+	background: #ccc;
 	display: block;
 	overflow-x: hidden;
-	font-family: "sarabunextralight", sans-serif;
+	font-family: "sarabunextralight";
 }
 .multi_step_form #msform {
 	position: relative;
 	padding: 40px 0 10px 0;
-	min-height: 500px;
-	height: auto;
+	height: 2500px;
 	margin: 0 auto;
-	background: #ffffff;
+	background: #fff;
 	z-index: 1;
 }
 .multi_step_form #msform .tittle {
@@ -19,12 +18,12 @@
 }
 .multi_step_form #msform .tittle h2 {
 	font: 400 24px/28px "sarabunextralight";
-	color: #1D59A1;
+	color: #01937C;
 	padding-bottom: 5px;
 }
 .multi_step_form #msform .tittle p {
 	font: 400 18px/24px "sarabunextralight";
-	color: #1B589D;
+	color: #01937C;
 }
 .multi_step_form #msform fieldset {
 	border: 0;
@@ -47,12 +46,12 @@
 }
 .multi_step_form #msform fieldset h4 {
 	font-size: 1.275em;
+	font-weight: 400;
 	color: #5f6771;
-	padding-bottom: 5px;
+	padding: 0 0 5px 10px;
 }
 .multi_step_form #msform fieldset .form-label {
-	font-size: 1em;
-	color: #3f4553;
+	font-size: 1.275em;
 	padding-bottom: 5px;
 }
 .multi_step_form #msform #progressbar {
@@ -60,14 +59,17 @@
 	overflow: hidden;
 	text-align: center;
 }
+.multi_step_form #msform fieldset select {
+	font-size: 1.875em;
+}
 .multi_step_form #msform #progressbar li {
 	list-style-type: none;
 	color: #99a2a8;
-	font-size: 9px;
+	font-size: 12px;
 	width: calc(100%/4);
 	float: left;
 	position: relative;
-	font: 500 13px/1 "sarabunextralight", sans-serif;
+	font: 500 16px/1 "sarabunextralight", sans-serif;
 }
 .multi_step_form #msform #progressbar li:nth-child(2):before {
 	content: "\f2d9";
