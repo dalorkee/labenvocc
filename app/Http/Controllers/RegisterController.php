@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Traits\{RefTrait,JsonBoundaryTrait,DbBoundaryTrait};
+use App\Traits\{RefTrait,JsonBoundaryTrait,DbBoundaryTrait,DbHospitalTrait};
 
 class RegisterController extends Controller
 {
-	use RefTrait, JsonBoundaryTrait, DbBoundaryTrait;
+	use RefTrait, JsonBoundaryTrait, DbBoundaryTrait, DbHospitalTrait;
 
 	public function index(): object {
 		return view('auth.pre-register');

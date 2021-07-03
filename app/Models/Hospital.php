@@ -6,6 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Hospital extends Model
 {
-	protected $table = 'ref_chospital_new';
-	protected $primaryKey = 'id';
+	protected $table = 'ref_chospital';
+	protected $primaryKey = 'hospcode';
 }

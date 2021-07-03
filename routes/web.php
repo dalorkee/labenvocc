@@ -22,6 +22,7 @@ Route::name('register.')->group(function() {
 	Route::post('province/district', [RegisterController::class, 'renderDistrictToHtmlSelect'])->name('district');
 	Route::post('province/district/subdistrict', [RegisterController::class, 'renderSubDistrictToHtmlSelect'])->name('subDistrict');
 	Route::post('province/subdistrict/postcode', [RegisterController::class, 'getPostCodeBySubDistrict'])->name('postcode');
+    Route::post('search/hospital', [RegisterController::class, 'searchHospitalByName'])->name('hospital');
 });
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function() {

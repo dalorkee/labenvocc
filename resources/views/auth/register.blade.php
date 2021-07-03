@@ -79,7 +79,7 @@
 										</div>
 										<div class="col-span-6 sm:col-span-6 md:mx-4">
 											<label for="health_place_id" class="block text-base font-medium text-gray-700">เลือกสถานพยาบาล</label>
-											<select data-placeholder="Select a state..." id="select2-ajax" name="health_place_id" class="js-data-example-ajax mt-1 block w-full py-2 px-3 border border-gray-400 bg-white shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+											<select name="health_place_id" data-placeholder="Select a Hospital..." id="select2-ajax" class="js-data-example-ajax mt-1 block w-full py-2 px-3 border border-gray-400 bg-white shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
 												<option>-- โปรดเลือก --</option>
 												<option>Canada</option>
 											</select>
@@ -403,72 +403,58 @@ $(document).ready(function() {
 			elm.element;
 			return elm.id ? "<i class='" + $(elm.element).data("icon") + " mr-2'></i>" + elm.text : elm.text
 		}
+		
 		$(".js-data-example-ajax").select2({
-			ajax:{
-				url: "https://api.github.com/search/repositories",
+			  ajax: {
+				  method: "POST",
+				url: "{{ route('register.hospital') }}",
 				dataType: 'json',
 				delay: 250,
-				data: function(params)
-				{
-					return {
-						q: params.term, // search term
-						page: params.page
-					};
+				data: function (params) {
+					
+				  return {
+					q: params.term,
+					page: params.page
+				  };
+ 
 				},
-				processResults: function(data, params) {
-					// parse the results into the format expected by Select2
-					// since we are using custom formatting functions we do not need to
-					// alter the remote JSON data, except to indicate that infinite
-					// scrolling can be used
-					params.page = params.page || 1;
-
-					return {
-						results: data.items,
-						pagination:
-						{
-							more: (params.page * 30) < data.total_count
-						}
-					};
+				processResults: function (data, params) {
+				  params.page = params.page || 1;
+ 
+				  return {
+					results: data.items,
+					pagination: {
+					  more: (params.page * 30) < data.total_count
+					}
+				  };
 				},
 				cache: true
-			},
-			placeholder: 'Search for a repository',
-			escapeMarkup: function(markup) {
-				return markup;
-			}, // let our custom formatter work
-			minimumInputLength: 1,
-			templateResult: formatRepo,
-			templateSelection: formatRepoSelection
+			  },
+			  escapeMarkup: function (markup) { return markup; },
+			  minimumInputLength: 1,
+			  templateResult: formatRepo,
+			  templateSelection: formatRepoSelection
 			});
-
-			function formatRepo(repo) {
-				if (repo.loading) {
-					return repo.text;
-				}
-
-				var markup = "<div class='select2-result-repository clearfix d-flex'>" +
-					"<div class='select2-result-repository__avatar mr-2'><img src='" + repo.owner.avatar_url + "' class='width-2 height-2 mt-1 rounded' /></div>" +
-					"<div class='select2-result-repository__meta'>" +
-					"<div class='select2-result-repository__title fs-lg fw-500'>" + repo.full_name + "</div>";
-
-				if (repo.description) {
-					markup += "<div class='select2-result-repository__description fs-xs opacity-80 mb-1'>" + repo.description + "</div>";
-				}
-
-				markup += "<div class='select2-result-repository__statistics d-flex fs-sm'>" +
-					"<div class='select2-result-repository__forks mr-2'><i class='fal fa-lightbulb'></i> " + repo.forks_count + " Forks</div>" +
-					"<div class='select2-result-repository__stargazers mr-2'><i class='fal fa-star'></i> " + repo.stargazers_count + " Stars</div>" +
-					"<div class='select2-result-repository__watchers mr-2'><i class='fal fa-eye'></i> " + repo.watchers_count + " Watchers</div>" +
-					"</div>" +
-					"</div></div>";
-
-				return markup;
-			}
-
-			function formatRepoSelection(repo) {
-				return repo.full_name || repo.text;
-			}
+ 
 		});
+		
+ 
+		function formatRepo (repo) {
+		
+		  if (repo.loading) return repo.text;
+		  
+		  var markup = "<div class='select2-result-repository clearfix'>" +
+			"<div class='select2-result-repository__meta'>" +
+			  "<div class='select2-result-repository__title'>" + repo.value + "</div></div></div>";
+ 
+		  return markup;
+		}
+ 
+		
+		function formatRepoSelection (repo) {
+		  return repo.value || repo.text;
+		}
+		
 
 		/* check box pj pj pj */
 		$('input[type="checkbox"]').on('change', function() {
