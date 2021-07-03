@@ -8,7 +8,8 @@ use App\Http\Controllers\
 	RegisterStaffController,
 	CustomerLstController,
 	CustomerBiolabController,
-    CustomerEnvLabController
+    CustomerEnvLabController,
+	BackendAdminController
 };
 
 Route::impersonate();
@@ -38,3 +39,5 @@ Route::resources([
     'biolabFrm' => CustomerBiolabController::class,
     'envlabFrm' => CustomerEnvLabController::class,
 ]);
+
+Route::resource('backadm', BackendAdminController::class);
