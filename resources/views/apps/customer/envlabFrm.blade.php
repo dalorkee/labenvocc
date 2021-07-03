@@ -111,87 +111,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                {{-- <div class="panel-content border-faded border-left-0 border-right-0 border-bottom-0 d-flex flex-row align-items-center">
-                                                    <button class="btn btn-primary ml-auto" type="submit">Submit form</button>
-                                                </div> --}}
                                             </form>
-                    {{-- <div class="panel-content p-0">
-                        <div class="panel-content">
-                            <div class="form-row">
-                                <div class="col-md-4 mb-3">
-                                    <label class="form-label" for="validationCustom01">หน่วยงานที่ส่งตัวอย่าง <span class="text-danger">*</span> </label>
-                                    <input type="text" class="form-control" id="validationCustom01" placeholder="" autocomplete="off" required>
-                                    <div class="invalid-feedback">
-                                        Looks good!
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="col-xl-6">
-                                    <label class="form-label" for="validationCustom21">ประเภทงาน <span class="text-danger">*</span> </label>
-                                    <div class="frame-wrap">
-                                        <div class="demo">
-                                            <div class="custom-control custom-radio custom-control-inline">
-                                                <input type="radio" class="custom-control-input" id="defaultUncheckedRadio1" name="defaultExampleRadios" checked="">
-                                                <label class="custom-control-label" for="defaultUncheckedRadio1">บริการ</label>
-                                            </div>
-                                            <div class="custom-control custom-radio custom-control-inline">
-                                                <input type="radio" class="custom-control-input" id="defaultCheckedRadio2" name="defaultExampleRadios">
-                                                <label class="custom-control-label" for="defaultCheckedRadio2">วิจัย</label>
-                                            </div>
-                                            <div class="custom-control custom-radio custom-control-inline">
-                                                <input type="radio" class="custom-control-input" id="defaultUncheckedRadio3" name="defaultExampleRadios">
-                                                <label class="custom-control-label" for="defaultUncheckedRadio3">เฝ้าระวัง</label>
-                                            </div>
-                                            <div class="custom-control custom-radio custom-control-inline">
-                                                <input type="radio" class="custom-control-input" id="defaultUncheckedRadio4" name="defaultExampleRadios">
-                                                <label class="custom-control-label" for="defaultUncheckedRadio4">SRRT/สอบสวนโรค</label>
-                                            </div>
-                                            <div class="custom-control custom-radio custom-control-inline">
-                                                <input type="radio" class="custom-control-input" id="defaultUncheckedRadio5" name="defaultExampleRadios">
-                                                <label class="custom-control-label" for="defaultUncheckedRadio5">อื่นๆ ระบุ</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="col-md-4 mb-3">
-                                    <label class="form-label" for="validationCustom02">หนังสือนำส่งเลขที่ <span class="text-danger">*</span> </label>
-                                    <input type="text" class="form-control" id="validationCustom02" placeholder="" autocomplete="off" required>
-                                    <div class="invalid-feedback">
-                                        Looks good!
-                                    </div>
-                                </div>
-                                <div class="col-md-4 mb-3">
-                                    <label class="form-label" for="validationCustom03">ลงวันที่ <span class="text-danger">*</span></label>
-                                    <div class="input-group">
-                                        <input type="text" class="form-control" id="validationCustom03" readonly placeholder="ระบุวันที่" id="datepicker-biolab-1" autocomplete="off">
-                                        <div class="input-group-append">
-                                            <span class="input-group-text fs-xl">
-                                                <i class="fal fa-calendar"></i>
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="invalid-feedback">
-                                        Looks good!
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="col-md-4 mb-3">
-                                    <label class="form-label" for="validationCustom04">แนบไฟล์หนังสือนำส่ง <span class="text-danger">*</span> </label>
-                                    <div class="custom-file">
-                                        <input type="file" class="custom-file-input" id="customFile" autocomplete="off">
-                                        <label class="custom-file-label" for="customFile"> ยังไม่มีไฟล์แนบ</label>
-                                    </div>
-                                    <div class="invalid-feedback">
-                                        Looks good!
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div> --}}
                 </section>
             </div>
             <div id="step-2" class="tab-pane" role="tabpanel" aria-labelledby="step-2">
@@ -220,11 +140,11 @@
                                     <thead>
                                         <tr>
                                             <th>รหัสตัวอย่าง</th>
-                                            <th>ชื่อ-สกุล</th>
-                                            <th>อายุ(ปี)</th>
-                                            <th>แผนก</th>
-                                            <th>อายุงาน(ปี)</th>
-                                            <th>วันที่เก็บตัวอย่าง</th>
+                                            <th>วิธีเก็บตัวอย่าง</th>
+                                            <th>ชนิดตัวอย่าง</th>
+                                            <th>จุดที่เก็บ</th>
+                                            <th>น้ำหนักฝุ่น(กรัม)</th>
+                                            <th>ปริมาตรอากาศ(กรัม)</th>
                                             <th>พารามิเตอร์</th>
                                             <th>หน่วย</th>
                                             <th>หมายเหตุ</th>
@@ -233,11 +153,11 @@
                                     <tbody>
                                         <tr>
                                             <td>000000000000000</td>
-                                            <td>นายสมโภช พุ่มกระโทก</td>
+                                            <td>-</td>
+                                            <td>น้ำ</td>
+                                            <td>บ่อพักหลังโรงงาน</td>
                                             <td>30</td>
-                                            <td>ช่างเย็บ</td>
-                                            <td>3</td>
-                                            <td>11/11/2564</td>
+                                            <td>-</td>
                                             <td>
                                               <select class="paramiter_selector form-control" multiple="multiple" id="multiple-basic">
                                                   <optgroup label="Alaskan/Hawaiian Time Zone">
@@ -389,85 +309,7 @@
                     <div class="panel-content p-0">
                         <div class="panel-content">
                             <div class="form-row">
-                                <div class="col-md-6 mb-6">
-                                    <table id="" class="table table-bordered table-hover table-striped w-100">
-                                        <thead>
-                                            <tr>
-                                                <th>รหัสตัวอย่าง</th>
-                                                <th>ชื่อ-สกุล</th>
-                                                <th>อายุ(ปี)</th>
-                                                <th>แผนก</th>
-                                                <th>อายุงาน(ปี)</th>
-                                                <th>วันที่เก็บตัวอย่าง</th>
-                                                <th>พารามิเตอร์</th>
-                                                <th>หน่วย</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>Tiger Nixon</td>
-                                                <td>System Architect</td>
-                                                <td>Edinburgh</td>
-                                                <td>61</td>
-                                                <td>2011/04/25</td>
-                                                <td>System Architect</td>
-                                                <td>Edinburgh</td>
-                                                <td>61</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Garrett Winters</td>
-                                                <td>Accountant</td>
-                                                <td>Tokyo</td>
-                                                <td>63</td>
-                                                <td>2011/07/25</td>
-                                                <td>System Architect</td>
-                                                <td>Edinburgh</td>
-                                                <td>61</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Ashton Cox</td>
-                                                <td>Junior Technical Author</td>
-                                                <td>San Francisco</td>
-                                                <td>66</td>
-                                                <td>2009/01/12</td>
-                                                <td>System Architect</td>
-                                                <td>Edinburgh</td>
-                                                <td>61</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Cedric Kelly</td>
-                                                <td>Senior Javascript Developer</td>
-                                                <td>Edinburgh</td>
-                                                <td>22</td>
-                                                <td>2012/03/29</td>
-                                                <td>System Architect</td>
-                                                <td>Edinburgh</td>
-                                                <td>61</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Airi Satou</td>
-                                                <td>Accountant</td>
-                                                <td>Tokyo</td>
-                                                <td>33</td>
-                                                <td>2008/11/28</td>
-                                                <td>System Architect</td>
-                                                <td>Edinburgh</td>
-                                                <td>61</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Brielle Williamson</td>
-                                                <td>Integration Specialist</td>
-                                                <td>New York</td>
-                                                <td>61</td>
-                                                <td>2012/12/02</td>
-                                                <td>System Architect</td>
-                                                <td>Edinburgh</td>
-                                                <td>61</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="col-md-6 mb-6">
+                                <div class="col-md-12 mb-6">
                                     <div class="form-row">
                                         <div class="col-md-4 mb-3">
                                             <label class="form-label" for="validationCustom24">ตัวอย่างที่ <span class="text-danger">*</span> </label>
@@ -508,7 +350,7 @@
                                         </div>
                                     </div>
                                     <div class="form-row">
-                                        <div class="col-md-4 mb-3">
+                                        <div class="col-md-6 mb-6">
                                             <div class="frame-wrap">
                                                 <div class="demo">
                                                     <div class="custom-control custom-checkbox">
