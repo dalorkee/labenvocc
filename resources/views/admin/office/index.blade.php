@@ -38,8 +38,14 @@
 					<td>{{$office['office_code']}}</td>
 					<td>{{$office['office_name']}}</td>
 					<td>
-					@if($office['office_status'] == '1')
-						<label class="badge badge-warning">New</label>
+					@if($office['office_status'] == '0')
+						<label class="badge badge-info">New</label>
+					@elseif($office['office_status'] == '1')
+						<label class="badge badge-success">Aollow</label>
+					@elseif($office['office_status'] == '2')
+						<label class="badge badge-warning">Close</label>
+					@elseif($office['office_status'] == '3')
+						<label class="badge badge-danger">Deny</label>
 					@endif
 					</td>
 					<td>
