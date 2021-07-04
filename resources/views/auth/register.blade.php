@@ -79,7 +79,7 @@
 										</div>
 										<div class="col-span-6 sm:col-span-6 md:mx-4">
 											<label for="health_place_id" class="block text-base font-medium text-gray-700">เลือกสถานพยาบาล</label>
-											<select name="health_place_id" data-placeholder="Select a Hospital..." id="select2-ajax" class="js-data-example-ajax mt-1 block w-full py-2 px-3 border border-gray-400 bg-white shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+											<select name="health_place_id" data-placeholder="Select a Hospital..." id="hosp_search" class="mt-1 block w-full py-2 px-3 border border-gray-400 bg-white shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
 												<option>-- โปรดเลือก --</option>
 												<option>Canada</option>
 											</select>
@@ -403,65 +403,53 @@ $(document).ready(function() {
 			elm.element;
 			return elm.id ? "<i class='" + $(elm.element).data("icon") + " mr-2'></i>" + elm.text : elm.text
 		}
-		
-		$(".js-data-example-ajax").select2({
-			  ajax: {
-				  method: "POST",
+		/* hospital search by name */
+		$("#hosp_search").select2({
+			ajax: {
+				method: "POST",
 				url: "{{ route('register.hospital') }}",
 				dataType: 'json',
 				delay: 250,
 				data: function (params) {
-					
-				  return {
-					q: params.term,
-					page: params.page
-				  };
- 
+					return {
+						q: params.term,
+						page: params.page
+					};
 				},
 				processResults: function (data, params) {
-				  params.page = params.page || 1;
- 
-				  return {
-					results: data.items,
-					pagination: {
-					  more: (params.page * 30) < data.total_count
-					}
-				  };
+					params.page = params.page || 1;
+					return {
+						results: data.items,
+						pagination: {
+							more: (params.page * 30) < data.total_count
+						}
+					};
 				},
 				cache: true
-			  },
-			  escapeMarkup: function (markup) { return markup; },
-			  minimumInputLength: 1,
-			  templateResult: formatRepo,
-			  templateSelection: formatRepoSelection
-			});
- 
-		});
-		
- 
-		function formatRepo (repo) {
-		
-		  if (repo.loading) return repo.text;
-		  
-		  var markup = "<div class='select2-result-repository clearfix'>" +
-			"<div class='select2-result-repository__meta'>" +
-			  "<div class='select2-result-repository__title'>" + repo.value + "</div></div></div>";
- 
-		  return markup;
-		}
- 
-		
-		function formatRepoSelection (repo) {
-		  return repo.value || repo.text;
-		}
-		
-
-		/* check box pj pj pj */
-		$('input[type="checkbox"]').on('change', function() {
-			$('input[name="' + this.name + '"]').not(this).prop('checked', false);
+			},
+			escapeMarkup: function (markup) { return markup; },
+			placeholder: "โปรดกรอกข้อมูล",
+			minimumInputLength: 3,
+			maximumInputLength: 20,
+			templateResult: formatRepo,
+			templateSelection: formatRepoSelection
 		});
 	});
-
+	function formatRepo (repo) {	
+		if (repo.loading) return repo.text;
+		var markup = "<div class='select2-result-repository clearfix'>" +
+			"<div class='select2-result-repository__meta'>" +
+			"<div class='select2-result-repository__title'>" + repo.value + "</div></div></div>";
+			return markup;
+	}	
+	function formatRepoSelection (repo) {
+		return repo.value || repo.text;
+	}
+	/* check box pj pj pj */
+	$('input[type="checkbox"]').on('change', function() {
+		$('input[name="' + this.name + '"]').not(this).prop('checked', false);
+	});
+});
 </script>
 <script>
 (function($) {
