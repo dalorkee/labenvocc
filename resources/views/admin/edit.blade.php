@@ -7,7 +7,7 @@
                 <h2>Edit Product</h2>
             </div>
             <div class="pull-right">
-                <a class="btn btn-primary" href="{{ route('admin.index') }}"> Back</a>
+                <a class="btn btn-primary" href="{{ route('backadm.index') }}"> Back</a>
             </div>
         </div>
     </div>
@@ -23,7 +23,7 @@
         </div>
     @endif
   
-    <form action="{{ route('admin.update',$backendAdmin->office_id) }}" method="POST">
+    <form action="{{ route('backadm.update',$backendAdmin->office_id) }}" method="POST">
         @csrf
         @method('PUT')
    

@@ -43,7 +43,7 @@ class BackendAdminController extends Controller
             'office_status'=>'required',
         ]);
         BackendAdmin::create($request->all());
-        return redirect()->route('admin.index')
+        return redirect()->route('backadm.index')
             ->with('success','Created Success');
     }
 
@@ -84,7 +84,7 @@ class BackendAdminController extends Controller
         ]);
 
         $backendAdmin->update($request->all());
-        return redirect()->route('admin.index')
+        return redirect()->route('backadm.index')
             ->with('success','Update Success');
     }
 
@@ -97,7 +97,7 @@ class BackendAdminController extends Controller
     public function destroy(BackendAdmin $backendAdmin)
     {
         $backendAdmin->delete();
-        return redirect()->route('admin.index')
+        return redirect()->route('backadm.index')
             ->with('success','Deleted Success');
     }
 }
