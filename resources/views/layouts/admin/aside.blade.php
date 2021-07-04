@@ -1,7 +1,7 @@
 <div class="page-logo">
 	<a href="#" class="page-logo-link press-scale-down d-flex align-items-center position-relative" data-toggle="modal" data-target="#modal-shortcut">
 		<img src="{{ URL::asset('assets/img/small-moph-logo.png') }}" alt="PJX Apps" aria-roledescription="logo">
-		<span class="page-logo-text mr-1">LAB ENV-OCC</span>
+		<span class="page-logo-text mr-1">Administrator</span>
 		<span class="position-absolute text-white opacity-50 small pos-top pos-right mr-2 mt-n2"></span>
 		<i class="fal fa-angle-down d-inline-block ml-1 fs-lg color-primary-300"></i>
 	</a>
@@ -32,43 +32,30 @@
 		</a>
 	</div>
 	<ul id="js-nav-menu" class="nav-menu">
-		<li class="active open">
-			<a href="#" title="Application Intel" data-filter-tags="application intel">
-				<i class="fal fa-home"></i>
-				<span class="nav-link-text" data-i18n="nav.application_intel">หน้าหลัก</span>
-			</a>
-		</li>
-		{{-- Aung Edit --}}
+		<li class="nav-title">Administrator</li>
 		<li>
-			<a href="{{ route('customerList.index') }}" title="Application Intel" data-filter-tags="application intel">
-				<i class="fal fa-vial"></i>
-				<span class="nav-link-text" data-i18n="nav.application_intel">คำขอส่งตัวอย่าง</span>
-			</a>
-		</li>
-		{{-- End Aung Edit --}}
-		<li>
-			<a href="#" title="Application Intel" data-filter-tags="application intel">
-				<i class="fal fa-download"></i>
-				<span class="nav-link-text" data-i18n="nav.application_intel">ดาวน์โหลด</span>
+			<a href="#" title="Utilities" data-filter-tags="utilities">
+				<i class="fal fa-users"></i>
+				<span class="nav-link-text" data-i18n="nav.utilities">จัดการผู้ใช้</span>
 			</a>
 		</li>
 		<li>
-			<a href="#" title="Application Intel" data-filter-tags="application intel">
-				<i class="fal fa-question-circle"></i>
-				<span class="nav-link-text" data-i18n="nav.application_intel">คำถามที่พบบ่อย</span>
+			<a href="#" title="Tables" data-filter-tags="tables">
+				<i class="fal fa-tasks"></i>
+				<span class="nav-link-text" data-i18n="nav.tables">จัดการสิทธิ์</span>
 			</a>
-		</li>
-		<li>
-			<a href="#" title="Application Intel" data-filter-tags="application intel">
-				<i class="fal fa-book"></i>
-				<span class="nav-link-text" data-i18n="nav.application_intel">เกี่ยวกับหน่วยงาน</span>
-			</a>
-		</li>
-		<li>
-			<a href="#" title="Application Intel" data-filter-tags="application intel">
-				<i class="fal fa-map-marker-alt"></i>
-				<span class="nav-link-text" data-i18n="nav.application_intel">ติดต่อหน่วยงาน</span>
-			</a>
+			<ul>
+				<li>
+					<a href="tables_basic.html" title="Basic Tables" data-filter-tags="tables basic tables">
+						<span class="nav-link-text" data-i18n="nav.tables_basic_tables">Role</span>
+					</a>
+				</li>
+				<li>
+					<a href="tables_generate_style.html" title="Generate Table Style" data-filter-tags="tables generate table style">
+						<span class="nav-link-text" data-i18n="nav.tables_generate_table_style">Permission</span>
+					</a>
+				</li>
+			</ul>
 		</li>
 	</ul>
 	<div class="filter-message js-filter-message bg-success-600"></div>
