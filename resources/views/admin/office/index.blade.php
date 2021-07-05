@@ -1,6 +1,9 @@
 @extends('layouts.admin.index')
 @section('style')
-<link href="{{ URL::asset('vendor/jquery-smartwizard/css/smart_wizard_arrows.min.css') }}" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="{{ URL::asset('vendor/jquery-smartwizard/css/smart_wizard_arrows.min.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ URL::asset('vendor/DataTables/DataTables-1.10.22/css/jquery.dataTables.min.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ URL::asset('vendor/DataTables/Buttons-1.6.5/css/buttons.jqueryui.min.css') }}">
+<link rel='stylesheet' type="text/css" href="{{ URL::asset('vendor/DataTables/Responsive-2.2.6/css/responsive.dataTables.min.css') }}">
 @endsection
 @section('content')
 <ol class="breadcrumb page-breadcrumb">
@@ -60,6 +63,11 @@
 	</div>	
 </div>
 @endsection
-@section('scripts')
-    {{$dataTable->scripts()}}
+@section('script')
+<script type="text/javascript" src="{{ URL::asset('vendor/DataTables/DataTables-1.10.22/js/jquery.dataTables.min.js') }}"></script>
+<script type="text/javascript" src="{{ URL::asset('vendor/DataTables/Buttons-1.6.5/js/dataTables.buttons.min.js') }}"></script>
+<script type="text/javascript" src="{{ URL::asset('vendor/DataTables/Responsive-2.2.6/js/dataTables.responsive.min.js') }}"></script>
+<script type="text/javascript" src="{{ URL::asset('vendor/jquery-contextMenu/dist/jquery.contextMenu.min.js') }}"></script>
+<script type="text/javascript" src="{{ URL::asset('js/buttons.server-side.js') }}"></script>
+    {{ $dataTable->scripts() }}
 @endsection

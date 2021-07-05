@@ -15,7 +15,7 @@ class OfficeController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(OfficeDataTable $dataTable) {
-        var_dump($dataTable);
+        //dd($dataTable);
         // $office_data = Office::latest()->paginate(10);
         // $office_data = Office::orderBy('office_status','ASC')->orderBy('created_at','DESC')->paginate(10);
         // dd($office_data->toArray());
