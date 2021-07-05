@@ -21,7 +21,8 @@
 @endif
 <div class="fs-lg fw-300 p-5 bg-white border-faded rounded mb-g">
 	<div class="frame-wrap">
-		<table class="table m-0">
+		{{ $dataTable->table() }}
+		{{-- <table class="table m-0">
 			<thead>
 				<tr>
 					<th>#</th>
@@ -55,7 +56,10 @@
 			@endforeach					
 			</tbody>
 		</table>
-		{{ $office_data->links() }}
+		{{ $office_data->links() }} --}}
 	</div>	
 </div>
+@endsection
+@section('scripts')
+    {{$dataTable->scripts()}}
 @endsection

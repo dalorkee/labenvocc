@@ -2,7 +2,7 @@
 
 namespace App\DataTables;
 
-use App\Models\Office;
+use App\Models\Admin\Office;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Html\Editor\Editor;
@@ -17,22 +17,20 @@ class OfficeDataTable extends DataTable
      * @param mixed $query Results from query() method.
      * @return \Yajra\DataTables\DataTableAbstract
      */
-    public function dataTable($query)
-    {
+    public function dataTable($query) {
         return datatables()
             ->eloquent($query)
-            ->addColumn('action', 'office.action');
+            ->addColumn('action', '<button class="context-nav btn btn-custom-1 btn-sm">Manage <i class="fas fa-angle-down"></i></button>');
     }
 
     /**
      * Get query source of dataTable.
      *
-     * @param \App\Models\Office $model
+     * @param \App\Models\Admin\Office $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(Office $model)
-    {
-        return $model->newQuery();
+    public function query() {
+        return Office::all();
     }
 
     /**
@@ -70,8 +68,11 @@ class OfficeDataTable extends DataTable
                   ->printable(false)
                   ->width(60)
                   ->addClass('text-center'),
-            Column::make('id'),
-            Column::make('add your columns'),
+            Column::make('office_id'),
+            Column::make('office_code'),
+            Column::make('office_name'),
+            Column::make('office_status'),
+            Column::make('action'),
             Column::make('created_at'),
             Column::make('updated_at'),
         ];

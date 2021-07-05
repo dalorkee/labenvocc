@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Admin\Office;
 use Illuminate\Http\Request;
+use App\DataTables\OfficeDataTable;
 
 class OfficeController extends Controller
 {
@@ -13,13 +14,14 @@ class OfficeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
+    public function index(OfficeDataTable $dataTable) {
+        var_dump($dataTable);
         // $office_data = Office::latest()->paginate(10);
-        $office_data = Office::orderBy('office_status','ASC')->orderBy('created_at','DESC')->paginate(10);
+        // $office_data = Office::orderBy('office_status','ASC')->orderBy('created_at','DESC')->paginate(10);
         // dd($office_data->toArray());
-        return view('admin.office.index',compact('office_data'));
+        // return view('admin.office.index',compact('office_data'));
             //->with('i',(request()->input('page',1)-1)*10);
+        return $dataTable->render('admin.office.index');
     }
 
     /**
