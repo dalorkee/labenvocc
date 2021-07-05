@@ -21,6 +21,15 @@ class RegisterController extends Controller
 			'provinces' => $provinces
 		]);
 	}
+
+    public function registerVerifyData() {
+        $htm = "
+        <span>555</span>
+
+        ";
+        return $htm;
+    }
+
 	public function store(Request $request) {
 		dd($request);
 	}

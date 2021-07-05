@@ -18,7 +18,7 @@
 @endsection
 @section('content')
 <article>
-	<div class="multi_step_form">
+	<section class="multi_step_form">
 		<form action="{{ route('register.store') }}" method="POST" id="msform" class="w-full">
 			@csrf
 			<div class="tittle">
@@ -316,10 +316,34 @@
 					</div>
 				</div>
 				<button type="button" class="action-button previous previous_button">ก่อนหน้า</button>
-				<button type="submit" class="action-button">ตรวจสอบข้อมูล</button>
+				<button type="button" class="btn btn-default"data-toggle="modal" data-target="#example-modal-backdrop-transparent">ตรวจสอบข้อมูล</button>
+				{{-- <button type="submit" class="action-button">ตรวจสอบข้อมูล</button> --}}
 			</fieldset>
+																	<!-- Modal Verify Data -->
+																	<div class="modal fade modal-backdrop-transparent" id="example-modal-backdrop-transparent" tabindex="1" role="dialog" aria-hidden="true">
+																		<div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+																			<div class="modal-content">
+																				<div class="modal-header">
+																					<h5 class="modal-title">ตรวจสอบข้อมูล</h5>
+																					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+																						<span aria-hidden="true"><i class="fal fa-times"></i></span>
+																					</button>
+																				</div>
+																				<div class="modal-body">
+																					<div id="meawdal"></div>
+																				</div>
+																				<div class="modal-footer">
+																					<button type="button" class="btn btn-secondary action-button" data-dismiss="modal" >กลับไปแก้ไข</button>
+																					<button type="button" class="btn btn-primary" style="z-index:">ตกลง</button>
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+
+			
 		</form>
-	</div> 
+	</section>
+
 </article>
 @endsection
 @section('script')
@@ -377,6 +401,22 @@ $(document).ready(function() {
 				}
 			});
 		}
+	});
+
+	$('#sad').click(function() {
+		let id ='isad';
+		$.ajax({
+			method: "POST",
+			url: "{{ route('register.verify') }}",
+			dataType: "HTML",
+			data: {id:id},
+			success: function(response) {
+				$('#meawdal').html(response);
+			},
+			error: function(jqXhr, textStatus, errorMessage) {
+				alert('Modal error: ' + jqXhr.status + errorMessage);
+			}
+		});
 	});
 });
 </script>
@@ -531,7 +571,7 @@ $(document).ready(function() {
 				//this comes from the custom easing plugin
 				easing: 'easeInOutBack'
 			});
-			//$("html, body").animate({ scrollTop: 0 }, "slow");
+			$("html, body").animate({ scrollTop: 0 }, "slow");
 		});
 		$(".previous").click(function () {
 			if (animating) return false;
@@ -567,7 +607,6 @@ $(document).ready(function() {
 					current_fs.hide();
 					animating = false;
 				},
-				//this comes from the custom easing plugin
 				easing: 'easeInOutBack'
 			});
 		});
@@ -575,7 +614,6 @@ $(document).ready(function() {
 		// 		return false;
 		// })
 	}; 
-	/*Function Calls*/  
 	verificationForm ();
 })(jQuery);
 </script>

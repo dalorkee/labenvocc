@@ -7,7 +7,7 @@
 .multi_step_form #msform {
 	position: relative;
 	padding: 40px 0 10px 0;
-	height: 2500px;
+	height: auto;
 	margin: 0 auto;
 	background: #fff;
 	z-index: 1;
@@ -33,8 +33,17 @@
 	left: 0;
 	right: 0;
 }
-.multi_step_form #msform fieldset:not(:first-of-type) {
+/* .multi_step_form #msform fieldset:not(:first-of-type) {
 	display: none;
+} */
+.multi_step_form #msform fieldset:nth-of-type(2) {
+    display: none;
+}
+.multi_step_form #msform fieldset:nth-of-type(3) {
+    display: none;
+}
+.multi_step_form #msform fieldset:nth-of-type(4) {
+    display: none;
 }
 .multi_step_form #msform fieldset h3 {
 	width: 100%;
@@ -58,6 +67,7 @@
 	margin-bottom: 30px;
 	overflow: hidden;
 	text-align: center;
+    z-index: 2;
 }
 .multi_step_form #msform fieldset select {
 	font-size: 1.875em;
@@ -69,7 +79,7 @@
 	width: calc(100%/4);
 	float: left;
 	position: relative;
-	font: 500 16px/1 "sarabunextralight", sans-serif;
+	font: 500 16px/1 "sarabunextralight";
 }
 .multi_step_form #msform #progressbar li:nth-child(2):before {
 	content: "\f2d9";
@@ -118,7 +128,7 @@
 	border-radius: 5px;
 	cursor: pointer;
 	min-width: 130px;
-	font: 700 14px/40px "sarabunextralight", Roboto, sans-serif;
+	font: 700 14px/40px "sarabunextralight";
 	border: 1px solid #01937C;
 	margin: 30px 5px 10px 5px;
 	text-transform: uppercase;
@@ -137,4 +147,7 @@
 	background: #405867;
 	border-color: #405867;
 	color: #fff;
-} 
+}
+#example-modal-backdrop-transparent {
+    z-index: 999999 !important;
+}
