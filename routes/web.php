@@ -11,6 +11,8 @@ use App\Http\Controllers\
 	CustomerEnvLabController,
 	BackendAdminController
 };
+use App\Http\Controllers\Admin\OfficeController;
+use App\Http\Controllers\Admin\ParametController;
 
 Route::impersonate();
 Route::get('/', [HomeController::class, 'index']);
@@ -42,4 +44,9 @@ Route::resources([
 	'envlabFrm' => CustomerEnvLabController::class,
 ]);
 
-Route::resource('backadm', BackendAdminController::class);
+Route::prefix('backadm')->middleware(['auth:sanctum', 'verified'])->group(function(){
+	Route::resources([
+		'office'=>OfficeController::class,
+		'paramet'=>ParametController::class
+	]);
+});
