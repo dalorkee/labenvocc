@@ -37,23 +37,22 @@ trait DbHospitalTrait {
 		return $json;
 	}
 
-	// public function searchDiseaseBorderByName(Request $request): array {
-	// 	$data = Hospital::select('hosp_id', 'hosp_name')
-	// 		->whereRaw("hosp_name like ? ", array('%'.$request->q.'%'))
-	// 		->whereHosp_type_code('01')
-	// 		->whereStatus_code(1)
-	// 		->get();
-	// 	$items = array();
-	// 	$data->map(function($item, $key) use (&$items) {
-	// 		$tmp['id'] = $item->hosp_id;
-	// 		$tmp['value'] = $item->hosp_name;
-	// 		array_push($items, $tmp);
-	// 	});
-	// 	$json = array(
-	// 		"total" => $data->count(),
-	// 		"items" => $items
-	// 	);
-	// 	return $json;
-	// }
+	public function searchDiseaseBorderByName(Request $request): array {
+		$data = Hospital::select('hosp_id', 'hosp_name')
+			->whereRaw("hosp_name like ? ", array('%'.$request->q.'%'))
+			->whereStatus_code(1)
+			->get();
+		$items = array();
+		$data->map(function($item, $key) use (&$items) {
+			$tmp['id'] = $item->hosp_id;
+			$tmp['value'] = $item->hosp_name;
+			array_push($items, $tmp);
+		});
+		$json = array(
+			"total" => $data->count(),
+			"items" => $items
+		);
+		return $json;
+	}
 }
 ?>

@@ -18,8 +18,9 @@
 @endsection
 @section('content')
 <article>
-	<section class="multi_step_form">
-		<form id="msform" class="w-full"> 
+	<div class="multi_step_form">
+		<form action="{{ route('register.store') }}" method="POST" id="msform" class="w-full">
+			@csrf
 			<div class="tittle">
 				<h2>ลงทะเบียนใช้งาน</h2>
 				<p>โปรดกรอกข้อมูลและตรวจสอบให้ถูกต้องทุกขั้นตอน</p>
@@ -79,9 +80,7 @@
 										</div>
 										<div class="col-span-6 sm:col-span-6 md:mx-4">
 											<label for="health_place_id" class="block text-base font-medium text-gray-700">เลือกสถานพยาบาล</label>
-											<select name="health_place_id" data-placeholder="Select a Hospital..." id="hosp_search" class="mt-1 block w-full py-2 px-3 border border-gray-400 bg-white shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-												<option>-- โปรดเลือก --</option>
-												<option>Canada</option>
+											<select name="health_place_id" data-placeholder="โปรดกรอกข้อความค้นหา" id="hosp_search" class="mt-1 block w-full py-2 px-3 border border-gray-400 bg-white shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
 											</select>
 										</div>
 										<div class="col-span-6 sm:col-span-6">
@@ -94,9 +93,7 @@
 										</div>
 										<div class="col-span-6 sm:col-span-6 md:mx-4">
 											<label for="border_check_point_id" class="block text-base font-medium text-gray-700">เลือกด่านควบคุมโรค</label>
-											<select id="border_check_point_id" name="border_check_point_id" class="select2-placeholder mt-1 block w-full py-2 px-3 border border-gray-800 bg-white shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-												<option>-- โปรดเลือก --</option>
-												<option>Canada</option>
+											<select name="border_check_point_id" data-placeholder="โปรดกรอกข้อความค้นหา" id="disease_border_search" class="mt-1 block w-full py-2 px-3 border border-gray-800 bg-white shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
 											</select>
 										</div>
 										<div class="col-span-6 sm:col-span-6">
@@ -169,7 +166,7 @@
 								<div class="px-6 pt-5 pb-16" style="border:1px solid #ccc">
 									<div class="grid grid-cols-6 gap-6">
 										<div class="col-span-6 sm:col-span-6">
-											<label for="title_name" class="block text-base font-medium text-gray-700">คำนำหน้าชื่อ <span class="text-red-600">*</span></label>
+											<label for="title_name" class="block form-label">คำนำหน้าชื่อ <span class="text-red-600">*</span></label>
 											<div class="frame-wrap">
 												<div class="custom-control custom-checkbox custom-control-inline">
 													<input type="checkbox" name="title_name" value="mr" id="mister" class="custom-control-input">
@@ -186,23 +183,23 @@
 											</div>
 										</div>
 										<div class="col-span-6 sm:col-span-3">
-											<label for="first_name" class="block text-sm font-medium text-gray-700">ชื่อ <span class="text-red-600">*</span></label>
+											<label for="first_name" class="block text-base font-medium text-gray-700">ชื่อ <span class="text-red-600">*</span></label>
 											<input type="text" name="first_name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-200">
 										</div>
 										<div class="col-span-6 sm:col-span-3">
-											<label for="last_name" class="block text-sm font-medium text-gray-700">นามสกุล <span class="text-red-600">*</span></label>
+											<label for="last_name" class="block text-base font-medium text-gray-700">นามสกุล <span class="text-red-600">*</span></label>
 											<input type="text" name="last_name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-200">
 										</div>
 										<div class="col-span-6 sm:col-span-3">
-											<label for="position" class="block text-sm font-medium text-gray-700">ตำแหน่ง <span class="text-red-600">*</span></label>
+											<label for="position" class="block text-base font-medium text-gray-700">ตำแหน่ง <span class="text-red-600">*</span></label>
 											<input type="text" name="position" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-200">
 										</div>
 										<div class="col-span-6 sm:col-span-3">
-											<label for="mobile" class="block text-sm font-medium text-gray-700">เบอร์โทรศัพท์มือถือ <span class="text-red-600">*</span></label>
+											<label for="mobile" class="block text-base font-medium text-gray-700">เบอร์โทรศัพท์มือถือ <span class="text-red-600">*</span></label>
 											<input type="text" name="mobile" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-200">
 										</div>
-										<div class="col-span-6 sm:col-span-3">
-											<label for="email" class="block text-sm font-medium text-gray-700">อีเมล์ <span class="text-red-600">*</span></label>
+										<div class="col-span-6 sm:col-span-6">
+											<label for="email" class="block text-base font-medium text-gray-700">อีเมล์ <span class="text-red-600">*</span></label>
 											<input type="text" name="email" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-200">
 										</div>
 									</div>
@@ -225,7 +222,7 @@
 								<div class="px-6 pt-5 pb-16" style="border:1px solid #ccc">
 									<div class="grid grid-cols-6 gap-6">
 										<div class="col-span-6 sm:col-span-3">
-											<label for="send_address" class="block text-base font-medium text-gray-700">ที่อยู่สำหรับส่งรายงานผลการตรวจ <span class="text-red-600">*</span></label>
+											<label for="send_address" class="block form-label">ที่อยู่สำหรับส่งรายงานผลการตรวจ <span class="text-red-600">*</span></label>
 											<div class="frame-wrap">
 												<div class="custom-control custom-switch custom-control-inline">
 													<input type="checkbox" name="send_result_addr" id="old_addr" class="custom-control-input">
@@ -256,29 +253,29 @@
 										</div>
 
 										<div class="col-span-6 sm:col-span-3 md:mx-4">
-											<label for="last_name" class="block text-sm font-medium text-gray-700">ชื่อ</label>
-											<input type="text" name="last_name" id="last_name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-200">
+											<label for="send_first_name" class="block text-base font-medium text-gray-700">ชื่อ</label>
+											<input type="text" name="send_first_name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-200">
 										</div>
 										<div class="col-span-6 sm:col-span-3 md:mx-4">
-											<label for="last_name" class="block text-sm font-medium text-gray-700">นามสกุล</label>
-											<input type="text" name="last_name" id="last_name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-200">
+											<label for="send_last_name" class="block text-base font-medium text-gray-700">นามสกุล</label>
+											<input type="text" name="send_last_name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-200">
 										</div>
 
 										<div class="col-span-6 sm:col-span-3 md:mx-4">
-											<label for="last_name" class="block text-sm font-medium text-gray-700">ตำแหน่ง</label>
-											<input type="text" name="last_name" id="last_name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-200">
+											<label for="send_position" class="block text-base font-medium text-gray-700">ตำแหน่ง</label>
+											<input type="text" name="send_position" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-200">
 										</div>
 										<div class="col-span-6 sm:col-span-3 md:mx-4">
-											<label for="last_name" class="block text-sm font-medium text-gray-700">เบอร์โทรศัพท์มือถือ</label>
-											<input type="text" name="last_name" id="last_name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-200">
+											<label for="send_mobile" class="block text-base font-medium text-gray-700">เบอร์โทรศัพท์มือถือ</label>
+											<input type="text" name="send_mobile" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-200">
 										</div>
-										<div class="col-span-6 sm:col-span-3 md:mx-4">
-											<label for="last_name" class="block text-sm font-medium text-gray-700">อีเมล์</label>
-											<input type="text" name="last_name" id="last_name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-200">
+										<div class="col-span-6 sm:col-span-6 md:mx-4">
+											<label for="send_email" class="block text-base font-medium text-gray-700">อีเมล์</label>
+											<input type="text" name="send_email" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-200">
 										</div>
-										<div class="col-span-6 sm:col-span-3 md:mx-4">
-											<label for="new_addr" class="block text-sm font-medium text-gray-700">ที่อยู่ใหม่</label>
-											<input type="text" name="new_addr" id="last_name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-200">
+										<div class="col-span-6 sm:col-span-6 md:mx-4">
+											<label for="send_new_addr" class="block text-sm font-medium text-gray-700">ที่อยู่ใหม่</label>
+											<input type="text" name="send_new_addr" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-200">
 										</div>
 									</div>
 								</div>
@@ -300,17 +297,17 @@
 								<div class="px-6 pt-5 pb-16" style="border:1px solid #ccc">
 									<div class="grid grid-cols-6 gap-6">
 										<div class="col-span-6 sm:col-span-6">
-											<label for="last_name" class="block text-sm font-medium text-gray-700">อีเมล์ (Email)</label>
-											<input type="text" name="last_name" id="last_name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-200">
+											<label for="user_email" class="block text-base font-medium text-gray-700">อีเมล์ (Email)</label>
+											<input type="text" name="user_email" id="user_email" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-200">
 										</div>
 
 										<div class="col-span-6 sm:col-span-6">
-											<label for="last_name" class="block text-sm font-medium text-gray-700">รหัสผ่าน (Password)</label>
-											<input type="text" name="last_name" id="last_name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-200">
+											<label for="user_password" class="block text-base font-medium text-gray-700">รหัสผ่าน (Password)</label>
+											<input type="text" name="user_password" id="user_password" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-200">
 										</div>
 										<div class="col-span-6 sm:col-span-6">
-											<label for="last_name" class="block text-sm font-medium text-gray-700">ยืนยันรหัสผ่าน (Confirm password)</label>
-											<input type="text" name="last_name" id="last_name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-200">
+											<label for="user_confirm_password" class="block text-base font-medium text-gray-700">ยืนยันรหัสผ่าน (Confirm password)</label>
+											<input type="text" name="user_confirm_password" id="user_confirm_password" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-200">
 										</div>
 									</div>
 								</div>
@@ -318,11 +315,11 @@
 						</div>
 					</div>
 				</div>
-				<button type="button" class="action-button previous previous_button">ก่อนหน้า</button> 
-				<button type="button" class="action-button">ตรวจสอบข้อมูล</button> 
+				<button type="button" class="action-button previous previous_button">ก่อนหน้า</button>
+				<button type="submit" class="action-button">ตรวจสอบข้อมูล</button>
 			</fieldset>
 		</form>
-	</section> 
+	</div> 
 </article>
 @endsection
 @section('script')
@@ -434,6 +431,39 @@ $(document).ready(function() {
 			templateResult: formatRepo,
 			templateSelection: formatRepoSelection
 		});
+
+		/* disease border search by name */
+		$("#disease_border_search").select2({
+			ajax: {
+				method: "POST",
+				url: "{{ route('register.hospital') }}",
+				dataType: 'json',
+				delay: 250,
+				data: function (params) {
+					return {
+						q: params.term,
+						page: params.page
+					};
+				},
+				processResults: function (data, params) {
+					params.page = params.page || 1;
+					return {
+						results: data.items,
+						pagination: {
+							more: (params.page * 30) < data.total_count
+						}
+					};
+				},
+				cache: true
+			},
+			escapeMarkup: function (markup) { return markup; },
+			placeholder: "โปรดกรอกข้อมูล",
+			minimumInputLength: 3,
+			maximumInputLength: 20,
+			templateResult: formatRepo,
+			templateSelection: formatRepoSelection
+		});
+		
 	});
 	function formatRepo (repo) {	
 		if (repo.loading) return repo.text;
@@ -541,9 +571,9 @@ $(document).ready(function() {
 				easing: 'easeInOutBack'
 			});
 		});
-		$(".submit").click(function () {
-				return false;
-		})
+		// $(".submit").click(function () {
+		// 		return false;
+		// })
 	}; 
 	/*Function Calls*/  
 	verificationForm ();
