@@ -13,7 +13,22 @@ class OfficeDataTable extends DataTable
 	public function dataTable($query): object {
 		return datatables()
 			->eloquent($query)
-			->addColumn('action', '<button class="context-nav btn btn-custom-1 btn-sm">Manage <i class="fas fa-angle-down"></i></button>');
+			->editColumn('office_status',function($officechk){
+				if($officechk->office_status == 0){
+					return '<span class="badge badge-warning">new</span>';
+				}
+				elseif($officechk->office_status == 1){
+					return '<span class="badge badge-success text-dark">new</span>';
+				}
+				elseif($officechk->office_status == 2){
+					return '<span class="badge badge-secondary">not use</span>';
+				}
+				elseif($officechk->office_status == 3){
+					return '<span class="badge badge-danger">deny</span>';
+				}
+			})
+			->addColumn('action', '<button type="button" class="btn btn-sm btn-info">จัดการ <i class="fal fa-angle-down"></i> </button>')
+			->rawColumns(['office_status','action']);
 	}
 
 	public function query(Office $model) {
@@ -30,11 +45,11 @@ class OfficeDataTable extends DataTable
 					->dom('Bfrtip')
 					->orderBy(1)
 					->buttons(
-						Button::make('create'),
-						Button::make('export'),
-						Button::make('print'),
-						Button::make('reset'),
-						Button::make('reload')
+						Button::make('create')->text('เพิ่มหน่วยงาน'),
+						// Button::make('export'),
+						// Button::make('print'),
+						// Button::make('reset'),
+						// Button::make('reload')
 					);
 	}
 
@@ -45,11 +60,11 @@ class OfficeDataTable extends DataTable
 			//       ->printable(false)
 			//       ->width(60)
 			//       ->addClass('text-center'),
-			Column::make('office_id'),
-			Column::make('office_code'),
-			Column::make('office_name'),
-			Column::make('office_status'),
-			// Column::make('action'),
+			Column::make('office_id')->title('ลำดับ'),
+			Column::make('office_code')->title('รหัสหน่วยงาน'),
+			Column::make('office_name')->title('ชื่อ'),
+			Column::make('office_status')->title('สถานะ'),
+			Column::make('action')->title('จัดการ'),
 			// Column::make('created_at'),
 			// Column::make('updated_at'),
 		];
