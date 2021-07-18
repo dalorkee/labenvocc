@@ -10,7 +10,7 @@ use App\Http\Controllers\
 	CustomerBiolabController,
 	CustomerEnvLabController
 };
-use App\Http\Controllers\admin\
+use App\Http\Controllers\Admin\
 {
 	OfficeController,
 	ParametController
