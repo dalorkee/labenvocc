@@ -32,8 +32,9 @@ class OfficeDataTable extends DataTable
 	}
 
 	public function query(Office $model) {
-		return $model->newQuery();
-		//return $model->select('office_id', 'office_code', 'office_name', 'office_status')->get();
+		//return $model->newQuery();
+		return $model->select('office_id', 'office_code', 'office_name', 'office_status')
+						->orderBy('office_id','DESC');
 	}
 
 
