@@ -14,28 +14,23 @@ class RegisterController extends Controller
 		return view('auth.pre-register');
 	}
 	protected function create(): object {
-		$agency_type = self::agencyType();
-		$provinces = self::getMinProvince();
+		$agency_type = $this->agencyType();
+		$provinces = $this->getMinProvince();
 		return view('auth.register', [
 			'agency_type' => $agency_type,
 			'provinces' => $provinces
 		]);
 	}
 
-    public function registerVerifyData() {
-        $htm = "
-        <span>555</span>
-
-        ";
-        return $htm;
-    }
+	public function registerVerifyData(Request $request) {
+		dd($request->data);
+		$htm = "
+		<div>test ja</div>";
+		return $htm;
+	}
 
 	public function store(Request $request) {
 		dd($request);
 	}
-	
-	public function show(Register $register) {}
-	public function edit(Register $register) {}
-	public function update(Request $request, Register $register) {}
-	public function destroy(Register $register) {}
+
 }

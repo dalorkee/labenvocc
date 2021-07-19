@@ -19,7 +19,7 @@
 @section('content')
 <article>
 	<section class="multi_step_form">
-		<form action="{{ route('register.store') }}" method="POST" id="msform" class="w-full">
+		<form action="{{ route('register.store') }}" method="POST" id="msform">
 			@csrf
 			<div class="tittle">
 				<h2>ลงทะเบียนใช้งาน</h2>
@@ -57,18 +57,18 @@
 											<label for="simpleinput" class="block form-label">ชนิดหน่วยงาน <span class="text-red-600">*</span></label>
 											<div class="frame-wrap">
 												<div class="custom-control custom-switch custom-control-inline">
-													<input type="checkbox" name="agency_type" id="agency_type_establishment" class="custom-control-input agency_type">
+													<input type="checkbox" name="agency_type" value="1" id="agency_type_establishment" class="custom-control-input agency_type">
 													<label class="custom-control-label" for="agency_type_establishment">สถานประกอบการ</label>
 												</div>
 											</div>
 										</div>
 										<div class="col-span-6 sm:col-span-3 md:ml-4">
 											<label for="first_name" class="block text-base font-medium text-gray-700">ชื่อหน่วยงาน</label>
-											<input type="text" name="first_name" id="first_name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300">
+											<input type="text" name="office_name_establishment" id="office_name_establishment" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300">
 										</div>
 										<div class="col-span-6 sm:col-span-3 md:mr-4">
 											<label for="last_name" class="block text-base font-medium text-gray-700">รหัสหน่วยงาน</label>
-											<input type="text" name="last_name" id="last_name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300">
+											<input type="text" name="office_code_establishment" id="office_code_establishment" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300">
 										</div>
 										<div class="col-span-6 sm:col-span-6">
 											<div class="frame-wrap">
@@ -115,7 +115,7 @@
 											<input type="text" name="taxpayer_no" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-200">
 										</div>
 
-										
+
 										<div class="col-span-6 sm:col-span-3">
 											<label for="address" class="block form-label">ที่อยู่</label>
 											<input type="text" name="address" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-200">
@@ -209,8 +209,8 @@
 					</div>
 				</div>
 				<button type="button" class="action-button previous previous_button">ก่อนหน้า</button>
-				<button type="button" class="next action-button">ถัดไป</button>  
-			</fieldset> 
+				<button type="button" class="next action-button">ถัดไป</button>
+			</fieldset>
 
 			<fieldset>
 				<h3>ข้อมูลติดต่อ</h3>
@@ -284,7 +284,7 @@
 					</div>
 				</div>
 				<button type="button" class="action-button previous previous_button">ก่อนหน้า</button>
-				<button type="button" class="next action-button">ถัดไป</button>  
+				<button type="button" class="next action-button">ถัดไป</button>
 			</fieldset>
 
 			<fieldset>
@@ -316,35 +316,32 @@
 					</div>
 				</div>
 				<button type="button" class="action-button previous previous_button">ก่อนหน้า</button>
-				<button type="button" class="btn btn-default"data-toggle="modal" data-target="#example-modal-backdrop-transparent">ตรวจสอบข้อมูล</button>
+				<button type="button" id="sad" class="btn btn-default"data-toggle="modal" data-target="#example-modal-backdrop-transparent">ตรวจสอบข้อมูล</button>
 				{{-- <button type="submit" class="action-button">ตรวจสอบข้อมูล</button> --}}
 			</fieldset>
-																	<!-- Modal Verify Data -->
-																	<div class="modal fade modal-backdrop-transparent" id="example-modal-backdrop-transparent" tabindex="1" role="dialog" aria-hidden="true">
-																		<div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-																			<div class="modal-content">
-																				<div class="modal-header">
-																					<h5 class="modal-title">ตรวจสอบข้อมูล</h5>
-																					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-																						<span aria-hidden="true"><i class="fal fa-times"></i></span>
-																					</button>
-																				</div>
-																				<div class="modal-body">
-																					<div id="meawdal"></div>
-																				</div>
-																				<div class="modal-footer">
-																					<button type="button" class="btn btn-secondary action-button" data-dismiss="modal" >กลับไปแก้ไข</button>
-																					<button type="button" class="btn btn-primary" style="z-index:">ตกลง</button>
-																				</div>
-																			</div>
-																		</div>
-																	</div>
-
-			
 		</form>
 	</section>
-
 </article>
+<!-- Modal Verify Data -->
+<div class="modal fade modal-backdrop-transparent" id="example-modal-backdrop-transparent" tabindex="1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">ตรวจสอบข้อมูล</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true"><i class="fal fa-times"></i></span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div id="meawdal">abc</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary action-button" data-dismiss="modal" >กลับไปแก้ไข</button>
+				<button type="button" class="btn btn-primary" style="z-index:">ตกลง</button>
+			</div>
+		</div>
+	</div>
+</div>
 @endsection
 @section('script')
 <script src="{{ URL::asset('assets/js/formplugins/select2/select2.bundle.js') }}"></script>
@@ -404,12 +401,15 @@ $(document).ready(function() {
 	});
 
 	$('#sad').click(function() {
-		let id ='isad';
+		var data = {};
+		$.each($('#msform').serializeArray(), function() {
+			data[this.name] = this.value;
+		});
 		$.ajax({
 			method: "POST",
 			url: "{{ route('register.verify') }}",
 			dataType: "HTML",
-			data: {id:id},
+			data: {data:data},
 			success: function(response) {
 				$('#meawdal').html(response);
 			},
@@ -503,15 +503,15 @@ $(document).ready(function() {
 			templateResult: formatRepo,
 			templateSelection: formatRepoSelection
 		});
-		
+
 	});
-	function formatRepo (repo) {	
+	function formatRepo (repo) {
 		if (repo.loading) return repo.text;
 		var markup = "<div class='select2-result-repository clearfix'>" +
 			"<div class='select2-result-repository__meta'>" +
 			"<div class='select2-result-repository__title'>" + repo.value + "</div></div></div>";
 			return markup;
-	}	
+	}
 	function formatRepoSelection (repo) {
 		return repo.value || repo.text;
 	}
@@ -523,7 +523,7 @@ $(document).ready(function() {
 </script>
 <script>
 (function($) {
-	"use strict";  
+	"use strict";
 	function verificationForm() {
 	//jQuery time
 		var current_fs, next_fs, previous_fs; //fieldsets
@@ -613,7 +613,7 @@ $(document).ready(function() {
 		// $(".submit").click(function () {
 		// 		return false;
 		// })
-	}; 
+	};
 	verificationForm ();
 })(jQuery);
 </script>
