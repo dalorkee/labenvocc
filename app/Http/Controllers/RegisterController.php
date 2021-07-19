@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\User;
+use Illuminate\Support\Facades\Validator;
+//use App\Models\User;
 use App\Traits\{RefTrait,JsonBoundaryTrait,DbBoundaryTrait,DbHospitalTrait};
 
 class RegisterController extends Controller
@@ -23,14 +24,23 @@ class RegisterController extends Controller
 	}
 
 	public function registerVerifyData(Request $request) {
-		dd($request->data);
-		$htm = "
-		<div>test ja</div>";
-		return $htm;
+		$validator = Validator::make($request->all(),[
+			'captcha' => 'required'
+		]);
+		if ($validator->fails()) {
+			return response()->json(['error'=>$validator->errors()->all()]);
+		}
+
+
 	}
 
 	public function store(Request $request) {
 		dd($request);
+	}
+
+	public function refreshCaptcha()
+	{
+		return response()->json(['captcha'=> captcha_img('flat')]);
 	}
 
 }

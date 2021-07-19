@@ -315,6 +315,17 @@
 						</div>
 					</div>
 				</div>
+				<div class="form-group mt-3 mb-3">
+					<div class="captcha">
+						<span>{!! captcha_img('flat') !!}</span>
+						<button type="button" class="btn btn-danger" class="refresh-captcha" id="refresh-captcha">
+							&#x21bb;
+						</button>
+					</div>
+				</div>
+				<div class="form-group mb-4">
+					<input name="captcha" id="captcha" type="text" class="form-control" placeholder="Enter Captcha">
+				</div>
 				<button type="button" class="action-button previous previous_button">ก่อนหน้า</button>
 				<button type="button" id="sad" class="btn btn-default"data-toggle="modal" data-target="#example-modal-backdrop-transparent">ตรวจสอบข้อมูล</button>
 				{{-- <button type="submit" class="action-button">ตรวจสอบข้อมูล</button> --}}
@@ -348,6 +359,43 @@
 <script>
 $(document).ready(function() {
 	$.ajaxSetup({headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}});
+	$('#refresh-captcha').click(function () {
+		$.ajax({
+			type: "POST",
+			url: "{{ route('register.refresh-captcha') }}",
+			success: function (data) {
+				$(".captcha span").html(data.captcha);
+			}
+		});
+	});
+	$('#sad').click(function(e) {
+        e.preventDefault();
+		var data = {};
+		$.each($('#msform').serializeArray(), function() {
+			data[this.name] = this.value;
+		});
+		$.ajax({
+			method: "POST",
+			url: "{{ route('register.verify') }}",
+			dataType: "HTML",
+			data: {data:data},
+			success: function(x) {
+				//$('#meawdal').html(response);
+                if ($.isEmptyObject(x.error)){
+                    alert('success');
+                 } else {
+                    printErrorMsg('err');
+                }
+			},
+			error: function(jqXhr, textStatus, errorMessage) {
+				alert('Modal error: ' + jqXhr.status + errorMessage);
+			}
+		});
+	});
+    function printErrorMsg (msg) {
+        alert('jet');
+    }
+
 	$('#province').change(function() {
 		if ($(this).val() != '') {
 			var id = $(this).val();
@@ -398,25 +446,6 @@ $(document).ready(function() {
 				}
 			});
 		}
-	});
-
-	$('#sad').click(function() {
-		var data = {};
-		$.each($('#msform').serializeArray(), function() {
-			data[this.name] = this.value;
-		});
-		$.ajax({
-			method: "POST",
-			url: "{{ route('register.verify') }}",
-			dataType: "HTML",
-			data: {data:data},
-			success: function(response) {
-				$('#meawdal').html(response);
-			},
-			error: function(jqXhr, textStatus, errorMessage) {
-				alert('Modal error: ' + jqXhr.status + errorMessage);
-			}
-		});
 	});
 });
 </script>
