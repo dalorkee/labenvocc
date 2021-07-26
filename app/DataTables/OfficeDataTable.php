@@ -4,30 +4,38 @@ namespace App\DataTables;
 
 use App\Models\Admin\Office;
 use App\Models\Postal;
+use App\Traits\RefTrait;
 use Yajra\DataTables\Html\{Button,Column};
 use Yajra\DataTables\Html\Editor\{Editor,Fields};
 use Yajra\DataTables\Services\DataTable;
 
 class OfficeDataTable extends DataTable
 {
+	// private function officeFilter(array $academy_arr) {
+	// 	$str = "";
+	// 	foreach ($academy_arr as $key => $value) {
+	// 		$str .= "WHEN academy = \"".$key."\" THEN \"".$value['name_academy']."\" ";
+	// 	}
+	// 	return $str;
+	// }
 	public function dataTable($query): object {
 		return datatables()
 			->eloquent($query)
 			->editColumn('office_status',function($officechk){
-				if($officechk->office_status == 0){
-					return '<span class="badge badge-warning">new</span>';
+				if($officechk->office_status == 'สมัครใหม่'){
+					return '<span class="badge badge-warning">สมัครใหม่</span>';
 				}
-				elseif($officechk->office_status == 1){
-					return '<span class="badge badge-success text-dark">new</span>';
+				elseif($officechk->office_status == 'อนุญาต'){
+					return '<span class="badge badge-success text-dark">อนุญาต</span>';
 				}
-				elseif($officechk->office_status == 2){
-					return '<span class="badge badge-secondary">not use</span>';
+				elseif($officechk->office_status == 'ปิด'){
+					return '<span class="badge badge-secondary">ปิด</span>';
 				}
-				elseif($officechk->office_status == 3){
-					return '<span class="badge badge-danger">deny</span>';
+				elseif($officechk->office_status == 'ไม่อนุญาต'){
+					return '<span class="badge badge-danger">ไม่อนุญาต</span>';
 				}
 			})
-			->addColumn('action', '<button type="button" class="btn btn-sm btn-info">จัดการ <i class="fal fa-angle-down"></i> </button>')
+			->addColumn('action', '<button type="button" class="office-manage-nav btn btn-sm btn-info">จัดการ <i class="fal fa-angle-down"></i> </button>')
 			->rawColumns(['office_status','action']);
 	}
 

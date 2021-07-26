@@ -25,41 +25,6 @@
 <div class="fs-lg fw-300 p-5 bg-white border-faded rounded mb-g">
 	<div class="frame-wrap">
 		{{ $dataTable->table() }}
-		{{-- <table class="table m-0">
-			<thead>
-				<tr>
-					<th>#</th>
-					<th>Office Code</th>
-					<th>Office Name</th>
-					<th>Status</th>
-					<th>Action</th>
-				</tr>
-			</thead>
-			<tbody>
-			@foreach ($office_data as $key=>$office)
-				<tr>
-					<th scope="row"></th>
-					<td>{{$office['office_code']}}</td>
-					<td>{{$office['office_name']}}</td>
-					<td>
-					@if($office['office_status'] == '0')
-						<label class="badge badge-info">New</label>
-					@elseif($office['office_status'] == '1')
-						<label class="badge badge-success">Aollow</label>
-					@elseif($office['office_status'] == '2')
-						<label class="badge badge-warning">Close</label>
-					@elseif($office['office_status'] == '3')
-						<label class="badge badge-danger">Deny</label>
-					@endif
-					</td>
-					<td>
-						<a class="btn btn-info btn-sm" href="edit">Edit</a>
-					</td>
-				</tr>
-			@endforeach					
-			</tbody>
-		</table>
-		{{ $office_data->links() }} --}}
 	</div>	
 </div>
 @endsection
@@ -70,4 +35,30 @@
 <script type="text/javascript" src="{{ URL::asset('vendor/jquery-contextMenu/dist/jquery.contextMenu.min.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/buttons.server-side.js') }}"></script>
     {{ $dataTable->scripts() }}
+
+<script>
+	$(document).ready(function() {
+		$.contextMenu({
+            selector: '.office-manage-nav',
+            callback: function(key, options) {
+                var m = "clicked: " + key;
+                window.console && console.log(m) || alert(m); 
+            },
+            items: {
+                "edit": {name: "Edit", icon: "edit"},
+                "cut": {name: "Cut", icon: "cut"},
+               copy: {name: "Copy", icon: "copy"},
+                "paste": {name: "Paste", icon: "paste"},
+                "delete": {name: "Delete", icon: "delete"},
+                "sep1": "---------",
+                "quit": {name: "Quit", icon: function(){
+                    return 'context-menu-icon context-menu-icon-quit';
+                }}
+            }
+        });
+        $('.office-manage-nav').on('click', function(e){
+            console.log('clicked', this);
+        })    
+	});
+</script>
 @endsection
