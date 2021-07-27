@@ -4,6 +4,7 @@
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('vendor/DataTables/DataTables-1.10.22/css/jquery.dataTables.min.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('vendor/DataTables/Buttons-1.6.5/css/buttons.jqueryui.min.css') }}">
 <link rel='stylesheet' type="text/css" href="{{ URL::asset('vendor/DataTables/Responsive-2.2.6/css/responsive.dataTables.min.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ URL::asset('vendor/jquery-contextmenu/css/jquery.contextMenu.min.css') }}">
 @endsection
 @section('content')
 <ol class="breadcrumb page-breadcrumb">
@@ -32,7 +33,7 @@
 <script type="text/javascript" src="{{ URL::asset('vendor/DataTables/DataTables-1.10.22/js/jquery.dataTables.min.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('vendor/DataTables/Buttons-1.6.5/js/dataTables.buttons.min.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('vendor/DataTables/Responsive-2.2.6/js/dataTables.responsive.min.js') }}"></script>
-<script type="text/javascript" src="{{ URL::asset('vendor/jquery-contextMenu/dist/jquery.contextMenu.min.js') }}"></script>
+<script type="text/javascript" src="{{ URL::asset('vendor/jquery-contextMenu/js/jquery.contextMenu.min.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/buttons.server-side.js') }}"></script>
     {{ $dataTable->scripts() }}
 
@@ -40,20 +41,17 @@
 	$(document).ready(function() {
 		$.contextMenu({
             selector: '.office-manage-nav',
+            trigger:'left',
             callback: function(key, options) {
                 var m = "clicked: " + key;
                 window.console && console.log(m) || alert(m); 
             },
             items: {
-                "edit": {name: "Edit", icon: "edit"},
-                "cut": {name: "Cut", icon: "cut"},
-               copy: {name: "Copy", icon: "copy"},
-                "paste": {name: "Paste", icon: "paste"},
-                "delete": {name: "Delete", icon: "delete"},
-                "sep1": "---------",
-                "quit": {name: "Quit", icon: function(){
-                    return 'context-menu-icon context-menu-icon-quit';
-                }}
+                "edit": {name: "Edit", icon: "fal fa-edit"},
+                "cut": {name: "Cut", icon: "fal fa-cut"},
+                "copy": {name: "Copy", icon: "fal fa-copy"},
+                "paste": {name: "Paste", icon: "fal fa-paste"},
+                "delete": {name: "Delete", icon: "fal fa-eraser"},
             }
         });
         $('.office-manage-nav').on('click', function(e){
