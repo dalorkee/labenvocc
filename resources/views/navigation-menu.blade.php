@@ -38,6 +38,9 @@
 							</x-jet-dropdown-link>
 							<x-jet-dropdown-link href="#">
 								{{ __('Parameter') }}
+							</x-jet-dropdown-link>
+							<x-jet-dropdown-link href="{{ route('biolabFrm.index') }}">
+								{{ __('Lab') }}
 							</x-jet-dropdown-link>	
 						</x-slot>	
 					</x-jet-dropdown>
