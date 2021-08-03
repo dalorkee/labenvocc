@@ -47,11 +47,12 @@
                 window.console && console.log(m) || alert(m); 
             },
             items: {
-                "edit": {name: "Edit", icon: "fal fa-edit"},
-                "cut": {name: "Cut", icon: "fal fa-cut"},
-                "copy": {name: "Copy", icon: "fal fa-copy"},
-                "paste": {name: "Paste", icon: "fal fa-paste"},
-                "delete": {name: "Delete", icon: "fal fa-eraser"},
+                "edit": {name: "แก้ไข", icon: "fal fa-edit"},
+                "sep1":"--------",
+                "cut": {name: "อนุญาต", icon: "fal fa-lock-open-alt"},
+                "copy": {name: "ไม่อนุญาต", icon: "fal fa-lock-alt"},
+                "paste": {name: "ปิดใช้งาน", icon: "fal fa-exclamation-triangle"},
+                "delete": {name: "ลบ", icon: "fal fa-eraser"},
             }
         });
         $('.office-manage-nav').on('click', function(e){

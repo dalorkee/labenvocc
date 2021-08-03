@@ -35,12 +35,13 @@ class OfficeDataTable extends DataTable
 					return '<span class="badge badge-danger">ไม่อนุญาต</span>';
 				}
 			})
-			->addColumn('action', '<button type="button" class="office-manage-nav btn btn-sm btn-info">จัดการ <i class="fal fa-angle-down"></i> </button>')
+			->addColumn('action', '<button type="button" class="office-manage-nav btn btn-sm btn-info" data-id="{{$office_id}}">จัดการ <i class="fal fa-angle-down"></i> </button>')
 			->rawColumns(['office_status','action']);
 	}
 
 	public function query(Office $model) {
 		//return $model->newQuery();
+
 		return $model->select('office_id', 'office_code', 'office_name', 'office_status')
 						->orderBy('office_id','DESC');
 	}
