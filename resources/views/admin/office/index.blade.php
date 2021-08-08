@@ -43,21 +43,25 @@
             selector: '.office-manage-nav',
             trigger:'left',
             callback: function(key, options) {
-                var m = "clicked: " + key;
-                window.console && console.log(m) || alert(m); 
+                var officeid = $(this).data('id');
+                switch(key){
+                    case 'edit':
+                        alert(key + officeid);
+                        let officeUrl = '{{ route("office.edit", ":officeid") }}';
+                        officeUrl = officeUrl.replace(':officeid', officeid);
+                        window.open(officeUrl, '_self');
+                    break;
+                }
             },
             items: {
                 "edit": {name: "แก้ไข", icon: "fal fa-edit"},
                 "sep1":"--------",
-                "cut": {name: "อนุญาต", icon: "fal fa-lock-open-alt"},
-                "copy": {name: "ไม่อนุญาต", icon: "fal fa-lock-alt"},
-                "paste": {name: "ปิดใช้งาน", icon: "fal fa-exclamation-triangle"},
+                "allow": {name: "อนุญาต", icon: "fal fa-lock-open-alt"},
+                "deny": {name: "ไม่อนุญาต", icon: "fal fa-lock-alt"},
+                "close": {name: "ปิดใช้งาน", icon: "fal fa-exclamation-triangle"},
                 "delete": {name: "ลบ", icon: "fal fa-eraser"},
             }
         });
-        $('.office-manage-nav').on('click', function(e){
-            console.log('clicked', this);
-        })    
 	});
 </script>
 @endsection

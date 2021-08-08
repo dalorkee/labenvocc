@@ -64,7 +64,7 @@ class OfficeController extends Controller
      */
     public function edit(Office $office)
     {
-        //
+        return view('admin.office.edit',compact('office'));
     }
 
     /**

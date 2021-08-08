@@ -70,6 +70,12 @@
 				<span class="nav-link-text" data-i18n="nav.application_intel">ติดต่อหน่วยงาน</span>
 			</a>
 		</li>
+		<li>
+			<a href="{{ route('office.index') }}" title="Application Intel" data-filter-tags="application intel">
+				<i class="fal fa-map-marker-alt"></i>
+				<span class="nav-link-text" data-i18n="nav.application_intel">back admin</span>
+			</a>
+		</li>
 	</ul>
 	<div class="filter-message js-filter-message bg-success-600"></div>
 </nav>
