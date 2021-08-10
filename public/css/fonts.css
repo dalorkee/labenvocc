@@ -1,79 +1,125 @@
 @font-face {
 	font-family: "Fira-code";
-	src: url('../fonts/FiraCode-Regular.woff2') format("woff2"),
-		url('../fonts/FiraCode-Regular.ttf') format("truetype");
+	src: url("../fonts/FiraCode-Regular.woff2") format("woff2"),
+		url("../fonts/FiraCode-Regular.ttf") format("truetype");
 	font-weight: 400;
 	font-weight: normal;
 	font-style: normal;
 }
 @font-face {
-	font-family: "sukhumvit";
-	src: url('../fonts/SukhumvitReg.woff2') format("woff2"),
-	url('../fonts/SukhumvitReg.woff') format("woff");
-	font-weight: 600;
-	font-style: normal;
-	font-display: swap;
+	font-family: "sukhumvit_setbold";
+	src:url("../fonts/sukhumvit-set_bold-webfont.eot");
+	src:url("../fonts/sukhumvit-set_bold-webfont.eot?#iefix") format("embedded-opentype"),
+		url("../fonts/sukhumvit-set_bold-webfont.woff2") format("woff2"),
+		url("../fonts/sukhumvit-set_bold-webfont.woff") format("woff"),
+		url("../fonts/sukhumvit-set_bold-webfont.ttf") format("truetype"),
+		url("../fonts/sukhumvit-set_bold-webfont.svg#sukhumvit_setbold") format("svg");font-weight:400;font-style:normal
 }
 @font-face {
-	font-family: 'sarabunregular';
-	src: url('../fonts/sarabun-regular-webfont.eot');
-	src: url('../fonts/sarabun-regular-webfont.eot?#iefix') format('embedded-opentype'),
-		 url('../fonts/sarabun-regular-webfont.woff2') format('woff2'),
-		 url('../fonts/sarabun-regular-webfont.woff') format('woff'),
-		 url('../fonts/sarabun-regular-webfont.ttf') format('truetype'),
-		 url('../fonts/sarabun-regular-webfont.svg#sarabunregular') format('svg');
+	font-family: "sukhumvit_setmedium";
+	src:url("../fonts/sukhumvit-set_medium-webfont.eot");
+	src:url("../fonts/sukhumvit-set_medium-webfont.eot?#iefix") format("embedded-opentype"),
+		url("../fonts/sukhumvit-set_medium-webfont.woff2") format("woff2"),
+		url("../fonts/sukhumvit-set_medium-webfont.woff") format("woff"),
+		url("../fonts/sukhumvit-set_medium-webfont.ttf") format("truetype"),
+		url("../fonts/sukhumvit-set_medium-webfont.svg#sukhumvit_setmedium") format("svg");font-weight:400;font-style:normal
+}
+@font-face {
+	font-family: "sukhumvit_setsemi_bold";
+	src:url("../fonts/sukhumvit-set_semibold-webfont.eot");
+	src:url("../fonts/sukhumvit-set_semibold-webfont.eot?#iefix") format("embedded-opentype"),
+		url("../fonts/sukhumvit-set_semibold-webfont.woff2") format("woff2"),
+		url("../fonts/sukhumvit-set_semibold-webfont.woff") format("woff"),
+		url("../fonts/sukhumvit-set_semibold-webfont.ttf") format("truetype"),
+		url("../fonts/sukhumvit-set_semibold-webfont.svg#sukhumvit_setsemi_bold") format("svg");font-weight:400;font-style:normal
+}
+@font-face {
+	font-family: "sukhumvit_settext";
+	src:url("../fonts/sukhumvit-set_text-webfont.eot");
+	src:url("../fonts/sukhumvit-set_text-webfont.eot?#iefix") format("embedded-opentype"),
+		url("../fonts/sukhumvit-set_text-webfont.woff2") format("woff2"),
+		url("../fonts/sukhumvit-set_text-webfont.woff") format("woff"),
+		url("../fonts/sukhumvit-set_text-webfont.ttf") format("truetype"),
+		url("../fonts/sukhumvit-set_text-webfont.svg#sukhumvit_settext") format("svg");font-weight:400;font-style:normal
+}
+@font-face {
+	font-family: "sarabunregular";
+	src: url("../fonts/sarabun-regular-webfont.eot");
+	src: url("../fonts/sarabun-regular-webfont.eot?#iefix") format("embedded-opentype"),
+		 url("../fonts/sarabun-regular-webfont.woff2") format("woff2"),
+		 url("../fonts/sarabun-regular-webfont.woff") format("woff"),
+		 url("../fonts/sarabun-regular-webfont.ttf") format("truetype"),
+		 url("../fonts/sarabun-regular-webfont.svg#sarabunregular") format("svg");
+	font-weight: normal;
+	font-style: normal;
+}
+@font-face {
+	font-family: "sarabunbold";
+	src: url("../fonts/sarabun-bold-webfont.eot");
+	src: url("../fonts/sarabun-bold-webfont.eot?#iefix") format("embedded-opentype"),
+		 url("../fonts/sarabun-bold-webfont.woff2") format("woff2"),
+		 url("../fonts/sarabun-bold-webfont.woff") format("woff"),
+		 url("../fonts/sarabun-bold-webfont.ttf") format("truetype"),
+		 url("../fonts/sarabun-bold-webfont.svg#sarabunbold") format("svg");
 	font-weight: normal;
 	font-style: normal;
 
 }
 @font-face {
-	font-family: 'sarabunbold';
-	src: url('../fonts/sarabun-bold-webfont.eot');
-	src: url('../fonts/sarabun-bold-webfont.eot?#iefix') format('embedded-opentype'),
-		 url('../fonts/sarabun-bold-webfont.woff2') format('woff2'),
-		 url('../fonts/sarabun-bold-webfont.woff') format('woff'),
-		 url('../fonts/sarabun-bold-webfont.ttf') format('truetype'),
-		 url('../fonts/sarabun-bold-webfont.svg#sarabunbold') format('svg');
+	font-family: "sarabunmedium";
+	src: url("../fonts/sarabun-medium-webfont.eot");
+	src: url("../fonts/sarabun-medium-webfont.eot?#iefix") format("embedded-opentype"),
+		 url("../fonts/sarabun-medium-webfont.woff2") format("woff2"),
+		 url("../fonts/sarabun-medium-webfont.woff") format("woff"),
+		 url("../fonts/sarabun-medium-webfont.ttf") format("truetype"),
+		 url("../fonts/sarabun-medium-webfont.svg#sarabunmedium") format("svg");
 	font-weight: normal;
 	font-style: normal;
-
 }
+
 @font-face {
-	font-family: 'sarabunmedium';
-	src: url('../fonts/sarabun-medium-webfont.eot');
-	src: url('../fonts/sarabun-medium-webfont.eot?#iefix') format('embedded-opentype'),
-		 url('../fonts/sarabun-medium-webfont.woff2') format('woff2'),
-		 url('../fonts/sarabun-medium-webfont.woff') format('woff'),
-		 url('../fonts/sarabun-medium-webfont.ttf') format('truetype'),
-		 url('../fonts/sarabun-medium-webfont.svg#sarabunmedium') format('svg');
+	font-family: "baijamjuree";
+	src: url("../fonts/baijamjuree-regular-webfont.woff2") format("woff2"),
+		 url("../fonts/baijamjuree-regular-webfont.woff") format("woff"),
+		 url("../fonts/baijamjuree-regular-webfont.ttf") format("truetype");
 	font-weight: normal;
 	font-style: normal;
 }
 @font-face {
-	font-family: 'sarabunlight';
-	src: url('../fonts/sarabun-light-webfont.woff2') format('woff2'),
-		 url('../fonts/sarabun-light-webfont.woff') format('woff');
+	font-family: 'kanitmedium';
+	src: url('../fonts/kanit-medium-webfont.eot');
+	src: url('../fonts/kanit-medium-webfont.eot?#iefix') format('embedded-opentype'),
+		 url('../fonts/kanit-medium-webfont.woff2') format('woff2'),
+		 url('../fonts/kanit-medium-webfont.woff') format('woff'),
+		 url('../fonts/kanit-medium-webfont.ttf') format('truetype');
 	font-weight: normal;
 	font-style: normal;
-
 }
 @font-face {
-	font-family: 'sarabunextralight';
-	src: url('../fonts/sarabun-extralight-webfont.eot');
-	src: url('../fonts/sarabun-extralight-webfont.eot?#iefix') format('embedded-opentype'),
-		 url('../fonts/sarabun-extralight-webfont.woff2') format('woff2'),
-		 url('../fonts/sarabun-extralight-webfont.woff') format('woff'),
-		 url('../fonts/sarabun-extralight-webfont.ttf') format('truetype'),
-		 url('../fonts/sarabun-extralight-webfont.svg#sarabunextralight') format('svg');
+	font-family: 'kanitextralight';
+	src: url('../fonts/kanit-extralight-webfont.eot');
+	src: url('../fonts/kanit-extralight-webfont.eot?#iefix') format('embedded-opentype'),
+		 url('../fonts/kanit-extralight-webfont.woff2') format('woff2'),
+		 url('../fonts/kanit-extralight-webfont.woff') format('woff'),
+		 url('../fonts/kanit-extralight-webfont.ttf') format('truetype');
 	font-weight: normal;
 	font-style: normal;
-
 }
-.font-sarabun-medium {
-	font-family: 'sarabunextralight' !important;
+@font-face {
+    font-family: 'cs_chatthaiuiregular';
+    src: url('../fonts/cschatthaiui-webfont.woff2') format('woff2'),
+         url('../fonts/cschatthaiui-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+.font-kanitextralight {
+	font-family: "kanitextralight" !important;
+}
+.font-cs-chatthai {
+    font-family: "cs_chatthaiuiregular" !important;
 }
 html, body, .page-wrapper {
-	font-family: 'sarabunextralight' !important;
+	/* font-family: "kanitextralight" !important; */
 	font-size: 1rem;
 }
 

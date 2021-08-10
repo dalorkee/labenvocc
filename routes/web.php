@@ -29,7 +29,6 @@ Route::name('register.')->group(function() {
 	Route::post('province/district/subdistrict', [RegisterController::class, 'renderSubDistrictToHtmlSelect'])->name('subDistrict');
 	Route::post('province/subdistrict/postcode', [RegisterController::class, 'getPostCodeBySubDistrict'])->name('postcode');
 	Route::post('search/hospital', [RegisterController::class, 'searchHospitalByName'])->name('hospital');
-	Route::post('register/verify', [RegisterController::class, 'registerVerifyData'])->name('verify');
     Route::post('refresh-captcha', [RegisterController::class, 'refreshCaptcha'])->name('refresh-captcha');
 });
 Route::any('captcha-test', function() {

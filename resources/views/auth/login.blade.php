@@ -7,7 +7,7 @@
 				<form method="POST" action="{{ route('login') }}">
 					@csrf
 					<fieldset style="height:505px;padding:10px 30px; border: 2px solid #4AD3C5">
-						<legend style="width:auto;padding:2px;color:#39675D">ลงชื่อเข้าใช้</legend>
+						<legend style="width:auto;padding:2px;" class="font-kanitextralight">ลงชื่อเข้าใช้</legend>
 						<div class="col-md-12">
 							<div class="form-group">
 								<label for="username" class="form-label">ชื่อผู้ใช้/อีเมล์</label>
@@ -54,7 +54,7 @@
 			<div class="col-md-12">
 				<form method="POST" action="{{ route('login') }}">
 					<fieldset style="padding:10px 30px; border: 2px solid #4AD3C5">
-						<legend style="width:auto;padding:2px;color:#39675D">ข่าวสารประชาสัมพันธ์</legend>
+						<legend style="width:auto;padding:2px;color:#39675D" class="font-kanitextralight">ข่าวสารประชาสัมพันธ์</legend>
 						<div class="card m-0 p-0 shadow-0" style="border:none;background: none;">
 							<div class="card-body p-0">
 								<div class="custom-scroll" style="height: 220px">
@@ -111,7 +111,7 @@
 			<div class="col-md-12 mt-4">
 				<form method="POST" action="{{ route('login') }}">
 					<fieldset style="padding:30px; border: 2px solid #4AD3C5">
-						<legend style="width:auto;padding:2px;color:#39675D">มาตรฐานคุณภาพ</legend>
+						<legend style="width:auto;padding:2px;color:#39675D" class="font-kanitextralight">มาตรฐานคุณภาพ</legend>
 						<div class="card m-0 p-0 shadow-0" style="border:none;background: none;">
 							<div class="card-body p-0">
 								<div class="custom-scroll" style="height: 80px">

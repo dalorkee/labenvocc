@@ -16,3 +16,4 @@ composer.lock
 /.vscode
 !.gitignore
 *.log
+.htaccess

@@ -12,11 +12,12 @@
 <link rel="icon" type="image/png" sizes="32x32" href="{{ URL::asset('assets/img/favicon/favicon-32x32.png') }}">
 <link rel="mask-icon" href="{{ URL::asset('assets/img/favicon/safari-pinned-tab.svg') }}" color="#5bbad5">
 <link rel="apple-touch-icon" sizes="180x180" href="{{ URL::asset('assets/img/favicon/apple-touch-icon.png') }}">
-<link rel="stylesheet" href="{{ URL::asset('assets/css/vendors.bundle.css') }}" media="screen, print" >
-<link rel="stylesheet" href="{{ URL::asset('assets/css/app.bundle.css') }}" media="screen, print">
-<link rel="stylesheet" href="{{ URL::asset('css/app.css') }}">
-<link rel="stylesheet" href="{{ URL::asset('assets/css/fa-brands.css') }}" media="screen, print">
-<link rel="stylesheet" href="{{ URL::asset('css/fonts.css') }}" media="screen, print">
+<link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/css/vendors.bundle.css') }}" media="screen, print" >
+<link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/css/app.bundle.css') }}" media="screen, print">
+<link rel="stylesheet" type="text/css" href="{{ URL::asset('css/app.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/css/fa-brands.css') }}" media="screen, print">
+<link rel="stylesheet" type="text/css" href="{{ URL::asset('css/fonts.css') }}" media="screen, print">
+<link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/css/notifications/toastr/toastr.css') }}" media="screen, print">
 @yield('style')
 <style type="text/css">
 .hoverable	{
@@ -64,10 +65,10 @@
 		<div class="page-content-wrapper bg-transparent m-0">
 			<div class="h-40 w-100 shadow-lg px-4 bg-brand-gradient">
 				<div class="d-flex align-items-center container p-0">
-					<div class="font-sarabun-medium">
+					<div>
 						<a href="javascript:void(0)" class="page-logo-link press-scale-down d-flex align-items-center">
 							<img src="{{ URL::asset('assets/img/moph-logo-160x154.png') }}" alt="logo" aria-roledescription="logo">
-							<div class="page-logo-text mr-1 text-4xl">ระบบห้องปฏิบัติการกองโรคจากการประกอบอาชีพและสิ่งแวดล้อม</div>
+							<div class="page-logo-text mr-1 text-4xl font-kanitextralight">ระบบห้องปฏิบัติการกองโรคจากการประกอบอาชีพและสิ่งแวดล้อม</div>
 						</a>
 					</div>
 				</div>
@@ -77,10 +78,10 @@
 				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
 					<span><i class="fal fa-bars text-green-100 text-2xl"></i></span>
 				</button>
-				<div class="collapse navbar-collapse text-2xl" id="navbarColor01">
+				<div class="collapse navbar-collapse text-2xl font-kanitextralight" id="navbarColor01">
 					<ul class="navbar-nav m-auto">
 						<li class="nav-item active">
-							<a class="nav-link hoverable" href="#"><i class="fal fa-home"></i> หน้าแรก <span class="sr-only">(current)</span></a>
+							<a class="nav-link hoverable" href="{{ route('login') }}"><i class="fal fa-home"></i> หน้าแรก <span class="sr-only">(current)</span></a>
 						</li>
 						<li class="nav-item">
 							<a class="nav-link hoverable" href="#">เกี่ยวกับหน่วยงาน</a>
@@ -99,7 +100,30 @@
 				</div>
 			</nav>
 			<div class="flex-1 bg-white">
-				<div class="container ">
+				<div class="container">
+					{{-- @if ($errors->any())
+					<div class="alert alert-danger alert-dismissible fade show" role="alert">
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+							<span aria-hidden="true"><i class="fal fa-times"></i></span>
+						</button>
+						<div class="d-flex align-items-center">
+							<div class="alert-icon width-2">
+								<span class="icon-stack" style="font-size: 22px;">
+									<i class="base-2 icon-stack-3x color-primary-400"></i>
+									<i class="base-10 text-white icon-stack-1x"></i>
+									<i class="ni md-profile color-primary-800 icon-stack-2x"></i>
+								</span>
+							</div>
+							<div class="flex-1">
+								<ul>
+									@foreach ($errors->all() as $error)
+										<li>{{ $error }}</li>
+									@endforeach
+								</ul>
+							</div>
+						</div>
+					</div>
+					@endif --}}
 					@yield('content')
 				</div>
 				@include('layouts.guest.footer')
@@ -109,6 +133,35 @@
 </div>
 <script src="{{ URL::asset('assets/js/vendors.bundle.js') }}"></script>
 <script src="{{ URL::asset('assets/js/app.bundle.js') }}"></script>
+<script src="{{ URL::asset('assets/js/notifications/toastr/toastr.js') }}"></script>
 @yield('script')
+<script>
+$(document).ready(function() {
+	var options = {
+		"closeButton": true,
+		"debug": false,
+		"newestOnTop": true,
+		"progressBar": false,
+		"positionClass": "toast-top-right",
+		"preventDuplicates": false,
+		"onclick": null,
+		"showDuration": 300,
+		"hideDuration": 100,
+		"timeOut": 0,
+		"extendedTimeOut": 0,
+		"showEasing": "swing",
+		"hideEasing": "linear",
+		"showMethod": "fadeIn",
+		"hideMethod": "fadeOut"
+	};
+	@if ($errors->any())
+		@foreach ($errors->all() as $error)
+			toastr.error('{{ $error }}', 'Lab EnvOcc', options)
+		@endforeach
+		@php Session::forget('errors'); @endphp
+	@endif
+
+});
+</script>
 </body>
 </html>
