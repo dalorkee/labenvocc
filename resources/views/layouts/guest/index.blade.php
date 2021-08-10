@@ -101,6 +101,27 @@
 			</nav>
 			<div class="flex-1 bg-white">
 				<div class="container">
+					@if (Session::has('success'))
+					<div class="alert alert-success alert-dismissible fade show mt-4" role="alert">
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+							<span aria-hidden="true"><i class="fal fa-times"></i></span>
+						</button>
+						<div class="d-flex align-items-center">
+							<div class="alert-icon width-3">
+								<span class="icon-stack icon-stack-md">
+									<i class="base-7 icon-stack-3x color-success-600"></i>
+									<i class="fal fa-check icon-stack-1x text-white"></i>
+								</span>
+							</div>
+							<div class="flex-1">
+								<span class="h5 m-0 fw-700">Success</span>
+								{{ Session::get('success') }}
+							</div>
+						</div>
+					</div>
+					@php Session::forget('error'); @endphp
+					@endif
+
 					{{-- @if ($errors->any())
 					<div class="alert alert-danger alert-dismissible fade show" role="alert">
 						<button type="button" class="close" data-dismiss="alert" aria-label="Close">

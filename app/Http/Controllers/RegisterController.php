@@ -177,11 +177,11 @@ class RegisterController extends Controller
 			if ($saved == true) {
 				$customer->user_id = $last_insert_id;
 				$customer->save();
-				$msg = ["success", "บันทึกข้อมูลผู้ใช้สำเร็จแล้ว"];
+				return redirect()->back()->with('success', 'บันทึกข้อมูลผู้ใช้สำเร็จแล้ว');
 			} else {
+				return redirect()->back()->with('success', 'บันทึกข้อมูลผู้ใช้สำเร็จแล้ว');
 				$msg = ["error", "ไม่สามารถบันทึกข้อมูลได้"];
 			}
-			return redirect()->back()->with($msg[0], $msg[1]);
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
 		}
