@@ -16,12 +16,16 @@
 						{{ __('Dashboard') }}
 					</x-jet-nav-link>					
 				</div>
+				<div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+					<x-jet-nav-link href="{{ route('biolabFrm.index') }}">
+						{{ __('Lab') }}
+					</x-jet-nav-link>					
+				</div>
 
 				<!-- Manage Dropdown Link -->
 				<div class="hidden sm:items-center sm:ml-6 sm:flex">
 					<x-jet-dropdown align="right" width="48">
-						<x-slot name="trigger">
-	
+						<x-slot name="trigger">	
 							<button class="flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-150 ease-in-out">
 								{{__('Manage')}}	
 								<div class="ml-1">
@@ -32,16 +36,43 @@
 							</button>	
 						</x-slot>	
 						<x-slot name="content">	
-							<!-- User Management -->								
+							<!-- Backend Management -->								
 							<x-jet-dropdown-link href="{{route('office.index')}}">
-								{{ __('Office') }}
+								{{ __('หน่วยงาน') }}
 							</x-jet-dropdown-link>
 							<x-jet-dropdown-link href="#">
-								{{ __('Parameter') }}
+								{{ __('แหล่งกำเนิดสิ่งคุกคาม') }}
 							</x-jet-dropdown-link>
-							<x-jet-dropdown-link href="{{ route('biolabFrm.index') }}">
-								{{ __('Lab') }}
+							<x-jet-dropdown-link href="#">
+								{{ __('เทคนิควิเคราะห์') }}
+							</x-jet-dropdown-link>
+							<x-jet-dropdown-link href="#">
+								{{ __('เครื่องวิเคราะห์') }}
+							</x-jet-dropdown-link>
+							<x-jet-dropdown-link href="#">
+								{{ __('หน่วยวัด') }}
+							</x-jet-dropdown-link>
+							<x-jet-dropdown-link href="#">
+								{{ __('วิธีวิเคราะห์') }}
+							</x-jet-dropdown-link>
+							<x-jet-dropdown-link href="#">
+								{{ __('วัตถุประสงค์การตรวจ') }}
+							</x-jet-dropdown-link>
+							<x-jet-dropdown-link href="#">
+								{{ __('ลักษณะตัวอย่าง') }}
+							</x-jet-dropdown-link>
+							<x-jet-dropdown-link href="#">
+								{{ __('พารามิเตอร์') }}
+							</x-jet-dropdown-link>
+							<x-jet-dropdown-link href="#">
+								{{ __('ประเภทสิ่งคุกคาม') }}
 							</x-jet-dropdown-link>	
+							<x-jet-dropdown-link href="#">
+								{{ __('ประเภทตัวอย่าง') }}
+							</x-jet-dropdown-link>
+							<x-jet-dropdown-link href="#">
+								{{ __('รับสัมผัส') }}
+							</x-jet-dropdown-link>
 						</x-slot>	
 					</x-jet-dropdown>
 				</div>

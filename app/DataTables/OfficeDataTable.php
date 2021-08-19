@@ -35,15 +35,15 @@ class OfficeDataTable extends DataTable
 					return '<span class="badge badge-danger">ไม่อนุญาต</span>';
 				}
 			})
-			->addColumn('action', '<button type="button" class="office-manage-nav btn btn-sm btn-info" data-id="{{$office_id}}">จัดการ <i class="fal fa-angle-down"></i> </button>')
+			->addColumn('action', '<button type="button" class="office-manage-nav btn btn-sm btn-info" data-id="{{$id}}">จัดการ <i class="fal fa-angle-down"></i> </button>')
 			->rawColumns(['office_status','action']);
 	}
 
 	public function query(Office $model) {
 		//return $model->newQuery();
 
-		return $model->select('office_id', 'office_code', 'office_name', 'office_status')
-						->orderBy('office_id','DESC');
+		return $model->select('id', 'ref_office_lab_code', 'office_name', 'office_status')
+						->orderBy('id','DESC');
 	}
 
 
@@ -70,8 +70,8 @@ class OfficeDataTable extends DataTable
 			//       ->printable(false)
 			//       ->width(60)
 			//       ->addClass('text-center'),
-			Column::make('office_id')->title('ลำดับ'),
-			Column::make('office_code')->title('รหัสหน่วยงาน'),
+			Column::make('id')->title('ลำดับ'),
+			Column::make('ref_office_lab_code')->title('รหัสหน่วยงาน'),
 			Column::make('office_name')->title('ชื่อ'),
 			Column::make('office_status')->title('สถานะ'),
 			Column::make('action')->title('จัดการ'),
