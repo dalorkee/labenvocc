@@ -26,6 +26,8 @@ class RegisterController extends Controller
 	}
 
 	public function store(Request $request) {
+        return redirect()->back()->with('success', 'บันทึกข้อมูลผู้ใช้สำเร็จแล้ว');
+        exit;
 		$request->validate([
 			'office_category'=>'bail|required',
 			'office_type'=>'required',
@@ -179,8 +181,7 @@ class RegisterController extends Controller
 				$customer->save();
 				return redirect()->back()->with('success', 'บันทึกข้อมูลผู้ใช้สำเร็จแล้ว');
 			} else {
-				return redirect()->back()->with('success', 'บันทึกข้อมูลผู้ใช้สำเร็จแล้ว');
-				$msg = ["error", "ไม่สามารถบันทึกข้อมูลได้"];
+				return redirect()->back()->with('error', 'ไม่สามารถบันทึกข้อมูลได้');
 			}
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());

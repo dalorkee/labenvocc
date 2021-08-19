@@ -119,7 +119,7 @@
 							</div>
 						</div>
 					</div>
-					@php Session::forget('error'); @endphp
+					{{-- @php Session::forget('success'); @endphp --}}
 					@endif
 
 					{{-- @if ($errors->any())
@@ -177,11 +177,14 @@ $(document).ready(function() {
 	};
 	@if ($errors->any())
 		@foreach ($errors->all() as $error)
-			toastr.error('{{ $error }}', 'Lab EnvOcc', options)
+			toastr.error("{{ $error }}", "Error", options);
 		@endforeach
-		@php Session::forget('errors'); @endphp
+		@php Session::forget("errors"); @endphp
 	@endif
-
+	@if (Session::has('success'))
+		toastr.success("{{ Session::get('success') }}", "Success", options);
+		@php Session::forget("success"); @endphp
+	@endif
 });
 </script>
 </body>

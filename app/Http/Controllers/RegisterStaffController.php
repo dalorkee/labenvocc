@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Traits\RefTrait;
+//use App\Traits\RefTrait;
 
 class RegisterStaffController extends Controller
 {
-	use RefTrait;
+	//use RefTrait;
 
 	public function index() {}
 

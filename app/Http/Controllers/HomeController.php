@@ -12,7 +12,8 @@ class HomeController extends Controller
 	public function index(): object {
 		if (Auth::check()) {
 			switch ($this->userRole()) {
-				case 'Superadmin':
+				case 'root':
+				case 'admin':
 					return view('dashboard');
 					break;
 				default:

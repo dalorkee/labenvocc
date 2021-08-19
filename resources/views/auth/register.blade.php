@@ -14,55 +14,24 @@
 .select2-container .select2-selection--single{height:38px!important;border:1px solid #cccccc;border-radius:0;}
 .select2-selection__arrow{height:37px!important;}
 .custom-control-label{font-size: 1.175em;}
-.title {
-	text-align: center;
-	padding-bottom: 10px;
-}
-.title h1, .form-title-label {
-	font: 400 24px/28px "cs_chatthaiuiregular";
-	color: #01937C;
-	padding-bottom: 5px;
-}
-.title p {
-	font: 400 18px/24px "cs_chatthaiuiregular";
-	color: #01937C;
-}
-.panel-hdr h2 {
-	font-size: 1.275em;
-	color: #1abc9c;
-}
-fieldset h2 {
-	font-size: 1em;
-	font-weight: 400;
-}
-.form-label, .custom-control-label {
-	font-size: 1em;
-	font-weight: 400;
-}
-::-webkit-input-placeholder { /* Edge */
-	font-size: 1em;
-}
-
-:-ms-input-placeholder { /* Internet Explorer 10-11 */
-	font-size: 1em;
-}
-
-::placeholder {
-	font-size: 1em;
-}
-.captcha img {
-	border: 1px solid blue;
-}
-input[type="text"]:disabled {
-  background: #eeeeee !important;
-}
+.title {text-align: center;padding-bottom: 10px;}
+.title h1, .form-title-label{font: 400 24px/28px "cs_chatthaiuiregular";color: #01937C;padding-bottom: 5px;}
+.title p{font: 400 18px/24px "cs_chatthaiuiregular";color: #01937C;}
+.panel-hdr h2{font-size: 1.275em;color: #1abc9c;}
+fieldset h2{font-size: 1em;font-weight: 400;}
+.form-label, .custom-control-label{font-size: 1em;font-weight: 400;}
+::-webkit-input-placeholder{ /* Edge */font-size: 1em;}
+:-ms-input-placeholder{ /* IE 10-11 */font-size: 1em;}
+::placeholder{font-size: 1em;}
+.captcha img{border: 1px solid blue;}
+input[type="text"]:disabled{background: #eeeeee !important;}
 </style>
 @endsection
 @section('content')
 <div class="row mt-10">
 	<div class="col-xl-6">
 		<div id="regis-title" class="title">
-			<h1>ลงทะเบียนหน่วยงาน</h1>
+			<h1>ลงทะเบียน ผู้รับบริการ</h1>
 			<p>โปรดกรอกข้อมูลและตรวจสอบให้ถูกต้อง</p>
 		</div>
 	</div>
@@ -479,7 +448,6 @@ input[type="text"]:disabled {
 		</section>
 	</div>
 </div>
-
 @endsection
 @section('script')
 <script src="{{ URL::asset('assets/js/formplugins/select2/select2.bundle.js') }}"></script>
@@ -498,7 +466,6 @@ $(document).ready(function() {
 			$('#position_other').val('');
 			$('#position_other').prop('disabled', true);
 		}
-
 	});
 	$('input[id="agency_type_establishment"]').on('change', function() {
 		if ($(this).prop("checked") == true) {
@@ -914,102 +881,78 @@ $(document).ready(function() {
 	}
 });
 </script>
-
 <script>
-	(function($) {
-
-		function verificationForm() {
-		//jQuery time
-			var current_fs, next_fs, previous_fs; //fieldsets
-			var left, opacity, scale; //fieldset properties which we will animate
-			var animating; //flag to prevent quick multi-click glitches
-
-			$(".next").click(function () {
-				if (animating) return false;
-				animating = true;
-
-				current_fs = $(this).parent();
-				next_fs = $(this).parent().next();
-
-				//activate next step on progressbar using the index of next_fs
-				$("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
-
-				//show the next fieldset
-				next_fs.show();
-				//hide the current fieldset with style
-				current_fs.animate({
-					opacity: 0
-				}, {
-					step: function (now, mx) {
-						//as the opacity of current_fs reduces to 0 - stored in "now"
-						//1. scale current_fs down to 80%
-						scale = 1 - (1 - now) * 0.2;
-						//2. bring next_fs from the right(50%)
-						left = (now * 50) + "%";
-						//3. increase opacity of next_fs to 1 as it moves in
-						opacity = 1 - now;
-						current_fs.css({
-							'transform': 'scale(' + scale + ')',
-							'position': 'absolute'
-						});
-						next_fs.css({
-							'left': left,
-							'opacity': opacity
-						});
-					},
-					duration: 800,
-					complete: function () {
-						current_fs.hide();
-						animating = false;
-					},
-					//this comes from the custom easing plugin
-					easing: 'easeInOutBack'
-				});
-				$("html, body").animate({ scrollTop: $("#regis-title").offset().top}, 2000);
+(function($) {
+	"use strict";
+	function verificationForm() {
+		var current_fs, next_fs, previous_fs;
+		var left, opacity, scale;
+		var animating;
+		$(".next").click(function () {
+			if (animating) return false;
+			animating = true;
+			current_fs = $(this).parent();
+			next_fs = $(this).parent().next();
+			$("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
+			next_fs.show();
+			current_fs.animate({
+				opacity: 0
+			}, {
+				step: function (now, mx) {
+					scale = 1 - (1 - now) * 0.2;
+					left = (now * 50) + "%";
+					opacity = 1 - now;
+					current_fs.css({
+						'transform': 'scale(' + scale + ')',
+						'position': 'absolute'
+					});
+					next_fs.css({
+						'left': left,
+						'opacity': opacity
+					});
+				},
+				duration: 800,
+				complete: function () {
+					current_fs.hide();
+					animating = false;
+				},
+				easing: 'easeInOutBack'
 			});
-			$(".previous").click(function () {
-				if (animating) return false;
-				animating = true;
-				current_fs = $(this).parent();
-				previous_fs = $(this).parent().prev();
-				//de-activate current step on progressbar
-				$("#progressbar li").eq($("fieldset").index(current_fs)).removeClass("active");
-				//show the previous fieldset
-				previous_fs.show();
-				//hide the current fieldset with style
-				current_fs.animate({
-					opacity: 0
-				}, {
-					step: function (now, mx) {
-						//as the opacity of current_fs reduces to 0 - stored in "now"
-						//1. scale previous_fs from 80% to 100%
-						scale = 0.8 + (1 - now) * 0.2;
-						//2. take current_fs to the right(50%) - from 0%
-						left = ((1 - now) * 50) + "%";
-						//3. increase opacity of previous_fs to 1 as it moves in
-						opacity = 1 - now;
-						current_fs.css({
-							'left': left
-						});
-						previous_fs.css({
-							'transform': 'scale(' + scale + ')',
-							'opacity': opacity
-						});
-					},
-					duration: 800,
-					complete: function () {
-						current_fs.hide();
-						animating = false;
-					},
-					easing: 'easeInOutBack'
-				});
-				$("html, body").animate({ scrollTop: $("#regis-title").offset().top}, 2000);
+			$("html, body").animate({ scrollTop: $("#regis-title").offset().top}, 2000);
+		});
+		$(".previous").click(function () {
+			if (animating) return false;
+			animating = true;
+			current_fs = $(this).parent();
+			previous_fs = $(this).parent().prev();
+			$("#progressbar li").eq($("fieldset").index(current_fs)).removeClass("active");
+			previous_fs.show();
+			current_fs.animate({
+				opacity: 0
+			}, {
+				step: function (now, mx) {
+					scale = 0.8 + (1 - now) * 0.2;
+					left = ((1 - now) * 50) + "%";
+					opacity = 1 - now;
+					current_fs.css({
+						'left': left
+					});
+					previous_fs.css({
+						'transform': 'scale(' + scale + ')',
+						'opacity': opacity
+					});
+				},
+				duration: 800,
+				complete: function () {
+					current_fs.hide();
+					animating = false;
+				},
+				easing: 'easeInOutBack'
 			});
-			// $(".submit").click(function () {
-			// 		return false;
-			// })
-		};
-		verificationForm ();
-	})(jQuery);
-	</script>
+			$("html, body").animate({ scrollTop: $("#regis-title").offset().top}, 2000);
+		});
+	};
+	verificationForm ();
+})(jQuery);
+</script>
 @endsection
