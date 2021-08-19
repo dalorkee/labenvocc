@@ -40,7 +40,7 @@
 									<a href="#"><i class="fal fa-book"></i> คู่มือการใช้งาน</a>
 								</div>
 								<div class="col-sm-6">
-									<span><i class="fal fa-user"></i> ยังไม่มีบัญชีผู้ใช้ ?</span>&nbsp;&nbsp;&nbsp;<a href="{{ route('register.create') }}" title="ลงทะเบียน">ลงทะเบียนใช้งาน</a>
+									<span><i class="fal fa-user"></i> ยังไม่มีบัญชีผู้ใช้ ?</span>&nbsp;&nbsp;&nbsp;<a href="{{ route('register.index') }}" title="ลงทะเบียน">ลงทะเบียนใช้งาน</a>
 								</div>
 							</nav>
 						</div>
