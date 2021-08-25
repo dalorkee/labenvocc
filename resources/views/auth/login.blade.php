@@ -1,4 +1,15 @@
 @extends('layouts.guest.index')
+@section('style')
+<link rel="stylesheet" href="{{ URL::asset('css/register_staff.css') }}">
+<style>
+.input-group-text {
+    background-color: #F3F3F3 !important;
+}
+.toggle-password {
+    color: #1AB3A3;
+}
+</style>
+@endsection
 @section('content')
 <div class="row bg-white font-prompt">
 	<div class="col-md-6">
@@ -6,19 +17,28 @@
 			<div class="col-md-12">
 				<form method="POST" action="{{ route('login') }}">
 					@csrf
-					<fieldset style="height:484px;padding:10px 30px; border: 1px solid #4AD3C5">
+					<fieldset style="height:484px;padding:10px 30px; border: 1px solid #d3ebe8">
 						<legend style="width:auto;padding:2px;font-size:1.10em">ลงชื่อเข้าใช้</legend>
 						<div class="col-md-12">
 							<div class="form-group">
 								<label for="username" class="form-label">ชื่อผู้ใช้/อีเมล์</label>
-								<input name="identity" type="text" id="username" class="form-control form-control" required>
-								<div class="invalid-feedback">No, you missed this one.</div>
+								<input name="identity" type="text" value="{{ old('identity') }}" id="username" class="form-control" required>
+								@error('identity')
+									<div class="invalid-feedback" role="alert">{{ $message }}</div>
+								 @enderror
 								<div class="help-block">สามารถใช้อีเมล์แทนชื่อผู้ใช้ได้</div>
 							</div>
 							<div class="form-group">
 								<label class="form-label" for="password">รหัสผ่าน</label>
-								<input name="password" type="password" id="password" class="form-control form-control" required>
-								<div class="invalid-feedback">Sorry, you missed this one.</div>
+								<div class="input-group">
+									<input name="password" type="password" id="password" class="form-control" required>
+									<div class="input-group-append">
+										<span class="input-group-text"><i class="fal fa-eye toggle-password" toggle="#password"></i></span>
+									</div>
+								</div>
+								@error('password')
+									<div class="invalid-feedback" role="alert">{{ $message }}</div>
+								@enderror
 								<div class="help-block">รหัสผ่านของคุณ</div>
 							</div>
 							<div class="form-group text-left">
@@ -53,7 +73,7 @@
 		<div class="row mt-4 mb-4">
 			<div class="col-md-12">
 				<form method="POST" action="{{ route('login') }}">
-					<fieldset style="padding:10px 30px; border: 1px solid #4AD3C5">
+					<fieldset style="padding:10px 30px; border: 1px solid #d3ebe8">
 						<legend style="width:auto;padding:2px;color:#39675D;font-size:1.10em">ข่าวสารประชาสัมพันธ์</legend>
 						<div class="card m-0 p-0 shadow-0" style="border:none;background: none;">
 							<div class="card-body p-0">
@@ -110,7 +130,7 @@
 			</div>
 			<div class="col-md-12 mt-4">
 				<form method="POST" action="{{ route('login') }}">
-					<fieldset style="padding:30px; border: 1px solid #4AD3C5">
+					<fieldset style="padding:30px; border: 1px solid #d3ebe8">
 						<legend style="width:auto;padding:2px;color:#39675D;font-size:1.10em">มาตรฐานคุณภาพ</legend>
 						<div class="card m-0 p-0 shadow-0" style="border:none;background: none;">
 							<div class="card-body p-0">
@@ -155,6 +175,19 @@
 	}
 	form.addClass('was-validated');
 	// Perform ajax submit here...
+});
+</script>
+<script>
+$(function(){
+	$(".toggle-password").click(function() {
+		$(this).toggleClass("fa-eye fa-eye-slash");
+		var type = $($(this).attr("toggle"));
+		if (type.attr("type") == "password") {
+			type.attr("type", "text");
+		} else {
+			type.attr("type", "password");
+		}
+	});
 });
 </script>
 @endsection

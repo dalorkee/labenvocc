@@ -117,13 +117,13 @@
 					<div class="form-group col-md-6">
 						<label class="form-label" for="position_level">2.4 ระดับตำแหน่ง</label>
 						<select name="position_level" id="position_level" class="select2 form-control">
-                            @if (old('position_level'))
-                                <option value="{{ $positions_level[old('position_level')] }}">-- โปรดเลือก --</option>
-                            @endif
-                            <option value="">-- โปรดเลือก --</option>
-                            @foreach ($positions_level as $key => $val)
-                                <option value="{{ $key }}">{{ $val }}</option>
-                            @endforeach
+							@if (old('position_level'))
+								<option value="{{ $positions_level[old('position_level')] }}">-- โปรดเลือก --</option>
+							@endif
+							<option value="">-- โปรดเลือก --</option>
+							@foreach ($positions_level as $key => $val)
+								<option value="{{ $key }}">{{ $val }}</option>
+							@endforeach
 							<option value="">-- โปรดเลือก --</option>
 						</select>
 						@error('position_level')
@@ -223,7 +223,6 @@ $(document).ready(function() {
 		$('.select2-hide-search').select2({
 			minimumResultsForSearch: 1/0
 		});
-
 	});
 });
 </script>
@@ -300,62 +299,44 @@ $(function(){
 <script>
 $(function(){
 	$('#position').on('change', function() {
-			let pid = $(this).val();
-			if (pid === '81') {
-				$('#position_other').prop('disabled', false);
-				$('#position_other').val('');
-				$('#position_other').focus();
-			} else {
-				$('#position_other').val('');
-				$('#position_other').prop('disabled', true);
-				$('#position').focus();
+		let pid = $(this).val();
+		if (pid === '81') {
+			$('#position_other').prop('disabled', false);
+			$('#position_other').val('');
+			$('#position_other').focus();
+		} else {
+			$('#position_other').val('');
+			$('#position_other').prop('disabled', true);
+			$('#position').focus();
+		}
+	});
+	$('#refresh-captcha').click(function () {
+		$.ajax({
+			type: "POST",
+			url: "{{ route('register.refresh-captcha') }}",
+			success: function (data) {
+				$(".captcha").html(data.captcha);
 			}
-		});
-		$('#refresh-captcha').click(function () {
-			$.ajax({
-				type: "POST",
-				url: "{{ route('register.refresh-captcha') }}",
-				success: function (data) {
-					$(".captcha").html(data.captcha);
-				}
-			});
-		});
-
-			$(".toggle-password").click(function() {
-			$(this).toggleClass("fa-eye fa-eye-slash");
-			var type = $($(this).attr("toggle"));
-			if (type.attr("type") == "password") {
-				type.attr("type", "text");
-			} else {
-				type.attr("type", "password");
-			}
-		});
-		$(".toggle-confirm-password").click(function() {
-			$(this).toggleClass("fa-eye fa-eye-slash");
-			var type = $($(this).attr("toggle"));
-			if (type.attr("type") == "password") {
-				type.attr("type", "text");
-			} else {
-				type.attr("type", "password");
-			}
-		});
-});
-</script>
-<script>
-	$(document).ready(function() {
-		$("#register").on("click", function() {
-			Swal.fire({
-				title: "Are you sure?",
-				text: "You won't be able to revert this!",
-				type: "warning",
-				showCancelButton: true,
-				confirmButtonText: "Yes, delete it!"
-			}).then(function(result){
-				if (result.value){
-					Swal.fire("Deleted!", "Your file has been deleted.", "success");
-				}
-			});
 		});
 	});
-	</script>
+	$(".toggle-password").click(function() {
+		$(this).toggleClass("fa-eye fa-eye-slash");
+		var type = $($(this).attr("toggle"));
+		if (type.attr("type") == "password") {
+			type.attr("type", "text");
+		} else {
+			type.attr("type", "password");
+		}
+	});
+	$(".toggle-confirm-password").click(function() {
+		$(this).toggleClass("fa-eye fa-eye-slash");
+		var type = $($(this).attr("toggle"));
+		if (type.attr("type") == "password") {
+			type.attr("type", "text");
+		} else {
+			type.attr("type", "password");
+		}
+	});
+});
+</script>
 @endsection
