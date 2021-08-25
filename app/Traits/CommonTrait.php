@@ -1,6 +1,6 @@
 <?php
 namespace App\Traits;
-use App\Models\{Position,Duty};
+use App\Models\{Position,PositionLevel,Duty};
 trait CommonTrait {
 	public function titleName(): array {
 		return ['mr'=>'นาย', 'mrs'=>'นาง', 'miss'=>'นางสาว'];
@@ -53,6 +53,13 @@ trait CommonTrait {
 		$result = array();
 		Position::select('id', 'name')->get()->each(function($value, $key) use (&$result) {
 			$result[$value->id] = $value->name;
+		});
+		return $result;
+	}
+    public function getPositionLevel(): array {
+		$result = array();
+		PositionLevel::select('id', 'name_th')->get()->each(function($value, $key) use (&$result) {
+			$result[$value->id] = $value->name_th;
 		});
 		return $result;
 	}

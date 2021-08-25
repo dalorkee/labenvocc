@@ -117,9 +117,18 @@
 					<div class="form-group col-md-6">
 						<label class="form-label" for="position_level">2.4 ระดับตำแหน่ง</label>
 						<select name="position_level" id="position_level" class="select2 form-control">
+                            @if (old('position_level'))
+                                <option value="{{ $positions_level[old('position_level')] }}">-- โปรดเลือก --</option>
+                            @endif
+                            <option value="">-- โปรดเลือก --</option>
+                            @foreach ($positions_level as $key => $val)
+                                <option value="{{ $key }}">{{ $val }}</option>
+                            @endforeach
 							<option value="">-- โปรดเลือก --</option>
 						</select>
-						<div class="invalid-feedback">โปรดเลือก ระดับตำแหน่ง</div>
+						@error('position_level')
+							<div class="invalid-feedback" role="alert">{{ $message }}</div>
+						@enderror
 					</div>
 					<div class="form-group col-md-6">
 						<label class="form-label" for="fname">2.5 หน้าที่ <span class="text-red-600">*</span></label>

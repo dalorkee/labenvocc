@@ -20,12 +20,14 @@ class RegisterStaffController extends Controller
 		try {
 			$titleName = $this->titleName();
 			$positions = $this->getPosition();
-            $affiliation = $this->affiliation();
+			$positions_level = $this->getPositionLevel();
+			$affiliation = $this->affiliation();
 			$staffDuty = $this->getStaffDuty();
 			return view('auth.register-staff', [
 				'title_name' => $titleName,
 				'positions' => $positions,
-                'affiliation' => $affiliation,
+				'positions_level' => $positions_level,
+				'affiliation' => $affiliation,
 				'staffDuty' => $staffDuty
 			]);
 		} catch (\Exception $e) {
