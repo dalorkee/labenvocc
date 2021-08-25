@@ -1,23 +1,23 @@
 @extends('layouts.guest.index')
 @section('content')
-<div class="row bg-white">
+<div class="row bg-white font-prompt">
 	<div class="col-md-6">
 		<div class="row mt-4 mb-4">
 			<div class="col-md-12">
 				<form method="POST" action="{{ route('login') }}">
 					@csrf
-					<fieldset style="height:505px;padding:10px 30px; border: 2px solid #4AD3C5">
-						<legend style="width:auto;padding:2px;" class="font-kanitextralight">ลงชื่อเข้าใช้</legend>
+					<fieldset style="height:484px;padding:10px 30px; border: 1px solid #4AD3C5">
+						<legend style="width:auto;padding:2px;font-size:1.10em">ลงชื่อเข้าใช้</legend>
 						<div class="col-md-12">
 							<div class="form-group">
 								<label for="username" class="form-label">ชื่อผู้ใช้/อีเมล์</label>
-								<input name="identity" type="text" id="username" class="form-control form-control-lg" required>
+								<input name="identity" type="text" id="username" class="form-control form-control" required>
 								<div class="invalid-feedback">No, you missed this one.</div>
 								<div class="help-block">สามารถใช้อีเมล์แทนชื่อผู้ใช้ได้</div>
 							</div>
 							<div class="form-group">
 								<label class="form-label" for="password">รหัสผ่าน</label>
-								<input name="password" type="password" id="password" class="form-control form-control-lg" required>
+								<input name="password" type="password" id="password" class="form-control form-control" required>
 								<div class="invalid-feedback">Sorry, you missed this one.</div>
 								<div class="help-block">รหัสผ่านของคุณ</div>
 							</div>
@@ -53,8 +53,8 @@
 		<div class="row mt-4 mb-4">
 			<div class="col-md-12">
 				<form method="POST" action="{{ route('login') }}">
-					<fieldset style="padding:10px 30px; border: 2px solid #4AD3C5">
-						<legend style="width:auto;padding:2px;color:#39675D" class="font-kanitextralight">ข่าวสารประชาสัมพันธ์</legend>
+					<fieldset style="padding:10px 30px; border: 1px solid #4AD3C5">
+						<legend style="width:auto;padding:2px;color:#39675D;font-size:1.10em">ข่าวสารประชาสัมพันธ์</legend>
 						<div class="card m-0 p-0 shadow-0" style="border:none;background: none;">
 							<div class="card-body p-0">
 								<div class="custom-scroll" style="height: 220px">
@@ -110,8 +110,8 @@
 			</div>
 			<div class="col-md-12 mt-4">
 				<form method="POST" action="{{ route('login') }}">
-					<fieldset style="padding:30px; border: 2px solid #4AD3C5">
-						<legend style="width:auto;padding:2px;color:#39675D" class="font-kanitextralight">มาตรฐานคุณภาพ</legend>
+					<fieldset style="padding:30px; border: 1px solid #4AD3C5">
+						<legend style="width:auto;padding:2px;color:#39675D;font-size:1.10em">มาตรฐานคุณภาพ</legend>
 						<div class="card m-0 p-0 shadow-0" style="border:none;background: none;">
 							<div class="card-body p-0">
 								<div class="custom-scroll" style="height: 80px">

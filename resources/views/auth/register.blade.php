@@ -469,27 +469,22 @@ $(document).ready(function() {
 	});
 	$('input[id="agency_type_establishment"]').on('change', function() {
 		if ($(this).prop("checked") == true) {
-
 			$('#office_name_establishment').val('');
 			$('#office_name_establishment').prop('disabled', false);
 			$('#office_code_establishment').val('');
 			$('#office_code_establishment').prop('disabled', false);
 			$('#office_name_establishment').focus();
-
 			$('#agency_type_hospital').prop('checked', false);
 			$("#hosp_search").empty().trigger('change');
 			$('#hosp_search').prop('disabled', true);
-
 			$('#agency_type_border_check_point').prop('checked', false);
 			$('#disease_border_search').empty().trigger('change');
 			$('#disease_border_search').prop('disabled', true);
-
 			$('#agency_type_other').prop('checked', false);
 			$('#agency_type_other_name').val('');
 			$('#agency_type_other_name').prop('disabled', true);
 			$('#agency_type_other_id').val('');
 			$('#agency_type_other_id').prop('disabled', true);
-
 		} else {
 			$('#office_name_establishment').val('');
 			$('#office_name_establishment').prop('disabled', true);
@@ -497,30 +492,24 @@ $(document).ready(function() {
 			$('#office_code_establishment').prop('disabled', true);
 		 }
 	});
-
 	$("#agency_type_hospital").on('change', function() {
 		if ($(this).prop("checked") == true) {
-
 			$("#hosp_search").empty().trigger('change');
 			$('#hosp_search').prop('disabled', false);
 			$('#hosp_search').focus();
-
 			$('#agency_type_establishment').prop('checked', false);
 			$('#office_name_establishment').val('');
 			$('#office_name_establishment').prop('disabled', true);
 			$('#office_code_establishment').val('');
 			$('#office_code_establishment').prop('disabled', true);
-
 			$('#agency_type_border_check_point').prop('checked', false);
 			$('#disease_border_search').empty().trigger('change');
 			$('#disease_border_search').prop('disabled', true);
-
 			$('#agency_type_other').prop('checked', false);
 			$('#agency_type_other_name').val('');
 			$('#agency_type_other_name').prop('disabled', true);
 			$('#agency_type_other_id').val('');
 			$('#agency_type_other_id').prop('disabled', true);
-
 		} else {
 			$('#hosp_search').empty().trigger('change');
 			$('#hosp_search').prop('disabled', true);
@@ -528,27 +517,22 @@ $(document).ready(function() {
 	});
 	$("#agency_type_border_check_point").on('change', function() {
 		if ($(this).prop("checked") == true) {
-
 			$("#disease_border_search").empty().trigger('change');
 			$('#disease_border_search').prop('disabled', false);
 			$('#disease_border_search').focus();
-
 			$('#agency_type_establishment').prop('checked', false);
 			$('#office_name_establishment').val('');
 			$('#office_name_establishment').prop('disabled', true);
 			$('#office_code_establishment').val('');
 			$('#office_code_establishment').prop('disabled', true);
-
 			$('#agency_type_hospital').prop('checked', false);
 			$('#hosp_search').empty().trigger('change');
 			$('#hosp_search').prop('disabled', true);
-
 			$('#agency_type_other').prop('checked', false);
 			$('#agency_type_other_name').val('');
 			$('#agency_type_other_name').prop('disabled', true);
 			$('#agency_type_other_id').val('');
 			$('#agency_type_other_id').prop('disabled', true);
-
 		} else {
 			$('#disease_border_search').empty().trigger('change');
 			$('#disease_border_search').prop('disabled', true);
@@ -561,22 +545,17 @@ $(document).ready(function() {
 			$('#agency_type_other_name').focus();
 			$('#agency_type_other_id').val('');
 			$('#agency_type_other_id').prop('disabled', false);
-
 			$('#agency_type_establishment').prop('checked', false);
 			$('#office_name_establishment').val('');
 			$('#office_name_establishment').prop('disabled', true);
 			$('#office_code_establishment').val('');
 			$('#office_code_establishment').prop('disabled', true);
-
-
 			$('#agency_type_hospital').prop('checked', false);
 			$('#hosp_search').empty().trigger('change');
 			$('#hosp_search').prop('disabled', true);
-
 			$('#agency_type_border_check_point').prop('checked', false);
 			$('#disease_border_search').empty().trigger('change');
 			$('#disease_border_search').prop('disabled', true);
-
 		} else {
 			$('#agency_type_other_name').val('');
 			$('#agency_type_other_name').prop('disabled', true);
@@ -584,30 +563,22 @@ $(document).ready(function() {
 			$('#agency_type_other_id').prop('disabled', true);
 		}
 	});
-
 	$('input[name="title_name"]').on('change', function() {
 		$('input[name="' + this.name + '"]').not(this).prop('checked', false);
 	});
-
 	$('input[name="contact_addr_opt"]').on('change', function() {
 		$('input[name="' + this.name + '"]').not(this).prop('checked', false);
 	});
-
 	$('input[name="contact_title_name"]').on('change', function() {
 		$('input[name="' + this.name + '"]').not(this).prop('checked', false);
 	});
-
 	$("#new_addr").on('change', function() {
 		if ($(this).prop("checked") == true) {
 			$('#old_addr').prop('checked', false);
-
 			$('.contact_title_name').prop('checked', false);
 			$('.contact_title_name').prop('disabled', false);
-
 			$('.contact_field').val('');
 			$('.contact_field').prop('disabled', false);
-
-
 			$('#contact_province').prop('disabled', false);
 			$('#contact_district').prop('disabled', false);
 			$('#contact_district').empty().trigger('change');
@@ -617,13 +588,10 @@ $(document).ready(function() {
 			$('#contact_postcode').val('');
 		} else {
 			$('#old_addr').prop('checked', true);
-
 			$('.contact_title_name').prop('checked', false);
 			$('.contact_title_name').prop('disabled', true);
-
 			$('.contact_field').val('');
 			$('.contact_field').prop('disabled', true);
-
 			$('#contact_province').prop('disabled', true);
 			$('#contact_district').empty().trigger('change');
 			$('#contact_district').prop('disabled', true);
@@ -633,7 +601,6 @@ $(document).ready(function() {
 			$('#contact_postcode').prop('disabled', true);
 		 }
 	});
-
 	$("#old_addr").on('change', function() {
 		if ($(this).prop("checked") == true) {
 
@@ -652,7 +619,6 @@ $(document).ready(function() {
 			$('#contact_postcode').prop('disabled', true);
 		}
 	});
-
 	$('#refresh-captcha').click(function () {
 		$.ajax({
 			type: "POST",

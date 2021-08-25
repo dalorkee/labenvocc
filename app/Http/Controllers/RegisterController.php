@@ -26,8 +26,6 @@ class RegisterController extends Controller
 	}
 
 	public function store(Request $request) {
-        return redirect()->back()->with('success', 'บันทึกข้อมูลผู้ใช้สำเร็จแล้ว');
-        exit;
 		$request->validate([
 			'office_category'=>'bail|required',
 			'office_type'=>'required',

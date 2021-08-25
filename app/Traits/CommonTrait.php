@@ -1,11 +1,11 @@
 <?php
 namespace App\Traits;
-use App\Models\{Position};
+use App\Models\{Position,Duty};
 trait CommonTrait {
 	public function titleName(): array {
 		return ['mr'=>'นาย', 'mrs'=>'นาง', 'miss'=>'นางสาว'];
 	}
-    public function titleNameKeyNo(): array {
+	public function titleNameKeyNo(): array {
 		return [1=>'นาย', 2=>'นาง', 3=>'นางสาว'];
 	}
 	public function gender(): array {
@@ -17,6 +17,9 @@ trait CommonTrait {
 	public function agencyType(): array {
 		return [1=>'หน่วยงานภาครัฐ', 2=>'หน่วยงานรัฐวิสาหกิจ', 3=>'หน่วยงานเอกชน'];
 	}
+    public function affiliation(): array {
+        return [1=>'หน่วยงานส่วนกลาง', 2=>'ศูนย์จังหวัดระยอง'];
+    }
 	public function calcPercent($data=0, $allData=0): float {
 		return (($data*100)/$allData);
 	}
@@ -50,6 +53,13 @@ trait CommonTrait {
 		$result = array();
 		Position::select('id', 'name')->get()->each(function($value, $key) use (&$result) {
 			$result[$value->id] = $value->name;
+		});
+		return $result;
+	}
+	public function getStaffDuty(): array {
+		$result = array();
+		Duty::select('id', 'duty_name')->get()->each(function($value, $key) use (&$result) {
+			$result[$value->id] = $value->duty_name;
 		});
 		return $result;
 	}

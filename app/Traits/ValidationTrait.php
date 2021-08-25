@@ -4,7 +4,6 @@ use App\Models\{User,Office};
 
 trait ValidationTrait {
 
-
 }
 
 ?>

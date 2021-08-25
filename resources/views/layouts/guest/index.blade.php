@@ -57,6 +57,10 @@
 .navbar-nav > li {
 	margin: 0 20px;
 }
+.swal2-popup {
+	font-size: 1rem !important;
+	font-family: "Prompt", Georgia, serif;
+}
 </style>
 </head>
 <body>
@@ -68,7 +72,7 @@
 					<div>
 						<a href="javascript:void(0)" class="page-logo-link press-scale-down d-flex align-items-center">
 							<img src="{{ URL::asset('assets/img/moph-logo-160x154.png') }}" alt="logo" aria-roledescription="logo">
-							<div class="page-logo-text mr-1 text-4xl font-kanitextralight">ระบบห้องปฏิบัติการกองโรคจากการประกอบอาชีพและสิ่งแวดล้อม</div>
+							<div class="page-logo-text mr-1 text-4xl font-prompt">ระบบห้องปฏิบัติการกองโรคจากการประกอบอาชีพและสิ่งแวดล้อม</div>
 						</a>
 					</div>
 				</div>
@@ -78,7 +82,7 @@
 				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
 					<span><i class="fal fa-bars text-green-100 text-2xl"></i></span>
 				</button>
-				<div class="collapse navbar-collapse text-2xl font-kanitextralight" id="navbarColor01">
+				<div class="collapse navbar-collapse text-1xl font-prompt" id="navbarColor01">
 					<ul class="navbar-nav m-auto">
 						<li class="nav-item active">
 							<a class="nav-link hoverable" href="{{ route('login') }}"><i class="fal fa-home"></i> หน้าแรก <span class="sr-only">(current)</span></a>

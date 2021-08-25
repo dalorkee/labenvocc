@@ -22,7 +22,7 @@ Route::get('/login', [HomeController::class, 'index'])->name('login')->middlewar
 Route::resources([
 	'home' => HomeController::class,
 	'register' => RegisterController::class,
-	'register/staff' => RegisterStaffController::class
+	'registerStaff' => RegisterStaffController::class
 ]);
 Route::name('register.')->group(function() {
 	Route::post('province/district', [RegisterController::class, 'renderDistrictToHtmlSelect'])->name('district');

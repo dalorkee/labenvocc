@@ -6,42 +6,7 @@
 	font-weight: normal;
 	font-style: normal;
 }
-@font-face {
-	font-family: "sukhumvit_setbold";
-	src:url("../fonts/sukhumvit-set_bold-webfont.eot");
-	src:url("../fonts/sukhumvit-set_bold-webfont.eot?#iefix") format("embedded-opentype"),
-		url("../fonts/sukhumvit-set_bold-webfont.woff2") format("woff2"),
-		url("../fonts/sukhumvit-set_bold-webfont.woff") format("woff"),
-		url("../fonts/sukhumvit-set_bold-webfont.ttf") format("truetype"),
-		url("../fonts/sukhumvit-set_bold-webfont.svg#sukhumvit_setbold") format("svg");font-weight:400;font-style:normal
-}
-@font-face {
-	font-family: "sukhumvit_setmedium";
-	src:url("../fonts/sukhumvit-set_medium-webfont.eot");
-	src:url("../fonts/sukhumvit-set_medium-webfont.eot?#iefix") format("embedded-opentype"),
-		url("../fonts/sukhumvit-set_medium-webfont.woff2") format("woff2"),
-		url("../fonts/sukhumvit-set_medium-webfont.woff") format("woff"),
-		url("../fonts/sukhumvit-set_medium-webfont.ttf") format("truetype"),
-		url("../fonts/sukhumvit-set_medium-webfont.svg#sukhumvit_setmedium") format("svg");font-weight:400;font-style:normal
-}
-@font-face {
-	font-family: "sukhumvit_setsemi_bold";
-	src:url("../fonts/sukhumvit-set_semibold-webfont.eot");
-	src:url("../fonts/sukhumvit-set_semibold-webfont.eot?#iefix") format("embedded-opentype"),
-		url("../fonts/sukhumvit-set_semibold-webfont.woff2") format("woff2"),
-		url("../fonts/sukhumvit-set_semibold-webfont.woff") format("woff"),
-		url("../fonts/sukhumvit-set_semibold-webfont.ttf") format("truetype"),
-		url("../fonts/sukhumvit-set_semibold-webfont.svg#sukhumvit_setsemi_bold") format("svg");font-weight:400;font-style:normal
-}
-@font-face {
-	font-family: "sukhumvit_settext";
-	src:url("../fonts/sukhumvit-set_text-webfont.eot");
-	src:url("../fonts/sukhumvit-set_text-webfont.eot?#iefix") format("embedded-opentype"),
-		url("../fonts/sukhumvit-set_text-webfont.woff2") format("woff2"),
-		url("../fonts/sukhumvit-set_text-webfont.woff") format("woff"),
-		url("../fonts/sukhumvit-set_text-webfont.ttf") format("truetype"),
-		url("../fonts/sukhumvit-set_text-webfont.svg#sukhumvit_settext") format("svg");font-weight:400;font-style:normal
-}
+
 @font-face {
 	font-family: "sarabunregular";
 	src: url("../fonts/sarabun-regular-webfont.eot");
@@ -106,20 +71,145 @@
 	font-style: normal;
 }
 @font-face {
-    font-family: 'cs_chatthaiuiregular';
-    src: url('../fonts/cschatthaiui-webfont.woff2') format('woff2'),
-         url('../fonts/cschatthaiui-webfont.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
+	font-family: 'cs_chatthaiuiregular';
+	src: url('../fonts/cschatthaiui-webfont.woff2') format('woff2'),
+		 url('../fonts/cschatthaiui-webfont.woff') format('woff');
+	font-weight: normal;
+	font-style: normal;
+}
+
+/* thai */
+@font-face {
+	font-family: 'Prompt';
+	font-style: normal;
+	font-weight: 100;
+	src: url('../fonts/prompt/fw100_th.woff2') format('woff2');
+	unicode-range: U+0E01-0E5B, U+200C-200D, U+25CC;
+}
+/* latin-ext */
+  @font-face {
+	font-family: 'Prompt';
+	font-style: normal;
+	font-weight: 100;
+	src: url('../fonts/prompt/fw100_latin_ext.woff2') format('woff2');
+	unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+  }
+  /* latin */
+  @font-face {
+	font-family: 'Prompt';
+	font-style: normal;
+	font-weight: 100;
+	src: url('../fonts/prompt/fw100_latin.woff2') format('woff2');
+	unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  }
+  /* thai */
+  @font-face {
+	font-family: 'Prompt';
+	font-style: normal;
+	font-weight: 200;
+	src: url('../fonts/prompt/fw200_th.woff2') format('woff2');
+	unicode-range: U+0E01-0E5B, U+200C-200D, U+25CC;
+  }
+  /* latin-ext */
+  @font-face {
+	font-family: 'Prompt';
+	font-style: normal;
+	font-weight: 200;
+	src: url('../fonts/prompt/fw200_latin_ext.woff2') format('woff2');
+	unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+  }
+  /* latin */
+  @font-face {
+	font-family: 'Prompt';
+	font-style: normal;
+	font-weight: 200;
+	src: url('../fonts/prompt/fw200_latin.woff2') format('woff2');
+	unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  }
+  /* thai */
+  @font-face {
+	font-family: 'Prompt';
+	font-style: normal;
+	font-weight: 300;
+	src: url('../fonts/prompt/fw300_th.woff2') format('woff2');
+	unicode-range: U+0E01-0E5B, U+200C-200D, U+25CC;
+  }
+  /* latin-ext */
+  @font-face {
+	font-family: 'Prompt';
+	font-style: normal;
+	font-weight: 300;
+	src: url('../fonts/prompt/fw300_latin_ext.woff2') format('woff2');
+	unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+  }
+  /* latin */
+  @font-face {
+	font-family: 'Prompt';
+	font-style: normal;
+	font-weight: 300;
+	src: url('../fonts/prompt/fw300_latin.woff2') format('woff2');
+	unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  }
+  /* thai */
+  @font-face {
+	font-family: 'Prompt';
+	font-style: normal;
+	font-weight: 400;
+	src: url('../fonts/prompt/fw400_th.woff2') format('woff2');
+	unicode-range: U+0E01-0E5B, U+200C-200D, U+25CC;
+  }
+  /* latin-ext */
+  @font-face {
+	font-family: 'Prompt';
+	font-style: normal;
+	font-weight: 400;
+	src: url('../fonts/prompt/fw400_latin_ext.woff2') format('woff2');
+	unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+  }
+  /* latin */
+  @font-face {
+	font-family: 'Prompt';
+	font-style: normal;
+	font-weight: 400;
+	src: url('../fonts/prompt/fw400_latin.woff2') format('woff2');
+	unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  }
+  /* thai */
+  @font-face {
+	font-family: 'Prompt';
+	font-style: normal;
+	font-weight: 600;
+	src: url('../fonts/prompt/fw600_th.woff2') format('woff2');
+	unicode-range: U+0E01-0E5B, U+200C-200D, U+25CC;
+  }
+  /* latin-ext */
+  @font-face {
+	font-family: 'Prompt';
+	font-style: normal;
+	font-weight: 600;
+	src: url('../fonts/prompt/fw600_latin_ext.woff2') format('woff2');
+	unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+  }
+  /* latin */
+  @font-face {
+	font-family: 'Prompt';
+	font-style: normal;
+	font-weight: 600;
+	src: url('../fonts/prompt/fw600_latin.woff2') format('woff2');
+	unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  }
+
+.font-prompt {
+	font-family: "Prompt" !important;
 }
 .font-kanitextralight {
 	font-family: "kanitextralight" !important;
 }
 .font-cs-chatthai {
-    font-family: "cs_chatthaiuiregular" !important;
+	font-family: "cs_chatthaiuiregular" !important;
 }
 html, body, .page-wrapper {
-	/* font-family: "kanitextralight" !important; */
+	font-family: SFMono-Regular,Menlo,Monaco,Consolas,Liberation Mono,Courier New,monospace;
 	font-size: 1rem;
 }
 

@@ -1,9 +1,7 @@
 <?php
 namespace App\Traits;
 
-use Illuminate\Http\Request;
 use Carbon\Carbon;
-
 trait FileTrait {
 	public function setFileName( $prefix='f', $uid='0', $extension='csv') {
 		$now = Carbon::now()->timestamp;
