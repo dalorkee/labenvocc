@@ -1,17 +1,16 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\
-{
+use App\Http\Controllers\{
 	HomeController,
 	RegisterController,
 	RegisterStaffController,
-	CustomerLstController,
+	CustomerController
+/* 	CustomerLstController,
 	CustomerBiolabController,
-	CustomerEnvLabController
+	CustomerEnvLabController */
 };
-use App\Http\Controllers\Admin\
-{
+use App\Http\Controllers\Admin\{
 	OfficeController,
 	ParametController
 };
@@ -22,14 +21,15 @@ Route::get('/login', [HomeController::class, 'index'])->name('login')->middlewar
 Route::resources([
 	'home' => HomeController::class,
 	'register' => RegisterController::class,
-	'registerStaff' => RegisterStaffController::class
+	'registerStaff' => RegisterStaffController::class,
+	'customer' => CustomerController::class
 ]);
 Route::name('register.')->group(function() {
 	Route::post('province/district', [RegisterController::class, 'renderDistrictToHtmlSelect'])->name('district');
 	Route::post('province/district/subdistrict', [RegisterController::class, 'renderSubDistrictToHtmlSelect'])->name('subDistrict');
 	Route::post('province/subdistrict/postcode', [RegisterController::class, 'getPostCodeBySubDistrict'])->name('postcode');
 	Route::post('search/hospital', [RegisterController::class, 'searchHospitalByName'])->name('hospital');
-    Route::post('refresh-captcha', [RegisterController::class, 'refreshCaptcha'])->name('refresh-captcha');
+	Route::post('refresh-captcha', [RegisterController::class, 'refreshCaptcha'])->name('refresh-captcha');
 });
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function() {
@@ -39,11 +39,11 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 });
 Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
 
-Route::resources([
+/* Route::resources([
 	'customerList' => CustomerLstController::class,
 	'biolabFrm' => CustomerBiolabController::class,
 	'envlabFrm' => CustomerEnvLabController::class,
-]);
+]); */
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function(){
 	Route::resources([

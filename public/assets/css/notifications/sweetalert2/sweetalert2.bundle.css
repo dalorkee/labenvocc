@@ -2,6 +2,13 @@
 /*  THEME COLORs
 ========================================================================== */
 /* Looks good on chrome default color profile */
+/* default bkk 
+$color-primary:						#886ab5;
+$color-success:						#1dc9b7;
+$color-info:						#2196F3;
+$color-warning:						#ffc241;
+$color-danger:						#fd3995;
+$color-fusion:						darken(desaturate(adjust-hue($color-primary, 5), 80%), 25%); */
 /* looks good in sRGB but washed up on chrome default 
 $color-primary:						#826bb0;
 $color-success:						#31cb55;
@@ -593,7 +600,7 @@ body.swal2-toast-column .swal2-toast {
       -webkit-box-shadow: 0 0 0 0.0625em #fff, 0 0 0 0.125em rgba(50, 100, 150, 0.4);
               box-shadow: 0 0 0 0.0625em #fff, 0 0 0 0.125em rgba(50, 100, 150, 0.4); }
   .swal2-popup.swal2-toast .swal2-success {
-    border-color: #1dc9b7; }
+    border-color: #28A745; }
     .swal2-popup.swal2-toast .swal2-success [class^='swal2-success-circular-line'] {
       position: absolute;
       width: 1.6em;
@@ -1088,7 +1095,7 @@ body.swal2-no-backdrop .swal2-shown {
     border: 0;
     border-radius: 0.25em;
     background: initial;
-    background-color: #5AA469;
+    background-color: #3C8DBC;
     color: #fff;
     font-size: 0.875em; }
   .swal2-styled.swal2-cancel {
@@ -1147,7 +1154,7 @@ body.swal2-no-backdrop .swal2-shown {
     -webkit-transform: none;
             transform: none;
     background: transparent;
-    color: #fd3995; }
+    color: #DC3545; }
 
 > .swal2-input,
 > .swal2-file,
@@ -1164,7 +1171,7 @@ body.swal2-no-backdrop .swal2-shown {
           justify-content: center;
   margin: 0;
   padding: 0;
-  color: #7f7f7f;
+  color: #7c7c7c;
   font-size: 0.875em;
   font-weight: 300;
   line-height: normal;
@@ -1199,13 +1206,13 @@ body.swal2-no-backdrop .swal2-shown {
   .swal2-input.swal2-inputerror,
   .swal2-file.swal2-inputerror,
   .swal2-textarea.swal2-inputerror {
-    border-color: #fd3995 !important;
-    -webkit-box-shadow: 0 0 2px #fd3995 !important;
-            box-shadow: 0 0 2px #fd3995 !important; }
+    border-color: #DC3545 !important;
+    -webkit-box-shadow: 0 0 2px #DC3545 !important;
+            box-shadow: 0 0 2px #DC3545 !important; }
   .swal2-input:focus,
   .swal2-file:focus,
   .swal2-textarea:focus {
-    border: 1px solid #5AA469;
+    border: 1px solid #3C8DBC;
     outline: none;
     -webkit-box-shadow: transparent;
             box-shadow: transparent; }
@@ -1310,7 +1317,7 @@ body.swal2-no-backdrop .swal2-shown {
     margin: 0 .625em;
     zoom: normal;
     border-radius: 50%;
-    background-color: #fd3995;
+    background-color: #DC3545;
     color: #fff;
     font-weight: 600;
     line-height: 1.5em;
@@ -1362,7 +1369,7 @@ body.swal2-no-backdrop .swal2-shown {
     height: 92%;
     font-size: 3.75em; }
   .swal2-icon.swal2-error {
-    border-color: #fd3995; }
+    border-color: #DC3545; }
     .swal2-icon.swal2-error .swal2-x-mark {
       position: relative;
       -webkit-box-flex: 1;
@@ -1375,7 +1382,7 @@ body.swal2-no-backdrop .swal2-shown {
       width: 2.9375em;
       height: .3125em;
       border-radius: .125em;
-      background-color: #fd3995; }
+      background-color: #DC3545; }
       .swal2-icon.swal2-error [class^='swal2-x-mark-line'][class$='left'] {
         left: 1.0625em;
         -webkit-transform: rotate(45deg);
@@ -1385,24 +1392,24 @@ body.swal2-no-backdrop .swal2-shown {
         -webkit-transform: rotate(-45deg);
                 transform: rotate(-45deg); }
   .swal2-icon.swal2-warning {
-    border-color: #ffcd65;
-    color: #ffc241; }
+    border-color: #ffca2b;
+    color: #FFC107; }
     .swal2-icon.swal2-warning::before {
       content: '!'; }
   .swal2-icon.swal2-info {
-    border-color: #82c4f8;
-    color: #2196F3; }
+    border-color: #4cd3e9;
+    color: #17A2B8; }
     .swal2-icon.swal2-info::before {
       content: 'i'; }
   .swal2-icon.swal2-question {
-    border-color: #9cc8a5;
-    color: #5AA469; }
+    border-color: #86bad8;
+    color: #3C8DBC; }
     .swal2-icon.swal2-question::before {
       content: '?'; }
     .swal2-icon.swal2-question.swal2-arabic-question-mark::before {
       content: '؟'; }
   .swal2-icon.swal2-success {
-    border-color: #1dc9b7; }
+    border-color: #28A745; }
     .swal2-icon.swal2-success [class^='swal2-success-circular-line'] {
       position: absolute;
       width: 3.75em;
@@ -1435,7 +1442,7 @@ body.swal2-no-backdrop .swal2-shown {
               box-sizing: content-box;
       width: 100%;
       height: 100%;
-      border: 0.25em solid rgba(29, 201, 183, 0.3);
+      border: 0.25em solid rgba(40, 167, 69, 0.3);
       border-radius: 50%; }
     .swal2-icon.swal2-success .swal2-success-fix {
       position: absolute;
@@ -1452,7 +1459,7 @@ body.swal2-no-backdrop .swal2-shown {
       z-index: 2;
       height: .3125em;
       border-radius: .125em;
-      background-color: #1dc9b7; }
+      background-color: #28A745; }
       .swal2-icon.swal2-success [class^='swal2-success-line'][class$='tip'] {
         top: 2.875em;
         left: .875em;
@@ -1482,23 +1489,23 @@ body.swal2-no-backdrop .swal2-shown {
     width: 2em;
     height: 2em;
     border-radius: 2em;
-    background: #5AA469;
+    background: #3C8DBC;
     color: #fff;
     line-height: 2em;
     text-align: center; }
     .swal2-progress-steps .swal2-progress-step.swal2-active-progress-step {
-      background: #5AA469; }
+      background: #3C8DBC; }
       .swal2-progress-steps .swal2-progress-step.swal2-active-progress-step ~ .swal2-progress-step {
-        background: #9cc8a5;
+        background: #86bad8;
         color: #fff; }
       .swal2-progress-steps .swal2-progress-step.swal2-active-progress-step ~ .swal2-progress-step-line {
-        background: #9cc8a5; }
+        background: #86bad8; }
   .swal2-progress-steps .swal2-progress-step-line {
     z-index: 10;
     width: 2.5em;
     height: .4em;
     margin: 0 -1px;
-    background: #5AA469; }
+    background: #3C8DBC; }
 
 [class^='swal2'] {
   -webkit-tap-highlight-color: transparent; }

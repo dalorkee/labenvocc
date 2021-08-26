@@ -6,7 +6,7 @@
 <meta name="description" content="Login">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no, minimal-ui">
-<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="msapplication-tap-highlight" content="no">
 @yield('meta-token')
 <link rel="icon" type="image/png" sizes="32x32" href="{{ URL::asset('assets/img/favicon/favicon-32x32.png') }}">
@@ -77,7 +77,7 @@
 					</div>
 				</div>
 			</div>
-			<nav class="navbar navbar-expand-lg bg-green-900 font-sarabun-medium">
+			<nav class="navbar navbar-expand-lg" style="background-color:#275970">
 				<div class="d-flex align-items-center container p-0">
 				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
 					<span><i class="fal fa-bars text-green-100 text-2xl"></i></span>

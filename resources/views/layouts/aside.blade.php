@@ -7,7 +7,7 @@
 	</a>
 </div>
 <!-- BEGIN PRIMARY NAVIGATION -->
-<nav id="js-primary-nav" class="primary-nav" role="navigation">
+<nav id="js-primary-nav" class="primary-nav font-prompt" role="navigation">
 	<div class="nav-filter">
 		<div class="position-relative">
 			<input type="text" id="nav_filter_input" placeholder="Filter menu" class="form-control" tabindex="0">
@@ -35,12 +35,12 @@
 		<li class="active open">
 			<a href="#" title="Application Intel" data-filter-tags="application intel">
 				<i class="fal fa-home"></i>
-				<span class="nav-link-text" data-i18n="nav.application_intel">หน้าหลัก</span>
+				<span class="nav-link-text" data-i18n="nav.application_intel">หน้าแรก</span>
 			</a>
 		</li>
 		{{-- Aung Edit --}}
 		<li>
-			<a href="{{ route('customerList.index') }}" title="Application Intel" data-filter-tags="application intel">
+			<a href="{{ route('customer.index') }}" title="Application Intel" data-filter-tags="application intel">
 				<i class="fal fa-vial"></i>
 				<span class="nav-link-text" data-i18n="nav.application_intel">คำขอส่งตัวอย่าง</span>
 			</a>
@@ -72,8 +72,8 @@
 		</li>
 		<li>
 			<a href="{{ route('office.index') }}" title="Application Intel" data-filter-tags="application intel">
-				<i class="fal fa-map-marker-alt"></i>
-				<span class="nav-link-text" data-i18n="nav.application_intel">back admin</span>
+				<i class="fal fa-user"></i>
+				<span class="nav-link-text" data-i18n="nav.application_intel">ผู้ดูแลระบบ</span>
 			</a>
 		</li>
 	</ul>

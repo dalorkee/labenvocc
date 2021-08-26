@@ -418,8 +418,8 @@
 												<img src="{{ asset('assets/img/d3.jpg') }}" class="rounded-circle profile-image" alt="avatar">
 											</span>
 											<div class="info-card-text">
-												<div class="fs-lg text-truncate text-truncate-lg">{{ auth()->user()->name }}</div>
-												<span class="text-truncate text-truncate-md opacity-80">{{ auth()->user()->email }}</span>
+												<div class="fs-lg text-truncate text-truncate-lg">{{ auth()->user()->name ?? 'pj' }}</div>
+												<span class="text-truncate text-truncate-md opacity-80">{{ auth()->user()->email ?? 'pjx' }}</span>
 											</div>
 										</div>
 									</div>
@@ -444,7 +444,7 @@
 										@csrf
 										<a class="dropdown-item fw-500 pt-3 pb-3" href="href="{{ route('logout') }}" onclick="event.preventDefault(); this.closest('form').submit();">
 											<span data-i18n="drpdwn.page-logout">Logout</span>
-											<span class="float-right fw-n">&commat;{{ auth()->user()->username }}</span>
+											<span class="float-right fw-n">&commat;{{ auth()->user()->username ?? 'pj' }}</span>
 										</a>
 									</form>
 								</div>
