@@ -403,12 +403,12 @@ input[type="text"]:disabled{background: #eeeeee !important;}
 														<div class="col-span-6 sm:col-span-3">
 															<label for="user_password" class="block text-base font-medium text-gray-700">รหัสผ่าน (อย่างน้อย 6 ตัว) <span class="text-red-600">*</span></label>
 															<input type="password" name="password" id="user_password" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-md sm:text-sm border-gray-300">
-															<span toggle="#user_password" class="fal fa-eye field-icon toggle-password text-red-600"></span>
+															<span toggle="#user_password" class="fal fa-eye field-icon toggle-password"></span>
 														</div>
 														<div class="col-span-6 sm:col-span-3">
 															<label for="user_confirm_password" class="block text-base font-medium text-gray-700">ยืนยันรหัสผ่าน <span class="text-red-600">*</span></label>
 															<input type="password" name="password_confirmation" id="user_confirm_password" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-md sm:text-sm border-gray-300">
-															<span toggle="#user_confirm_password" class="fal fa-eye field-icon toggle-confirm-password text-red-600"></span>
+															<span toggle="#user_confirm_password" class="fal fa-eye field-icon toggle-confirm-password"></span>
 														</div>
 													</div>
 												</div>
@@ -431,7 +431,7 @@ input[type="text"]:disabled{background: #eeeeee !important;}
 														<input name="captcha" id="captcha" type="text" class="form-control" placeholder="ป้อนรหัสที่ท่านเห็น">
 													</div>
 													<div class="col-span-6 sm:col-span-6">
-														<button type="submit" class="btn btn-lg btn-primary">ลงทะเบียน</button>
+														<button type="buttom" id="test" class="btn btn-lg btn-primary">ลงทะเบียน</button>
 													</div>
 												</div>
 											</div>

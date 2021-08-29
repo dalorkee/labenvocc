@@ -268,7 +268,8 @@ $(function(){
 				type: "warning",
 				showCancelButton: true,
 				cancelButtonText: "ยกเลิก",
-				confirmButtonText: "บันทึกข้อมูล"
+				confirmButtonText: "บันทึกข้อมูล",
+				allowOutsideClick: false
 			}).then(function(result){
 				if (result.value){
 					$("#form").submit();
