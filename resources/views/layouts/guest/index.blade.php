@@ -18,6 +18,7 @@
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/css/fa-brands.css') }}" media="screen, print">
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/fonts.css') }}" media="screen, print">
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/css/notifications/toastr/toastr.css') }}" media="screen, print">
+<link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/css/notifications/sweetalert2/sweetalert2.bundle.css') }}" media="screen, print">
 @yield('style')
 <style type="text/css">
 .hoverable	{
@@ -159,6 +160,7 @@
 <script src="{{ URL::asset('assets/js/vendors.bundle.js') }}"></script>
 <script src="{{ URL::asset('assets/js/app.bundle.js') }}"></script>
 <script src="{{ URL::asset('assets/js/notifications/toastr/toastr.js') }}"></script>
+<script src="{{ URL::asset('assets/js/notifications/sweetalert2/sweetalert2.bundle.js') }}"></script>
 @yield('script')
 <script>
 $(document).ready(function() {
@@ -187,6 +189,14 @@ $(document).ready(function() {
 	@endif
 	@if (Session::has('success'))
 		toastr.success("{{ Session::get('success') }}", "Success", options);
+		Swal.fire({
+			type: "success",
+			title: "บันทึกข้อมูลสำเร็จแล้ว",
+			text: "เราได้รับข้อมูลของท่านแล้ว โปรดรอการติดต่อกลับจากเจ้าหน้าที่",
+			confirmButtonText: "ตกลง",
+			footer: "LAB ENV-OCC DDC",
+			allowOutsideClick: false
+		});
 		@php Session::forget("success"); @endphp
 	@endif
 });
