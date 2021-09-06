@@ -1,36 +1,27 @@
-@extends('layouts.index')
+@extends('layouts.guest.index')
+@section('meta-token')
+<meta name="csrf-token" content="{{ csrf_token() }}">
+@endsection
 @section('style')
-<link rel="stylesheet" href="{{ URL::asset('vendor/jquery-smartwizard/css/smart_wizard_arrows.min.css') }}">
-<link rel="stylesheet" href="{{ URL::asset('vendor/css/datagrid/datatables/datatables.bundle.css') }}" media="screen, print">
+<link rel="stylesheet" href="{{ URL::asset('css/register_staff.css') }}">
+<link rel="stylesheet" href="{{ URL::asset('assets/css/formplugins/select2/select2.bundle.css') }}">
+<link rel="stylesheet" href="{{ URL::asset('assets/css/notifications/sweetalert2/sweetalert2.bundle.css') }}" media="screen, print">
 @endsection
 @section('content')
-<ol class="breadcrumb page-breadcrumb font-prompt fs-md">
-	<li class="breadcrumb-item"><a href="javascript:void(0);">หน้าแรก</a></li>
-</ol>
-<div class="row">
-    <div class="col-xl-12">
-        <div id="panel-1" class="panel">
-            <div class="panel-hdr">
-                <h2>
-                    Example <span class="fw-300"><i>Table</i></span>
-                </h2>
-                <div class="panel-toolbar">
-                    <button class="btn btn-panel" data-action="panel-fullscreen" data-toggle="tooltip" data-offset="0,10" data-original-title="Fullscreen"></button>
-                </div>
-            </div>
-            <div class="panel-container show">
-                <div class="panel-content">
-                    <!-- datatable start -->
-                </div>
-            </div>
-        </div>
-    </div>
+<div class="wrapper">
+
 </div>
+
 @endsection
 @section('script')
-<script src="{{ URL::asset('vendor/js/datagrid/datatables/datatables.bundle.js') }}" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-steps/1.1.0/jquery.steps.min.js"></script>
+<script src="{{ URL::asset('assets/js/formplugins/select2/select2.bundle.js') }}"></script>
+<script src="{{ URL::asset('assets/js/notifications/sweetalert2/sweetalert2.bundle.js') }}"></script>
 <script>
 $(document).ready(function() {
+	$.ajaxSetup({headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}});
 });
 </script>
+
+
 @endsection
