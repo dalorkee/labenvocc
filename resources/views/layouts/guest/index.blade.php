@@ -9,16 +9,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="msapplication-tap-highlight" content="no">
 @yield('meta-token')
-<link rel="icon" type="image/png" sizes="32x32" href="{{ URL::asset('assets/img/favicon/favicon-32x32.png') }}">
-<link rel="mask-icon" href="{{ URL::asset('assets/img/favicon/safari-pinned-tab.svg') }}" color="#5bbad5">
-<link rel="apple-touch-icon" sizes="180x180" href="{{ URL::asset('assets/img/favicon/apple-touch-icon.png') }}">
-<link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/css/vendors.bundle.css') }}" media="screen, print" >
-<link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/css/app.bundle.css') }}" media="screen, print">
-<link rel="stylesheet" type="text/css" href="{{ URL::asset('css/app.css') }}">
-<link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/css/fa-brands.css') }}" media="screen, print">
-<link rel="stylesheet" type="text/css" href="{{ URL::asset('css/fonts.css') }}" media="screen, print">
-<link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/css/notifications/toastr/toastr.css') }}" media="screen, print">
-<link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/css/notifications/sweetalert2/sweetalert2.bundle.css') }}" media="screen, print">
+@include('layouts.guest.style')
 @yield('style')
 <style type="text/css">
 .hoverable	{
@@ -66,45 +57,11 @@
 </head>
 <body>
 <div class="page-wrapper">
-	<div class="page-inner bg-brand-gradient">
-		<div class="page-content-wrapper bg-transparent m-0">
-			<div class="h-40 w-100 shadow-lg px-4 bg-brand-gradient">
-				<div class="d-flex align-items-center container p-0">
-					<div>
-						<a href="javascript:void(0)" class="page-logo-link press-scale-down d-flex align-items-center">
-							<img src="{{ URL::asset('assets/img/moph-logo-160x154.png') }}" alt="logo" aria-roledescription="logo">
-							<div class="page-logo-text mr-1 text-4xl font-prompt">ระบบห้องปฏิบัติการกองโรคจากการประกอบอาชีพและสิ่งแวดล้อม</div>
-						</a>
-					</div>
-				</div>
-			</div>
-			<nav class="navbar navbar-expand-lg" style="background-color:#275970">
-				<div class="d-flex align-items-center container p-0">
-				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
-					<span><i class="fal fa-bars text-green-100 text-2xl"></i></span>
-				</button>
-				<div class="collapse navbar-collapse text-1xl font-prompt" id="navbarColor01">
-					<ul class="navbar-nav m-auto">
-						<li class="nav-item active">
-							<a class="nav-link hoverable" href="{{ route('login') }}"><i class="fal fa-home"></i> หน้าแรก <span class="sr-only">(current)</span></a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link hoverable" href="#">เกี่ยวกับหน่วยงาน</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link hoverable" href="#">ดาวน์โหลด</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link hoverable" href="#">คำถามที่พบบ่อย</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link hoverable" href="#">ติดต่อหน่วยงาน</a>
-						</li>
-					</ul>
-				</div>
-				</div>
-			</nav>
-			<div class="flex-1 bg-white">
+	<div class="page-inner">
+		<div class="page-content-wrapper bg-white">
+			@include('layouts.guest.header')
+			@include('layouts.guest.nav')
+			<main class="page-content">
 				<div class="container">
 					@if (Session::has('success'))
 					<div class="alert alert-success alert-dismissible fade show mt-4" role="alert">
@@ -124,43 +81,54 @@
 							</div>
 						</div>
 					</div>
-					{{-- @php Session::forget('success'); @endphp --}}
 					@endif
+					{{-- @yield('content') --}}
 
-					{{-- @if ($errors->any())
-					<div class="alert alert-danger alert-dismissible fade show" role="alert">
-						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-							<span aria-hidden="true"><i class="fal fa-times"></i></span>
-						</button>
-						<div class="d-flex align-items-center">
-							<div class="alert-icon width-2">
-								<span class="icon-stack" style="font-size: 22px;">
-									<i class="base-2 icon-stack-3x color-primary-400"></i>
-									<i class="base-10 text-white icon-stack-1x"></i>
-									<i class="ni md-profile color-primary-800 icon-stack-2x"></i>
-								</span>
-							</div>
-							<div class="flex-1">
-								<ul>
-									@foreach ($errors->all() as $error)
-										<li>{{ $error }}</li>
-									@endforeach
-								</ul>
-							</div>
-						</div>
-					</div>
-					@endif --}}
-					@yield('content')
+                        <!-- notice the utilities added to the wrapper below -->
+                        <div class="d-flex flex-grow-1 p-0 shadow-1">
+                            <!-- left slider panel : must have unique ID-->
+                            <div id="js-slide-left" class="flex-wrap flex-shrink-0 position-relative slide-on-mobile slide-on-mobile-left bg-primary-200 pattern-0 p-3">
+                                <div class="alert alert-primary">
+                                    aaa These side panels slide out on mobile view port and can be activated by a button as an "slide in/out" mode.
+                                </div>
+                            </div>
+                            <!-- left slider panel backdrop : activated on mobile, must be place immideately after left slider closing tag -->
+                            <div class="slide-backdrop" data-action="toggle" data-class="slide-on-mobile-left-show" data-target="#js-slide-left"></div>
+                            <!-- middle content area -->
+                            <div class="d-flex flex-column flex-grow-1 bg-white">
+                                <div class="p-3">
+                                    <div class="row hidden-lg-up mb-g">
+                                        <div class="col-6">
+                                            <!-- this button is activated on mobile view and activates the left panel -->
+                                            <a href="javascript:void(0);" class="btn btn-primary btn-block btn-lg" data-action="toggle" data-class="slide-on-mobile-left-show" data-target="#js-slide-left">
+                                                open left panel
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="panel-tag">
+                                        <p>These side panels slide out on mobile view port and can be activated by a button as an "slide in/out" mode. We use the classes <code>.slide-on-mobile</code> and <code>.slide-on-mobile-{left,right}</code> on the panels, which are then activated on mobile viewport by toggling the class <code>.slide-on-mobile-{left,right}-show</code></p>
+                                        <p>
+                                            The backdrop is inserted right after the closing tag of the <code>.slider-on-mobile</code> container. Generally this slide panel is pared with <code>.layout-composed</code> to give it a nice clean look.
+                                        </p>
+                                        <a href="#" class="btn btn-secondary" data-action="toggle" data-class="layout-composed">Try with Composed Layout</a>
+                                    </div>
+                                    <div class="d-flex hidden-lg-down">
+                                        <img src="img/demo/side-panel-demo.gif" alt="" class="m-auto shadow">
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- right slider panel backdrop : activated on mobile, must be place immideately after right slider closing tag -->
+                            <div class="slide-backdrop" data-action="toggle" data-class="slide-on-mobile-right-show" data-target="#js-slide-right"></div>
+                        </div>
+
+
 				</div>
-				@include('layouts.guest.footer')
-			</div>
+			</main>
+			@include('layouts.guest.footer')
 		</div>
 	</div>
 </div>
-<script src="{{ URL::asset('assets/js/vendors.bundle.js') }}"></script>
-<script src="{{ URL::asset('assets/js/app.bundle.js') }}"></script>
-<script src="{{ URL::asset('assets/js/notifications/toastr/toastr.js') }}"></script>
-<script src="{{ URL::asset('assets/js/notifications/sweetalert2/sweetalert2.bundle.js') }}"></script>
+@include('layouts.guest.script')
 @yield('script')
 <script>
 $(document).ready(function() {

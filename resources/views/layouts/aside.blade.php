@@ -20,32 +20,22 @@
 		<img src="{{ URL::asset('assets/img/d3.jpg') }}" class="profile-image rounded-circle" alt="avatar">
 		<div class="info-card-text">
 			<a href="#" class="d-flex align-items-center text-white">
-				<span class="text-truncate text-truncate-sm d-inline-block">
-					PJ Root
-				</span>
+				<span class="text-truncate text-truncate-sm d-inline-block">PJ Root</span>
 			</a>
 			<span class="d-inline-block text-truncate text-truncate-sm">Nonthaburi, Thailand</span>
 		</div>
-		<img src="{{ URL::asset('assets/img/card-backgrounds/cover-2-lg.png') }}" class="cover" alt="cover">
+		<img src="{{ URL::asset('images/nav-bg.png') }}" class="cover" alt="cover">
 		<a href="#" onclick="return false;" class="pull-trigger-btn" data-action="toggle" data-class="list-filter-active" data-target=".page-sidebar" data-focus="nav_filter_input">
 			<i class="fal fa-angle-down"></i>
 		</a>
 	</div>
-	<ul id="js-nav-menu" class="nav-menu">
+	<ul id="js-nav-menu" class="nav-menu nav-function-hidden">
 		<li class="active open">
-			<a href="#" title="Application Intel" data-filter-tags="application intel">
+			<a href="#" title="home" data-filter-tags="home">
 				<i class="fal fa-home"></i>
-				<span class="nav-link-text" data-i18n="nav.application_intel">หน้าแรก</span>
+				<span class="nav-link-text">หน้าแรก</span>
 			</a>
 		</li>
-		{{-- Aung Edit --}}
-		<li>
-			<a href="{{ route('customer.index') }}" title="Application Intel" data-filter-tags="application intel">
-				<i class="fal fa-vial"></i>
-				<span class="nav-link-text" data-i18n="nav.application_intel">คำขอส่งตัวอย่าง</span>
-			</a>
-		</li>
-		{{-- End Aung Edit --}}
 		<li>
 			<a href="#" title="Application Intel" data-filter-tags="application intel">
 				<i class="fal fa-download"></i>
@@ -77,6 +67,6 @@
 			</a>
 		</li>
 	</ul>
-	<div class="filter-message js-filter-message bg-success-600"></div>
+	<div class="filter-message js-filter-message bg-danger-600">aaa</div>
 </nav>
 <!-- END PRIMARY NAVIGATION -->
