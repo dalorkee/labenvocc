@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Customer;
+use App\Models\Specimen;
 use Illuminate\Http\Request;
+use App\DataTables\CustomersDataTable;
 
 class CustomerController extends Controller
 {
@@ -12,8 +13,9 @@ class CustomerController extends Controller
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	protected function index(): object {
-		return view('apps.customers.index');
+	protected function index(CustomersDataTable $dataTable): object {
+		return $dataTable->render('apps.customers.index');
+        //return view('apps.customers.pj');
 	}
 
 	/**
@@ -25,6 +27,9 @@ class CustomerController extends Controller
 	{
 		//
 	}
+    protected function list(CustomersDataTable $dataTable): object {
+        return $dataTable->render('apps.customers.index');
+    }
 
 	/**
 	 * Store a newly created resource in storage.
@@ -43,7 +48,7 @@ class CustomerController extends Controller
 	 * @param  \App\Models\Customer  $customer
 	 * @return \Illuminate\Http\Response
 	 */
-	public function show(Customer $customer)
+	public function show(Specimen $customer)
 	{
 		//
 	}
@@ -54,7 +59,7 @@ class CustomerController extends Controller
 	 * @param  \App\Models\Customer  $customer
 	 * @return \Illuminate\Http\Response
 	 */
-	public function edit(Customer $customer)
+	public function edit(Specimen $customer)
 	{
 		//
 	}
@@ -66,7 +71,7 @@ class CustomerController extends Controller
 	 * @param  \App\Models\Customer  $customer
 	 * @return \Illuminate\Http\Response
 	 */
-	public function update(Request $request, Customer $customer)
+	public function update(Request $request, Specimen $customer)
 	{
 		//
 	}
@@ -77,7 +82,7 @@ class CustomerController extends Controller
 	 * @param  \App\Models\Customer  $customer
 	 * @return \Illuminate\Http\Response
 	 */
-	public function destroy(Customer $customer)
+	public function destroy(Specimen $customer)
 	{
 		//
 	}

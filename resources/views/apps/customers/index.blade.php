@@ -1,27 +1,26 @@
-@extends('layouts.guest.index')
-@section('meta-token')
-<meta name="csrf-token" content="{{ csrf_token() }}">
-@endsection
+@extends('layouts.index')
 @section('style')
-<link rel="stylesheet" href="{{ URL::asset('css/register_staff.css') }}">
-<link rel="stylesheet" href="{{ URL::asset('assets/css/formplugins/select2/select2.bundle.css') }}">
-<link rel="stylesheet" href="{{ URL::asset('assets/css/notifications/sweetalert2/sweetalert2.bundle.css') }}" media="screen, print">
+<link rel="stylesheet" type="text/css" href="{{ URL::asset('vendor/DataTables/DataTables-1.10.22/css/jquery.dataTables.min.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ URL::asset('vendor/DataTables/Buttons-1.6.5/css/buttons.jqueryui.min.css') }}">
+<link rel='stylesheet' type="text/css" href="{{ URL::asset('vendor/DataTables/Responsive-2.2.6/css/responsive.dataTables.min.css') }}">
 @endsection
 @section('content')
-<div class="wrapper">
-
-</div>
-
+<ol class="breadcrumb page-breadcrumb font-prompt">
+	<li class="breadcrumb-item"><a href="javascript:void(0);">คำขอส่งตัวอย่าง</a></li>
+	<li class="breadcrumb-item">รายการคำขอ</li>
+	{{-- <li class="position-absolute pos-top pos-right d-none d-sm-block"><span class="js-get-date"></span></li> --}}
+</ol>
+{{ $dataTable->table() }}
 @endsection
 @section('script')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-steps/1.1.0/jquery.steps.min.js"></script>
-<script src="{{ URL::asset('assets/js/formplugins/select2/select2.bundle.js') }}"></script>
-<script src="{{ URL::asset('assets/js/notifications/sweetalert2/sweetalert2.bundle.js') }}"></script>
+<script type="text/javascript" src="{{ URL::asset('vendor/DataTables/DataTables-1.10.22/js/jquery.dataTables.min.js') }}"></script>
+<script type="text/javascript" src="{{ URL::asset('vendor/DataTables/Buttons-1.6.5/js/dataTables.buttons.min.js') }}"></script>
+<script type="text/javascript" src="{{ URL::asset('vendor/DataTables/Responsive-2.2.6/js/dataTables.responsive.min.js') }}"></script>
+<script type="text/javascript" src="{{ URL::asset('js/buttons.server-side.js') }}"></script>
+{{ $dataTable->scripts() }}
 <script>
 $(document).ready(function() {
-	$.ajaxSetup({headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}});
+
 });
 </script>
-
-
 @endsection

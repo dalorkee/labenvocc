@@ -17,9 +17,9 @@ trait CommonTrait {
 	public function agencyType(): array {
 		return [1=>'หน่วยงานภาครัฐ', 2=>'หน่วยงานรัฐวิสาหกิจ', 3=>'หน่วยงานเอกชน'];
 	}
-    public function affiliation(): array {
-        return [1=>'หน่วยงานส่วนกลาง', 2=>'ศูนย์จังหวัดระยอง'];
-    }
+	public function affiliation(): array {
+		return [130=>'หน่วยงานส่วนกลาง', 130=>'ศูนย์จังหวัดระยอง'];
+	}
 	public function calcPercent($data=0, $allData=0): float {
 		return (($data*100)/$allData);
 	}
@@ -56,7 +56,7 @@ trait CommonTrait {
 		});
 		return $result;
 	}
-    public function getPositionLevel(): array {
+	public function getPositionLevel(): array {
 		$result = array();
 		PositionLevel::select('id', 'name_th')->get()->each(function($value, $key) use (&$result) {
 			$result[$value->id] = $value->name_th;

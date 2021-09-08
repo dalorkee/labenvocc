@@ -1,4 +1,4 @@
-						<!-- we need this logo when user switches to nav-function-top -->
+                        <!-- we need this logo when user switches to nav-function-top -->
 						<div class="page-logo">
 							<a href="#" class="page-logo-link press-scale-down d-flex align-items-center position-relative" data-toggle="modal" data-target="#modal-shortcut">
 								<img src="{{ URL::asset('assets/img/small-moph-logo.png') }}" alt="pj logo" aria-roledescription="logo">
