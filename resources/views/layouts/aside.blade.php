@@ -30,14 +30,14 @@
 		</a>
 	</div>
 	<ul id="js-nav-menu" class="nav-menu nav-function-hidden">
-        <li class="nav-title">จัดการตัวอย่าง</li>
+        <li class="nav-title">Specimen</li>
 		<li class="active open">
 			<a href="#" title="example" data-filter-tags="home">
 				<i class="fal fa-clipboard"></i>
 				<span class="nav-link-text">คำขอส่งตัวอย่าง</span>
 			</a>
 		</li>
-        <li class="nav-title">ข้อมูลหน่วยงาน</li>
+        <li class="nav-title">Common</li>
 		<li>
 			<a href="#" title="Application Intel" data-filter-tags="application intel">
 				<i class="fal fa-download"></i>
@@ -62,7 +62,7 @@
 				<span class="nav-link-text" data-i18n="nav.application_intel">ติดต่อหน่วยงาน</span>
 			</a>
 		</li>
-        <li class="nav-title">ผู้ดูแลระบบ</li>
+        <li class="nav-title">Administrator</li>
 		<li>
 			<a href="{{ route('office.index') }}" title="Application Intel" data-filter-tags="application intel">
 				<i class="fal fa-user"></i>

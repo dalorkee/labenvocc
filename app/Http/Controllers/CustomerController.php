@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Specimen;
+use App\Models\Order;
 use Illuminate\Http\Request;
 use App\DataTables\CustomersDataTable;
 
@@ -15,7 +15,7 @@ class CustomerController extends Controller
 	 */
 	protected function index(CustomersDataTable $dataTable): object {
 		return $dataTable->render('apps.customers.index');
-        //return view('apps.customers.pj');
+		//return view('apps.customers.pj');
 	}
 
 	/**
@@ -23,13 +23,9 @@ class CustomerController extends Controller
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function create()
-	{
+	public function create() {
 		//
 	}
-    protected function list(CustomersDataTable $dataTable): object {
-        return $dataTable->render('apps.customers.index');
-    }
 
 	/**
 	 * Store a newly created resource in storage.
@@ -45,10 +41,10 @@ class CustomerController extends Controller
 	/**
 	 * Display the specified resource.
 	 *
-	 * @param  \App\Models\Customer  $customer
+	 * @param  \App\Models\Order  $customer
 	 * @return \Illuminate\Http\Response
 	 */
-	public function show(Specimen $customer)
+	public function show(Order $customer)
 	{
 		//
 	}
@@ -56,10 +52,10 @@ class CustomerController extends Controller
 	/**
 	 * Show the form for editing the specified resource.
 	 *
-	 * @param  \App\Models\Customer  $customer
+	 * @param  \App\Models\Order  $customer
 	 * @return \Illuminate\Http\Response
 	 */
-	public function edit(Specimen $customer)
+	public function edit(Order $customer)
 	{
 		//
 	}
@@ -68,10 +64,10 @@ class CustomerController extends Controller
 	 * Update the specified resource in storage.
 	 *
 	 * @param  \Illuminate\Http\Request  $request
-	 * @param  \App\Models\Customer  $customer
+	 * @param  \App\Models\Order  $customer
 	 * @return \Illuminate\Http\Response
 	 */
-	public function update(Request $request, Specimen $customer)
+	public function update(Request $request, Order $customer)
 	{
 		//
 	}
@@ -82,7 +78,7 @@ class CustomerController extends Controller
 	 * @param  \App\Models\Customer  $customer
 	 * @return \Illuminate\Http\Response
 	 */
-	public function destroy(Specimen $customer)
+	public function destroy(Order $customer)
 	{
 		//
 	}

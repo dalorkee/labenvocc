@@ -4,8 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Specimen extends Model
+class Order extends Model
 {
-	protected $table = 'specimens';
+	protected $table = 'orders';
 	protected $primaryKey = 'id';
 }
