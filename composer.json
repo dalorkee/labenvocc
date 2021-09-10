@@ -16,6 +16,7 @@
         "laravel/tinker": "^2.5",
         "livewire/livewire": "^2.5",
         "mews/captcha": "^3.2",
+        "rap2hpoutre/fast-excel": "^3.0",
         "rap2hpoutre/laravel-log-viewer": "^1.7",
         "yajra/laravel-datatables": "1.5",
         "yajra/laravel-datatables-oracle": "~9.0"

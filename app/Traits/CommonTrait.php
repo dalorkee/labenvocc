@@ -18,8 +18,11 @@ trait CommonTrait {
 		return [1=>'หน่วยงานภาครัฐ', 2=>'หน่วยงานรัฐวิสาหกิจ', 3=>'หน่วยงานเอกชน'];
 	}
 	public function affiliation(): array {
-		return [130=>'หน่วยงานส่วนกลาง', 130=>'ศูนย์จังหวัดระยอง'];
+		return [130=>'หน่วยงานส่วนกลาง', 131=>'ศูนย์จังหวัดระยอง'];
 	}
+    public function latStation(): array {
+        return [130=>'ศูนย์อ้างอิง', 131=>'ศูนย์ระยอง'];
+    }
 	public function calcPercent($data=0, $allData=0): float {
 		return (($data*100)/$allData);
 	}
