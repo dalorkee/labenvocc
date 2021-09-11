@@ -115,9 +115,9 @@ class CustomersDataTable extends DataTable
                 >"
             )
 				->buttons(
-					Button::make('create')->addClass('btn btn-success font-prompt pjx')->text('<i class="fal fa-plus-circle"></i> สร้างคำขอส่งตัวอย่าง')->action(""),
-					Button::make('export')->addClass('btn btn-info')->text('<i class="fal fa-download"></i> ส่งออก'),
-					Button::make('print')->addClass('btn btn-info')->text('<i class="fal fa-print"></i> พิมพ์'),
+					Button::make('create')->addClass('btn btn-success font-prompt pjx')->text('<i class="fal fa-plus-circle"></i>">สร้างคำขอส่งตัวอย่าง')->action(""),
+					Button::make('export')->addClass('btn btn-info ml-4')->text('<i class="fal fa-download"></i> <span class="d-none d-sm-inline">ส่งออก</span>'),
+					Button::make('print')->addClass('btn btn-info')->text('<i class="fal fa-print"></i> <span class="d-none d-sm-inline">พิมพ์</span>'),
 					// Button::make('reload')->addClass('btn btn-info')->text('<i class="fal fa-redo"></i> โหลดใหม่'),
 				)
 				->parameters([
