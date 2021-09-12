@@ -2,10 +2,10 @@
 @section('style')
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/css/datagrid/datatables/datatables.bundle.css') }}">
 <style>
-.dataTables_filter input:first-child {margin-top: -8px;}
+/* .dataTables_filter input:first-child {margin-top: -8px;} */
 #order-table thead {background-color:#297FB0;color: white;}
-.pj {position: absolute;left:18px;top: 18px;z-index: 1;}
-.pjx {visibility: hidden;}
+/* .pj {position: absolute;left:18px;top: 18px;z-index: 1;}
+.pjx {visibility: hidden;} */
 </style>
 @endsection
 @section('content')
@@ -27,13 +27,13 @@
 			</div>
 			<div class="panel-container show">
 				<div class="panel-content relative">
-					<div class="btn-group pj" role="group">
+					{{-- <div class="btn-group pj" role="group">
 						<button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown"><i class="fal fa-plus-circle"></i> <span class="d-none d-sm-inline">สร้างคำขอส่งตัวอย่าง</span></button>
 						<div class="dropdown-menu">
 							<a class="dropdown-item" href="javascript:void(0)">ตัวอย่างชีวภาพ</a>
 							<a class="dropdown-item" href="javascript:void(0)">ตัวอย่างสิ่งแวดล้อม</a>
 						</div>
-					</div>
+					</div> --}}
 					{{ $dataTable->table() }}
 				</div>
 			</div>

@@ -1,14 +1,10 @@
 <?php
-
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\{
 	HomeController,
 	RegisterController,
 	RegisterStaffController,
 	CustomerController
-/* 	CustomerLstController,
-	CustomerBiolabController,
-	CustomerEnvLabController */
 };
 use App\Http\Controllers\Admin\{
 	OfficeController,
@@ -38,12 +34,6 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 	})->name('dashboard');
 });
 Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
-
-/* Route::resources([
-	'customerList' => CustomerLstController::class,
-	'biolabFrm' => CustomerBiolabController::class,
-	'envlabFrm' => CustomerEnvLabController::class,
-]); */
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function(){
 	Route::resources([

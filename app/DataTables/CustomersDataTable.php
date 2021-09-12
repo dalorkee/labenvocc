@@ -101,22 +101,23 @@ class CustomersDataTable extends DataTable
 				// 		<'col-sm-12 col-md-7'p>
 				// 	>"
 				// )
-                ->dom("
-                <'row mb-3'
-                    <'col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 d-flex align-items-center justify-content-start'B>
-                    <'mt-2 ol-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 d-flex align-items-center justify-content-end'f>
-                >
-                <'row'
-                    <'col-sm-12'tr>
-                >
-                <'row'
-                    <'col-sm-12 col-md-5'i>
-                    <'col-sm-12 col-md-7'p>
-                >"
-            )
+				->dom("
+				<'row p-2 bg-yellow-100 mb-3'
+					<'col-xs-6 col-sm-6 col-md-6 col-xl-4 col-lg-4 bg-red-200 d-flex justify-content-start'>
+					<'col-xs-6 col-sm-6 col-md-6 col-xl-4 col-lg-4 bg-blue-100 p-0 d-flex justify-content-end'B>
+					<'col-xs-12 col-sm-12 col-md-6 col-xl-4 col-lg-4 bg-green-200 p-0 d-flex justify-content-end'f>
+				>
+				<'row'
+					<'col-sm-12'tr>
+				>
+				<'row'
+					<'col-sm-12 col-md-5'i>
+					<'col-sm-12 col-md-7'p>
+				>"
+			)
 				->buttons(
-					Button::make('create')->addClass('btn btn-success font-prompt pjx')->text('<i class="fal fa-plus-circle"></i>">สร้างคำขอส่งตัวอย่าง')->action(""),
-					Button::make('export')->addClass('btn btn-info ml-4')->text('<i class="fal fa-download"></i> <span class="d-none d-sm-inline">ส่งออก</span>'),
+					// Button::make('create')->addClass('btn btn-success font-prompt')->text('<i class="fal fa-plus-circle"></i> สร้างคำขอส่งตัวอย่าง')->action(""),
+					Button::make('export')->addClass('btn btn-info')->text('<i class="fal fa-download"></i> <span class="d-none d-sm-inline">ส่งออก</span>'),
 					Button::make('print')->addClass('btn btn-info')->text('<i class="fal fa-print"></i> <span class="d-none d-sm-inline">พิมพ์</span>'),
 					// Button::make('reload')->addClass('btn btn-info')->text('<i class="fal fa-redo"></i> โหลดใหม่'),
 				)
