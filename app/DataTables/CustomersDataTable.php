@@ -10,7 +10,6 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 use App\Traits\CommonTrait;
 
-
 class CustomersDataTable extends DataTable
 {
 	use CommonTrait;
@@ -63,7 +62,6 @@ class CustomersDataTable extends DataTable
 		}
 	}
 
-
 	/**
 	 * Get query source of dataTable.
 	 *
@@ -101,20 +99,19 @@ class CustomersDataTable extends DataTable
 				// 		<'col-sm-12 col-md-7'p>
 				// 	>"
 				// )
-				->dom("
-				<'row p-2 bg-yellow-100 mb-3'
-					<'col-xs-6 col-sm-6 col-md-6 col-xl-4 col-lg-4 bg-red-200 d-flex justify-content-start'>
-					<'col-xs-6 col-sm-6 col-md-6 col-xl-4 col-lg-4 bg-blue-100 p-0 d-flex justify-content-end'B>
-					<'col-xs-12 col-sm-12 col-md-6 col-xl-4 col-lg-4 bg-green-200 p-0 d-flex justify-content-end'f>
+				->dom('
+				<"row bg-yellow-100"
+					<"pjb"B>
+					<"pjf"f>
 				>
-				<'row'
-					<'col-sm-12'tr>
+				<"row"
+					<"col-sm-12"tr>
 				>
-				<'row'
-					<'col-sm-12 col-md-5'i>
-					<'col-sm-12 col-md-7'p>
-				>"
-			)
+				<"row"
+					<"col-sm-12 col-md-5"i>
+					<"col-sm-12 col-md-7"p>
+				>'
+				)
 				->buttons(
 					// Button::make('create')->addClass('btn btn-success font-prompt')->text('<i class="fal fa-plus-circle"></i> สร้างคำขอส่งตัวอย่าง')->action(""),
 					Button::make('export')->addClass('btn btn-info')->text('<i class="fal fa-download"></i> <span class="d-none d-sm-inline">ส่งออก</span>'),
