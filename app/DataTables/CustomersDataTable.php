@@ -100,9 +100,9 @@ class CustomersDataTable extends DataTable
 				// 	>"
 				// )
 				->dom('
-				<"row bg-yellow-100"
-					<"pjb"B>
-					<"pjf"f>
+				<"row"
+					<"col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6 d-flex justify-content-center">
+					<"col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6 d-flex justify-content-end"f>
 				>
 				<"row"
 					<"col-sm-12"tr>

@@ -27,7 +27,9 @@ Route::name('register.')->group(function() {
 	Route::post('search/hospital', [RegisterController::class, 'searchHospitalByName'])->name('hospital');
 	Route::post('refresh-captcha', [RegisterController::class, 'refreshCaptcha'])->name('refresh-captcha');
 });
-
+Route::name('customer.')->group(function() {
+    Route::get('customer/general/info', [CustomerController::class, 'createGeneralInfo'])->name('general');
+});
 Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 	Route::get('/dashboard', function() {
 		return view('dashboard');
