@@ -10,7 +10,6 @@ class CustomerController extends Controller
 {
 	protected function index(CustomersDataTable $dataTable): object {
 		return $dataTable->render('apps.customers.index');
-		//return view('apps.customers.pj');
 	}
 
 	public function create() {}
@@ -20,7 +19,10 @@ class CustomerController extends Controller
 	public function update(Request $request, Order $customer){}
 	public function destroy(Order $customer){}
 
-    public function createGeneralInfo(): object {
-        return view('apps.customers.general');
+    protected function createInfo(): object {
+        return view('apps.customers.info');
+	}
+    protected function createParameter(): object {
+        return view('apps.customers.parameter');
 	}
 }

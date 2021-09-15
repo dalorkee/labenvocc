@@ -32,7 +32,7 @@
 	<ul id="js-nav-menu" class="nav-menu nav-function-hidden">
         <li class="nav-title">Specimen</li>
 		<li class="active open">
-			<a href="#" title="example" data-filter-tags="home">
+			<a href="{{ route('customer.index') }}" title="คำขอส่งตัวอย่าง" data-filter-tags="home">
 				<i class="fal fa-clipboard"></i>
 				<span class="nav-link-text">คำขอส่งตัวอย่าง</span>
 			</a>
