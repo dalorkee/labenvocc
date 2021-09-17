@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use Illuminate\Http\Request;
-use App\DataTables\CustomersDataTable;
+use App\DataTables\{CustomersDataTable,CustParameterDataTable};
 
 class CustomerController extends Controller
 {
@@ -19,10 +19,10 @@ class CustomerController extends Controller
 	public function update(Request $request, Order $customer){}
 	public function destroy(Order $customer){}
 
-    protected function createInfo(): object {
-        return view('apps.customers.info');
+	protected function createInfo(): object {
+		return view('apps.customers.info');
 	}
-    protected function createParameter(): object {
-        return view('apps.customers.parameter');
+	protected function createParameter(CustParameterDataTable $dataTable): object {
+		return $dataTable->render('apps.customers.parameter');
 	}
 }

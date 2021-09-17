@@ -7,12 +7,9 @@
 <style>
 .btn-group {margin:0;padding:0;}
 .dt-buttons {display:flex;flex-direction:row;flex-wrap:wrap;justify-content:flex-end;}
-
 .dataTables_filter label {margin-top: 8px;}
 .dataTables_filter input:first-child {margin-top: -8px;}
-
 #order-table thead {background-color:#297FB0;color: white;}
-
 /* Extra small devices (phones, 600px and down) */
 @media only screen and (max-width:600px) {.pj-btn{position:absolute;top:10px;z-index:1;}}
 /* Small devices (portrait tablets and large phones, 600px and up) */
@@ -47,7 +44,7 @@
 						<div class="btn-group" role="group">
 							<button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown"><i class="fal fa-plus-circle"></i> <span class="d-none d-sm-inline">สร้างคำขอส่งตัวอย่าง</span></button>
 							<div class="dropdown-menu">
-								<a class="dropdown-item" href="{{ route('customer.general') }}">ตัวอย่างชีวภาพ</a>
+								<a class="dropdown-item" href="{{ route('customer.info') }}">ตัวอย่างชีวภาพ</a>
 								<a class="dropdown-item" href="javascript:void(0)">ตัวอย่างสิ่งแวดล้อม</a>
 							</div>
 						</div>

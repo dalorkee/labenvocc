@@ -4,6 +4,24 @@
 @endsection
 @section('style')
 <link href="{{ URL::asset('css/pj-step.css') }}" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/css/datagrid/datatables/datatables.bundle.css') }}">
+<style>
+.btn-group {margin:0;padding:0;}
+.dt-buttons {display:flex;flex-direction:row;flex-wrap:wrap;justify-content:flex-end;}
+.dataTables_filter label {margin-top: 8px;}
+.dataTables_filter input:first-child {margin-top: -8px;}
+#order-table thead {background-color:#297FB0;color: white;}
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width:600px) {.pj-btn{position:absolute;top:10px;z-index:1;}}
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width:600px) {.pj-btn {position:absolute;top:10px;z-index:1;}}
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width:768px) {.pj-btn {position:absolute;top:16px;z-index:1;}}
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width:992px) {.pj-btn{position:absolute;top:16px;z-index:1;}}
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width:1200px) {.pj-btn{position:absolute;top:16px;z-index:1;}}
+</style>
 @endsection
 @section('content')
 <ol class="breadcrumb page-breadcrumb text-sm font-prompt">
@@ -32,7 +50,7 @@
 							<li class="undone"><p><i class="fal fa-user"></i> <span class="d-none d-sm-inline">ตรวจสอบข้อมูล</span></p></li>
 						</ul>
 
-
+						{{ $dataTable->table() }}
 
 					</div>
 					<div class="panel-content border-faded border-left-0 border-right-0 border-bottom-0 d-flex flex-row align-items-center">
@@ -51,6 +69,9 @@
 </div>
 @endsection
 @section('script')
+<script type="text/javascript" src="{{ URL::asset('assets/js/datagrid/datatables/datatables.bundle.js') }}"></script>
+<script type="text/javascript" src="{{ URL::asset('js/buttons.server-side.js') }}"></script>
+{{ $dataTable->scripts() }}
 <script>
 $(document).ready(function() {
 	$.ajaxSetup({headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}});
