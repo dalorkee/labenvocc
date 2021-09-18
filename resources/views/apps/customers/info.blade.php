@@ -9,14 +9,14 @@
 @section('content')
 <ol class="breadcrumb page-breadcrumb text-sm font-prompt">
 	<li class="breadcrumb-item"><a href="javascript:void(0);">LabEnvOcc</a></li>
-	<li class="breadcrumb-item">คำขอส่งตัวอย่าง</li>
+	<li class="breadcrumb-item">คำขอส่งตัวอย่างชีวภาพ</li>
 	<li class="breadcrumb-item">ข้อมูลทั่วไป</li>
 </ol>
 <div class="row text-sm font-prompt">
 	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
 		<div id="panel-customer" class="panel">
 			<div class="panel-hdr">
-				<h2 class="text-gray-600"><i class="fal fa-clipboard"></i>&nbsp;คำขอส่งตัวอย่าง</h2>
+				<h2 class="text-gray-600"><i class="fal fa-clipboard"></i>&nbsp;คำขอส่งตัวอย่างชีวภาพ</h2>
 				<div class="panel-toolbar">
 					<button class="btn btn-panel" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="Collapse"></button>
 					<button class="btn btn-panel" data-action="panel-fullscreen" data-toggle="tooltip" data-offset="0,10" data-original-title="Fullscreen"></button>

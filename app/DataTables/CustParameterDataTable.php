@@ -21,13 +21,18 @@ class CustParameterDataTable extends DataTable
 				->editColumn('created_at', function($field) {
 					return Carbon::parse($field->created_at)->format('d/m/Y');
 				})
-				->addColumn('isad', function (OrderDetail $p) {
-					return $p->parameter->map(function($para) {
-						//return $para->specemen;
-                        $x = json_decode($para->specemen, JSON_UNESCAPED_UNICODE);
-                        return $x;
-					});
-				});
+				->addColumn('parameter', function (OrderDetail $detail) {
+					return $detail->parameters->map(function($parameter) {
+						return $parameter->parameter_name;
+					})->implode('<br>');
+				})
+				->addColumn('unit', function (OrderDetail $detail) {
+					return $detail->parameters->map(function($parameter) {
+						return $parameter->unit_name;
+					})->implode('<br>');
+				})
+				->addColumn('action', '<button class="bg-purple-400 hover:bg-purple-500 text-white py-1 px-3 rounded" id="context-menu" data-id="{{$id}}">พารามิเตอร์ <i class="fal fa-plus"></i></button>')
+				->rawColumns(['parameter', 'unit', 'action']);;
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
 		}
@@ -36,7 +41,7 @@ class CustParameterDataTable extends DataTable
 	public function query(OrderDetail $orderDetail) {
 		//return $orderDetail->newQuery();
 		//$orders =  OrderDetail::select('id', 'firstname', 'lastname', 'age_year', 'work_life_year', 'specimen_date' );
-		$orders = OrderDetail::with('parameter')->select('*');
+		$orders = OrderDetail::with('parameters')->select('*');
 		return $orders;
 	}
 
@@ -51,7 +56,7 @@ class CustParameterDataTable extends DataTable
 				->orderBy(0, 'desc')
 				->dom('
 				<"row"
-					<"col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6 d-flex justify-content-center">
+					<"col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6 d-flex justify-content-start"B>
 					<"col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6 d-flex justify-content-end"f>
 				>
 				<"row"
@@ -62,12 +67,12 @@ class CustParameterDataTable extends DataTable
 					<"col-sm-12 col-md-7"p>
 				>'
 				)
-				// ->buttons(
-				// 	Button::make('create')->addClass('btn btn-success font-prompt')->text('<i class="fal fa-plus-circle"></i> สร้างคำขอส่งตัวอย่าง')->action(""),
+				->buttons(
+					Button::make('create')->addClass('btn btn-success font-prompt')->text('<i class="fal fa-plus-circle"></i> เพิ่มข้อมูลใหม่')->action("javascript:newData()"),
 				// 	Button::make('export')->addClass('btn btn-info')->text('<i class="fal fa-download"></i> <span class="d-none d-sm-inline">ส่งออก</span>'),
 				// 	Button::make('print')->addClass('btn btn-info')->text('<i class="fal fa-print"></i> <span class="d-none d-sm-inline">พิมพ์</span>'),
 				// 	Button::make('reload')->addClass('btn btn-info')->text('<i class="fal fa-redo"></i> โหลดใหม่'),
-				// )
+				)
 				->parameters([
 					'language'=>['url'=>url('/vendor/DataTables/i18n/thai.json')],
 				]);
@@ -86,7 +91,11 @@ class CustParameterDataTable extends DataTable
 				Column::make('division')->title('แผนก'),
 				Column::make('work_life_year')->title('อายุงาน'),
 				Column::make('specimen_date')->title('วันที่เก็บตัวอย่าง'),
-				Column::make('isad')->title('jetkhe'),
+				Column::make('parameter')->title('พารามิเตอร์'),
+				Column::make('unit')->title('หน่วย'),
+				Column::make('note')->title('หมายเหตุ'),
+				Column::computed('action')->addClass('text-center')->title('จัดการ')
+
 			];
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());

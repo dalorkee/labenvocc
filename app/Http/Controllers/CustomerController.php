@@ -23,6 +23,7 @@ class CustomerController extends Controller
 		return view('apps.customers.info');
 	}
 	protected function createParameter(CustParameterDataTable $dataTable): object {
+        // dd($dataTable);
 		return $dataTable->render('apps.customers.parameter');
 	}
 }

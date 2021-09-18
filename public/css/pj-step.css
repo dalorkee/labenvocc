@@ -1,6 +1,7 @@
 .steps {
 	list-style-type: none;
 	padding: 0;
+    margin: 0;
 }
 .steps li {
 	display: inline-block;

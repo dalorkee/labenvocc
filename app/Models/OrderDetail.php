@@ -13,7 +13,7 @@ class OrderDetail extends Model
 		return $this->belongTo(Order::class)->withDefault();
 	}
 
-	public function parameter() {
+	public function parameters() {
 		return $this->hasMany(OrderDetailParameter::class);
 	}
 }
