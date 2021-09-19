@@ -31,7 +31,7 @@ class CustParameterDataTable extends DataTable
 						return $parameter->unit_name;
 					})->implode('<br>');
 				})
-				->addColumn('action', '<button class="bg-purple-400 hover:bg-purple-500 text-white py-1 px-3 rounded" id="context-menu" data-id="{{$id}}">พารามิเตอร์ <i class="fal fa-plus"></i></button>')
+				->addColumn('action', '<button class="context-nav bg-purple-400 hover:bg-purple-500 text-white py-1 px-3 rounded" id="context-menu" data-id="{{$id}}">จัดการ <i class="fal fa-angle-down"></i></button>')
 				->rawColumns(['parameter', 'unit', 'action']);;
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
@@ -94,7 +94,7 @@ class CustParameterDataTable extends DataTable
 				Column::make('parameter')->title('พารามิเตอร์'),
 				Column::make('unit')->title('หน่วย'),
 				Column::make('note')->title('หมายเหตุ'),
-				Column::computed('action')->addClass('text-center')->title('จัดการ')
+				Column::computed('action')->addClass('text-center')->title('#')
 
 			];
 		} catch (\Exception $e) {

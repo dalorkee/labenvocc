@@ -28,8 +28,9 @@ Route::name('register.')->group(function() {
 	Route::post('refresh-captcha', [RegisterController::class, 'refreshCaptcha'])->name('refresh-captcha');
 });
 Route::name('customer.')->group(function() {
-    Route::get('customer/create/info', [CustomerController::class, 'createInfo'])->name('info');
-    Route::get('customer/create/parameter', [CustomerController::class, 'createParameter'])->name('parameter');
+	Route::get('customer/create/info', [CustomerController::class, 'createInfo'])->name('info');
+	Route::get('customer/create/parameter', [CustomerController::class, 'createParameter'])->name('parameter');
+	Route::post('customer/store/parameter/personal', [CustomerController::class, 'storeParameterPersonalInfo'])->name('personal');
 });
 Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 	Route::get('/dashboard', function() {

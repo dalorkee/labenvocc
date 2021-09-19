@@ -73,5 +73,67 @@ var resetSettings = function() {
 @include('components.page-settings')
 @include('layouts.script')
 @yield('script')
+<script>
+$(document).ready(function() {
+	var options = {
+	"closeButton": true,
+	"debug": false,
+	"newestOnTop": true,
+	"progressBar": false,
+	"positionClass": "toast-top-right",
+	"preventDuplicates": false,
+	"onclick": null,
+	"showDuration": 300,
+	"hideDuration": 100,
+	"timeOut": 0,
+	"extendedTimeOut": 0,
+	"showEasing": "swing",
+	"hideEasing": "linear",
+	"showMethod": "fadeIn",
+	"hideMethod": "fadeOut"
+	};
+	@if ($errors->any())
+		@foreach ($errors->all() as $error)
+			toastr.error("{{ $error }}", "Error", options);
+		@endforeach
+		@php Session::forget("errors"); @endphp
+	@endif
+	@if (Session::has('success'))
+		toastr.success("{{ Session::get('success') }}", "Success", options);
+		Swal.fire({
+			type: "success",
+			title: "บันทึกข้อมูลสำเร็จแล้ว",
+			text: "เราได้รับข้อมูลของท่านแล้ว โปรดรอการติดต่อกลับจากเจ้าหน้าที่",
+			confirmButtonText: "ตกลง",
+			footer: "LAB ENV-OCC DDC",
+			allowOutsideClick: false
+		});
+		@php Session::forget("success"); @endphp
+	@endif
+
+	/* opt2 */
+	var options2 = {
+		"closeButton": true,
+		"debug": false,
+		"newestOnTop": true,
+		"progressBar": true,
+		"positionClass": "toast-bottom-left",
+		"preventDuplicates": true,
+		"onclick": null,
+		"showDuration": 300,
+		"hideDuration": 100,
+		"timeOut": 5000,
+		"extendedTimeOut": 1000,
+		"showEasing": "swing",
+		"hideEasing": "linear",
+		"showMethod": "fadeIn",
+		"hideMethod": "fadeOut"
+	};
+	@if (Session::has('action_alert'))
+		toastr.info("{{ Session::get('action_alert') }}", "LabEnvOcc", options2);
+		@php Session::forget("action_alert"); @endphp
+	@endif
+});
+</script>
 </body>
 </html>
