@@ -129,9 +129,9 @@ $(document).ready(function() {
 		"showMethod": "fadeIn",
 		"hideMethod": "fadeOut"
 	};
-	@if (Session::has('action_alert'))
-		toastr.info("{{ Session::get('action_alert') }}", "LabEnvOcc", options2);
-		@php Session::forget("action_alert"); @endphp
+	@if (Session::has('action_notic'))
+		toastr.info("{{ Session::get('action_notic') }}", "LabEnvOcc", options2);
+		@php Session::forget("action_notic"); @endphp
 	@endif
 });
 </script>

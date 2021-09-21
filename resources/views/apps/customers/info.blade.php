@@ -24,7 +24,8 @@
 				</div>
 			</div>
 			<div class="panel-container show">
-				<form>
+				<form name="saveInfo" action="{{ route('customer.storeInfo') }}" method="POST" enctype="multipart/form-data">
+					@csrf
 					<div class="panel-content">
 						<ul class="steps">
 							<li class="active"><a href=""><i class="fal fa-user"></i> <span class="d-none d-sm-inline">ข้อมูลทั่วไป</span></a></li>
@@ -34,65 +35,65 @@
 						</ul>
 						<div class="form-row">
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
-								<label class="form-label" for="firstname">หน่วยงานที่ส่งตัวอย่าง <span class="text-red-600">*</span></label>
-								<input type="text" name="firstname" value="{{ old('firstname') }}" class="form-control @error('firstname') is-invalid @enderror" required>
-								@error('firstname')
-									<div class="invalid-feedback" role="alert">{{ $message }}</div>
-								@enderror
+								<label class="form-label" for="office_name">หน่วยงานที่ส่งตัวอย่าง <span class="text-red-600">*</span></label>
+								<input type="text" name="office_name" value="{{ Auth::user()->userCustomer->office_name }}" class="form-control" readonly>
 							</div>
 						</div>
 						<div class="form-row">
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
-								<label class="form-label" for="firstname">ประเภทงาน <span class="text-red-600">*</span></label>
+								<label class="form-label" for="type_of_work">ประเภทงาน <span class="text-red-600">*</span></label>
 								<div class="frame-wrap">
 									<div class="custom-control custom-checkbox custom-control-inline">
-										<input type="checkbox" class="custom-control-input" id="defaultInline2" checked="">
-										<label class="custom-control-label" for="defaultInline2">บริการ</label>
+										<input type="checkbox" name="type_of_work" class="custom-control-input" id="type_of_work1" checked>
+										<label class="custom-control-label" for="type_of_work1">บริการ</label>
 									</div>
 									<div class="custom-control custom-checkbox custom-control-inline">
-										<input type="checkbox" class="custom-control-input" id="defaultUnchecked">
-										<label class="custom-control-label" for="defaultUnchecked">วิจัย</label>
+										<input type="checkbox" class="custom-control-input" id="type_of_work2">
+										<label class="custom-control-label" for="type_of_work2">วิจัย</label>
 									</div>
 									<div class="custom-control custom-checkbox custom-control-inline">
-										<input type="checkbox" class="custom-control-input" id="defaultUnchecked">
-										<label class="custom-control-label" for="defaultUnchecked">เฝ้าระวัง</label>
+										<input type="checkbox" class="custom-control-input" id="type_of_work3">
+										<label class="custom-control-label" for="type_of_work3">เฝ้าระวัง</label>
 									</div>
 									<div class="custom-control custom-checkbox custom-control-inline">
-										<input type="checkbox" class="custom-control-input" id="defaultUnchecked">
-										<label class="custom-control-label" for="defaultUnchecked">SRRT/สอบสวนโรค</label>
+										<input type="checkbox" class="custom-control-input" id="type_of_work4">
+										<label class="custom-control-label" for="type_of_work4">SRRT/สอบสวนโรค</label>
 									</div>
 									<div class="custom-control custom-checkbox custom-control-inline">
-										<input type="checkbox" class="custom-control-input" id="defaultUnchecked">
-										<label class="custom-control-label" for="defaultUnchecked">อื่นๆ ระบุ</label>
+										<input type="checkbox" class="custom-control-input" id="type_of_work5">
+										<label class="custom-control-label" for="type_of_work5">อื่นๆ ระบุ</label>
 									</div>
 								</div>
 							</div>
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
-								<label class="form-label" for="mobile">ประเภทงานอื่นๆ ระบุ</label>
-								<input type="text" name="mobile" value="{{ old('mobile') }}" class="form-control @error('mobile') is-invalid @enderror" required>
-								@error('moblie')
+								<label class="form-label" for="type_of_work_other">ประเภทงานอื่นๆ ระบุ</label>
+								<input type="text" name="type_of_work_other" value="{{ old('motype_of_work_other') }}" class="form-control @error('type_of_work_other') is-invalid @enderror" disabled>
+								@error('type_of_work_other')
 									<div class="invalid-feedback" role="alert">{{ $message }}</div>
 								@enderror
 							</div>
 						</div>
 						<div class="form-row">
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
-								<label class="form-label" for="mobile">เลขที่หนังสือนำส่ง <span class="text-red-600">*</span></label>
-								<input type="text" name="mobile" value="{{ old('mobile') }}" class="form-control @error('mobile') is-invalid @enderror" required>
-								@error('moblie')
+								<label class="form-label" for="book_no">เลขที่หนังสือนำส่ง <span class="text-red-600">*</span></label>
+								<input type="text" name="book_no" value="{{ old('book_no') }}" class="form-control @error('book_no') is-invalid @enderror">
+								@error('book_no')
 									<div class="invalid-feedback" role="alert">{{ $message }}</div>
 								@enderror
 							</div>
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
-								<label class="form-label" for="email">ลงวันที่ <span class="text-red-600">*</span></label>
+								<label class="form-label" for="book_date">ลงวันที่ <span class="text-red-600">*</span></label>
 								<div class="input-group">
-									<input type="text" class="form-control " readonly placeholder="Select date" id="datepicker-2">
+									<input type="text" name="book_date" value="{{ old('book_date') }}" placeholder="เลือกวันที่" class="form-control @error('book_date') is-invalid @enderror" id="datepicker_book_date" readonly >
 									<div class="input-group-append">
 										<span class="input-group-text fs-xl">
 											<i class="fal fa-calendar-alt"></i>
 										</span>
 									</div>
 								</div>
+								@error('book_date')
+									<div class="invalid-feedback" role="alert">{{ $message }}</div>
+								@enderror
 							</div>
 						</div>
 						<div class="form-row">
@@ -100,17 +101,20 @@
 								<label class="form-label" for="inputGroupFile01">แนบไฟล์หนังสือนำส่ง <span class="text-red-600">*</span></label>
 								<div class="input-group">
 									<div class="custom-file">
-										<input type="file" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01">
-										<label class="custom-file-label" for="inputGroupFile01">เลือกไฟล์</label>
+										<input type="file" name="book_file" value="{{ old('book_file') }}" class="custom-file-input @error('book_file') is-invalid @enderror" id="bookFile01" aria-describedby="bookFile01">
+										<label class="custom-file-label" for="bookFile01" id="book_label">เลือกไฟล์</label>
 									</div>
 								</div>
+								@error('book_file')
+									<div class="invalid-feedback" role="alert">{{ $message }}</div>
+								@enderror
 							</div>
 						</div>
 					</div>
 					<div class="panel-content border-faded border-left-0 border-right-0 border-bottom-0 d-flex flex-row align-items-center">
 						<div class="form-row">
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
-								<button class="btn btn-primary ml-auto" type="button"><i class="fal fa-save"></i> บันทึกร่าง</button>
+								<button type="submit" class="btn btn-primary ml-auto"><i class="fal fa-save"></i> บันทึกร่าง</button>
 								<a href="{{ route('customer.parameter') }}" class="btn btn-warning ml-auto">ต่อไป <i class="fal fa-arrow-alt-right"></i></a>
 							</div>
 						</div>
@@ -125,21 +129,28 @@
 <script src="{{ URL::asset('assets/js/formplugins/bootstrap-datepicker/bootstrap-datepicker.js') }}"></script>
 <script>
 	var controls = {
-	    leftArrow: '<i class="fal fa-angle-left" style="font-size: 1.25rem"></i>',
-	    rightArrow: '<i class="fal fa-angle-right" style="font-size: 1.25rem"></i>'
-    }
+		leftArrow: '<i class="fal fa-angle-left" style="font-size: 1.25rem"></i>',
+		rightArrow: '<i class="fal fa-angle-right" style="font-size: 1.25rem"></i>'
+	}
 	var runDatePicker = function() {
-        $('#datepicker-2').datepicker({
-            todayHighlight: true,
-            orientation: "bottom left",
-            templates: controls
-        });
-    }
+		$('#datepicker_book_date').datepicker({
+			todayHighlight: true,
+			orientation: "bottom left",
+			templates: controls
+		});
+	}
 </script>
 <script>
 $(document).ready(function() {
 	$.ajaxSetup({headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}});
 	runDatePicker();
+
+    $('#bookFile01').on('change',function(){
+                //get the file name
+                var fileName = $(this).val();
+                //replace the "Choose a file" label
+                $(this).next('.book_label').html(fileName);
+            })
 });
 </script>
 @endsection

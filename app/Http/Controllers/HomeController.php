@@ -16,6 +16,9 @@ class HomeController extends Controller
 				case 'admin':
 					return view('dashboard');
 					break;
+				case 'customer':
+					return redirect()->route('customer.index');
+					break;
 				default:
 					return view('apps.home');
 					break;
