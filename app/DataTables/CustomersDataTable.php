@@ -69,7 +69,9 @@ class CustomersDataTable extends DataTable
 	 * @return \Illuminate\Database\Eloquent\Builder
 	 */
 	public function query(Order $order) {
-		return $order->newQuery();
+		return $order->select('id', 'order_no', 'ref_user_id', 'lab_station_id', 'order_status', 'payment_status', 'detail', 'created_at')
+            ->whereNotNull('order_no')
+            ->limit(25);
 	}
 
 	/**

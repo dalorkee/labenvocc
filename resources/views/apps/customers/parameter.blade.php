@@ -46,8 +46,8 @@
 						<div class="form-row">
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
 								<button class="btn btn-primary ml-auto" type="button"><i class="fal fa-save"></i> บันทึกร่าง</button>
-								<a href="{{ route('customer.info') }}" class="btn btn-warning ml-auto"><i class="fal fa-arrow-alt-left"></i> ก่อนหน้า</a>
-								<a href="" class="btn btn-warning ml-auto">ต่อไป <i class="fal fa-arrow-alt-right"></i></a>
+								<a href="{{ route('customer.info', ['idx' => Session::get('idx')]) }}" class="btn btn-warning ml-auto"><i class="fal fa-arrow-alt-left"></i> ก่อนหน้า</a>
+								<a href="" class="btn btn-warning ml-auto">ถัดไป <i class="fal fa-arrow-alt-right"></i></a>
 							</div>
 						</div>
 					</div>
@@ -179,7 +179,7 @@ function newData(){$('#new-data-modal').modal('show');}
 <script>
 $(document).ready(function() {
 	$.ajaxSetup({headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}});
-    $('input[name="title_name"]').on('change', function() {
+	$('input[name="title_name"]').on('change', function() {
 		$('input[name="' + this.name + '"]').not(this).prop('checked', false);
 	});
 	$.contextMenu({

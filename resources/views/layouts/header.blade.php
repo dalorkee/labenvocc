@@ -442,7 +442,7 @@
 									<div class="dropdown-divider m-0"></div>
 									<form method="POST" action="{{ route('logout') }}">
 										@csrf
-										<a class="dropdown-item fw-500 pt-3 pb-3" href="href="{{ route('logout') }}" onclick="event.preventDefault(); this.closest('form').submit();">
+										<a class="dropdown-item fw-500 pt-3 pb-3" href="{{ route('logout') }}" onclick="event.preventDefault(); this.closest('form').submit();">
 											<span data-i18n="drpdwn.page-logout">Logout</span>
 											<span class="float-right fw-n">&commat;{{ auth()->user()->username ?? 'pj' }}</span>
 										</a>

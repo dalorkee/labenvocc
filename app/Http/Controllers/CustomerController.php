@@ -6,17 +6,21 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\{Auth,Log,Storage,File};
 use App\Models\{Order,OrderDetail,Fileupload};
 use App\DataTables\{CustomersDataTable,CustParameterDataTable};
-use App\Traits\{CustomerTrait,FileTrait};
+use App\Traits\CommonTrait as TraitsCommonTrait;
+use App\Traits\{CustomerTrait,FileTrait,CommonTrait};
 
 class CustomerController extends Controller
 {
-	use CustomerTrait, FileTrait;
+	use CustomerTrait, FileTrait, CommonTrait;
 
 	protected function index(CustomersDataTable $dataTable): object {
 		return $dataTable->render('apps.customers.index');
 	}
 	protected function createInfo(): object {
-		return view('apps.customers.info');
+		$type_of_work = $this->typeOfWork();
+		return view('apps.customers.info', [
+			'type_of_work' => $type_of_work
+		]);
 	}
 	protected function storeInfo(Request $request) {
 		try {
@@ -42,22 +46,23 @@ class CustomerController extends Controller
 
 					$order = new Order;
 					$order->ref_user_id = $user->userCustomer->user->id;
-					$order->status = 'pending';
+					$order->order_status = 'pending';
 					$order->payment_status = 'pending';
 					$order->ref_office_id = $user->userCustomer->office_code;
 					$order->ref_office_name = $user->userCustomer->office_name;
 					$order->type_of_work = $request->type_of_work;
 					$order->type_of_work_other = $request->type_of_work_other;
 					$order->book_no = $request->book_no;
-					$order->book_date = $request->book_date;
+					$order->book_date = $this->convertJsDateToMySQL($request->book_date);
 					$order->ref_book_file_id = $last_file_upload_insert_id;
 					$order->save();
-
+                    $last_idx_id = $order->id;
 					Log::notice($user->userCustomer->user->first_name.' อับโหลดไฟล์หนังสือนำส่ง '.$new_name);
 					return redirect()
 						->back()
 						->with('action_notic', $user->userCustomer->user->first_name.' อับโหลดไฟล์หนังสือนำส่ง')
-						->with('success', 'บันทึกร่างข้อมูลทั่วไปสำเร็จ');
+						->with('success', 'บันทึกร่างข้อมูลทั่วไปสำเร็จ')
+                        ->with('idx', $last_idx_id);
 				} else {
 					Log::warning($user->userCustomer->user->first_name.' อับโหลดไฟล์หนังสือนำส่งไม่สำเร็จ');
 					return redirect()->back()->with('error', 'บันทึกข้อมูลไม่สำเร็จ');
@@ -83,7 +88,6 @@ class CustomerController extends Controller
 		try {
 			$orderDetail = new OrderDetail;
 			$orderDetail->id_card = $request->id_card;
-
 
 			$saved = $orderDetail->save();
 			$last_insert_id = $orderDetail->id;
