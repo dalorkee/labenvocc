@@ -36,7 +36,9 @@
 						<div class="form-row">
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
 								<label class="form-label" for="office_name">หน่วยงานที่ส่งตัวอย่าง <span class="text-red-600">*</span></label>
-								<input type="text" name="office_name" value="{{ Auth::user()->userCustomer->office_name }}" class="form-control" readonly>
+								<input type="hidden" name="order_id" value="{{ $order[0]->id ?? null }}">
+								<input type="hidden" name="office_id" value="{{ $order[0]->ref_office_id ?? Auth::user()->userCustomer->office_id }}">
+								<input type="text" name="office_name" value="{{ $order[0]->ref_office_name ?? Auth::user()->userCustomer->office_name }}" class="form-control" readonly>
 							</div>
 						</div>
 						<div class="form-row">
@@ -45,7 +47,7 @@
 								<div class="frame-wrap">
 									@foreach ($type_of_work as $key => $val)
 									<div class="custom-control custom-checkbox custom-control-inline">
-										<input type="checkbox" name="type_of_work" value="{{ $key }}" class="custom-control-input type-of-work" id="type_of_work{{ $key }}" {{ old('type_of_work') == $key ? 'checked' : '' }}>
+										<input type="checkbox" name="type_of_work" value="{{ $key }}" class="custom-control-input type-of-work" id="type_of_work{{ $key }}" {{ (isset($order) && $order[0]->type_of_work == $key) ? 'checked' : '' }}>
 										<label class="custom-control-label" for="type_of_work{{ $key }}">{{ $val }}</label>
 									</div>
 									@endforeach
@@ -53,7 +55,7 @@
 							</div>
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
 								<label class="form-label" for="type_of_work_other">ประเภทงานอื่นๆ ระบุ</label>
-								<input type="text" name="type_of_work_other" value="{{ old('motype_of_work_other') }}" id="type_of_work_other" class="form-control @error('type_of_work_other') is-invalid @enderror" disabled>
+								<input type="text" name="type_of_work_other" value="{{ $order[0]->motype_of_work_other ?? '' }}" id="type_of_work_other" class="form-control @error('type_of_work_other') is-invalid @enderror" disabled>
 								@error('type_of_work_other')
 									<div class="invalid-feedback" role="alert">{{ $message }}</div>
 								@enderror
@@ -62,7 +64,7 @@
 						<div class="form-row">
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
 								<label class="form-label" for="book_no">เลขที่หนังสือนำส่ง <span class="text-red-600">*</span></label>
-								<input type="text" name="book_no" value="{{ old('book_no') }}" class="form-control @error('book_no') is-invalid @enderror">
+								<input type="text" name="book_no" value="{{ $order[0]->book_no ?? '' }}" class="form-control @error('book_no') is-invalid @enderror">
 								@error('book_no')
 									<div class="invalid-feedback" role="alert">{{ $message }}</div>
 								@enderror
@@ -70,7 +72,7 @@
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
 								<label class="form-label" for="book_date">ลงวันที่ <span class="text-red-600">*</span></label>
 								<div class="input-group">
-									<input type="text" name="book_date" value="{{ old('book_date') }}" placeholder="เลือกวันที่" class="form-control @error('book_date') is-invalid @enderror" id="datepicker_book_date" readonly >
+									<input type="text" name="book_date" value="{{ $order[0]->book_date ?? '' }}" placeholder="เลือกวันที่" class="form-control @error('book_date') is-invalid @enderror" id="datepicker_book_date" readonly >
 									<div class="input-group-append">
 										<span class="input-group-text fs-xl">
 											<i class="fal fa-calendar-alt"></i>
@@ -87,8 +89,8 @@
 								<label class="form-label" for="inputGroupFile01">แนบไฟล์หนังสือนำส่ง <span class="text-red-600">*</span></label>
 								<div class="input-group">
 									<div class="custom-file">
-										<input type="file" name="book_file" value="{{ old('book_file') }}" class="custom-file-input @error('book_file') is-invalid @enderror" id="bookFile01" aria-describedby="bookFile01">
-										<label class="custom-file-label" for="bookFile01">ยังไม่มีไฟล์แนบ</label>
+										<input type="file" name="book_file" value="{{ $order[0]->ref_book_file_id ?? '' }}" accept="image/png, image/jpeg" class="custom-file-input @error('book_file') is-invalid @enderror" id="bookFile01" aria-describedby="bookFile01">
+										<label class="custom-file-label" for="bookFile01">{{ $order[0]->ref_book_file_id ?? 'ยังไม่มีไฟล์แนบ' }}</label>
 									</div>
 								</div>
 								@error('book_file')

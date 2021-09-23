@@ -16,10 +16,16 @@ class CustomerController extends Controller
 	protected function index(CustomersDataTable $dataTable): object {
 		return $dataTable->render('apps.customers.index');
 	}
-	protected function createInfo(): object {
+	protected function createInfo(Request $request): object {
 		$type_of_work = $this->typeOfWork();
+		if ($request->idx == 'new') {
+			$order = null;
+		} else {
+			$order = Order::whereId($request->idx)->get();
+		}
 		return view('apps.customers.info', [
-			'type_of_work' => $type_of_work
+			'type_of_work' => $type_of_work,
+			'order' => $order
 		]);
 	}
 	protected function storeInfo(Request $request) {
@@ -56,13 +62,13 @@ class CustomerController extends Controller
 					$order->book_date = $this->convertJsDateToMySQL($request->book_date);
 					$order->ref_book_file_id = $last_file_upload_insert_id;
 					$order->save();
-                    $last_idx_id = $order->id;
+					$last_idx_id = $order->id;
 					Log::notice($user->userCustomer->user->first_name.' อับโหลดไฟล์หนังสือนำส่ง '.$new_name);
 					return redirect()
 						->back()
 						->with('action_notic', $user->userCustomer->user->first_name.' อับโหลดไฟล์หนังสือนำส่ง')
 						->with('success', 'บันทึกร่างข้อมูลทั่วไปสำเร็จ')
-                        ->with('idx', $last_idx_id);
+						->with('idx', $last_idx_id);
 				} else {
 					Log::warning($user->userCustomer->user->first_name.' อับโหลดไฟล์หนังสือนำส่งไม่สำเร็จ');
 					return redirect()->back()->with('error', 'บันทึกข้อมูลไม่สำเร็จ');
