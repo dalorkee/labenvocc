@@ -44,7 +44,7 @@
 						<div class="btn-group" role="group">
 							<button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown"><i class="fal fa-plus-circle"></i> <span class="d-none d-sm-inline">สร้างคำขอส่งตัวอย่าง</span></button>
 							<div class="dropdown-menu">
-								<a class="dropdown-item" href="{{ route('customer.info', ['idx' => 'new']) }}">ตัวอย่างชีวภาพ</a>
+								<a class="dropdown-item" href="{{ route('customer.info', ['id' => 'new']) }}">ตัวอย่างชีวภาพ</a>
 								<a class="dropdown-item" href="javascript:void(0)">ตัวอย่างสิ่งแวดล้อม</a>
 							</div>
 						</div>

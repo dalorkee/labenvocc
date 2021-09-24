@@ -8,6 +8,7 @@ use App\Models\{Order,OrderDetail,Fileupload};
 use App\DataTables\{CustomersDataTable,CustParameterDataTable};
 use App\Traits\CommonTrait as TraitsCommonTrait;
 use App\Traits\{CustomerTrait,FileTrait,CommonTrait};
+use Illuminate\Routing\Redirector;
 
 class CustomerController extends Controller
 {
@@ -18,10 +19,12 @@ class CustomerController extends Controller
 	}
 	protected function createInfo(Request $request): object {
 		$type_of_work = $this->typeOfWork();
-		if ($request->idx == 'new') {
+		if ($request->id == 'new') {
 			$order = null;
 		} else {
-			$order = Order::whereId($request->idx)->get();
+			$order = Order::whereId($request->id)->get();
+            $file_name = FileUpload::find($request->id)->get();
+            //dd($file_name);
 		}
 		return view('apps.customers.info', [
 			'type_of_work' => $type_of_work,
@@ -62,13 +65,10 @@ class CustomerController extends Controller
 					$order->book_date = $this->convertJsDateToMySQL($request->book_date);
 					$order->ref_book_file_id = $last_file_upload_insert_id;
 					$order->save();
-					$last_idx_id = $order->id;
+					$last_order_id = $order->id;
 					Log::notice($user->userCustomer->user->first_name.' อับโหลดไฟล์หนังสือนำส่ง '.$new_name);
-					return redirect()
-						->back()
-						->with('action_notic', $user->userCustomer->user->first_name.' อับโหลดไฟล์หนังสือนำส่ง')
-						->with('success', 'บันทึกร่างข้อมูลทั่วไปสำเร็จ')
-						->with('idx', $last_idx_id);
+					return redirect()->route('info', ['id' => $last_order_id])
+						->withInput(['action_notic' => $user->userCustomer->user->first_name.' อับโหลดไฟล์หนังสือนำส่ง', 'success' =>'บันทึกร่างข้อมูลทั่วไปสำเร็จ']);
 				} else {
 					Log::warning($user->userCustomer->user->first_name.' อับโหลดไฟล์หนังสือนำส่งไม่สำเร็จ');
 					return redirect()->back()->with('error', 'บันทึกข้อมูลไม่สำเร็จ');

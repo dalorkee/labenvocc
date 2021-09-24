@@ -103,8 +103,8 @@
 						<div class="form-row">
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
 								<button type="submit" class="btn btn-primary ml-auto"><i class="fal fa-save"></i> บันทึกร่าง</button>
-								@if (Session::has('idx'))
-									<a href="{{ route('customer.parameter', ['idx' => Session::get('idx')]) }}" class="btn btn-warning ml-auto">ถัดไป <i class="fal fa-arrow-alt-right"></i></a>
+								@if ($order && $order[0]->id != 'new')
+									<a href="{{ route('customer.parameter', ['id' => $order[0]->id]) }}" class="btn btn-warning ml-auto">ถัดไป <i class="fal fa-arrow-alt-right"></i></a>
 								@endif
 							</div>
 						</div>
