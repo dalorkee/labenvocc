@@ -28,7 +28,7 @@ class CustomersDataTable extends DataTable
 					return Carbon::parse($field->created_at)->format('d/m/Y');
 				})
 				->editColumn('lab_station_id', function($field) use ($lab_station) {
-					return $lab_station[$field->lab_station_id];
+					return $lab_station[$field->lab_station_id] ?? null;
 				})
 				->addColumn('status', function() {
 					$htm = "<form>";
@@ -52,11 +52,10 @@ class CustomersDataTable extends DataTable
 					$htm .= "<li><a href=\"".$field->id."\"><i class=\"fal fa-print\"></i> รายงานผล</a></li></ul>";
 					return $htm;
 				})
-				// ->addColumn('action', function() {
-				// 	$htm = "<button type=\"button\" class=\"btn btn-danger\">จัดการ <i class=\"fal fa-angle-down\"></i></button>";
-				// 	return $htm;
-				// })
-				->rawColumns(['status', 'detail']);
+				->addColumn('action', function($field) {
+					return "<a href=\"".route('customer.info', ['id' => $field->id])."\" title=\"แก้ไข\" class=\"btn btn-warning\"><i class=\"fal fa-pencil\"></i></a>";
+				 })
+				->rawColumns(['status', 'detail', 'action']);
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
 		}
@@ -69,9 +68,7 @@ class CustomersDataTable extends DataTable
 	 * @return \Illuminate\Database\Eloquent\Builder
 	 */
 	public function query(Order $order) {
-		return $order->select('id', 'order_no', 'ref_user_id', 'lab_station_id', 'order_status', 'payment_status', 'detail', 'created_at')
-            ->whereNotNull('order_no')
-            ->limit(25);
+		return $order->select('id', 'ref_user_id', 'lab_station_id', 'order_status', 'payment_status', 'detail', 'created_at');
 	}
 
 	/**
@@ -137,12 +134,12 @@ class CustomersDataTable extends DataTable
 	protected function getColumns() {
 		try {
 			return [
-				Column::make('order_no')->title('เลขที่'),
+				Column::make('id')->title('เลขที่'),
 				Column::make('created_at')->title('วันที่สร้าง'),
 				Column::make('lab_station_id')->title('ส่งที่'),
 				Column::make('status')->title('สถานะ'),
 				Column::make('detail')->title('รายละเอียด'),
-				// Column::make('action')->title('จัดการ')->addClass('text-right'),
+				Column::make('action')->title('จัดการ')->addClass('text-right'),
 				// Column::computed('action')
 				// ->exportable(false)
 				// ->printable(false)

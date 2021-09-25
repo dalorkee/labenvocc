@@ -15,4 +15,8 @@ class Order extends Model
 	public function detail() {
 		return $this->hasMany(OrderDetail::class);
 	}
+
+	public function upload() {
+		return $this->hasMany(FileUpload::class);
+	}
 }
