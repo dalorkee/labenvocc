@@ -3,13 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\{Auth,Log,Storage,File};
+use Illuminate\Support\Facades\{Auth,Log,Storage,File,DB};
 use Spatie\Permission\Models\{Role,Permission};
 use App\Models\{Order,OrderDetail,Fileupload};
 use App\DataTables\{CustomersDataTable,CustParameterDataTable};
 use App\Traits\CommonTrait as TraitsCommonTrait;
 use App\Traits\{CustomerTrait,FileTrait,CommonTrait};
 use Illuminate\Routing\Redirector;
+use Livewire\Controllers\FileUploadHandler;
 
 class CustomerController extends Controller
 {
@@ -34,14 +35,10 @@ class CustomerController extends Controller
 	}
 	protected function createInfo(Request $request): object {
 		$type_of_work = $this->typeOfWork();
-		if ($request->id == 'new') {
-			$order = null;
-		} else {
-			$order = Order::whereId($request->id)->get();
-            dd($order->upload->file_name);
-			//$file_name = FileUpload::find($request->id)->get();
-			//dd($file_name);
-		}
+		$order = ($request->id != 'new') ? Order::find($request->id)->with('uploads')->get() : null;
+			//dd($order[0]->book_date_js);
+			//dd($order[0]['uploads'][0]->file_name);
+
 		return view('apps.customers.info', [
 			'type_of_work' => $type_of_work,
 			'order' => $order
@@ -49,21 +46,46 @@ class CustomerController extends Controller
 	}
 	protected function storeInfo(Request $request) {
 		try {
-			$order = new Order;
-			$order->ref_user_id = $this->user->userCustomer->user->id;
-			$order->order_status = 'pending';
-			$order->payment_status = 'pending';
-			$order->ref_office_id = $this->user->userCustomer->office_code;
-			$order->ref_office_name = $this->user->userCustomer->office_name;
-			$order->type_of_work = $request->type_of_work;
-			$order->type_of_work_other = $request->type_of_work_other;
-			$order->book_no = $request->book_no;
-			$order->book_date = $this->convertJsDateToMySQL($request->book_date);
-			$order->book_upload = ($request->hasFile('book_file')) ? 'y' : 'n';
-			$order_saved = $order->save();
+			$order = Order::updateOrCreate(
+				['id' => $request->order_id],
+				[
+					'ref_user_id' => $this->user->userCustomer->user->id,
+					'order_status' => 'pending',
+					'payment_status' => 'pending',
+					'ref_office_id' => $this->user->userCustomer->office_code,
+					'ref_office_name' => $this->user->userCustomer->office_name,
+					'type_of_work' => $request->type_of_work,
+					'type_of_work_other' => $request->type_of_work_other,
+					'book_no' => $request->book_no,
+					'book_date' => $this->convertJsDateToMySQL($request->book_date),
+					'book_upload' => ($request->hasFile('book_file')) ? 'y' : 'n'
+				]
+			);
 			$last_insert_order_id = $order->id;
+			// $order = new Order;
+			// $order->ref_user_id = $this->user->userCustomer->user->id;
+			// $order->order_status = 'pending';
+			// $order->payment_status = 'pending';
+			// $order->ref_office_id = $this->user->userCustomer->office_code;
+			// $order->ref_office_name = $this->user->userCustomer->office_name;
+			// $order->type_of_work = $request->type_of_work;
+			// $order->type_of_work_other = $request->type_of_work_other;
+			// $order->book_no = $request->book_no;
+			// $order->book_date = $this->convertJsDateToMySQL($request->book_date);
+			// $order->book_upload = ($request->hasFile('book_file')) ? 'y' : 'n';
+			// $order_saved = $order->save();
+			// $last_insert_order_id = $order->id;
 
 			if ($request->hasFile('book_file')) {
+				FileUpload::select('id', 'file_name')->whereOrder_id($request->id)->whereRef_user_id($this->user->id)->each(function($item, $key) {
+					if (Storage::disk('uploads')->exists($item->file_name)) {
+						Storage::dist('uploads')->delete($item->file_name);
+					}
+				});
+                FileUpload::forceDeleted()->whereOrder_id($request->id)->whereRef_user_id($this->user->id);
+
+
+
 				$file = $request->file('book_file');
 				$file_mime = $file->getMimeType();
 				$file_size_byte = $file->getSize();
@@ -88,14 +110,17 @@ class CustomerController extends Controller
 					Log::warning($this->user->userCustomer->user->first_name.' อับโหลดไฟล์หนังสือนำส่งไม่สำเร็จ');
 				}
 			}
-			if ($order_saved == true) {
-				return redirect()->route('customer.info', ['id' => $last_insert_order_id])->with(['success' => 'บันทึกร่าง [ข้อมูลทั่วไป] สำเร็จ']);
+			if ($order == true) {
+				return redirect()->route('customer.info.create', ['id' => $last_insert_order_id])->with(['success' => 'บันทึกร่าง [ข้อมูลทั่วไป] สำเร็จ']);
 			} else {
 				return redirect()->back()->with('error', 'บันทึกร่าง [ข้อมูลทั่วไป] ไม่สำเร็จ');
 			}
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
+			//DB::rollback();
+			return redirect()->route('customer.index')->with('error', $e->getMessage());
 		}
+		//DB::commit();
 	}
 
 	protected function createParameter(CustParameterDataTable $dataTable): object {

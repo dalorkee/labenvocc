@@ -24,7 +24,7 @@
 				</div>
 			</div>
 			<div class="panel-container show">
-				<form name="saveInfo" action="{{ route('customer.storeInfo') }}" method="POST" enctype="multipart/form-data">
+				<form name="saveInfo" action="{{ route('customer.info.store') }}" method="POST" enctype="multipart/form-data">
 					@csrf
 					<div class="panel-content">
 						<ul class="steps">
@@ -72,14 +72,14 @@
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
 								<label class="form-label" for="book_date">ลงวันที่ <span class="text-red-600">*</span></label>
 								<div class="input-group">
-									<input type="text" name="book_date" value="{{ $order[0]->book_date ?? '' }}" placeholder="เลือกวันที่" class="form-control @error('book_date') is-invalid @enderror" id="datepicker_book_date" readonly >
+									<input type="text" name="book_date" value="{{ $order[0]->book_date_js ?? '' }}" placeholder="เลือกวันที่" class="form-control @error('book_date_js') is-invalid @enderror" id="datepicker_book_date" readonly >
 									<div class="input-group-append">
 										<span class="input-group-text fs-xl">
 											<i class="fal fa-calendar-alt"></i>
 										</span>
 									</div>
 								</div>
-								@error('book_date')
+								@error('book_date_js')
 									<div class="invalid-feedback" role="alert">{{ $message }}</div>
 								@enderror
 							</div>
@@ -89,8 +89,8 @@
 								<label class="form-label" for="inputGroupFile01">แนบไฟล์หนังสือนำส่ง <span class="text-red-600">*</span></label>
 								<div class="input-group">
 									<div class="custom-file">
-										<input type="file" name="book_file" value="{{ $order[0]->ref_book_file_id ?? '' }}" accept="image/png, image/jpeg" class="custom-file-input @error('book_file') is-invalid @enderror" id="bookFile01" aria-describedby="bookFile01">
-										<label class="custom-file-label" for="bookFile01">{{ $order[0]->ref_book_file_id ?? 'ยังไม่มีไฟล์แนบ' }}</label>
+										<input type="file" name="book_file" class="custom-file-input @error('book_file') is-invalid @enderror" id="bookFile01" aria-describedby="bookFile01">
+										<label class="custom-file-label" for="bookFile01">{{ $order[0]['uploads'][0]->file_name ?? 'ยังไม่มีไฟล์แนบ' }}</label>
 									</div>
 								</div>
 								@error('book_file')

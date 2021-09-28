@@ -2,7 +2,7 @@
 
 namespace App\DataTables;
 
-use App\Models\Order;
+use App\Models\{Order,FileUpload,OrderDetail};
 use Yajra\DataTables\Html\{Button,Column};
 use Yajra\DataTables\Html\Editor\{Editor,Fields};
 use Yajra\DataTables\Services\DataTable;
@@ -53,7 +53,7 @@ class CustomersDataTable extends DataTable
 					return $htm;
 				})
 				->addColumn('action', function($field) {
-					return "<a href=\"".route('customer.info', ['id' => $field->id])."\" title=\"แก้ไข\" class=\"btn btn-warning\"><i class=\"fal fa-pencil\"></i></a>";
+					return "<a href=\"".route('customer.info.create', ['id' => $field->id])."\" title=\"แก้ไข\" class=\"btn btn-warning\"><i class=\"fal fa-pencil\"></i></a>";
 				 })
 				->rawColumns(['status', 'detail', 'action']);
 		} catch (\Exception $e) {

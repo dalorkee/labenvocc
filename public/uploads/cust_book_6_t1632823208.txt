@@ -1,0 +1,7 @@
+1 Multiple select หน้า pui list ให้ เปลี่ยน Status ได้ จาก PUI เป็น Confirm
+
+2 เพิ่มปุ่มลบ ในหน้า PUI List minimal
+
+3 ปรับให้สามารถค้นหาโดย SAT Code หรือ Passport ได้
+
+4 ซ่อน ช่องกรอก ใน PUI Invest โดยแยกเป็น Tab
