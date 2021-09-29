@@ -17,6 +17,8 @@ class CustomerController extends Controller
 	private object $user;
 	private string $user_role;
 
+	use CustomerTrait, FileTrait, CommonTrait;
+
 	public function __construct() {
 		$this->middleware('auth');
 		$this->middleware(['role:root|admin|customer']);
@@ -28,22 +30,19 @@ class CustomerController extends Controller
 		});
 	}
 
-	use CustomerTrait, FileTrait, CommonTrait;
-
 	protected function index(CustomersDataTable $dataTable): object {
 		return $dataTable->render('apps.customers.index');
 	}
+
 	protected function createInfo(Request $request): object {
 		$type_of_work = $this->typeOfWork();
-		$order = ($request->id != 'new') ? Order::find($request->id)->with('uploads')->get() : null;
-			//dd($order[0]->book_date_js);
-			//dd($order[0]['uploads'][0]->file_name);
-
+		$order = ($request->order_id != 'new') ? Order::whereId($request->order_id)->with('uploads')->get() : null;
 		return view('apps.customers.info', [
 			'type_of_work' => $type_of_work,
 			'order' => $order
 		]);
 	}
+
 	protected function storeInfo(Request $request) {
 		try {
 			$order = Order::updateOrCreate(
@@ -62,6 +61,7 @@ class CustomerController extends Controller
 				]
 			);
 			$last_insert_order_id = $order->id;
+			//dd($last_insert_order_id);
 			// $order = new Order;
 			// $order->ref_user_id = $this->user->userCustomer->user->id;
 			// $order->order_status = 'pending';
@@ -77,15 +77,15 @@ class CustomerController extends Controller
 			// $last_insert_order_id = $order->id;
 
 			if ($request->hasFile('book_file')) {
-				FileUpload::select('id', 'file_name')->whereOrder_id($request->id)->whereRef_user_id($this->user->id)->each(function($item, $key) {
+				/* Delete older files */
+				FileUpload::select('id', 'file_name')->whereOrder_id($request->order_id)->whereRef_user_id($this->user->id)->each(function($item, $key) {
 					if (Storage::disk('uploads')->exists($item->file_name)) {
 						Storage::dist('uploads')->delete($item->file_name);
 					}
 				});
-                FileUpload::forceDeleted()->whereOrder_id($request->id)->whereRef_user_id($this->user->id);
+				FileUpload::whereOrder_id($request->order_id)->forceDelete();
 
-
-
+				/* Create new file */
 				$file = $request->file('book_file');
 				$file_mime = $file->getMimeType();
 				$file_size_byte = $file->getSize();
@@ -111,7 +111,7 @@ class CustomerController extends Controller
 				}
 			}
 			if ($order == true) {
-				return redirect()->route('customer.info.create', ['id' => $last_insert_order_id])->with(['success' => 'บันทึกร่าง [ข้อมูลทั่วไป] สำเร็จ']);
+				return redirect()->route('customer.info.create', ['order_id' => $last_insert_order_id])->with(['success' => 'บันทึกร่าง [ข้อมูลทั่วไป] สำเร็จ']);
 			} else {
 				return redirect()->back()->with('error', 'บันทึกร่าง [ข้อมูลทั่วไป] ไม่สำเร็จ');
 			}

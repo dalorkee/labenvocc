@@ -53,7 +53,7 @@ class CustomersDataTable extends DataTable
 					return $htm;
 				})
 				->addColumn('action', function($field) {
-					return "<a href=\"".route('customer.info.create', ['id' => $field->id])."\" title=\"แก้ไข\" class=\"btn btn-warning\"><i class=\"fal fa-pencil\"></i></a>";
+					return "<a href=\"".route('customer.info.create', ['order_id' => $field->id])."\" title=\"แก้ไข\" class=\"btn btn-warning\"><i class=\"fal fa-pencil\"></i></a>";
 				 })
 				->rawColumns(['status', 'detail', 'action']);
 		} catch (\Exception $e) {

@@ -32,9 +32,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 		return view('dashboard');
 	})->name('dashboard');
 	Route::name('customer.')->group(function() {
-		Route::get('/customer/info/create/{id}', [CustomerController::class, 'createInfo'])->name('info.create');
+		Route::get('/customer/info/create/{order_id}', [CustomerController::class, 'createInfo'])->name('info.create');
 		Route::post('customer/info/store', [CustomerController::class, 'storeInfo'])->name('info.store');
-		Route::get('/customer/create/parameter/{id}', [CustomerController::class, 'createParameter'])->name('parameter');
+		Route::get('/customer/create/parameter/{order_id}', [CustomerController::class, 'createParameter'])->name('parameter');
 		Route::post('customer/store/parameter/personal', [CustomerController::class, 'storeParameterPersonalInfo'])->name('personal');
 	});
 });

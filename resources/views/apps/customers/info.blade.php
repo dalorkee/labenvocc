@@ -64,7 +64,7 @@
 						<div class="form-row">
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
 								<label class="form-label" for="book_no">เลขที่หนังสือนำส่ง <span class="text-red-600">*</span></label>
-								<input type="text" name="book_no" value="{{ $order[0]->book_no ?? '' }}" class="form-control @error('book_no') is-invalid @enderror">
+								<input type="text" name="book_no" value="{{ $order[0]->book_no.'xxx'.$order[0]->id ?? '' }}" class="form-control @error('book_no') is-invalid @enderror">
 								@error('book_no')
 									<div class="invalid-feedback" role="alert">{{ $message }}</div>
 								@enderror
@@ -104,7 +104,7 @@
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
 								<button type="submit" class="btn btn-primary ml-auto"><i class="fal fa-save"></i> บันทึกร่าง</button>
 								@if ($order && $order[0]->id != 'new')
-									<a href="{{ route('customer.parameter', ['id' => $order[0]->id]) }}" class="btn btn-warning ml-auto">ถัดไป <i class="fal fa-arrow-alt-right"></i></a>
+									<a href="{{ route('customer.parameter', ['order_id' => $order[0]->id]) }}" class="btn btn-warning ml-auto">ถัดไป <i class="fal fa-arrow-alt-right"></i></a>
 								@endif
 							</div>
 						</div>
