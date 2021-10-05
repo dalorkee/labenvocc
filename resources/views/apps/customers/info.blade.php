@@ -3,7 +3,7 @@
 <meta name="csrf-token" content="{{ csrf_token() }}">
 @endsection
 @section('style')
-<link href="{{ URL::asset('css/pj-step.css') }}" rel="stylesheet" type="text/css">
+<link href="{{ URL::asset('css/pj-step.css') }}" rel="stylesheet">
 <link href="{{ URL::asset('assets/css/formplugins/bootstrap-datepicker/bootstrap-datepicker.css') }}" rel="stylesheet" type="text/css">
 @endsection
 @section('content')
@@ -47,7 +47,7 @@
 								<div class="frame-wrap">
 									@foreach ($type_of_work as $key => $val)
 									<div class="custom-control custom-checkbox custom-control-inline">
-										<input type="checkbox" name="type_of_work" value="{{ $key }}" class="custom-control-input type-of-work" id="type_of_work{{ $key }}" {{ (isset($order) && $order[0]->type_of_work == $key) ? 'checked' : '' }}>
+										<input type="checkbox" name="type_of_work" value="{{ $key }}" class="custom-control-input type-of-work" id="type_of_work{{ $key }}" {{ (isset($order[0]->type_of_work) && $order[0]->type_of_work == $key) ? 'checked' : '' }}>
 										<label class="custom-control-label" for="type_of_work{{ $key }}">{{ $val }}</label>
 									</div>
 									@endforeach
@@ -64,7 +64,7 @@
 						<div class="form-row">
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
 								<label class="form-label" for="book_no">เลขที่หนังสือนำส่ง <span class="text-red-600">*</span></label>
-								<input type="text" name="book_no" value="{{ $order[0]->book_no.'xxx'.$order[0]->id ?? '' }}" class="form-control @error('book_no') is-invalid @enderror">
+								<input type="text" name="book_no" value="{{ $order[0]->book_no ?? null }}" class="form-control @error('book_no') is-invalid @enderror">
 								@error('book_no')
 									<div class="invalid-feedback" role="alert">{{ $message }}</div>
 								@enderror
@@ -103,8 +103,8 @@
 						<div class="form-row">
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
 								<button type="submit" class="btn btn-primary ml-auto"><i class="fal fa-save"></i> บันทึกร่าง</button>
-								@if ($order && $order[0]->id != 'new')
-									<a href="{{ route('customer.parameter', ['order_id' => $order[0]->id]) }}" class="btn btn-warning ml-auto">ถัดไป <i class="fal fa-arrow-alt-right"></i></a>
+								@if (!is_null($order) && count($order) > 0)
+									<a href="{{ route('customer.parameter.create', ['order_id' => $order[0]->id]) }}" class="btn btn-warning ml-auto">ถัดไป <i class="fal fa-arrow-alt-right"></i></a>
 								@endif
 							</div>
 						</div>
@@ -116,7 +116,7 @@
 </div>
 @endsection
 @section('script')
-<script src="{{ URL::asset('assets/js/formplugins/bootstrap-datepicker/bootstrap-datepicker.js') }}"></script>
+<script type="text/javascript" src="{{ URL::asset('assets/js/formplugins/bootstrap-datepicker/bootstrap-datepicker.js') }}"></script>
 <script>
 	var controls = {
 		leftArrow: '<i class="fal fa-angle-left" style="font-size: 1.25rem"></i>',

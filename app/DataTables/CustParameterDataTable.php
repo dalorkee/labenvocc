@@ -41,7 +41,7 @@ class CustParameterDataTable extends DataTable
 	public function query(OrderDetail $orderDetail) {
 		//return $orderDetail->newQuery();
 		//$orders =  OrderDetail::select('id', 'firstname', 'lastname', 'age_year', 'work_life_year', 'specimen_date' );
-		$orders = OrderDetail::with('parameters')->select('*');
+		$orders = OrderDetail::with('parameters')->select('*')->orderBy('id', 'ASC');
 		return $orders;
 	}
 

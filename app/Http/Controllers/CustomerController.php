@@ -36,7 +36,11 @@ class CustomerController extends Controller
 
 	protected function createInfo(Request $request): object {
 		$type_of_work = $this->typeOfWork();
-		$order = ($request->order_id != 'new') ? Order::whereId($request->order_id)->with('uploads')->get() : null;
+		if ($request->order_id == 'new') {
+			$order = null;
+		 } else {
+			 $order = Order::whereId($request->order_id)->with('uploads')->get();
+		 }
 		return view('apps.customers.info', [
 			'type_of_work' => $type_of_work,
 			'order' => $order
@@ -61,29 +65,19 @@ class CustomerController extends Controller
 				]
 			);
 			$last_insert_order_id = $order->id;
-			//dd($last_insert_order_id);
-			// $order = new Order;
-			// $order->ref_user_id = $this->user->userCustomer->user->id;
-			// $order->order_status = 'pending';
-			// $order->payment_status = 'pending';
-			// $order->ref_office_id = $this->user->userCustomer->office_code;
-			// $order->ref_office_name = $this->user->userCustomer->office_name;
-			// $order->type_of_work = $request->type_of_work;
-			// $order->type_of_work_other = $request->type_of_work_other;
-			// $order->book_no = $request->book_no;
-			// $order->book_date = $this->convertJsDateToMySQL($request->book_date);
-			// $order->book_upload = ($request->hasFile('book_file')) ? 'y' : 'n';
-			// $order_saved = $order->save();
-			// $last_insert_order_id = $order->id;
-
 			if ($request->hasFile('book_file')) {
 				/* Delete older files */
 				FileUpload::select('id', 'file_name')->whereOrder_id($request->order_id)->whereRef_user_id($this->user->id)->each(function($item, $key) {
 					if (Storage::disk('uploads')->exists($item->file_name)) {
-						Storage::dist('uploads')->delete($item->file_name);
+						/* uncomment this where need delete the file */
+						/*
+						Storage::disk('uploads')->delete($item->file_name);
+						FileUpload::whereFile_name($item->file_name)->forceDelete();
+						*/
+						FileUpload::find($item->id)->delete();
+						Log::warning($this->user->userCustomer->first_name.' ลบไฟล์หนังสือนำส่ง [id:'.$item->id.']');
 					}
 				});
-				FileUpload::whereOrder_id($request->order_id)->forceDelete();
 
 				/* Create new file */
 				$file = $request->file('book_file');
@@ -105,9 +99,9 @@ class CustomerController extends Controller
 					$file_upload->file_size = $file_size;
 					$file_upload->note = 'หนังสือนำส่ง';
 					$file_upload->save();
-					Log::notice($this->user->userCustomer->user->first_name.' อับโหลดไฟล์หนังสือนำส่ง '.$new_name);
+					Log::notice($this->user->userCustomer->first_name.' อับโหลดไฟล์หนังสือนำส่ง '.$new_name);
 				} else {
-					Log::warning($this->user->userCustomer->user->first_name.' อับโหลดไฟล์หนังสือนำส่งไม่สำเร็จ');
+					Log::warning($this->user->userCustomer->first_name.' อับโหลดไฟล์หนังสือนำส่งไม่สำเร็จ');
 				}
 			}
 			if ($order == true) {
@@ -123,30 +117,140 @@ class CustomerController extends Controller
 		//DB::commit();
 	}
 
-	protected function createParameter(CustParameterDataTable $dataTable): object {
-		return $dataTable->render('apps.customers.parameter');
+	protected function createParameter(Request $request, CustParameterDataTable $dataTable): object {
+		$order_id = $request->order_id;
+		return $dataTable->render('apps.customers.parameter', compact('order_id'));
 	}
-	protected function storeParameterPersonalInfo(Request $request) {
-		// return redirect()->back()->with('action_alert', 'บันทึกข้อมูลผู้ใช้สำเร็จแล้ว');
-		// exit;
+
+	protected function storeParameterPersonal(Request $request) {
 		$request->validate([
-			'id_card'=>'bail|required',
+			'order_id'=>'bail|required',
+			'id_card'=>'required',
+			'title_name'=>'required',
 		],[
+			'order_id.required'=>'ไม่พบรหัสคำสั่งซื้ัอ โปรดตรวจสอบ',
 			'id_card.required'=>'โปรดกรอกเลขบัตรประชาชน',
+			'title_name.required'=>'โปรดกรอกคำนำหน้าชื่อ',
 		]);
 		try {
 			$orderDetail = new OrderDetail;
+			$orderDetail->order_id = $request->order_id;
 			$orderDetail->id_card = $request->id_card;
-
+			$orderDetail->passport = $request->passport;
+			$orderDetail->title_name = $request->title_name;
+			$orderDetail->firstname = $request->firstname;
+			$orderDetail->lastname = $request->lastname;
+			$orderDetail->age_year = $request->age_year;
+			$orderDetail->division = $request->division;
+			$orderDetail->work_life_year = $request->work_life_year;
+			$orderDetail->specimen_date = $this->convertJsDateToMySQL($request->specimen_date);
+			$orderDetail->note = $request->note;
 			$saved = $orderDetail->save();
 			$last_insert_id = $orderDetail->id;
 			if ($saved == true) {
-				return redirect()->back()->with('success', 'บันทึกร่างข้อมูลทั่วไปสำเร็จ');
+				return redirect()->back()->with('success', 'บันทึกข้อมูลแล้ว');
 			} else {
-				return redirect()->back()->with('error', 'บันทึกข้อมูลไม่สำเร็จ');
+				return redirect()->back()->with('error', 'ไม่สามารถบันทึกข้อมูลได้');
 			}
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
 		}
+	}
+
+	protected function editParameterPersonal(Request $request, $message="null") {
+        $order_detail = OrderDetail::find((int)$request->id);
+        //dd($order_detail);
+		switch ($order_detail->title_name) {
+			case "mr":
+				$mr_chk = "checked";
+				$mrs_chk = null;
+				$miss_chk = null;
+				break;
+			case "mrs":
+				$mr_chk = null;
+				$mrs_chk = "checked";
+				$miss_chk = null;
+				break;
+			case "miss":
+				$mr_chk = null;
+				$mrs_chk = null;
+				$miss_chk = "checked";
+				break;
+			default:
+				$mr_chk = null;
+				$mrs_chk = null;
+				$miss_chk = null;
+		}
+        $edit_specimen_date = $this->convertMySQLDateToJs($order_detail->specimen_date);
+		$htm = "
+		<div class=\"form-row\">
+			<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3\">
+				<label class=\"form-label\" for=\"title_name\">คำนำหน้าชื่อ <span class=\"text-red-600\">*</span></label>
+				<div class=\"frame-wrap\">
+					<div class=\"custom-control custom-checkbox custom-control-inline\">
+						<input type=\"checkbox\" name=\"title_name\" value=\"mr\" class=\"custom-control-input\" id=\"edit_chk_mr\"".$mr_chk.">
+						<label class=\"custom-control-label\" for=\"edit_chk_mr\">นาย</label>
+					</div>
+					<div class=\"custom-control custom-checkbox custom-control-inline\">
+						<input type=\"checkbox\" name=\"title_name\" value=\"mrs\" class=\"custom-control-input\" id=\"edit_chk_mrs\"".$mrs_chk.">
+						<label class=\"custom-control-label\" for=\"edit_chk_mrs\">นาง</label>
+					</div>
+					<div class=\"custom-control custom-checkbox custom-control-inline\">
+						<input type=\"checkbox\" name=\"title_name\" value=\"miss\" class=\"custom-control-input\" id=\"edit_chk_miss\"".$miss_chk.">
+						<label class=\"custom-control-label\" for=\"edit_chk_miss\">นางสาว</label>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class=\"form-row\">
+			<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3\">
+				<label class=\"form-label\" for=\"id_card\">เลขบัตรประชาชน <span class=\"text-red-600\">*</span></label>
+				<input type=\"hidden\" name=\"order_id\" value=\"".$order_detail->order_id."\">
+				<input type=\"text\" name=\"id_card\" value=\"".$order_detail->id_card."\" placeholder=\"\" data-inputmask=\"'mask': '9-9999-99999-99-9'\" class=\"form-control\">
+			</div>
+			<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3\">
+				<label class=\"form-label\" for=\"passport\">พาสปอร์ต</label>
+				<input type=\"text\" name=\"passport\" value=\"".$order_detail->passport."\" class=\"form-control\">
+			</div>
+			<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3\">
+				<label class=\"form-label\" for=\"firstname\">ชื่อ <span class=\"text-red-600\">*</span></label>
+				<input type=\"text\" name=\"firstname\" value=\"".$order_detail->firstname."\" class=\"form-control\">
+			</div>
+			<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3\">
+				<label class=\"form-label\" for=\"lastname\">นามสกุล <span class=\"text-red-600\">*</span></label>
+				<input type=\"text\" name=\"lastname\" value=\"".$order_detail->lastname."\" class=\"form-control\">
+			</div>
+			<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3\">
+				<label class=\"form-label\" for=\"age_year\">อายุ/ปี <span class=\"text-red-600\">*</span></label>
+				<input type=\"number\" name=\"age_year\" value=\"".$order_detail->age_year."\" min=\"1\" max=\"100\" class=\"form-control\">
+			</div>
+			<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3\">
+				<label class=\"form-label\" for=\"division\">แผนก <span class=\"text-red-600\">*</span></label>
+				<input type=\"text\" name=\"division\" value=\"".$order_detail->division."\" class=\"form-control\">
+			</div>
+			<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3\">
+				<label class=\"form-label\" for=\"work_life_year\">อายุงาน/ปี <span class=\"text-red-600\">*</span></label>
+				<input type=\"number\" name=\"work_life_year\" value=\"".$order_detail->work_life_year."\" min=\"1\" max=\"100\" class=\"form-control\">
+			</div>
+			<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3\">
+				<label class=\"form-label\" for=\"specimen_date\">วันที่เก็บตัวอย่าง <span class=\"text-red-600\">*</span></label>
+				<div class=\"input-group\">
+					<input type=\"text\" name=\"specimen_date\" value=\"".$edit_specimen_date."\" class=\"form-control\" readonly placeholder=\"เลือกวันที่\" id=\"datepicker_edit_specimen_date\">
+					<div class=\"input-group-append\">
+						<span class=\"input-group-text fs-xl\">
+							<i class=\"fal fa-calendar-alt\"></i>
+						</span>
+					</div>
+				</div>
+			</div>
+			<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3\">
+				<label class=\"form-label\" for=\"note\">หมายเหตุ</label>
+				<input type=\"text\" name=\"note\" value=\"".$order_detail->note."\" class=\"form-control\">
+			</div>
+		</div>";
+		return $htm;
+	}
+	protected function updateParameterPersonal(Request $request) {
+		dd('jetkhe');
 	}
 }

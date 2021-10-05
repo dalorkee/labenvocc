@@ -1,0 +1,25 @@
+newWeb 506 centOS 7 ติดตั้ง Ap แล้ว 203.157.15.18 
+root
+WE&*L^opN-hv,^]
+
+DB เฉพาะเข้าในเครื่อง 203.157.15.18
+root
+fk9hkg:Hog9viN
+
+DB เข้าจากภายนอก 203.157.15.18 
+webboe
+web4boe
+
+remote 203.157.15.220 backup DB
+administrator
+CeI%B)E!@#$lv'ihvp[200]
+
+DB 203.157.15.220
+root
+B)E!@#$lv'ihvp[200]
+
+203.157.15.25 web backup web 30 เหมือนกันทุกอย่าง
+root
+B)Eit[kf
+
+outprior => fetp19080459

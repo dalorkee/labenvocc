@@ -7,6 +7,7 @@
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/css/datagrid/datatables/datatables.bundle.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('vendor/jquery-contextmenu/css/jquery.contextMenu.min.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/css/notifications/sweetalert2/sweetalert2.bundle.css') }}" media="screen, print">
+<link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/css/formplugins/bootstrap-datepicker/bootstrap-datepicker.css') }}">
 <style>
 .btn-group {margin:0 0 5px 0;padding:0;}
 .dataTables_filter label {margin-top: 8px;}
@@ -46,7 +47,7 @@
 						<div class="form-row">
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
 								<button class="btn btn-primary ml-auto" type="button"><i class="fal fa-save"></i> บันทึกร่าง</button>
-								<a href="{{ route('customer.info', ['idx' => Session::get('idx')]) }}" class="btn btn-warning ml-auto"><i class="fal fa-arrow-alt-left"></i> ก่อนหน้า</a>
+								<a href="{{ route('customer.info.create', ['order_id' => $order_id]) }}" class="btn btn-warning ml-auto"><i class="fal fa-arrow-alt-left"></i> ก่อนหน้า</a>
 								<a href="" class="btn btn-warning ml-auto">ถัดไป <i class="fal fa-arrow-alt-right"></i></a>
 							</div>
 						</div>
@@ -56,11 +57,11 @@
 		</div>
 	</div>
 </div>
-<!-- Modal New Data-->
+<!-- Modal new personal data-->
 <div class="modal fade font-prompt" id="new-data-modal" data-keyboard="false" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
 	<div class="modal-dialog modal-lg modal-dialog-centered" role="document">
 		<div class="modal-content">
-			<form name="modal_new_data" action="{{ route('customer.personal') }}" method="POST">
+			<form name="modal_new_data" action="{{ route('customer.parameter.personal.store') }}" method="POST">
 				@csrf
 				<div class="modal-header bg-green-600 text-white">
 					<h5 class="modal-title"><i class="fal fa-plus-circle"></i> เพิ่มข้อมูลใหม่</h5>
@@ -91,7 +92,8 @@
 					<div class="form-row">
 						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
 							<label class="form-label" for="id_card">เลขบัตรประชาชน <span class="text-red-600">*</span></label>
-							<input type="text" name="id_card" value="{{ old('id_card') }}" class="form-control @error('id_card') is-invalid @enderror">
+							<input type="hidden" name="order_id" value="{{ $order_id }}">
+							<input type="text" name="id_card" value="{{ old('id_card') }}" placeholder="" data-inputmask="'mask': '9-9999-99999-99-9'" class="form-control @error('id_card') is-invalid @enderror">
 							@error('id_card')
 								<div class="invalid-feedback" role="alert">{{ $message }}</div>
 							@enderror
@@ -118,8 +120,8 @@
 							@enderror
 						</div>
 						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
-							<label class="form-label" for="age_year">อายุ <span class="text-red-600">*</span></label>
-							<input type="text" name="age_year" value="{{ old('age_year') }}" class="form-control @error('age_year') is-invalid @enderror" >
+							<label class="form-label" for="age_year">อายุ/ปี <span class="text-red-600">*</span></label>
+							<input type="number" name="age_year" value="{{ old('age_year') }}" min="1" max="100" class="form-control @error('age_year') is-invalid @enderror" >
 							@error('age_year')
 								<div class="invalid-feedback" role="alert">{{ $message }}</div>
 							@enderror
@@ -132,8 +134,8 @@
 							@enderror
 						</div>
 						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
-							<label class="form-label" for="work_life_year">อายุงาน <span class="text-red-600">*</span></label>
-							<input type="text" name="work_life_year" value="{{ old('work_life_year') }}" class="form-control @error('work_life_year') is-invalid @enderror" >
+							<label class="form-label" for="work_life_year">อายุงาน/ปี <span class="text-red-600">*</span></label>
+							<input type="number" name="work_life_year" value="{{ old('work_life_year') }}" min="1" max="100" class="form-control @error('work_life_year') is-invalid @enderror" >
 							@error('work_life_year')
 								<div class="invalid-feedback" role="alert">{{ $message }}</div>
 							@enderror
@@ -166,22 +168,61 @@
 		</div>
 	</div>
 </div>
+<!-- Modal update personal Data-->
+<div class="modal fade font-prompt" id="edit-customer-personal-modal" data-keyboard="false" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<form name="modal_new_data" action="{{ route('customer.parameter.personal.update') }}" method="POST">
+				@csrf
+				<div class="modal-header bg-red-500 text-white">
+					<h5 class="modal-title"><i class="fal fa-pencil"></i> แก้ไขข้อมูล รหัส {{ $order_id }}</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true"><i class="fal fa-times"></i></span>
+					</button>
+				</div>
+				<div class="modal-body" id="edit-customer-personal">
+
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">ปิด</button>
+					<button type="submit" class="btn btn-primary">บันทึก</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
 @endsection
 @section('script')
 <script type="text/javascript" src="{{ URL::asset('assets/js/datagrid/datatables/datatables.bundle.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/buttons.server-side.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('vendor/jquery-contextmenu/js/jquery.contextMenu.min.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('assets/js/notifications/sweetalert2/sweetalert2.bundle.js') }}"></script>
+<script type="text/javascript" src="{{ URL::asset('assets/js/formplugins/bootstrap-datepicker/bootstrap-datepicker.js') }}"></script>
+<script type="text/javascript" src="{{ URL::asset('assets/js/formplugins/inputmask/inputmask.bundle.js') }}"></script>
 {{ $dataTable->scripts() }}
 <script>
 function newData(){$('#new-data-modal').modal('show');}
+var controls = {
+	leftArrow: '<i class="fal fa-angle-left" style="font-size: 1.25rem"></i>',
+	rightArrow: '<i class="fal fa-angle-right" style="font-size: 1.25rem"></i>'
+}
+var runDatePicker = function() {
+	$('#datepicker_specimen_date', '#datepicker_edit_specimen_date').datepicker({
+		format: 'dd/mm/yyyy',
+		todayHighlight: true,
+		orientation: "bottom left",
+		templates: controls
+	});
+}
 </script>
 <script>
 $(document).ready(function() {
 	$.ajaxSetup({headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}});
+	runDatePicker();
 	$('input[name="title_name"]').on('change', function() {
 		$('input[name="' + this.name + '"]').not(this).prop('checked', false);
 	});
+	$(":input").inputmask();
 	$.contextMenu({
 		selector: '.context-nav',
 		trigger: 'left',
@@ -192,13 +233,13 @@ $(document).ready(function() {
 			switch (itemKey) {
 				case 'edit':
 					$.ajax({
-						method: 'POST',
-						url: '',
+						method: 'GET',
+						url: '{{ route("customer.parameter.personal.edit") }}',
 						data: {id:id},
 						dataType: 'HTML',
 						success: function(data) {
-							$('#data_resp').html(data);
-							$('#edit-modal').modal({backdrop: 'static', keyboard: false})
+							$('#edit-customer-personal').html(data);
+							$('#edit-customer-personal-modal').modal({backdrop: 'static', keyboard: false})
 						},
 						error: function(data, status, error) {
 							alert(error);
