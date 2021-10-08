@@ -93,7 +93,7 @@
 						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
 							<label class="form-label" for="id_card">เลขบัตรประชาชน <span class="text-red-600">*</span></label>
 							<input type="hidden" name="order_id" value="{{ $order_id }}">
-							<input type="text" name="id_card" value="{{ old('id_card') }}" placeholder="" data-inputmask="'mask': '9-9999-99999-99-9'" class="form-control @error('id_card') is-invalid @enderror">
+							<input type="text" name="id_card" value="{{ old('id_card') }}" placeholder="" data-inputmask="'mask': '9-9999-99999-99-9'" maxlength="18" class="form-control @error('id_card') is-invalid @enderror">
 							@error('id_card')
 								<div class="invalid-feedback" role="alert">{{ $message }}</div>
 							@enderror
@@ -161,8 +161,8 @@
 					</div>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-dismiss="modal">ปิด</button>
-					<button type="submit" class="btn btn-primary">บันทึก</button>
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">ยกเลิก</button>
+					<button type="submit" class="btn btn-success">บันทึกข้อมูล</button>
 				</div>
 			</form>
 		</div>
@@ -171,24 +171,7 @@
 <!-- Modal update personal Data-->
 <div class="modal fade font-prompt" id="edit-customer-personal-modal" data-keyboard="false" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
 	<div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-		<div class="modal-content">
-			<form name="modal_new_data" action="{{ route('customer.parameter.personal.update') }}" method="POST">
-				@csrf
-				<div class="modal-header bg-red-500 text-white">
-					<h5 class="modal-title"><i class="fal fa-pencil"></i> แก้ไขข้อมูล รหัส {{ $order_id }}</h5>
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true"><i class="fal fa-times"></i></span>
-					</button>
-				</div>
-				<div class="modal-body" id="edit-customer-personal">
-
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-dismiss="modal">ปิด</button>
-					<button type="submit" class="btn btn-primary">บันทึก</button>
-				</div>
-			</form>
-		</div>
+		<div class="modal-content" id="edit-customer-personal"></div>
 	</div>
 </div>
 @endsection
@@ -207,7 +190,7 @@ var controls = {
 	rightArrow: '<i class="fal fa-angle-right" style="font-size: 1.25rem"></i>'
 }
 var runDatePicker = function() {
-	$('#datepicker_specimen_date', '#datepicker_edit_specimen_date').datepicker({
+	$('#datepicker_specimen_date').datepicker({
 		format: 'dd/mm/yyyy',
 		todayHighlight: true,
 		orientation: "bottom left",
@@ -239,11 +222,16 @@ $(document).ready(function() {
 						dataType: 'HTML',
 						success: function(data) {
 							$('#edit-customer-personal').html(data);
-							$('#edit-customer-personal-modal').modal({backdrop: 'static', keyboard: false})
+                            $(":input").inputmask();
+							$('#datepicker_edit_specimen_date').datepicker({
+								format: 'dd/mm/yyyy',
+								todayHighlight: true,
+								orientation: "bottom left",
+								templates: controls
+							});
+							$('#edit-customer-personal-modal').modal({backdrop: 'static', keyboard: false});
 						},
-						error: function(data, status, error) {
-							alert(error);
-						}
+						error: function(data, status, error) {alert(error);}
 					});
 					break;
 				case 'view':

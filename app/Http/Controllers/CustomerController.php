@@ -158,8 +158,8 @@ class CustomerController extends Controller
 	}
 
 	protected function editParameterPersonal(Request $request, $message="null") {
-        $order_detail = OrderDetail::find((int)$request->id);
-        //dd($order_detail);
+		$order_detail = OrderDetail::find((int)$request->id);
+		//dd($order_detail);
 		switch ($order_detail->title_name) {
 			case "mr":
 				$mr_chk = "checked";
@@ -181,76 +181,122 @@ class CustomerController extends Controller
 				$mrs_chk = null;
 				$miss_chk = null;
 		}
-        $edit_specimen_date = $this->convertMySQLDateToJs($order_detail->specimen_date);
+		$edit_specimen_date = $this->convertMySQLDateToJs($order_detail->specimen_date);
 		$htm = "
-		<div class=\"form-row\">
-			<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3\">
-				<label class=\"form-label\" for=\"title_name\">คำนำหน้าชื่อ <span class=\"text-red-600\">*</span></label>
-				<div class=\"frame-wrap\">
-					<div class=\"custom-control custom-checkbox custom-control-inline\">
-						<input type=\"checkbox\" name=\"title_name\" value=\"mr\" class=\"custom-control-input\" id=\"edit_chk_mr\"".$mr_chk.">
-						<label class=\"custom-control-label\" for=\"edit_chk_mr\">นาย</label>
+		<form name=\"modal_new_data\" action=\"".route('customer.parameter.personal.update')."\" method=\"POST\">
+		<div class=\"modal-header bg-red-500 text-white\">
+			<h5 class=\"modal-title\"><i class=\"fal fa-pencil\"></i> แก้ไขข้อมูล รหัส ".$request->id."</h5>
+			<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">
+				<span aria-hidden=\"true\"><i class=\"fal fa-times\"></i></span>
+			</button>
+		</div>
+		<div class=\"modal-body\">
+			<div class=\"form-row\">
+				<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3\">
+					<label class=\"form-label\" for=\"title_name\">คำนำหน้าชื่อ <span class=\"text-red-600\">*</span></label>
+					<input type=\"hidden\" name=\"_token\" value=\"".csrf_token()."\">
+                    <input type=\"hidden\" name=\"edit_order_id\" value=\"".$order_detail->order_id."\">
+					<div class=\"frame-wrap\">
+						<div class=\"custom-control custom-checkbox custom-control-inline\">
+							<input type=\"checkbox\" name=\"edit_title_name\" value=\"mr\" class=\"custom-control-input\" id=\"edit_chk_mr\"".$mr_chk.">
+							<label class=\"custom-control-label\" for=\"edit_chk_mr\">นาย</label>
+						</div>
+						<div class=\"custom-control custom-checkbox custom-control-inline\">
+							<input type=\"checkbox\" name=\"edit_title_name\" value=\"mrs\" class=\"custom-control-input\" id=\"edit_chk_mrs\"".$mrs_chk.">
+							<label class=\"custom-control-label\" for=\"edit_chk_mrs\">นาง</label>
+						</div>
+						<div class=\"custom-control custom-checkbox custom-control-inline\">
+							<input type=\"checkbox\" name=\"edit_title_name\" value=\"miss\" class=\"custom-control-input\" id=\"edit_chk_miss\"".$miss_chk.">
+							<label class=\"custom-control-label\" for=\"edit_chk_miss\">นางสาว</label>
+						</div>
 					</div>
-					<div class=\"custom-control custom-checkbox custom-control-inline\">
-						<input type=\"checkbox\" name=\"title_name\" value=\"mrs\" class=\"custom-control-input\" id=\"edit_chk_mrs\"".$mrs_chk.">
-						<label class=\"custom-control-label\" for=\"edit_chk_mrs\">นาง</label>
+				</div>
+			</div>
+			<div class=\"form-row\">
+				<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3\">
+					<label class=\"form-label\" for=\"id_card\">เลขบัตรประชาชน <span class=\"text-red-600\">*</span></label>
+					<input type=\"text\" name=\"id_card\" value=\"".$order_detail->id_card."\" placeholder=\"\" data-inputmask=\"'mask': '9-9999-99999-99-9'\" maxlength=\"18\" class=\"form-control\">
+				</div>
+				<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3\">
+					<label class=\"form-label\" for=\"passport\">พาสปอร์ต</label>
+					<input type=\"text\" name=\"edit_passport\" value=\"".$order_detail->passport."\" maxlength=\"30\" class=\"form-control\">
+				</div>
+				<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3\">
+					<label class=\"form-label\" for=\"firstname\">ชื่อ <span class=\"text-red-600\">*</span></label>
+					<input type=\"text\" name=\"edit_firstname\" value=\"".$order_detail->firstname."\" class=\"form-control\">
+				</div>
+				<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3\">
+					<label class=\"form-label\" for=\"lastname\">นามสกุล <span class=\"text-red-600\">*</span></label>
+					<input type=\"text\" name=\"edit_lastname\" value=\"".$order_detail->lastname."\" class=\"form-control\">
+				</div>
+				<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3\">
+					<label class=\"form-label\" for=\"age_year\">อายุ/ปี <span class=\"text-red-600\">*</span></label>
+					<input type=\"number\" name=\"edit_age_year\" value=\"".$order_detail->age_year."\" min=\"1\" max=\"100\" class=\"form-control\">
+				</div>
+				<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3\">
+					<label class=\"form-label\" for=\"division\">แผนก <span class=\"text-red-600\">*</span></label>
+					<input type=\"text\" name=\"edit_division\" value=\"".$order_detail->division."\" class=\"form-control\">
+				</div>
+				<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3\">
+					<label class=\"form-label\" for=\"work_life_year\">อายุงาน/ปี <span class=\"text-red-600\">*</span></label>
+					<input type=\"number\" name=\"edit_work_life_year\" value=\"".$order_detail->work_life_year."\" min=\"1\" max=\"100\" class=\"form-control\">
+				</div>
+				<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3\">
+					<label class=\"form-label\" for=\"edit_specimen_date\">วันที่เก็บตัวอย่าง <span class=\"text-red-600\">*</span></label>
+					<div class=\"input-group\">
+						<input type=\"text\" name=\"edit_specimen_date\" value=\"".$edit_specimen_date."\" class=\"form-control\" readonly placeholder=\"เลือกวันที่\" id=\"datepicker_edit_specimen_date\">
+						<div class=\"input-group-append\">
+							<span class=\"input-group-text fs-xl\">
+								<i class=\"fal fa-calendar-alt\"></i>
+							</span>
+						</div>
 					</div>
-					<div class=\"custom-control custom-checkbox custom-control-inline\">
-						<input type=\"checkbox\" name=\"title_name\" value=\"miss\" class=\"custom-control-input\" id=\"edit_chk_miss\"".$miss_chk.">
-						<label class=\"custom-control-label\" for=\"edit_chk_miss\">นางสาว</label>
-					</div>
+				</div>
+				<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3\">
+					<label class=\"form-label\" for=\"note\">หมายเหตุ</label>
+					<input type=\"text\" name=\"edit_note\" value=\"".$order_detail->note."\" class=\"form-control\">
 				</div>
 			</div>
 		</div>
-		<div class=\"form-row\">
-			<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3\">
-				<label class=\"form-label\" for=\"id_card\">เลขบัตรประชาชน <span class=\"text-red-600\">*</span></label>
-				<input type=\"hidden\" name=\"order_id\" value=\"".$order_detail->order_id."\">
-				<input type=\"text\" name=\"id_card\" value=\"".$order_detail->id_card."\" placeholder=\"\" data-inputmask=\"'mask': '9-9999-99999-99-9'\" class=\"form-control\">
+		<div class=\"modal-footer\">
+				<button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">ยกเลิก</button>
+				<button type=\"submit\" class=\"btn btn-danger\">แก้ไขข้อมูล</button>
 			</div>
-			<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3\">
-				<label class=\"form-label\" for=\"passport\">พาสปอร์ต</label>
-				<input type=\"text\" name=\"passport\" value=\"".$order_detail->passport."\" class=\"form-control\">
-			</div>
-			<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3\">
-				<label class=\"form-label\" for=\"firstname\">ชื่อ <span class=\"text-red-600\">*</span></label>
-				<input type=\"text\" name=\"firstname\" value=\"".$order_detail->firstname."\" class=\"form-control\">
-			</div>
-			<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3\">
-				<label class=\"form-label\" for=\"lastname\">นามสกุล <span class=\"text-red-600\">*</span></label>
-				<input type=\"text\" name=\"lastname\" value=\"".$order_detail->lastname."\" class=\"form-control\">
-			</div>
-			<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3\">
-				<label class=\"form-label\" for=\"age_year\">อายุ/ปี <span class=\"text-red-600\">*</span></label>
-				<input type=\"number\" name=\"age_year\" value=\"".$order_detail->age_year."\" min=\"1\" max=\"100\" class=\"form-control\">
-			</div>
-			<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3\">
-				<label class=\"form-label\" for=\"division\">แผนก <span class=\"text-red-600\">*</span></label>
-				<input type=\"text\" name=\"division\" value=\"".$order_detail->division."\" class=\"form-control\">
-			</div>
-			<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3\">
-				<label class=\"form-label\" for=\"work_life_year\">อายุงาน/ปี <span class=\"text-red-600\">*</span></label>
-				<input type=\"number\" name=\"work_life_year\" value=\"".$order_detail->work_life_year."\" min=\"1\" max=\"100\" class=\"form-control\">
-			</div>
-			<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3\">
-				<label class=\"form-label\" for=\"specimen_date\">วันที่เก็บตัวอย่าง <span class=\"text-red-600\">*</span></label>
-				<div class=\"input-group\">
-					<input type=\"text\" name=\"specimen_date\" value=\"".$edit_specimen_date."\" class=\"form-control\" readonly placeholder=\"เลือกวันที่\" id=\"datepicker_edit_specimen_date\">
-					<div class=\"input-group-append\">
-						<span class=\"input-group-text fs-xl\">
-							<i class=\"fal fa-calendar-alt\"></i>
-						</span>
-					</div>
-				</div>
-			</div>
-			<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3\">
-				<label class=\"form-label\" for=\"note\">หมายเหตุ</label>
-				<input type=\"text\" name=\"note\" value=\"".$order_detail->note."\" class=\"form-control\">
-			</div>
-		</div>";
+		</form>";
 		return $htm;
 	}
 	protected function updateParameterPersonal(Request $request) {
-		dd('jetkhe');
+		$request->validate([
+			'edit_order_id'=>'bail|required',
+			'edit_id_card'=>'required',
+			'edit_title_name'=>'required',
+		],[
+			'edit_order_id.required'=>'ไม่พบรหัสคำสั่งซื้ัอ โปรดตรวจสอบ',
+			'edit_id_card.required'=>'โปรดกรอกเลขบัตรประชาชน',
+			'edit_title_name.required'=>'โปรดกรอกคำนำหน้าชื่อ',
+		]);
+		try {
+			$orderDetail = OrderDetail::find($request->order_id);
+
+			$orderDetail->order_id = $request->edit_order_id;
+			$orderDetail->id_card = $request->edit_id_card;
+			$orderDetail->passport = $request->edit_passport;
+			$orderDetail->title_name = $request->edit_title_name;
+			$orderDetail->firstname = $request->edit_firstname;
+			$orderDetail->lastname = $request->edit_lastname;
+			$orderDetail->age_year = $request->edit_age_year;
+			$orderDetail->division = $request->edit_division;
+			$orderDetail->work_life_year = $request->edit_work_life_year;
+			$orderDetail->specimen_date = $this->convertJsDateToMySQL($request->edit_specimen_date);
+			$orderDetail->note = $request->edit_note;
+			$saved = $orderDetail->save();
+			if ($saved == true) {
+				return redirect()->back()->with('success', 'แก้ไขข้อมูลแล้ว');
+			} else {
+				return redirect()->back()->with('error', 'ไม่สามารถแก้ไขข้อมูลได้');
+			}
+		} catch (\Exception $e) {
+			Log::error($e->getMessage());
+		}
 	}
 }
