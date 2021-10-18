@@ -3,14 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\{Auth,Log,Storage,File,DB};
-use Spatie\Permission\Models\{Role,Permission};
-use App\Models\{Order,OrderDetail,Fileupload};
+use Illuminate\Support\Facades\{Auth,Log,Storage,File};
+//use Spatie\Permission\Models\{Role,Permission};
+use App\Models\{Order,OrderDetail,Fileupload, OrderDetailParameter};
 use App\DataTables\{CustomersDataTable,CustParameterDataTable};
-use App\Traits\CommonTrait as TraitsCommonTrait;
+//use App\Traits\CommonTrait as TraitsCommonTrait;
 use App\Traits\{CustomerTrait,FileTrait,CommonTrait};
-use Illuminate\Routing\Redirector;
-use Livewire\Controllers\FileUploadHandler;
+//use Illuminate\Routing\Redirector;
+//use Livewire\Controllers\FileUploadHandler;
+use Yajra\DataTables\Facades\DataTables;
 
 class CustomerController extends Controller
 {
@@ -32,6 +33,21 @@ class CustomerController extends Controller
 
 	protected function index(CustomersDataTable $dataTable): object {
 		return $dataTable->render('apps.customers.index');
+	}
+
+	public function listParameter(Request $request) {
+		if ($request->ajax()) {
+			//$data = OrderDetail::find(2)->parameters;
+			$data = OrderDetailParameter::whereOrder_detail_id($request->order_detail_id)->get();
+			return DataTables::of($data)
+				->addIndexColumn()
+				->addColumn('action', function($row) {
+					$actionBtn = '<a href="#" class="btn btn-success btn-sm">Edit</a> <a href="#" class="btn btn-danger btn-sm">Delete</a>';
+					return $actionBtn;
+				})
+				->rawColumns(['action'])
+				->make(true);
+		}
 	}
 
 	protected function createInfo(Request $request): object {
@@ -195,7 +211,7 @@ class CustomerController extends Controller
 				<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3\">
 					<label class=\"form-label\" for=\"title_name\">คำนำหน้าชื่อ <span class=\"text-red-600\">*</span></label>
 					<input type=\"hidden\" name=\"_token\" value=\"".csrf_token()."\">
-                    <input type=\"hidden\" name=\"edit_order_id\" value=\"".$order_detail->order_id."\">
+					<input type=\"hidden\" name=\"edit_order_id\" value=\"".$order_detail->order_id."\">
 					<div class=\"frame-wrap\">
 						<div class=\"custom-control custom-checkbox custom-control-inline\">
 							<input type=\"checkbox\" name=\"edit_title_name\" value=\"mr\" class=\"custom-control-input\" id=\"edit_chk_mr\"".$mr_chk.">
@@ -215,7 +231,7 @@ class CustomerController extends Controller
 			<div class=\"form-row\">
 				<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3\">
 					<label class=\"form-label\" for=\"id_card\">เลขบัตรประชาชน <span class=\"text-red-600\">*</span></label>
-					<input type=\"text\" name=\"id_card\" value=\"".$order_detail->id_card."\" placeholder=\"\" data-inputmask=\"'mask': '9-9999-99999-99-9'\" maxlength=\"18\" class=\"form-control\">
+					<input type=\"text\" name=\"edit_id_card\" value=\"".$order_detail->id_card."\" placeholder=\"\" data-inputmask=\"'mask': '9-9999-99999-99-9'\" maxlength=\"18\" class=\"form-control\">
 				</div>
 				<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3\">
 					<label class=\"form-label\" for=\"passport\">พาสปอร์ต</label>
@@ -276,8 +292,7 @@ class CustomerController extends Controller
 			'edit_title_name.required'=>'โปรดกรอกคำนำหน้าชื่อ',
 		]);
 		try {
-			$orderDetail = OrderDetail::find($request->order_id);
-
+			$orderDetail = OrderDetail::find($request->edit_order_id);
 			$orderDetail->order_id = $request->edit_order_id;
 			$orderDetail->id_card = $request->edit_id_card;
 			$orderDetail->passport = $request->edit_passport;

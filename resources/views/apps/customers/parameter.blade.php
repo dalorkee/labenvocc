@@ -27,9 +27,9 @@
 			<div class="panel-hdr">
 				<h2 class="text-gray-600"><i class="fal fa-clipboard"></i>&nbsp;คำขอส่งตัวอย่างชีวภาพ</h2>
 				<div class="panel-toolbar">
-					<button class="btn btn-panel" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="Collapse"></button>
-					<button class="btn btn-panel" data-action="panel-fullscreen" data-toggle="tooltip" data-offset="0,10" data-original-title="Fullscreen"></button>
-					<button class="btn btn-panel" data-action="panel-close" data-toggle="tooltip" data-offset="0,10" data-original-title="Close"></button>
+					<button class="btn btn-panel bg-transparent fs-xl w-auto h-auto rounded-0" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="Collapse"><i class="fal fa-window-minimize"></i></button>
+					<button class="btn btn-panel bg-transparent fs-xl w-auto h-auto rounded-0" data-action="panel-fullscreen" data-toggle="tooltip" data-offset="0,10" data-original-title="Fullscreen"><i class="fal fa-expand"></i></button>
+					<button class="btn btn-panel bg-transparent fs-xl w-auto h-auto rounded-0" data-action="panel-close" data-toggle="tooltip" data-offset="0,10" data-original-title="Close"><i class="fal fa-times"></i></button>
 				</div>
 			</div>
 			<div class="panel-container relative">
@@ -174,6 +174,76 @@
 		<div class="modal-content" id="edit-customer-personal"></div>
 	</div>
 </div>
+
+
+<!-- Modal new parameter-->
+<div class="modal fade font-prompt" id="new-parameter-modal" data-keyboard="false" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<form name="modal_new_parameter" action="" method="POST">
+				@csrf
+				<div class="modal-header bg-green-600 text-white">
+					<h5 class="modal-title"><i class="fal fa-plus-circle"></i> เพิ่มพารามิเตอร์ตัวอย่างชีวภาพ</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true"><i class="fal fa-times"></i></span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div class="form-row">
+						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
+							<label class="form-label d-none">ค้นหา</label>
+							<div class="input-group input-group-sm bg-white shadow-inset-2">
+								<div class="input-group-prepend">
+									<span class="input-group-text bg-transparent border-right-0 py-1 px-3 text-success">
+										<i class="fal fa-search"></i>
+									</span>
+								</div>
+								<input type="text" class="form-control border-left-0 bg-transparent pl-0" placeholder="Type here...">
+								<div class="input-group-append">
+									<button class="btn btn-default" type="button">ค้นหา</button>
+								</div>
+							</div>
+						</div>
+						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
+							<label class="form-label" for="passport">กลุ่มรายงานตรวจวิเคราะห์</label>
+							<select name="office_province" id="province" class="select2-placeholder mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+								<option value="">-- โปรดเลือก --</option>
+								<option value="1">กลุ่มโลหะหนัก</option>
+								<option value="2">กลุ่มสารอินทรีย์ระเหยและสารประกอบอินทรีย์</option>
+								<option value="3">กลุ่มสารอินทรีย์แปรรูป</option>
+								<option value="4">กลุ่มสิ่งก่อกลายพันธุ์</option>
+							</select>
+						</div>
+					</div>
+					<div class="row bg-red-100">
+						<div class="col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
+							<table class="table table-bordered" id="dt-parameter">
+								<thead>
+									<tr>
+										<th>รหัส</th>
+										<th>พารามิเตอร์</th>
+										<th>สิ่งส่งตรวจ</th>
+										<th>ห้องปฏิบัติการ</th>
+										<th>ราคา (บาท)</th>
+										<th>จัดการ</th>
+									</tr>
+								</thead>
+								<tbody>
+								</tbody>
+							</table>
+						</div>
+					</div>
+					
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">ยกเลิก</button>
+					<button type="submit" class="btn btn-success">บันทึก</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
 @endsection
 @section('script')
 <script type="text/javascript" src="{{ URL::asset('assets/js/datagrid/datatables/datatables.bundle.js') }}"></script>
@@ -185,10 +255,7 @@
 {{ $dataTable->scripts() }}
 <script>
 function newData(){$('#new-data-modal').modal('show');}
-var controls = {
-	leftArrow: '<i class="fal fa-angle-left" style="font-size: 1.25rem"></i>',
-	rightArrow: '<i class="fal fa-angle-right" style="font-size: 1.25rem"></i>'
-}
+var controls = {leftArrow: '<i class="fal fa-angle-left" style="font-size: 1.25rem"></i>', rightArrow: '<i class="fal fa-angle-right" style="font-size: 1.25rem"></i>'}
 var runDatePicker = function() {
 	$('#datepicker_specimen_date').datepicker({
 		format: 'dd/mm/yyyy',
@@ -222,7 +289,7 @@ $(document).ready(function() {
 						dataType: 'HTML',
 						success: function(data) {
 							$('#edit-customer-personal').html(data);
-                            $(":input").inputmask();
+							$(":input").inputmask();
 							$('#datepicker_edit_specimen_date').datepicker({
 								format: 'dd/mm/yyyy',
 								todayHighlight: true,
@@ -234,8 +301,30 @@ $(document).ready(function() {
 						error: function(data, status, error) {alert(error);}
 					});
 					break;
-				case 'view':
-					alert('ยังไม่เปิดใช้ Featuer นี้');
+				case 'parameter':
+                    $('#new-parameter-modal').modal({backdrop: 'static', keyboard: false});
+                    var url = "{{ route('customer.parameter.list', ":id") }}";
+                    url = url.replace(':id', id);
+						var table = $('#dt-parameter').DataTable({
+                        processing: true,
+                        serverSide: true,
+                        //ajax: "{{ route('customer.parameter.list') }}",
+                        columns: [
+                            //{data: 'DT_RowIndex', name: 'DT_RowIndex'},
+                            {data: 'order_detail_id', name: 'order_detail_id'},
+                            {data: 'parameter_name', name: 'parameter_name'},
+                            {data: 'specemen', name: 'specemen'},
+                            {data: 'lab_verify_id', name: 'lab_verify_id'},
+                            {data: 'price', name: 'price'},
+                            {
+                                data: 'action', 
+                                name: 'action', 
+                                orderable: true,
+                                searchable: true
+                            },
+                        ]
+                    });
+                    table.destroy();
 					break;
 				case 'export':
 					alert('ยังไม่เปิดใช้ Featuer นี้');
@@ -250,7 +339,7 @@ $(document).ready(function() {
 		items: {
 			"edit": {name: "แก้ไขข้อมูล", icon: "fal fa-edit"},
 			"sep1": "---------",
-			"view": {name: "เพิ่มพารามิเตอร์", icon: "fal fa-tachometer"},
+			"parameter": {name: "เพิ่มพารามิเตอร์", icon: "fal fa-tachometer"},
 			"export": {name: "แก้ไขพารามิเตอร์", icon: "fal fa-tachometer-alt"},
 			"sep2": "---------",
 			"delete": {name: "ลบข้อมูล", icon: "fal fa-trash-alt"},

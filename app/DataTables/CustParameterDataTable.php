@@ -2,7 +2,7 @@
 namespace App\DataTables;
 
 use App\Models\OrderDetail;
-use App\Models\OrderDetailParameter;
+//use App\Models\OrderDetailParameter;
 use Yajra\DataTables\Html\{Button,Column};
 use Yajra\DataTables\Services\DataTable;
 use Illuminate\Support\Carbon;
@@ -95,7 +95,6 @@ class CustParameterDataTable extends DataTable
 				Column::make('unit')->title('หน่วย'),
 				Column::make('note')->title('หมายเหตุ'),
 				Column::computed('action')->addClass('text-center')->title('#')
-
 			];
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
