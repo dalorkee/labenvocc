@@ -190,7 +190,7 @@
 				</div>
 				<div class="modal-body">
 					<div class="form-row">
-						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
+						{{-- <div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
 							<label class="form-label d-none">ค้นหา</label>
 							<div class="input-group input-group-sm bg-white shadow-inset-2">
 								<div class="input-group-prepend">
@@ -203,7 +203,7 @@
 									<button class="btn btn-default" type="button">ค้นหา</button>
 								</div>
 							</div>
-						</div>
+						</div> --}}
 						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
 							<label class="form-label" for="passport">กลุ่มรายงานตรวจวิเคราะห์</label>
 							<select name="office_province" id="province" class="select2-placeholder mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
@@ -233,7 +233,7 @@
 							</table>
 						</div>
 					</div>
-					
+
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary" data-dismiss="modal">ยกเลิก</button>
@@ -302,29 +302,29 @@ $(document).ready(function() {
 					});
 					break;
 				case 'parameter':
-                    $('#new-parameter-modal').modal({backdrop: 'static', keyboard: false});
-                    var url = "{{ route('customer.parameter.list', ":id") }}";
-                    url = url.replace(':id', id);
+						var url = "{{ route('customer.parameter.list', ['id'=>':id']) }}";
+						url = url.replace(':id', id);
 						var table = $('#dt-parameter').DataTable({
-                        processing: true,
-                        serverSide: true,
-                        //ajax: "{{ route('customer.parameter.list') }}",
-                        columns: [
-                            //{data: 'DT_RowIndex', name: 'DT_RowIndex'},
-                            {data: 'order_detail_id', name: 'order_detail_id'},
-                            {data: 'parameter_name', name: 'parameter_name'},
-                            {data: 'specemen', name: 'specemen'},
-                            {data: 'lab_verify_id', name: 'lab_verify_id'},
-                            {data: 'price', name: 'price'},
-                            {
-                                data: 'action', 
-                                name: 'action', 
-                                orderable: true,
-                                searchable: true
-                            },
-                        ]
-                    });
-                    table.destroy();
+						processing: true,
+						serverSide: true,
+						ajax: url,
+						columns: [
+							//{data: 'DT_RowIndex', name: 'DT_RowIndex'},
+							{data: 'id', name: 'id'},
+							{data: 'parameter_name', name: 'parameter_name'},
+							{data: 'sample_charecter_name', name: 'sample_charecter_name'},
+							{data: 'office_name', name: 'office_name'},
+                            {data: 'unit', name: 'office_name'},
+							{
+								data: 'action',
+								name: 'action',
+								orderable: true,
+								searchable: true
+							},
+						]
+					});
+					$('#new-parameter-modal').modal({backdrop: 'static', keyboard: false});
+					table.destroy();
 					break;
 				case 'export':
 					alert('ยังไม่เปิดใช้ Featuer นี้');

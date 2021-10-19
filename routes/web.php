@@ -37,8 +37,10 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 		Route::get('/customer/parameter/create/{order_id}', [CustomerController::class, 'createParameter'])->name('parameter.create');
 		Route::post('customer/parameter/personal/store', [CustomerController::class, 'storeParameterPersonal'])->name('parameter.personal.store');
 		Route::get('/customer/parameter/personal/edit', [CustomerController::class, 'editParameterPersonal'])->name('parameter.personal.edit');
-        Route::post('/customer/parameter/personal/update', [CustomerController::class, 'updateParameterPersonal'])->name('parameter.personal.update');
-        Route::get('/customer/parameter/list', [CustomerController::class, 'listParameter'])->name('parameter.list');
+		Route::post('/customer/parameter/personal/update', [CustomerController::class, 'updateParameterPersonal'])->name('parameter.personal.update');
+
+		Route::get('/customer/parameter/create/{id}', [CustomerController::class, 'createParameter'])->name('parameter.create');
+		Route::get('/customer/parameter/list/{id}', [CustomerController::class, 'listParameter'])->name('parameter.list');
 	});
 });
 Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');

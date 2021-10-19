@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\{Auth,Log,Storage,File};
 //use Spatie\Permission\Models\{Role,Permission};
-use App\Models\{Order,OrderDetail,Fileupload, OrderDetailParameter};
+use App\Models\{Order,OrderDetail,Fileupload, OrderDetailParameter, Parameter};
 use App\DataTables\{CustomersDataTable,CustParameterDataTable};
 //use App\Traits\CommonTrait as TraitsCommonTrait;
 use App\Traits\{CustomerTrait,FileTrait,CommonTrait};
@@ -35,10 +35,36 @@ class CustomerController extends Controller
 		return $dataTable->render('apps.customers.index');
 	}
 
-	public function listParameter(Request $request) {
+	protected function listParameter(Request $request): object {
 		if ($request->ajax()) {
-			//$data = OrderDetail::find(2)->parameters;
-			$data = OrderDetailParameter::whereOrder_detail_id($request->order_detail_id)->get();
+			$data = Parameter::select(
+				'id',
+				'parameter_id',
+				'parameter_name',
+				'sample_charecter_id',
+				'sample_charecter_name',
+				'threat_type_id',
+				'threat_type_name',
+				'unit_id',
+				'unit_name',
+				'office_id',
+				'office_name',
+				'parameter_status'
+			)->whereThreat_type_id(3)->get();
+			return DataTables::of($data)
+				->addIndexColumn()
+				->addColumn('action', function($row) {
+					$actionBtn = '<a href="#" class="btn btn-success btn-sm">Edit</a> <a href="#" class="btn btn-danger btn-sm">Delete</a>';
+					return $actionBtn;
+				})
+				->rawColumns(['action'])
+				->make(true);
+		}
+	}
+
+	protected function editParameter(Request $request): object {
+		if ($request->ajax()) {
+			$data = OrderDetail::find($request->id)->parameters;
 			return DataTables::of($data)
 				->addIndexColumn()
 				->addColumn('action', function($row) {

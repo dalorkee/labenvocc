@@ -14,6 +14,6 @@ class OrderDetail extends Model
 	}
 
 	public function parameters() {
-		return $this->hasMany(OrderDetailParameter::class);
+		return $this->hasMany(OrderDetailParameter::class, 'order_detail_id');
 	}
 }
