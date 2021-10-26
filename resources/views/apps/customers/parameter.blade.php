@@ -92,7 +92,7 @@
 					<div class="form-row">
 						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
 							<label class="form-label" for="id_card">เลขบัตรประชาชน <span class="text-red-600">*</span></label>
-							<input type="hidden" name="order_id" value="{{ $order_id }}">
+							<input type="hidden" name="order_id" value="{{ $order_id }}" id="order_id">
 							<input type="text" name="id_card" value="{{ old('id_card') }}" placeholder="" data-inputmask="'mask': '9-9999-99999-99-9'" maxlength="18" class="form-control @error('id_card') is-invalid @enderror">
 							@error('id_card')
 								<div class="invalid-feedback" role="alert">{{ $message }}</div>
@@ -175,12 +175,11 @@
 	</div>
 </div>
 
-
-<!-- Modal new parameter-->
-<div class="modal fade font-prompt" id="new-parameter-modal" data-keyboard="false" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
-	<div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+<!-- Modal add parameter-->
+<div class="modal font-prompt" id="add-parameter-modal" data-keyboard="false" data-backdrop="static" tabindex="-2" role="dialog" aria-hidden="true">
+	<div class="modal-dialog modal-xl modal-dialog-centered" role="document">
 		<div class="modal-content">
-			<form name="modal_new_parameter" action="" method="POST">
+			<form name="modal_new_parameter" action="#" method="POST">
 				@csrf
 				<div class="modal-header bg-green-600 text-white">
 					<h5 class="modal-title"><i class="fal fa-plus-circle"></i> เพิ่มพารามิเตอร์ตัวอย่างชีวภาพ</h5>
@@ -190,24 +189,10 @@
 				</div>
 				<div class="modal-body">
 					<div class="form-row">
-						{{-- <div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
-							<label class="form-label d-none">ค้นหา</label>
-							<div class="input-group input-group-sm bg-white shadow-inset-2">
-								<div class="input-group-prepend">
-									<span class="input-group-text bg-transparent border-right-0 py-1 px-3 text-success">
-										<i class="fal fa-search"></i>
-									</span>
-								</div>
-								<input type="text" class="form-control border-left-0 bg-transparent pl-0" placeholder="Type here...">
-								<div class="input-group-append">
-									<button class="btn btn-default" type="button">ค้นหา</button>
-								</div>
-							</div>
-						</div> --}}
 						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
-							<label class="form-label" for="passport">กลุ่มรายงานตรวจวิเคราะห์</label>
-							<select name="office_province" id="province" class="select2-placeholder mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-								<option value="">-- โปรดเลือก --</option>
+							<label class="form-label" for="z_parameter">กลุ่มรายงานตรวจวิเคราะห์</label>
+							<select name="z_parameter" id="z_parameter" class="select2-placeholder mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+								<option value="0">-- ทั้งหมด --</option>
 								<option value="1">กลุ่มโลหะหนัก</option>
 								<option value="2">กลุ่มสารอินทรีย์ระเหยและสารประกอบอินทรีย์</option>
 								<option value="3">กลุ่มสารอินทรีย์แปรรูป</option>
@@ -215,12 +200,12 @@
 							</select>
 						</div>
 					</div>
-					<div class="row bg-red-100">
+					<div class="form-row">
 						<div class="col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
-							<table class="table table-bordered" id="dt-parameter">
-								<thead>
+							<table class="table table-bordered text-sm dt-parameter">
+								<thead class="bg-gray-300">
 									<tr>
-										<th>รหัส</th>
+										<th>ลำดับ</th>
 										<th>พารามิเตอร์</th>
 										<th>สิ่งส่งตรวจ</th>
 										<th>ห้องปฏิบัติการ</th>
@@ -233,7 +218,6 @@
 							</table>
 						</div>
 					</div>
-
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary" data-dismiss="modal">ยกเลิก</button>
@@ -243,7 +227,6 @@
 		</div>
 	</div>
 </div>
-
 @endsection
 @section('script')
 <script type="text/javascript" src="{{ URL::asset('assets/js/datagrid/datatables/datatables.bundle.js') }}"></script>
@@ -279,6 +262,7 @@ $(document).ready(function() {
 		delay: 500,
 		className: 'data-title',
 		callback: function(itemKey, opt) {
+			var order_id = $('#order_id').val();
 			var id = $(this).data('id');
 			switch (itemKey) {
 				case 'edit':
@@ -302,11 +286,14 @@ $(document).ready(function() {
 					});
 					break;
 				case 'parameter':
-						var url = "{{ route('customer.parameter.list', ['id'=>':id']) }}";
-						url = url.replace(':id', id);
-						var table = $('#dt-parameter').DataTable({
+						var url = "{{ route('customer.parameter.data.list', ['order_detail_id'=>':order_detail_id']) }}";
+						url = url.replace(':order_detail_id', id);
+						var table = $('.dt-parameter').DataTable({
 						processing: true,
 						serverSide: true,
+						paging: true,
+						searching: true,
+						//retrieve: true,
 						ajax: url,
 						columns: [
 							//{data: 'DT_RowIndex', name: 'DT_RowIndex'},
@@ -314,16 +301,16 @@ $(document).ready(function() {
 							{data: 'parameter_name', name: 'parameter_name'},
 							{data: 'sample_charecter_name', name: 'sample_charecter_name'},
 							{data: 'office_name', name: 'office_name'},
-                            {data: 'unit', name: 'office_name'},
+							{data: 'unit_name', name: 'unit_name'},
 							{
 								data: 'action',
 								name: 'action',
 								orderable: true,
-								searchable: true
+								searchable: false
 							},
-						]
+						],
 					});
-					$('#new-parameter-modal').modal({backdrop: 'static', keyboard: false});
+					$('#add-parameter-modal').modal('show');
 					table.destroy();
 					break;
 				case 'export':
@@ -347,6 +334,6 @@ $(document).ready(function() {
 			"quit": {name: "ปิด", icon: "fal fa-times"}
 		}
 	});
-})
+});
 </script>
 @endsection

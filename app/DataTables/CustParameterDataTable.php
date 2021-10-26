@@ -1,12 +1,13 @@
 <?php
 namespace App\DataTables;
 
-use App\Models\OrderDetail;
-//use App\Models\OrderDetailParameter;
+use Illuminate\Http\Request;
+
 use Yajra\DataTables\Html\{Button,Column};
 use Yajra\DataTables\Services\DataTable;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
+use App\Models\OrderDetail;
 use App\Traits\CommonTrait;
 
 class CustParameterDataTable extends DataTable
@@ -15,7 +16,7 @@ class CustParameterDataTable extends DataTable
 
 	public function dataTable($query) {
 		try {
-			$lab_station = $this->latStation();
+			//$lab_station = $this->latStation();
 			return datatables()
 				->eloquent($query)
 				->editColumn('created_at', function($field) {
@@ -38,10 +39,8 @@ class CustParameterDataTable extends DataTable
 		}
 	}
 
-	public function query(OrderDetail $orderDetail) {
-		//return $orderDetail->newQuery();
-		//$orders =  OrderDetail::select('id', 'firstname', 'lastname', 'age_year', 'work_life_year', 'specimen_date' );
-		$orders = OrderDetail::with('parameters')->select('*')->orderBy('id', 'ASC');
+	public function query(Request $request, OrderDetail $orderDetail) {
+		$orders = $orderDetail::with('parameters')->select('*')->whereOrder_id($request->order_id)->orderBy('id', 'ASC');
 		return $orders;
 	}
 

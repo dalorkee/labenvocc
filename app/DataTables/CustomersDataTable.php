@@ -68,7 +68,7 @@ class CustomersDataTable extends DataTable
 	 * @return \Illuminate\Database\Eloquent\Builder
 	 */
 	public function query(Order $order) {
-		return $order->select('id', 'ref_user_id', 'lab_station_id', 'order_status', 'payment_status', 'detail', 'created_at');
+		return $order->select('id', 'ref_user_id', 'lab_station_id', 'order_status', 'payment_status', 'detail', 'created_at')->orderBy('id', 'ASC');
 	}
 
 	/**
@@ -124,7 +124,6 @@ class CustomersDataTable extends DataTable
 			Log::error($e->getMessage());
 		}
 	}
-
 
 	/**
 	 * Get columns.

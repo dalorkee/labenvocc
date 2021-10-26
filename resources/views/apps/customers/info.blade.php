@@ -118,18 +118,15 @@
 @section('script')
 <script type="text/javascript" src="{{ URL::asset('assets/js/formplugins/bootstrap-datepicker/bootstrap-datepicker.js') }}"></script>
 <script>
-	var controls = {
-		leftArrow: '<i class="fal fa-angle-left" style="font-size: 1.25rem"></i>',
-		rightArrow: '<i class="fal fa-angle-right" style="font-size: 1.25rem"></i>'
-	}
-	var runDatePicker = function() {
-		$('#datepicker_book_date').datepicker({
-			format: 'dd/mm/yyyy',
-			todayHighlight: true,
-			orientation: "bottom left",
-			templates: controls
-		});
-	}
+var controls = {leftArrow: '<i class="fal fa-angle-left" style="font-size: 1.25rem"></i>',rightArrow: '<i class="fal fa-angle-right" style="font-size: 1.25rem"></i>'}
+var runDatePicker = function() {
+	$('#datepicker_book_date').datepicker({
+		format: 'dd/mm/yyyy',
+		todayHighlight: true,
+		orientation: "bottom left",
+		templates: controls
+	});
+}
 </script>
 <script>
 $(document).ready(function() {

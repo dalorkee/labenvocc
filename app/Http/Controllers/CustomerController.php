@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\{Auth,Log,Storage,File};
 //use Spatie\Permission\Models\{Role,Permission};
-use App\Models\{Order,OrderDetail,Fileupload, OrderDetailParameter, Parameter};
+use App\Models\{Order,OrderDetail,Fileupload,OrderDetailParameter,Parameter};
 use App\DataTables\{CustomersDataTable,CustParameterDataTable};
 //use App\Traits\CommonTrait as TraitsCommonTrait;
 use App\Traits\{CustomerTrait,FileTrait,CommonTrait};
@@ -30,52 +30,9 @@ class CustomerController extends Controller
 			return $next($request);
 		});
 	}
-
 	protected function index(CustomersDataTable $dataTable): object {
 		return $dataTable->render('apps.customers.index');
 	}
-
-	protected function listParameter(Request $request): object {
-		if ($request->ajax()) {
-			$data = Parameter::select(
-				'id',
-				'parameter_id',
-				'parameter_name',
-				'sample_charecter_id',
-				'sample_charecter_name',
-				'threat_type_id',
-				'threat_type_name',
-				'unit_id',
-				'unit_name',
-				'office_id',
-				'office_name',
-				'parameter_status'
-			)->whereThreat_type_id(3)->get();
-			return DataTables::of($data)
-				->addIndexColumn()
-				->addColumn('action', function($row) {
-					$actionBtn = '<a href="#" class="btn btn-success btn-sm">Edit</a> <a href="#" class="btn btn-danger btn-sm">Delete</a>';
-					return $actionBtn;
-				})
-				->rawColumns(['action'])
-				->make(true);
-		}
-	}
-
-	protected function editParameter(Request $request): object {
-		if ($request->ajax()) {
-			$data = OrderDetail::find($request->id)->parameters;
-			return DataTables::of($data)
-				->addIndexColumn()
-				->addColumn('action', function($row) {
-					$actionBtn = '<a href="#" class="btn btn-success btn-sm">Edit</a> <a href="#" class="btn btn-danger btn-sm">Delete</a>';
-					return $actionBtn;
-				})
-				->rawColumns(['action'])
-				->make(true);
-		}
-	}
-
 	protected function createInfo(Request $request): object {
 		$type_of_work = $this->typeOfWork();
 		if ($request->order_id == 'new') {
@@ -88,7 +45,6 @@ class CustomerController extends Controller
 			'order' => $order
 		]);
 	}
-
 	protected function storeInfo(Request $request) {
 		try {
 			$order = Order::updateOrCreate(
@@ -158,12 +114,6 @@ class CustomerController extends Controller
 		}
 		//DB::commit();
 	}
-
-	protected function createParameter(Request $request, CustParameterDataTable $dataTable): object {
-		$order_id = $request->order_id;
-		return $dataTable->render('apps.customers.parameter', compact('order_id'));
-	}
-
 	protected function storeParameterPersonal(Request $request) {
 		$request->validate([
 			'order_id'=>'bail|required',
@@ -198,10 +148,8 @@ class CustomerController extends Controller
 			Log::error($e->getMessage());
 		}
 	}
-
-	protected function editParameterPersonal(Request $request, $message="null") {
-		$order_detail = OrderDetail::find((int)$request->id);
-		//dd($order_detail);
+	protected function editParameterPersonal(Request $request) {
+		$order_detail = OrderDetail::find($request->id);
 		switch ($order_detail->title_name) {
 			case "mr":
 				$mr_chk = "checked";
@@ -237,6 +185,7 @@ class CustomerController extends Controller
 				<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3\">
 					<label class=\"form-label\" for=\"title_name\">คำนำหน้าชื่อ <span class=\"text-red-600\">*</span></label>
 					<input type=\"hidden\" name=\"_token\" value=\"".csrf_token()."\">
+                    <input type=\"hidden\" name=\"edit_id\" value=\"".$order_detail->id."\">
 					<input type=\"hidden\" name=\"edit_order_id\" value=\"".$order_detail->order_id."\">
 					<div class=\"frame-wrap\">
 						<div class=\"custom-control custom-checkbox custom-control-inline\">
@@ -318,7 +267,7 @@ class CustomerController extends Controller
 			'edit_title_name.required'=>'โปรดกรอกคำนำหน้าชื่อ',
 		]);
 		try {
-			$orderDetail = OrderDetail::find($request->edit_order_id);
+			$orderDetail = OrderDetail::find($request->edit_id);
 			$orderDetail->order_id = $request->edit_order_id;
 			$orderDetail->id_card = $request->edit_id_card;
 			$orderDetail->passport = $request->edit_passport;
@@ -340,4 +289,87 @@ class CustomerController extends Controller
 			Log::error($e->getMessage());
 		}
 	}
+	protected function createParameter(Request $request, CustParameterDataTable $dataTable): object {
+		$order_id = $request->order_id;
+		return $dataTable->render('apps.customers.parameter', compact('order_id'));
+	}
+
+	protected function listParameterData(Request $request): object {
+		try {
+			if ($request->ajax()) {
+				if ($request->z_parameter && $request->z_parameter != 0) {
+					$data = Parameter::select(
+						'id',
+						'parameter_id',
+						'parameter_name',
+						'sample_charecter_id',
+						'sample_charecter_name',
+						'threat_type_id',
+						'threat_type_name',
+						'unit_id',
+						'unit_name',
+						'office_id',
+						'office_name',
+						'parameter_status'
+					)->whereThreat_type_id($request->z_parameter)->get();
+				} else {
+					$data = Parameter::select(
+						'id',
+						'parameter_id',
+						'parameter_name',
+						'sample_charecter_id',
+						'sample_charecter_name',
+						'threat_type_id',
+						'threat_type_name',
+						'unit_id',
+						'unit_name',
+						'office_id',
+						'office_name',
+						'parameter_status'
+					)->get();
+				}
+				return DataTables::of($data)
+					->addIndexColumn()
+					->addColumn('action', function($row) use ($request) {
+						$actionBtn = "<a href=\"".route('customer.parameter.data.store', ['order_detail_id'=>$request->order_detail_id, 'id'=>$row->id])."\" class=\"btn btn-success btn-sm\"><i class=\"fal fa-plus\"></i></a>";
+						return $actionBtn;
+					})
+					->rawColumns(['action'])
+					->make(true);
+			}
+		} catch (\Exception $e) {
+			Log::error($e->getMessage());
+		}
+	}
+
+	protected function storeParameterData(Parameter $parameter, Request $request) {
+		$paramet = $parameter->find($request->id);
+		$upserted = OrderDetailParameter::updateOrcreate(
+			['order_detail_id' => $request->order_detail_id, 'parameter_id' => $request->id],
+			[
+				'parameter_id' => $paramet->id,
+				'parameter_name' => $paramet->parameter_name,
+				'parameter_group'=> $paramet->sample_charecter_id,
+				'unit_id' => $paramet->unit_id,
+				'unit_name' => $paramet->unit_name
+			]
+		);
+		if ($upserted) {
+			return redirect()->back()->with('success', 'บันทึกข้อมูลพารามิเตอร์แล้ว');
+		}
+	}
+
+	// protected function editParameterData(Request $request): object {
+	// 	if ($request->ajax()) {
+	// 		$data = OrderDetail::find($request->id)->parameters;
+	// 		return DataTables::of($data)
+	// 			->addIndexColumn()
+	// 			->addColumn('action', function($row) {
+	// 				$actionBtn = '<a href="#" class="btn btn-success btn-sm">Edit</a> <a href="#" class="btn btn-danger btn-sm">Delete</a>';
+	// 				return $actionBtn;
+	// 			})
+	// 			->rawColumns(['action'])
+	// 			->make(true);
+	// 	}
+	// }
 }
