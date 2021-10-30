@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\{Model,SoftDeletes};
 
 class OrderDetail extends Model
 {
+	use SoftDeletes;
+
 	protected $table = 'order_detail';
 	protected $primaryKey = 'id';
 
@@ -15,5 +17,15 @@ class OrderDetail extends Model
 
 	public function parameters() {
 		return $this->hasMany(OrderDetailParameter::class, 'order_detail_id');
+	}
+
+	public static function boot() {
+		parent::boot();
+		self::deleting(function($orderDetail) {
+			$orderDetail->parameters()->each(function($parameter) {
+				$parameter->delete();
+			});
+		});
+
 	}
 }

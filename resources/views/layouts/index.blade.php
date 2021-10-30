@@ -133,6 +133,29 @@ $(document).ready(function() {
 		toastr.info("{{ Session::get('action_notic') }}", "LabEnvOcc", options2);
 		@php Session::forget("action_notic"); @endphp
 	@endif
+
+    	/* opt2 */
+	let options3 = {
+		"closeButton": true,
+		"debug": false,
+		"newestOnTop": true,
+		"progressBar": true,
+		"positionClass": "toast-top-right",
+		"preventDuplicates": true,
+		"onclick": null,
+		"showDuration": 300,
+		"hideDuration": 100,
+		"timeOut": 5000,
+		"extendedTimeOut": 1000,
+		"showEasing": "swing",
+		"hideEasing": "linear",
+		"showMethod": "fadeIn",
+		"hideMethod": "fadeOut"
+	};
+	@if (Session::has('destroy'))
+		toastr.error("{{ Session::get('destroy') }}", "LabEnvOcc", options3);
+		@php Session::forget("destroy"); @endphp
+	@endif
 });
 </script>
 </body>

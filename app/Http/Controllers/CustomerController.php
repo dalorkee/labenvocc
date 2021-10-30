@@ -185,7 +185,7 @@ class CustomerController extends Controller
 				<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3\">
 					<label class=\"form-label\" for=\"title_name\">คำนำหน้าชื่อ <span class=\"text-red-600\">*</span></label>
 					<input type=\"hidden\" name=\"_token\" value=\"".csrf_token()."\">
-                    <input type=\"hidden\" name=\"edit_id\" value=\"".$order_detail->id."\">
+					<input type=\"hidden\" name=\"edit_id\" value=\"".$order_detail->id."\">
 					<input type=\"hidden\" name=\"edit_order_id\" value=\"".$order_detail->order_id."\">
 					<div class=\"frame-wrap\">
 						<div class=\"custom-control custom-checkbox custom-control-inline\">
@@ -289,6 +289,18 @@ class CustomerController extends Controller
 			Log::error($e->getMessage());
 		}
 	}
+
+	protected function DestroyParameterPersonal(OrderDetail $orderDetail, Request $request): object {
+		try {
+			$deleted = $orderDetail->find($request->id)->delete();
+			if ($deleted == true) {
+				return redirect()->back()->with('destroy', 'ลบข้อมูลตัวอย่างแล้ว');
+			}
+		} catch (\Exception $e) {
+			Log::error($e->getMessage());
+		}
+	}
+
 	protected function createParameter(Request $request, CustParameterDataTable $dataTable): object {
 		$order_id = $request->order_id;
 		return $dataTable->render('apps.customers.parameter', compact('order_id'));
@@ -297,37 +309,13 @@ class CustomerController extends Controller
 	protected function listParameterData(Request $request): object {
 		try {
 			if ($request->ajax()) {
-				if ($request->z_parameter && $request->z_parameter != 0) {
-					$data = Parameter::select(
-						'id',
-						'parameter_id',
-						'parameter_name',
-						'sample_charecter_id',
-						'sample_charecter_name',
-						'threat_type_id',
-						'threat_type_name',
-						'unit_id',
-						'unit_name',
-						'office_id',
-						'office_name',
-						'parameter_status'
-					)->whereThreat_type_id($request->z_parameter)->get();
-				} else {
-					$data = Parameter::select(
-						'id',
-						'parameter_id',
-						'parameter_name',
-						'sample_charecter_id',
-						'sample_charecter_name',
-						'threat_type_id',
-						'threat_type_name',
-						'unit_id',
-						'unit_name',
-						'office_id',
-						'office_name',
-						'parameter_status'
-					)->get();
-				}
+				$data = Parameter::query()
+					->when($request->threat_type_id <= 0, function($q) {
+						return $q->orderBy('id', 'ASC')->get();
+					})
+					->when($request->threat_type_id > 0, function($q) use ($request) {
+						return $q->whereThreat_type_id($request->threat_type_id)->orderBy('id', 'ASC')->get();
+					});
 				return DataTables::of($data)
 					->addIndexColumn()
 					->addColumn('action', function($row) use ($request) {
@@ -342,34 +330,41 @@ class CustomerController extends Controller
 		}
 	}
 
-	protected function storeParameterData(Parameter $parameter, Request $request) {
-		$paramet = $parameter->find($request->id);
-		$upserted = OrderDetailParameter::updateOrcreate(
-			['order_detail_id' => $request->order_detail_id, 'parameter_id' => $request->id],
-			[
-				'parameter_id' => $paramet->id,
-				'parameter_name' => $paramet->parameter_name,
-				'parameter_group'=> $paramet->sample_charecter_id,
-				'unit_id' => $paramet->unit_id,
-				'unit_name' => $paramet->unit_name
-			]
-		);
-		if ($upserted) {
-			return redirect()->back()->with('success', 'บันทึกข้อมูลพารามิเตอร์แล้ว');
+	protected function storeParameterData(Parameter $parameter, Request $request): object {
+		try {
+			$paramet = $parameter->findOrfail($request->id);
+			$upserted = OrderDetailParameter::updateOrcreate(
+				['order_detail_id' => $request->order_detail_id, 'parameter_id' => $request->id],
+				[
+					'parameter_id' => $paramet->id,
+					'parameter_name' => $paramet->parameter_name,
+					'parameter_group'=> $paramet->sample_charecter_id,
+					'unit_id' => $paramet->unit_id,
+					'unit_name' => $paramet->unit_name
+				]
+			);
+			if ($upserted) {
+				return redirect()->back()->with('success', 'บันทึกข้อมูลพารามิเตอร์แล้ว');
+			} else {
+				redirect()->back()->with('error', 'บันทึกพารามิเตอร์ไม่ได้ โปรดตรวจสอบ');
+			}
+		} catch (\Exception $e) {
+			Log::error($e->getMessage());
 		}
 	}
 
-	// protected function editParameterData(Request $request): object {
-	// 	if ($request->ajax()) {
-	// 		$data = OrderDetail::find($request->id)->parameters;
-	// 		return DataTables::of($data)
-	// 			->addIndexColumn()
-	// 			->addColumn('action', function($row) {
-	// 				$actionBtn = '<a href="#" class="btn btn-success btn-sm">Edit</a> <a href="#" class="btn btn-danger btn-sm">Delete</a>';
-	// 				return $actionBtn;
-	// 			})
-	// 			->rawColumns(['action'])
-	// 			->make(true);
-	// 	}
-	// }
+	protected function destroyParameterData(OrderDetailParameter $orderDetailParamet, Request $request): object {
+		try {
+			$deleted = $orderDetailParamet->find($request->id)->delete();
+			if ($deleted == true) {
+				return redirect()->back()->with('destroy', 'ลบข้อมูลพารามิเตอร์แล้ว');
+			}
+		} catch (\Exception $e) {
+			Log::error($e->getMessage());
+		}
+	}
+
+	protected function createSpecemen(Request $request) {
+		return view('apps.customers.specemen', ['order_id' => $request->order_id]);
+	}
 }

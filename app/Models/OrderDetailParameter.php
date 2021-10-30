@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\{Model,SoftDeletes};
 
 class OrderDetailParameter extends Model
 {
+    use SoftDeletes;
+
 	protected $table = 'order_detail_parameter';
 	protected $primaryKey = 'id';
 
@@ -13,7 +15,7 @@ class OrderDetailParameter extends Model
 		'order_detail_id',
 		'parameter_id',
 		'parameter_name',
-        'parameter_group',
+		'parameter_group',
 		'unit_id',
 		'unit_name'
 	];

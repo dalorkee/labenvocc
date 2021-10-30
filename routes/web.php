@@ -39,9 +39,13 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 		Route::post('customer/parameter/personal/store', [CustomerController::class, 'storeParameterPersonal'])->name('parameter.personal.store');
 		Route::get('/customer/parameter/personal/edit', [CustomerController::class, 'editParameterPersonal'])->name('parameter.personal.edit');
 		Route::post('/customer/parameter/personal/update', [CustomerController::class, 'updateParameterPersonal'])->name('parameter.personal.update');
+		Route::get('/customer/parameter/personal/delete/id/{id}', [CustomerController::class, 'DestroyParameterPersonal'])->name('parameter.personal.destroy');
 
-		Route::get('/customer/parameter/data/list/detail/{order_detail_id}', [CustomerController::class, 'listParameterData'])->name('parameter.data.list');
+		Route::get('/customer/parameter/data/list/detail/{order_detail_id}/type/{threat_type_id}', [CustomerController::class, 'listParameterData'])->name('parameter.data.list');
 		Route::get('/customer/parameter/data/store/detail/{order_detail_id}/id/{id}', [CustomerController::class, 'storeParameterData'])->name('parameter.data.store');
+		Route::get('/customer/parameter/data/delete/id/{id}', [CustomerController::class, 'DestroyParameterData'])->name('parameter.data.destroy');
+
+		Route::get('/customer/specemen/create/order/{order_id}', [CustomerController::class, 'createSpecemen'])->name('specemen.create');
 	});
 });
 Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');

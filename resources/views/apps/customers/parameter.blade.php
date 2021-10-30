@@ -12,6 +12,9 @@
 .btn-group {margin:0 0 5px 0;padding:0;}
 .dataTables_filter label {margin-top: 8px;}
 .dataTables_filter input:first-child {margin-top: -8px;}
+.buttons-create {float:left;margin-left:12px;}
+.buttons-create:after {content:'';clear:both;}
+.dt-btn {margin:0;padding:0;}
 #order-table thead {background-color:#297FB0;color: white;}
 </style>
 @endsection
@@ -35,20 +38,20 @@
 			<div class="panel-container relative">
 				<form>
 					<div class="panel-content">
-						<ul class="steps">
-							<li class="undone"><a href=""><i class="fal fa-user"></i> <span class="d-none d-sm-inline">ข้อมูลทั่วไป</span></a></li>
-							<li class="active"><p><i class="fal fa-user"></i> <span class="d-none d-sm-inline">พารามิเตอร์</span></p></li>
-							<li class="undone"><p><i class="fal fa-user"></i> <span class="d-none d-sm-inline">ข้อมูลตัวอย่าง</span></p></li>
-							<li class="undone"><p><i class="fal fa-user"></i> <span class="d-none d-sm-inline">ตรวจสอบข้อมูล</span></p></li>
+						<ul class="steps mb-3">
+							<li class="undone"><a href="javascript:void(0);" data-toggle="tooltip" data-placement="top" title="ข้อมูลทั่วไป"><i class="fal fa-user"></i> <span class="d-none d-sm-inline">ข้อมูลทั่วไป</span></a></li>
+							<li class="active"><a href="javascript:void(0);" data-toggle="tooltip" data-placement="top" title="พารามิเตอร์"><i class="fal fa-tachometer"></i> <span class="d-none d-sm-inline">พารามิเตอร์</span></a></li>
+							<li class="undone"><a href="javascript:void(0);" data-toggle="tooltip" data-placement="top" title="ข้อมูลตัวอย่าง"><i class="fal fa-list-ul"></i> <span class="d-none d-sm-inline">ข้อมูลตัวอย่าง</span></a></li>
+							<li class="undone"><a href="javascript:void(0);" data-toggle="tooltip" data-placement="top" title="ตรวจสอบข้อมูล"><i class="fal fa-check-circle"></i> <span class="d-none d-sm-inline">ตรวจสอบข้อมูล</span></a></li>
 						</ul>
 						{{ $dataTable->table() }}
 					</div>
 					<div class="panel-content border-faded border-left-0 border-right-0 border-bottom-0 d-flex flex-row align-items-center">
 						<div class="form-row">
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
-								<button class="btn btn-primary ml-auto" type="button"><i class="fal fa-save"></i> บันทึกร่าง</button>
+								{{-- <button class="btn btn-primary ml-auto" type="button"><i class="fal fa-save"></i> บันทึกร่าง</button> --}}
 								<a href="{{ route('customer.info.create', ['order_id' => $order_id]) }}" class="btn btn-warning ml-auto"><i class="fal fa-arrow-alt-left"></i> ก่อนหน้า</a>
-								<a href="" class="btn btn-warning ml-auto">ถัดไป <i class="fal fa-arrow-alt-right"></i></a>
+								<a href="{{ route('customer.specemen.create', ['order_id' => $order_id]) }}" class="btn btn-warning ml-auto">ถัดไป <i class="fal fa-arrow-alt-right"></i></a>
 							</div>
 						</div>
 					</div>
@@ -174,7 +177,6 @@
 		<div class="modal-content" id="edit-customer-personal"></div>
 	</div>
 </div>
-
 <!-- Modal add parameter-->
 <div class="modal font-prompt" id="add-parameter-modal" data-keyboard="false" data-backdrop="static" tabindex="-2" role="dialog" aria-hidden="true">
 	<div class="modal-dialog modal-xl modal-dialog-centered" role="document">
@@ -190,8 +192,9 @@
 				<div class="modal-body">
 					<div class="form-row">
 						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
-							<label class="form-label" for="z_parameter">กลุ่มรายงานตรวจวิเคราะห์</label>
-							<select name="z_parameter" id="z_parameter" class="select2-placeholder mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+							<label class="form-label" for="parameter">กลุ่มรายงานตรวจวิเคราะห์</label>
+							<input type="hidden" name="aj_order_detail_id" value="" id="aj_order_detail_id">
+							<select name="parameter_group" id="parameter_group" class="select2-placeholder mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
 								<option value="0">-- ทั้งหมด --</option>
 								<option value="1">กลุ่มโลหะหนัก</option>
 								<option value="2">กลุ่มสารอินทรีย์ระเหยและสารประกอบอินทรีย์</option>
@@ -210,7 +213,7 @@
 										<th>สิ่งส่งตรวจ</th>
 										<th>ห้องปฏิบัติการ</th>
 										<th>ราคา (บาท)</th>
-										<th>จัดการ</th>
+										<th>เพิ่ม</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -218,10 +221,6 @@
 							</table>
 						</div>
 					</div>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-dismiss="modal">ยกเลิก</button>
-					<button type="submit" class="btn btn-success">บันทึก</button>
 				</div>
 			</form>
 		</div>
@@ -251,6 +250,7 @@ var runDatePicker = function() {
 <script>
 $(document).ready(function() {
 	$.ajaxSetup({headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}});
+	var order_id = $('#order_id').val();
 	runDatePicker();
 	$('input[name="title_name"]').on('change', function() {
 		$('input[name="' + this.name + '"]').not(this).prop('checked', false);
@@ -262,10 +262,9 @@ $(document).ready(function() {
 		delay: 500,
 		className: 'data-title',
 		callback: function(itemKey, opt) {
-			var order_id = $('#order_id').val();
-			var id = $(this).data('id');
 			switch (itemKey) {
 				case 'edit':
+					let id = $(this).data('id');
 					$.ajax({
 						method: 'GET',
 						url: '{{ route("customer.parameter.personal.edit") }}',
@@ -286,40 +285,57 @@ $(document).ready(function() {
 					});
 					break;
 				case 'parameter':
-						var url = "{{ route('customer.parameter.data.list', ['order_detail_id'=>':order_detail_id']) }}";
-						url = url.replace(':order_detail_id', id);
-						var table = $('.dt-parameter').DataTable({
+						let order_detail_id = $(this).data('id');
+						let url = "{{ route('customer.parameter.data.list', ['order_detail_id'=>':order_detail_id','threat_type_id'=>0]) }}";
+						url = url.replace(':order_detail_id', order_detail_id);
+						$("#aj_order_detail_id").val(order_detail_id);
+						let table = $('.dt-parameter').DataTable({
 						processing: true,
 						serverSide: true,
 						paging: true,
 						searching: true,
-						//retrieve: true,
+						bDestroy: true,
 						ajax: url,
 						columns: [
-							//{data: 'DT_RowIndex', name: 'DT_RowIndex'},
+							/* {data: 'DT_RowIndex', name: 'DT_RowIndex'}, */
 							{data: 'id', name: 'id'},
 							{data: 'parameter_name', name: 'parameter_name'},
 							{data: 'sample_charecter_name', name: 'sample_charecter_name'},
 							{data: 'office_name', name: 'office_name'},
 							{data: 'unit_name', name: 'unit_name'},
-							{
-								data: 'action',
-								name: 'action',
-								orderable: true,
-								searchable: false
-							},
+							{data: 'action', name: 'action', orderable: true, searchable: false},
 						],
 					});
 					$('#add-parameter-modal').modal('show');
-					table.destroy();
-					break;
-				case 'export':
-					alert('ยังไม่เปิดใช้ Featuer นี้');
+					/*table.destroy();*/
 					break;
 				case 'delete':
-					alert('ยังไม่เปิดใช้ Featuer นี้');
+					let del_id = $(this).data('id');
+					let del_url = "{{ route('customer.parameter.personal.destroy', ['id'=>':id']) }}";
+					del_url = del_url.replace(':id', del_id);
+					var swalWithBootstrapButtons = Swal.mixin({
+						customClass:{confirmButton: "btn btn-danger",cancelButton: "btn btn-primary mr-2"},
+						buttonsStyling: false
+					});
+					swalWithBootstrapButtons.fire({
+						title: "ยืนยันการลบข้อมูล?",
+						text: "การลบข้อมูลรายการนี้ พารามิเตอร์ที่เลือกไว้จะถูกลบไปด้วย",
+						type: "warning",
+						showCancelButton: true,
+						confirmButtonText: "ลบทันที",
+						cancelButtonText: 'ยกเลิก',
+						reverseButtons: true,
+						footer: "LAB ENV-OCC DDC",
+						allowOutsideClick: false
+					}).then(function(result) {
+						if (result.value) {
+							window.location.replace(del_url);
+						}
+					});
 					break;
 				default:
+					let df_url = "{{ route('logout') }}";
+					window.location.replace(df_url);
 					break;
 			}
 		},
@@ -327,12 +343,35 @@ $(document).ready(function() {
 			"edit": {name: "แก้ไขข้อมูล", icon: "fal fa-edit"},
 			"sep1": "---------",
 			"parameter": {name: "เพิ่มพารามิเตอร์", icon: "fal fa-tachometer"},
-			"export": {name: "แก้ไขพารามิเตอร์", icon: "fal fa-tachometer-alt"},
 			"sep2": "---------",
 			"delete": {name: "ลบข้อมูล", icon: "fal fa-trash-alt"},
 			"sep3": "---------",
 			"quit": {name: "ปิด", icon: "fal fa-times"}
 		}
+	});
+	$('#parameter_group').on('change', function() {
+		let order_detail_id = $("#aj_order_detail_id").val();
+		let threat_type_id = $(this).val();
+		let url = "{{ route('customer.parameter.data.list', ['order_detail_id'=>':order_detail_id', 'threat_type_id'=>':threat_type_id']) }}";
+		url = url.replace(':order_detail_id', order_detail_id);
+		url = url.replace(':threat_type_id', threat_type_id);
+		let table = $('.dt-parameter').DataTable({
+			processing: true,
+			serverSide: true,
+			paging: true,
+			searching: true,
+			bDestroy: true,
+			ajax: url,
+			columns: [
+				{data: 'id', name: 'id'},
+				{data: 'parameter_name', name: 'parameter_name'},
+				{data: 'sample_charecter_name', name: 'sample_charecter_name'},
+				{data: 'office_name', name: 'office_name'},
+				{data: 'unit_name', name: 'unit_name'},
+				{data: 'action', name: 'action', orderable: true, searchable: false},
+			],
+		});
+		$('#add-parameter-modal').modal('show');
 	});
 });
 </script>

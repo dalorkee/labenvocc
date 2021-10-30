@@ -24,7 +24,7 @@ class CustParameterDataTable extends DataTable
 				})
 				->addColumn('parameter', function (OrderDetail $detail) {
 					return $detail->parameters->map(function($parameter) {
-						return $parameter->parameter_name;
+						return "<span class=\"badge badge-info\">".$parameter->parameter_name."</span> <a href=\"".route('customer.parameter.data.destroy', ['id'=>$parameter->id])."\" data-toggle=\"tooltip\" data-placement=\"auto\" title=\"ลบ ".$parameter->parameter_name."\"><i class=\"fal fa-times-circle\"></i></a>";
 					})->implode('<br>');
 				})
 				->addColumn('unit', function (OrderDetail $detail) {
@@ -40,12 +40,12 @@ class CustParameterDataTable extends DataTable
 	}
 
 	public function query(Request $request, OrderDetail $orderDetail) {
-		$orders = $orderDetail::with('parameters')->select('*')->whereOrder_id($request->order_id)->orderBy('id', 'ASC');
-		return $orders;
+		return $orderDetail::with('parameters')->select('*')->whereOrder_id($request->order_id)->orderBy('id', 'ASC');
 	}
 
 	public function html() {
 		try {
+            $row_completed = OrderDetail::whereOrder_id(1)->whereCompleted('y')->count();
 			return $this->builder()
 				->setTableId("order-table")
 				->setTableAttribute("class", "table table-bordered table-hover table-striped w-100")
@@ -54,9 +54,9 @@ class CustParameterDataTable extends DataTable
 				->responsive(true)
 				->orderBy(0, 'desc')
 				->dom('
-				<"row"
-					<"col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6 d-flex justify-content-start"B>
-					<"col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6 d-flex justify-content-end"f>
+				<"row mb-2"
+					<"col-8 d-flex justify-content-start dt-btn"B>
+					<"col-4 d-flex justify-content-end">
 				>
 				<"row"
 					<"col-sm-12"tr>
@@ -67,10 +67,11 @@ class CustParameterDataTable extends DataTable
 				>'
 				)
 				->buttons(
-					Button::make('create')->addClass('btn btn-success font-prompt')->text('<i class="fal fa-plus-circle"></i> เพิ่มข้อมูลใหม่')->action("javascript:newData()"),
-				// 	Button::make('export')->addClass('btn btn-info')->text('<i class="fal fa-download"></i> <span class="d-none d-sm-inline">ส่งออก</span>'),
-				// 	Button::make('print')->addClass('btn btn-info')->text('<i class="fal fa-print"></i> <span class="d-none d-sm-inline">พิมพ์</span>'),
-				// 	Button::make('reload')->addClass('btn btn-info')->text('<i class="fal fa-redo"></i> โหลดใหม่'),
+					Button::make('create')->addClass('btn btn-success font-prompt')->text('<i class="fal fa-plus-circle"></i> <span class="d-none d-sm-inline">เพิ่มข้อมูลใหม่</span>')->action("javascript:newData()"),
+                    Button::make('print')->addClass('ml-2 btn btn-danger font-prompt')->text('จำนวน '.$row_completed.' ตัวอย่าง')->action("javascript:newData()"),
+				// Button::make('export')->addClass('btn btn-info font-prompt')->text('<i class="fal fa-download"></i> <span class="d-none d-sm-inline">ส่งออก</span>'),
+				// Button::make('print')->addClass('btn btn-info font-prompt')->text('<i class="fal fa-print"></i> <span class="d-none d-sm-inline">print</span>')->action("javascript:alert('xx')"),
+				// Button::make('reload')->addClass('btn btn-info')->text('<i class="fal fa-redo"></i> โหลดใหม่'),
 				)
 				->parameters([
 					'language'=>['url'=>url('/vendor/DataTables/i18n/thai.json')],
