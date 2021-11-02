@@ -16,6 +16,7 @@
 .buttons-create:after {content:'';clear:both;}
 .dt-btn {margin:0;padding:0;}
 #order-table thead {background-color:#297FB0;color: white;}
+.row-completed {width:180px;padding-right:14px;position:absolute;top:82px;right:10px;text-align:right;}
 </style>
 @endsection
 @section('content')
@@ -36,6 +37,7 @@
 				</div>
 			</div>
 			<div class="panel-container relative">
+                <div class="row-completed"><span class="badge badge-danger p-2">จำนวน {{ number_format($row_completed) }} ตัวอย่าง</span></div>
 				<form>
 					<div class="panel-content">
 						<ul class="steps mb-3">

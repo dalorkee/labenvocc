@@ -45,7 +45,6 @@ class CustParameterDataTable extends DataTable
 
 	public function html() {
 		try {
-            $row_completed = OrderDetail::whereOrder_id(1)->whereCompleted('y')->count();
 			return $this->builder()
 				->setTableId("order-table")
 				->setTableAttribute("class", "table table-bordered table-hover table-striped w-100")
@@ -68,7 +67,6 @@ class CustParameterDataTable extends DataTable
 				)
 				->buttons(
 					Button::make('create')->addClass('btn btn-success font-prompt')->text('<i class="fal fa-plus-circle"></i> <span class="d-none d-sm-inline">เพิ่มข้อมูลใหม่</span>')->action("javascript:newData()"),
-                    Button::make('print')->addClass('ml-2 btn btn-danger font-prompt')->text('จำนวน '.$row_completed.' ตัวอย่าง')->action("javascript:newData()"),
 				// Button::make('export')->addClass('btn btn-info font-prompt')->text('<i class="fal fa-download"></i> <span class="d-none d-sm-inline">ส่งออก</span>'),
 				// Button::make('print')->addClass('btn btn-info font-prompt')->text('<i class="fal fa-print"></i> <span class="d-none d-sm-inline">print</span>')->action("javascript:alert('xx')"),
 				// Button::make('reload')->addClass('btn btn-info')->text('<i class="fal fa-redo"></i> โหลดใหม่'),

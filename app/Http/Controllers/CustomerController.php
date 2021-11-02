@@ -303,7 +303,8 @@ class CustomerController extends Controller
 
 	protected function createParameter(Request $request, CustParameterDataTable $dataTable): object {
 		$order_id = $request->order_id;
-		return $dataTable->render('apps.customers.parameter', compact('order_id'));
+        $row_completed = OrderDetail::whereOrder_id($request->order_id)->whereCompleted('y')->count();
+		return $dataTable->render('apps.customers.parameter', compact('order_id', 'row_completed'));
 	}
 
 	protected function listParameterData(Request $request): object {
