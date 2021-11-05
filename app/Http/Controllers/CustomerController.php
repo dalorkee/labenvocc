@@ -5,12 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\{Auth,Log,Storage,File};
 //use Spatie\Permission\Models\{Role,Permission};
-use App\Models\{Order,OrderDetail,Fileupload,OrderDetailParameter,Parameter};
-use App\DataTables\{CustomersDataTable,CustParameterDataTable};
-//use App\Traits\CommonTrait as TraitsCommonTrait;
-use App\Traits\{CustomerTrait,FileTrait,CommonTrait};
 //use Illuminate\Routing\Redirector;
 //use Livewire\Controllers\FileUploadHandler;
+//use App\Traits\CommonTrait as TraitsCommonTrait;
+use App\Models\{Order,OrderDetail,Fileupload,OrderDetailParameter,Parameter};
+use App\DataTables\{CustomersDataTable,CustParameterDataTable,CustSpecemenDataTable};
+use App\Traits\{CustomerTrait,FileTrait,CommonTrait,JsonBoundaryTrait};
 use Yajra\DataTables\Facades\DataTables;
 
 class CustomerController extends Controller
@@ -18,7 +18,7 @@ class CustomerController extends Controller
 	private object $user;
 	private string $user_role;
 
-	use CustomerTrait, FileTrait, CommonTrait;
+	use CustomerTrait, FileTrait, CommonTrait, JsonBoundaryTrait;
 
 	public function __construct() {
 		$this->middleware('auth');
@@ -303,7 +303,7 @@ class CustomerController extends Controller
 
 	protected function createParameter(Request $request, CustParameterDataTable $dataTable): object {
 		$order_id = $request->order_id;
-        $row_completed = OrderDetail::whereOrder_id($request->order_id)->whereCompleted('y')->count();
+		$row_completed = OrderDetail::whereOrder_id($request->order_id)->whereCompleted('y')->count();
 		return $dataTable->render('apps.customers.parameter', compact('order_id', 'row_completed'));
 	}
 
@@ -365,7 +365,14 @@ class CustomerController extends Controller
 		}
 	}
 
-	protected function createSpecemen(Request $request) {
-		return view('apps.customers.specemen', ['order_id' => $request->order_id]);
+	// protected function createSpecemen(Request $request) {
+	// 	return view('apps.customers.specemen', ['order_id' => $request->order_id]);
+	// }
+	protected function createSpecemen(CustSpecemenDataTable $dataTable, Request $request): object {
+		$order_id = $request->order_id;
+		$sample_charecter = $this->getSampleCharecter();
+		$provinces = $this->getMinProvince();
+		$data = ['order_id' => $order_id, 'sample_charecter' => $sample_charecter, 'provinces' => $provinces];
+		return $dataTable->render('apps.customers.specemen', ['data'=> $data]);
 	}
 }

@@ -1,6 +1,8 @@
 <?php
 namespace App\Traits;
-use App\Models\{Position,PositionLevel,Duty};
+
+use App\Models\{Position,PositionLevel,Duty,SampleCharecter};
+
 trait CommonTrait {
 	public function titleName(): array {
 		return ['mr'=>'นาย', 'mrs'=>'นาง', 'miss'=>'นางสาว'];
@@ -73,6 +75,13 @@ trait CommonTrait {
 		$result = array();
 		Duty::select('id', 'duty_name')->get()->each(function($value, $key) use (&$result) {
 			$result[$value->id] = $value->duty_name;
+		});
+		return $result;
+	}
+	public function getSampleCharecter(): array {
+		$result = array();
+		SampleCharecter::select('id', 'sample_charecter_name')->whereSample_charecter_status(1)->get()->each(function($value, $key) use (&$result) {
+			$result[$value->id] = $value->sample_charecter_name;
 		});
 		return $result;
 	}
