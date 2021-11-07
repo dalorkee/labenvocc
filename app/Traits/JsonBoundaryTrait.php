@@ -14,20 +14,20 @@ trait JsonBoundaryTrait {
 			} else {
 				return array();
 			}
-		} catch (Exception $e) {
+		} catch (\Exception $e) {
 			echo $e->getMessage();
 		}
 	}
 
 	public function getMinProvince(): array {
 		try {
-			$provinces = self::getProvince();
+			$provinces = $this->getProvince();
 			foreach ($provinces as $key => $val) {
 				$minProvince[$key] = $val['province_name'];
 			}
 			asort($minProvince);
 			return $minProvince;
-		} catch (Exception $e) {
+		} catch (\Exception $e) {
 			echo $e->getMessage();
 		}
 	}
@@ -43,7 +43,7 @@ trait JsonBoundaryTrait {
 			} else {
 				return collect();
 			}
-		} catch (Exception $e) {
+		} catch (\Exception $e) {
 			echo $e->getMessage();
 		}
 	}
@@ -59,33 +59,33 @@ trait JsonBoundaryTrait {
 			} else {
 				return collect();
 			}
-		} catch (Exception $e) {
+		} catch (\Exception $e) {
 			echo $e->getMessage();
 		}
 	}
 
 	public function renderDistrictToHtmlSelect(Request $request): string {
 		try {
-			$district = self::getDistrictByProvince($request->id);
+			$district = $this->getDistrictByProvince($request->id);
 			$htm = "<option value=\"\">-- โปรดเลือก --</option>";
 			foreach ($district as $key => $val) {
 				$htm .= "<option value=\"".$key."\">".$val['district_name']."</option>";
 			}
 			return $htm;
-		} catch (Exception $e) {
+		} catch (\Exception $e) {
 			echo $e->getMessage();
 		}
 	}
 
 	public function renderSubDistrictToHtmlSelect(Request $request): string {
 		try {
-			$sub_district = self::getSubDistrictByDistrict($request->id);
+			$sub_district = $this->getSubDistrictByDistrict($request->id);
 			$htm = "<option value=\"\">-- โปรดเลือก --</option>";
 			foreach ($sub_district as $key => $val) {
 				$htm .= "<option value=\"".$key."\">".$val['sub_district_name']."</option>";
 			}
 			return $htm;
-		} catch (Exception $e) {
+		} catch (\Exception $e) {
 			echo $e->getMessage();
 		}
 	}

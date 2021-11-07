@@ -14,45 +14,53 @@ trait DbHospitalTrait {
 			->limit(10000)
 			->get()
 			->chunk(1000)->toArray();
-		} catch (Exception $e) {
+		} catch (\Exception $e) {
 			Log::error($e->getMessage());
 		}
 	}
 
 	public function searchHospitalByName(Request $request): array {
-		$data = Hospital::select('hosp_id', 'hosp_name')
-			->whereRaw("hosp_name like ? ", array('%'.$request->q.'%'))
-			->whereStatus_code(1)
-			->get();
-		$items = array();
-		$data->map(function($item, $key) use (&$items) {
-			$tmp['id'] = $item->hosp_id;
-			$tmp['value'] = $item->hosp_name;
-			array_push($items, $tmp);
-		});
-		$json = array(
-			"total" => $data->count(),
-			"items" => $items
-		);
-		return $json;
+		try {
+			$data = Hospital::select('id', 'hosp_name')
+				->whereRaw("hosp_name like ? ", array('%'.$request->q.'%'))
+				->whereStatus_code(1)
+				->get();
+			$items = array();
+			$data->map(function($item, $key) use (&$items) {
+				$tmp['id'] = $item->id;
+				$tmp['value'] = $item->hosp_name;
+				array_push($items, $tmp);
+			});
+			$json = array(
+				"total" => $data->count(),
+				"items" => $items
+			);
+			return $json;
+		} catch (\Exception $e) {
+			Log::error($e->getMessage());
+		}
 	}
 
 	public function searchDiseaseBorderByName(Request $request): array {
-		$data = Hospital::select('hosp_id', 'hosp_name')
-			->whereRaw("hosp_name like ? ", array('%'.$request->q.'%'))
-			->whereStatus_code(1)
-			->get();
-		$items = array();
-		$data->map(function($item, $key) use (&$items) {
-			$tmp['id'] = $item->hosp_id;
-			$tmp['value'] = $item->hosp_name;
-			array_push($items, $tmp);
-		});
-		$json = array(
-			"total" => $data->count(),
-			"items" => $items
-		);
-		return $json;
+		try {
+			$data = Hospital::select('hosp_id', 'hosp_name')
+				->whereRaw("hosp_name like ? ", array('%'.$request->q.'%'))
+				->whereStatus_code(1)
+				->get();
+			$items = array();
+			$data->map(function($item, $key) use (&$items) {
+				$tmp['id'] = $item->hosp_id;
+				$tmp['value'] = $item->hosp_name;
+				array_push($items, $tmp);
+			});
+			$json = array(
+				"total" => $data->count(),
+				"items" => $items
+			);
+			return $json;
+		} catch (\Exception $e) {
+			Log::error($e->getMessage());
+		}
 	}
 }
 ?>

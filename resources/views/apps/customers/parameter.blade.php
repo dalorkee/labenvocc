@@ -53,7 +53,7 @@
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
 								{{-- <button class="btn btn-primary ml-auto" type="button"><i class="fal fa-save"></i> บันทึกร่าง</button> --}}
 								<a href="{{ route('customer.info.create', ['order_id' => $order_id]) }}" class="btn btn-warning ml-auto"><i class="fal fa-arrow-alt-left"></i> ก่อนหน้า</a>
-								<a href="{{ route('customer.specemen.create', ['order_id' => $order_id]) }}" class="btn btn-warning ml-auto">ถัดไป <i class="fal fa-arrow-alt-right"></i></a>
+								<a href="{{ route('customer.sample.create', ['order_id' => $order_id]) }}" class="btn btn-warning ml-auto">ถัดไป <i class="fal fa-arrow-alt-right"></i></a>
 							</div>
 						</div>
 					</div>
@@ -69,7 +69,7 @@
 			<form name="modal_new_data" action="{{ route('customer.parameter.personal.store') }}" method="POST">
 				@csrf
 				<div class="modal-header bg-green-600 text-white">
-					<h5 class="modal-title"><i class="fal fa-plus-circle"></i> เพิ่มข้อมูลใหม่</h5>
+					<h5 class="modal-title"><i class="fal fa-plus-circle"></i> เพิ่มข้อมูลตัวอย่างใหม่</h5>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true"><i class="fal fa-times"></i></span>
 					</button>

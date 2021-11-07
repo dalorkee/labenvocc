@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\{Auth,Log,Storage,File};
 //use Livewire\Controllers\FileUploadHandler;
 //use App\Traits\CommonTrait as TraitsCommonTrait;
 use App\Models\{Order,OrderDetail,Fileupload,OrderDetailParameter,Parameter};
-use App\DataTables\{CustomersDataTable,CustParameterDataTable,CustSpecemenDataTable};
+use App\DataTables\{CustomersDataTable,CustParameterDataTable,CustSampleDataTable};
 use App\Traits\{CustomerTrait,FileTrait,CommonTrait,JsonBoundaryTrait};
 use Yajra\DataTables\Facades\DataTables;
 
@@ -365,14 +365,42 @@ class CustomerController extends Controller
 		}
 	}
 
-	// protected function createSpecemen(Request $request) {
-	// 	return view('apps.customers.specemen', ['order_id' => $request->order_id]);
-	// }
-	protected function createSpecemen(CustSpecemenDataTable $dataTable, Request $request): object {
+	protected function createSample(CustSampleDataTable $dataTable, Request $request): object {
 		$order_id = $request->order_id;
+		$sample_list = array();
+		OrderDetail::select('id')->whereOrder_id($order_id)->whereCompleted('y')->get()->each(function($value, $key) use (&$sample_list) {$sample_list[$key] = $value->id;});
 		$sample_charecter = $this->getSampleCharecter();
 		$provinces = $this->getMinProvince();
-		$data = ['order_id' => $order_id, 'sample_charecter' => $sample_charecter, 'provinces' => $provinces];
-		return $dataTable->render('apps.customers.specemen', ['data'=> $data]);
+		$data = ['order_id' => $order_id, 'sample_list' => $sample_list, 'sample_charecter' => $sample_charecter, 'provinces' => $provinces];
+		return $dataTable->render('apps.customers.sample', ['data'=> $data]);
+	}
+
+	protected function storeSample(Request $request) {
+		$request->validate([
+			'sample_charecter'=>'bail|required',
+		],[
+			'sample_charecter.required'=>'โปรดเลือกประเด็นมลพิษ',
+		]);
+		try {
+			if ((int)$request->sample_select_begin > (int)$request->sample_select_end) {
+				return redirect()->back()->with('warning', 'เลือกข้อมูลตัวอย่างไม่ถูกต้อง โปรดตรวจสอบ');
+			} else {
+				$saved = false;
+				for ($i=(int)$request->sample_select_begin; $i<=(int)$request->sample_select_end; $i++) {
+					$orderDetail = OrderDetail::find($i);
+					if (!is_null($orderDetail)) {
+						$orderDetail->sample_charecter = $request->sample_charecter;
+						$saved = $orderDetail->save();
+					}
+				}
+				if ($saved == true) {
+					return redirect()->back()->with('success', 'บันทึกข้อมูลแล้ว');
+				} else {
+					return redirect()->back()->with('error', 'บันทึกข้อมูลไม่สมบูรณ์ โปรดตรวจสอบ');
+				}
+			}
+		} catch (\Exception $e) {
+			Log::error($e->getMessage());
+		}
 	}
 }

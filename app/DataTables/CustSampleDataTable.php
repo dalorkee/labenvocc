@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Log;
 use App\Models\OrderDetail;
 use App\Traits\CommonTrait;
 
-class CustSpecemenDataTable extends DataTable
+class CustSampleDataTable extends DataTable
 {
 	use CommonTrait;
 

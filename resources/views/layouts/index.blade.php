@@ -75,44 +75,24 @@ var resetSettings = function() {
 @yield('script')
 <script>
 $(document).ready(function() {
-	var options = {
-	"closeButton": true,
-	"debug": false,
-	"newestOnTop": true,
-	"progressBar": false,
-	"positionClass": "toast-top-right",
-	"preventDuplicates": false,
-	"onclick": null,
-	"showDuration": 300,
-	"hideDuration": 100,
-	"timeOut": 0,
-	"extendedTimeOut": 0,
-	"showEasing": "swing",
-	"hideEasing": "linear",
-	"showMethod": "fadeIn",
-	"hideMethod": "fadeOut"
+	let options = {
+		"closeButton": true,
+		"debug": false,
+		"newestOnTop": true,
+		"progressBar": false,
+		"positionClass": "toast-top-right",
+		"preventDuplicates": false,
+		"onclick": null,
+		"showDuration": 300,
+		"hideDuration": 100,
+		"timeOut": 0,
+		"extendedTimeOut": 0,
+		"showEasing": "swing",
+		"hideEasing": "linear",
+		"showMethod": "fadeIn",
+		"hideMethod": "fadeOut"
 	};
-	@if ($errors->any())
-		@foreach ($errors->all() as $error)
-			toastr.error("{{ $error }}", "Error", options);
-		@endforeach
-		@php Session::forget("errors"); @endphp
-	@endif
-	@if (Session::has('success'))
-		toastr.success("{{ Session::get('success') }}", "Success", options);
-		Swal.fire({
-			type: "success",
-			title: "บันทึกข้อมูลสำเร็จแล้ว",
-			text: "เราได้รับข้อมูลของท่านแล้ว โปรดรอการติดต่อกลับจากเจ้าหน้าที่",
-			confirmButtonText: "ตกลง",
-			footer: "LAB ENV-OCC DDC",
-			allowOutsideClick: false
-		});
-		@php Session::forget("success"); @endphp
-	@endif
-
-	/* opt2 */
-	var options2 = {
+	let options2 = {
 		"closeButton": true,
 		"debug": false,
 		"newestOnTop": true,
@@ -129,12 +109,6 @@ $(document).ready(function() {
 		"showMethod": "fadeIn",
 		"hideMethod": "fadeOut"
 	};
-	@if (Session::has('action_notic'))
-		toastr.info("{{ Session::get('action_notic') }}", "LabEnvOcc", options2);
-		@php Session::forget("action_notic"); @endphp
-	@endif
-
-    	/* opt2 */
 	let options3 = {
 		"closeButton": true,
 		"debug": false,
@@ -152,6 +126,44 @@ $(document).ready(function() {
 		"showMethod": "fadeIn",
 		"hideMethod": "fadeOut"
 	};
+	@if ($errors->any())
+		@foreach ($errors->all() as $error)
+			toastr.error("{{ $error }}", "Error", options);
+		@endforeach
+		@php Session::forget("$errors"); @endphp
+	@endif
+	@if (Session::has('success'))
+		toastr.success("{{ Session::get('success') }}", "Success", options);
+		Swal.fire({
+			type: "success",
+			title: "บันทึกข้อมูลสำเร็จแล้ว",
+			text: "เราได้รับข้อมูลของท่านแล้ว โปรดรอการติดต่อกลับจากเจ้าหน้าที่",
+			confirmButtonText: "ตกลง",
+			footer: "LAB ENV-OCC DDC",
+			allowOutsideClick: false
+		});
+		@php Session::forget("success"); @endphp
+	@endif
+	@if (Session::has('warning'))
+		toastr.warning("{{ Session::get('warning') }}", "Warning", options);
+		Swal.fire({
+			type: "warning",
+			title: "เกิดข้อผิดพลาด",
+			text: "{{ Session::get('warning') }}",
+			confirmButtonText: "ตกลง",
+			footer: "LAB ENV-OCC DDC",
+			allowOutsideClick: false
+		});
+		@php Session::forget("warning"); @endphp
+	@endif
+    @if (Session::has('error'))
+		toastr.error("{{ Session::get('error') }}", "LabEnvOcc", options);
+		@php Session::forget("error"); @endphp
+	@endif
+	@if (Session::has('action_notic'))
+		toastr.info("{{ Session::get('action_notic') }}", "LabEnvOcc", options2);
+		@php Session::forget("action_notic"); @endphp
+	@endif
 	@if (Session::has('destroy'))
 		toastr.error("{{ Session::get('destroy') }}", "LabEnvOcc", options3);
 		@php Session::forget("destroy"); @endphp

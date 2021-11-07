@@ -8,12 +8,13 @@
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/css/formplugins/select2/select2.bundle.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/css/notifications/sweetalert2/sweetalert2.bundle.css') }}" media="screen">
 <style>
-.select2{width:100%!important;}
+.select2{width:100%!important;z-index:99999}
 .select2-selection{overflow:hidden;}
 .select2-selection__rendered{white-space:normal;word-break:break-all;}
 .select2-selection__rendered{line-height:39px!important;}
 .select2-container .select2-selection--single{height:38px!important;border:1px solid #cccccc;border-radius:0;}
 .select2-selection__arrow{height:37px!important;}
+.js-data-example-ajax {z-index:1000;background:red;}
 .btn-group {margin:0 0 5px 0;padding:0;}
 .dataTables_filter label {margin-top: 8px;}
 .dataTables_filter input:first-child {margin-top: -8px;}
@@ -54,8 +55,8 @@
 					<div class="panel-content border-faded border-left-0 border-right-0 border-bottom-0 d-flex flex-row align-items-center">
 						<div class="form-row">
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
-								<a href="{{ route('customer.info.create', ['order_id' => $data['order_id']]) }}" class="btn btn-warning ml-auto"><i class="fal fa-arrow-alt-left"></i> ก่อนหน้า</a>
-								<a href="{{ route('customer.specemen.create', ['order_id' => $data['order_id']]) }}" class="btn btn-warning ml-auto">ถัดไป <i class="fal fa-arrow-alt-right"></i></a>
+								<a href="{{ route('customer.parameter.create', ['order_id' => $data['order_id']]) }}" class="btn btn-warning ml-auto"><i class="fal fa-arrow-alt-left"></i> ก่อนหน้า</a>
+								<a href="{{ route('customer.sample.create', ['order_id' => $data['order_id']]) }}" class="btn btn-warning ml-auto">ถัดไป <i class="fal fa-arrow-alt-right"></i></a>
 							</div>
 						</div>
 					</div>
@@ -68,26 +69,37 @@
 <div class="modal fade font-prompt" id="new-data-modal" data-keyboard="false" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
 	<div class="modal-dialog modal-xl modal-dialog-centered" role="document">
 		<div class="modal-content">
-			<form name="modal_new_data" action="{{ route('customer.parameter.personal.store') }}" method="POST">
+			<form name="newSampleData" action="{{ route('customer.sample.store', ['order_id' => $data['order_id']]) }}" method="POST">
 				@csrf
 				<div class="modal-header bg-green-600 text-white">
 					<h5 class="modal-title"><i class="fal fa-plus-circle"></i> เพิ่มประเด็นมลพิษ</h5>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true"><i class="fal fa-times"></i></span>
 					</button>
+                    <input type="hidden" name="order_id" value="{{ $data['order_id'] }}">
 				</div>
 				<div class="modal-body">
 					<div class="form-row">
 						<div class="form-group col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6 mb-3">
 							<label class="form-label text-gray-800" for="title_name">ตัวอย่างที่ <span class="text-red-600">*</span></label>
-							<select name="sample_select_begin" class="form-control">
+							<select name="sample_select_begin" class="select2 form-control">
 								<option value="">-- โปรดเลือก --</option>
+                                @forelse ($data['sample_list'] as $key => $val)
+                                    <option value="{{ $val }}">{{ $val }}</option>
+                                @empty
+                                    <option value="-1">ไม่พบข้อมูล</option>
+                                @endforelse
 							</select>
 						</div>
 						<div class="form-group col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6 mb-3">
 							<label class="form-label text-gray-800" for="title_name">ถึง <span class="text-red-600">*</span></label>
-							<select name="sample_select_end" class="form-control">
+							<select name="sample_select_end" class="select2 form-control">
 								<option value="">-- โปรดเลือก --</option>
+                                @forelse ($data['sample_list'] as $key => $val)
+                                    <option value="{{ $val }}">{{ $val }}</option>
+                                @empty
+                                    <option value="-1">ไม่พบข้อมูล</option>
+                                @endforelse
 							</select>
 						</div>
 					</div>
@@ -147,7 +159,7 @@
 						</div>
 						<div class="col-span-6 sm:col-span-6 md:mx-4">
 							<label for="health_place_code" class="block text-base font-medium text-gray-700">เลือกสถานพยาบาล <span class="text-red-600">*</span></label>
-							<select name="health_place_code" data-placeholder="โปรดกรอกข้อความค้นหา" id="hosp_search" class="form-control" disabled>
+							<select name="health_place_code" data-placeholder="โปรดกรอกข้อความค้นหาป" id="hosp_search" class="js-data-example-ajax form-control" disabled>
 							</select>
 						</div>
 						<div class="col-span-6 sm:col-span-6">
@@ -187,7 +199,7 @@
 						</div>
 						<div class="col-span-6 sm:col-span-3">
 							<label for="province" class="block text-base font-medium text-gray-800">1.5 จังหวัด <span class="text-red-600">*</span></label>
-							<select name="office_province" id="province" class="select2-placeholder form-control">
+							<select name="office_province" id="province" class="form-control">
 								<option value="">-- โปรดเลือก --</option>
 								@foreach ($data['provinces'] as $key => $val)
 									<option value="{{ $key }}">{{ $val }}</option>
@@ -196,13 +208,13 @@
 						</div>
 						<div class="col-span-6 sm:col-span-3">
 							<label for="district" class="block text-base font-medium text-gray-800">1.6 เขต/อำเภอ <span class="text-red-600">*</span></label>
-							<select name="office_district" id="district" class="select2-placeholder form-control">
+							<select name="office_district" id="district" class="form-control">
 								<option value="">-- โปรดเลือก --</option>
 							</select>
 						</div>
 						<div class="col-span-6 sm:col-span-3">
 							<label for="sub_district" class="block text-base font-medium text-gray-800">1.7 แขวง/ตำบล <span class="text-red-600">*</span></label>
-							<select name="office_sub_district" id="sub_district" class="select2-placeholder form-control">
+							<select name="office_sub_district" id="sub_district" class="form-control">
 								<option>-- โปรดเลือก --</option>
 							</select>
 						</div>
@@ -388,11 +400,11 @@ $(document).ready(function() {
 <script>
 $(document).ready(function() {
 	$(function() {
-			$('.select2').select2();
+			$('.select2').select2({dropdownParent: $('#new-data-modal')});
 			$(".select2-placeholder-multiple").select2({placeholder: "-- โปรดระบุ --"});
 			$(".js-hide-search").select2({minimumResultsForSearch: 1 / 0});
 			$(".js-max-length").select2({maximumSelectionLength: 2, placeholder: "Select maximum 2 items"});
-			$(".select2-placeholder").select2({placeholder: "-- โปรดระบุ --", allowClear: true});
+			$(".select2-placeholder").select2({placeholder: "-- โปรดระบุ --", allowClear: true,dropdownParent: $('#new-data-modal')});
 			$(".js-select2-icons").select2({
 				minimumResultsForSearch: 1 / 0,
 				templateResult: icon,
@@ -434,7 +446,8 @@ $(document).ready(function() {
 				minimumInputLength: 3,
 				maximumInputLength: 20,
 				templateResult: formatRepo,
-				templateSelection: formatRepoSelection
+				templateSelection: formatRepoSelection,
+				dropdownParent: $('#new-data-modal')
 			});
 
 			/* disease border search by name */
@@ -466,7 +479,8 @@ $(document).ready(function() {
 				minimumInputLength: 3,
 				maximumInputLength: 20,
 				templateResult: formatRepo,
-				templateSelection: formatRepoSelection
+				templateSelection: formatRepoSelection,
+				dropdownParent: $('#new-data-modal')
 			});
 
 		});

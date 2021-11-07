@@ -45,7 +45,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 		Route::get('/customer/parameter/data/store/detail/{order_detail_id}/id/{id}', [CustomerController::class, 'storeParameterData'])->name('parameter.data.store');
 		Route::get('/customer/parameter/data/delete/id/{id}', [CustomerController::class, 'DestroyParameterData'])->name('parameter.data.destroy');
 
-		Route::get('/customer/specemen/create/order/{order_id}', [CustomerController::class, 'createSpecemen'])->name('specemen.create');
+		Route::get('/customer/sample/create/order/{order_id}', [CustomerController::class, 'createSample'])->name('sample.create');
+        Route::post('customer/sample/store/order/{order_id}', [CustomerController::class, 'storeSample'])->name('sample.store');
 	});
 });
 Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
