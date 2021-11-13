@@ -85,7 +85,7 @@ class CustSampleDataTable extends DataTable
 				Column::make('id')->title('รหัส'),
 				Column::make('firstname')->title('ชื่อ'),
 				Column::make('lastname')->title('นามสกุล'),
-				Column::make('specimen_date')->title('วันที่เก็บตัวอย่าง'),
+				Column::make('sample_date')->title('วันที่เก็บตัวอย่าง'),
 				Column::make('parameter')->title('พารามิเตอร์'),
 				Column::make('unit')->title('หน่วย'),
 				Column::make('sample_charecter')->title('ประเด็นมลพิษ'),

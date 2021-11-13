@@ -118,14 +118,14 @@
 					</div>
 					<div class="form-row">
 						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
-							<label class="form-label text-gray-800" for="title_name">สถานที่เก็บตัวอย่าง <span class="text-red-600">*</span></label>
+							<label class="form-label text-gray-800" for="sample_place_type">สถานที่เก็บตัวอย่าง <span class="text-red-600">*</span></label>
 							<div class="frame-wrap">
 								<div class="custom-control custom-checkbox custom-control-inline">
-									<input type="checkbox" name="sample_place_type" value="same_place" class="custom-control-input" id="chk_a">
+									<input type="checkbox" name="sample_place_type" value="same" class="custom-control-input" id="chk_a">
 									<label class="custom-control-label" for="chk_a">สถานที่เดียวกับหน่วยงานที่ส่งตัวอย่าง</label>
 								</div>
 								<div class="custom-control custom-checkbox custom-control-inline">
-									<input type="checkbox" name="sample_place_type" value="specify" class="custom-control-input" id="chk_b">
+									<input type="checkbox" name="sample_place_type" value="new" class="custom-control-input" id="chk_b">
 									<label class="custom-control-label" for="chk_b">กำหนดใหม่</label>
 								</div>
 							</div>

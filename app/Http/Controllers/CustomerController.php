@@ -135,7 +135,7 @@ class CustomerController extends Controller
 			$orderDetail->age_year = $request->age_year;
 			$orderDetail->division = $request->division;
 			$orderDetail->work_life_year = $request->work_life_year;
-			$orderDetail->specimen_date = $this->convertJsDateToMySQL($request->specimen_date);
+			$orderDetail->sample_date = $this->convertJsDateToMySQL($request->sample_date);
 			$orderDetail->note = $request->note;
 			$saved = $orderDetail->save();
 			$last_insert_id = $orderDetail->id;
@@ -171,7 +171,7 @@ class CustomerController extends Controller
 				$mrs_chk = null;
 				$miss_chk = null;
 		}
-		$edit_specimen_date = $this->convertMySQLDateToJs($order_detail->specimen_date);
+		$edit_sample_date = $this->convertMySQLDateToJs($order_detail->sample_date);
 		$htm = "
 		<form name=\"modal_new_data\" action=\"".route('customer.parameter.personal.update')."\" method=\"POST\">
 		<div class=\"modal-header bg-red-500 text-white\">
@@ -235,7 +235,7 @@ class CustomerController extends Controller
 				<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3\">
 					<label class=\"form-label\" for=\"edit_specimen_date\">วันที่เก็บตัวอย่าง <span class=\"text-red-600\">*</span></label>
 					<div class=\"input-group\">
-						<input type=\"text\" name=\"edit_specimen_date\" value=\"".$edit_specimen_date."\" class=\"form-control\" readonly placeholder=\"เลือกวันที่\" id=\"datepicker_edit_specimen_date\">
+						<input type=\"text\" name=\"edit_sample_date\" value=\"".$edit_sample_date."\" class=\"form-control\" readonly placeholder=\"เลือกวันที่\" id=\"datepicker_edit_specimen_date\">
 						<div class=\"input-group-append\">
 							<span class=\"input-group-text fs-xl\">
 								<i class=\"fal fa-calendar-alt\"></i>
@@ -375,7 +375,7 @@ class CustomerController extends Controller
 		return $dataTable->render('apps.customers.sample', ['data'=> $data]);
 	}
 
-	protected function storeSample(Request $request) {
+	protected function storeSample(Request $request): object {
 		$request->validate([
 			'sample_charecter'=>'bail|required',
 		],[
@@ -390,6 +390,7 @@ class CustomerController extends Controller
 					$orderDetail = OrderDetail::find($i);
 					if (!is_null($orderDetail)) {
 						$orderDetail->sample_charecter = $request->sample_charecter;
+						$orderDetail->sample_place_type = $request->sample_place_type;
 						$saved = $orderDetail->save();
 					}
 				}

@@ -88,7 +88,7 @@ class CustParameterDataTable extends DataTable
 				Column::make('age_year')->title('อายุ (ปี)'),
 				Column::make('division')->title('แผนก'),
 				Column::make('work_life_year')->title('อายุงาน'),
-				Column::make('specimen_date')->title('วันที่เก็บตัวอย่าง'),
+				Column::make('sample_date')->title('วันที่เก็บตัวอย่าง'),
 				Column::make('parameter')->title('พารามิเตอร์'),
 				Column::make('unit')->title('หน่วย'),
 				Column::make('note')->title('หมายเหตุ'),
