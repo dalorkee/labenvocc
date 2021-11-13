@@ -76,7 +76,7 @@
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true"><i class="fal fa-times"></i></span>
 					</button>
-                    <input type="hidden" name="order_id" value="{{ $data['order_id'] }}">
+					<input type="hidden" name="order_id" value="{{ $data['order_id'] }}">
 				</div>
 				<div class="modal-body">
 					<div class="form-row">
@@ -84,22 +84,22 @@
 							<label class="form-label text-gray-800" for="title_name">ตัวอย่างที่ <span class="text-red-600">*</span></label>
 							<select name="sample_select_begin" class="select2 form-control">
 								<option value="">-- โปรดเลือก --</option>
-                                @forelse ($data['sample_list'] as $key => $val)
-                                    <option value="{{ $val }}">{{ $val }}</option>
-                                @empty
-                                    <option value="-1">ไม่พบข้อมูล</option>
-                                @endforelse
+								@forelse ($data['sample_list'] as $key => $val)
+									<option value="{{ $val }}">{{ $val }}</option>
+								@empty
+									<option value="-1">ไม่พบข้อมูล</option>
+								@endforelse
 							</select>
 						</div>
 						<div class="form-group col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6 mb-3">
 							<label class="form-label text-gray-800" for="title_name">ถึง <span class="text-red-600">*</span></label>
 							<select name="sample_select_end" class="select2 form-control">
 								<option value="">-- โปรดเลือก --</option>
-                                @forelse ($data['sample_list'] as $key => $val)
-                                    <option value="{{ $val }}">{{ $val }}</option>
-                                @empty
-                                    <option value="-1">ไม่พบข้อมูล</option>
-                                @endforelse
+								@forelse ($data['sample_list'] as $key => $val)
+									<option value="{{ $val }}">{{ $val }}</option>
+								@empty
+									<option value="-1">ไม่พบข้อมูล</option>
+								@endforelse
 							</select>
 						</div>
 					</div>
@@ -136,18 +136,18 @@
 							<label for="office_type" class="block text-gray-800">กำหนดสถานที่เก็บตัวอย่าง <span class="text-red-600">*</span></label>
 							<div class="frame-wrap">
 								<div class="custom-control custom-switch custom-control-inline">
-									<input type="checkbox" name="office_type" value="1" id="agency_type_establishment" class="custom-control-input agency_type">
+									<input type="checkbox" name="office_type" value="1" id="agency_type_establishment" class="custom-control-input agency_type" @if (Auth()->user()->userCustomer->office_type == 1) checked @endif>
 									<label class="custom-control-label" for="agency_type_establishment">สถานประกอบการ <span class="text-red-600">*</span></label>
 								</div>
 							</div>
 						</div>
 						<div class="col-span-6 sm:col-span-3 md:ml-4">
 							<label for="office_name_establishment" class="block text-base font-medium text-gray-700">ชื่อสถานประกอบการ <span class="text-red-600">*</span></label>
-							<input type="text" name="office_name_establishment" id="office_name_establishment" class="form-control">
+							<input type="text" name="office_name_establishment" id="office_name_establishment" value="{{ Auth::user()->userCustomer->office_name }}" class="form-control">
 						</div>
 						<div class="col-span-6 sm:col-span-3 md:mr-4">
 							<label for="office_code_establishment" class="block text-base font-medium text-gray-700">รหัสสถานประกอบการ <span class="text-red-600">*</span></label>
-							<input type="text" name="office_code_establishment" id="office_code_establishment" class="form-control">
+							<input type="text" name="office_code_establishment" value="{{ (Auth()->user()->userCustomer->office_type == 1) ? Auth::user()->userCustomer->office_code : null }}" id="office_code_establishment" class="form-control">
 						</div>
 						<div class="col-span-6 sm:col-span-6">
 							<div class="frame-wrap">
