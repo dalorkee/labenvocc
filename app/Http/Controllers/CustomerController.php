@@ -366,12 +366,18 @@ class CustomerController extends Controller
 	}
 
 	protected function createSample(CustSampleDataTable $dataTable, Request $request): object {
-		$order_id = $request->order_id;
 		$sample_list = array();
-		OrderDetail::select('id')->whereOrder_id($order_id)->whereCompleted('y')->get()->each(function($value, $key) use (&$sample_list) {$sample_list[$key] = $value->id;});
+		OrderDetail::select('id')->whereOrder_id($request->order_id)->whereCompleted('y')->get()->each(function($value, $key) use (&$sample_list) {
+			$sample_list[$key] = $value->id;
+		});
 		$sample_charecter = $this->getSampleCharecter();
 		$provinces = $this->getMinProvince();
-		$data = ['order_id' => $order_id, 'sample_list' => $sample_list, 'sample_charecter' => $sample_charecter, 'provinces' => $provinces];
+		$data = [
+			'order_id' => $request->order_id,
+			'sample_list' => $sample_list,
+			'sample_charecter' => $sample_charecter,
+			'provinces' => $provinces
+		];
 		return $dataTable->render('apps.customers.sample', ['data'=> $data]);
 	}
 
