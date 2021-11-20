@@ -9,10 +9,10 @@
 @section('content')
 <ol class="breadcrumb page-breadcrumb">
 	<li class="breadcrumb-item"><a href="javascript:void(0);">Admin</a></li>
-	<li class="breadcrumb-item">Users Customer Manage</li>
+	<li class="breadcrumb-item">Office Manage</li>
 </ol>
 <div class="subheader">
-	<h1 class="subheader-title"><small>จัดการข้อมูลลูกค้า</small></h1>
+	<h1 class="subheader-title"><small>แก้ไขข้อมูลหน่วยงาน</small></h1>
 </div>
 @if (Session::get('success'))
 	<div class="alert alert-success">
@@ -25,8 +25,14 @@
 @endif
 <div class="fs-lg fw-300 p-5 bg-white border-faded rounded mb-g">
 	<div class="frame-wrap">
-		{{ $dataTable->table() }}
+		hello edit
+		{{-- {{dd($userCus)}} --}}
+        {{-- {{ $userCus->id }} --}}
 	</div>	
+    <div class="frame-wrap">
+        -------------
+        {{ $userCus->office_name }}
+	</div>
 </div>
 @endsection
 @section('script')
@@ -35,34 +41,4 @@
 <script type="text/javascript" src="{{ URL::asset('vendor/DataTables/Responsive-2.2.6/js/dataTables.responsive.min.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('vendor/jquery-contextmenu/js/jquery.contextmenu.min.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/buttons.server-side.js') }}"></script>
-    {{ $dataTable->scripts() }}
-
-<script>
-	$(document).ready(function() {
-        $.ajaxSetup({headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}});
-		$.contextMenu({
-            selector: '.usercus-manage-nav',
-            trigger:'left',
-            callback: function(key, options) {
-                var userCusId = $(this).data('id');
-                switch(key){
-                    case 'edit':                        
-                        let userCusUrl = '{{ route("users.edit", ":id") }}';                        
-                        userCusUrl = userCusUrl.replace(':id', userCusId);
-                        alert(userCusUrl);
-                        window.open(userCusUrl, '_self');
-                    break;
-                }
-            },
-            items: {
-                "edit": {name: "แก้ไข", icon: "fal fa-edit"},
-                "sep1":"--------",
-                "allow": {name: "อนุญาต", icon: "fal fa-lock-open-alt"},
-                "deny": {name: "ไม่อนุญาต", icon: "fal fa-lock-alt"},
-                "close": {name: "ปิดใช้งาน", icon: "fal fa-exclamation-triangle"},
-                "delete": {name: "ลบ", icon: "fal fa-eraser"},
-            }
-        });
-	});
-</script>
 @endsection

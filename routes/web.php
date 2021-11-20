@@ -58,4 +58,5 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function(){
 		'paramet'=>ParametController::class,
 		'users'=>UsersController::class
 	]);
+Route::get('/users/id/{id}/edit',[UsersController::class,'edit'])->name('users.edit');
 });
