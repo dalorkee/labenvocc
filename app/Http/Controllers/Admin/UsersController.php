@@ -58,13 +58,11 @@ class UsersController extends Controller
      */
     public function edit(Request $request)
     {
-        dd($request);
         $userCus = User::join('users_customer_detail','users.id','=','users_customer_detail.user_id')
             ->where('users.user_type','customer')
             ->where('users_customer_detail.user_id',$request->id)
             ->get();
-            // ->toarray();
-        dd($userCus);
+            
         return view('admin.users.edit',compact('userCus'));
     }
 

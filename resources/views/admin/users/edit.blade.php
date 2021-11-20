@@ -25,14 +25,14 @@
 @endif
 <div class="fs-lg fw-300 p-5 bg-white border-faded rounded mb-g">
 	<div class="frame-wrap">
-		hello edit
-		{{-- {{dd($userCus)}} --}}
-        {{-- {{ $userCus->id }} --}}
-	</div>	
-    <div class="frame-wrap">
-        -------------
-        {{ $userCus->office_name }}
+		@foreach ($userCus as $value)
+			{{ $value->user_id }}			
 	</div>
+	---------------------------	
+    <div class="frame-wrap">
+        	{{ $value->office_name }}
+	</div>
+		@endforeach
 </div>
 @endsection
 @section('script')
