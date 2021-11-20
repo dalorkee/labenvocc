@@ -7,7 +7,7 @@ use Yajra\DataTables\Html\{Button,Column};
 use Yajra\DataTables\Services\DataTable;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
-use App\Models\OrderDetail;
+use App\Models\{OrderDetail,User,UserCustomer};
 use App\Traits\CommonTrait;
 
 class CustSampleDataTable extends DataTable

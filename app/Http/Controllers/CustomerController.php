@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\{Auth,Log,Storage,File};
 //use Illuminate\Routing\Redirector;
 //use Livewire\Controllers\FileUploadHandler;
 //use App\Traits\CommonTrait as TraitsCommonTrait;
-use App\Models\{Order,OrderDetail,Fileupload,OrderDetailParameter,Parameter};
+use App\Models\{Order,OrderDetail,Fileupload,OrderDetailParameter,Parameter,UserCustomer};
 use App\DataTables\{CustomersDataTable,CustParameterDataTable,CustSampleDataTable};
 use App\Traits\{CustomerTrait,FileTrait,CommonTrait,JsonBoundaryTrait};
 use Yajra\DataTables\Facades\DataTables;
@@ -365,7 +365,7 @@ class CustomerController extends Controller
 		}
 	}
 
-	protected function createSample(CustSampleDataTable $dataTable, Request $request): object {
+	protected function createSample(CustSampleDataTable $dataTable, Request $request) {
 		$sample_list = array();
 		OrderDetail::select('id')->whereOrder_id($request->order_id)->whereCompleted('y')->get()->each(function($value, $key) use (&$sample_list) {
 			$sample_list[$key] = $value->id;
@@ -388,15 +388,23 @@ class CustomerController extends Controller
 			'sample_charecter.required'=>'โปรดเลือกประเด็นมลพิษ',
 		]);
 		try {
-			if ((int)$request->sample_select_begin > (int)$request->sample_select_end) {
+			if ($request->sample_select_begin > $request->sample_select_end) {
 				return redirect()->back()->with('warning', 'เลือกข้อมูลตัวอย่างไม่ถูกต้อง โปรดตรวจสอบ');
 			} else {
 				$saved = false;
-				for ($i=(int)$request->sample_select_begin; $i<=(int)$request->sample_select_end; $i++) {
+				for ($i=$request->sample_select_begin; $i<=$request->sample_select_end; $i++) {
 					$orderDetail = OrderDetail::find($i);
 					if (!is_null($orderDetail)) {
 						$orderDetail->sample_charecter = $request->sample_charecter;
 						$orderDetail->sample_place_type = $request->sample_place_type;
+						$orderDetail->sample_office_category = $request->sample_office_category;
+						$orderDetail->sample_office_id = $request->sample_office_id;
+						$orderDetail->sample_office_name = $request->sample_office_name;
+						$orderDetail->sample_office_addr = $request->sample_office_addr;
+						$orderDetail->sample_office_sub_district = $request->sample_office_sub_district;
+						$orderDetail->sample_office_district = $request->sample_office_district;
+						$orderDetail->sample_office_province = $request->sample_office_province;
+						$orderDetail->sample_office_postal = $request->sample_office_postal;
 						$saved = $orderDetail->save();
 					}
 				}
