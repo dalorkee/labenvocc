@@ -9,10 +9,10 @@
 @section('content')
 <ol class="breadcrumb page-breadcrumb">
 	<li class="breadcrumb-item"><a href="javascript:void(0);">Admin</a></li>
-	<li class="breadcrumb-item">Office Manage</li>
+	<li class="breadcrumb-item">Users Customer Manage</li>
 </ol>
 <div class="subheader">
-	<h1 class="subheader-title"><small>จัดการหน่วยงาน</small></h1>
+	<h1 class="subheader-title"><small>จัดการข้อมูลลูกค้า</small></h1>
 </div>
 @if (Session::get('success'))
 	<div class="alert alert-success">
@@ -47,8 +47,8 @@
                 switch(key){
                     case 'edit':
                         alert(key + officeid);
-                        let officeUrl = '{{ route("office.edit", ":officeid") }}';
-                        officeUrl = officeUrl.replace(':officeid', officeid);
+                        let officeUrl = '{{ route("users.edit", ":id") }}';
+                        officeUrl = officeUrl.replace(':id', id);
                         window.open(officeUrl, '_self');
                     break;
                 }

@@ -8,7 +8,8 @@ use App\Http\Controllers\{
 };
 use App\Http\Controllers\Admin\{
 	OfficeController,
-	ParametController
+	ParametController,
+	UsersController
 };
 
 Route::impersonate();
@@ -54,6 +55,7 @@ Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
 Route::middleware(['auth:sanctum', 'verified'])->group(function(){
 	Route::resources([
 		'office'=>OfficeController::class,
-		'paramet'=>ParametController::class
+		'paramet'=>ParametController::class,
+		'users'=>UsersController::class
 	]);
 });
