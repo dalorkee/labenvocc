@@ -121,11 +121,11 @@
 							<label class="form-label text-gray-800" for="sample_place_type">สถานที่เก็บตัวอย่าง <span class="text-red-600">*</span></label>
 							<div class="frame-wrap">
 								<div class="custom-control custom-checkbox custom-control-inline">
-									<input type="checkbox" name="sample_place_type" value="same" class="custom-control-input" id="chk_a">
+									<input type="checkbox" name="sample_place_type" value="1" class="custom-control-input" id="chk_a" checked>
 									<label class="custom-control-label" for="chk_a">สถานที่เดียวกับหน่วยงานที่ส่งตัวอย่าง</label>
 								</div>
 								<div class="custom-control custom-checkbox custom-control-inline">
-									<input type="checkbox" name="sample_place_type" value="new" class="custom-control-input" id="chk_b">
+									<input type="checkbox" name="sample_place_type" value="2" class="custom-control-input" id="chk_b">
 									<label class="custom-control-label" for="chk_b">กำหนดใหม่</label>
 								</div>
 							</div>
@@ -136,43 +136,43 @@
 							<label for="office_type" class="block text-gray-800">กำหนดสถานที่เก็บตัวอย่าง <span class="text-red-600">*</span></label>
 							<div class="frame-wrap">
 								<div class="custom-control custom-switch custom-control-inline">
-									<input type="checkbox" name="office_type" value="1" id="agency_type_establishment" class="custom-control-input agency_type" @if (Auth()->user()->userCustomer->office_type == 1) checked @endif>
+									<input type="checkbox" name="sample_office_category" value="1" id="agency_type_establishment" class="custom-control-input agency_type" @if (Auth()->user()->userCustomer->office_type == 1) checked @endif>
 									<label class="custom-control-label" for="agency_type_establishment">สถานประกอบการ <span class="text-red-600">*</span></label>
 								</div>
 							</div>
 						</div>
 						<div class="col-span-6 sm:col-span-3 md:ml-4">
 							<label for="office_name_establishment" class="block text-base font-medium text-gray-700">ชื่อสถานประกอบการ <span class="text-red-600">*</span></label>
-							<input type="text" name="office_name_establishment" id="office_name_establishment" value="{{ Auth::user()->userCustomer->office_name }}" class="form-control">
+							<input type="text" name="sample_office_name" id="office_name_establishment" value="{{ Auth::user()->userCustomer->office_name }}" class="form-control">
 						</div>
 						<div class="col-span-6 sm:col-span-3 md:mr-4">
 							<label for="office_code_establishment" class="block text-base font-medium text-gray-700">รหัสสถานประกอบการ <span class="text-red-600">*</span></label>
-							<input type="text" name="office_code_establishment" value="{{ (Auth()->user()->userCustomer->office_type == 1) ? Auth::user()->userCustomer->office_code : null }}" id="office_code_establishment" class="form-control">
+							<input type="text" name="sample_office_id" value="{{ (Auth()->user()->userCustomer->office_type == 1) ? Auth::user()->userCustomer->office_code : null }}" id="office_code_establishment" class="form-control">
 						</div>
 						<div class="col-span-6 sm:col-span-6">
 							<div class="frame-wrap">
 								<div class="custom-control custom-switch custom-control-inline">
-									<input type="checkbox" name="office_type" value="2" id="agency_type_hospital" class="custom-control-input agency_type">
+									<input type="checkbox" name="sample_office_category" value="2" id="agency_type_hospital" class="custom-control-input agency_type">
 									<label class="custom-control-label" for="agency_type_hospital">สถานพยาบาล</label>
 								</div>
 							</div>
 						</div>
 						<div class="col-span-6 sm:col-span-6 md:mx-4">
 							<label for="health_place_code" class="block text-base font-medium text-gray-700">เลือกสถานพยาบาล <span class="text-red-600">*</span></label>
-							<select name="health_place_code" data-placeholder="โปรดกรอกข้อความค้นหาป" id="hosp_search" class="js-data-example-ajax form-control" disabled>
+							<select name="sample_office_id" data-placeholder="โปรดกรอกข้อความค้นหา" id="hosp_search" class="js-data-example-ajax form-control" disabled>
 							</select>
 						</div>
 						<div class="col-span-6 sm:col-span-6">
 							<div class="frame-wrap">
 								<div class="custom-control custom-switch custom-control-inline">
-									<input type="checkbox" name="office_type" value="3" id="agency_type_border_check_point" class="custom-control-input agency_type">
+									<input type="checkbox" name="sample_office_category" value="3" id="agency_type_border_check_point" class="custom-control-input agency_type">
 									<label class="custom-control-label" for="agency_type_border_check_point">ด่านควบคุมโรค </label>
 								</div>
 							</div>
 						</div>
 						<div class="col-span-6 sm:col-span-6 md:mx-4">
 							<label for="border_check_point_id" class="block text-base font-medium text-gray-700">เลือกด่านควบคุมโรค <span class="text-red-600">*</span></label>
-							<select name="border_check_point_code" data-placeholder="โปรดกรอกข้อความค้นหา" id="disease_border_search" class="form-control" disabled>
+							<select name="sample_office_id" data-placeholder="โปรดกรอกข้อความค้นหา" id="disease_border_search" class="form-control" disabled>
 							</select>
 						</div>
 						<div class="col-span-6 sm:col-span-6">
@@ -185,21 +185,21 @@
 						</div>
 						<div class="col-span-6 sm:col-span-3 md:mx-4">
 							<label for="office_type_other_name" class="block text-base font-medium text-gray-700">ชื่อหน่วยงาน <span class="text-red-600">*</span></label>
-							<input type="text" name="office_type_other_name" id="agency_type_other_name" class="form-control">
+							<input type="text" name="sample_office_name" id="agency_type_other_name" class="form-control">
 						</div>
 						<div class="col-span-6 sm:col-span-3 md:mx-4">
 							<label for="office_type_other_code" class="block text-base font-medium text-gray-700">รหัสหน่วยงาน <span class="text-red-600">*</span></label>
-							<input type="text" name="office_type_other_code" id="agency_type_other_id" class="form-control">
+							<input type="text" name="sample_office_id" id="agency_type_other_id" class="form-control">
 						</div>
 					</div>
 					<div class="grid grid-cols-6 gap-6 mt-12">
 						<div class="col-span-6 sm:col-span-6">
 							<label for="address" class="block text-base font-medium text-gray-800">ที่อยู่ (เลขที่ หมู่ที่ ถนน หมู่บ้าน/อาคาร) <span class="text-red-600">*</span></label>
-							<input type="text" name="office_address" class="form-control">
+							<input type="text" name="sample_office_addr" id="sample_office_addr" class="form-control" disabled>
 						</div>
 						<div class="col-span-6 sm:col-span-3">
 							<label for="province" class="block text-base font-medium text-gray-800">1.5 จังหวัด <span class="text-red-600">*</span></label>
-							<select name="office_province" id="province" class="form-control">
+							<select name="office_province" id="province" class="form-control chk-b" disabled>
 								<option value="">-- โปรดเลือก --</option>
 								@foreach ($data['provinces'] as $key => $val)
 									<option value="{{ $key }}">{{ $val }}</option>
@@ -208,19 +208,19 @@
 						</div>
 						<div class="col-span-6 sm:col-span-3">
 							<label for="district" class="block text-base font-medium text-gray-800">1.6 เขต/อำเภอ <span class="text-red-600">*</span></label>
-							<select name="office_district" id="district" class="form-control">
+							<select name="sample_office_district" id="district" class="form-control" disabled>
 								<option value="">-- โปรดเลือก --</option>
 							</select>
 						</div>
 						<div class="col-span-6 sm:col-span-3">
 							<label for="sub_district" class="block text-base font-medium text-gray-800">1.7 แขวง/ตำบล <span class="text-red-600">*</span></label>
-							<select name="office_sub_district" id="sub_district" class="form-control">
+							<select name="sample_office_sub_district" id="sub_district" class="form-control" disabled>
 								<option>-- โปรดเลือก --</option>
 							</select>
 						</div>
 						<div class="col-span-6 sm:col-span-3">
 							<label for="zip_code" class="block text-base font-medium text-gray-800">1.8 รหัสไปรษณีย์ <span class="text-red-600">*</span></label>
-							<input type="text" name="office_postal" id="postcode" class="form-control">
+							<input type="text" name="sample_office_postal" id="postcode" class="form-control" disabled>
 						</div>
 					</div>
 
@@ -344,6 +344,28 @@ $(document).ready(function() {
 			$('#agency_type_other_id').prop('disabled', true);
 		}
 	});
+
+    $('input[name=sample_place_type]').on('click', function() {
+        if ($(this).val() == 2) {
+            $('#sample_office_addr').prop('disabled', false);
+            $('#sample_office_addr').val('');
+            $('#province').prop('disabled', false);
+            $('#district').prop('disabled', false);
+            $('#sub_district').prop('disabled', false);
+            $('#postal').prop('disabled', false);
+        } else {
+            $('#sample_office_addr').val('');
+            $('#sample_office_addr').prop('disabled', true);
+            $('#province').prop('disabled', true);
+            $('#district').empty().trigger('change');
+            $('#district').prop('disabled', true);
+            $('#sub_district').empty().trigger('change');
+            $('#sub_district').prop('disabled', true);
+            $('#postal').val('');
+            $('#postal').prop('disabled', true;
+        }
+    });
+
 	$('#province').change(function() {
 		if ($(this).val() != '') {
 			var id = $(this).val();

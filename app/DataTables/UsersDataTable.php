@@ -2,7 +2,7 @@
 
 namespace App\DataTables;
 
-use App\Models\User;
+use App\Models\{User,UserCustomer};
 use App\Models\Postal;
 use App\Traits\RefTrait;
 use Yajra\DataTables\Html\{Button,Column};

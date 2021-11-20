@@ -15,7 +15,9 @@ class UsersController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(UsersDataTable $dataTable) {
+
         return $dataTable->render('admin.users.index');
+
     }
 
     /**
