@@ -35,24 +35,20 @@ class UsersDataTable extends DataTable
 					return '<span class="badge badge-danger">ไม่อนุญาต</span>';
 				}
 			})
-            ->addColumn('ref_office_lab_code', function(UserCustomer $cust) {
-                return $cust->ref_office_lab_code->map(function($x) {
-                    return $ref_office_lab_code
-                })
-            })
-			->addColumn('action', '<button type="button" class="office-manage-nav btn btn-sm btn-info" data-id="{{$id}}">จัดการ <i class="fal fa-angle-down"></i> </button>')
+			->addColumn('action', '<button type="button" class="usercus-manage-nav btn btn-sm btn-info" data-id="{{$user_id}}">จัดการ<i class="fal fa-angle-down"></i></button>')
 			->rawColumns(['user_status','action']);
 	}
 
 	public function query() {
-		$userCus = User::select('*')->whereUser_type('customer')->with('userCustomer');
-        //dd($userCus);
+		$userCus = User::join('users_customer_detail','users.id','=','users_customer_detail.user_id')
+			->where('users.user_type','customer');
+
 		// $userCus = User::find(5);
 		// $userCus = $userCus->userCustomer()
 		// 	->with('userCus')
 		// 	->join('users','users.id','=','users_customer_detail.user_id1')
 		// 	->get();
-		//dd($userCus);
+		// dd($userCus);
 		return $userCus;
 	}
 
@@ -62,7 +58,7 @@ class UsersDataTable extends DataTable
 					->setTableId('usercustomer-table')
 					->columns($this->getColumns())
 					->minifiedAjax()
-					->dom('Bfrtip')
+					->dom('frtip')
 					->orderBy(1);
 	}
 
@@ -73,7 +69,7 @@ class UsersDataTable extends DataTable
 			//       ->printable(false)
 			//       ->width(60)
 			//       ->addClass('text-center'),
-			Column::make('id')->title('ลำดับ'),
+			Column::make('user_id')->title('ลำดับ'),
 			Column::make('username')->title('username'),
 			Column::make('ref_office_lab_code')->title('รหัสหน่วยงาน'),
 			Column::make('ref_office_env_code')->title('รหัสหน่วยงาน(env)'),
@@ -88,6 +84,6 @@ class UsersDataTable extends DataTable
 	}
 
 	protected function filename() {
-		return 'Office_' . date('YmdHis');
+		return 'UserCus_' . date('YmdHis');
 	}
 }

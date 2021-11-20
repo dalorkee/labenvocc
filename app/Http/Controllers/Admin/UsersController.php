@@ -15,7 +15,9 @@ class UsersController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(UsersDataTable $dataTable) {
-        return $dataTable->render('admin.Users.index');
+
+        return $dataTable->render('admin.users.index');
+
     }
 
     /**
@@ -56,9 +58,16 @@ class UsersController extends Controller
      * @param  \App\Models\User  $users
      * @return \Illuminate\Http\Response
      */
-    public function edit(User $users)
+    public function edit(Request $request)
     {
-        return view('admin.Users.edit',compact('Users'));
+        dd($request);
+        $userCus = User::join('users_customer_detail','users.id','=','users_customer_detail.user_id')
+            ->where('users.user_type','customer')
+            ->where('users_customer_detail.user_id',$request->id)
+            ->get();
+            // ->toarray();
+        dd($userCus);
+        return view('admin.users.edit',compact('userCus'));
     }
 
     /**
