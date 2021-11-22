@@ -121,11 +121,11 @@
 							<label class="form-label text-gray-800" for="sample_place_type">สถานที่เก็บตัวอย่าง <span class="text-red-600">*</span></label>
 							<div class="frame-wrap">
 								<div class="custom-control custom-checkbox custom-control-inline">
-									<input type="checkbox" name="sample_place_type" value="1" class="custom-control-input" id="chk_a" checked>
+									<input type="checkbox" name="sample_place_type" value="1" id="chk_a" class="custom-control-input" checked>
 									<label class="custom-control-label" for="chk_a">สถานที่เดียวกับหน่วยงานที่ส่งตัวอย่าง</label>
 								</div>
 								<div class="custom-control custom-checkbox custom-control-inline">
-									<input type="checkbox" name="sample_place_type" value="2" class="custom-control-input" id="chk_b">
+									<input type="checkbox" name="sample_place_type" value="2" id="chk_b" class="custom-control-input">
 									<label class="custom-control-label" for="chk_b">กำหนดใหม่</label>
 								</div>
 							</div>
@@ -178,7 +178,7 @@
 						<div class="col-span-6 sm:col-span-6">
 							<div class="frame-wrap">
 								<div class="custom-control custom-switch custom-control-inline">
-									<input type="checkbox" name="office_type" value="4" id="agency_type_other" class="custom-control-input agency_type">
+									<input type="checkbox" name="sample_office_category" value="4" id="agency_type_other" class="custom-control-input agency_type">
 									<label class="custom-control-label" for="agency_type_other">อื่นๆ โปรดระบุ</label>
 								</div>
 							</div>
@@ -199,7 +199,7 @@
 						</div>
 						<div class="col-span-6 sm:col-span-3">
 							<label for="province" class="block text-base font-medium text-gray-800">1.5 จังหวัด <span class="text-red-600">*</span></label>
-							<select name="office_province" id="province" class="form-control chk-b" disabled>
+							<select name="sample_office_province" id="province" class="form-control chk-b" disabled>
 								<option value="">-- โปรดเลือก --</option>
 								@foreach ($data['provinces'] as $key => $val)
 									<option value="{{ $key }}">{{ $val }}</option>
@@ -215,13 +215,12 @@
 						<div class="col-span-6 sm:col-span-3">
 							<label for="sub_district" class="block text-base font-medium text-gray-800">1.7 แขวง/ตำบล <span class="text-red-600">*</span></label>
 							<select name="sample_office_sub_district" id="sub_district" class="form-control" disabled>
-								<option>-- โปรดเลือก --</option>
+								<option value="">-- โปรดเลือก --</option>
 							</select>
 						</div>
 						<div class="col-span-6 sm:col-span-3">
 							<label for="zip_code" class="block text-base font-medium text-gray-800">1.8 รหัสไปรษณีย์ <span class="text-red-600">*</span></label>
 							<input type="text" name="sample_office_postal" id="postcode" class="form-control" disabled>
-						</div>
 					</div>
 
 				</div>
@@ -345,26 +344,40 @@ $(document).ready(function() {
 		}
 	});
 
-    $('input[name=sample_place_type]').on('click', function() {
-        if ($(this).val() == 2) {
-            $('#sample_office_addr').prop('disabled', false);
-            $('#sample_office_addr').val('');
-            $('#province').prop('disabled', false);
-            $('#district').prop('disabled', false);
-            $('#sub_district').prop('disabled', false);
-            $('#postal').prop('disabled', false);
-        } else {
-            $('#sample_office_addr').val('');
-            $('#sample_office_addr').prop('disabled', true);
-            $('#province').prop('disabled', true);
-            $('#district').empty().trigger('change');
-            $('#district').prop('disabled', true);
-            $('#sub_district').empty().trigger('change');
-            $('#sub_district').prop('disabled', true);
-            $('#postal').val('');
-            $('#postal').prop('disabled', true;
-        }
-    });
+	$('#chk_a').on('change', function() {
+		if ($(this).prop("checked") == true) {
+			$('#sample_office_addr').val('');
+			$('#sample_office_addr').prop('disabled', true);
+			$('#province').prop('disabled', true);
+			$('#district')[0].options.length = 1;
+			$('#district').prop('disabled', true);
+			$('#sub_district')[0].options.length = 1;
+			$('#sub_district').prop('disabled', true);
+			$('#postcode').val('');
+			$('#postcode').prop('disabled', true);
+		}
+	});
+
+	$('#chk_b').on('change', function() {
+		if ($(this).prop("checked") == true) {
+			$('#sample_office_addr').prop('disabled', false);
+			$('#sample_office_addr').val('');
+			$('#province').prop('disabled', false);
+			$('#district').prop('disabled', false);
+			$('#sub_district').prop('disabled', false);
+			$('#postcode').prop('disabled', false);
+		} else if ($(this).prop("checked") == false) {
+			$('#sample_office_addr').val('');
+			$('#sample_office_addr').prop('disabled', true);
+			$('#province').prop('disabled', true);
+			$('#district')[0].options.length = 1;
+			$('#district').prop('disabled', true);
+			$('#sub_district')[0].options.length = 1;
+			$('#sub_district').prop('disabled', true);
+			$('#postcode').val('');
+			$('#postcode').prop('disabled', true);
+		}
+	});
 
 	$('#province').change(function() {
 		if ($(this).val() != '') {
@@ -401,20 +414,24 @@ $(document).ready(function() {
 		}
 	});
 	$('#sub_district').change(function() {
-		if ($(this).val() != '') {
-			var id = $(this).val();
+		var id = $(this).val();
+		if (id != "" || id != null || id !== undefined) {
 			$.ajax({
 				method: "POST",
 				url: "{{ route('register.postcode') }}",
 				dataType: "HTML",
 				data: {id:id},
 				success: function(response) {
-					$('#postcode').val(response);
+					if (!$('#postcode').is('disabled')) {
+						$('#postcode').val(response);
+					}
 				},
 				error: function(jqXhr, textStatus, errorMessage) {
 					alert('Postcode error: ' + jqXhr.status + errorMessage);
 				}
 			});
+		} else {
+			return false;
 		}
 	});
 });
