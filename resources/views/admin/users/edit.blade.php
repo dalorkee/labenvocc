@@ -25,14 +25,68 @@
 @endif
 <div class="fs-lg fw-300 p-5 bg-white border-faded rounded mb-g">
 	<div class="frame-wrap">
+		<form>
+		@csrf
 		@foreach ($userCus as $value)
-			{{ $value->user_id }}			
-	</div>
-	---------------------------	
-    <div class="frame-wrap">
-        	{{ $value->office_name }}
-	</div>
+			<div class="form-row">
+				<div class="col-md-6 mb-3">
+					<label class="form-label" for="user_id">UserId</label>
+					<input type="text" class="form-control" id="user_id" name="user_id" value="{{ $value->user_id }}" readonly>
+				</div>
+				<div class="col-md-6 mb-3">
+					<label class="form-label" for="username">UserName</label>
+					<input type="text" class="form-control" id="username" name="username" value="{{ $value->username }}" readonly>
+				</div>				
+			</div>
+			<div class="form-row">
+				<div class="col-md-6 mb-3">
+					<label class="form-label" for="first_name">FirstName</label>
+					<input type="text" class="form-control" id="first_name" name="first_name" value="{{ $value->first_name }}">
+				</div>
+				<div class="col-md-6 mb-3">
+					<label class="form-label" for="last_name">LastName</label>
+					<input type="text" class="form-control" id="last_name" name="last_name" value="{{ $value->last_name }}">
+				</div>				
+			</div>
+			<div class="form-row form-group">
+				<div class="col-md-4 mb-3">
+					<label class="form-label" for="user_status">สถานะ<span class="text-danger">*</span></label>
+					<select class="custom-select" name="user_status">
+						<option value="">-------</option>
+						<option value="สมัครใหม่">สมัครใหม่</option>
+						<option value="อนุญาต">อนุญาต</option>
+						<option value="ปิด">ปิด</option>
+						<option value="ไม่อนุญาต">ไม่อนุญาต</option>
+					</select>
+				</div>
+			</div>
+			<div class="form-row">
+				<div class="col-md-4 mb-3">
+					<label class="form-label" for="ref_office_lab_code">รหัสสถานประกอบการ</label>
+					<input type="text" class="form-control" id="ref_office_lab_code" name="ref_office_lab_code" value="{{ $value->ref_office_lab_code }}">
+				</div>
+				<div class="col-md-4 mb-3">
+					<label class="form-label" for="ref_office_env_code">รหัสสถานประกอบการ(Env)</label>
+					<input type="text" class="form-control" id="ref_office_env_code" name="ref_office_env_code" value="{{ $value->ref_office_env_code }}">
+				</div>
+				<div class="col-md-4 mb-3">
+					<label class="form-label" for="office_code">รหัสสถานประกอบการ(Moph)</label>
+					<input type="text" class="form-control" id="office_code" name="office_code" value="{{ $value->office_code }}">
+				</div>				
+			</div>
+			<div class="form-row">
+				<div class="col-md-6 mb-3">
+					<label class="form-label" for="office_name">OfficeName</label>
+					<input type="text" class="form-control" id="office_name" name="office_name" value="{{ $value->office_name }}">
+					<div class="invalid-feedback">
+						Please provide a valid city.
+					</div>
+				</div>
+			</div>
+			<button type="submit" class="btn btn-primary">Submit</button>
 		@endforeach
+		</form>		
+	</div>
 </div>
 @endsection
 @section('script')
