@@ -24,10 +24,11 @@
 	</div>
 @endif
 <div class="fs-lg fw-300 p-5 bg-white border-faded rounded mb-g">
+	@foreach ($userCus as $value)
 	<div class="frame-wrap">
-		<form>
+		<form ction="{{ route('users.update',$value->user_id) }}" method="POST">
 		@csrf
-		@foreach ($userCus as $value)
+		@method('PUT')
 			<div class="form-row">
 				<div class="col-md-6 mb-3">
 					<label class="form-label" for="user_id">UserId</label>
@@ -52,11 +53,11 @@
 				<div class="col-md-4 mb-3">
 					<label class="form-label" for="user_status">สถานะ<span class="text-danger">*</span></label>
 					<select class="custom-select" name="user_status">
-						<option value="">-------</option>
-						<option value="สมัครใหม่">สมัครใหม่</option>
-						<option value="อนุญาต">อนุญาต</option>
-						<option value="ปิด">ปิด</option>
-						<option value="ไม่อนุญาต">ไม่อนุญาต</option>
+						<option value="">---เลือก---</option>
+						<option {{ ($value->user_status) == 'สมัครใหม่' ? 'selected' : '' }} value="สมัครใหม่">สมัครใหม่</option>
+						<option {{ ($value->user_status) == 'อนุญาต' ? 'selected' : '' }} value="อนุญาต">อนุญาต</option>
+						<option {{ ($value->user_status) == 'ปิด' ? 'selected' : '' }} value="ปิด">ปิด</option>
+						<option {{ ($value->user_status) == 'ไม่อนุญาต' ? 'selected' : '' }} value="ไม่อนุญาต">ไม่อนุญาต</option>
 					</select>
 				</div>
 			</div>
@@ -84,9 +85,9 @@
 				</div>
 			</div>
 			<button type="submit" class="btn btn-primary">Submit</button>
-		@endforeach
 		</form>		
 	</div>
+	@endforeach
 </div>
 @endsection
 @section('script')
