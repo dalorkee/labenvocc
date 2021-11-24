@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\{
 Route::impersonate();
 Route::get('/', [HomeController::class, 'index']);
 Route::get('/login', [HomeController::class, 'index'])->name('login')->middleware('throttle:60,1');
+Route::get('/logout', [HomeController::class, 'logout'])->name('logout');
 Route::resources([
 	'home' => HomeController::class,
 	'register' => RegisterController::class,

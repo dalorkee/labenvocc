@@ -76,6 +76,7 @@
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true"><i class="fal fa-times"></i></span>
 					</button>
+					<input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
 					<input type="hidden" name="order_id" value="{{ $data['order_id'] }}">
 				</div>
 				<div class="modal-body">
@@ -133,21 +134,21 @@
 					</div>
 					<div class="grid grid-cols-6 gap-6">
 						<div class="col-span-6 sm:col-span-6">
-							<label for="office_type" class="block text-gray-800">กำหนดสถานที่เก็บตัวอย่าง <span class="text-red-600">*</span></label>
+							<label for="office_type" class="block text-gray-800">กรณีเลือกสถานที่เก็บตัวอย่างใหม่ โปรดกรอกข้อมูล <span class="text-red-600">*</span></label>
 							<div class="frame-wrap">
 								<div class="custom-control custom-switch custom-control-inline">
-									<input type="checkbox" name="sample_office_category" value="1" id="agency_type_establishment" class="custom-control-input agency_type" @if (Auth()->user()->userCustomer->office_type == 1) checked @endif>
+									<input type="checkbox" name="sample_office_category" value="1" id="agency_type_establishment" class="custom-control-input agency_type">
 									<label class="custom-control-label" for="agency_type_establishment">สถานประกอบการ <span class="text-red-600">*</span></label>
 								</div>
 							</div>
 						</div>
 						<div class="col-span-6 sm:col-span-3 md:ml-4">
 							<label for="office_name_establishment" class="block text-base font-medium text-gray-700">ชื่อสถานประกอบการ <span class="text-red-600">*</span></label>
-							<input type="text" name="sample_office_name" id="office_name_establishment" value="{{ Auth::user()->userCustomer->office_name }}" class="form-control">
+							<input type="text" name="sample_office_name" id="office_name_establishment" class="form-control" disabled>
 						</div>
 						<div class="col-span-6 sm:col-span-3 md:mr-4">
 							<label for="office_code_establishment" class="block text-base font-medium text-gray-700">รหัสสถานประกอบการ <span class="text-red-600">*</span></label>
-							<input type="text" name="sample_office_id" value="{{ (Auth()->user()->userCustomer->office_type == 1) ? Auth::user()->userCustomer->office_code : null }}" id="office_code_establishment" class="form-control">
+							<input type="text" name="sample_office_id" id="office_code_establishment" class="form-control" disabled>
 						</div>
 						<div class="col-span-6 sm:col-span-6">
 							<div class="frame-wrap">
@@ -345,6 +346,16 @@ $(document).ready(function() {
 	});
 
 	$('#chk_a').on('change', function() {
+		$('#agency_type_establishment').prop('checked', false);
+		$('#agency_type_establishment').prop('disabled', true);
+		$('#office_name_establishment').prop('disabled', true);
+		$('#office_code_establishment').prop('disabled', true);
+
+        $('#agency_type_hospital').prop('checked', false);
+        $('#agency_type_hospital').prop('disabled', true);
+		$('#hosp_search').empty().trigger('change');
+		$('#hosp_search').prop('disabled', true);
+
 		if ($(this).prop("checked") == true) {
 			$('#sample_office_addr').val('');
 			$('#sample_office_addr').prop('disabled', true);
@@ -360,6 +371,14 @@ $(document).ready(function() {
 
 	$('#chk_b').on('change', function() {
 		if ($(this).prop("checked") == true) {
+			$('#agency_type_establishment').prop('checked', false);
+			$('#agency_type_establishment').prop('disabled', false);
+
+            $('#agency_type_hospital').prop('checked', true);
+            $('#agency_type_hospital').prop('disabled', false);
+		    $('#hosp_search').empty().trigger('change');
+		    $('#hosp_search').prop('disabled', false);
+
 			$('#sample_office_addr').prop('disabled', false);
 			$('#sample_office_addr').val('');
 			$('#province').prop('disabled', false);
@@ -367,6 +386,9 @@ $(document).ready(function() {
 			$('#sub_district').prop('disabled', false);
 			$('#postcode').prop('disabled', false);
 		} else if ($(this).prop("checked") == false) {
+			$('#agency_type_establishment').prop('checked', false);
+			$('#agency_type_establishment').prop('disabled', true);
+
 			$('#sample_office_addr').val('');
 			$('#sample_office_addr').prop('disabled', true);
 			$('#province').prop('disabled', true);

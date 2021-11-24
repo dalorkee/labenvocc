@@ -32,4 +32,9 @@ class HomeController extends Controller
 		$user_roles= Auth::user()->roles->pluck('name')->all();
 		return $user_roles[0];
 	}
+
+	public function logout() {
+		Auth::logout();
+		return redirect('/login');
+	}
 }

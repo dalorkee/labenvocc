@@ -20,9 +20,9 @@
 		<img src="{{ URL::asset('assets/img/d3.jpg') }}" class="profile-image rounded-circle" alt="avatar">
 		<div class="info-card-text">
 			<a href="#" class="d-flex align-items-center text-white">
-				<span class="text-truncate text-truncate-sm d-inline-block">PJ Root</span>
+				<span class="text-truncate text-truncate-sm d-inline-block">{{ auth()->user()->username ?? 'Guest' }}</span>
 			</a>
-			<span class="d-inline-block text-truncate text-truncate-sm">Nonthaburi, Thailand</span>
+			<span class="d-inline-block text-truncate text-truncate-sm">{{ auth()->user()->email ?? 'Role' }}</span>
 		</div>
 		<img src="{{ URL::asset('images/nav-bg.png') }}" class="cover" alt="cover">
 		<a href="#" onclick="return false;" class="pull-trigger-btn" data-action="toggle" data-class="list-filter-active" data-target=".page-sidebar" data-focus="nav_filter_input">
@@ -30,14 +30,14 @@
 		</a>
 	</div>
 	<ul id="js-nav-menu" class="nav-menu nav-function-hidden">
-        <li class="nav-title">Specimen</li>
+		<li class="nav-title">Specimen</li>
 		<li class="active open">
 			<a href="{{ route('customer.index') }}" title="คำขอส่งตัวอย่าง" data-filter-tags="home">
 				<i class="fal fa-clipboard"></i>
 				<span class="nav-link-text">คำขอส่งตัวอย่าง</span>
 			</a>
 		</li>
-        <li class="nav-title">Common</li>
+		<li class="nav-title">Common</li>
 		<li>
 			<a href="#" title="Application Intel" data-filter-tags="application intel">
 				<i class="fal fa-download"></i>
@@ -62,7 +62,7 @@
 				<span class="nav-link-text" data-i18n="nav.application_intel">ติดต่อหน่วยงาน</span>
 			</a>
 		</li>
-        <li class="nav-title">Administrator</li>
+		<li class="nav-title">Administrator</li>
 		<li>
 			<a href="{{ route('office.index') }}" title="Application Intel" data-filter-tags="application intel">
 				<i class="fal fa-user"></i>

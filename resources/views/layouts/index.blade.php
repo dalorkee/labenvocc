@@ -85,7 +85,7 @@ $(document).ready(function() {
 		"onclick": null,
 		"showDuration": 300,
 		"hideDuration": 100,
-		"timeOut": 0,
+		"timeOut": 5000,
 		"extendedTimeOut": 0,
 		"showEasing": "swing",
 		"hideEasing": "linear",
