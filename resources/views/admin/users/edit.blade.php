@@ -26,7 +26,7 @@
 <div class="fs-lg fw-300 p-5 bg-white border-faded rounded mb-g">
 	@foreach ($userCus as $value)
 	<div class="frame-wrap">
-		<form ction="{{ route('users.update',$value->user_id) }}" method="POST">
+		<form action="{{ route('users.update',$value->user_id) }}" method="POST">
 		@csrf
 		@method('PUT')
 			<div class="form-row">
