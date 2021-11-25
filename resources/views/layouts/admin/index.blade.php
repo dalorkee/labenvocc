@@ -58,6 +58,11 @@ var resetSettings = function() {
 				@include('layouts.header')
 			</header>
 			<main id="js-page-content" role="main" class="page-content">
+				@if (Session::get('success'))
+					<div class="alert alert-success"><p>{{ Session::get('success') }}</p></div>
+				@elseif (Session::get('error'))
+					<div class="alert alert-danger"><p>{{ Session::get('error') }}</p></div>
+				@endif
 				@yield('content')
 			</main>
 			<div class="page-content-overlay" data-action="toggle" data-class="mobile-nav-on"></div>

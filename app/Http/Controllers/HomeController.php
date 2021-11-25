@@ -14,7 +14,7 @@ class HomeController extends Controller
 			switch ($this->userRole()) {
 				case 'root':
 				case 'admin':
-					return view('dashboard');
+					return view('admin.index');
 					break;
 				case 'customer':
 					return redirect()->route('customer.index');

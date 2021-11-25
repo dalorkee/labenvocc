@@ -14,19 +14,10 @@
 <div class="subheader">
 	<h1 class="subheader-title"><small>จัดการข้อมูลลูกค้า</small></h1>
 </div>
-@if (Session::get('success'))
-	<div class="alert alert-success">
-		<p>{{ Session::get('success') }}</p>
-	</div>
-@elseif (Session::get('error'))
-	<div class="alert alert-danger">
-		<p>{{ Session::get('error') }}</p>
-	</div>
-@endif
 <div class="fs-lg fw-300 p-5 bg-white border-faded rounded mb-g">
 	<div class="frame-wrap">
 		{{ $dataTable->table() }}
-	</div>	
+	</div>
 </div>
 @endsection
 @section('script')
@@ -46,8 +37,8 @@
             callback: function(key, options) {
                 var userCusId = $(this).data('id');
                 switch(key){
-                    case 'edit':                        
-                        let userCusUrl = '{{ route("users.edit", ":id") }}';                        
+                    case 'edit':
+                        let userCusUrl = '{{ route("users.edit", ":id") }}';
                         userCusUrl = userCusUrl.replace(':id', userCusId);
                         alert(userCusUrl);
                         window.open(userCusUrl, '_self');

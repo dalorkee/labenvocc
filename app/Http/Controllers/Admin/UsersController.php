@@ -64,7 +64,7 @@ class UsersController extends Controller
             ->where('users.user_type','customer')
             ->where('users_customer_detail.user_id',$request->id)
             ->get();
-            
+
         return view('admin.users.edit',compact('userCus'));
     }
 
@@ -90,4 +90,5 @@ class UsersController extends Controller
     {
         //
     }
+
 }

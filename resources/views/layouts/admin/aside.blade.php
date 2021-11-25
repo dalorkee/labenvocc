@@ -20,11 +20,9 @@
 		<img src="{{ URL::asset('assets/img/d3.jpg') }}" class="profile-image rounded-circle" alt="avatar">
 		<div class="info-card-text">
 			<a href="#" class="d-flex align-items-center text-white">
-				<span class="text-truncate text-truncate-sm d-inline-block">
-					PJ Root
-				</span>
+				<span class="text-truncate text-truncate-sm d-inline-block">{{ Auth::user()->username }}</span>
 			</a>
-			<span class="d-inline-block text-truncate text-truncate-sm">Nonthaburi, Thailand</span>
+			<span class="d-inline-block text-truncate text-truncate-sm">{{ Auth::user()->email }}</span>
 		</div>
 		<img src="{{ URL::asset('assets/img/card-backgrounds/cover-2-lg.png') }}" class="cover" alt="cover">
 		<a href="#" onclick="return false;" class="pull-trigger-btn" data-action="toggle" data-class="list-filter-active" data-target=".page-sidebar" data-focus="nav_filter_input">
@@ -33,6 +31,12 @@
 	</div>
 	<ul id="js-nav-menu" class="nav-menu">
 		<li class="nav-title">Administrator</li>
+        <li>
+			<a href="{{ route('admin.index') }}" title="Utilities" data-filter-tags="utilities">
+				<i class="fal fa-users"></i>
+				<span class="nav-link-text" data-i18n="nav.utilities">หน้าหลัก</span>
+			</a>
+		</li>
 		<li>
 			<a href="#" title="Utilities" data-filter-tags="utilities">
 				<i class="fal fa-users"></i>
@@ -46,8 +50,8 @@
 			</a>
 			<ul>
 				<li>
-					<a href="tables_basic.html" title="Basic Tables" data-filter-tags="tables basic tables">
-						<span class="nav-link-text" data-i18n="nav.tables_basic_tables">Role</span>
+					<a href="{{ route('roles.index')  }}" title="Roles" data-filter-tags="Roles">
+						<span class="nav-link-text" data-i18n="nav.roles">Role</span>
 					</a>
 				</li>
 				<li>

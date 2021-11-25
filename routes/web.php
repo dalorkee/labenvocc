@@ -7,9 +7,11 @@ use App\Http\Controllers\{
 	CustomerController
 };
 use App\Http\Controllers\Admin\{
+    AdminController,
 	OfficeController,
 	ParametController,
-	UsersController
+	UsersController,
+    RoleController
 };
 
 Route::impersonate();
@@ -20,7 +22,9 @@ Route::resources([
 	'home' => HomeController::class,
 	'register' => RegisterController::class,
 	'registerStaff' => RegisterStaffController::class,
-	'customer' => CustomerController::class
+	'customer' => CustomerController::class,
+	'roles' => RoleController::class,
+	'permissions' => PermissionController::class
 ]);
 Route::name('register.')->group(function() {
 	Route::post('province/district', [RegisterController::class, 'renderDistrictToHtmlSelect'])->name('district');
@@ -48,7 +52,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 		Route::get('/customer/parameter/data/delete/id/{id}', [CustomerController::class, 'DestroyParameterData'])->name('parameter.data.destroy');
 
 		Route::get('/customer/sample/create/order/{order_id}', [CustomerController::class, 'createSample'])->name('sample.create');
-        Route::post('customer/sample/store/order/{order_id}', [CustomerController::class, 'storeSample'])->name('sample.store');
+		Route::post('customer/sample/store/order/{order_id}', [CustomerController::class, 'storeSample'])->name('sample.store');
 	});
 });
 Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
@@ -59,5 +63,6 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function(){
 		'paramet'=>ParametController::class,
 		'users'=>UsersController::class
 	]);
+    Route::get('/admin/home', [AdminController::class, 'index'])->name('admin.index');
 Route::get('/users/id/{id}/edit',[UsersController::class,'edit'])->name('users.edit');
 });
