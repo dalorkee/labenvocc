@@ -11,7 +11,8 @@ use App\Http\Controllers\Admin\{
 	OfficeController,
 	ParametController,
 	UsersController,
-    RoleController
+    RoleController,
+    PermissionController
 };
 
 Route::impersonate();

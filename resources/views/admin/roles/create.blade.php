@@ -1,42 +1,10 @@
-@extends('layouts.index')
-@section('custom-style')
-<link type="text/css" href="{{ URL::asset('admindek/css/style.css') }}" rel="stylesheet" >
-@endsection
-@section('custom-style')
-<style>
-	input:-moz-read-only { /* For Firefox */
-		background-color: #fafafa !important;
-	}
-	input:read-only {
-		background-color: #fafafa !important;
-	}
-	.select-custom select option {
-		padding: 18px!important;
-	}
-	.font-fira {
-		font-family: 'Fira-code' !important;
-	}
-	.input-group .bootstrap-select.form-control {
-		z-index: 0;
-	}
-</style>
-@endsection
-@section('contents')
-<div class="page-breadcrumb bg-light">
-	<div class="row">
-		<div class="col-12 d-flex no-block align-items-center">
-			<h4 class="page-title"><span style="display:none;">Users</span></h4>
-			<div class="ml-auto text-right">
-				<nav aria-label="breadcrumb">
-					<ol class="breadcrumb">
-						<li class="breadcrumb-item"><a href="{{ route('roles.index') }}">Roles</a></li>
-						<li class="breadcrumb-item active" aria-current="page"><a href="#">Create</a></li>
-					</ol>
-				</nav>
-			</div>
-		</div>
-	</div>
-</div>
+@extends('layouts.admin.index')
+@section('content')
+<ol class="breadcrumb page-breadcrumb">
+	<li class="breadcrumb-item"><a href="javascript:void(0);">Admin</a></li>
+	<li class="breadcrumb-item"><a href="{{ route('roles.index') }}">Roles</a></li>
+	<li class="breadcrumb-item">Create</li>
+</ol>
 <div class="container-fluid">
 	<div class="row">
 		<div class="col-md-12">
@@ -44,8 +12,7 @@
 				<div class="card-body">
 					<div class="d-md-flex align-items-center" style="border-bottom:1px solid #EAEAEA">
 						<div>
-							<h4 class="card-title">บริหารจัดการผู้ใช้งานระบบ</h4>
-							<h5 class="card-subtitle">ID Flu-BOE</h5>
+							<h4 class="card-title">Role Management [Create]</h4>
 						</div>
 					</div>
 					<div class="my-4">
@@ -60,28 +27,28 @@
 					</div>
 					@endif
 					{!! Form::open(array('route' => 'roles.store','method'=>'POST')) !!}
-						<div class="row">
-							<div class="col-xs-12 col-sm-12 col-md-12">
-								<div class="form-group">
-									<strong>Name:</strong>
-									{!! Form::text('name', null, array('placeholder' => 'Name','class' => 'form-control')) !!}
-								</div>
-							</div>
-							<div class="col-xs-12 col-sm-12 col-md-12">
-								<div class="form-group">
-									<strong>Permission:</strong>
-									<br/>
-									@foreach($permission as $value)
-									<label>{{ Form::checkbox('permission[]', $value->id, false, array('class' => 'name')) }}
-										{{ $value->name }}</label>
-										<br/>
-									@endforeach
-								</div>
-							</div>
-							<div class="col-xs-12 col-sm-12 col-md-12">
-								<button type="submit" class="btn btn-primary">Submit</button>
+					<div class="row">
+						<div class="col-xs-12 col-sm-12 col-md-12 mb-2">
+							<div class="form-group">
+								<strong>Role name:</strong>
+								{!! Form::text('name', null, array('placeholder' => 'Name','class' => 'form-control')) !!}
 							</div>
 						</div>
+						<div class="col-xs-12 col-sm-12 col-md-12 mb-2">
+							<div class="form-group">
+								<strong>Permission:</strong>
+								<br/>
+								@foreach($permission as $value)
+									<label>{{ Form::checkbox('permission[]', $value->id, false, array('class' => 'name')) }}
+									{{ $value->name }}</label>
+									<br/>
+								@endforeach
+							</div>
+						</div>
+						<div class="col-xs-12 col-sm-12 col-md-12 mb-2">
+							<button type="submit" class="btn btn-success">Create</button>
+						</div>
+					</div>
 					{!! Form::close() !!}
 				</div>
 			</div>
