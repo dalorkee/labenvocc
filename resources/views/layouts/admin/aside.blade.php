@@ -6,7 +6,6 @@
 		<i class="fal fa-angle-down d-inline-block ml-1 fs-lg color-primary-300"></i>
 	</a>
 </div>
-<!-- BEGIN PRIMARY NAVIGATION -->
 <nav id="js-primary-nav" class="primary-nav" role="navigation">
 	<div class="nav-filter">
 		<div class="position-relative">
@@ -31,7 +30,7 @@
 	</div>
 	<ul id="js-nav-menu" class="nav-menu">
 		<li class="nav-title">Administrator</li>
-        <li>
+		<li>
 			<a href="{{ route('admin.index') }}" title="Utilities" data-filter-tags="utilities">
 				<i class="fal fa-users"></i>
 				<span class="nav-link-text" data-i18n="nav.utilities">หน้าหลัก</span>
@@ -51,12 +50,12 @@
 			<ul>
 				<li>
 					<a href="{{ route('roles.index')  }}" title="Roles" data-filter-tags="Roles">
-						<span class="nav-link-text" data-i18n="nav.roles">Role</span>
+						<span class="nav-link-text" data-i18n="nav.Roles">Role</span>
 					</a>
 				</li>
 				<li>
-					<a href="tables_generate_style.html" title="Generate Table Style" data-filter-tags="tables generate table style">
-						<span class="nav-link-text" data-i18n="nav.tables_generate_table_style">Permission</span>
+					<a href="{{ route('permissions.index') }}" title="Permissions" data-filter-tags="Permissions">
+						<span class="nav-link-text" data-i18n="nav.Permissions">Permission</span>
 					</a>
 				</li>
 			</ul>
@@ -64,4 +63,4 @@
 	</ul>
 	<div class="filter-message js-filter-message bg-success-600"></div>
 </nav>
-<!-- END PRIMARY NAVIGATION -->
+

@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Spatie\Permission\Models\{Role,Permission};
 use Illuminate\Support\Facades\{Validator,Auth,Session};
 
@@ -9,16 +10,22 @@ class PermissionController extends Controller {
 
 	public function __construct() {
 		$this->middleware(['auth']);
-		$this->middleware(['role:root']);
+		$this->middleware(['role:root|admin']);
 	}
 
-	public function index() {
+	public function index(): object {
+        $uer = auth()->user();
+        if ($uer->can('permission-create')) {
+            dd('ok');
+        }
+        dd('y');
+
 		$permissions = Permission::all();
 		return view('admin.permissions.index')->with('permissions', $permissions);
 	}
 
 	public function create() {
-		$roles = Role::get(); //Get all roles
+		$roles = Role::get();
 		return view('permissions.create')->with('roles', $roles);
 	}
 
@@ -35,14 +42,13 @@ class PermissionController extends Controller {
 		$roles = $request['roles'];
 		$permission->save();
 
-		if (!empty($request['roles'])) { //If one or more role is selected
+		if (!empty($request['roles'])) {
 			foreach ($roles as $role) {
-				$r = Role::where('id', '=', $role)->firstOrFail(); //Match input role to db record
-				$permission = Permission::where('name', '=', $name)->first(); //Match input //permission to db record
+				$r = Role::where('id', '=', $role)->firstOrFail();
+				$permission = Permission::where('name', '=', $name)->first();
 				$r->givePermissionTo($permission);
 			}
 		}
-
 		return redirect()->route('permissions.index')->with('success', 'PermissionName : '. $permission->name.' created successfully!');
 	}
 
