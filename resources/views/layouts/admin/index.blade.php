@@ -9,7 +9,6 @@
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="msapplication-tap-highlight" content="no">
 <meta name="csrf-token" content="{{ csrf_token() }}">
-@yield('token')
 @include('layouts.style')
 @yield('style')
 </head>
@@ -48,7 +47,7 @@ var resetSettings = function() {
 }
 </script>
 <!-- BEGIN Page Wrapper -->
-<div class="page-wrapper">
+<div class="page-wrapper text-sm font-prompt">
 	<div class="page-inner">
 		<aside class="page-sidebar">
 			@include('layouts.admin.aside')
