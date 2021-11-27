@@ -1,26 +1,10 @@
-@extends('layouts.index')
-@section('custom-style')
-<link type="text/css" href="{{ URL::asset('admindek/css/style.css') }}" rel="stylesheet" >
-@endsection
-@section('custom-style')
-<!-- <link rel="stylesheet" href="{{ URL::asset('assets/libs/select2/dist/css/select2.min.css') }}"> -->
-@endsection
-@section('contents')
-<div class="page-breadcrumb bg-light">
-	<div class="row">
-		<div class="col-12 d-flex no-block align-items-center">
-			<h4 class="page-title"><span style="display:none;">Create Permission</span></h4>
-			<div class="ml-auto text-right">
-				<nav aria-label="breadcrumb">
-					<ol class="breadcrumb">
-						<li class="breadcrumb-item"><a href="{{ route('users.index') }}">Permission</a></li>
-						<li class="breadcrumb-item active" aria-current="page"><a href="#">Create</a></li>
-					</ol>
-				</nav>
-			</div>
-		</div>
-	</div>
-</div>
+@extends('layouts.admin.index')
+@section('content')
+<ol class="breadcrumb page-breadcrumb">
+	<li class="breadcrumb-item"><a href="javascript:void(0);">Admin</a></li>
+	<li class="breadcrumb-item"><a href="{{ route('permissions.index') }}">Permission</a></li>
+	<li class="breadcrumb-item">Create</li>
+</ol>
 <div class="container-fluid">
 	<div class="row">
 		<div class="col-md-12">
@@ -28,8 +12,7 @@
 				<div class="card-body">
 					<div class="d-md-flex align-items-center" style="border-bottom:1px solid #EAEAEA">
 						<div>
-							<h4 class="card-title">บริหารจัดการผู้ใช้งานระบบ</h4>
-							<h5 class="card-subtitle">เพิ่มสิทธิ์ผู้ใช้งาน</h5>
+							<h4 class="card-title">Permission Management [Create]</h4>
 						</div>
 					</div>
 					<div class="my-4">
@@ -45,26 +28,26 @@
 						@endif
 						{!! Form::open(array('route'=>'permissions.store', 'method'=>'POST', 'class'=>'mt-4 mb-3')) !!}
 						<div class="row">
-							<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-4">
 								<div class="form-group">
-									<label for="otherTitleNameInput">ชื่อสิทธิ์</label>
-									<input type="text" name="name" required class="form-control" placeholder="ชื่อสิทธิ์" >
+									<label for="permission">Permission Name</label>
+									<input type="text" name="name" required class="form-control" placeholder="Permission" >
 								</div>
 							</div>
 						</div>
 						<div class="row">
-							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-4">
 								<div class="form-group">
 									<label>กลุ่มผู้ใช้งาน:</label>
 										<div class="custom-control custom-checkbox">
-											<input class="custom-control-input" name="select_all" value="all" type="checkbox" id="selectAll">
-											<label class="custom-control-label" for="selectAll">All</label>
+											<input class="custom-control-input" name="select_all" value="all" type="checkbox" id="select_all">
+											<label class="custom-control-label" for="select_all">All</label>
 											<br />
 										</div>
 
 											@foreach($roles as $role)
 											<div class="custom-control custom-checkbox">
-											<input class="custom-control-input" name="roles[]" value="{{ $role->id }}" type="checkbox" id="checkbox{{ $role->id }}">
+											<input class="custom-control-input" data-chk="chk" name="roles[]" value="{{ $role->id }}" type="checkbox" id="checkbox{{ $role->id }}">
 											<label class="custom-control-label" for="checkbox{{ $role->id }}">{{ ucfirst($role->name) }}</label>
 											<br />
 											</div>
@@ -74,9 +57,9 @@
 							</div>
 						</div>
 						<div class="row">
-							<div class="col-xs-12 col-sm-12 col-md-4 col-lg-3 col-xl-3">
+							<div class="col-xs-12 col-sm-12 col-md-4 col-lg-3 col-xl-3 mb-2">
 								<div class="form-group">
-									<button type="submit" class="btn btn-primary">Create</button>
+									<button type="submit" class="btn btn-success">Create</button>
 								</div>
 							</div>
 						</div>
@@ -88,20 +71,12 @@
 	</div>
 </div>
 @endsection
-@section('bottom-script')
-	<!-- <script src="{{ URL::asset('assets/libs/select2/dist/js/select2.min.js') }}"></script> -->
-	<script>
-	$(document).ready(function() {
-	  /* ajax request */
-		$.ajaxSetup({
-			headers: {
-				'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-			}
-		});
-		//$('#select-roles').selectpicker();
-	  $("#selectAll").click(function(){
-	        $("input[type=checkbox]").prop('checked', $(this).prop('checked'));
-	  });
+@section('script')
+<script>
+$(document).ready(function() {
+	$("#select_all").click(function(){
+		$("input[data-chk='chk']").prop('checked', $(this).prop('checked'));
 	});
-	</script>
+});
+</script>
 @endsection

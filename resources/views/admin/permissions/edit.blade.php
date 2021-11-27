@@ -1,23 +1,10 @@
-@extends('layouts.index')
-@section('custom-style')
-<link type="text/css" href="{{ URL::asset('admindek/css/style.css') }}" rel="stylesheet" >
-@endsection
-@section('contents')
-<div class="page-breadcrumb bg-light">
-	<div class="row">
-		<div class="col-12 d-flex no-block align-items-center">
-			<h4 class="page-title"><span style="display:none;">Edit Permission</span></h4>
-			<div class="ml-auto text-right">
-				<nav aria-label="breadcrumb">
-					<ol class="breadcrumb">
-						<li class="breadcrumb-item"><a href="{{ route('permissions.index') }}">Permission</a></li>
-						<li class="breadcrumb-item active" aria-current="page"><a href="#">Edit</a></li>
-					</ol>
-				</nav>
-			</div>
-		</div>
-	</div>
-</div>
+@extends('layouts.admin.index')
+@section('content')
+<ol class="breadcrumb page-breadcrumb">
+	<li class="breadcrumb-item"><a href="javascript:void(0);">Admin</a></li>
+	<li class="breadcrumb-item"><a href="{{ route('permissions.index') }}">Permission</a></li>
+	<li class="breadcrumb-item">Edit</li>
+</ol>
 <div class="container-fluid">
 	<div class="row">
 		<div class="col-md-12">
@@ -25,8 +12,7 @@
 				<div class="card-body">
 					<div class="d-md-flex align-items-center" style="border-bottom:1px solid #EAEAEA">
 						<div>
-							<h4 class="card-title">บริหารจัดการผู้ใช้งานระบบ</h4>
-							<h5 class="card-subtitle">ID Flu-BOE</h5>
+							<h4 class="card-title">Permission Management [Edit]</h4>
 						</div>
 					</div>
 					<div class="my-4">
@@ -42,15 +28,15 @@
 						@endif
 						{!! Form::model($permission, ['method' => 'PATCH','route' => ['permissions.update', $permission->id]]) !!}
 						<div class="row">
-							<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3">
+							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-4">
 								<div class="form-group">
-									<label for"name">ชื่อสิทธิ์</label>
+									<label for"permission_name">Permission Name</label>
 									{!! Form::text('name', null, array('placeholder' => 'ชื่อสิทธิ์','class' => 'form-control')) !!}
 								</div>
 							</div>
 
-							<div class="col-xs-12 col-sm-12 col-md-12">
-								<button type="submit" class="btn btn-primary">Save</button>
+							<div class="col-xs-12 col-sm-12 col-md-12 mb-2">
+								<button type="submit" class="btn btn-warning">Update</button>
 							</div>
 						</div>
 						{!! Form::close() !!}
