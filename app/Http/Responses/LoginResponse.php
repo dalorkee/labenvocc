@@ -22,22 +22,5 @@ class LoginResponse implements ContractsLoginResponse
 		} else {
 			return redirect()->route('logout');
 		}
-/* 		$role= Auth::user()->roles->pluck('name')->all();
-		if (count($role) > 0) {
-			switch ($role[0]) {
-				case 'root':
-				case 'admin':
-					return redirect()->route('admin.index');
-					break;
-				case 'customer':
-					return redirect()->route('customer.index');
-					break;
-				default:
-					return redirect()->route('logout');
-					break;
-			}
-		} else {
-			return redirect()->route('logout');
-		} */
 	}
 }

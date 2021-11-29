@@ -31,8 +31,9 @@ class CustomerController extends Controller
 			return $next($request);
 		});
 	}
-	protected function index(CustomersDataTable $dataTable): object {
-		return $dataTable->render('apps.customers.index');
+	protected function index(CustomersDataTable $dataTable, $user_id=0): object {
+		$user_id = $this->user->id;
+		return $dataTable->with('id', $user_id)->render('apps.customers.index');
 	}
 	protected function createInfo(Request $request): object {
 		$type_of_work = $this->typeOfWork();

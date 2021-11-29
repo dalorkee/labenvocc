@@ -25,7 +25,7 @@
 						<a class="btn btn-success" href="{{ route('permissions.create') }}"><i class="fal fa-plus"></i> New Permission</a>
 					</div>
 					@endif
-					<table class="table table-responsive-xl table-striped table-bordered">
+					<table class="table table-striped table-bordered">
 						<thead class="bg-info text-white">
 							<tr>
 								<th>Permission Name</th>
