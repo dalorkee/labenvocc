@@ -2,10 +2,7 @@
 
 namespace App\Http\Controllers;
 
-//use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-//use Spatie\Permission\Models\{Role,Permission};
-//use Spatie\Permission\Traits\HasRoles;
 
 class HomeController extends Controller
 {
@@ -20,7 +17,7 @@ class HomeController extends Controller
 					return redirect()->route('customer.index');
 					break;
 				default:
-					return view('apps.home');
+					return redirect('logout');
 					break;
 			}
 		} else {
@@ -30,11 +27,15 @@ class HomeController extends Controller
 
 	public static function userRole(): string {
 		$user_roles= Auth::user()->roles->pluck('name')->all();
-		return $user_roles[0];
+		if (count($user_roles) > 0) {
+			return $user_roles[0];
+		} else {
+			return redirect('logout');
+		}
 	}
 
 	public function logout() {
 		Auth::logout();
-		return redirect('/login');
+		return redirect('login');
 	}
 }
