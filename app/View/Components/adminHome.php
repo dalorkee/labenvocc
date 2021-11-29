@@ -4,7 +4,7 @@ namespace App\View\Components;
 
 use Illuminate\View\Component;
 
-class admin-home extends Component
+class adminHome extends Component
 {
     /**
      * Create a new component instance.
