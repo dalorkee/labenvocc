@@ -31,44 +31,26 @@
 	</div>
 	<ul id="js-nav-menu" class="nav-menu">
 		<li class="nav-title">Administrator</li>
-		<li class="{{ Request::is('home') ? 'active' : '' }}">
+		<li class="{{ Request::is('admin/home') ? 'active' : '' }}">
 			<a href="{{ route('admin.index') }}" title="หน้าหลัก" data-filter-tags="home">
 				<i class="fal fa-home"></i>
 				<span class="nav-link-text" data-i18n="nav.home">หน้าหลัก</span>
 			</a>
 		</li>
-		<li>
-			<a href="#" title="Application Intel" data-filter-tags="application intel">
-				<i class="fal fa-cog"></i>
-				<span class="nav-link-text" data-i18n="nav.application_intel">จัดการระบบฯ</span>
-			</a>
-			<ul>
-				<li>
-					<a href="#" title="ข้อมูลผู้ใช้งาน" data-filter-tags="user manage">
-						<span class="nav-link-text" data-i18n="nav.user_manage">ข้อมูลผู้ใช้งาน</span>
-					</a>
-				</li>
-				<li>
-					<a href="#" title="แหล่งกำเนิดสิ่งคุกคาม" data-filter-tags="manage">
-						<span class="nav-link-text" data-i18n="nav.manage">แหล่งกำเนิดสิ่งคุกคาม</span>
-					</a>
-				</li>
-			</ul>
-		</li>
-		<li class="{{ Request::is('dashboard/by/helminth/type') ? 'active open' : '' }}">
+		<li class="{{ (Request::is('roles*') || Request::is('permissions*')) ? 'active open' : '' }}">
 			<a href="#" title="จัดการสิทธิ์" data-filter-tags="manage permission">
 				<i class="fal fa-tasks"></i>
 				<span class="nav-link-text" data-i18n="nav.manage_permission">จัดการสิทธิ์</span>
 			</a>
 			<ul>
-				<li class="active">
+				<li class="{{ Request::is('roles*') ? 'active' : '' }}">
 					<a href="{{ route('roles.index')  }}" title="Roles" data-filter-tags="roles">
-						<span class="nav-link-text" data-i18n="nav.roles">Role</span>
+						<span class="nav-link-text" data-i18n="nav.roles">Roles</span>
 					</a>
 				</li>
-				<li>
+				<li class="{{ Request::is('permissions*') ? 'active' : '' }}">
 					<a href="{{ route('permissions.index') }}" title="Permissions" data-filter-tags="permissions">
-						<span class="nav-link-text" data-i18n="nav.permissions">Permission</span>
+						<span class="nav-link-text" data-i18n="nav.permissions">Permissions</span>
 					</a>
 				</li>
 			</ul>

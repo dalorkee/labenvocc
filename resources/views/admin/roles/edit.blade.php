@@ -10,7 +10,7 @@
 		<div class="col-md-12">
 			<div class="card">
 				<div class="card-body">
-					<div class="d-md-flex align-items-center" style="border-bottom:1px solid #EAEAEA">
+					<div class="d-md-flex align-items-center">
 						<div>
 							<h4 class="card-title">Role Management [Edit]</h4>
 						</div>

@@ -7,12 +7,12 @@ use App\Http\Controllers\{
 	CustomerController
 };
 use App\Http\Controllers\Admin\{
-    AdminController,
+	AdminController,
 	OfficeController,
 	ParametController,
 	UsersController,
-    RoleController,
-    PermissionController
+	RoleController,
+	PermissionController
 };
 
 Route::impersonate();
@@ -23,7 +23,6 @@ Route::resources([
 	'home' => HomeController::class,
 	'register' => RegisterController::class,
 	'registerStaff' => RegisterStaffController::class,
-	'customer' => CustomerController::class,
 	'roles' => RoleController::class,
 	'permissions' => PermissionController::class
 ]);
@@ -35,6 +34,9 @@ Route::name('register.')->group(function() {
 	Route::post('refresh-captcha', [RegisterController::class, 'refreshCaptcha'])->name('refresh-captcha');
 });
 Route::middleware(['auth:sanctum', 'verified'])->group(function() {
+	Route::resources([
+		'customer' => CustomerController::class
+	]);
 	Route::get('/dashboard', function() {
 		return view('dashboard');
 	})->name('dashboard');
@@ -64,6 +66,6 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function(){
 		'paramet'=>ParametController::class,
 		'users'=>UsersController::class
 	]);
-    Route::get('/admin/home', [AdminController::class, 'index'])->name('admin.index');
+	Route::get('/admin/home', [AdminController::class, 'index'])->name('admin.index');
 Route::get('/users/id/{id}/edit',[UsersController::class,'edit'])->name('users.edit');
 });
