@@ -63,22 +63,22 @@ return [
 	|
 	*/
 
-	//'home' => RouteServiceProvider::HOME,
-	'home' => function () {
-		$role= Auth::user()->roles->pluck('name')->all();
-		switch ($role[0]) {
-			case 'root':
-			case 'admin':
-				return view('admin.index');
-				break;
-			case 'customer':
-				return redirect()->route('customer.index');
-				break;
-			default:
-				return redirect('logout');
-				break;
-		}
-	},
+	'home' => RouteServiceProvider::HOME,
+	// 'home' => function () {
+	// 	$role= Auth::user()->roles->pluck('name')->all();
+	// 	switch ($role[0]) {
+	// 		case 'root':
+	// 		case 'admin':
+	// 			return view('admin.index');
+	// 			break;
+	// 		case 'customer':
+	// 			return redirect()->route('customer.index');
+	// 			break;
+	// 		default:
+	// 			return redirect('logout');
+	// 			break;
+	// 	}
+	// },
 
 	/*
 	|--------------------------------------------------------------------------

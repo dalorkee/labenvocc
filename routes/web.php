@@ -14,7 +14,6 @@ use App\Http\Controllers\Admin\{
 	RoleController,
 	PermissionController
 };
-
 Route::impersonate();
 Route::get('/', [HomeController::class, 'index']);
 Route::get('/login', [HomeController::class, 'index'])->name('login')->middleware('throttle:60,1');
@@ -35,7 +34,10 @@ Route::name('register.')->group(function() {
 });
 Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 	Route::resources([
-		'customer' => CustomerController::class
+		'customer' => CustomerController::class,
+		'office'=>OfficeController::class,
+		'paramet'=>ParametController::class,
+		'users'=>UsersController::class
 	]);
 	Route::get('/dashboard', function() {
 		return view('dashboard');
@@ -56,16 +58,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 
 		Route::get('/customer/sample/create/order/{order_id}', [CustomerController::class, 'createSample'])->name('sample.create');
 		Route::post('customer/sample/store/order/{order_id}', [CustomerController::class, 'storeSample'])->name('sample.store');
+
+		Route::get('/admin/home', [AdminController::class, 'index'])->name('admin.index');
+		Route::get('/users/id/{id}/edit',[UsersController::class,'edit'])->name('users.edit');
 	});
 });
 Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
-
-Route::middleware(['auth:sanctum', 'verified'])->group(function(){
-	Route::resources([
-		'office'=>OfficeController::class,
-		'paramet'=>ParametController::class,
-		'users'=>UsersController::class
-	]);
-	Route::get('/admin/home', [AdminController::class, 'index'])->name('admin.index');
-Route::get('/users/id/{id}/edit',[UsersController::class,'edit'])->name('users.edit');
-});
