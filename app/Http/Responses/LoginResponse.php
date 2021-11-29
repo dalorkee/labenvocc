@@ -17,7 +17,12 @@ class LoginResponse implements ContractsLoginResponse
 		//return redirect()->intended(config('fortify.admin.home'));
 
 		/* by tonn */
-		$role= Auth::user()->roles->pluck('name')->all();
+		if (Auth::user()->user_status == 'อนุญาต' && Auth::user()->approved == 'y') {
+			return redirect()->route('home.index');
+		} else {
+			return redirect()->route('logout');
+		}
+/* 		$role= Auth::user()->roles->pluck('name')->all();
 		if (count($role) > 0) {
 			switch ($role[0]) {
 				case 'root':
@@ -33,6 +38,6 @@ class LoginResponse implements ContractsLoginResponse
 			}
 		} else {
 			return redirect()->route('logout');
-		}
+		} */
 	}
 }

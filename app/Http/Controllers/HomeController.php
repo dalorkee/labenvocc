@@ -11,17 +11,17 @@ class HomeController extends Controller
 			switch ($this->userRole()) {
 				case 'root':
 				case 'admin':
-					return view('admin.index');
+					return redirect()->route('admin.index');
 					break;
 				case 'customer':
 					return redirect()->route('customer.index');
 					break;
 				default:
-					return redirect('logout');
+					return redirect()->route('logout');
 					break;
 			}
 		} else {
-			return view('auth.login');
+			return redirect()->route('logout');
 		}
 	}
 

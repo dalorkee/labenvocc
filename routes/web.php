@@ -16,7 +16,7 @@ use App\Http\Controllers\Admin\{
 };
 Route::impersonate();
 Route::get('/', [HomeController::class, 'index']);
-Route::get('/login', [HomeController::class, 'index'])->name('login')->middleware('throttle:60,1');
+//Route::get('/login', [HomeController::class, 'index'])->name('login')->middleware('throttle:60,1');
 Route::get('/logout', [HomeController::class, 'logout'])->name('logout');
 Route::resources([
 	'home' => HomeController::class,
@@ -58,9 +58,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 
 		Route::get('/customer/sample/create/order/{order_id}', [CustomerController::class, 'createSample'])->name('sample.create');
 		Route::post('customer/sample/store/order/{order_id}', [CustomerController::class, 'storeSample'])->name('sample.store');
-
-		Route::get('/admin/home', [AdminController::class, 'index'])->name('admin.index');
-		Route::get('/users/id/{id}/edit',[UsersController::class,'edit'])->name('users.edit');
 	});
+	Route::get('/admin/home', [AdminController::class, 'index'])->name('admin.index');
+	Route::get('/users/id/{id}/edit',[UsersController::class,'edit'])->name('users.edit');
 });
 Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
