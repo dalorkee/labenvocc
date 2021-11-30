@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\{Auth,Log,Storage,File};
 //use Livewire\Controllers\FileUploadHandler;
 //use App\Traits\CommonTrait as TraitsCommonTrait;
 use App\Models\{Order,OrderDetail,Fileupload,OrderDetailParameter,Parameter,UserCustomer};
-use App\DataTables\{CustomersDataTable,CustParameterDataTable,CustSampleDataTable};
+use App\DataTables\{CustomersDataTable,CustParameterDataTable,CustSampleDataTable,CustVerifyDataTable};
 use App\Traits\{CustomerTrait,FileTrait,CommonTrait,JsonBoundaryTrait};
 use Yajra\DataTables\Facades\DataTables;
 use App\Models\User;
@@ -445,5 +445,21 @@ class CustomerController extends Controller
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
 		}
+	}
+
+	protected function createVerify(CustSampleDataTable $dataTable, Request $request) {
+		$sample_list = array();
+		OrderDetail::select('id')->whereOrder_id($request->order_id)->whereCompleted('y')->get()->each(function($value, $key) use (&$sample_list) {
+			$sample_list[$key] = $value->id;
+		});
+		$sample_charecter = $this->getSampleCharecter();
+		$provinces = $this->getMinProvince();
+		$data = [
+			'order_id' => $request->order_id,
+			'sample_list' => $sample_list,
+			'sample_charecter' => $sample_charecter,
+			'provinces' => $provinces
+		];
+		return $dataTable->render('apps.customers.verify', ['data'=> $data]);
 	}
 }
