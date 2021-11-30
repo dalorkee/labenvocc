@@ -79,9 +79,6 @@
 				<div class="col-md-6 mb-3">
 					<label class="form-label" for="office_name">OfficeName</label>
 					<input type="text" class="form-control" id="office_name" name="office_name" value="{{ $value->office_name }}">
-					<div class="invalid-feedback">
-						Please provide a valid city.
-					</div>
 				</div>
 			</div>
 			<button type="submit" class="btn btn-primary">Submit</button>

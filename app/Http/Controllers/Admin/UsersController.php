@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\DataTables\UsersDataTable;
+use Illuminate\Support\Facades\DB;
 
 class UsersController extends Controller
 {
@@ -77,7 +78,39 @@ class UsersController extends Controller
      */
     public function update(Request $request, User $users)
     {
-        dd($users);
+        // $this->validate($request,[
+        //     'user_id'=>'required',
+        //     'user_status'=>'required',
+        // ]);
+        $user_find = $users->find($request->user_id);
+        $user_cus_find = $user_find->userCustomer;
+        $user_cus_find->first_name = $request->first_name;
+        $user_cus_find->last_name = $request->last_name;
+        $user_cus_find->ref_office_lab_code = $request->ref_office_lab_code;
+        $user_cus_find->ref_office_env_code = $request->ref_office_env_code;
+        $user_cus_find->office_code = $request->office_code;
+        $user_cus_find->office_name = $request->office_name;
+        $uc_up = $user_cus_find->save();
+        if($uc_up==true){
+            if($request->user_status === 'อนุญาต'){
+                $user_find->user_status = $request->user_status;
+                $user_find->approved = 'y';
+                DB::table('model_has_roles')->insert([
+                    'role_id'=>'4',
+                    'model_type'=>'App\Models\User',
+                    'model_id'=>$request->user_id,
+                ]);
+    
+            }else{
+                $user_find->approved = 'n';
+                $user_find->user_status = $request->user_status;
+                DB::table('model_has_roles')->where('model_id',$request->user_id)->delete();
+            }
+            $u_up = $user_find->save();
+            if($u_up==true){
+                return redirect()->route('users.index')->with('success', 'updated successfully');
+            }
+        }
     }
 
     /**

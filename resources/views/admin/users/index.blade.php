@@ -40,7 +40,7 @@
                     case 'edit':
                         let userCusUrl = '{{ route("users.edit", ":id") }}';
                         userCusUrl = userCusUrl.replace(':id', userCusId);
-                        alert(userCusUrl);
+                        //alert(userCusUrl);
                         window.open(userCusUrl, '_self');
                     break;
                 }
