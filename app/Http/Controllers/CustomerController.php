@@ -447,11 +447,14 @@ class CustomerController extends Controller
 		}
 	}
 
-	protected function createVerify(CustSampleDataTable $dataTable, Request $request) {
+	protected function createVerify(CustVerifyDataTable $dataTable, Request $request) {
+        $x = User::select('*')->whereUser_type('customer')->with('userCustomer')->get();
+        dd($x);
 		$sample_list = array();
 		OrderDetail::select('id')->whereOrder_id($request->order_id)->whereCompleted('y')->get()->each(function($value, $key) use (&$sample_list) {
 			$sample_list[$key] = $value->id;
 		});
+
 		$sample_charecter = $this->getSampleCharecter();
 		$provinces = $this->getMinProvince();
 		$data = [
