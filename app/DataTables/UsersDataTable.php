@@ -35,20 +35,19 @@ class UsersDataTable extends DataTable
 					return '<span class="badge badge-danger">ไม่อนุญาต</span>';
 				}
 			})
-			->addColumn('action', '<button type="button" class="usercus-manage-nav btn btn-sm btn-info" data-id="{{$user_id}}">จัดการ<i class="fal fa-angle-down"></i></button>')
+			->addColumn('action', '<button type="button" class="usercus-manage-nav btn btn-sm btn-info" data-id="{{$id}}">จัดการ<i class="fal fa-angle-down"></i></button>')
 			->rawColumns(['user_status','action']);
 	}
 
-	public function query() {
-		$userCus = User::join('users_customer_detail','users.id','=','users_customer_detail.user_id')
-			->where('users.user_type','customer');
+	public function query(User $user) {
+		// $userCus = User::join('users_customer_detail','users.id','=','users_customer_detail.user_id')->where('users.user_type','customer');
 
-		// $userCus = User::find(5);
 		// $userCus = $userCus->userCustomer()
 		// 	->with('userCus')
 		// 	->join('users','users.id','=','users_customer_detail.user_id1')
 		// 	->get();
 		// dd($userCus);
+		$userCus = $user::whereUserType('customer')->with('userCustomer')->select('*')->orderBy('id', 'ASC');
 		return $userCus;
 	}
 
@@ -64,12 +63,7 @@ class UsersDataTable extends DataTable
 
 	protected function getColumns() {
 		return [
-			// Column::computed('action')
-			//       ->exportable(false)
-			//       ->printable(false)
-			//       ->width(60)
-			//       ->addClass('text-center'),
-			Column::make('user_id')->title('ลำดับ'),
+			Column::make('id')->title('ลำดับ'),
 			Column::make('username')->title('username'),
 			Column::make('ref_office_lab_code')->title('รหัสหน่วยงาน'),
 			Column::make('ref_office_env_code')->title('รหัสหน่วยงาน(env)'),
@@ -78,8 +72,6 @@ class UsersDataTable extends DataTable
 			Column::make('last_name')->title('นามสกลุ'),
 			Column::make('user_status')->title('สถานะ'),
 			Column::make('action')->title('จัดการ'),
-			// Column::make('created_at'),
-			// Column::make('updated_at'),
 		];
 	}
 
