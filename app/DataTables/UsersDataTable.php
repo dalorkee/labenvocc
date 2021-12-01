@@ -8,6 +8,7 @@ use App\Traits\RefTrait;
 use Yajra\DataTables\Html\{Button,Column};
 use Yajra\DataTables\Html\Editor\{Editor,Fields};
 use Yajra\DataTables\Services\DataTable;
+use Illuminate\Support\Facades\DB;
 
 class UsersDataTable extends DataTable
 {
@@ -47,7 +48,10 @@ class UsersDataTable extends DataTable
 		// 	->join('users','users.id','=','users_customer_detail.user_id1')
 		// 	->get();
 		// dd($userCus);
-		$userCus = $user::whereUserType('customer')->with('userCustomer')->select('*')->orderBy('id', 'ASC');
+		//$userCus = $user::whereUserType('customer')->with('userCustomer')->select('*')->orderBy('id', 'ASC');
+		$userCus = DB::table('users')
+			->join('users_customer_detail','users.id','=','users_customer_detail.user_id')
+			->where('users.user_type','customer');
 		return $userCus;
 	}
 
