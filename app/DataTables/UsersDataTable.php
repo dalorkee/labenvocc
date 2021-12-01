@@ -22,7 +22,22 @@ class UsersDataTable extends DataTable
 	public function dataTable($query): object {
 		return datatables()
 			->eloquent($query)
-			->editColumn('user_status',function($usercuschk){
+			->addColumn('ref_office_lab_code', function($query) {
+				return $query->userCustomer->ref_office_lab_code;
+			})
+			->addColumn('ref_office_env_code', function($query) {
+				return $query->userCustomer->ref_office_env_code;
+			})
+			->addColumn('office_name', function($query) {
+				return $query->userCustomer->office_name;
+			})
+			->addColumn('first_name', function($query) {
+				return $query->userCustomer->first_name;
+			})
+			->addColumn('last_name', function($query) {
+				return $query->userCustomer->last_name;
+			})
+			->editColumn('user_status',function($usercuschk) {
 				if($usercuschk->user_status == 'สมัครใหม่'){
 					return '<span class="badge badge-warning">สมัครใหม่</span>';
 				}
@@ -36,22 +51,12 @@ class UsersDataTable extends DataTable
 					return '<span class="badge badge-danger">ไม่อนุญาต</span>';
 				}
 			})
-			->addColumn('action', '<button type="button" class="usercus-manage-nav btn btn-sm btn-info" data-id="{{$id}}">จัดการ<i class="fal fa-angle-down"></i></button>')
+			->addColumn('action', '<button type="button" class="usercus-manage-nav btn btn-sm btn-info" data-id="{{$id}}">จัดการ <i class="fal fa-angle-down"></i></button>')
 			->rawColumns(['user_status','action']);
 	}
 
 	public function query(User $user) {
-		// $userCus = User::join('users_customer_detail','users.id','=','users_customer_detail.user_id')->where('users.user_type','customer');
-
-		// $userCus = $userCus->userCustomer()
-		// 	->with('userCus')
-		// 	->join('users','users.id','=','users_customer_detail.user_id1')
-		// 	->get();
-		// dd($userCus);
-		//$userCus = $user::whereUserType('customer')->with('userCustomer')->select('*')->orderBy('id', 'ASC');
-		$userCus = DB::table('users')
-			->join('users_customer_detail','users.id','=','users_customer_detail.user_id')
-			->where('users.user_type','customer');
+		$userCus = $user->whereUser_type('customer')->with('userCustomer')->orderBy('id', 'ASC');
 		return $userCus;
 	}
 
@@ -73,7 +78,7 @@ class UsersDataTable extends DataTable
 			Column::make('ref_office_env_code')->title('รหัสหน่วยงาน(env)'),
 			Column::make('office_name')->title('ชื่อหน่วยงาน'),
 			Column::make('first_name')->title('ชื่อ'),
-			Column::make('last_name')->title('นามสกลุ'),
+			Column::make('last_name')->title('นามสกุล'),
 			Column::make('user_status')->title('สถานะ'),
 			Column::make('action')->title('จัดการ'),
 		];

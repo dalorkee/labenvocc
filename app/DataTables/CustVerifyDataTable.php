@@ -8,15 +8,14 @@ use Yajra\DataTables\Services\DataTable;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 use App\Models\{OrderDetail,User,UserCustomer};
-use App\Traits\CommonTrait;
+//use App\Traits\CommonTrait;
 
 class CustVerifyDataTable extends DataTable
 {
-	use CommonTrait;
+	//use CommonTrait;
 
 	public function dataTable($query) {
 		try {
-			//$lab_station = $this->latStation();
 			return datatables()
 				->eloquent($query)
 				->editColumn('created_at', function($field) {
@@ -46,7 +45,7 @@ class CustVerifyDataTable extends DataTable
 	public function html() {
 		try {
 			return $this->builder()
-				->setTableId("order-table")
+				->setTableId("verify-table")
 				->setTableAttribute("class", "table table-bordered table-hover table-striped w-100")
 				->columns($this->getColumns())
 				->minifiedAjax()
@@ -98,6 +97,6 @@ class CustVerifyDataTable extends DataTable
 	}
 
 	protected function filename() {
-		return 'order_detail' . date('YmdHis');
+		return 'verify_detail' . date('YmdHis');
 	}
 }
