@@ -2,7 +2,7 @@
 
 namespace App\DataTables;
 
-use App\Models\Admin\Office;
+use App\Models\{User,UserCustomer};
 use App\Models\Postal;
 use App\Traits\RefTrait;
 use Yajra\DataTables\Html\{Button,Column};
@@ -21,66 +21,72 @@ class OfficeDataTable extends DataTable
 	public function dataTable($query): object {
 		return datatables()
 			->eloquent($query)
-			->editColumn('office_status',function($officechk){
-				if($officechk->office_status == 'สมัครใหม่'){
+			 ->addColumn('first_name', function($query) {
+			 	return $query->userStaff->first_name;
+			})
+			// ->addColumn('last_name', function($query) {
+			// 	return $query->userStaff->last_name;
+			// })
+			// ->addColumn('position', function($query) {
+			// 	return $query->userStaff->position;
+			// })
+			// ->addColumn('position_level', function($query) {
+			// 	return $query->userStaff->position_level;
+			// })
+			// ->addColumn('duty', function($query) {
+			// 	return $query->userStaff->duty;
+			// })
+			->editColumn('user_status',function($userstaffchk){
+				if($userstaffchk->user_status == 'สมัครใหม่'){
 					return '<span class="badge badge-warning">สมัครใหม่</span>';
 				}
-				elseif($officechk->office_status == 'อนุญาต'){
+				elseif($userstaffchk->user_status == 'อนุญาต'){
 					return '<span class="badge badge-success text-dark">อนุญาต</span>';
 				}
-				elseif($officechk->office_status == 'ปิด'){
+				elseif($userstaffchk->user_status == 'ปิด'){
 					return '<span class="badge badge-secondary">ปิด</span>';
 				}
-				elseif($officechk->office_status == 'ไม่อนุญาต'){
+				elseif($userstaffchk->user_status == 'ไม่อนุญาต'){
 					return '<span class="badge badge-danger">ไม่อนุญาต</span>';
 				}
 			})
-			->addColumn('action', '<button type="button" class="office-manage-nav btn btn-sm btn-info" data-id="{{$id}}">จัดการ <i class="fal fa-angle-down"></i> </button>')
-			->rawColumns(['office_status','action']);
+			->addColumn('action', '<button type="button" class="userstaff-manage-nav btn btn-sm btn-info" data-id="{{$id}}">จัดการ<i class="fal fa-angle-down"></i> </button>')
+			->rawColumns(['user_status','action']);
 	}
 
-	public function query(Office $model) {
-		//return $model->newQuery();
+	public function query(User $user) {
 
-		return $model->select('id', 'ref_office_lab_code', 'office_name', 'office_status')
-						->orderBy('id','DESC');
+		$userStaff = $user->whereUser_type('staff')->with('userStaff')->orderBy('id', 'ASC');
+		//dd($userStaff);
+		return $userStaff;
 	}
 
 
 	public function html(): object {
+
 		return $this->builder()
-					->setTableId('office-table')
+					->setTableId('userstaff-table')
 					->columns($this->getColumns())
 					->minifiedAjax()
-					->dom('Bfrtip')
-					->orderBy(1)
-					->buttons(
-						Button::make('create')->text('เพิ่มหน่วยงาน'),
-						// Button::make('export'),
-						// Button::make('print'),
-						// Button::make('reset'),
-						// Button::make('reload')
-					);
+					->dom('frtip')
+					->orderBy(1);
 	}
 
 	protected function getColumns() {
 		return [
-			// Column::computed('action')
-			//       ->exportable(false)
-			//       ->printable(false)
-			//       ->width(60)
-			//       ->addClass('text-center'),
 			Column::make('id')->title('ลำดับ'),
-			Column::make('ref_office_lab_code')->title('รหัสหน่วยงาน'),
-			Column::make('office_name')->title('ชื่อ'),
-			Column::make('office_status')->title('สถานะ'),
+			Column::make('username')->title('username'),
+			Column::make('first_name')->title('ชื่อ'),
+			// Column::make('last_name')->title('นามสกุล'),
+			Column::make('user_status')->title('สถานะ'),
+			// Column::make('position')->title('ตำแหน่ง'),
+			// Column::make('position_level')->title('ระดับ'),
+			// Column::make('duty')->title('หน้าที่'),
 			Column::make('action')->title('จัดการ'),
-			// Column::make('created_at'),
-			// Column::make('updated_at'),
 		];
 	}
 
 	protected function filename() {
-		return 'Office_' . date('YmdHis');
+		return 'UserStaff_' . date('YmdHis');
 	}
 }
