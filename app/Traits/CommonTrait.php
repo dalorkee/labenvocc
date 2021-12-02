@@ -28,6 +28,9 @@ trait CommonTrait {
 	public function typeOfWork(): array {
 		return [1=>'บริการ', 2=>'วิจัย', 3=>'เฝ้าระวัง', 4=>'SRRT/สอบสวนโรค', 5=>'อื่นๆ'];
 	}
+    public function sampleOfficeCategory(): array {
+        return [1=>'สถานประกอบการ', 2=>'สถานพยาบาล', 3=>'ด่านควบคุมโรค', 4=>'อื่นๆ'];
+    }
 	public function calcPercent($data=0, $allData=0): float {
 		return (($data*100)/$allData);
 	}

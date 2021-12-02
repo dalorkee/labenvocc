@@ -8,11 +8,11 @@ use Yajra\DataTables\Services\DataTable;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 use App\Models\{OrderDetail,User,UserCustomer};
-use App\Traits\CommonTrait;
+//use App\Traits\CommonTrait;
 
 class CustSampleDataTable extends DataTable
 {
-	use CommonTrait;
+	//use CommonTrait;
 
 	public function dataTable($query) {
 		try {
@@ -33,7 +33,7 @@ class CustSampleDataTable extends DataTable
 					})->implode('<br>');
 				})
 				->addColumn('action', '<button class="context-nav bg-purple-400 hover:bg-purple-500 text-white py-1 px-3 rounded" id="context-menu" data-id="{{$id}}">จัดการ <i class="fal fa-angle-down"></i></button>')
-				->rawColumns(['parameter', 'unit', 'action']);;
+				->rawColumns(['parameter', 'unit', 'action']);
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
 		}

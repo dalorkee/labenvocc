@@ -5,14 +5,20 @@
 @section('style')
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/pj-step.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/css/datagrid/datatables/datatables.bundle.css') }}">
-<link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/css/formplugins/select2/select2.bundle.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/css/notifications/sweetalert2/sweetalert2.bundle.css') }}" media="screen">
+<style type="text/css">
+.dataTables_filter label {margin-top: 8px;}
+.dataTables_filter input:first-child {margin-top: -8px;}
+.buttons-create {float:left;margin-left:12px;}
+.buttons-create:after {content:'';clear:both;}
+#verify_table thead {background-color: #056676;color: white;}
+</style>
 @endsection
 @section('content')
 <ol class="breadcrumb page-breadcrumb text-sm font-prompt">
 	<li class="breadcrumb-item"><a href="javascript:void(0);">LabEnvOcc</a></li>
 	<li class="breadcrumb-item">สร้างคำขอส่งตัวอย่างชีวภาพ</li>
-	<li class="breadcrumb-item">ตรวจสอบข้อมูล</li>
+	<li class="breadcrumb-item">ข้อมูลตัวอย่าง</li>
 </ol>
 <div class="row text-sm font-prompt">
 	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -40,6 +46,7 @@
 						<div class="form-row">
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
 								<a href="{{ route('customer.parameter.create', ['order_id' => $data['order_id']]) }}" class="btn btn-warning ml-auto"><i class="fal fa-arrow-alt-left"></i> ก่อนหน้า</a>
+								<button class="btn btn-warning ml-auto" disabled>ถัดไป <i class="fal fa-arrow-alt-right"></i></button>
 							</div>
 						</div>
 					</div>
@@ -48,7 +55,6 @@
 		</div>
 	</div>
 </div>
-
 @endsection
 @section('script')
 <script type="text/javascript" src="{{ URL::asset('assets/js/datagrid/datatables/datatables.bundle.js') }}"></script>
@@ -60,5 +66,4 @@ $(document).ready(function() {
 	$.ajaxSetup({headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}});
 });
 </script>
-
 @endsection
