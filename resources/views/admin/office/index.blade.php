@@ -9,47 +9,39 @@
 @section('content')
 <ol class="breadcrumb page-breadcrumb">
 	<li class="breadcrumb-item"><a href="javascript:void(0);">Admin</a></li>
-	<li class="breadcrumb-item">Office Manage</li>
+	<li class="breadcrumb-item">User Staff Manage</li>
 </ol>
 <div class="subheader">
-	<h1 class="subheader-title"><small>จัดการหน่วยงาน</small></h1>
+	<h1 class="subheader-title"><small>จัดการข้อมูลเจ้าหน้าที่</small></h1>
 </div>
-@if (Session::get('success'))
-	<div class="alert alert-success">
-		<p>{{ Session::get('success') }}</p>
-	</div>
-@elseif (Session::get('error'))
-	<div class="alert alert-danger">
-		<p>{{ Session::get('error') }}</p>
-	</div>
-@endif
 <div class="fs-lg fw-300 p-5 bg-white border-faded rounded mb-g">
 	<div class="frame-wrap">
 		{{ $dataTable->table() }}
-	</div>	
+	</div>
 </div>
 @endsection
 @section('script')
 <script type="text/javascript" src="{{ URL::asset('vendor/DataTables/DataTables-1.10.22/js/jquery.dataTables.min.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('vendor/DataTables/Buttons-1.6.5/js/dataTables.buttons.min.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('vendor/DataTables/Responsive-2.2.6/js/dataTables.responsive.min.js') }}"></script>
-<script type="text/javascript" src="{{ URL::asset('vendor/jquery-contextmenu/js/jquery.contextmenu.min.js') }}"></script>
+<script type="text/javascript" src="{{ URL::asset('vendor/jquery-contextmenu/js/jquery.contextMenu.min.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/buttons.server-side.js') }}"></script>
     {{ $dataTable->scripts() }}
 
 <script>
 	$(document).ready(function() {
+        $.ajaxSetup({headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}});
 		$.contextMenu({
-            selector: '.office-manage-nav',
+            selector: '.userstaff-manage-nav',
             trigger:'left',
             callback: function(key, options) {
-                var officeid = $(this).data('id');
+                var userStaffId = $(this).data('id');
                 switch(key){
                     case 'edit':
-                        alert(key + officeid);
-                        let officeUrl = '{{ route("office.edit", ":officeid") }}';
-                        officeUrl = officeUrl.replace(':officeid', officeid);
-                        window.open(officeUrl, '_self');
+                        alert(key + userStaffId);
+                        let userStaffUrl = '{{ route("office.edit", ":id") }}';
+                        userStaffUrl = userStaffUrl.replace(':id', userStaffId);
+                        window.open(userStaffUrl, '_self');
                     break;
                 }
             },
