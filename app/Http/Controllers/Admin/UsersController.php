@@ -92,19 +92,25 @@ class UsersController extends Controller
         $user_cus_find->office_name = $request->office_name;
         $uc_up = $user_cus_find->save();
         if($uc_up==true){
-            if($request->user_status === 'อนุญาต'){
+            if($request->user_status === 'อนุญาต' AND $user_find->user_status !== 'อนุญาต'){
                 $user_find->user_status = $request->user_status;
                 $user_find->approved = 'y';
                 DB::table('model_has_roles')->insert([
                     'role_id'=>'4',
                     'model_type'=>'App\Models\User',
                     'model_id'=>$request->user_id,
-                ]);
-    
-            }else{
+                ]);    
+            }elseif($request->user_status !== 'อนุญาต' AND $user_find->user_status === 'อนุญาต'){
                 $user_find->approved = 'n';
                 $user_find->user_status = $request->user_status;
                 DB::table('model_has_roles')->where('model_id',$request->user_id)->delete();
+            }
+            elseif($request->user_status === 'อนุญาต' AND $user_find->user_status === 'อนุญาต'){
+                return redirect()->route('users.index')->with('success', 'updated successfully');
+            }elseif($request->user_status !== 'อนุญาต' AND $user_find->user_status !== 'อนุญาต'){
+                $user_find->user_status = $request->user_status;                
+            }else{
+                return redirect()->route('users.index')->with('error', 'unsuccessfully');
             }
             $u_up = $user_find->save();
             if($u_up==true){

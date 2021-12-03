@@ -24,29 +24,28 @@
 	</div>
 @endif
 <div class="fs-lg fw-300 p-5 bg-white border-faded rounded mb-g">
-	@foreach ($userStuff as $value)
 	<div class="frame-wrap">
-		<form action="{{ route('office.update',$value->user_id) }}" method="POST">
+		<form action="{{ route('office.update',$userStuff[0]->user_id) }}" method="POST">
 		@csrf
 		@method('PUT')
 			<div class="form-row">
 				<div class="col-md-6 mb-3">
 					<label class="form-label" for="user_id">UserId</label>
-					<input type="text" class="form-control" id="user_id" name="user_id" value="{{ $value->user_id }}" readonly>
+					<input type="text" class="form-control" id="user_id" name="user_id" value="{{ $userStuff[0]->user_id }}" readonly>
 				</div>
 				<div class="col-md-6 mb-3">
 					<label class="form-label" for="username">UserName</label>
-					<input type="text" class="form-control" id="username" name="username" value="{{ $value->username }}" readonly>
+					<input type="text" class="form-control" id="username" name="username" value="{{ $userStuff[0]->username }}" readonly>
 				</div>				
 			</div>
 			<div class="form-row">
 				<div class="col-md-6 mb-3">
 					<label class="form-label" for="first_name">FirstName</label>
-					<input type="text" class="form-control" id="first_name" name="first_name" value="{{ $value->first_name }}">
+					<input type="text" class="form-control" id="first_name" name="first_name" value="{{ $userStuff[0]->first_name }}">
 				</div>
 				<div class="col-md-6 mb-3">
 					<label class="form-label" for="last_name">LastName</label>
-					<input type="text" class="form-control" id="last_name" name="last_name" value="{{ $value->last_name }}">
+					<input type="text" class="form-control" id="last_name" name="last_name" value="{{ $userStuff[0]->last_name }}">
 				</div>				
 			</div>
 			<div class="form-row form-group">
@@ -54,35 +53,52 @@
 					<label class="form-label" for="user_status">สถานะ<span class="text-danger">*</span></label>
 					<select class="custom-select" name="user_status">
 						<option value="">---เลือก---</option>
-						<option {{ ($value->user_status) == 'สมัครใหม่' ? 'selected' : '' }} value="สมัครใหม่">สมัครใหม่</option>
-						<option {{ ($value->user_status) == 'อนุญาต' ? 'selected' : '' }} value="อนุญาต">อนุญาต</option>
-						<option {{ ($value->user_status) == 'ปิด' ? 'selected' : '' }} value="ปิด">ปิด</option>
-						<option {{ ($value->user_status) == 'ไม่อนุญาต' ? 'selected' : '' }} value="ไม่อนุญาต">ไม่อนุญาต</option>
+						<option {{ ($userStuff[0]->user_status) == 'สมัครใหม่' ? 'selected' : '' }} value="สมัครใหม่">สมัครใหม่</option>
+						<option {{ ($userStuff[0]->user_status) == 'อนุญาต' ? 'selected' : '' }} value="อนุญาต">อนุญาต</option>
+						<option {{ ($userStuff[0]->user_status) == 'ปิด' ? 'selected' : '' }} value="ปิด">ปิด</option>
+						<option {{ ($userStuff[0]->user_status) == 'ไม่อนุญาต' ? 'selected' : '' }} value="ไม่อนุญาต">ไม่อนุญาต</option>
 					</select>
 				</div>
 			</div>
 			<div class="form-row">
 				<div class="col-md-4 mb-3">
 					<label class="form-label" for="position">ตำแหน่ง</label>
-					<input type="text" class="form-control" id="position" name="position" value="{{ $value->position }}">
+					<select class="custom-select" name="position">
+						<option value=" {{ $userStuff[0]->position??null }} ">{{ $positions[$userStuff[0]->position]??null }}</option>
+						<option value="">---เลือก---</option>
+						@foreach ($positions as $key=>$val)
+							<option value="{{ $key }}">{{ $val }}</option>
+						@endforeach
+					</select>
 				</div>
 				<div class="col-md-4 mb-3">
 					<label class="form-label" for="position_level">ระดับ</label>
-					<input type="text" class="form-control" id="position_level" name="position_level" value="{{ $value->position_level }}">
+					<select class="custom-select" name="position_level">
+						<option value=" {{ $userStuff[0]->position_level??null }} ">{{ $position_levels[$userStuff[0]->position_level]??null }}</option>
+						<option value="">---เลือก---</option>
+						@foreach ($position_levels as $key=>$val)
+							<option value="{{ $key }}">{{ $val }}</option>
+						@endforeach
+					</select>
 				</div>
 				<div class="col-md-4 mb-3">
-					<label class="form-label" for="duty">หน้าที่</label>
-					<input type="text" class="form-control" id="duty" name="duty" value="{{ $value->duty }}">
+					<label class="form-label" for="duty">หน้าที่</label>					
+					<select class="custom-select" name="duty">
+						<option value=" {{ $userStuff[0]->duty??null }} ">{{ $duties[$userStuff[0]->duty]??null }}</option>
+						<option value="">---เลือก---</option>
+						@foreach ($duties as $key=>$val)
+							<option value="{{ $key }}">{{ $val }}</option>
+						@endforeach
+					</select>
 				</div>	
 				<div class="col-md-4 mb-3">
 					<label class="form-label" for="mobile">เบอร์โทร</label>
-					<input type="text" class="form-control" id="mobile" name="mobile" value="{{ $value->mobile }}">
+					<input type="text" class="form-control" id="mobile" name="mobile" value="{{ $userStuff[0]->mobile }}">
 				</div>			
 			</div>
 			<button type="submit" class="btn btn-primary">Submit</button>
 		</form>		
 	</div>
-	@endforeach
 </div>
 @endsection
 @section('script')

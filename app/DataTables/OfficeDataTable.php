@@ -21,17 +21,17 @@ class OfficeDataTable extends DataTable
 	public function dataTable($query): object {
 		return datatables()
 			->eloquent($query)
-			->addColumn('first_name',function($query){
+			->addColumn('first_name', function($query) {
 				return $query->userStaff->first_name;
 			})
 			->addColumn('last_name', function($query) {
-				return $query->userStaff->last_name??"";
+				return $query->userStaff->last_name;
 			})
 			->addColumn('position', function($query) {
-				return $query->userStaff->position??"";
+				return $query->userStaff->position;
 			})
 			->addColumn('position_level', function($query) {
-				return $query->userStaff->position_level??"";
+				return $query->userStaff->position_level;
 			})
 			->addColumn('duty', function($query) {
 				return $query->userStaff->duty??"";
@@ -55,13 +55,10 @@ class OfficeDataTable extends DataTable
 	}
 
 	public function query(User $user) {
-
-		$userStaff = $user->whereUser_type('staff')->with('userStaff')->orderBy('id', 'ASC');
-		return $userStaff;
+		return $user->whereUser_type('staff')->with('userStaff')->orderBy('id', 'ASC');
 	}
 
 	public function html(): object {
-
 		return $this->builder()
 					->setTableId('userstaff-table')
 					->columns($this->getColumns())
@@ -73,7 +70,7 @@ class OfficeDataTable extends DataTable
 	protected function getColumns() {
 		return [
 			Column::make('id')->title('ลำดับ'),
-			Column::make('username')->title('username'),
+			Column::make('username')->title('ชื่อผู้ใช้'),
 			Column::make('first_name')->title('ชื่อ'),
 			Column::make('last_name')->title('นามสกุล'),
 			Column::make('user_status')->title('สถานะ'),
