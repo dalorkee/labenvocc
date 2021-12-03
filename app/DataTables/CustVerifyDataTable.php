@@ -16,7 +16,6 @@ class CustVerifyDataTable extends DataTable
 
 	public function dataTable($query) {
 		try {
-			//$lab_station = $this->latStation();
 			$sample_office_category = $this->sampleOfficeCategory();
 			return datatables()
 				->eloquent($query)
@@ -27,18 +26,17 @@ class CustVerifyDataTable extends DataTable
 					return Carbon::parse($field->created_at)->format('d/m/Y');
 				})
 				->editColumn('sample_office_category', function($field) use ($sample_office_category) {
-					return $sample_office_category[$field->sample_office_category];
+					return $sample_office_category[$field->sample_office_category] ?? null;
 				})
-
-				->addColumn('parameter', function (OrderDetail $detail) {
-					return $detail->parameters->map(function($parameter) {
+				->addColumn('parameter', function ($parameters) {
+					return $parameters->parameters->map(function($parameter) {
 						return "<span class=\"badge badge-info mb-1\">".$parameter->parameter_name."</span>";
-					})->implode('<br>');
+					})->implode('<br />');
 				})
-				->addColumn('unit', function (OrderDetail $detail) {
-					return $detail->parameters->map(function($parameter) {
+				->addColumn('unit', function ($units) {
+					return $units->parameters->map(function($parameter) {
 						return $parameter->unit_name;
-					})->implode('<br>');
+					})->implode('<br />');
 				})
 				->addColumn('action', '<button class="context-nav bg-purple-400 hover:bg-purple-500 text-white py-1 px-3 rounded" id="context-menu" data-id="{{$id}}">จัดการ <i class="fal fa-angle-down"></i></button>')
 				->rawColumns(['parameter', 'action']);
@@ -80,7 +78,9 @@ class CustVerifyDataTable extends DataTable
 				// Button::make('reload')->addClass('btn btn-info')->text('<i class="fal fa-redo"></i> โหลดใหม่'),
 				//)
 				->parameters([
-					'language'=>['url'=>url('/vendor/DataTables/i18n/thai.json')],
+					'language' => ['url'=>url('/vendor/DataTables/i18n/thai.json')],
+                    'responsive' => true,
+                    'autoWidth' => true,
 				]);
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
@@ -90,7 +90,7 @@ class CustVerifyDataTable extends DataTable
 	protected function getColumns() {
 		try {
 			return [
-				Column::make('id')->title('รหัสตัวอย่าง')->className(''),
+				Column::make('id')->title('รหัสตัวอย่าง')->className('col-md-2'),
 				Column::make('fullname')->title('ชื่อ-สกุล'),
 				Column::make('age_year')->title('อายุ'),
 				Column::make('division')->title('หน่วยงาน'),
@@ -108,7 +108,7 @@ class CustVerifyDataTable extends DataTable
 				Column::make('sample_office_province_name')->title('จังหวัด'),
 				Column::make('sample_office_postal')->title('รหัสไปรษณีย์'),
 				Column::make('note')->title('หมายเหตุ'),
-				//Column::computed('action')->addClass('text-center')->title('#')
+				Column::computed('action')->addClass('text-center')->title('#')
 			];
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
