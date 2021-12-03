@@ -4,13 +4,14 @@ namespace App\DataTables;
 
 use App\Models\{User,UserCustomer};
 use App\Models\Postal;
-use App\Traits\RefTrait;
+use App\Traits\CommonTrait;
 use Yajra\DataTables\Html\{Button,Column};
 use Yajra\DataTables\Html\Editor\{Editor,Fields};
 use Yajra\DataTables\Services\DataTable;
 
 class OfficeDataTable extends DataTable
 {
+	use CommonTrait;
 	// private function officeFilter(array $academy_arr) {
 	// 	$str = "";
 	// 	foreach ($academy_arr as $key => $value) {
@@ -19,6 +20,9 @@ class OfficeDataTable extends DataTable
 	// 	return $str;
 	// }
 	public function dataTable($query): object {
+		$positions = $this->getPosition();
+        $position_levels = $this->getPositionLevel();
+        $duties = $this->getStaffDuty();
 		return datatables()
 			->eloquent($query)
 			->addColumn('first_name', function($query) {
@@ -27,14 +31,14 @@ class OfficeDataTable extends DataTable
 			->addColumn('last_name', function($query) {
 				return $query->userStaff->last_name;
 			})
-			->addColumn('position', function($query) {
-				return $query->userStaff->position;
+			->addColumn('position', function($position) use ($positions) {
+				return $positions[$position->userStaff->position] ?? null;
 			})
-			->addColumn('position_level', function($query) {
-				return $query->userStaff->position_level;
+			->addColumn('position_level', function($query) use ($position_levels) {
+				return $position_levels[$query->userStaff->position_level] ?? null;
 			})
-			->addColumn('duty', function($query) {
-				return $query->userStaff->duty??"";
+			->addColumn('duty', function($query) use ($duties) {
+				return $duties[$query->userStaff->duty] ?? null;
 			})
 			->editColumn('user_status',function($userstaffchk){
 				if($userstaffchk->user_status == 'สมัครใหม่'){
