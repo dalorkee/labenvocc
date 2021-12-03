@@ -9,10 +9,10 @@
 @section('content')
 <ol class="breadcrumb page-breadcrumb">
 	<li class="breadcrumb-item"><a href="javascript:void(0);">Admin</a></li>
-	<li class="breadcrumb-item">Office Manage</li>
+	<li class="breadcrumb-item">User Customer Manage</li>
 </ol>
 <div class="subheader">
-	<h1 class="subheader-title"><small>แก้ไขข้อมูลหน่วยงาน</small></h1>
+	<h1 class="subheader-title"><small>แก้ไขข้อมูลลูกค้า</small></h1>
 </div>
 @if (Session::get('success'))
 	<div class="alert alert-success">
@@ -91,6 +91,6 @@
 <script type="text/javascript" src="{{ URL::asset('vendor/DataTables/DataTables-1.10.22/js/jquery.dataTables.min.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('vendor/DataTables/Buttons-1.6.5/js/dataTables.buttons.min.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('vendor/DataTables/Responsive-2.2.6/js/dataTables.responsive.min.js') }}"></script>
-<script type="text/javascript" src="{{ URL::asset('vendor/jquery-contextmenu/js/jquery.contextmenu.min.js') }}"></script>
+<script type="text/javascript" src="{{ URL::asset('vendor/jquery-contextmenu/js/jquery.contextMenu.min.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/buttons.server-side.js') }}"></script>
 @endsection

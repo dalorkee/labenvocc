@@ -37,10 +37,10 @@
             callback: function(key, options) {
                 var userStaffId = $(this).data('id');
                 switch(key){
-                    case 'edit':
-                        alert(key + userStaffId);
+                    case 'edit':                       
                         let userStaffUrl = '{{ route("office.edit", ":id") }}';
                         userStaffUrl = userStaffUrl.replace(':id', userStaffId);
+                        alert(userStaffUrl);
                         window.open(userStaffUrl, '_self');
                     break;
                 }

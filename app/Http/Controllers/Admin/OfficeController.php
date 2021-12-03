@@ -64,7 +64,6 @@ class OfficeController extends Controller
         ->where('users.user_type','staff')
         ->where('users_staff_detail.user_id',$request->id)
         ->get();
-
         return view('admin.office.edit',compact('userStuff'));
     }
 

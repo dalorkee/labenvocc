@@ -63,5 +63,6 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 	});
 	Route::get('/admin/home', [AdminController::class, 'index'])->name('admin.index');
 	Route::get('/users/id/{id}/edit',[UsersController::class,'edit'])->name('users.edit');
+	Route::get('/office/id/{id}/edit',[OfficeController::class,'edit'])->name('office.edit');
 });
 Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
