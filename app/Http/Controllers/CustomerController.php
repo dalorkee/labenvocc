@@ -457,12 +457,15 @@ class CustomerController extends Controller
 
 			$sample_charecter = $this->getSampleCharecter();
 			$provinces = $this->getMinProvince();
+            $order = Order::whereId($request->order_id)->with('uploads')->get();
 			$data = [
 				'order_id' => $request->order_id,
+                'order' => $order,
 				'sample_list' => $sample_list,
 				'sample_charecter' => $sample_charecter,
 				'provinces' => $provinces
 			];
+            //dd($data);
 			return $dataTable->render('apps.customers.verify', ['data'=> $data]);
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
