@@ -60,6 +60,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 		Route::post('customer/sample/store/order/{order_id}', [CustomerController::class, 'storeSample'])->name('sample.store');
 
 		Route::get('/customer/verify/create/order/{order_id}', [CustomerController::class, 'createVerify'])->name('verify.create');
+        Route::get('/customer/verify/store/order/{order_id}', [CustomerController::class, 'storeVerify'])->name('verify.store');
 	});
 	Route::get('/admin/home', [AdminController::class, 'index'])->name('admin.index');
 	Route::get('/users/id/{id}/edit',[UsersController::class,'edit'])->name('users.edit');

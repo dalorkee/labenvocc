@@ -471,4 +471,8 @@ class CustomerController extends Controller
 			Log::error($e->getMessage());
 		}
 	}
+
+    protected function storeVerify(Request $request) {
+        dd($request->order_id);
+    }
 }
