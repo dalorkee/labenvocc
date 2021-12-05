@@ -37,7 +37,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 		'customer' => CustomerController::class,
 		'office'=>OfficeController::class,
 		'paramet'=>ParametController::class,
-		'users'=>UsersController::class
+		'users'=>UsersController::class,
+		'advertise'=>AdvertiseController::class
 	]);
 	Route::get('/dashboard', function() {
 		return view('dashboard');
