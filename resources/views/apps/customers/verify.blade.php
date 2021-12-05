@@ -10,6 +10,7 @@
 .dataTables_filter label {margin-top: 8px;}
 .dataTables_filter input:first-child {margin-top: -8px}
 table.dataTable thead th {background-color: #056676;color:white}
+input[type=text], input:read-only {border: none; background-color: none!important;}
 </style>
 @endsection
 @section('content')
@@ -40,59 +41,47 @@ table.dataTable thead th {background-color: #056676;color:white}
 						</ul>
 
 
-                                    <div class="form-row">
-                                        <div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
-                                            <label class="form-label" for="office_name">หน่วยงานที่ส่งตัวอย่าง <span class="text-red-600">*</span></label>
-                                            <input type="text" name="office_name" value="{{ $data['order'][0]->ref_office_name ?? Auth::user()->userCustomer->office_name }}" class="form-control" readonly>
-                                        </div>
-                                    </div>
-                                    <div class="form-row">
-                                        <div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
-                                            <label class="form-label" for="type_of_work">ประเภทงาน <span class="text-red-600">*</span></label>
-                                            <div class="frame-wrap">
-                                                <div class="custom-control custom-checkbox custom-control-inline">
-                                                    <input type="checkbox" name="type_of_work" value="{{ $data['order'][0]->type_of_work }}" class="custom-control-input type-of-work" id="type_of_work{{ $data['order'][0]->type_of_work }}" checked>
-                                                    <label class="custom-control-label" for="type_of_work{{ $data['order'][0]->type_of_work }}">{{ 'xxx' }}</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        {{-- <div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
-                                            <label class="form-label" for="type_of_work_other">ประเภทงานอื่นๆ ระบุ</label>
-                                            <input type="text" name="type_of_work_other" value="{{ $order[0]->motype_of_work_other ?? '' }}" id="type_of_work_other" class="form-control @error('type_of_work_other') is-invalid @enderror" disabled>
+									<div class="form-row">
+										<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
+											<label class="form-label" for="office_name">หน่วยงานที่ส่งตัวอย่าง</label>
+											<input type="text" name="office_name" value="{{ $data['order'][0]->ref_office_name ?? Auth::user()->userCustomer->office_name }}" class="form-control" readonly>
+										</div>
+									</div>
+									<div class="form-row">
+										<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
+											<label class="form-label" for="office_name">ประเภทงาน</label>
+											<input type="text" name="office_name" value="{{ $data['type_of_work'][$data['order'][0]->type_of_work] }}" class="form-control" readonly>
+										</div>
+										<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
+											<label class="form-label" for="type_of_work_other">ประเภทงานอื่นๆ</label>
+											<input type="text" name="type_of_work_other" value="{{ $data['order'][0]->type_of_work_other ?? '' }}" id="type_of_work_other" class="form-control @error('type_of_work_other') is-invalid @enderror" disabled>
+										</div>
+									</div>
+									<div class="form-row">
+										<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
+											<label class="form-label" for="book_no">เลขที่หนังสือนำส่ง</label>
+											<input type="text" name="book_no" value="{{ $data['order'][0]->book_no ?? null }}" class="form-control" readonly>
 
-                                        </div> --}}
-                                    </div>
-                                    <div class="form-row">
-                                        <div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
-                                            <label class="form-label" for="book_no">เลขที่หนังสือนำส่ง <span class="text-red-600">*</span></label>
-                                            <input type="text" name="book_no" value="{{ $data['order'][0]->book_no ?? null }}" class="form-control">
+										</div>
+										<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
+											<label class="form-label" for="book_date">ลงวันที่</label>
+											<div class="input-group">
+												<input type="text" name="book_date" value="{{ $data['order'][0]->book_date_js ?? '' }}" placeholder="เลือกวันที่" class="form-control" readonly>
+												<div class="input-group-append">
+													<span class="input-group-text fs-xl">
+														<i class="fal fa-calendar-alt"></i>
+													</span>
+												</div>
+											</div>
 
-                                        </div>
-                                        <div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
-                                            <label class="form-label" for="book_date">ลงวันที่ <span class="text-red-600">*</span></label>
-                                            <div class="input-group">
-                                                <input type="text" name="book_date" value="{{ $data['order'][0]->book_date_js ?? '' }}" placeholder="เลือกวันที่" class="form-control">
-                                                <div class="input-group-append">
-                                                    <span class="input-group-text fs-xl">
-                                                        <i class="fal fa-calendar-alt"></i>
-                                                    </span>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                    {{-- <div class="form-row">
-                                        <div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
-                                            <label class="form-label" for="inputGroupFile01">แนบไฟล์หนังสือนำส่ง <span class="text-red-600">*</span></label>
-                                            <div class="input-group">
-                                                <div class="custom-file">
-                                                    <input type="file" name="book_file" class="custom-file-input @error('book_file') is-invalid @enderror" id="bookFile01" aria-describedby="bookFile01">
-                                                    <label class="custom-file-label" for="bookFile01">{{ $order[0]['uploads'][0]->file_name ?? 'ยังไม่มีไฟล์แนบ' }}</label>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div> --}}
+										</div>
+									</div>
+									<div class="form-row">
+										<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
+											<label class="form-label" for="attach_file">แนบไฟล์หนังสือนำส่ง</label>
+											<input type="text" name="book_file" value="{{ $data['order'][0]['uploads'][0]->file_name }}" class="form-control" readonly>
+										</div>
+									</div>
 
 
 

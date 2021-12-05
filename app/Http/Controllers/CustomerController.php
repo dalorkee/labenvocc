@@ -448,24 +448,24 @@ class CustomerController extends Controller
 
 	protected function createVerify(Request $request, CustVerifyDataTable $dataTable) {
 		try {
-			// $x = OrderDetail::with('parameters')->whereOrder_id($request->order_id)->orderBy('id', 'ASC');
-			// dd($x);
 			$sample_list = array();
 			OrderDetail::select('id')->whereOrder_id($request->order_id)->whereCompleted('y')->get()->each(function($value, $key) use (&$sample_list) {
 				$sample_list[$key] = $value->id;
 			});
 
 			$sample_charecter = $this->getSampleCharecter();
+			$type_of_work = $this->typeOfWork();
 			$provinces = $this->getMinProvince();
-            $order = Order::whereId($request->order_id)->with('uploads')->get();
+			$order = Order::whereId($request->order_id)->with('uploads')->get();
 			$data = [
 				'order_id' => $request->order_id,
-                'order' => $order,
+				'order' => $order,
 				'sample_list' => $sample_list,
 				'sample_charecter' => $sample_charecter,
+				'type_of_work' => $type_of_work,
 				'provinces' => $provinces
 			];
-            //dd($data);
+			//dd($data);
 			return $dataTable->render('apps.customers.verify', ['data'=> $data]);
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
