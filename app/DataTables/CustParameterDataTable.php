@@ -82,7 +82,7 @@ class CustParameterDataTable extends DataTable
 	protected function getColumns() {
 		try {
 			return [
-				Column::make('id')->title('รหัส'),
+				Column::make('id')->title('รหัส ตย.'),
 				Column::make('firstname')->title('ชื่อ'),
 				Column::make('lastname')->title('นามสกุล'),
 				Column::make('age_year')->title('อายุ (ปี)'),
