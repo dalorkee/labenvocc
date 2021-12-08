@@ -234,9 +234,9 @@ class CustomerController extends Controller
 					<input type=\"number\" name=\"edit_work_life_year\" value=\"".$order_detail->work_life_year."\" min=\"1\" max=\"100\" class=\"form-control\">
 				</div>
 				<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3\">
-					<label class=\"form-label\" for=\"edit_specimen_date\">วันที่เก็บตัวอย่าง <span class=\"text-red-600\">*</span></label>
+					<label class=\"form-label\" for=\"edit_sample_date\">วันที่เก็บตัวอย่าง <span class=\"text-red-600\">*</span></label>
 					<div class=\"input-group\">
-						<input type=\"text\" name=\"edit_sample_date\" value=\"".$edit_sample_date."\" class=\"form-control\" readonly placeholder=\"เลือกวันที่\" id=\"datepicker_edit_specimen_date\">
+						<input type=\"text\" name=\"edit_sample_date\" value=\"".$edit_sample_date."\" class=\"form-control\" placeholder=\"เลือกวันที่\" id=\"datepicker_edit_specimen_date\" readonly>
 						<div class=\"input-group-append\">
 							<span class=\"input-group-text fs-xl\">
 								<i class=\"fal fa-calendar-alt\"></i>
@@ -278,7 +278,7 @@ class CustomerController extends Controller
 			$orderDetail->age_year = $request->edit_age_year;
 			$orderDetail->division = $request->edit_division;
 			$orderDetail->work_life_year = $request->edit_work_life_year;
-			$orderDetail->specimen_date = $this->convertJsDateToMySQL($request->edit_specimen_date);
+			$orderDetail->sample_date = $this->convertJsDateToMySQL($request->edit_sample_date);
 			$orderDetail->note = $request->edit_note;
 			$saved = $orderDetail->save();
 			if ($saved == true) {
@@ -318,6 +318,7 @@ class CustomerController extends Controller
 					->when($request->threat_type_id > 0, function($q) use ($request) {
 						return $q->whereThreat_type_id($request->threat_type_id)->orderBy('id', 'ASC')->get();
 					});
+                    //dd($data->toArray());
 				return DataTables::of($data)
 					->addIndexColumn()
 					->addColumn('action', function($row) use ($request) {
@@ -465,14 +466,17 @@ class CustomerController extends Controller
 				'type_of_work' => $type_of_work,
 				'provinces' => $provinces
 			];
-			//dd($data);
 			return $dataTable->render('apps.customers.verify', ['data'=> $data]);
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
 		}
 	}
 
-    protected function storeVerify(Request $request) {
-        dd($request->order_id);
-    }
+	protected function storeVerify(Request $request) {
+		try {
+			dd($request->order_id);
+		} catch (\Exception $e) {
+			Log::error($e->getMessage());
+		}
+	}
 }

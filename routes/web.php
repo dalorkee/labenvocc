@@ -50,7 +50,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 		Route::get('/customer/parameter/create/order/{order_id}', [CustomerController::class, 'createParameter'])->name('parameter.create');
 		Route::post('customer/parameter/personal/store', [CustomerController::class, 'storeParameterPersonal'])->name('parameter.personal.store');
 		Route::get('/customer/parameter/personal/edit', [CustomerController::class, 'editParameterPersonal'])->name('parameter.personal.edit');
-		Route::post('/customer/parameter/personal/update', [CustomerController::class, 'updateParameterPersonal'])->name('parameter.personal.update');
+		Route::post('customer/parameter/personal/update', [CustomerController::class, 'updateParameterPersonal'])->name('parameter.personal.update');
 		Route::get('/customer/parameter/personal/delete/id/{id}', [CustomerController::class, 'DestroyParameterPersonal'])->name('parameter.personal.destroy');
 
 		Route::get('/customer/parameter/data/list/detail/{order_detail_id}/type/{threat_type_id}', [CustomerController::class, 'listParameterData'])->name('parameter.data.list');
@@ -61,7 +61,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 		Route::post('customer/sample/store/order/{order_id}', [CustomerController::class, 'storeSample'])->name('sample.store');
 
 		Route::get('/customer/verify/create/order/{order_id}', [CustomerController::class, 'createVerify'])->name('verify.create');
-        Route::get('/customer/verify/store/order/{order_id}', [CustomerController::class, 'storeVerify'])->name('verify.store');
+		Route::get('/customer/verify/store/order/{order_id}', [CustomerController::class, 'storeVerify'])->name('verify.store');
 	});
 	Route::get('/admin/home', [AdminController::class, 'index'])->name('admin.index');
 	Route::get('/users/id/{id}/edit',[UsersController::class,'edit'])->name('users.edit');

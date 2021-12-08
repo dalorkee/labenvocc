@@ -37,7 +37,7 @@
 				</div>
 			</div>
 			<div class="panel-container relative">
-                <div class="row-completed"><span class="badge badge-danger p-2">จำนวน {{ number_format($row_completed) }} ตัวอย่าง</span></div>
+				<div class="row-completed"><span class="badge badge-danger p-2">จำนวน {{ number_format($row_completed) }} ตัวอย่าง</span></div>
 				<form>
 					<div class="panel-content">
 						<ul class="steps mb-3">
@@ -215,7 +215,7 @@
 										<th>สิ่งส่งตรวจ</th>
 										<th>ห้องปฏิบัติการ</th>
 										<th>ราคา (บาท)</th>
-										<th>เพิ่ม</th>
+										<th>#</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -297,6 +297,10 @@ $(document).ready(function() {
 						paging: true,
 						searching: true,
 						bDestroy: true,
+						lengthMenu: [6, 12, 24],
+						language: {
+							'url': '/vendor/DataTables/i18n/thai.json'
+						},
 						ajax: url,
 						columns: [
 							/* {data: 'DT_RowIndex', name: 'DT_RowIndex'}, */
@@ -304,7 +308,7 @@ $(document).ready(function() {
 							{data: 'parameter_name', name: 'parameter_name'},
 							{data: 'sample_charecter_name', name: 'sample_charecter_name'},
 							{data: 'office_name', name: 'office_name'},
-							{data: 'unit_name', name: 'unit_name'},
+							{data: 'price_name', name: 'price_name'},
 							{data: 'action', name: 'action', orderable: true, searchable: false},
 						],
 					});
@@ -363,6 +367,10 @@ $(document).ready(function() {
 			paging: true,
 			searching: true,
 			bDestroy: true,
+			lengthMenu: [6, 12, 24],
+			language: {
+				'url': '/vendor/DataTables/i18n/thai.json'
+			},
 			ajax: url,
 			columns: [
 				{data: 'id', name: 'id'},
