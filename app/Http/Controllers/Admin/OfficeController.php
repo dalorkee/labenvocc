@@ -81,10 +81,10 @@ class OfficeController extends Controller
      */
     public function update(Request $request, User $users)
     {
-        // $this->validate($request,[
-        //     'user_id'=>'required',
-        //     'user_status'=>'required',
-        // ]);
+        $this->validate($request,[
+            'user_id'=>'required',
+            'user_status'=>'required',
+        ]);
         $user_find = $users->find($request->user_id);
         $user_staff_find = $user_find->userStaff;
         $user_staff_find->first_name = $request->first_name;

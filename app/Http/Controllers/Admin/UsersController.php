@@ -78,10 +78,10 @@ class UsersController extends Controller
      */
     public function update(Request $request, User $users)
     {
-        // $this->validate($request,[
-        //     'user_id'=>'required',
-        //     'user_status'=>'required',
-        // ]);
+        $this->validate($request,[
+            'user_id'=>'required',
+            'user_status'=>'required',
+        ]);
         $user_find = $users->find($request->user_id);
         $user_cus_find = $user_find->userCustomer;
         $user_cus_find->first_name = $request->first_name;
