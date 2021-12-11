@@ -315,6 +315,9 @@ $(document).ready(function() {
 					$('#add-parameter-modal').modal('show');
 					/*table.destroy();*/
 					break;
+				case 'unit':
+					alert('unit');
+					break;
 				case 'delete':
 					let del_id = $(this).data('id');
 					let del_url = "{{ route('customer.parameter.personal.destroy', ['id'=>':id']) }}";
@@ -349,6 +352,7 @@ $(document).ready(function() {
 			"edit": {name: "แก้ไขข้อมูล", icon: "fal fa-edit"},
 			"sep1": "---------",
 			"parameter": {name: "เพิ่มพารามิเตอร์", icon: "fal fa-tachometer"},
+			'unit': {name: "เพิ่มหน่วย", icon: "fal fa-underline"},
 			"sep2": "---------",
 			"delete": {name: "ลบข้อมูล", icon: "fal fa-trash-alt"},
 			"sep3": "---------",
@@ -377,7 +381,7 @@ $(document).ready(function() {
 				{data: 'parameter_name', name: 'parameter_name'},
 				{data: 'sample_charecter_name', name: 'sample_charecter_name'},
 				{data: 'office_name', name: 'office_name'},
-				{data: 'unit_name', name: 'unit_name'},
+				{data: 'price_name', name: 'price_name'},
 				{data: 'action', name: 'action', orderable: true, searchable: false},
 			],
 		});

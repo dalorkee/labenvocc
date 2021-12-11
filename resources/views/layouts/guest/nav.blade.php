@@ -21,6 +21,11 @@
 				<a class="nav-link hoverable" href="#">ติดต่อหน่วยงาน</a>
 			</li>
 		</ul>
+		<ul class="nav-bar">
+			<li class="nav-item">
+				<a class="nav-link hoverable" href="{{ route('registerStaff.create') }}"><i class="fal fa-user"></i> สำหรับเจ้าหน้าที่</a>
+			</li>
+		</ul>
 	</div>
 	</div>
 </nav>
