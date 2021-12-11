@@ -29,7 +29,7 @@ input[type="text"]:disabled{background: #eeeeee !important;}
 @endsection
 @section('content')
 <div class="row mt-10">
-	<div class="col-xl-6">
+	<div class="col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12">
 		<div id="regis-title" class="title">
 			<h1>ลงทะเบียน ผู้รับบริการ</h1>
 			<p>โปรดกรอกข้อมูลและตรวจสอบให้ถูกต้อง</p>
@@ -37,7 +37,7 @@ input[type="text"]:disabled{background: #eeeeee !important;}
 	</div>
 </div>
 <div class="row">
-	<div class="col-xl-6">
+	<div class="col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12">
 		<section class="multi_step_form">
 			<form action="{{ route('register.store') }}" method="POST" id="msform">
 				@csrf

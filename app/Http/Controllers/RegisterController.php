@@ -12,7 +12,7 @@ class RegisterController extends Controller
 	use CommonTrait, JsonBoundaryTrait, DbBoundaryTrait, DbHospitalTrait;
 
 	public function index(): object {
-		return view('auth.pre-register');
+		return view('auth.register.cust-step1');
 	}
 	protected function create(): object {
 		$agency_type = $this->agencyType();
