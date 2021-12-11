@@ -29,7 +29,7 @@ class AdvertiseController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.advertise.create');
     }
 
     /**
@@ -38,9 +38,18 @@ class AdvertiseController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, Advertise $advertise)
     {
-        //
+        $this->validate($request,[
+            'advertise_type'=>'required',
+            'advertise_detail'=>'required'
+        ]);
+        $advertise->advertise_type = $request->advertise_type;
+        $advertise->advertise_detail = $request->advertise_detail;
+        $adv_up = $advertise->save();
+        if($adv_up == true){
+            return redirect()->route('advertise.index')->with('success', 'insert successfully');
+        }
     }
 
     /**
@@ -63,7 +72,6 @@ class AdvertiseController extends Controller
     public function edit(Request $request, Advertise $advertise)
     {
         $advertise = $advertise->find($request->id); 
-        // dd($advertise); 
         return view('admin.advertise.edit',compact('advertise'));
     }
 
@@ -76,44 +84,18 @@ class AdvertiseController extends Controller
      */
     public function update(Request $request, Advertise $advertise)
     {
-        // $this->validate($request,[
-        //     'user_id'=>'required',
-        //     'user_status'=>'required',
-        // ]);
-        // $user_find = $users->find($request->user_id);
-        // $user_staff_find = $user_find->userStaff;
-        // $user_staff_find->first_name = $request->first_name;
-        // $user_staff_find->last_name = $request->last_name;
-        // $user_staff_find->position = $request->position;
-        // $user_staff_find->position_level = $request->position_level;
-        // $user_staff_find->duty = $request->duty;
-        // $user_staff_find->mobile = $request->mobile;
-        // $us_up = $user_staff_find->save();
-        // if($us_up == true){
-        //     if($request->user_status === 'อนุญาต' AND $user_find->user_status !== 'อนุญาต'){
-        //         $user_find->user_status = $request->user_status;
-        //         $user_find->approved = 'y';
-        //         DB::table('model_has_roles')->insert([
-        //             'role_id'=>'4',
-        //             'model_type'=>'App\Models\User',
-        //             'model_id'=>$request->user_id,
-        //         ]);    
-        //     }elseif($request->user_status !== 'อนุญาต' AND $user_find->user_status === 'อนุญาต'){
-        //         $user_find->approved = 'n';
-        //         $user_find->user_status = $request->user_status;
-        //         DB::table('model_has_roles')->where('model_id',$request->user_id)->delete();
-        //     }elseif($request->user_status === 'อนุญาต' AND $user_find->user_status === 'อนุญาต'){
-        //         return redirect()->route('office.index')->with('success', 'updated successfully');
-        //     }elseif($request->user_status !== 'อนุญาต' AND $user_find->user_status !== 'อนุญาต'){
-        //         $user_find->user_status = $request->user_status;                
-        //     }else{
-        //         return redirect()->route('office.index')->with('error', 'unsuccessfully');
-        //     }
-        //     $u_up = $user_find->save();
-        //     if($u_up==true){
-        //         return redirect()->route('office.index')->with('success', 'updated successfully');
-        //     }
-        // }
+        $this->validate($request,[
+            'adv_id'=>'required',
+            'advertise_type'=>'required',
+            'advertise_detail'=>'required'
+        ]);
+        $adv_find = $advertise->find($request->adv_id);
+        $adv_find->advertise_type = $request->advertise_type;
+        $adv_find->advertise_detail = $request->advertise_detail;
+        $adv_up = $adv_find->save();
+        if($adv_up == true){
+            return redirect()->route('advertise.index')->with('success', 'updated successfully');
+        }
     }
 
     /**
@@ -122,8 +104,11 @@ class AdvertiseController extends Controller
      * @param  \App\Models\Admin\Advertise  $office
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Advertise $advertise)
+    public function destroy(Request $request,Advertise $advertise)
     {
-        //
+        $adv_find = $advertise->find($request->id)->delete();
+        if($adv_find == true){
+            return redirect()->route('advertise.index')->with('success', 'Role deleted successfully');
+        }
     }
 }

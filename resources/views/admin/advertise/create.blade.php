@@ -9,10 +9,10 @@
 @section('content')
 <ol class="breadcrumb page-breadcrumb">
 	<li class="breadcrumb-item"><a href="javascript:void(0);">Admin</a></li>
-	<li class="breadcrumb-item">Advertise Edit</li>
+	<li class="breadcrumb-item">Advertise Create</li>
 </ol>
 <div class="subheader">
-	<h1 class="subheader-title"><small>แก้ไขข้อมูลหน่วยงาน</small></h1>
+	<h1 class="subheader-title"><small>เพิ่มข้อมูลหน่วยงาน</small></h1>
 </div>
 @if (Session::get('success'))
 	<div class="alert alert-success">
@@ -25,31 +25,20 @@
 @endif
 <div class="fs-lg fw-300 p-5 bg-white border-faded rounded mb-g">
 	<div class="frame-wrap">
-		<form action="{{ route('advertise.update',[$advertise['id']]) }}" method="POST">
+		<form action="{{ route('advertise.store') }}" method="POST">
 		@csrf
-		@method('PUT')
-			<div class="form-row">
-				<div class="col-md-6 mb-3">
-					<label class="form-label" for="adv_id">Id</label>
-					<input type="text" class="form-control" id="adv_id" name="adv_id" value="{{ $advertise['id'] }}" readonly>
-				</div>
-				<div class="col-md-6 mb-3">
-					<label class="form-label" for="advertise_date">วันที่บันทึก</label>
-					<input type="text" class="form-control" id="advertise_date" name="advertise_date" value="{{ $advertise['advertise_date'] }}" readonly>
-				</div>				
-			</div>
 			<div class="form-row">
 				<div class="col-md-6 mb-3">
 					<label class="form-label" for="advertise_type">ประเภทหัวข้อ</label>
 					<select class="custom-select" name="advertise_type">
 						<option value="">---เลือก---</option>
-						<option {{ ($advertise['advertise_type']) == 'ประชาสัมพันธ์' ? 'selected' : '' }} value="ประชาสัมพันธ์">ประชาสัมพันธ์</option>
-						<option {{ ($advertise['advertise_type']) == 'มาตราฐานคุณภาพ' ? 'selected' : '' }} value="มาตราฐานคุณภาพ">มาตราฐานคุณภาพ</option>
+						<option value="ประชาสัมพันธ์">ประชาสัมพันธ์</option>
+						<option value="มาตราฐานคุณภาพ">มาตราฐานคุณภาพ</option>
 					</select>
 				</div>
 				<div class="col-md-6 mb-3">
 					<label class="form-label" for="advertise_detail">รายละเอียด</label>
-					<textarea class="form-control" id="advertise_detail" name="advertise_detail">{{ $advertise['advertise_detail'] }}</textarea>					
+					<textarea class="form-control" id="advertise_detail" name="advertise_detail"></textarea>					
 				</div>				
 			</div>
 			<button type="submit" class="btn btn-primary">Submit</button>

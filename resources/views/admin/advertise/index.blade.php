@@ -39,18 +39,21 @@
                 switch(key){
                     case 'edit':                       
                         let advUrl = '{{ route("advertise.edit", ":id") }}';
-                       advUrl = advUrl.replace(':id', advId);
+                        advUrl = advUrl.replace(':id', advId);
                         alert(advUrl);
                         window.open(advUrl, '_self');
+                    break;
+                    case 'delete':
+                        let advDesUrl = '{{ route("advertise.destroy", ":id") }}';
+                        advDesUrl = advDesUrl.replace(':id', advId);
+                        alert(advDesUrl);
+                        window.open(advDesUrl, '_self');
                     break;
                 }
             },
             items: {
                 "edit": {name: "แก้ไข", icon: "fal fa-edit"},
                 "sep1":"--------",
-                "allow": {name: "อนุญาต", icon: "fal fa-lock-open-alt"},
-                "deny": {name: "ไม่อนุญาต", icon: "fal fa-lock-alt"},
-                "close": {name: "ปิดใช้งาน", icon: "fal fa-exclamation-triangle"},
                 "delete": {name: "ลบ", icon: "fal fa-eraser"},
             }
         });
