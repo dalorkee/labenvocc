@@ -79,10 +79,10 @@
 <div class="row font-prompt mt-6 mb-6">
 	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
 		<ul class="list-unstyled multi-steps">
-			<li class="is-active">ขั้นตอนที่ 1</li>
-			<li>ขั้นตอนที่ 2</li>
-			<li>ขั้นตอนที่ 3</li>
-			<li>ขั้นตอนที่ 4</li>
+			<li class="is-active">ประเภทผู้รับบริการ</li>
+			<li>ข้อมูลผู้รับบริการ</li>
+			<li>ข้อมูลติดต่อ</li>
+			<li>บัญชีผู้ใช้</li>
 		</ul>
 	</div>
 </div>
@@ -93,7 +93,7 @@
 			<div class="card-body">
 				<p style="font-size:4rem"><i class="fal fa-users mr-1"></i></p>
 			</div>
-			<a href="{{ route('register.create') }}" title="Register" class="btn btn-lg btn-primary">บุคคลทั่วไป</a>
+			<a href="{{ route('register.personal.step2') }}" title="Register" class="btn btn-lg btn-primary">บุคคลทั่วไป</a>
 		</div>
 	</div>
 	<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
@@ -101,7 +101,7 @@
 			<div class="card-body">
 				<p style="font-size:4rem"><i class="fal fa-user-plus mr-1"></i></p>
 			</div>
-			<a href="{{ route('registerStaff.create') }}" title="Register" class="btn btn-lg btn-info">หน่วยงานภาคเอกชน</a>
+			<a href="{{ route('registerStaff.create') }}" title="Register" class="btn btn-lg btn-info">หน่วยงานเอกชน</a>
 		</div>
 	</div>
 	<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">

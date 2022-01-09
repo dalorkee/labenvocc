@@ -1,0 +1,66 @@
+.multi-steps > li.is-active:before, .multi-steps > li.is-active ~ li:before {
+	 content: counter(stepNum);
+	 font-family: inherit;
+	 font-weight: 700;
+}
+ .multi-steps > li.is-active:after, .multi-steps > li.is-active ~ li:after {
+	background-color: #ededed;
+	z-index: 0;
+}
+ .multi-steps {
+	 display: table;
+	 table-layout: fixed;
+	 width: 100%;
+}
+ .multi-steps > li {
+	 counter-increment: stepNum;
+	 text-align: center;
+	 display: table-cell;
+	 position: relative;
+	 color: #90C146;
+}
+ .multi-steps > li:before {
+	 content: '\f00c';
+	 content: '\2713;
+	 content: '\10003';
+	 content: '\10004';
+	 content: '\2713';
+	 display: block;
+	 margin: 0 auto 4px;
+	 background-color: #EAEAAE;
+	 width: 50px;
+	 height: 50px;
+	 line-height: 44px;
+	 text-align: center;
+	 font-weight: bold;
+	 border-width: 4px;
+	 border-style: solid;
+	 border-color: #90C146;
+	 border-radius: 50%;
+}
+ .multi-steps > li:after {
+	 content: '';
+	 margin-left: 18px;
+	 height: 4px;
+	 width: 100%;
+	 background-color: #90C146;
+	 position: absolute;
+	 top: 22px;
+	 left: 52%;
+	 /* z-index: -1; */
+}
+ .multi-steps > li:last-child:after {
+	 display: none;
+}
+ .multi-steps > li.is-active:before {
+	 background-color: #fff;
+	 border-color: #90C146;
+}
+ .multi-steps > li.is-active ~ li {
+	 color: #808080;
+}
+ .multi-steps > li.is-active ~ li:before {
+	 background-color: #ededed;
+	 border-color: #ededed;
+	 color: white;
+}

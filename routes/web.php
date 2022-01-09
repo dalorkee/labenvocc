@@ -27,7 +27,9 @@ Route::resources([
 	'permissions' => PermissionController::class
 ]);
 Route::name('register.')->group(function() {
-    Route::get('/customer/step/2', [RegisterController::class, 'customerStep2'])->name('cust.step2');
+	Route::get('/register/personal/step/2', [RegisterController::class, 'personalStep2'])->name('personal.step2');
+	Route::get('/register/personal/step/3', [RegisterController::class, 'personalStep3'])->name('personal.step3');
+	Route::get('/register/personal/step/4', [RegisterController::class, 'personalStep4'])->name('personal.step4');
 	Route::post('province/district', [RegisterController::class, 'renderDistrictToHtmlSelect'])->name('district');
 	Route::post('province/district/subdistrict', [RegisterController::class, 'renderSubDistrictToHtmlSelect'])->name('subDistrict');
 	Route::post('province/subdistrict/postcode', [RegisterController::class, 'getPostCodeBySubDistrict'])->name('postcode');

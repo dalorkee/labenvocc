@@ -12,8 +12,23 @@ class RegisterController extends Controller
 	use CommonTrait, JsonBoundaryTrait, DbBoundaryTrait, DbHospitalTrait;
 
 	public function index(): object {
-		return view('auth.register.cust-step1');
+		return view('auth.register.index');
 	}
+
+	protected function personalStep2(): object {
+		$provinces = $this->getMinProvince();
+		return view('auth.register.personalStep2', ['provinces' => $provinces]);
+	}
+
+	protected function personalStep3(): object {
+		$provinces = $this->getMinProvince();
+		return view('auth.register.personalStep3', ['provinces' => $provinces]);
+	}
+
+	protected function personalStep4(): object {
+		return view('auth.register.personalStep4');
+	}
+
 	protected function create(): object {
 		$agency_type = $this->agencyType();
 		$provinces = $this->getMinProvince();
