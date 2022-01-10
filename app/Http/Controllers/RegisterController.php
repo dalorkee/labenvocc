@@ -20,8 +20,12 @@ class RegisterController extends Controller
 		return view('auth.register.personalStep2', ['provinces' => $provinces]);
 	}
 
-	protected function personalStep3(): object {
+	protected function personalStep3(Request $request): object {
+        $request->session()->put('title_name', $request->title_name);
+        $request->session()->put('first_name', $request->first_name);
+        $request->session()->put('province', $request->province);
 		$provinces = $this->getMinProvince();
+
 		return view('auth.register.personalStep3', ['provinces' => $provinces]);
 	}
 
@@ -41,6 +45,7 @@ class RegisterController extends Controller
 	}
 
 	public function store(Request $request) {
+        dd('ok');
 		$request->validate([
 			'office_category'=>'bail|required',
 			'office_type'=>'required',
