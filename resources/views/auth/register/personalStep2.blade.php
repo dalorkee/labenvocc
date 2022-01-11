@@ -21,9 +21,6 @@ fieldset h2{font-size: 1em;font-weight: 400;}
 ::-webkit-input-placeholder{ /* Edge */font-size: 1em;}
 :-ms-input-placeholder{ /* IE 10-11 */font-size: 1em;}
 ::placeholder{font-size: 1em;}
-.is-invalid .select2-container--default .select2-selection--single {
-	border-color: #dc3545;
-}
 </style>
 @endsection
 @section('content')
@@ -66,12 +63,12 @@ fieldset h2{font-size: 1em;font-weight: 400;}
 <div class="row font-prompt">
 	<div class="col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12">
 		<section>
-			<form action="{{ route('register.personal.step3') }}" method="GET" class="needs-validation" novalidate>
+			<form action="{{ route('register.personal.step3') }}" method="POST" class="needs-validation" novalidate>
 				@csrf
 				<fieldset>
 					<div class="panel">
 						<div class="panel-hdr">
-							<h2 style="font-size: 1.10em;color:#285D74;"><i class="fal fa-clipboard"></i>&nbsp;&nbsp;ข้อมูลผู้รับบริการ</h2>
+							<h2><i class="fal fa-clipboard"></i>&nbsp;&nbsp;ข้อมูลผู้รับบริการ</h2>
 							<div class="panel-toolbar">
 								<button class="btn btn-panel" data-action="panel-fullscreen" data-toggle="tooltip" data-offset="0,10" data-original-title="Fullscreen"></button>
 							</div>
@@ -109,12 +106,12 @@ fieldset h2{font-size: 1em;font-weight: 400;}
 														</div>
 														<div class="col-span-6 sm:col-span-3">
 															<label for="last_name" class="block text-base font-medium text-gray-800">นามสกุล <span class="text-red-600">*</span></label>
-															<input type="text" name="last_name" value="{{ (Session::has('last_name')) ? Sesson::get('last_name') : '' }}" class="form-control mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="100" size="100" required>
+															<input type="text" name="last_name" value="{{ (Session::has('last_name')) ? Session::get('last_name') : '' }}" class="form-control mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="100" size="100" required>
 															<div class="invalid-feedback">โปรดกรอกนามสกุล</div>
 														</div>
 														<div class="col-span-6 sm:col-span-3">
-															<label for="idcard" class="block text-base font-medium text-gray-800">เลขบัตรประชาชน <span class="text-red-600">*</span></label>
-															<input type="text" name="idcard" value="{{ (Session::has('idcard')) ? Session::get('idcard') : '' }}" class="form-control mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="13" size="13" pattern="^\d{13}$" required>
+															<label for="id_card" class="block text-base font-medium text-gray-800">เลขบัตรประชาชน <span class="text-red-600">*</span></label>
+															<input type="text" name="id_card" value="{{ (Session::has('id_card')) ? Session::get('id_card') : '' }}" class="form-control mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="13" size="13" pattern="^\d{13}$" required>
 															<div class="invalid-feedback">โปรดกรอกเลขบัตรประชาชน</div>
 														</div>
 														<div class="col-span-6 sm:col-span-3">
@@ -135,13 +132,13 @@ fieldset h2{font-size: 1em;font-weight: 400;}
 													<div class="grid grid-cols-6 gap-6 mt-4">
 														<div class="col-span-6 sm:col-span-6">
 															<label for="address" class="block text-base font-medium text-gray-800">ที่อยู่ (เลขที่ หมู่ที่ หมู่บ้าน/อาคาร ถนน) <span class="text-red-600">*</span></label>
-															<input type="text" name="office_address" value="{{ (Session::has('address')) ? Session::get('address') : '' }}" class="form-control mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="200" size="200" required>
+															<input type="text" name="address" value="{{ (Session::has('address')) ? Session::get('address') : '' }}" class="form-control mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="200" size="200" required>
 															<div class="invalid-feedback">โปรดกรอกโทรศัพท์เคลื่อนที่</div>
 														</div>
 														<div class="col-span-6 sm:col-span-3 form-group">
 															<label for="province" class="block text-base font-medium text-gray-800">จังหวัด <span class="text-red-600">*</span></label>
 															<select name="province" id="province" class="form-control" required="">
-                                                                @if (Session::has('province')) <option value="{{ Session::get('province') }}">{{ $provinces[Session::get('province')] }}</option> @endif
+																@if (Session::has('province')) <option value="{{ Session::get('province') }}">{{ $provinces[Session::get('province')] }}</option> @endif
 																<option value="">-- โปรดเลือก --</option>
 																@foreach ($provinces as $key => $val)
 																	<option value="{{ $key }}">{{ $val }}</option>
@@ -152,6 +149,7 @@ fieldset h2{font-size: 1em;font-weight: 400;}
 														<div class="col-span-6 sm:col-span-3">
 															<label for="district" class="block text-base font-medium text-gray-800">เขต/อำเภอ <span class="text-red-600">*</span></label>
 															<select name="district" id="district" class="form-control" required="">
+                                                                @if (Session::has('district')) <option value="{{ Session::get('district') }}">{{ Session::get('district') }}</option> @endif
 																<option value="">-- โปรดเลือก --</option>
 															</select>
 															<div class="invalid-feedback">โปรดเลือกอำเภอ</div>
@@ -159,13 +157,14 @@ fieldset h2{font-size: 1em;font-weight: 400;}
 														<div class="col-span-6 sm:col-span-3">
 															<label for="sub_district" class="block text-base font-medium text-gray-800">แขวง/ตำบล <span class="text-red-600">*</span></label>
 															<select name="sub_district" id="sub_district" class="form-control" required="">
+                                                                @if (Session::has('sub_district')) <option value="{{ Session::get('sub_district') }}">{{ Session::get('sub_district') }}</option> @endif
 																<option value="">-- โปรดเลือก --</option>
 															</select>
 															<div class="invalid-feedback">โปรดเลือกตำบล</div>
 														</div>
 														<div class="col-span-6 sm:col-span-3">
 															<label for="zip_code" class="block text-base font-medium text-gray-800">รหัสไปรษณีย์ <span class="text-red-600">*</span></label>
-															<input type="text" name="postal" value="{{ old('postal') }}" id="postcode" class="form-control mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="10" size="10" required>
+															<input type="text" name="postal" value="{{ (Session::has('postal')) ? Session::get('postal') : '' }}" id="postcode" class="form-control mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="10" size="10" required>
 															<div class="invalid-feedback">โปรดกรอกรหัสไปรษณีย์</div>
 														</div>
 													</div>
@@ -192,7 +191,6 @@ fieldset h2{font-size: 1em;font-weight: 400;}
 <script>
 $(document).ready(function() {
 	$.ajaxSetup({headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}});
-
 	$('input[name="title_name"]').on('change', function() {
 		$('input[name="' + this.name + '"]').not(this).prop('checked', false);
 	});

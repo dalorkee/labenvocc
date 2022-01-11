@@ -21,15 +21,33 @@ class RegisterController extends Controller
 	}
 
 	protected function personalStep3(Request $request): object {
-        $request->session()->put('title_name', $request->title_name);
-        $request->session()->put('first_name', $request->first_name);
-        $request->session()->put('province', $request->province);
+		$request->session()->put('title_name', $request->title_name);
+		$request->session()->put('first_name', $request->first_name);
+		$request->session()->put('last_name', $request->last_name);
+		$request->session()->put('id_card', $request->id_card);
+		$request->session()->put('taxpayer_no', $request->taxpayer_no);
+		$request->session()->put('email', $request->email);
+		$request->session()->put('mobile', $request->mobile);
+		$request->session()->put('address', $request->address);
+		$request->session()->put('province', $request->province);
+		$request->session()->put('district', $request->district);
+		$request->session()->put('sub_district', $request->sub_district);
+		$request->session()->put('postal', $request->postal);
 		$provinces = $this->getMinProvince();
-
 		return view('auth.register.personalStep3', ['provinces' => $provinces]);
 	}
 
-	protected function personalStep4(): object {
+	protected function personalStep3Back(): object {
+		$provinces = $this->getMinProvince();
+		return view('auth.register.personalStep3', ['provinces' => $provinces]);
+	}
+
+	protected function personalStep4(Request $request): object {
+		$request->session()->put('contact_addr_opt', $request->contact_addr_opt);
+		$request->session()->put('contact_title_name', $request->contact_title_name);
+		$request->session()->put('contact_first_name', $request->contact_first_name);
+		$request->session()->put('contact_province', $request->contact_province);
+
 		return view('auth.register.personalStep4');
 	}
 
@@ -45,7 +63,7 @@ class RegisterController extends Controller
 	}
 
 	public function store(Request $request) {
-        dd('ok');
+		dd('ok');
 		$request->validate([
 			'office_category'=>'bail|required',
 			'office_type'=>'required',

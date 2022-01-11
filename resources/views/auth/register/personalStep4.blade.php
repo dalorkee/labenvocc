@@ -145,8 +145,8 @@ input[type="text"]:disabled{background: #eeeeee !important;}
 						</div>
 					</div>
 					<div class="text-center">
-						<a href="{{ route('register.personal.step3') }}" type="button" class="btn btn-warning btn-pills" style="width: 110px;"><i class="fal fa-arrow-left"></i> ก่อนหน้า</a>
-						<a href="#" type="button" class="btn btn-success btn-pills disabled" style="width: 110px;">ถัดไป <i class="fal fa-arrow-right"></i></a>
+						<a href="{{ route('register.personal.step3.back') }}" type="button" class="btn btn-warning btn-pills" style="width: 110px;"><i class="fal fa-arrow-left"></i> ก่อนหน้า</a>
+						<button type="submit" class="btn btn-success btn-pills" style="width: 110px;">ถัดไป <i class="fal fa-arrow-right"></i></button>
 					</div>
 				</fieldset>
 			</form>

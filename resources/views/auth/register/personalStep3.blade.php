@@ -42,7 +42,7 @@ input[type="text"]:disabled{background: #eeeeee !important;}
 <div class="row font-prompt">
 	<div class="col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12">
 		<section>
-			<form action="{{ route('register.store') }}" method="POST" id="msform">
+			<form action="{{ route('register.personal.step4') }}" method="POST" class="needs-validation" novalidate>
 				@csrf
 				<fieldset>
 					<div class="panel">
@@ -61,15 +61,16 @@ input[type="text"]:disabled{background: #eeeeee !important;}
 												<div class="px-6 pt-5 pb-16">
 													<div class="grid grid-cols-6 gap-6">
 														<div class="col-span-6 sm:col-span-3">
-															<label for="send_address" class="block text-base font-medium text-gray-800">ที่อยู่สำหรับส่งผลการตรวจ <span class="text-red-600">*</span></label>
+															<label for="send_address" class="block text-base font-medium text-gray-800">ที่อยู่สำหรับส่งรายงานผลการตรวจ <span class="text-red-600">*</span></label>
 															<div class="frame-wrap">
 																<div class="custom-control custom-switch custom-control-inline">
-																	<input type="checkbox" name="contact_addr_opt" value="1" id="old_addr" class="custom-control-input" @if (old('contact_addr_opt') == "1") checked @endif>
+																	<input type="radio" name="contact_addr_opt" value="1" id="old_addr" class="custom-control-input" @if (Session::has('contact_addr_opt') && Session::get('contact_addr_opt') == '1') checked @endif required="">
 																	<label class="custom-control-label" for="old_addr">ที่อยู่เดียวกับผู้รับบริการ</label>
 																</div>
 																<div class="custom-control custom-switch custom-control-inline">
-																	<input type="checkbox" name="contact_addr_opt" value="2" id="new_addr" class="custom-control-input" @if (old('contact_addr_opt') == "2") checked @endif>
-																	<label class="custom-control-label" for="new_addr">กำหนดใหม่ <span class="badge badge-warning">โปรดระบุข้อมูลด้านล่าง</span></label>
+																	<input type="radio" name="contact_addr_opt" value="2" id="new_addr" class="custom-control-input" @if (Session::has('contact_addr_opt') && Session::get('contact_addr_opt') == '2') checked @endif required="">
+																	<label class="custom-control-label" for="new_addr">กำหนดใหม่</label>
+																	<div class="invalid-feedback">โปรดเลือกคำนำหน้าชื่อ</div>
 																</div>
 															</div>
 														</div>
@@ -78,64 +79,85 @@ input[type="text"]:disabled{background: #eeeeee !important;}
 														<div class="col-span-6 sm:col-span-6">
 															<label for="simpleinput" class="block text-base font-medium text-gray-800">คำนำหน้าชื่อ <span class="text-red-600">*</span></label>
 															<div class="frame-wrap">
-																<div class="custom-control custom-checkbox custom-control-inline">
-																	<input type="checkbox" name="contact_title_name" value="mr" id="contact_title_name_mr" class="contact_title_name custom-control-input" @if (old('contact_title_name') == 'mr') checked @endif {{ (old('contact_addr_opt') == '2') ? '' : 'disabled' }}>
+																<div class="custom-control custom-switch custom-control-inline">
+																	<input type="radio" name="contact_title_name" value="mr" id="contact_title_name_mr" class="contact_title_name custom-control-input"
+																	@if (Session::has('contact_addr_opt') && Session::get('contact_addr_opt')=='2')
+																		@if (Session::has('contact_title_name') && Session::get('contact_title_name') == 'mr') checked @endif
+																	@endif
+																	{{(Session::has('contact_addr_opt')&&Session::get('contact_addr_opt')=='2')?'':'disabled'}}>
 																	<label class="custom-control-label" for="contact_title_name_mr">นาย</label>
 																</div>
-																<div class="custom-control custom-checkbox custom-control-inline">
-																	<input type="checkbox" name="contact_title_name" value="mrs" id="contact_title_name_mrs" class="contact_title_name custom-control-input" @if (old('contact_title_name') == 'mrs') checked @endif {{ (old('contact_addr_opt') == '2') ? '' : 'disabled' }}>
+																<div class="custom-control custom-switch custom-control-inline">
+																	<input type="radio" name="contact_title_name" value="mrs" id="contact_title_name_mrs" class="contact_title_name custom-control-input"
+																	@if (Session::has('contact_addr_opt') && Session::get('contact_addr_opt') == '2')
+																		@if (Session::has('contact_title_name') && Session::get('contact_title_name') == 'mrs') checked @endif
+																	@endif
+																	{{(Session::has('contact_addr_opt')&&Session::get('contact_addr_opt')=='2')?'':'disabled'}}>
 																	<label class="custom-control-label" for="contact_title_name_mrs">นาง</label>
 																</div>
-																<div class="custom-control custom-checkbox custom-control-inline">
-																	<input type="checkbox" name="contact_title_name" value="miss" id="contact_title_name_ms" class="contact_title_name custom-control-input" @if (old('contact_title_name') == 'miss') checked @endif {{ (old('contact_addr_opt') == '2') ? '' : 'disabled' }}>
+																<div class="custom-control custom-switch custom-control-inline">
+																	<input type="radio" name="contact_title_name" value="miss" id="contact_title_name_ms" class="contact_title_name custom-control-input"
+																	@if (Session::has('contact_addr_opt') && Session::get('contact_addr_opt') == '2')
+																		@if (Session::has('contact_title_name') && Session::get('contact_title_name') == 'miss') checked @endif
+																	@endif
+																	{{(Session::has('contact_addr_opt')&&Session::get('contact_addr_opt' )=='2')?'':'disabled'}}>
 																	<label class="custom-control-label" for="contact_title_name_ms">นางสาว</label>
+																	<div class="invalid-feedback">โปรดเลือกคำนำหน้าชื่อ</div>
 																</div>
 															</div>
 														</div>
 														<div class="col-span-6 sm:col-span-3">
 															<label for="contact_first_name" class="block text-base font-medium text-gray-800">ชื่อ <span class="text-red-600">*</span></label>
-															<input type="text" name="contact_first_name" value="{{ old('contact_first_name') }}" class="contact_field mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" {{ (old('contact_addr_opt') == '2') ? '' : 'disabled' }}>
+															<input type="text" name="contact_first_name" value="{{(Session::has('contact_first_name'))?Session::get('contact_first_name'):''}}" class="form-control mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" {{(Session::has('contact_addr_opt')&&Session::get('contact_addr_opt' )=='2')?'':'disabled'}}>
+															<div class="invalid-feedback">โปรดกรอกชื่อ</div>
 														</div>
 														<div class="col-span-6 sm:col-span-3">
 															<label for="contact_last_name" class="block text-base font-medium text-gray-800">นามสกุล <span class="text-red-600">*</span></label>
-															<input type="text" name="contact_last_name" value="{{ old('contact_last_name') }}" class="contact_field mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" {{ (old('contact_addr_opt') == '2') ? '' : 'disabled' }}>
+															<input type="text" name="contact_last_name" value="{{(Session::has('contact_last_name'))?Session::get('contact_last_name'):''}}" class="form-control mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" {{(Session::has('contact_addr_opt')&&Session::get('contact_addr_opt' )=='2')?'':'disabled'}}>
 														</div>
 														<div class="col-span-6 sm:col-span-3">
 															<label for="contact_mobile" class="block text-base font-medium text-gray-800">โทรศัพท์เคลื่อนที่ <span class="text-red-600">*</span></label>
-															<input type="text" name="contact_mobile" value="{{ old('contact_mobile') }}" class="contact_field mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" {{ (old('contact_addr_opt') == '2') ? '' : 'disabled' }}>
+															<input type="text" name="contact_mobile" value="{{(Session::has('contact_mobile'))?Session::get('contact_mobile'):''}}" class="form-control mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" {{(Session::has('contact_addr_opt')&&Session::get('contact_addr_opt' )=='2')?'':'disabled'}}>
 														</div>
 														<div class="col-span-6 sm:col-span-3">
 															<label for="contact_email" class="block text-base font-medium text-gray-800">อีเมล์ <span class="text-red-600">*</span></label>
-															<input type="text" name="contact_email" value="{{ old('contact_email') }}" class="contact_field mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" {{ (old('contact_addr_opt') == '2') ? '' : 'disabled' }}>
+															<input type="text" name="contact_email" value="{{(Session::has('contact_email'))?Session::get('contact_email'):''}}" class="form-control mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" {{(Session::has('contact_addr_opt')&&Session::get('contact_addr_opt' )=='2')?'':'disabled'}}>
 														</div>
 														<div class="col-span-6 sm:col-span-6">
 															<label for="contact_addr" class="block text-base font-medium text-gray-800">ที่อยู่ (เลขที่ หมู่ที่ หมู่บ้าน/อาคาร ถนน) <span class="text-red-600">*</span></label>
-															<input type="text" name="contact_addr" value="{{ old('contact_addr') }}" class="contact_field mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" {{ (old('contact_addr_opt') == '2') ? '' : 'disabled' }}>
+															<input type="text" name="contact_addr" value="{{(Session::has('contact_addr'))?Session::get('contact_addr'):''}}" class="form-control mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" {{(Session::has('contact_addr_opt')&&Session::get('contact_addr_opt' )=='2')?'':'disabled'}}>
 														</div>
 														<div class="col-span-6 sm:col-span-3">
 															<label for="contact_province" class="block text-base font-medium text-gray-800">จังหวัด <span class="text-red-600">*</span></label>
-															<select name="contact_province" id="contact_province" class="select2-placeholder mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" {{ (old('contact_addr_opt') == '2') ? '' : 'disabled' }}>
-																<option value="">-- โปรดเลือก --</option>
+															<select name="contact_province" id="contact_province" class="form-control" {{(Session::has('contact_addr_opt')&&Session::get('contact_addr_opt' )=='2')?'required=""':'disabled'}}>
+																@if (Session::has('contact_province')) <option value="{{Session::get('contact_province')}}">{{$provinces[Session::get('contact_province')]}}</option> @endif
+                                                                <option value="">-- โปรดเลือก --</option>
 																@foreach ($provinces as $key => $val)
 																	<option value="{{ $key }}">{{ $val }}</option>
 																@endforeach
 															</select>
+                                                            <div class="invalid-feedback">โปรดเลือกจังหวัด</div>
 														</div>
 														<div class="col-span-6 sm:col-span-3">
 															<label for="contact_district" class="block text-base font-medium text-gray-800">เขต/อำเภอ <span class="text-red-600">*</span></label>
-															<select name="contact_district" id="contact_district" class="select2-placeholder mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" {{ (old('contact_addr_opt') == '2') ? '' : 'disabled' }}>
-																<option value="">-- โปรดเลือก --</option>
+															<select name="contact_district" id="contact_district" class="form-control" {{(Session::has('contact_addr_opt')&&Session::get('contact_addr_opt' )=='2')?'required=""':'disabled'}}>
+																@if (Session::has('contact_district')) <option value="{{Session::get('contact_district')}}">{{Session::get('contact_district')}}</option> @endif
+                                                                <option value="">-- โปรดเลือก --</option>
 															</select>
+                                                            <div class="invalid-feedback">โปรดเลือกอำเภอ</div>
 														</div>
 														<div class="col-span-6 sm:col-span-3">
 															<label for="contact_sub_district" class="block text-base font-medium text-gray-800">แขวง/ตำบล <span class="text-red-600">*</span></label>
-															<select name="contact_sub_district" id="contact_sub_district" class="select2-placeholder form-control mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" {{ (old('contact_addr_opt') == '2') ? '' : 'disabled' }}>
-																<option>-- โปรดเลือก --</option>
+															<select name="contact_sub_district" id="contact_sub_district" class="form-control" {{(Session::has('contact_addr_opt')&&Session::get('contact_addr_opt' )=='2')?'required=""':'disabled'}}>
+																@if (Session::has('contact_sub_district')) <option value="{{Session::get('contact_sub_district')}}">{{Session::get('contact_sub_district')}}</option> @endif
+                                                                <option value="">-- โปรดเลือก --</option>
+                                                                <div class="invalid-feedback">โปรดเลือกตำบล</div>
 															</select>
 														</div>
 														<div class="col-span-6 sm:col-span-3">
 															<label for="contact_postcode" class="block text-base font-medium text-gray-800">รหัสไปรษณีย์ <span class="text-red-600">*</span></label>
-															<input type="text" name="contact_postcode" value="{{ old('contact_postcode') }}" id="contact_postcode" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" {{ (old('contact_addr_opt') == '2') ? '' : 'disabled' }}>
+															<input type="text" name="contact_postcode" value="{{(Session::has('contact_postcode'))?Session::get('contact_postcode'):''}}" id="contact_postcode" class="form-control mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="10" size="10" {{(Session::has('contact_addr_opt')&&Session::get('contact_addr_opt' )=='2')?'required':'disabled'}}>
+                                                            <div class="invalid-feedback">โปรดกรอกรหัสไปรษณีย์</div>
 														</div>
 													</div>
 												</div>
@@ -148,7 +170,7 @@ input[type="text"]:disabled{background: #eeeeee !important;}
 					</div>
 					<div class="text-center">
 						<a href="{{ route('register.personal.step2') }}" type="button" class="btn btn-warning btn-pills" style="width: 110px;"><i class="fal fa-arrow-left"></i> ก่อนหน้า</a>
-						<a href="{{ route('register.personal.step4') }}" type="button" class="btn btn-success btn-pills" style="width: 110px;">ถัดไป <i class="fal fa-arrow-right"></i></a>
+						<button type="submit" class="btn btn-success btn-pills" style="width: 110px;">ถัดไป <i class="fal fa-arrow-right"></i></button>
 					</div>
 				</fieldset>
 			</form>
@@ -267,8 +289,8 @@ $(document).ready(function() {
 				}
 			});
 		} else {
-            return false;
-        }
+			return false;
+		}
 	});
 });
 </script>
@@ -378,6 +400,25 @@ $(document).ready(function() {
 	};
 	verificationForm ();
 })(jQuery);
+</script>
+<script>
+(function() {
+	'use strict';
+	window.addEventListener('load', function() {
+		var forms = document.getElementsByClassName('needs-validation');
+		// Loop over them and prevent submission
+		var validation = Array.prototype.filter.call(forms, function(form) {
+			form.addEventListener('submit', function(event) {
+			// document.getElementById("pj").addEventListener("click", function(event) {
+				if (form.checkValidity() === false) {
+					event.preventDefault();
+					event.stopPropagation();
+				}
+				form.classList.add('was-validated');
+			}, false);
+		});
+	}, false);
+})();
 </script>
 @endsection
 
