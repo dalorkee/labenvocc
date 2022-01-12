@@ -93,7 +93,7 @@
 			<div class="card-body">
 				<p style="font-size:4rem"><i class="fal fa-users mr-1"></i></p>
 			</div>
-			<a href="{{ route('register.personal.step2') }}" title="Register" class="btn btn-lg btn-primary">บุคคลทั่วไป</a>
+			<a href="{{ route('register.personal.step2.get') }}" title="Register" class="btn btn-lg btn-primary">บุคคลทั่วไป</a>
 		</div>
 	</div>
 	<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">

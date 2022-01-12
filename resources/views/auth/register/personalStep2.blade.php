@@ -63,7 +63,7 @@ fieldset h2{font-size: 1em;font-weight: 400;}
 <div class="row font-prompt">
 	<div class="col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12">
 		<section>
-			<form action="{{ route('register.personal.step3') }}" method="POST" class="needs-validation" novalidate>
+			<form action="{{ route('register.personal.step2.post') }}" method="POST" class="needs-validation" novalidate>
 				@csrf
 				<fieldset>
 					<div class="panel">
@@ -85,15 +85,15 @@ fieldset h2{font-size: 1em;font-weight: 400;}
 															<label for="title_name" class="block text-base font-medium text-gray-800">คำนำหน้าชื่อ <span class="text-red-600">*</span></label>
 															<div class="frame-wrap">
 																<div class="custom-control custom-switch custom-control-inline">
-																	<input type="radio" name="title_name" value="mr" id="mister" class="custom-control-input" @if (Session::has('title_name') && Session::get('title_name')  == 'mr') checked @endif required="">
+																	<input type="radio" name="title_name" value="mr" id="mister" class="custom-control-input" {{{ (isset($userData->title_name) && $userData->title_name  == 'mr') ? "checked" : "" }}} required="">
 																	<label class="custom-control-label" for="mister">นาย</label>
 																</div>
 																<div class="custom-control custom-switch custom-control-inline">
-																	<input type="radio" name="title_name" value="mrs" id="mistress" class="custom-control-input" @if (Session::has('title_name') && Session::get('title_name') == "mrs") checked @endif required="">
+																	<input type="radio" name="title_name" value="mrs" id="mistress" class="custom-control-input" {{{ (isset($userData->title_name) && $userData->title_name  == 'mrs') ? "checked" : "" }}} required="">
 																	<label class="custom-control-label" for="mistress">นาง</label>
 																</div>
 																<div class="custom-control custom-switch custom-control-inline">
-																	<input type="radio" name="title_name" value="miss" id="miss" class="custom-control-input" @if (Session::has('title_name') && Session::get('title_name') == "miss") checked @endif required="">
+																	<input type="radio" name="title_name" value="miss" id="miss" class="custom-control-input" {{{ (isset($userData->title_name) && $userData->title_name  == 'miss') ? "checked" : "" }}} required="">
 																	<label class="custom-control-label" for="miss">นางสาว</label>
 																	<div class="invalid-feedback">โปรดเลือกคำนำหน้าชื่อ</div>
 																</div>
@@ -101,12 +101,12 @@ fieldset h2{font-size: 1em;font-weight: 400;}
 														</div>
 														<div class="col-span-6 sm:col-span-3">
 															<label for="first_name" class="block text-base font-medium text-gray-800">ชื่อ <span class="text-red-600">*</span></label>
-															<input type="text" name="first_name" value="{{ (Session::has('first_name')) ? Session::get('first_name') : '' }}" class="form-control mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="100" size="100" required>
+															<input type="text" name="first_name" value="{{ $userData->first_name ?? '' }}" class="form-control mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="100" size="100" required>
 															<div class="invalid-feedback">โปรดกรอกชื่อ</div>
 														</div>
 														<div class="col-span-6 sm:col-span-3">
 															<label for="last_name" class="block text-base font-medium text-gray-800">นามสกุล <span class="text-red-600">*</span></label>
-															<input type="text" name="last_name" value="{{ (Session::has('last_name')) ? Session::get('last_name') : '' }}" class="form-control mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="100" size="100" required>
+															<input type="text" name="last_name" value="{{ $userData->last_name ?? '' }}" class="form-control mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="100" size="100" required>
 															<div class="invalid-feedback">โปรดกรอกนามสกุล</div>
 														</div>
 														<div class="col-span-6 sm:col-span-3">
@@ -136,8 +136,8 @@ fieldset h2{font-size: 1em;font-weight: 400;}
 															<div class="invalid-feedback">โปรดกรอกโทรศัพท์เคลื่อนที่</div>
 														</div>
 														<div class="col-span-6 sm:col-span-3 form-group">
-															<label for="province" class="block text-base font-medium text-gray-800">จังหวัด <span class="text-red-600">*</span></label>
-															<select name="province" id="province" class="form-control" required="">
+															<label for="province" class="form-label block text-base font-medium text-gray-800">จังหวัด <span class="text-red-600">*</span></label>
+															<select name="province" id="province" class="custom-select" required="">
 																@if (Session::has('province')) <option value="{{ Session::get('province') }}">{{ $provinces[Session::get('province')] }}</option> @endif
 																<option value="">-- โปรดเลือก --</option>
 																@foreach ($provinces as $key => $val)
@@ -149,7 +149,7 @@ fieldset h2{font-size: 1em;font-weight: 400;}
 														<div class="col-span-6 sm:col-span-3">
 															<label for="district" class="block text-base font-medium text-gray-800">เขต/อำเภอ <span class="text-red-600">*</span></label>
 															<select name="district" id="district" class="form-control" required="">
-                                                                @if (Session::has('district')) <option value="{{ Session::get('district') }}">{{ Session::get('district') }}</option> @endif
+																@if (Session::has('district')) <option value="{{ Session::get('district') }}">{{ Session::get('district') }}</option> @endif
 																<option value="">-- โปรดเลือก --</option>
 															</select>
 															<div class="invalid-feedback">โปรดเลือกอำเภอ</div>
@@ -157,7 +157,7 @@ fieldset h2{font-size: 1em;font-weight: 400;}
 														<div class="col-span-6 sm:col-span-3">
 															<label for="sub_district" class="block text-base font-medium text-gray-800">แขวง/ตำบล <span class="text-red-600">*</span></label>
 															<select name="sub_district" id="sub_district" class="form-control" required="">
-                                                                @if (Session::has('sub_district')) <option value="{{ Session::get('sub_district') }}">{{ Session::get('sub_district') }}</option> @endif
+																@if (Session::has('sub_district')) <option value="{{ Session::get('sub_district') }}">{{ Session::get('sub_district') }}</option> @endif
 																<option value="">-- โปรดเลือก --</option>
 															</select>
 															<div class="invalid-feedback">โปรดเลือกตำบล</div>

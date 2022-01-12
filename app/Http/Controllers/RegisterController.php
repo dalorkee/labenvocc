@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\{Hash,Log};
 use App\Models\{User,UserCustomer};
 use App\Traits\{CommonTrait,JsonBoundaryTrait,DbBoundaryTrait,DbHospitalTrait};
+use Kineticamobile\Lumki\Controllers\UserController;
 
 class RegisterController extends Controller
 {
@@ -15,24 +16,56 @@ class RegisterController extends Controller
 		return view('auth.register.index');
 	}
 
-	protected function personalStep2(): object {
+	protected function createPersonalStep2Get(Request $request): object {
+        $provinces = $this->getMinProvince();
+		$userData = $request->session()->get('userData');
+		return view('auth.register.personalStep2', compact('provinces', 'userData'));
+	}
+	protected function createPersonalStep2Post(Request $request): object {
+		$validatedData = $request->validate([
+            'title_name' => 'required',
+			'first_name' => 'required',
+			'last_name' => 'nullable',
+		]);
+		if (empty($request->session()->get('userData'))) {
+			$userData = new UserCustomer();
+            $userData->fill($validatedData);
+            $request->session()->put('userData', $userData);
+		} else {
+            $userData = $request->session()->get('userData');
+            $userData->fill($validatedData);
+            $request->session()->put('userData', $userData);
+        }
 		$provinces = $this->getMinProvince();
-		return view('auth.register.personalStep2', ['provinces' => $provinces]);
+		return view('auth.register.personalStep3', compact('provinces', 'userData'));
 	}
 
-	protected function personalStep3(Request $request): object {
-		$request->session()->put('title_name', $request->title_name);
-		$request->session()->put('first_name', $request->first_name);
-		$request->session()->put('last_name', $request->last_name);
-		$request->session()->put('id_card', $request->id_card);
-		$request->session()->put('taxpayer_no', $request->taxpayer_no);
-		$request->session()->put('email', $request->email);
-		$request->session()->put('mobile', $request->mobile);
-		$request->session()->put('address', $request->address);
-		$request->session()->put('province', $request->province);
-		$request->session()->put('district', $request->district);
-		$request->session()->put('sub_district', $request->sub_district);
-		$request->session()->put('postal', $request->postal);
+
+	protected function createPersonalStep3Get(Request $request): object {
+		return view('auth.register.personalStep3');
+	}
+
+	protected function createPersonalStep3Post(Request $request): object {
+		$validatedData = $request->validate([
+            'title_name' => 'required',
+			'first_name' => 'required',
+			'last_name' => 'nullable',
+		]);
+		$userData = new UserCustomer();
+		$userData->fill($validatedData);
+		$request->session()->put('userData', $userData);
+		// $request->session()->put('title_name', $request->title_name);
+		// $request->session()->put('first_name', $request->first_name);
+		// $request->session()->put('last_name', $request->last_name);
+		// $request->session()->put('id_card', $request->id_card);
+		// $request->session()->put('taxpayer_no', $request->taxpayer_no);
+		// $request->session()->put('email', $request->email);
+		// $request->session()->put('mobile', $request->mobile);
+		// $request->session()->put('address', $request->address);
+		// $request->session()->put('province', $request->province);
+		// $request->session()->put('district', $request->district);
+		// $request->session()->put('sub_district', $request->sub_district);
+		// $request->session()->put('postal', $request->postal);
 		$provinces = $this->getMinProvince();
 		return view('auth.register.personalStep3', ['provinces' => $provinces]);
 	}
