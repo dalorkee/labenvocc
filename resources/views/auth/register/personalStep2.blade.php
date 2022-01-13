@@ -15,7 +15,7 @@
 .select2-selection__arrow{height:37px!important;}
 .custom-control-label{font-size: 1.175em;}
 .title {text-align: center;padding-bottom: 10px;}
-.panel-hdr h2{font-size: 1.275em;color: #1abc9c;}
+.panel-hdr h2{font-size: 1.275em;color: #d05d1f;}
 fieldset h2{font-size: 1em;font-weight: 400;}
 .form-label, .custom-control-label{font-size: 1em;font-weight: 400;}
 ::-webkit-input-placeholder{ /* Edge */font-size: 1em;}
@@ -85,15 +85,15 @@ fieldset h2{font-size: 1em;font-weight: 400;}
 															<label for="title_name" class="block text-base font-medium text-gray-800">คำนำหน้าชื่อ <span class="text-red-600">*</span></label>
 															<div class="frame-wrap">
 																<div class="custom-control custom-switch custom-control-inline">
-																	<input type="radio" name="title_name" value="mr" id="mister" class="custom-control-input" {{{ (isset($userData->title_name) && $userData->title_name  == 'mr') ? "checked" : "" }}} required="">
+																	<input type="radio" name="title_name" value="mr" id="mister" class="custom-control-input" {{ (isset($userData->title_name) && $userData->title_name  == 'mr') ? "checked" : "" }} required="">
 																	<label class="custom-control-label" for="mister">นาย</label>
 																</div>
 																<div class="custom-control custom-switch custom-control-inline">
-																	<input type="radio" name="title_name" value="mrs" id="mistress" class="custom-control-input" {{{ (isset($userData->title_name) && $userData->title_name  == 'mrs') ? "checked" : "" }}} required="">
+																	<input type="radio" name="title_name" value="mrs" id="mistress" class="custom-control-input" {{ (isset($userData->title_name) && $userData->title_name  == 'mrs') ? "checked" : "" }} required="">
 																	<label class="custom-control-label" for="mistress">นาง</label>
 																</div>
 																<div class="custom-control custom-switch custom-control-inline">
-																	<input type="radio" name="title_name" value="miss" id="miss" class="custom-control-input" {{{ (isset($userData->title_name) && $userData->title_name  == 'miss') ? "checked" : "" }}} required="">
+																	<input type="radio" name="title_name" value="miss" id="miss" class="custom-control-input" {{ (isset($userData->title_name) && $userData->title_name  == 'miss') ? "checked" : "" }} required="">
 																	<label class="custom-control-label" for="miss">นางสาว</label>
 																	<div class="invalid-feedback">โปรดเลือกคำนำหน้าชื่อ</div>
 																</div>
@@ -111,35 +111,35 @@ fieldset h2{font-size: 1em;font-weight: 400;}
 														</div>
 														<div class="col-span-6 sm:col-span-3">
 															<label for="id_card" class="block text-base font-medium text-gray-800">เลขบัตรประชาชน <span class="text-red-600">*</span></label>
-															<input type="text" name="id_card" value="{{ (Session::has('id_card')) ? Session::get('id_card') : '' }}" class="form-control mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="13" size="13" pattern="^\d{13}$" required>
+															<input type="text" name="id_card" value="{{ $userData->id_card ?? '' }}" class="form-control mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="13" size="13" pattern="^\d{13}$" required>
 															<div class="invalid-feedback">โปรดกรอกเลขบัตรประชาชน</div>
 														</div>
 														<div class="col-span-6 sm:col-span-3">
 															<label for="taxpayer_no" class="block text-base font-medium text-gray-800">เลขผู้เสียภาษี</label>
-															<input type="text" name="taxpayer_no" value="{{ (Session::has('taxpayer_no')) ? Session::get('taxpayer_no') : '' }}" class="form-control mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="100" size="100">
+															<input type="text" name="taxpayer_no" value="{{ $userData->taxpayer_no ?? '' }}" class="form-control mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="30" size="30">
 														</div>
 														<div class="col-span-6 sm:col-span-3">
 															<label for="email" class="block text-base font-medium text-gray-800">อีเมล์ <span class="text-red-600">*</span></label>
-															<input type="text" name="email" value="{{ (Session::has('email')) ? Session::get('email') : '' }}" class="form-control mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" required>
+															<input type="text" name="email" value="{{ $userData->email ?? '' }}" class="form-control mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" required>
 															<div class="invalid-feedback">โปรดกรอกอีเมล์</div>
 														</div>
 														<div class="col-span-6 sm:col-span-3">
 															<label for="mobile" class="block text-base font-medium text-gray-800">โทรศัพท์เคลื่อนที่ <span class="text-red-600">*</span></label>
-															<input type="tel" name="mobile" value="{{ (Session::has('mobile')) ? Session::get('mobile') : '' }}" class="form-control mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="10" size="10" pattern="^\d{10}$" required>
+															<input type="tel" name="mobile" value="{{ $userData->mobile ?? '' }}" class="form-control mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="10" size="10" pattern="^\d{10}$" required>
 															<div class="invalid-feedback">โปรดกรอกโทรศัพท์เคลื่อนที่ 10 หลัก</div>
 														</div>
 													</div>
 													<div class="grid grid-cols-6 gap-6 mt-4">
 														<div class="col-span-6 sm:col-span-6">
 															<label for="address" class="block text-base font-medium text-gray-800">ที่อยู่ (เลขที่ หมู่ที่ หมู่บ้าน/อาคาร ถนน) <span class="text-red-600">*</span></label>
-															<input type="text" name="address" value="{{ (Session::has('address')) ? Session::get('address') : '' }}" class="form-control mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="200" size="200" required>
+															<input type="text" name="address" value="{{ $userData->address ?? '' }}" class="form-control mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="200" size="200" required>
 															<div class="invalid-feedback">โปรดกรอกโทรศัพท์เคลื่อนที่</div>
 														</div>
 														<div class="col-span-6 sm:col-span-3 form-group">
 															<label for="province" class="form-label block text-base font-medium text-gray-800">จังหวัด <span class="text-red-600">*</span></label>
-															<select name="province" id="province" class="custom-select" required="">
-																@if (Session::has('province')) <option value="{{ Session::get('province') }}">{{ $provinces[Session::get('province')] }}</option> @endif
+															<select name="province" id="province" class="form-control custom-select" required="">
 																<option value="">-- โปรดเลือก --</option>
+																{!! (isset($userData->province)) ? "<option value=\"".$userData->province."\" selected>".$provinces[$userData->province]."</option>" : "" !!}
 																@foreach ($provinces as $key => $val)
 																	<option value="{{ $key }}">{{ $val }}</option>
 																@endforeach
@@ -149,22 +149,22 @@ fieldset h2{font-size: 1em;font-weight: 400;}
 														<div class="col-span-6 sm:col-span-3">
 															<label for="district" class="block text-base font-medium text-gray-800">เขต/อำเภอ <span class="text-red-600">*</span></label>
 															<select name="district" id="district" class="form-control" required="">
-																@if (Session::has('district')) <option value="{{ Session::get('district') }}">{{ Session::get('district') }}</option> @endif
 																<option value="">-- โปรดเลือก --</option>
+																{!! (isset($userData->district)) ? "<option value=\"".$userData->district."\" selected>".$userData->district."</option>" : "" !!}
 															</select>
 															<div class="invalid-feedback">โปรดเลือกอำเภอ</div>
 														</div>
 														<div class="col-span-6 sm:col-span-3">
 															<label for="sub_district" class="block text-base font-medium text-gray-800">แขวง/ตำบล <span class="text-red-600">*</span></label>
 															<select name="sub_district" id="sub_district" class="form-control" required="">
-																@if (Session::has('sub_district')) <option value="{{ Session::get('sub_district') }}">{{ Session::get('sub_district') }}</option> @endif
 																<option value="">-- โปรดเลือก --</option>
+																{!! (isset($userData->sub_district)) ? "<option value=\"".$userData->sub_district."\" selected>".$userData->sub_district."</option>" : "" !!}
 															</select>
 															<div class="invalid-feedback">โปรดเลือกตำบล</div>
 														</div>
 														<div class="col-span-6 sm:col-span-3">
 															<label for="zip_code" class="block text-base font-medium text-gray-800">รหัสไปรษณีย์ <span class="text-red-600">*</span></label>
-															<input type="text" name="postal" value="{{ (Session::has('postal')) ? Session::get('postal') : '' }}" id="postcode" class="form-control mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="10" size="10" required>
+															<input type="text" name="postcode" value="{{ $userData->postcode ?? '' }}" id="postcode" class="form-control mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="10" size="10" required>
 															<div class="invalid-feedback">โปรดกรอกรหัสไปรษณีย์</div>
 														</div>
 													</div>

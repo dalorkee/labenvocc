@@ -28,12 +28,12 @@ Route::resources([
 ]);
 Route::name('register.')->group(function() {
 	Route::get('/register/personal/step/2', [RegisterController::class, 'createPersonalStep2Get'])->name('personal.step2.get');
-	Route::post('register/personal/step/2', [RegisterController::class, 'createPersonalStep2Post'])->name('personal.step2.post');
+	Route::post('register/personal/step/3', [RegisterController::class, 'createPersonalStep2Post'])->name('personal.step2.post');
 
-    Route::get('/register.personal/step/3', [RegisterController::class, 'createPersonalStep3Get'])->name('personal.step3.get');
-	Route::post('register.personal/step/3', [RegisterController::class, 'createPersonalStep3Post'])->name('personal.step3.post');
+	Route::get('/register.personal/step/3', [RegisterController::class, 'createPersonalStep3Get'])->name('personal.step3.get');
+	Route::post('register.personal/step/4', [RegisterController::class, 'createPersonalStep3Post'])->name('personal.step3.post');
 
-    Route::post('register/personal/step/4', [RegisterController::class, 'personalStep4'])->name('personal.step4');
+	Route::post('register/personal/step/4', [RegisterController::class, 'personalStep4'])->name('personal.step4');
 	Route::post('province/district', [RegisterController::class, 'renderDistrictToHtmlSelect'])->name('district');
 	Route::post('province/district/subdistrict', [RegisterController::class, 'renderSubDistrictToHtmlSelect'])->name('subDistrict');
 	Route::post('province/subdistrict/postcode', [RegisterController::class, 'getPostCodeBySubDistrict'])->name('postcode');

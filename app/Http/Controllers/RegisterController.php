@@ -17,58 +17,60 @@ class RegisterController extends Controller
 	}
 
 	protected function createPersonalStep2Get(Request $request): object {
-        $provinces = $this->getMinProvince();
+		$provinces = $this->getMinProvince();
 		$userData = $request->session()->get('userData');
 		return view('auth.register.personalStep2', compact('provinces', 'userData'));
 	}
 	protected function createPersonalStep2Post(Request $request): object {
 		$validatedData = $request->validate([
-            'title_name' => 'required',
+			'title_name' => 'required',
 			'first_name' => 'required',
 			'last_name' => 'nullable',
+			'id_card' => 'required',
+			'taxpayer_no' => 'nullable',
+			'email' => 'required',
+			'mobile' => 'required',
+			'address' => 'required',
+			'province' => 'required',
+			'district' => 'required',
+			'sub_district' => 'required',
+			'postcode' => 'required'
 		]);
 		if (empty($request->session()->get('userData'))) {
 			$userData = new UserCustomer();
-            $userData->fill($validatedData);
-            $request->session()->put('userData', $userData);
+			$userData->fill($validatedData);
+			$request->session()->put('userData', $userData);
 		} else {
-            $userData = $request->session()->get('userData');
-            $userData->fill($validatedData);
-            $request->session()->put('userData', $userData);
-        }
+			$userData = $request->session()->get('userData');
+			$userData->fill($validatedData);
+			$request->session()->put('userData', $userData);
+		}
 		$provinces = $this->getMinProvince();
 		return view('auth.register.personalStep3', compact('provinces', 'userData'));
 	}
 
 
+
 	protected function createPersonalStep3Get(Request $request): object {
-		return view('auth.register.personalStep3');
+		$provinces = $this->getMinProvince();
+		$userData = $request->session()->get('userData');
+		return view('auth.register.personalStep3', compact('provinces', 'userData'));
 	}
 
 	protected function createPersonalStep3Post(Request $request): object {
 		$validatedData = $request->validate([
-            'title_name' => 'required',
-			'first_name' => 'required',
-			'last_name' => 'nullable',
+			'contact_addr_opt' => 'required',
+			'contact_title_name' => 'required',
 		]);
-		$userData = new UserCustomer();
+		$userData = $request->session()->get('userData');
 		$userData->fill($validatedData);
 		$request->session()->put('userData', $userData);
-		// $request->session()->put('title_name', $request->title_name);
-		// $request->session()->put('first_name', $request->first_name);
-		// $request->session()->put('last_name', $request->last_name);
-		// $request->session()->put('id_card', $request->id_card);
-		// $request->session()->put('taxpayer_no', $request->taxpayer_no);
-		// $request->session()->put('email', $request->email);
-		// $request->session()->put('mobile', $request->mobile);
-		// $request->session()->put('address', $request->address);
-		// $request->session()->put('province', $request->province);
-		// $request->session()->put('district', $request->district);
-		// $request->session()->put('sub_district', $request->sub_district);
-		// $request->session()->put('postal', $request->postal);
+
 		$provinces = $this->getMinProvince();
-		return view('auth.register.personalStep3', ['provinces' => $provinces]);
+		return view('auth.register.personalStep4', compact('provinces', 'userData'));
 	}
+
+
 
 	protected function personalStep3Back(): object {
 		$provinces = $this->getMinProvince();
