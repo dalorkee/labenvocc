@@ -21,6 +21,7 @@ class RegisterController extends Controller
 		$userData = $request->session()->get('userData');
 		return view('auth.register.personalStep2', compact('provinces', 'userData'));
 	}
+
 	protected function createPersonalStep2Post(Request $request): object {
 		$validatedData = $request->validate([
 			'title_name' => 'required',
@@ -49,8 +50,6 @@ class RegisterController extends Controller
 		return view('auth.register.personalStep3', compact('provinces', 'userData'));
 	}
 
-
-
 	protected function createPersonalStep3Get(Request $request): object {
 		$provinces = $this->getMinProvince();
 		$userData = $request->session()->get('userData');
@@ -61,29 +60,55 @@ class RegisterController extends Controller
 		$validatedData = $request->validate([
 			'contact_addr_opt' => 'required',
 			'contact_title_name' => 'required',
+			'contact_first_name' => 'required',
+			'contact_last_name' => 'required',
+			'contact_mobile' => 'required',
+			'contact_email' => 'required',
+			'contact_addr' => 'required',
+			'contact_province' => 'required',
+			'contact_district' => 'required',
+			'contact_sub_district' => 'required',
+			'contact_postcode' => 'required'
 		]);
 		$userData = $request->session()->get('userData');
 		$userData->fill($validatedData);
 		$request->session()->put('userData', $userData);
 
+		if (empty($request->session()->get('userLoginData'))) {
+			$userLoginData = new User();
+			$userLoginData->fill(["username" => "username", "password" => "password", "email" => "email", "password_confirmation" => "password_confirmation"]);
+			$request->session()->put('userLoginData', $userLoginData);
+		} else {
+			$userLoginData = $request->session()->get('userLoginData');
+			$userLoginData->fill(["username" => $userLoginData->username, "password" => $userLoginData->password, "password_confirmation" => $userLoginData->password_confirmation]);
+			$request->session()->put('userLoginData', $userLoginData);
+		}
+
 		$provinces = $this->getMinProvince();
-		return view('auth.register.personalStep4', compact('provinces', 'userData'));
+		return view('auth.register.personalStep4', compact('provinces', 'userData', 'userLoginData'));
 	}
 
 
-
-	protected function personalStep3Back(): object {
-		$provinces = $this->getMinProvince();
-		return view('auth.register.personalStep3', ['provinces' => $provinces]);
+	protected function createpersonalStep4Get(Request $request): object {
+		$userData = $request->session()->get('userData');
+		$userLoginData = $request->session()->get('userLoginData');
+		return view('auth.register.personalStep4', compact('userData', 'userLoginData'));
 	}
 
-	protected function personalStep4(Request $request): object {
-		$request->session()->put('contact_addr_opt', $request->contact_addr_opt);
-		$request->session()->put('contact_title_name', $request->contact_title_name);
-		$request->session()->put('contact_first_name', $request->contact_first_name);
-		$request->session()->put('contact_province', $request->contact_province);
+	protected function createPersonalStep4Post(Request $request): object {
+		$validatedLoginData = $request->validate([
+			'username' => 'required',
+			'email' => 'required',
+			'password' => 'required',
+			"password_confirmation" => 'required'
+		]);
 
-		return view('auth.register.personalStep4');
+		$userLoginData = $request->session()->get('userLoginData');
+		$userLoginData->fill($validatedLoginData);
+		$request->session()->put('userLoginData', $userLoginData);
+
+		$userData = $request->session()->get('userData');
+		return view('auth.register.personalStep5', compact('userData', 'userLoginData'));
 	}
 
 	protected function create(): object {

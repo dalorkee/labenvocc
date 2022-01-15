@@ -36,6 +36,7 @@ fieldset h2{font-size: 1em;font-weight: 400;}
 			<li class="is-active">ข้อมูลผู้รับบริการ</li>
 			<li>ข้อมูลติดต่อ</li>
 			<li>บัญชีผู้ใช้</li>
+			<li>ตรวจสอบข้อมูล</li>
 		</ul>
 	</div>
 </div>
@@ -120,7 +121,7 @@ fieldset h2{font-size: 1em;font-weight: 400;}
 														</div>
 														<div class="col-span-6 sm:col-span-3">
 															<label for="email" class="block text-base font-medium text-gray-800">อีเมล์ <span class="text-red-600">*</span></label>
-															<input type="text" name="email" value="{{ $userData->email ?? '' }}" class="form-control mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" required>
+															<input type="text" name="email" value="{{ $userData->email ?? '' }}" class="form-control mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="90" size="90" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" required>
 															<div class="invalid-feedback">โปรดกรอกอีเมล์</div>
 														</div>
 														<div class="col-span-6 sm:col-span-3">

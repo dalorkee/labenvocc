@@ -36,6 +36,7 @@ input[type="text"]:disabled{background: #eeeeee !important;}
 			<li>ข้อมูลผู้รับบริการ</li>
 			<li class="is-active">ข้อมูลติดต่อ</li>
 			<li>บัญชีผู้ใช้</li>
+			<li>ตรวจสอบข้อมูล</li>
 		</ul>
 	</div>
 </div>
@@ -80,15 +81,15 @@ input[type="text"]:disabled{background: #eeeeee !important;}
 															<label for="simpleinput" class="block text-base font-medium text-gray-800">คำนำหน้าชื่อ <span class="text-red-600">*</span></label>
 															<div class="frame-wrap">
 																<div class="custom-control custom-switch custom-control-inline">
-																	<input type="radio" name="contact_title_name" value="mr" id="contact_title_name_mr" class="contact_title_name custom-control-input"{{ (isset($userData->contact_addr_opt) && $userData->contact_addr_opt == '2' && isset($userData->contact_title_name) && $userData->contact_title_name == 'mr') ? "checked" : "disabled" }} required="">
+																	<input type="radio" name="contact_title_name" value="mr" id="contact_title_name_mr" class="contact_title_name custom-control-input" {{ (isset($userData->contact_addr_opt) && $userData->contact_addr_opt == '2' && isset($userData->contact_title_name) && $userData->contact_title_name == 'mr') ? "checked" : "disabled" }} required="">
 																	<label class="custom-control-label" for="contact_title_name_mr">นาย</label>
 																</div>
 																<div class="custom-control custom-switch custom-control-inline">
-																	<input type="radio" name="contact_title_name" value="mrs" id="contact_title_name_mrs" class="contact_title_name custom-control-input"{{ (isset($userData->contact_addr_opt) && $userData->contact_addr_opt == '2' && isset($userData->contact_title_name) && $userData->contact_title_name == 'mrs') ? "checked" : "disabled" }} required="">
+																	<input type="radio" name="contact_title_name" value="mrs" id="contact_title_name_mrs" class="contact_title_name custom-control-input" {{ (isset($userData->contact_addr_opt) && $userData->contact_addr_opt == '2' && isset($userData->contact_title_name) && $userData->contact_title_name == 'mrs') ? "checked" : "disabled" }} required="">
 																	<label class="custom-control-label" for="contact_title_name_mrs">นาง</label>
 																</div>
 																<div class="custom-control custom-switch custom-control-inline">
-																	<input type="radio" name="contact_title_name" value="miss" id="contact_title_name_ms" class="contact_title_name custom-control-input"{{ (isset($userData->contact_addr_opt) && $userData->contact_addr_opt == '2' && isset($userData->contact_title_name) && $userData->contact_title_name == 'miss') ? "checked" : "disabled" }} required="">
+																	<input type="radio" name="contact_title_name" value="miss" id="contact_title_name_ms" class="contact_title_name custom-control-input" {{ (isset($userData->contact_addr_opt) && $userData->contact_addr_opt == '2' && isset($userData->contact_title_name) && $userData->contact_title_name == 'miss') ? "checked" : "disabled" }} required="">
 																	<label class="custom-control-label" for="contact_title_name_ms">นางสาว</label>
 																	<div class="invalid-feedback">โปรดเลือกคำนำหน้าชื่อ</div>
 																</div>
@@ -96,56 +97,60 @@ input[type="text"]:disabled{background: #eeeeee !important;}
 														</div>
 														<div class="col-span-6 sm:col-span-3">
 															<label for="contact_first_name" class="block text-base font-medium text-gray-800">ชื่อ <span class="text-red-600">*</span></label>
-															<input type="text" name="contact_first_name" value="{{ $userData->contact_first_name ?? '' }}" class="form-control mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" {{ (isset($userData->contact_addr_opt) && $userData->contact_addr_opt == '2') ? "" : "disabled" }}>
+															<input type="text" name="contact_first_name" value="{{ $userData->contact_first_name ?? '' }}" class="form-control contact_field mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="100" size="100" {{ (isset($userData->contact_addr_opt) && $userData->contact_addr_opt == '2') ? "" : "disabled" }} required>
 															<div class="invalid-feedback">โปรดกรอกชื่อ</div>
 														</div>
 														<div class="col-span-6 sm:col-span-3">
 															<label for="contact_last_name" class="block text-base font-medium text-gray-800">นามสกุล <span class="text-red-600">*</span></label>
-															<input type="text" name="contact_last_name" value="{{ $userData->contact_last_name ?? '' }}" class="form-control mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" {{ (isset($userData->contact_addr_opt) && $userData->contact_addr_opt == '2') ? "" : "disabled" }}>
+															<input type="text" name="contact_last_name" value="{{ $userData->contact_last_name ?? '' }}" class="form-control contact_field mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="100" size="100" {{ (isset($userData->contact_addr_opt) && $userData->contact_addr_opt == '2') ? "" : "disabled" }} required>
 														</div>
+														<div class="invalid-feedback">โปรดกรอกนามสกุล</div>
 														<div class="col-span-6 sm:col-span-3">
 															<label for="contact_mobile" class="block text-base font-medium text-gray-800">โทรศัพท์เคลื่อนที่ <span class="text-red-600">*</span></label>
-															<input type="text" name="contact_mobile" value="{{ $userData->contact_mobile ?? '' }}" class="form-control mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" {{ (isset($userData->contact_addr_opt) && $userData->contact_addr_opt == '2' ) ? "" : "disabled" }}>
+															<input type="text" name="contact_mobile" value="{{ $userData->contact_mobile ?? '' }}" class="form-control contact_field mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="10" size="10" pattern="^\d{10}$" {{ (isset($userData->contact_addr_opt) && $userData->contact_addr_opt == '2' ) ? "" : "disabled" }} required>
 														</div>
+														<div class="invalid-feedback">โปรดกรอกหมายเลขโทรศัพท์</div>
 														<div class="col-span-6 sm:col-span-3">
 															<label for="contact_email" class="block text-base font-medium text-gray-800">อีเมล์ <span class="text-red-600">*</span></label>
-															<input type="text" name="contact_email" value="{{ $userData->contact_email ?? '' }}" class="form-control mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" {{ (isset($userData->contact_addr_opt) && $userData->contact_addr_opt == '2') ? "" : "disabled" }}>
+															<input type="text" name="contact_email" value="{{ $userData->contact_email ?? '' }}" class="form-control contact_field mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="90" size="90" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" {{ (isset($userData->contact_addr_opt) && $userData->contact_addr_opt == '2') ? "" : "disabled" }} required>
 														</div>
+														<div class="invalid-feedback">โปรดกรอกอีเมล์</div>
 														<div class="col-span-6 sm:col-span-6">
 															<label for="contact_addr" class="block text-base font-medium text-gray-800">ที่อยู่ (เลขที่ หมู่ที่ หมู่บ้าน/อาคาร ถนน) <span class="text-red-600">*</span></label>
-															<input type="text" name="contact_addr" value="{{ $userData->contact_addr ?? '' }}" class="form-control mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" {{ (isset($userData->contact_addr_opt) && $userData->contact_addr_opt == '2') ? "" : "disabled" }}>
+															<input type="text" name="contact_addr" value="{{ $userData->contact_addr ?? '' }}" class="form-control contact_field mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" {{ (isset($userData->contact_addr_opt) && $userData->contact_addr_opt == '2') ? "" : "disabled" }} required>
 														</div>
+														<div class="invalid-feedback">โปรดกรอกที่อยู่</div>
 														<div class="col-span-6 sm:col-span-3">
 															<label for="contact_province" class="block text-base font-medium text-gray-800">จังหวัด <span class="text-red-600">*</span></label>
-															<select name="contact_province" id="contact_province" class="form-control" {{(Session::has('contact_addr_opt')&&Session::get('contact_addr_opt' )=='2')?'required=""':'disabled'}}>
-																@if (Session::has('contact_province')) <option value="{{Session::get('contact_province')}}">{{$provinces[Session::get('contact_province')]}}</option> @endif
-                                                                <option value="">-- โปรดเลือก --</option>
+															<select name="contact_province" id="contact_province" class="form-control" {{ (isset($userData->contact_addr_opt) && $userData->contact_addr_opt == '2') ? "" : "disabled" }} required="">
+																<option value="">-- โปรดเลือก --</option>
+																{!! (isset($userData->contact_province)) ? "<option value=\"".$userData->contact_province."\" selected>".$provinces[$userData->contact_province]."</option>" : "" !!}
 																@foreach ($provinces as $key => $val)
 																	<option value="{{ $key }}">{{ $val }}</option>
 																@endforeach
 															</select>
-                                                            <div class="invalid-feedback">โปรดเลือกจังหวัด</div>
+															<div class="invalid-feedback">โปรดเลือกจังหวัด</div>
 														</div>
 														<div class="col-span-6 sm:col-span-3">
 															<label for="contact_district" class="block text-base font-medium text-gray-800">เขต/อำเภอ <span class="text-red-600">*</span></label>
-															<select name="contact_district" id="contact_district" class="form-control" {{(Session::has('contact_addr_opt')&&Session::get('contact_addr_opt' )=='2')?'required=""':'disabled'}}>
-																@if (Session::has('contact_district')) <option value="{{Session::get('contact_district')}}">{{Session::get('contact_district')}}</option> @endif
-                                                                <option value="">-- โปรดเลือก --</option>
+															<select name="contact_district" id="contact_district" class="form-control" {{ (isset($userData->contact_addr_opt) && $userData->contact_addr_opt == '2') ? "" : "disabled" }} required="">
+																<option value="">-- โปรดเลือก --</option>
+																{!! (isset($userData->contact_district)) ? "<option value=\"".$userData->contact_district."\" selected>".$userData->contact_district."</option>" : "" !!}
 															</select>
-                                                            <div class="invalid-feedback">โปรดเลือกอำเภอ</div>
+															<div class="invalid-feedback">โปรดเลือกอำเภอ</div>
 														</div>
 														<div class="col-span-6 sm:col-span-3">
 															<label for="contact_sub_district" class="block text-base font-medium text-gray-800">แขวง/ตำบล <span class="text-red-600">*</span></label>
-															<select name="contact_sub_district" id="contact_sub_district" class="form-control" {{(Session::has('contact_addr_opt')&&Session::get('contact_addr_opt' )=='2')?'required=""':'disabled'}}>
-																@if (Session::has('contact_sub_district')) <option value="{{Session::get('contact_sub_district')}}">{{Session::get('contact_sub_district')}}</option> @endif
-                                                                <option value="">-- โปรดเลือก --</option>
-                                                                <div class="invalid-feedback">โปรดเลือกตำบล</div>
+															<select name="contact_sub_district" id="contact_sub_district" class="form-control" {{ (isset($userData->contact_addr_opt) && $userData->contact_addr_opt == '2') ? "" : "disabled" }} required="">
+																<option value="">-- โปรดเลือก --</option>
+																{!! (isset($userData->contact_sub_district)) ? "<option value=\"".$userData->contact_sub_district."\" selected>".$userData->contact_sub_district."</option>" : "" !!}
 															</select>
+															<div class="invalid-feedback">โปรดเลือกตำบล</div>
 														</div>
 														<div class="col-span-6 sm:col-span-3">
 															<label for="contact_postcode" class="block text-base font-medium text-gray-800">รหัสไปรษณีย์ <span class="text-red-600">*</span></label>
-															<input type="text" name="contact_postcode" value="{{(Session::has('contact_postcode'))?Session::get('contact_postcode'):''}}" id="contact_postcode" class="form-control mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="10" size="10" {{(Session::has('contact_addr_opt')&&Session::get('contact_addr_opt' )=='2')?'required':'disabled'}}>
-                                                            <div class="invalid-feedback">โปรดกรอกรหัสไปรษณีย์</div>
+															<input type="text" name="contact_postcode" value="{{ $userData->contact_postcode ?? '' }}" id="contact_postcode" class="form-control mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="10" size="10" {{ (isset($userData->contact_addr_opt) && $userData->contact_addr_opt == '2') ? "" : "disabled" }} required>
+															<div class="invalid-feedback">โปรดกรอกรหัสไปรษณีย์</div>
 														</div>
 													</div>
 												</div>

@@ -23,7 +23,16 @@ class UserCustomer extends Model
 		'sub_district',
 		'postcode',
 		'contact_addr_opt',
-		'contact_title_name'
+		'contact_title_name',
+		'contact_first_name',
+		'contact_last_name',
+		'contact_mobile',
+		'contact_email',
+		'contact_addr',
+		'contact_province',
+		'contact_district',
+		'contact_sub_district',
+		'contact_postcode'
 	];
 
 	public function user() {

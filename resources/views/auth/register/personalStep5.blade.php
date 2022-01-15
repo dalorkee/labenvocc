@@ -32,7 +32,7 @@ input[type="text"]:disabled{background: #eeeeee !important;}
 	font-size: 1.275em;
 	position: relative;
 	z-index: 2;
-    color: #F57C00
+	color: #F57C00
 }
 </style>
 @endsection
@@ -48,84 +48,39 @@ input[type="text"]:disabled{background: #eeeeee !important;}
 			<li>บุคคลทั่วไป</li>
 			<li>ข้อมูลผู้รับบริการ</li>
 			<li>ข้อมูลติดต่อ</li>
-			<li class="is-active">บัญชีผู้ใช้</li>
-			<li>ตรวจสอบข้อมูล</li>
+			<li>บัญชีผู้ใช้</li>
+			<li class="is-active">ตรวจสอบข้อมูล</li>
 		</ul>
-	</div>
-</div>
-<div class="row mt-10">
-	<div class="col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12">
-		<div class="alert alert-danger font-prompt text-sm">
-			<section>
-				<h2 class="text-red-900">เงื่อนไขในการกำหนด ชื่อผู้ใช้</h2>
-				<ol class="pl-2 text-red-500">
-					<li>1. มีความยาว 8-12 ตัวอักษร</li>
-					<li>2. ชื่อผู้ใช้สามารถเป็น A-Z a-z อักษรพิเศษ(#,?,!,@,$,%,^,&,*,-) หรือตัวเลข(0-9) อย่างใดอย่างหนึ่ง</li>
-				</ol>
-			</section>
-			<section class="mt-4">
-				<h2 class="text-red-900">เงื่อนไขในการกำหนด รหัสผ่าน</h2>
-				<ol class="pl-2 text-red-500">
-					<li>1. มีความยาว 8-12 ตัวอักษร</li>
-					<li>2. ตัวอักษรตัวแรกเป็นตัวพิมพ์ใหญ่ (A-Z)</li>
-					<li>3. ตัวอักษรถัดไปสามารถเป็น a-z อย่างน้อย 1 ตัวอักษร อักษรพิเศษ(#,?,!,@,$,%,^,&,*,-) อย่างน้อย 1 ตัวอักษร และตัวเลข(0-9) อย่างน้อย 1 ตัวอักษร</li>
-				</ol>
-			</section>
-		</div>
 	</div>
 </div>
 <div class="row font-prompt">
 	<div class="col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12">
 		<section>
-			<form action="{{ route('register.personal.step4.post') }}" method="POST" id="msform">
+			<form action="{{ route('register.store') }}" method="POST" id="msform">
 				@csrf
 				<fieldset>
 					<div class="panel">
 						<div class="panel-hdr">
-							<h2><i class="fal fa-clipboard"></i>&nbsp;&nbsp;บัญชีผู้ใช้</h2>
+							<h2><i class="fal fa-clipboard"></i>&nbsp;&nbsp;ตรวจสอบข้อมูล</h2>
 							<div class="panel-toolbar">
 								<button class="btn btn-panel" data-action="panel-fullscreen" data-toggle="tooltip" data-offset="0,10" data-original-title="Fullscreen"></button>
 							</div>
 						</div>
 						<div class="panel-container show">
 							<div class="panel-content">
+                                <ul>
+                                    <li>{{ $userData->title_name ?? "" }}</li>
+                                    <li>{{ $userData->first_name ?? "" }}</li>
+                                </ul>
+
+
 								<div class="mt-0 sm:mt-0">
-									<div class="md:grid md:grid-cols-1">
-										<div class="mt-2 md:mt-0 md:col-span-2">
-											<div class="overflow-hidden">
-												<div class="px-6 pt-5 pb-16">
-													<div class="grid grid-cols-6 gap-6">
-														<div class="col-span-6 sm:col-span-3">
-															<label for="user_name" class="block text-base font-medium text-gray-700">ชื่อผู้ใช้ <span class="text-red-600">*</span></label>
-															<input type="text" name="username" value="{{ $userLoginData->username ?? "" }}" id="user_name" class="form-control mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300">
-														</div>
-														<div class="col-span-6 sm:col-span-3">
-															<label for="user_email" class="block text-base font-medium text-gray-700">อีเมล์ <span class="text-red-600">*</span></label>
-															<input type="email" name="email" value="{{ $userLoginData->email ?? "" }}" id="user_email" class="form-control mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300">
-														</div>
-														<div class="col-span-6 sm:col-span-3">
-															<label for="user_password" class="block text-base font-medium text-gray-700">รหัสผ่าน (อย่างน้อย 6 ตัว) <span class="text-red-600">*</span></label>
-															<input type="password" name="password" value="{{ $userLoginData->password ?? "" }}" id="user_password" class="form-control mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300">
-															<span toggle="#user_password" class="fal fa-eye field-icon toggle-password"></span>
-														</div>
-														<div class="col-span-6 sm:col-span-3">
-															<label for="user_confirm_password" class="block text-base font-medium text-gray-700">ยืนยันรหัสผ่าน <span class="text-red-600">*</span></label>
-															<input type="password" name="password_confirmation" value="{{ $userLoginData->password_confirmation ?? "" }}" id="user_confirm_password" class="form-control mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300">
-															<span toggle="#user_confirm_password" class="fal fa-eye field-icon toggle-confirm-password"></span>
-														</div>
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-								{{-- <div class="mt-0 sm:mt-0">
 									<div class="md:grid md:grid-cols-1">
 										<div class="mt-2 md:mt-0 md:col-span-2">
 											<div class="px-6 pt-5 pb-16">
 												<div class="grid grid-cols-6 gap-6">
 													<div class="col-span-6 sm:col-span-6">
-														<div class="captcha inline-block">!! captcha_img('flat') !!</div>
+														<div class="captcha inline-block">{!! captcha_img('flat') !!}</div>
 														<button type="button" class="btn btn-sm btn-dark" id="refresh-captcha" style="margin-bottom:24px;">
 															<span>&#x21bb;</span>
 														</button>
@@ -133,20 +88,18 @@ input[type="text"]:disabled{background: #eeeeee !important;}
 													<div class="col-span-6 sm:col-span-6 mt-0">
 														<input name="captcha" id="captcha" type="text" class="pt-3 pb-3 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-md border-blue-200" placeholder="ป้อนรหัสที่ท่านเห็น">
 													</div>
-													<div class="col-span-6 sm:col-span-6">
-														<button type="buttom" class="btn btn-lg btn-primary">ลงทะเบียน</button>
-													</div>
 												</div>
 											</div>
 										</div>
 									</div>
-								</div> --}}
+								</div>
+
 							</div>
 						</div>
 					</div>
 					<div class="text-center">
-						<a href="{{ route('register.personal.step3.get') }}" type="button" class="btn btn-warning btn-pills" style="width: 110px;"><i class="fal fa-arrow-left"></i> ก่อนหน้า</a>
-						<button type="submit" class="btn btn-success btn-pills" style="width: 110px;">ถัดไป <i class="fal fa-arrow-right"></i></button>
+						<a href="{{ route('register.personal.step4.get') }}" type="button" class="btn btn-warning btn-pills" style="width: 116px;"><i class="fal fa-arrow-left"></i> ก่อนหน้า</a>
+						<button type="submit" class="btn btn-success btn-pills" style="width: 116px;">ลงทะเบียน <i class="fal fa-arrow-right"></i></button>
 					</div>
 				</fieldset>
 			</form>
