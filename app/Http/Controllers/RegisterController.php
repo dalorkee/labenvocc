@@ -18,6 +18,7 @@ class RegisterController extends Controller
 
 	protected function createPersonalStep2Get(Request $request): object {
 		$provinces = $this->getMinProvince();
+		$userData = ($request->session()->has('userData')) ? $request->session()->get('userData') : array();
 		$userData = $request->session()->get('userData');
 		return view('auth.register.personalStep2', compact('provinces', 'userData'));
 	}
@@ -51,9 +52,13 @@ class RegisterController extends Controller
 	}
 
 	protected function createPersonalStep3Get(Request $request): object {
-		$provinces = $this->getMinProvince();
-		$userData = $request->session()->get('userData');
-		return view('auth.register.personalStep3', compact('provinces', 'userData'));
+		if ($request->session()->has('userData')) {
+			$provinces = $this->getMinProvince();
+			$userData = $request->session()->get('userData');
+			return view('auth.register.personalStep3', compact('provinces', 'userData'));
+		} else {
+			return redirect()->route('register.index');
+		}
 	}
 
 	protected function createPersonalStep3Post(Request $request): object {
@@ -76,7 +81,7 @@ class RegisterController extends Controller
 
 		if (empty($request->session()->get('userLoginData'))) {
 			$userLoginData = new User();
-			$userLoginData->fill(["username" => "username", "password" => "password", "email" => "email", "password_confirmation" => "password_confirmation"]);
+			$userLoginData->fill(["username" => "", "password" => "", "email" => "", "password_confirmation" => ""]);
 			$request->session()->put('userLoginData', $userLoginData);
 		} else {
 			$userLoginData = $request->session()->get('userLoginData');
@@ -99,8 +104,8 @@ class RegisterController extends Controller
 		$validatedLoginData = $request->validate([
 			'username' => 'required',
 			'email' => 'required',
-			'password' => 'required',
-			"password_confirmation" => 'required'
+			'password' => 'min:6|required_with:password_confirmation|same:password_confirmation',
+			'password_confirmation' => 'required'
 		]);
 
 		$userLoginData = $request->session()->get('userLoginData');

@@ -320,7 +320,7 @@ $(document).ready(function() {
 	}
 });
 </script>
-<script>
+{{-- <script>
 (function($) {
 	"use strict";
 	function verificationForm() {
@@ -393,7 +393,7 @@ $(document).ready(function() {
 	};
 	verificationForm ();
 })(jQuery);
-</script>
+</script> --}}
 <script>
 (function() {
 	'use strict';
@@ -402,7 +402,6 @@ $(document).ready(function() {
 		// Loop over them and prevent submission
 		var validation = Array.prototype.filter.call(forms, function(form) {
 			form.addEventListener('submit', function(event) {
-			// document.getElementById("pj").addEventListener("click", function(event) {
 				if (form.checkValidity() === false) {
 					event.preventDefault();
 					event.stopPropagation();

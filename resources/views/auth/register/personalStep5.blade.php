@@ -34,6 +34,9 @@ input[type="text"]:disabled{background: #eeeeee !important;}
 	z-index: 2;
 	color: #F57C00
 }
+ul.verify-data li {
+    line-height: 24px;
+}
 </style>
 @endsection
 @section('content')
@@ -68,10 +71,123 @@ input[type="text"]:disabled{background: #eeeeee !important;}
 						</div>
 						<div class="panel-container show">
 							<div class="panel-content">
-                                <ul>
-                                    <li>{{ $userData->title_name ?? "" }}</li>
-                                    <li>{{ $userData->first_name ?? "" }}</li>
-                                </ul>
+
+								<div class="card mb-g">
+									<div class="card-body">
+										<section>
+											<h3 class="fw-500 m-0"><i class="fal fa-info"></i> ข้อมูลผู้รับบริการ</h3>
+											<div class="panel-tag mt-2">
+                                                <div class="form-row">
+                                                    <div class="col-md-4 mb-3">
+                                                        <label class="form-label">คำนำหน้าชื่อ <span class="text-danger">*</span> </label>
+                                                        <input type="text" class="form-control" value="{{ $userData->title_name ?? "" }}" disabled>
+                                                    </div>
+                                                    <div class="col-md-4 mb-3">
+                                                        <label class="form-label">ชื่อ <span class="text-danger">*</span> </label>
+                                                        <input type="text" class="form-control" value="{{ $userData->first_name ?? "" }}" disabled>
+                                                    </div>
+                                                    <div class="col-md-4 mb-3">
+                                                        <label class="form-label">นามสกุล <span class="text-danger">*</span> </label>
+                                                        <input type="text" class="form-control" value="{{ $userData->last_name ?? "" }}" disabled>
+                                                    </div>
+                                                </div>
+                                                <div class="form-row">
+                                                    <div class="col-md-4 mb-3">
+                                                        <label class="form-label">เลขบัตรประชาชน <span class="text-danger">*</span> </label>
+                                                        <input type="text" class="form-control" value="{{ $userData->id_card ?? "" }}" disabled>
+                                                    </div>
+                                                    <div class="col-md-4 mb-3">
+                                                        <label class="form-label">เลขผู้เสียภาษี <span class="text-danger">*</span> </label>
+                                                        <input type="text" class="form-control" value="{{ $userData->taxpayer_no ?? "" }}" disabled>
+                                                    </div>
+                                                    <div class="col-md-4 mb-3">
+                                                        <label class="form-label">อีเมล์ <span class="text-danger">*</span> </label>
+                                                        <input type="text" class="form-control" value="{{ $userData->email ?? "" }}" disabled>
+                                                    </div>
+                                                </div>
+                                                <div class="form-row">
+                                                    <div class="col-md-4 mb-3">
+                                                        <label class="form-label">โทรศัพท์เคลื่อนที่ <span class="text-danger">*</span> </label>
+                                                        <input type="text" class="form-control" value="{{ $userData->mobile ?? "" }}" disabled>
+                                                    </div>
+                                                    <div class="col-md-4 mb-3">
+                                                        <label class="form-label">ที่อยู่ <span class="text-danger">*</span> </label>
+                                                        <input type="text" class="form-control" value="{{ $userData->address ?? "" }}" disabled>
+                                                    </div>
+                                                    <div class="col-md-4 mb-3">
+                                                        <label class="form-label">จังหวัด <span class="text-danger">*</span> </label>
+                                                        <input type="text" class="form-control" value="{{ $userData->province ?? "" }}" disabled>
+                                                    </div>
+                                                </div>
+                                                <div class="form-row">
+                                                    <div class="col-md-4 mb-3">
+                                                        <label class="form-label">อำเภอ <span class="text-danger">*</span> </label>
+                                                        <input type="text" class="form-control" value="{{ $userData->district ?? "" }}" disabled>
+                                                    </div>
+                                                    <div class="col-md-4 mb-3">
+                                                        <label class="form-label">ตำบล <span class="text-danger">*</span> </label>
+                                                        <input type="text" class="form-control" value="{{ $userData->sub_district ?? "" }}" disabled>
+                                                    </div>
+                                                    <div class="col-md-4 mb-3">
+                                                        <label class="form-label">รหัสไปรษณีย์ <span class="text-danger">*</span> </label>
+                                                        <input type="text" class="form-control" value="{{ $userData->postcode ?? "" }}" disabled>
+                                                    </div>
+                                                </div>
+											</div>
+										</section>
+										<section>
+											<h3 class="fw-500 m-0"><i class="fal fa-address"></i> ข้อมูลติดต่อ</h3>
+											<div class="panel-tag mt-2">
+                                                <div class="form-row">
+                                                    <div class="col-md-4 mb-3">
+                                                        <label class="form-label" for="validationCustom01">First name <span class="text-danger">*</span> </label>
+                                                        <input type="text" class="form-control" id="validationCustom01" placeholder="First name" value="Codex" disabled>
+                                                        <div class="valid-feedback">
+                                                            Looks good!
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4 mb-3">
+                                                        <label class="form-label" for="validationCustom02">Last name <span class="text-danger">*</span></label>
+                                                        <input type="text" class="form-control" id="validationCustom02" placeholder="Last name" value="Lantern" required>
+                                                        <div class="valid-feedback">
+                                                            Looks good!
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4 mb-3">
+                                                        <label class="form-label" for="validationCustomUsername">Username <span class="text-danger">*</span></label>
+                                                        <div class="input-group">
+                                                            <div class="input-group-prepend">
+                                                                <span class="input-group-text" id="inputGroupPrepend">@</span>
+                                                            </div>
+                                                            <input type="text" class="form-control" id="validationCustomUsername" placeholder="Username" aria-describedby="inputGroupPrepend" required>
+                                                            <div class="invalid-feedback">
+                                                                Please choose a username.
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+											</div>
+										</section>
+										<section>
+											<h3 class="fw-500 m-0"><i class="fal fa-address"></i> บัญชีผู้ใช้</h3>
+											<div class="panel-tag mt-2">
+												<ul>
+													<li>คำนำหน้าชื่อ: {{ $userData->title_name ?? "" }}</li>
+													<li>ชื่อ: {{ $userData->first_name ?? "" }}</li>
+													<li>นามสกุล: {{ $userLoginData->username ?? "" }}</li>
+
+												</ul>
+											</div>
+										</section>
+									</div>
+								</div>
+
+
+
+
+
+
+
 
 
 								<div class="mt-0 sm:mt-0">
@@ -110,144 +226,70 @@ input[type="text"]:disabled{background: #eeeeee !important;}
 @section('script')
 <script src="{{ URL::asset('assets/js/formplugins/select2/select2.bundle.js') }}"></script>
 <script>
-	$(document).ready(function() {
-		$.ajaxSetup({headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}});
-		$('#refresh-captcha').click(function () {
-			$.ajax({
-				type: "POST",
-				url: "{{ route('register.refresh-captcha') }}",
-				success: function (data) {
-					$(".captcha").html(data.captcha);
-				}
-			});
-		});
-
-		$(".toggle-password").click(function() {
-			$(this).toggleClass("fa-eye fa-eye-slash");
-			var type = $($(this).attr("toggle"));
-			if (type.attr("type") == "password") {
-				type.attr("type", "text");
-			} else {
-				type.attr("type", "password");
-			}
-		});
-		$(".toggle-confirm-password").click(function() {
-			$(this).toggleClass("fa-eye fa-eye-slash");
-			var type = $($(this).attr("toggle"));
-			if (type.attr("type") == "password") {
-				type.attr("type", "text");
-			} else {
-				type.attr("type", "password");
+$(document).ready(function() {
+	$.ajaxSetup({headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}});
+	$('#refresh-captcha').click(function () {
+		$.ajax({
+			type: "POST",
+			url: "{{ route('register.refresh-captcha') }}",
+			success: function (data) {
+				$(".captcha").html(data.captcha);
 			}
 		});
 	});
-	</script>
-	<script>
-	$(document).ready(function() {
-		$(function() {
-			$('.select2').select2();
+});
+</script>
+<script>
+$(document).ready(function() {
+	$(function() {
+		$('.select2').select2();
 			$(".select2-placeholder-multiple").select2({placeholder: "-- โปรดระบุ --"});
-			$(".js-hide-search").select2({minimumResultsForSearch: 1 / 0});
-			$(".js-max-length").select2({maximumSelectionLength: 2, placeholder: "Select maximum 2 items"});
-			$(".select2-placeholder").select2({placeholder: "-- โปรดระบุ --", allowClear: true});
-			$(".js-select2-icons").select2({
-				minimumResultsForSearch: 1 / 0,
-				templateResult: icon,
-				templateSelection: icon,
-				escapeMarkup: function(elm){
-					return elm
-				}
-			});
-			function icon(elm){
-				elm.element;
-				return elm.id ? "<i class='" + $(elm.element).data("icon") + " mr-2'></i>" + elm.text : elm.text
+		$(".js-hide-search").select2({minimumResultsForSearch: 1 / 0});
+		$(".js-max-length").select2({maximumSelectionLength: 2, placeholder: "Select maximum 2 items"});
+		$(".select2-placeholder").select2({placeholder: "-- โปรดระบุ --", allowClear: true});
+		$(".js-select2-icons").select2({
+			minimumResultsForSearch: 1 / 0,
+			templateResult: icon,
+			templateSelection: icon,
+			escapeMarkup: function(elm){
+				return elm
 			}
 		});
-		function formatRepo (repo) {
-			if (repo.loading) return repo.text;
-			var markup = "<div class='select2-result-repository clearfix'>" +
-				"<div class='select2-result-repository__meta'>" +
-				"<div class='select2-result-repository__title'>" + repo.value + "</div></div></div>";
-				return markup;
-		}
-		function formatRepoSelection (repo) {
-			return repo.value || repo.text;
+		function icon(elm){
+			elm.element;
+			return elm.id ? "<i class='" + $(elm.element).data("icon") + " mr-2'></i>" + elm.text : elm.text
 		}
 	});
-	</script>
-	<script>
-	(function($) {
-		"use strict";
-		function verificationForm() {
-			var current_fs, next_fs, previous_fs;
-			var left, opacity, scale;
-			var animating;
-			$(".next").click(function () {
-				if (animating) return false;
-				animating = true;
-				current_fs = $(this).parent();
-				next_fs = $(this).parent().next();
-				$("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
-				next_fs.show();
-				current_fs.animate({
-					opacity: 0
-				}, {
-					step: function (now, mx) {
-						scale = 1 - (1 - now) * 0.2;
-						left = (now * 50) + "%";
-						opacity = 1 - now;
-						current_fs.css({
-							'transform': 'scale(' + scale + ')',
-							'position': 'absolute'
-						});
-						next_fs.css({
-							'left': left,
-							'opacity': opacity
-						});
-					},
-					duration: 800,
-					complete: function () {
-						current_fs.hide();
-						animating = false;
-					},
-					easing: 'easeInOutBack'
-				});
-				$("html, body").animate({ scrollTop: $("#regis-title").offset().top}, 2000);
-			});
-			$(".previous").click(function () {
-				if (animating) return false;
-				animating = true;
-				current_fs = $(this).parent();
-				previous_fs = $(this).parent().prev();
-				$("#progressbar li").eq($("fieldset").index(current_fs)).removeClass("active");
-				previous_fs.show();
-				current_fs.animate({
-					opacity: 0
-				}, {
-					step: function (now, mx) {
-						scale = 0.8 + (1 - now) * 0.2;
-						left = ((1 - now) * 50) + "%";
-						opacity = 1 - now;
-						current_fs.css({
-							'left': left
-						});
-						previous_fs.css({
-							'transform': 'scale(' + scale + ')',
-							'opacity': opacity
-						});
-					},
-					duration: 800,
-					complete: function () {
-						current_fs.hide();
-						animating = false;
-					},
-					easing: 'easeInOutBack'
-				});
-				$("html, body").animate({ scrollTop: $("#regis-title").offset().top}, 2000);
-			});
-		};
-		verificationForm ();
-	})(jQuery);
-	</script>
-	@endsection
+	function formatRepo (repo) {
+		if (repo.loading) return repo.text;
+		var markup = "<div class='select2-result-repository clearfix'>" +
+			"<div class='select2-result-repository__meta'>" +
+			"<div class='select2-result-repository__title'>" + repo.value + "</div></div></div>";
+			return markup;
+	}
+	function formatRepoSelection (repo) {
+		return repo.value || repo.text;
+	}
+	});
+</script>
+<script>
+(function() {
+	'use strict';
+	window.addEventListener('load', function() {
+		var forms = document.getElementsByClassName('needs-validation');
+		// Loop over them and prevent submission
+		var validation = Array.prototype.filter.call(forms, function(form) {
+			form.addEventListener('submit', function(event) {
+			// document.getElementById("pj").addEventListener("click", function(event) {
+				if (form.checkValidity() === false) {
+					event.preventDefault();
+					event.stopPropagation();
+				}
+				form.classList.add('was-validated');
+			}, false);
+		});
+	}, false);
+})();
+</script>
+@endsection
 

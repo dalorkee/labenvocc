@@ -4,6 +4,7 @@
 @endsection
 @section('style')
 <link href="{{ URL::asset('css/step.css') }}" rel="stylesheet">
+<link href="{{ URL::asset('assets/css/ionicons.min.css') }}" rel="stylesheet">
 <link href="{{ URL::asset('assets/css/formplugins/select2/select2.bundle.css') }}" rel="stylesheet">
 <style type="text/css">
 .select2{width:100%!important;}
@@ -32,7 +33,7 @@ input[type="text"]:disabled{background: #eeeeee !important;}
 	font-size: 1.275em;
 	position: relative;
 	z-index: 2;
-    color: #F57C00
+	color: #F57C00
 }
 </style>
 @endsection
@@ -53,7 +54,7 @@ input[type="text"]:disabled{background: #eeeeee !important;}
 		</ul>
 	</div>
 </div>
-<div class="row mt-10">
+<div class="row font-prompt">
 	<div class="col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12">
 		<div class="alert alert-danger font-prompt text-sm">
 			<section>
@@ -77,7 +78,7 @@ input[type="text"]:disabled{background: #eeeeee !important;}
 <div class="row font-prompt">
 	<div class="col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12">
 		<section>
-			<form action="{{ route('register.personal.step4.post') }}" method="POST" id="msform">
+			<form action="{{ route('register.personal.step4.post') }}" method="POST" class="needs-validation" novalidate>
 				@csrf
 				<fieldset>
 					<div class="panel">
@@ -97,21 +98,26 @@ input[type="text"]:disabled{background: #eeeeee !important;}
 													<div class="grid grid-cols-6 gap-6">
 														<div class="col-span-6 sm:col-span-3">
 															<label for="user_name" class="block text-base font-medium text-gray-700">ชื่อผู้ใช้ <span class="text-red-600">*</span></label>
-															<input type="text" name="username" value="{{ $userLoginData->username ?? "" }}" id="user_name" class="form-control mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300">
+															<input type="text" name="username" value="{{ $userLoginData->username ?? "" }}" class="form-control mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="60" size="60" required>
+															<div class="invalid-feedback">โปรดกรอกชื่อผู้ใช้</div>
 														</div>
 														<div class="col-span-6 sm:col-span-3">
 															<label for="user_email" class="block text-base font-medium text-gray-700">อีเมล์ <span class="text-red-600">*</span></label>
-															<input type="email" name="email" value="{{ $userLoginData->email ?? "" }}" id="user_email" class="form-control mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300">
+															<input type="email" name="email" value="{{ $userLoginData->email ?? "" }}" id="user_email" class="form-control mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="60" size="60" required>
+															<div class="invalid-feedback">โปรดกรอกอีเมล์</div>
 														</div>
 														<div class="col-span-6 sm:col-span-3">
 															<label for="user_password" class="block text-base font-medium text-gray-700">รหัสผ่าน (อย่างน้อย 6 ตัว) <span class="text-red-600">*</span></label>
-															<input type="password" name="password" value="{{ $userLoginData->password ?? "" }}" id="user_password" class="form-control mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300">
+															<input type="password" name="password" value="{{ $userLoginData->password ?? "" }}" id="user_password" class="form-control mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="60" size="60" required>
 															<span toggle="#user_password" class="fal fa-eye field-icon toggle-password"></span>
+															<div class="invalid-feedback">โปรดกรอกรหัสผ่าน</div>
 														</div>
 														<div class="col-span-6 sm:col-span-3">
-															<label for="user_confirm_password" class="block text-base font-medium text-gray-700">ยืนยันรหัสผ่าน <span class="text-red-600">*</span></label>
-															<input type="password" name="password_confirmation" value="{{ $userLoginData->password_confirmation ?? "" }}" id="user_confirm_password" class="form-control mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300">
+															<label for="user_confirm_password" class="is-invalid block text-base font-medium text-gray-700">ยืนยันรหัสผ่าน <span class="text-red-600">*</span></label>
+															<input type="password" name="password_confirmation" value="{{ $userLoginData->password_confirmation ?? "" }}" id="user_confirm_password" class="form-control mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="60" size="60" required>
 															<span toggle="#user_confirm_password" class="fal fa-eye field-icon toggle-confirm-password"></span>
+															<div class="invalid-feedback">โปรดกรอกยืนยันรหัสผ่าน</div>
+															<div style="margin-top: 7px;" id="CheckPasswordMatch"></div>
 														</div>
 													</div>
 												</div>
@@ -119,28 +125,6 @@ input[type="text"]:disabled{background: #eeeeee !important;}
 										</div>
 									</div>
 								</div>
-								{{-- <div class="mt-0 sm:mt-0">
-									<div class="md:grid md:grid-cols-1">
-										<div class="mt-2 md:mt-0 md:col-span-2">
-											<div class="px-6 pt-5 pb-16">
-												<div class="grid grid-cols-6 gap-6">
-													<div class="col-span-6 sm:col-span-6">
-														<div class="captcha inline-block">!! captcha_img('flat') !!</div>
-														<button type="button" class="btn btn-sm btn-dark" id="refresh-captcha" style="margin-bottom:24px;">
-															<span>&#x21bb;</span>
-														</button>
-													</div>
-													<div class="col-span-6 sm:col-span-6 mt-0">
-														<input name="captcha" id="captcha" type="text" class="pt-3 pb-3 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-md border-blue-200" placeholder="ป้อนรหัสที่ท่านเห็น">
-													</div>
-													<div class="col-span-6 sm:col-span-6">
-														<button type="buttom" class="btn btn-lg btn-primary">ลงทะเบียน</button>
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div> --}}
 							</div>
 						</div>
 					</div>
@@ -157,144 +141,90 @@ input[type="text"]:disabled{background: #eeeeee !important;}
 @section('script')
 <script src="{{ URL::asset('assets/js/formplugins/select2/select2.bundle.js') }}"></script>
 <script>
-	$(document).ready(function() {
-		$.ajaxSetup({headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}});
-		$('#refresh-captcha').click(function () {
-			$.ajax({
-				type: "POST",
-				url: "{{ route('register.refresh-captcha') }}",
-				success: function (data) {
-					$(".captcha").html(data.captcha);
-				}
-			});
-		});
-
-		$(".toggle-password").click(function() {
-			$(this).toggleClass("fa-eye fa-eye-slash");
-			var type = $($(this).attr("toggle"));
-			if (type.attr("type") == "password") {
-				type.attr("type", "text");
-			} else {
-				type.attr("type", "password");
-			}
-		});
-		$(".toggle-confirm-password").click(function() {
-			$(this).toggleClass("fa-eye fa-eye-slash");
-			var type = $($(this).attr("toggle"));
-			if (type.attr("type") == "password") {
-				type.attr("type", "text");
-			} else {
-				type.attr("type", "password");
-			}
-		});
-	});
-	</script>
-	<script>
-	$(document).ready(function() {
-		$(function() {
-			$('.select2').select2();
-			$(".select2-placeholder-multiple").select2({placeholder: "-- โปรดระบุ --"});
-			$(".js-hide-search").select2({minimumResultsForSearch: 1 / 0});
-			$(".js-max-length").select2({maximumSelectionLength: 2, placeholder: "Select maximum 2 items"});
-			$(".select2-placeholder").select2({placeholder: "-- โปรดระบุ --", allowClear: true});
-			$(".js-select2-icons").select2({
-				minimumResultsForSearch: 1 / 0,
-				templateResult: icon,
-				templateSelection: icon,
-				escapeMarkup: function(elm){
-					return elm
-				}
-			});
-			function icon(elm){
-				elm.element;
-				return elm.id ? "<i class='" + $(elm.element).data("icon") + " mr-2'></i>" + elm.text : elm.text
-			}
-		});
-		function formatRepo (repo) {
-			if (repo.loading) return repo.text;
-			var markup = "<div class='select2-result-repository clearfix'>" +
-				"<div class='select2-result-repository__meta'>" +
-				"<div class='select2-result-repository__title'>" + repo.value + "</div></div></div>";
-				return markup;
-		}
-		function formatRepoSelection (repo) {
-			return repo.value || repo.text;
+$(document).ready(function() {
+	$.ajaxSetup({headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}});
+	$(".toggle-password").click(function() {
+		$(this).toggleClass("fa-eye fa-eye-slash");
+		var type = $($(this).attr("toggle"));
+		if (type.attr("type") == "password") {
+			type.attr("type", "text");
+		} else {
+			type.attr("type", "password");
 		}
 	});
-	</script>
-	<script>
-	(function($) {
-		"use strict";
-		function verificationForm() {
-			var current_fs, next_fs, previous_fs;
-			var left, opacity, scale;
-			var animating;
-			$(".next").click(function () {
-				if (animating) return false;
-				animating = true;
-				current_fs = $(this).parent();
-				next_fs = $(this).parent().next();
-				$("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
-				next_fs.show();
-				current_fs.animate({
-					opacity: 0
-				}, {
-					step: function (now, mx) {
-						scale = 1 - (1 - now) * 0.2;
-						left = (now * 50) + "%";
-						opacity = 1 - now;
-						current_fs.css({
-							'transform': 'scale(' + scale + ')',
-							'position': 'absolute'
-						});
-						next_fs.css({
-							'left': left,
-							'opacity': opacity
-						});
-					},
-					duration: 800,
-					complete: function () {
-						current_fs.hide();
-						animating = false;
-					},
-					easing: 'easeInOutBack'
-				});
-				$("html, body").animate({ scrollTop: $("#regis-title").offset().top}, 2000);
-			});
-			$(".previous").click(function () {
-				if (animating) return false;
-				animating = true;
-				current_fs = $(this).parent();
-				previous_fs = $(this).parent().prev();
-				$("#progressbar li").eq($("fieldset").index(current_fs)).removeClass("active");
-				previous_fs.show();
-				current_fs.animate({
-					opacity: 0
-				}, {
-					step: function (now, mx) {
-						scale = 0.8 + (1 - now) * 0.2;
-						left = ((1 - now) * 50) + "%";
-						opacity = 1 - now;
-						current_fs.css({
-							'left': left
-						});
-						previous_fs.css({
-							'transform': 'scale(' + scale + ')',
-							'opacity': opacity
-						});
-					},
-					duration: 800,
-					complete: function () {
-						current_fs.hide();
-						animating = false;
-					},
-					easing: 'easeInOutBack'
-				});
-				$("html, body").animate({ scrollTop: $("#regis-title").offset().top}, 2000);
-			});
-		};
-		verificationForm ();
-	})(jQuery);
-	</script>
-	@endsection
+	$(".toggle-confirm-password").click(function() {
+		$(this).toggleClass("fa-eye fa-eye-slash");
+		var type = $($(this).attr("toggle"));
+		if (type.attr("type") == "password") {
+			type.attr("type", "text");
+		} else {
+			type.attr("type", "password");
+		}
+	});
+});
+</script>
+<script>
+$(document).ready(function() {
+	$(function() {
+		$('.select2').select2();
+		$(".select2-placeholder-multiple").select2({placeholder: "-- โปรดระบุ --"});
+		$(".js-hide-search").select2({minimumResultsForSearch: 1 / 0});
+		$(".js-max-length").select2({maximumSelectionLength: 2, placeholder: "Select maximum 2 items"});
+		$(".select2-placeholder").select2({placeholder: "-- โปรดระบุ --", allowClear: true});
+		$(".js-select2-icons").select2({
+			minimumResultsForSearch: 1 / 0,
+			templateResult: icon,
+			templateSelection: icon,
+			escapeMarkup: function(elm){
+				return elm
+			}
+		});
+		function icon(elm){
+			elm.element;
+			return elm.id ? "<i class='" + $(elm.element).data("icon") + " mr-2'></i>" + elm.text : elm.text
+		}
+	});
+	function formatRepo (repo) {
+		if (repo.loading) return repo.text;
+		var markup = "<div class='select2-result-repository clearfix'>" +
+			"<div class='select2-result-repository__meta'>" +
+			"<div class='select2-result-repository__title'>" + repo.value + "</div></div></div>";
+			return markup;
+	}
+	function formatRepoSelection (repo) {
+		return repo.value || repo.text;
+	}
+});
+</script>
+<script>
+(function() {
+	'use strict';
+	window.addEventListener('load', function() {
+		var forms = document.getElementsByClassName('needs-validation');
+		// Loop over them and prevent submission
+		var validation = Array.prototype.filter.call(forms, function(form) {
+			form.addEventListener('submit', function(event) {
+				if (form.checkValidity() === false) {
+					event.preventDefault();
+					event.stopPropagation();
+				}
+				form.classList.add('was-validated');
+			}, false);
+		});
+	}, false);
+})();
+</script>
+<script>
+$(document).ready(function () {
+	$("#user_confirm_password").on('keyup', function() {
+		var password = $("#user_password").val();
+		var confirmPassword = $("#user_confirm_password").val();
+		if (password != confirmPassword)
+			$("#CheckPasswordMatch").html("Password does not match !").css("color","red");
+		else
+			$("#CheckPasswordMatch").html("Password match !").css("color","green");
+	});
+});
+</script>
+@endsection
 

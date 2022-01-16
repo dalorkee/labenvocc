@@ -281,7 +281,7 @@ $(document).ready(function() {
 	}
 });
 </script>
-<script>
+{{-- <script>
 (function($) {
 	"use strict";
 	function verificationForm() {
@@ -354,7 +354,7 @@ $(document).ready(function() {
 	};
 	verificationForm ();
 })(jQuery);
-</script>
+</script> --}}
 <script>
 (function() {
 	'use strict';
