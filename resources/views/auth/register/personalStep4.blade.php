@@ -78,7 +78,7 @@ input[type="text"]:disabled{background: #eeeeee !important;}
 <div class="row font-prompt">
 	<div class="col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12">
 		<section>
-			<form action="{{ route('register.personal.step4.post') }}" method="POST" class="needs-validation" novalidate>
+			<form name="step4" action="{{ route('register.personal.step4.post') }}" method="POST" class="needs-validation" novalidate>
 				@csrf
 				<fieldset>
 					<div class="panel">

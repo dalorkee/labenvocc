@@ -4,17 +4,9 @@
 @endsection
 @section('style')
 <link href="{{ URL::asset('css/step.css') }}" rel="stylesheet">
-<link href="{{ URL::asset('assets/css/ionicons.min.css') }}" rel="stylesheet">
-<link href="{{ URL::asset('assets/css/formplugins/select2/select2.bundle.css') }}" rel="stylesheet">
 <style type="text/css">
-.select2{width:100%!important;}
-.select2-selection{overflow:hidden;}
-.select2-selection__rendered{white-space:normal;word-break:break-all;}
-.select2-selection__rendered{line-height:39px!important;}
-.select2-container .select2-selection--single{height:38px!important;border:1px solid #cccccc;border-radius:0;}
-.select2-selection__arrow{height:37px!important;}
 .custom-control-label{font-size: 1.175em;}
-.panel-hdr h2{font-size: 1.10em;color: #d05d1f;}
+.panel-hdr h2{font-size: 1.10em;color: #1877F2;}
 .form-label, .custom-control-label{font-size: 1em;font-weight: 400;}
 ::-webkit-input-placeholder{ /* Edge */font-size: 1em;}
 :-ms-input-placeholder{ /* IE 10-11 */font-size: 1em;}
@@ -43,7 +35,7 @@ input[type="text"]:disabled{background: #eeeeee !important;}
 <div class="row font-prompt">
 	<div class="col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12">
 		<section>
-			<form action="{{ route('register.personal.step3.post') }}" method="POST" class="needs-validation" novalidate>
+			<form name="step3" action="{{ route('register.personal.step3.post') }}" method="POST" class="needs-validation" novalidate>
 				@csrf
 				<fieldset>
 					<div class="panel">
@@ -65,13 +57,13 @@ input[type="text"]:disabled{background: #eeeeee !important;}
 															<label for="send_address" class="block text-base font-medium text-gray-800">ที่อยู่สำหรับส่งรายงานผลการตรวจ <span class="text-red-600">*</span></label>
 															<div class="frame-wrap">
 																<div class="custom-control custom-switch custom-control-inline">
-																	<input type="radio" name="contact_addr_opt" value="1" id="old_addr" class="custom-control-input" {{ (isset($userData->contact_addr_opt) && $userData->contact_addr_opt == '1') ? "checked" : "" }} required="">
+																	<input type="radio" name="contact_addr_opt" value="1" id="old_addr" class="@error('contact_addr_opt') is-invalid @enderror custom-control-input" {{ ((isset($userData->contact_addr_opt) && $userData->contact_addr_opt == '1') || old('contact_addr_opt') == '1') ? "checked" : "" }} required="">
 																	<label class="custom-control-label" for="old_addr">ที่อยู่เดียวกับผู้รับบริการ</label>
 																</div>
 																<div class="custom-control custom-switch custom-control-inline">
-																	<input type="radio" name="contact_addr_opt" value="2" id="new_addr" class="custom-control-input" {{ (isset($userData->contact_addr_opt) && $userData->contact_addr_opt == '2') ? "checked" : "" }} required="">
+																	<input type="radio" name="contact_addr_opt" value="2" id="new_addr" class="@error('contact_addr_opt') is-invalid @enderror custom-control-input" {{ ((isset($userData->contact_addr_opt) && $userData->contact_addr_opt == '2') || old('contact_addr_opt') == '2') ? "checked" : "" }} required="">
 																	<label class="custom-control-label" for="new_addr">กำหนดใหม่</label>
-																	<div class="invalid-feedback">โปรดเลือกคำนำหน้าชื่อ</div>
+																	<div class="invalid-feedback" role="alert">@if ($errors->any()) @error('contact_addr_opt') {{ $message }} @enderror @else {{ 'โปรดเลือกที่อยู่สำหรับส่งรายงานผลการตรวจ' }} @endif</div>
 																</div>
 															</div>
 														</div>
@@ -81,76 +73,88 @@ input[type="text"]:disabled{background: #eeeeee !important;}
 															<label for="simpleinput" class="block text-base font-medium text-gray-800">คำนำหน้าชื่อ <span class="text-red-600">*</span></label>
 															<div class="frame-wrap">
 																<div class="custom-control custom-switch custom-control-inline">
-																	<input type="radio" name="contact_title_name" value="mr" id="contact_title_name_mr" class="contact_title_name custom-control-input" {{ (isset($userData->contact_addr_opt) && $userData->contact_addr_opt == '2' && isset($userData->contact_title_name) && $userData->contact_title_name == 'mr') ? "checked" : "disabled" }} required="">
+																	<input type="radio" name="contact_title_name" value="mr" id="contact_title_name_mr" class="@error('contact_title_name') is-invalid @enderror contact_title_name custom-control-input" {{ ((isset($userData->contact_addr_opt) && $userData->contact_addr_opt == '2' && isset($userData->contact_title_name) && $userData->contact_title_name == 'mr') || old('contact_addr_opt') == '2') ? "checked" : "disabled" }} required="">
 																	<label class="custom-control-label" for="contact_title_name_mr">นาย</label>
 																</div>
 																<div class="custom-control custom-switch custom-control-inline">
-																	<input type="radio" name="contact_title_name" value="mrs" id="contact_title_name_mrs" class="contact_title_name custom-control-input" {{ (isset($userData->contact_addr_opt) && $userData->contact_addr_opt == '2' && isset($userData->contact_title_name) && $userData->contact_title_name == 'mrs') ? "checked" : "disabled" }} required="">
+																	<input type="radio" name="contact_title_name" value="mrs" id="contact_title_name_mrs" class="@error('contact_title_name') is-invalid @enderror contact_title_name custom-control-input" {{ ((isset($userData->contact_addr_opt) && $userData->contact_addr_opt == '2' && isset($userData->contact_title_name) && $userData->contact_title_name == 'mrs') || old('contact_addr_opt') == '2') ? "checked" : "disabled" }} required="">
 																	<label class="custom-control-label" for="contact_title_name_mrs">นาง</label>
 																</div>
 																<div class="custom-control custom-switch custom-control-inline">
-																	<input type="radio" name="contact_title_name" value="miss" id="contact_title_name_ms" class="contact_title_name custom-control-input" {{ (isset($userData->contact_addr_opt) && $userData->contact_addr_opt == '2' && isset($userData->contact_title_name) && $userData->contact_title_name == 'miss') ? "checked" : "disabled" }} required="">
+																	<input type="radio" name="contact_title_name" value="miss" id="contact_title_name_ms" class="@error('contact_title_name') is-invalid @enderror contact_title_name custom-control-input" {{ ((isset($userData->contact_addr_opt) && $userData->contact_addr_opt == '2' && isset($userData->contact_title_name) && $userData->contact_title_name == 'miss') || old('contact_addr_opt') == '2') ? "checked" : "disabled" }} required="">
 																	<label class="custom-control-label" for="contact_title_name_ms">นางสาว</label>
-																	<div class="invalid-feedback">โปรดเลือกคำนำหน้าชื่อ</div>
+																	<div class="invalid-feedback" role="alert">@if ($errors->any()) @error('contact_title_name') {{ $message }} @enderror @else {{ 'โปรดกรอกคำนำหน้าชื่อ' }} @endif</div>
 																</div>
 															</div>
 														</div>
 														<div class="col-span-6 sm:col-span-3">
 															<label for="contact_first_name" class="block text-base font-medium text-gray-800">ชื่อ <span class="text-red-600">*</span></label>
-															<input type="text" name="contact_first_name" value="{{ $userData->contact_first_name ?? '' }}" class="form-control contact_field mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="100" size="100" {{ (isset($userData->contact_addr_opt) && $userData->contact_addr_opt == '2') ? "" : "disabled" }} required>
-															<div class="invalid-feedback">โปรดกรอกชื่อ</div>
+															<input type="text" name="contact_first_name" value="{{ (isset($userData->contact_first_name) && $userData->contact_addr_opt == '2') ? $userData->contact_first_name : old('contact_first_name') }}" class="form-control @error('contact_first_name') is-invalid @enderror contact_field mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="100" size="100" {{ ((isset($userData->contact_addr_opt) && $userData->contact_addr_opt == '2') || old('contact_addr_opt') == '2') ? "" : "disabled" }} required>
+															<div class="invalid-feedback" role="alert">@if ($errors->any()) @error('contact_first_name') {{ $message }} @enderror @else {{ 'โปรดกรอกชื่อ' }} @endif</div>
 														</div>
 														<div class="col-span-6 sm:col-span-3">
 															<label for="contact_last_name" class="block text-base font-medium text-gray-800">นามสกุล <span class="text-red-600">*</span></label>
-															<input type="text" name="contact_last_name" value="{{ $userData->contact_last_name ?? '' }}" class="form-control contact_field mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="100" size="100" {{ (isset($userData->contact_addr_opt) && $userData->contact_addr_opt == '2') ? "" : "disabled" }} required>
+															<input type="text" name="contact_last_name" value="{{ (isset($userData->contact_last_name) && $userData->contact_addr_opt == '2') ? $userData->contact_last_name : old('contact_last_name') }}" class="form-control @error('contact_last_name') is-invalid @enderror contact_field mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="100" size="100" {{ ((isset($userData->contact_addr_opt) && $userData->contact_addr_opt == '2') || old('contact_addr_opt') == '2') ? "" : "disabled" }} required>
+															<div class="invalid-feedback" role="alert">@if ($errors->any()) @error('contact_last_name') {{ $message }} @enderror @else {{ 'โปรดกรอกนามสกุล' }} @endif</div>
 														</div>
-														<div class="invalid-feedback">โปรดกรอกนามสกุล</div>
 														<div class="col-span-6 sm:col-span-3">
 															<label for="contact_mobile" class="block text-base font-medium text-gray-800">โทรศัพท์เคลื่อนที่ <span class="text-red-600">*</span></label>
-															<input type="text" name="contact_mobile" value="{{ $userData->contact_mobile ?? '' }}" class="form-control contact_field mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="10" size="10" pattern="^\d{10}$" {{ (isset($userData->contact_addr_opt) && $userData->contact_addr_opt == '2' ) ? "" : "disabled" }} required>
+															<input type="text" name="contact_mobile" value="{{ (isset($userData->contact_mobile) && $userData->contact_addr_opt == '2') ? $userData->contact_mobile : old('contact_mobile') }}" class="form-control @error('contact_mobile') is-invalid @enderror contact_field mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="10" size="10" pattern="^\d{10}$" {{ ((isset($userData->contact_addr_opt) && $userData->contact_addr_opt == '2' ) || old('contact_addr_opt') == '2') ? "" : "disabled" }} required>
+															<div class="invalid-feedback" role="alert">@if ($errors->any()) @error('contact_mobile') {{ $message }} @enderror @else {{ 'โปรดกรอกโทรศัพท์เคลื่อนที่' }} @endif</div>
 														</div>
-														<div class="invalid-feedback">โปรดกรอกหมายเลขโทรศัพท์</div>
 														<div class="col-span-6 sm:col-span-3">
 															<label for="contact_email" class="block text-base font-medium text-gray-800">อีเมล์ <span class="text-red-600">*</span></label>
-															<input type="text" name="contact_email" value="{{ $userData->contact_email ?? '' }}" class="form-control contact_field mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="90" size="90" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" {{ (isset($userData->contact_addr_opt) && $userData->contact_addr_opt == '2') ? "" : "disabled" }} required>
+															<input type="text" name="contact_email" value="{{ (isset($userData->contact_email) && $userData->contact_addr_opt == '2') ? $userData->contact_email : old('contact_email') }}" class="form-control @error('contact_email') is-invalid @enderror contact_field mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="90" size="90" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" {{ ((isset($userData->contact_addr_opt) && $userData->contact_addr_opt == '2') || old('contact_addr_opt') == '2') ? "" : "disabled" }} required>
+															<div class="invalid-feedback" role="alert">@if ($errors->any()) @error('contact_email') {{ $message }} @enderror @else {{ 'โปรดกรอกอีเมล์' }} @endif</div>
 														</div>
-														<div class="invalid-feedback">โปรดกรอกอีเมล์</div>
 														<div class="col-span-6 sm:col-span-6">
 															<label for="contact_addr" class="block text-base font-medium text-gray-800">ที่อยู่ (เลขที่ หมู่ที่ หมู่บ้าน/อาคาร ถนน) <span class="text-red-600">*</span></label>
-															<input type="text" name="contact_addr" value="{{ $userData->contact_addr ?? '' }}" class="form-control contact_field mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" {{ (isset($userData->contact_addr_opt) && $userData->contact_addr_opt == '2') ? "" : "disabled" }} required>
+															<input type="text" name="contact_addr" value="{{ (isset($userData->contact_addr) && $userData->contact_addr_opt == '2') ? $userData->contact_addr : old('contact_addr') }}" class="form-control @error('contact_addr') is-invalid @enderror contact_field mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" {{ ((isset($userData->contact_addr_opt) && $userData->contact_addr_opt == '2') || old('contact_addr_opt') == '2') ? "" : "disabled" }} required>
+															<div class="invalid-feedback" role="alert">@if ($errors->any()) @error('contact_addr') {{ $message }} @enderror @else {{ 'โปรดกรอกที่อยู่' }} @endif</div>
 														</div>
-														<div class="invalid-feedback">โปรดกรอกที่อยู่</div>
 														<div class="col-span-6 sm:col-span-3">
 															<label for="contact_province" class="block text-base font-medium text-gray-800">จังหวัด <span class="text-red-600">*</span></label>
-															<select name="contact_province" id="contact_province" class="form-control" {{ (isset($userData->contact_addr_opt) && $userData->contact_addr_opt == '2') ? "" : "disabled" }} required="">
+															<select name="contact_province" id="contact_province" class="form-control @error('contact_province') is-invalid @enderror" {{ ((isset($userData->contact_addr_opt) && $userData->contact_addr_opt == '2') || old('contact_addr_opt') == '2') ? "" : "disabled" }} required="">
 																<option value="">-- โปรดเลือก --</option>
-																{!! (isset($userData->contact_province)) ? "<option value=\"".$userData->contact_province."\" selected>".$provinces[$userData->contact_province]."</option>" : "" !!}
+																@if (isset($userData->contact_province) && $userData->contact_addr_opt == '2')
+																	<option value="{{ $userData->contact_province }}" selected>{{ $provinces[$userData->contact_province] }}</option>
+																@elseif (old('contact_province') > 0)
+																	<option value="{{ old('contact_province') }}" selected>{{ $provinces[old('contact_province')] }}</option>
+																@endif
 																@foreach ($provinces as $key => $val)
 																	<option value="{{ $key }}">{{ $val }}</option>
 																@endforeach
 															</select>
-															<div class="invalid-feedback">โปรดเลือกจังหวัด</div>
+															<div class="invalid-feedback" role="alert">@if ($errors->any()) @error('contact_province') {{ $message }} @enderror @else {{ 'โปรดเลือกจังหวัด' }} @endif</div>
 														</div>
 														<div class="col-span-6 sm:col-span-3">
 															<label for="contact_district" class="block text-base font-medium text-gray-800">เขต/อำเภอ <span class="text-red-600">*</span></label>
-															<select name="contact_district" id="contact_district" class="form-control" {{ (isset($userData->contact_addr_opt) && $userData->contact_addr_opt == '2') ? "" : "disabled" }} required="">
+															<select name="contact_district" id="contact_district" class="form-control @error('contact_district') is-invalid @enderror" {{ ((isset($userData->contact_addr_opt) && $userData->contact_addr_opt == '2') || old('contact_addr_opt') == '2') ? "" : "disabled" }} required="">
 																<option value="">-- โปรดเลือก --</option>
-																{!! (isset($userData->contact_district)) ? "<option value=\"".$userData->contact_district."\" selected>".$userData->contact_district."</option>" : "" !!}
+																@if (isset($userData->contact_district) && $userData->contact_addr_opt == '2')
+																	<option value="{{ $userData->contact_district }}" selected>{{ $districts[$userData->contact_district] }}</option>
+																@elseif (old('contact_district') > 0)
+																	<option value="{{ old('contact_district') }}" selected>{{ $districts[old('contact_district')] }}</option>
+																@endif
 															</select>
-															<div class="invalid-feedback">โปรดเลือกอำเภอ</div>
+															<div class="invalid-feedback" role="alert">@if ($errors->any()) @error('contact_district') {{ $message }} @enderror @else {{ 'โปรดเลือกอำเภอ' }} @endif</div>
 														</div>
 														<div class="col-span-6 sm:col-span-3">
 															<label for="contact_sub_district" class="block text-base font-medium text-gray-800">แขวง/ตำบล <span class="text-red-600">*</span></label>
-															<select name="contact_sub_district" id="contact_sub_district" class="form-control" {{ (isset($userData->contact_addr_opt) && $userData->contact_addr_opt == '2') ? "" : "disabled" }} required="">
+															<select name="contact_sub_district" id="contact_sub_district" class="form-control @error('contact_sub_district') is-invalid @enderror" {{ ((isset($userData->contact_addr_opt) && $userData->contact_addr_opt == '2') || old('contact_addr_opt') == '2') ? "" : "disabled" }} required="">
 																<option value="">-- โปรดเลือก --</option>
-																{!! (isset($userData->contact_sub_district)) ? "<option value=\"".$userData->contact_sub_district."\" selected>".$userData->contact_sub_district."</option>" : "" !!}
+																@if (isset($userData->contact_sub_district) && $userData->contact_addr_opt == '2')
+																	<option value="{{ $userData->contact_sub_district }}" selected>{{ $sub_districts[$userData->contact_sub_district] }}</option>
+																@elseif (old('contact_sub_district') > 0)
+																	<option value="{{ old('contact_sub_district') }}" selected>{{ $sub_districts[old('contact_sub_district')] }}</option>
+																@endif
 															</select>
-															<div class="invalid-feedback">โปรดเลือกตำบล</div>
+															<div class="invalid-feedback" role="alert">@if ($errors->any()) @error('contact_sub_district') {{ $message }} @enderror @else {{ 'โปรดเลือกตำบล' }} @endif</div>
 														</div>
 														<div class="col-span-6 sm:col-span-3">
 															<label for="contact_postcode" class="block text-base font-medium text-gray-800">รหัสไปรษณีย์ <span class="text-red-600">*</span></label>
-															<input type="text" name="contact_postcode" value="{{ $userData->contact_postcode ?? '' }}" id="contact_postcode" class="form-control mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="10" size="10" {{ (isset($userData->contact_addr_opt) && $userData->contact_addr_opt == '2') ? "" : "disabled" }} required>
-															<div class="invalid-feedback">โปรดกรอกรหัสไปรษณีย์</div>
+															<input type="text" name="contact_postcode" value="{{ (isset($userData->contact_postcode) && $userData->contact_addr_opt == '2') ? $userData->contact_postcode : old('contact_postcode') }}" id="contact_postcode" class="form-control @error('contact_postcode') is-invalid @enderror mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="10" size="10" {{ ((isset($userData->contact_addr_opt) && $userData->contact_addr_opt == '2') || old('contact_addr_opt') == '2') ? "" : "disabled" }} required>
+															<div class="invalid-feedback" role="alert">@if ($errors->any()) @error('contact_postcode') {{ $message }} @enderror @else {{ 'โปรดกรอกรหัสไปรษณีย์' }} @endif</div>
 														</div>
 													</div>
 												</div>
@@ -172,7 +176,6 @@ input[type="text"]:disabled{background: #eeeeee !important;}
 </div>
 @endsection
 @section('script')
-<script src="{{ URL::asset('assets/js/formplugins/select2/select2.bundle.js') }}"></script>
 <script>
 $(document).ready(function() {
 	$.ajaxSetup({headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}});
@@ -191,11 +194,12 @@ $(document).ready(function() {
 			$('.contact_title_name').prop('disabled', false);
 			$('.contact_field').val('');
 			$('.contact_field').prop('disabled', false);
+			$('#contact_province').prop('selectedIndex', 0);
 			$('#contact_province').prop('disabled', false);
+			$('#contact_district').prop('selectedIndex', 0);
 			$('#contact_district').prop('disabled', false);
-			$('#contact_district').empty().trigger('change');
+			$('#contact_sub_district').prop('selectedIndex', 0);
 			$('#contact_sub_district').prop('disabled', false);
-			$('#contact_sub_district').empty().trigger('change');
 			$('#contact_postcode').prop('disabled', false);
 			$('#contact_postcode').val('');
 		} else {
@@ -204,10 +208,11 @@ $(document).ready(function() {
 			$('.contact_title_name').prop('disabled', true);
 			$('.contact_field').val('');
 			$('.contact_field').prop('disabled', true);
+			$('#contact_province').prop('selectedIndex', 0);
 			$('#contact_province').prop('disabled', true);
-			$('#contact_district').empty().trigger('change');
+			$('#contact_district').prop('selectedIndex', 0);
 			$('#contact_district').prop('disabled', true);
-			$('#contact_sub_district').empty().trigger('change');
+			$('#contact_sub_district').prop('selectedIndex', 0);
 			$('#contact_sub_district').prop('disabled', true);
 			$('#contact_postcode').val('');
 			$('#contact_postcode').prop('disabled', true);
@@ -222,11 +227,15 @@ $(document).ready(function() {
 			$('.contact_field').val('');
 			$('.contact_field').prop('disabled', true);
 
+			$('#contact_province').prop('selectedIndex', 0);
 			$('#contact_province').prop('disabled', true);
-			$('#contact_district').empty().trigger('change');
+
+			$('#contact_district').prop('selectedIndex', 0);
 			$('#contact_district').prop('disabled', true);
-			$('#contact_sub_district').empty().trigger('change');
+
+			$('#contact_sub_district').prop('selectedIndex', 0);
 			$('#contact_sub_district').prop('disabled', true);
+
 			$('#contact_postcode').val('');
 			$('#contact_postcode').prop('disabled', true);
 		}
@@ -287,113 +296,6 @@ $(document).ready(function() {
 	});
 });
 </script>
-<script>
-$(document).ready(function() {
-	$(function() {
-		$('.select2').select2();
-		$(".select2-placeholder-multiple").select2({placeholder: "-- โปรดระบุ --"});
-		$(".js-hide-search").select2({minimumResultsForSearch: 1 / 0});
-		$(".js-max-length").select2({maximumSelectionLength: 2, placeholder: "Select maximum 2 items"});
-		$(".select2-placeholder").select2({placeholder: "-- โปรดระบุ --", allowClear: true});
-		$(".js-select2-icons").select2({
-			minimumResultsForSearch: 1 / 0,
-			templateResult: icon,
-			templateSelection: icon,
-			escapeMarkup: function(elm){
-				return elm
-			}
-		});
-		function icon(elm){
-			elm.element;
-			return elm.id ? "<i class='" + $(elm.element).data("icon") + " mr-2'></i>" + elm.text : elm.text
-		}
-	});
-	function formatRepo (repo) {
-		if (repo.loading) return repo.text;
-		var markup = "<div class='select2-result-repository clearfix'>" +
-			"<div class='select2-result-repository__meta'>" +
-			"<div class='select2-result-repository__title'>" + repo.value + "</div></div></div>";
-			return markup;
-	}
-	function formatRepoSelection (repo) {
-		return repo.value || repo.text;
-	}
-});
-</script>
-{{-- <script>
-(function($) {
-	"use strict";
-	function verificationForm() {
-		var current_fs, next_fs, previous_fs;
-		var left, opacity, scale;
-		var animating;
-		$(".next").click(function () {
-			if (animating) return false;
-			animating = true;
-			current_fs = $(this).parent();
-			next_fs = $(this).parent().next();
-			$("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
-			next_fs.show();
-			current_fs.animate({
-				opacity: 0
-			}, {
-				step: function (now, mx) {
-					scale = 1 - (1 - now) * 0.2;
-					left = (now * 50) + "%";
-					opacity = 1 - now;
-					current_fs.css({
-						'transform': 'scale(' + scale + ')',
-						'position': 'absolute'
-					});
-					next_fs.css({
-						'left': left,
-						'opacity': opacity
-					});
-				},
-				duration: 800,
-				complete: function () {
-					current_fs.hide();
-					animating = false;
-				},
-				easing: 'easeInOutBack'
-			});
-			$("html, body").animate({ scrollTop: $("#regis-title").offset().top}, 2000);
-		});
-		$(".previous").click(function () {
-			if (animating) return false;
-			animating = true;
-			current_fs = $(this).parent();
-			previous_fs = $(this).parent().prev();
-			$("#progressbar li").eq($("fieldset").index(current_fs)).removeClass("active");
-			previous_fs.show();
-			current_fs.animate({
-				opacity: 0
-			}, {
-				step: function (now, mx) {
-					scale = 0.8 + (1 - now) * 0.2;
-					left = ((1 - now) * 50) + "%";
-					opacity = 1 - now;
-					current_fs.css({
-						'left': left
-					});
-					previous_fs.css({
-						'transform': 'scale(' + scale + ')',
-						'opacity': opacity
-					});
-				},
-				duration: 800,
-				complete: function () {
-					current_fs.hide();
-					animating = false;
-				},
-				easing: 'easeInOutBack'
-			});
-			$("html, body").animate({ scrollTop: $("#regis-title").offset().top}, 2000);
-		});
-	};
-	verificationForm ();
-})(jQuery);
-</script> --}}
 <script>
 (function() {
 	'use strict';

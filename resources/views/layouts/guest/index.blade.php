@@ -97,14 +97,14 @@ $(document).ready(function() {
 		"closeButton": true,
 		"debug": false,
 		"newestOnTop": true,
-		"progressBar": false,
+		"progressBar": true,
 		"positionClass": "toast-top-right",
 		"preventDuplicates": false,
 		"onclick": null,
 		"showDuration": 300,
 		"hideDuration": 100,
-		"timeOut": 0,
-		"extendedTimeOut": 0,
+		"timeOut": 5000,
+		"extendedTimeOut": 1000,
 		"showEasing": "swing",
 		"hideEasing": "linear",
 		"showMethod": "fadeIn",
@@ -121,12 +121,24 @@ $(document).ready(function() {
 		Swal.fire({
 			type: "success",
 			title: "บันทึกข้อมูลสำเร็จแล้ว",
-			text: "เราได้รับข้อมูลของท่านแล้ว โปรดรอการติดต่อกลับจากเจ้าหน้าที่",
+			text: "{{ Session::get('success') }}",
 			confirmButtonText: "ตกลง",
 			footer: "LAB ENV-OCC DDC",
 			allowOutsideClick: false
 		});
 		@php Session::forget("success"); @endphp
+	@endif
+	@if (Session::has('error'))
+		toastr.error("{{ Session::get('error') }}", "Error", options);
+		Swal.fire({
+			type: "error",
+			title: "เกิดข้อผิดพลาด",
+			text: "{{ Session::get('error') }}",
+			confirmButtonText: "ตกลง",
+			footer: "LAB ENV-OCC DDC",
+			allowOutsideClick: false
+		});
+		@php Session::forget("error"); @endphp
 	@endif
 });
 </script>

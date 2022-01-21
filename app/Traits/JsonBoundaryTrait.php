@@ -2,7 +2,7 @@
 namespace App\Traits;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\{Storage,Log};
 use App\Models\{Province,District,SubDistrict};
 
 trait JsonBoundaryTrait {
@@ -15,7 +15,33 @@ trait JsonBoundaryTrait {
 				return array();
 			}
 		} catch (\Exception $e) {
-			echo $e->getMessage();
+			Log::error($e->getMessage());
+		}
+	}
+
+	public function getDistrict(): array {
+		try {
+			if (Storage::disk('json')->exists('ref_district.json')) {
+				$data = json_decode(Storage::disk('json')->get('ref_district.json'), true);
+				return $data;
+			} else {
+				return array();
+			}
+		} catch (\Exception $e) {
+			Log::error($e->getMessage());
+		}
+	}
+
+	public function getSubDistrict(): array {
+		try {
+			if (Storage::disk('json')->exists('ref_sub_district.json')) {
+				$data = json_decode(Storage::disk('json')->get('ref_sub_district.json'), true);
+				return $data;
+			} else {
+				return array();
+			}
+		} catch (\Exception $e) {
+			Log::error($e->getMessage());
 		}
 	}
 
@@ -28,7 +54,33 @@ trait JsonBoundaryTrait {
 			asort($minProvince);
 			return $minProvince;
 		} catch (\Exception $e) {
-			echo $e->getMessage();
+			Log::error($e->getMessage());
+		}
+	}
+
+	public function getMinDistrict(): array {
+		try {
+			$districts = $this->getDistrict();
+			foreach ($districts as $key => $val) {
+				$minDistrict[$key] = $val['district_name'];
+			}
+			asort($minDistrict);
+			return $minDistrict;
+		} catch (\Exception $e) {
+			Log::error($e->getMessage());
+		}
+	}
+
+	public function getMinSubDistrict(): array {
+		try {
+			$sub_districts = $this->getSubDistrict();
+			foreach ($sub_districts as $key => $val) {
+				$minSubDistrict[$key] = $val['sub_district_name'];
+			}
+			asort($minSubDistrict);
+			return $minSubDistrict;
+		} catch (\Exception $e) {
+			Log::error($e->getMessage());
 		}
 	}
 
@@ -44,7 +96,7 @@ trait JsonBoundaryTrait {
 				return collect();
 			}
 		} catch (\Exception $e) {
-			echo $e->getMessage();
+			Log::error($e->getMessage());
 		}
 	}
 
@@ -60,7 +112,7 @@ trait JsonBoundaryTrait {
 				return collect();
 			}
 		} catch (\Exception $e) {
-			echo $e->getMessage();
+			Log::error($e->getMessage());
 		}
 	}
 
@@ -73,7 +125,7 @@ trait JsonBoundaryTrait {
 			}
 			return $htm;
 		} catch (\Exception $e) {
-			echo $e->getMessage();
+			Log::error($e->getMessage());
 		}
 	}
 
@@ -86,7 +138,7 @@ trait JsonBoundaryTrait {
 			}
 			return $htm;
 		} catch (\Exception $e) {
-			echo $e->getMessage();
+			Log::error($e->getMessage());
 		}
 	}
 }

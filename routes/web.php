@@ -28,13 +28,16 @@ Route::resources([
 ]);
 Route::name('register.')->group(function() {
 	Route::get('/register/personal/step/2', [RegisterController::class, 'createPersonalStep2Get'])->name('personal.step2.get');
-	Route::post('register/personal/step/3', [RegisterController::class, 'createPersonalStep2Post'])->name('personal.step2.post');
+	Route::post('register/personal/step/2', [RegisterController::class, 'createPersonalStep2Post'])->name('personal.step2.post');
 
-	Route::get('/register/personal/step/33', [RegisterController::class, 'createPersonalStep3Get'])->name('personal.step3.get');
-	Route::post('register/personal/step/4', [RegisterController::class, 'createPersonalStep3Post'])->name('personal.step3.post');
+	Route::get('/register/personal/step/3', [RegisterController::class, 'createPersonalStep3Get'])->name('personal.step3.get');
+	Route::post('register/personal/step/3', [RegisterController::class, 'createPersonalStep3Post'])->name('personal.step3.post');
 
 	Route::get('/register/personal/step/4', [RegisterController::class, 'createPersonalStep4Get'])->name('personal.step4.get');
-	Route::post('register/personal/step/5', [RegisterController::class, 'createPersonalStep4Post'])->name('personal.step4.post');
+	Route::post('register/personal/step/4', [RegisterController::class, 'createPersonalStep4Post'])->name('personal.step4.post');
+
+    Route::get('/register/personal/step/5', [RegisterController::class, 'createPersonalStep5Get'])->name('personal.step5.get');
+    Route::post('register/personal/step/5', [RegisterController::class, 'createPersonalStep5Post'])->name('personal.step5.post');
 
 
 	Route::post('province/district', [RegisterController::class, 'renderDistrictToHtmlSelect'])->name('district');
