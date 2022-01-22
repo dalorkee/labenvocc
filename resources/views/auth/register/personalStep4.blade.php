@@ -4,20 +4,8 @@
 @endsection
 @section('style')
 <link href="{{ URL::asset('css/step.css') }}" rel="stylesheet">
-<link href="{{ URL::asset('assets/css/ionicons.min.css') }}" rel="stylesheet">
-<link href="{{ URL::asset('assets/css/formplugins/select2/select2.bundle.css') }}" rel="stylesheet">
 <style type="text/css">
-.select2{width:100%!important;}
-.select2-selection{overflow:hidden;}
-.select2-selection__rendered{white-space:normal;word-break:break-all;}
-.select2-selection__rendered{line-height:39px!important;}
-.select2-container .select2-selection--single{height:38px!important;border:1px solid #cccccc;border-radius:0;}
-.select2-selection__arrow{height:37px!important;}
-.custom-control-label{font-size: 1.175em;}
-.title {text-align: center;padding-bottom: 10px;}
-.title h1, .form-title-label{font: 400 24px/28px "cs_chatthaiuiregular";color: #01937C;padding-bottom: 5px;}
-.title p{font: 400 18px/24px "cs_chatthaiuiregular";color: #01937C;}
-.panel-hdr h2{font-size: 1.275em;color: #1abc9c;}
+.panel-hdr h2{font-size: 1.275em;color: #1877F2;}
 fieldset h2{font-size: 1em;font-weight: 400;}
 .form-label, .custom-control-label{font-size: 1em;font-weight: 400;}
 ::-webkit-input-placeholder{ /* Edge */font-size: 1em;}
@@ -98,25 +86,26 @@ input[type="text"]:disabled{background: #eeeeee !important;}
 													<div class="grid grid-cols-6 gap-6">
 														<div class="col-span-6 sm:col-span-3">
 															<label for="user_name" class="block text-base font-medium text-gray-700">ชื่อผู้ใช้ <span class="text-red-600">*</span></label>
-															<input type="text" name="username" value="{{ $userLoginData->username ?? "" }}" class="form-control mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="60" size="60" required>
-															<div class="invalid-feedback">โปรดกรอกชื่อผู้ใช้</div>
+															<input type="text" name="username" value="{{ (isset($userLoginData->username)) ? $userLoginData->username : old('username') }}" class="form-control @error('username') is-invalid @enderror mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="60" size="60" required>
+															<div class="invalid-feedback" role="alert">@if ($errors->any()) @error('username') {{ $message }} @enderror @else {{ 'โปรดกรอกชื่อผู้ใช้' }} @endif</div>
 														</div>
 														<div class="col-span-6 sm:col-span-3">
 															<label for="user_email" class="block text-base font-medium text-gray-700">อีเมล์ <span class="text-red-600">*</span></label>
-															<input type="email" name="email" value="{{ $userLoginData->email ?? "" }}" id="user_email" class="form-control mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="60" size="60" required>
+															<input type="email" name="email" value="{{ (isset($userLoginData->email)) ? $userLoginData->email : old('email') }}" id="user_email" class="form-control @error('email') is-invalid @enderror mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="60" size="60" required>
 															<div class="invalid-feedback">โปรดกรอกอีเมล์</div>
+                                                            <div class="invalid-feedback" role="alert">@if ($errors->any()) @error('email') {{ $message }} @enderror @else {{ 'โปรดกรอกอีเมล์' }} @endif</div>
 														</div>
 														<div class="col-span-6 sm:col-span-3">
 															<label for="user_password" class="block text-base font-medium text-gray-700">รหัสผ่าน (อย่างน้อย 6 ตัว) <span class="text-red-600">*</span></label>
-															<input type="password" name="password" value="{{ $userLoginData->password ?? "" }}" id="user_password" class="form-control mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="60" size="60" required>
+															<input type="password" name="password" value="{{ (isset($userLoginData->password)) ? $userLoginData->password : old('password') }}" id="user_password" class="form-control @error('password') is-invalid @enderror mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="60" size="60" required>
 															<span toggle="#user_password" class="fal fa-eye field-icon toggle-password"></span>
-															<div class="invalid-feedback">โปรดกรอกรหัสผ่าน</div>
+                                                            <div class="invalid-feedback" role="alert">@if ($errors->any()) @error('password') {{ $message }} @enderror @else {{ 'โปรดกรอกรหัสผ่าน' }} @endif</div>
 														</div>
 														<div class="col-span-6 sm:col-span-3">
 															<label for="user_confirm_password" class="is-invalid block text-base font-medium text-gray-700">ยืนยันรหัสผ่าน <span class="text-red-600">*</span></label>
-															<input type="password" name="password_confirmation" value="{{ $userLoginData->password_confirmation ?? "" }}" id="user_confirm_password" class="form-control mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="60" size="60" required>
+															<input type="password" name="password_confirmation" value="{{ (isset($userLoginData->password_confirmation)) ? $userLoginData->password_confirmation : old('password_confirmation') }}" id="user_confirm_password" class="form-control @error('password_confirmation') is-invalid @enderror mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="60" size="60" required>
 															<span toggle="#user_confirm_password" class="fal fa-eye field-icon toggle-confirm-password"></span>
-															<div class="invalid-feedback">โปรดกรอกยืนยันรหัสผ่าน</div>
+                                                            <div class="invalid-feedback" role="alert">@if ($errors->any()) @error('password_confirmation') {{ $message }} @enderror @else {{ 'โปรดกรอกยืนยันรหัสผ่าน' }} @endif</div>
 															<div style="margin-top: 7px;" id="CheckPasswordMatch"></div>
 														</div>
 													</div>
@@ -161,39 +150,14 @@ $(document).ready(function() {
 			type.attr("type", "password");
 		}
 	});
-});
-</script>
-<script>
-$(document).ready(function() {
-	$(function() {
-		$('.select2').select2();
-		$(".select2-placeholder-multiple").select2({placeholder: "-- โปรดระบุ --"});
-		$(".js-hide-search").select2({minimumResultsForSearch: 1 / 0});
-		$(".js-max-length").select2({maximumSelectionLength: 2, placeholder: "Select maximum 2 items"});
-		$(".select2-placeholder").select2({placeholder: "-- โปรดระบุ --", allowClear: true});
-		$(".js-select2-icons").select2({
-			minimumResultsForSearch: 1 / 0,
-			templateResult: icon,
-			templateSelection: icon,
-			escapeMarkup: function(elm){
-				return elm
-			}
-		});
-		function icon(elm){
-			elm.element;
-			return elm.id ? "<i class='" + $(elm.element).data("icon") + " mr-2'></i>" + elm.text : elm.text
-		}
+	$("#user_confirm_password").on('keyup', function() {
+		var password = $("#user_password").val();
+		var confirmPassword = $("#user_confirm_password").val();
+		if (password != confirmPassword)
+			$("#CheckPasswordMatch").html("Password does not match !").css("color","red");
+		else
+			$("#CheckPasswordMatch").html("Password match !").css("color","green");
 	});
-	function formatRepo (repo) {
-		if (repo.loading) return repo.text;
-		var markup = "<div class='select2-result-repository clearfix'>" +
-			"<div class='select2-result-repository__meta'>" +
-			"<div class='select2-result-repository__title'>" + repo.value + "</div></div></div>";
-			return markup;
-	}
-	function formatRepoSelection (repo) {
-		return repo.value || repo.text;
-	}
 });
 </script>
 <script>
@@ -213,18 +177,6 @@ $(document).ready(function() {
 		});
 	}, false);
 })();
-</script>
-<script>
-$(document).ready(function () {
-	$("#user_confirm_password").on('keyup', function() {
-		var password = $("#user_password").val();
-		var confirmPassword = $("#user_confirm_password").val();
-		if (password != confirmPassword)
-			$("#CheckPasswordMatch").html("Password does not match !").css("color","red");
-		else
-			$("#CheckPasswordMatch").html("Password match !").css("color","green");
-	});
-});
 </script>
 @endsection
 
