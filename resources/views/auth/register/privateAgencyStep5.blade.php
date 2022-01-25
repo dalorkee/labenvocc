@@ -6,7 +6,7 @@
 <link rel="stylesheet" href="{{ URL::asset('css/step.css') }}">
 <style type="text/css">
 .text-primary-1 {color: #1877F2 !important}
-.panel-hdr h2{font-size: 1.175em;}}
+.panel-hdr h2{font-size: 1.175em;}
 ::-webkit-input-placeholder{ /* Edge */font-size: 1em;}
 :-ms-input-placeholder{ /* IE 10-11 */font-size: 1em;}
 ::placeholder{font-size: 1em;}
@@ -28,13 +28,13 @@ input:disabled {background: none !important;}
 @section('content')
 <div class="row font-prompt mt-4 mb-6">
 	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-		<h2 class="fw-600 mt-4 text-xl text-center">ลงทะเบียน : <span class="text-primary-1">บุคคลทั่วไป</span></h2>
+		<h2 class="fw-600 mt-4 text-xl text-center">ลงทะเบียน : <span class="text-primary-1">หน่วยงานเอกชน</span></h2>
 	</div>
 </div>
 <div class="row font-prompt mt-6 mb-6">
 	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
 		<ul class="list-unstyled multi-steps">
-			<li>บุคคลทั่วไป</li>
+			<li>หน่วยงานเอกชน</li>
 			<li>ข้อมูลผู้รับบริการ</li>
 			<li>ข้อมูลติดต่อ</li>
 			<li>บัญชีผู้ใช้</li>
@@ -45,14 +45,14 @@ input:disabled {background: none !important;}
 <div class="row font-prompt">
 	<div class="col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12">
 		<section>
-			<form name="step5" action="{{ route('register.personal.step5.post') }}" method="POST" class="needs-validation" novalidate>
+			<form name="step5" action="{{ route('register.private.step5.post') }}" method="POST" class="needs-validation" novalidate>
 				{{ csrf_field() }}
 				<fieldset>
 					<div class="panel">
 						<div class="panel-hdr">
 							<h2 class="text-primary-1"><i class="fal fa-clipboard"></i>&nbsp;&nbsp;ตรวจสอบข้อมูล</h2>
 							<div class="panel-toolbar">
-								<button class="btn btn-panel" data-action="panel-fullscreen" data-toggle="tooltip" data-offset="0,10" data-original-title="Fullscreen"></button>
+								<button class="btn btn-panel bg-transparent fs-xl w-auto h-auto rounded-0" data-action="panel-fullscreen" data-toggle="tooltip" data-offset="0,10" data-original-title="Fullscreen"><i class="fal fa-expand"></i></button>
 							</div>
 						</div>
 						<div class="panel-container show">
@@ -62,12 +62,12 @@ input:disabled {background: none !important;}
 									<div class="panel-tag panel-tag-primary mt-2 bg-white">
 										<div class="form-group row">
 											<div class="col-md-4 mb-3">
-												<label class="form-label">ชื่อ-นามสกุล <span class="text-danger">*</span> </label>
-												<input type="text" class="form-control form-control-sm border-dashed" value="{{ $titleName[$userData->title_name] ?? "" }} {{ $userData->first_name ?? "" }} {{ $userData->last_name ?? "" }}" readonly>
+												<label class="form-label">ชื่อหน่วยงาน <span class="text-danger">*</span> </label>
+												<input type="text" class="form-control form-control-sm border-dashed" value="{{ $userData->agency_name ?? "" }}" readonly>
 											</div>
 											<div class="col-md-4 mb-3">
-												<label class="form-label">เลขบัตรประชาชน <span class="text-danger">*</span> </label>
-												<input type="text" class="form-control form-control-sm border-dashed" value="{{ $userData->id_card ?? "" }}" readonly>
+												<label class="form-label">รหัสสถานประกอบการ <span class="text-danger">*</span> </label>
+												<input type="text" class="form-control form-control-sm border-dashed" value="{{ $userData->agency_code ?? "" }}" readonly>
 											</div>
 											<div class="col-md-4 mb-3">
 												<label class="form-label">เลขผู้เสียภาษี <span class="text-danger">*</span> </label>
@@ -87,13 +87,13 @@ input:disabled {background: none !important;}
 										<div class="form-row">
 											<div class="col-md-12 mb-3">
 												<label class="form-label">ที่อยู่ <span class="text-danger">*</span> </label>
-												<input type="text" class="form-control form-control-sm border-dashed" value="{{ $userData->address ?? "" }} {{ " ตำบล ".$sub_districts[$userData->sub_district] ?? "" }} {{ " อำเภอ ".$districts[$userData->district] ?? "" }} {{ " จังหวัด ".$provinces[$userData->province] ?? "" }} {{ $userData->postcode ?? "" }}" readonly>
+												<input type="text" class="form-control form-control-sm border-dashed" value="{{ $userData->address ?? "" }} {{ " ต. ".$sub_districts[$userData->sub_district] ?? "" }} {{ " อ. ".$districts[$userData->district] ?? "" }} {{ " จ. ".$provinces[$userData->province] ?? "" }} {{ $userData->postcode ?? "" }}" readonly>
 											</div>
 										</div>
 									</div>
 								</section>
 								<section class="pt-2 pl-4 pr-4">
-									<h3 class="fw-500 m-0">ข้อมูลติดต่อ</h3>
+									<h3 class="fw-500 m-0">ข้อมูลติดต่อสำหรับส่งรายงานผลการตรวจ</h3>
 									<div class="panel-tag panel-tag-danger mt-2 bg-white">
 										<div class="form-row">
 											<div class="col-md-4 mb-3">
@@ -116,7 +116,7 @@ input:disabled {background: none !important;}
 											</div>
 											<div class="col-md-8 mb-3">
 												<label class="form-label">ที่อยู่ <span class="text-danger">*</span> </label>
-												<input type="text" class="form-control form-control-sm border-dashed" value="{{ $userData->contact_addr ?? "" }} {{ " ตำบล ".$sub_districts[$userData->contact_sub_district] ?? "" }} {{ " อำเภอ ".$districts[$userData->contact_district] ?? "" }} {{ " จังหวัด ".$provinces[$userData->contact_province] ?? "" }} {{ $userData->contact_postcode ?? "" }}" readonly>
+												<input type="text" class="form-control form-control-sm border-dashed" value="{{ $userData->contact_addr ?? "" }} {{ " ต. ".$sub_districts[$userData->contact_sub_district] ?? "" }} {{ " อ. ".$districts[$userData->contact_district] ?? "" }} {{ " จ. ".$provinces[$userData->contact_province] ?? "" }} {{ $userData->contact_postcode ?? "" }}" readonly>
 											</div>
 										</div>
 									</div>
@@ -174,8 +174,6 @@ input:disabled {background: none !important;}
 </div>
 @endsection
 @section('script')
-<script src="{{ URL::asset('assets/js/formplugins/select2/select2.bundle.js') }}"></script>
-<script src="{{ URL::asset('assets/js/notifications/sweetalert2/sweetalert2.bundle.js') }}"></script>
 <script>
 $(document).ready(function() {
 	$.ajaxSetup({headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}});

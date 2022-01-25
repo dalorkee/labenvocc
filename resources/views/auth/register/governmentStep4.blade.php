@@ -5,11 +5,13 @@
 @section('style')
 <link href="{{ URL::asset('css/step.css') }}" rel="stylesheet">
 <style type="text/css">
-.text-primary-1 {color: #1877F2 !important}
+.text-primary-1 {color: #1877F2}
 .panel-hdr h2{font-size: 1.275em;}
+.form-label, .custom-control-label{font-size: 1em;font-weight: 400;}
 ::-webkit-input-placeholder{ /* Edge */font-size: 1em;}
 :-ms-input-placeholder{ /* IE 10-11 */font-size: 1em;}
 ::placeholder{font-size: 1em;}
+input[type="text"]:disabled{background: #eeeeee !important;}
 .field-icon {
 	float: right;
 	margin-left: -25px;
@@ -25,13 +27,13 @@
 @section('content')
 <div class="row font-prompt mt-4 mb-6">
 	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-		<h2 class="fw-600 mt-4 text-xl text-center">ลงทะเบียน : <span class="text-primary-1">บุคคลทั่วไป</span></h2>
+		<h2 class="fw-600 mt-4 text-xl text-center">ลงทะเบียน : <span class="text-primary-1">หน่วยงานรัฐบาล</span></h2>
 	</div>
 </div>
 <div class="row font-prompt mt-6 mb-6">
 	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
 		<ul class="list-unstyled multi-steps">
-			<li>บุคคลทั่วไป</li>
+			<li>หน่วยงานรัฐบาล</li>
 			<li>ข้อมูลผู้รับบริการ</li>
 			<li>ข้อมูลติดต่อ</li>
 			<li class="is-active">บัญชีผู้ใช้</li>
@@ -62,14 +64,14 @@
 <div class="row font-prompt">
 	<div class="col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12">
 		<section>
-			<form name="step4" action="{{ route('register.personal.step4.post') }}" method="POST" class="needs-validation" novalidate>
+			<form name="step4" action="{{ route('register.gov.step4.post') }}" method="POST" class="needs-validation" novalidate>
 				@csrf
 				<fieldset>
 					<div class="panel">
 						<div class="panel-hdr">
-							<h2 class="text-primary-1"><i class="fal fa-clipboard"></i>&nbsp;&nbsp;บัญชีผู้ใช้</h2>
+							<h2 class="text-primary"><i class="fal fa-clipboard"></i>&nbsp;&nbsp;บัญชีผู้ใช้</h2>
 							<div class="panel-toolbar">
-								<button class="btn btn-panel" data-action="panel-fullscreen" data-toggle="tooltip" data-offset="0,10" data-original-title="Fullscreen"></button>
+								<button class="btn btn-panel bg-transparent fs-xl w-auto h-auto rounded-0" data-action="panel-fullscreen" data-toggle="tooltip" data-offset="0,10" data-original-title="Fullscreen"><i class="fal fa-expand"></i></button>
 							</div>
 						</div>
 						<div class="panel-container show">
@@ -113,7 +115,7 @@
 						</div>
 					</div>
 					<div class="text-center">
-						<a href="{{ route('register.personal.step3.get') }}" type="button" class="btn btn-warning btn-pills" style="width: 110px;"><i class="fal fa-arrow-left"></i> ก่อนหน้า</a>
+						<a href="{{ route('register.gov.step3.get') }}" type="button" class="btn btn-warning btn-pills" style="width: 110px;"><i class="fal fa-arrow-left"></i> ก่อนหน้า</a>
 						<button type="submit" class="btn btn-success btn-pills" style="width: 110px;">ถัดไป <i class="fal fa-arrow-right"></i></button>
 					</div>
 				</fieldset>
@@ -123,7 +125,6 @@
 </div>
 @endsection
 @section('script')
-<script src="{{ URL::asset('assets/js/formplugins/select2/select2.bundle.js') }}"></script>
 <script>
 $(document).ready(function() {
 	$.ajaxSetup({headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}});

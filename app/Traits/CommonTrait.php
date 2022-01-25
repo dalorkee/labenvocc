@@ -16,11 +16,11 @@ trait CommonTrait {
 	public function sex(): array {
 		return ['male'=>'ชาย', 'female'=>'หญิง'];
 	}
-	public function agencyType(): array {
+	public function officeType(): array {
 		return [1=>'หน่วยงานภาครัฐ', 2=>'หน่วยงานรัฐวิสาหกิจ', 3=>'หน่วยงานเอกชน'];
 	}
 	public function customerType(): array {
-		return ['personal'=>'บุคคลทั่วไป', 'private'=>'เอกชน', 'government'=>'รัฐบาล'];
+		return ['personal'=>'บุคคลทั่วไป', 'private'=>'เอกชน', 'government'=>'รัฐบาล', 'government-owned'=>'รัฐวิสาหกิจ'];
 	}
 	public function affiliation(): array {
 		return [130=>'หน่วยงานส่วนกลาง', 131=>'ศูนย์จังหวัดระยอง'];

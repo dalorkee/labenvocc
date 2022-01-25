@@ -15,13 +15,13 @@
 @section('content')
 <div class="row font-prompt mt-4 mb-6">
 	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-		<h2 class="fw-600 mt-4 text-xl text-center">ลงทะเบียน : <span class="text-primary-1">บุคคลทั่วไป</span></h2>
+		<h2 class="fw-600 mt-4 text-xl text-center">ลงทะเบียน : <span class="text-primary-1">หน่วยงานเอกชน</span></h2>
 	</div>
 </div>
 <div class="row font-prompt mt-6 mb-6">
 	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
 		<ul class="list-unstyled multi-steps">
-			<li>บุคคลทั่วไป</li>
+			<li>หน่วยงานเอกชน</li>
 			<li class="is-active">ข้อมูลผู้รับบริการ</li>
 			<li>ข้อมูลติดต่อ</li>
 			<li>บัญชีผู้ใช้</li>
@@ -29,31 +29,10 @@
 		</ul>
 	</div>
 </div>
-{{-- <div class="row mt-10">
-	<div class="col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12">
-		<div class="alert alert-danger font-prompt">
-			<section>
-				<h2 class="text-red-900">เงื่อนไขในการกำหนด ชื่อผู้ใช้</h2>
-				<ol class="pl-2 text-red-500">
-					<li>1. มีความยาว 8-12 ตัวอักษร</li>
-					<li>2. ชื่อผู้ใช้สามารถเป็น A-Z a-z อักษรพิเศษ(#,?,!,@,$,%,^,&,*,-) หรือตัวเลข(0-9) อย่างใดอย่างหนึ่ง</li>
-				</ol>
-			</section>
-			<section class="mt-4">
-				<h2 class="text-red-900">เงื่อนไขในการกำหนด รหัสผ่าน</h2>
-				<ol class="pl-2 text-red-500">
-					<li>1. มีความยาว 8-12 ตัวอักษร</li>
-					<li>2. ตัวอักษรตัวแรกเป็นตัวพิมพ์ใหญ่ (A-Z)</li>
-					<li>3. ตัวอักษรถัดไปสามารถเป็น a-z อย่างน้อย 1 ตัวอักษร อักษรพิเศษ(#,?,!,@,$,%,^,&,*,-) อย่างน้อย 1 ตัวอักษร และตัวเลข(0-9) อย่างน้อย 1 ตัวอักษร</li>
-				</ol>
-			</section>
-		</div>
-	</div>
-</div> --}}
 <div class="row font-prompt">
 	<div class="col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12">
 		<section>
-			<form name="step2" action="{{ route('register.personal.step2.post') }}" method="POST" class="needs-validation" novalidate>
+			<form name="step2" action="{{ route('register.private.step2.post') }}" method="POST" class="needs-validation" novalidate>
 				@csrf
 				<fieldset>
 					<div class="panel">
@@ -72,57 +51,34 @@
 												<div class="px-6 pt-2 pb-16">
 													<div class="grid grid-cols-6 gap-6">
 														<div class="col-span-6 sm:col-span-6">
-															<label for="title_name" class="block text-base font-medium text-gray-800">คำนำหน้าชื่อ <span class="text-red-600">*</span></label>
-															<div class="frame-wrap">
-																<div class="custom-control custom-switch custom-control-inline">
-																	<input type="radio" name="title_name" value="mr" id="mister" class="@error('title_name') is-invalid @enderror custom-control-input" {{ ((isset($userData->title_name) && $userData->title_name  == 'mr') || old('title_name') == 'mr') ? "checked" : "" }} required="">
-																	<label class="custom-control-label" for="mister">นาย</label>
-																</div>
-																<div class="custom-control custom-switch custom-control-inline">
-																	<input type="radio" name="title_name" value="mrs" id="mistress" class="@error('title_name') is-invalid @enderror custom-control-input" {{ ((isset($userData->title_name) && $userData->title_name  == 'mrs') || old('title_name') == 'mrs') ? "checked" : "" }} required="">
-																	<label class="custom-control-label" for="mistress">นาง</label>
-																</div>
-																<div class="custom-control custom-switch custom-control-inline">
-																	<input type="radio" name="title_name" value="miss" id="miss" class="@error('title_name') is-invalid @enderror custom-control-input" {{ ((isset($userData->title_name) && $userData->title_name  == 'miss') || old('title_name') == 'miss') ? "checked" : "" }} required="">
-																	<label class="custom-control-label" for="miss">นางสาว</label>
-																	<span class="invalid-feedback" role="alert">@if ($errors->any()) @error('title_name') {{ $message }} @enderror @else {{ 'โปรดเลือกคำนำหน้าชื่อ' }} @endif</span>
-																</div>
-															</div>
+															<label for="agency_name" class="block text-base font-medium text-gray-800">ชื่อสถานประกอบการ <span class="text-red-600">*</span></label>
+															<input type="text" name="agency_name" value="{{ (isset($userData->agency_name)) ? $userData->agency_name : old('agency_name') }}" class="form-control @error('agency_name') is-invalid @enderror mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="100" size="100" required>
+															<span class="invalid-feedback" role="alert">@if ($errors->any()) @error('agency_name') {{ $message }} @enderror @else {{ 'โปรดกรอกชื่อสถานประกอบการ' }} @endif</span>
 														</div>
 														<div class="col-span-6 sm:col-span-3">
-															<label for="first_name" class="block text-base font-medium text-gray-800">ชื่อ <span class="text-red-600">*</span></label>
-															<input type="text" name="first_name" value="{{ (isset($userData->first_name)) ? $userData->first_name : old('first_name') }}" class="form-control @error('first_name') is-invalid @enderror mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="100" size="100" required>
-															<span class="invalid-feedback" role="alert">@if ($errors->any()) @error('first_name') {{ $message }} @enderror @else {{ 'โปรดกรอกชื่อ' }} @endif</span>
+															<label for="agency_code" class="block text-base font-medium text-gray-800">รหัสสถานประกอบการ <span class="text-red-600">*</span></label>
+															<input type="text" name="agency_code" value="{{ (isset($userData->agency_code)) ? $userData->agency_code : old('agency_code') }}" class="form-control @error('agency_code') is-invalid @enderror mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="30" size="30" required>
+															<span class="invalid-feedback" role="alert">@if ($errors->any()) @error('agency_code') {{ $message }} @enderror @else {{ 'โปรดกรอกรหัสสถานประกอบการ' }} @endif</span>
 														</div>
 														<div class="col-span-6 sm:col-span-3">
-															<label for="last_name" class="block text-base font-medium text-gray-800">นามสกุล <span class="text-red-600">*</span></label>
-															<input type="text" name="last_name" value="{{ (isset($userData->last_name)) ? $userData->last_name : old('last_name') }}" class="form-control @error('last_name') is-invalid @enderror mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="100" size="100" required>
-															<span class="invalid-feedback" role="alert">@if ($errors->any()) @error('last_name') {{ $message }} @enderror @else {{ 'โปรดกรอกนามสกุล' }} @endif</span>
+															<label for="taxpayer_no" class="block text-base font-medium text-gray-800">เลขผู้เสียภาษี <span class="text-red-600">*</span></label>
+															<input type="text" name="taxpayer_no" value="{{ (isset($userData->taxpayer_no)) ? $userData->taxpayer_no : old('taxpayer_no') }}" class="form-control @error('taxpayer_no') is-invalid @enderror mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="30" size="30">
+															<span class="invalid-feedback" role="alert">@if ($errors->any()) @error('taxpayer_no') {{ $message }} @enderror @else {{ 'โปรดกรอกรหัสเลขผู้เสียภาษี' }} @endif</span>
 														</div>
 														<div class="col-span-6 sm:col-span-3">
-															<label for="id_card" class="block text-base font-medium text-gray-800">เลขบัตรประชาชน <span class="text-red-600">*</span></label>
-															<input type="text" name="id_card" value="{{ (isset($userData->id_card)) ? $userData->id_card : old('id_card') }}" class="form-control @error('id_card') is-invalid @enderror mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="13" size="13" pattern="^\d{13}$" required>
-															<span class="invalid-feedback" role="alert">@if ($errors->any()) @error('id_card') {{ $message }} @enderror @else {{ 'โปรดกรอกเลขบัตรประชาชน' }} @endif</span>
-														</div>
-														<div class="col-span-6 sm:col-span-3">
-															<label for="taxpayer_no" class="block text-base font-medium text-gray-800">เลขผู้เสียภาษี</label>
-															<input type="text" name="taxpayer_no" value="{{ (isset($userData->taxpayer_no)) ? $userData->taxpayer_no : old('taxpayer_no') }}" class="form-control @error('taxpayer_no') is-invalid @enderror mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="30" size="30" required>
-															<span class="invalid-feedback" role="alert">@if ($errors->any()) @error('taxpayer_no') {{ $message }} @enderror @else {{ 'โปรดกรอกเลขผู้เสียภาษี' }} @endif</span>
+															<label for="mobile" class="block text-base font-medium text-gray-800">หมายเลขโทรศัพท์ <span class="text-red-600">*</span></label>
+															<input type="tel" name="mobile" value="{{ (isset($userData->mobile)) ? $userData->mobile : old('mobile') }}" class="form-control @error('mobile') is-invalid @enderror mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="10" size="10" pattern="^\d{10}$" required>
+															<span class="invalid-feedback" role="alert">@if ($errors->any()) @error('mobile') {{ $message }} @enderror @else {{ 'โปรดกรอกโทรศัพท์เคลื่อนที่' }} @endif</span>
 														</div>
 														<div class="col-span-6 sm:col-span-3">
 															<label for="email" class="block text-base font-medium text-gray-800">อีเมล์ <span class="text-red-600">*</span></label>
 															<input type="text" name="email" value="{{ (isset($userData->email)) ? $userData->email : old('email') }}" class="form-control @error('email') is-invalid @enderror mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="90" size="90" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" required>
 															<span class="invalid-feedback" role="alert">@if ($errors->any()) @error('email') {{ $message }} @enderror @else {{ 'โปรดกรอกอีเมล์' }} @endif</span>
 														</div>
-														<div class="col-span-6 sm:col-span-3">
-															<label for="mobile" class="block text-base font-medium text-gray-800">โทรศัพท์เคลื่อนที่ <span class="text-red-600">*</span></label>
-															<input type="tel" name="mobile" value="{{ (isset($userData->mobile)) ? $userData->mobile : old('mobile') }}" class="form-control @error('mobile') is-invalid @enderror mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="10" size="10" pattern="^\d{10}$" required>
-															<span class="invalid-feedback" role="alert">@if ($errors->any()) @error('mobile') {{ $message }} @enderror @else {{ 'โปรดกรอกโทรศัพท์เคลื่อนที่' }} @endif</span>
-														</div>
 													</div>
 													<div class="grid grid-cols-6 gap-6 mt-4">
 														<div class="col-span-6 sm:col-span-6">
-															<label for="address" class="block text-base font-medium text-gray-800">ที่อยู่ (เลขที่ หมู่ที่ หมู่บ้าน/อาคาร ถนน) <span class="text-red-600">*</span></label>
+															<label for="address" class="block text-base font-medium text-gray-800">ที่อยู่หน่วยงาน (เลขที่ หมู่ที่ หมู่บ้าน/อาคาร ถนน) <span class="text-red-600">*</span></label>
 															<input type="text" name="address" value="{{ (isset($userData->address)) ? $userData->address : old('address') }}" class="form-control @error('address') is-invalid @enderror mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="200" size="200" required>
 															<span class="invalid-feedback" role="alert">@if ($errors->any()) @error('address') {{ $message }} @enderror @else {{ 'โปรดกรอกที่อยู่' }} @endif</span>
 														</div>
@@ -205,8 +161,7 @@ $(document).ready(function() {
 				dataType: "html",
 				data: {id:id},
 				success: function(response) {
-					// $('#district').html(response);
-					document.getElementById("district").innerHTML = response;
+					$('#district').html(response);
 				},
 				error: function(jqXhr, textStatus, errorMessage) {
 					alert('Error code: ' + jqXhr.status + errorMessage);
@@ -223,8 +178,7 @@ $(document).ready(function() {
 				dataType: "HTML",
 				data: {id:id},
 				success: function(response) {
-					// $('#sub_district').html(response);
-					document.getElementById("sub_district").innerHTML = response;
+					$('#sub_district').html(response);
 				},
 				error: function(jqXhr, textStatus, errorMessage) {
 					alert('Sub district error: ' + jqXhr.status + errorMessage);
@@ -241,8 +195,7 @@ $(document).ready(function() {
 				dataType: "HTML",
 				data: {id:id},
 				success: function(response) {
-					// $('#postcode').val(response);
-					document.getElementById("postcode").value = response;
+					$('#postcode').val(response);
 				},
 				error: function(jqXhr, textStatus, errorMessage) {
 					alert('Postcode error: ' + jqXhr.status + errorMessage);
@@ -250,39 +203,6 @@ $(document).ready(function() {
 			});
 		}
 	});
-});
-</script>
-<script>
-$(document).ready(function() {
-	$(function() {
-		$('.select2').select2();
-		$(".select2-placeholder-multiple").select2({placeholder: "-- โปรดระบุ --"});
-		$(".js-hide-search").select2({minimumResultsForSearch: 1 / 0});
-		$(".js-max-length").select2({maximumSelectionLength: 2, placeholder: "Select maximum 2 items"});
-		$(".select2-placeholder").select2({placeholder: "-- โปรดระบุ --", allowClear: true});
-		$(".js-select2-icons").select2({
-			minimumResultsForSearch: 1 / 0,
-			templateResult: icon,
-			templateSelection: icon,
-			escapeMarkup: function(elm){
-				return elm
-			}
-		});
-		function icon(elm){
-			elm.element;
-			return elm.id ? "<i class='" + $(elm.element).data("icon") + " mr-2'></i>" + elm.text : elm.text
-		}
-	});
-	function formatRepo (repo) {
-		if (repo.loading) return repo.text;
-		var markup = "<div class='select2-result-repository clearfix'>" +
-			"<div class='select2-result-repository__meta'>" +
-			"<div class='select2-result-repository__title'>" + repo.value + "</div></div></div>";
-			return markup;
-	}
-	function formatRepoSelection (repo) {
-		return repo.value || repo.text;
-	}
 });
 </script>
 <script>

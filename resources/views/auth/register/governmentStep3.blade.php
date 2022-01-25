@@ -5,7 +5,7 @@
 @section('style')
 <link href="{{ URL::asset('css/step.css') }}" rel="stylesheet">
 <style type="text/css">
-.text-primary-1 {color: #1877F2 !important}
+.text-primary-1 {color: #1877F2}
 .panel-hdr h2{font-size: 1.10em;}
 ::-webkit-input-placeholder{ /* Edge */font-size: 1em;}
 :-ms-input-placeholder{ /* IE 10-11 */font-size: 1em;}
@@ -16,13 +16,13 @@ input[type="text"]:disabled{background: #eeeeee !important;}
 @section('content')
 <div class="row font-prompt mt-4 mb-6">
 	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-		<h2 class="fw-600 mt-4 text-xl text-center">ลงทะเบียน : <span class="text-primary-1">บุคคลทั่วไป</span></h2>
+		<h2 class="fw-600 mt-4 text-xl text-center">ลงทะเบียน : <span class="text-primary-1">หน่วยงานรัฐบาล</span></h2>
 	</div>
 </div>
 <div class="row font-prompt mt-6 mb-6">
 	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
 		<ul class="list-unstyled multi-steps">
-			<li>บุคคลทั่วไป</li>
+			<li>หน่วยงานรัฐบาล</li>
 			<li>ข้อมูลผู้รับบริการ</li>
 			<li class="is-active">ข้อมูลติดต่อ</li>
 			<li>บัญชีผู้ใช้</li>
@@ -33,12 +33,12 @@ input[type="text"]:disabled{background: #eeeeee !important;}
 <div class="row font-prompt">
 	<div class="col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12">
 		<section>
-			<form name="step3" action="{{ route('register.personal.step3.post') }}" method="POST" class="needs-validation" novalidate>
+			<form name="step3" action="{{ route('register.gov.step3.post') }}" method="POST" class="needs-validation" novalidate>
 				@csrf
 				<fieldset>
 					<div class="panel">
 						<div class="panel-hdr">
-							<h2 class="text-primary-1"><i class="fal fa-clipboard"></i>&nbsp;&nbsp;ข้อมูลติดต่อ</h2>
+							<h2 class="text-primary"><i class="fal fa-clipboard"></i>&nbsp;&nbsp;ข้อมูลติดต่อสำหรับส่งผลการตรวจ</h2>
 							<div class="panel-toolbar">
 								<button class="btn btn-panel bg-transparent fs-xl w-auto h-auto rounded-0" data-action="panel-fullscreen" data-toggle="tooltip" data-offset="0,10" data-original-title="Fullscreen"><i class="fal fa-expand"></i></button>
 							</div>
@@ -51,8 +51,38 @@ input[type="text"]:disabled{background: #eeeeee !important;}
 											<div class="overflow-hidden">
 												<div class="px-6 pt-5 pb-16">
 													<div class="grid grid-cols-6 gap-6">
+														<div class="col-span-6 sm:col-span-6">
+															<label for="simpleinput" class="block text-base font-medium text-gray-800">คำนำหน้าชื่อ <span class="text-red-600">*</span></label>
+															<div class="frame-wrap">
+																<div class="custom-control custom-switch custom-control-inline">
+																	<input type="radio" name="contact_title_name" value="mr" id="contact_title_name_mr" class="@error('contact_title_name') is-invalid @enderror contact_title_name custom-control-input" {{ ((isset($userData->contact_title_name) && $userData->contact_title_name == 'mr') || old('contact_title_name') == 'mr') ? "checked" : "" }} required="">
+																	<label class="custom-control-label" for="contact_title_name_mr">นาย</label>
+																</div>
+																<div class="custom-control custom-switch custom-control-inline">
+																	<input type="radio" name="contact_title_name" value="mrs" id="contact_title_name_mrs" class="@error('contact_title_name') is-invalid @enderror contact_title_name custom-control-input" {{ ((isset($userData->contact_title_name) && $userData->contact_title_name == 'mrs') || old('contact_title_name') == 'mrs') ? "checked" : "" }} required="">
+																	<label class="custom-control-label" for="contact_title_name_mrs">นาง</label>
+																</div>
+																<div class="custom-control custom-switch custom-control-inline">
+																	<input type="radio" name="contact_title_name" value="miss" id="contact_title_name_ms" class="@error('contact_title_name') is-invalid @enderror contact_title_name custom-control-input" {{ ((isset($userData->contact_title_name) && $userData->contact_title_name == 'miss') || old('contact_title_name') == 'miss') ? "checked" : "" }} required="">
+																	<label class="custom-control-label" for="contact_title_name_ms">นางสาว</label>
+																	<div class="invalid-feedback" role="alert">@if ($errors->any()) @error('contact_title_name') {{ $message }} @enderror @else {{ 'โปรดกรอกคำนำหน้าชื่อ' }} @endif</div>
+																</div>
+															</div>
+														</div>
 														<div class="col-span-6 sm:col-span-3">
-															<label for="send_address" class="block text-base font-medium text-gray-800">ที่อยู่สำหรับส่งรายงานผลการตรวจ <span class="text-red-600">*</span></label>
+															<label for="contact_first_name" class="block text-base font-medium text-gray-800">ชื่อ <span class="text-red-600">*</span></label>
+															<input type="text" name="contact_first_name" value="{{ (isset($userData->contact_first_name)) ? $userData->contact_first_name : old('contact_first_name') }}" class="form-control @error('contact_first_name') is-invalid @enderror mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="100" size="100" required>
+															<div class="invalid-feedback" role="alert">@if ($errors->any()) @error('contact_first_name') {{ $message }} @enderror @else {{ 'โปรดกรอกชื่อ' }} @endif</div>
+														</div>
+														<div class="col-span-6 sm:col-span-3">
+															<label for="contact_last_name" class="block text-base font-medium text-gray-800">นามสกุล <span class="text-red-600">*</span></label>
+															<input type="text" name="contact_last_name" value="{{ (isset($userData->contact_last_name)) ? $userData->contact_last_name : old('contact_last_name') }}" class="form-control @error('contact_last_name') is-invalid @enderror mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="100" size="100" required>
+															<div class="invalid-feedback" role="alert">@if ($errors->any()) @error('contact_last_name') {{ $message }} @enderror @else {{ 'โปรดกรอกนามสกุล' }} @endif</div>
+														</div>
+													</div>
+													<div class="grid grid-cols-6 gap-6 mt-4">
+														<div class="col-span-6 sm:col-span-3">
+															<label for="send_address" class="block text-base font-medium text-gray-800">ที่อยู่ <span class="text-red-600">*</span></label>
 															<div class="frame-wrap">
 																<div class="custom-control custom-switch custom-control-inline">
 																	<input type="radio" name="contact_addr_opt" value="1" id="old_addr" class="@error('contact_addr_opt') is-invalid @enderror custom-control-input" {{ ((isset($userData->contact_addr_opt) && $userData->contact_addr_opt == '1') || old('contact_addr_opt') == '1') ? "checked" : "" }} required="">
@@ -67,34 +97,6 @@ input[type="text"]:disabled{background: #eeeeee !important;}
 														</div>
 													</div>
 													<div class="grid grid-cols-6 gap-6 mt-4">
-														<div class="col-span-6 sm:col-span-6">
-															<label for="simpleinput" class="block text-base font-medium text-gray-800">คำนำหน้าชื่อ <span class="text-red-600">*</span></label>
-															<div class="frame-wrap">
-																<div class="custom-control custom-switch custom-control-inline">
-																	<input type="radio" name="contact_title_name" value="mr" id="contact_title_name_mr" class="@error('contact_title_name') is-invalid @enderror contact_title_name custom-control-input" {{ ((isset($userData->contact_addr_opt) && $userData->contact_addr_opt == '2' && isset($userData->contact_title_name) && $userData->contact_title_name == 'mr') || old('contact_addr_opt') == '2') ? "checked" : "disabled" }} required="">
-																	<label class="custom-control-label" for="contact_title_name_mr">นาย</label>
-																</div>
-																<div class="custom-control custom-switch custom-control-inline">
-																	<input type="radio" name="contact_title_name" value="mrs" id="contact_title_name_mrs" class="@error('contact_title_name') is-invalid @enderror contact_title_name custom-control-input" {{ ((isset($userData->contact_addr_opt) && $userData->contact_addr_opt == '2' && isset($userData->contact_title_name) && $userData->contact_title_name == 'mrs') || old('contact_addr_opt') == '2') ? "checked" : "disabled" }} required="">
-																	<label class="custom-control-label" for="contact_title_name_mrs">นาง</label>
-																</div>
-																<div class="custom-control custom-switch custom-control-inline">
-																	<input type="radio" name="contact_title_name" value="miss" id="contact_title_name_ms" class="@error('contact_title_name') is-invalid @enderror contact_title_name custom-control-input" {{ ((isset($userData->contact_addr_opt) && $userData->contact_addr_opt == '2' && isset($userData->contact_title_name) && $userData->contact_title_name == 'miss') || old('contact_addr_opt') == '2') ? "checked" : "disabled" }} required="">
-																	<label class="custom-control-label" for="contact_title_name_ms">นางสาว</label>
-																	<div class="invalid-feedback" role="alert">@if ($errors->any()) @error('contact_title_name') {{ $message }} @enderror @else {{ 'โปรดกรอกคำนำหน้าชื่อ' }} @endif</div>
-																</div>
-															</div>
-														</div>
-														<div class="col-span-6 sm:col-span-3">
-															<label for="contact_first_name" class="block text-base font-medium text-gray-800">ชื่อ <span class="text-red-600">*</span></label>
-															<input type="text" name="contact_first_name" value="{{ (isset($userData->contact_first_name) && $userData->contact_addr_opt == '2') ? $userData->contact_first_name : old('contact_first_name') }}" class="form-control @error('contact_first_name') is-invalid @enderror contact_field mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="100" size="100" {{ ((isset($userData->contact_addr_opt) && $userData->contact_addr_opt == '2') || old('contact_addr_opt') == '2') ? "" : "disabled" }} required>
-															<div class="invalid-feedback" role="alert">@if ($errors->any()) @error('contact_first_name') {{ $message }} @enderror @else {{ 'โปรดกรอกชื่อ' }} @endif</div>
-														</div>
-														<div class="col-span-6 sm:col-span-3">
-															<label for="contact_last_name" class="block text-base font-medium text-gray-800">นามสกุล <span class="text-red-600">*</span></label>
-															<input type="text" name="contact_last_name" value="{{ (isset($userData->contact_last_name) && $userData->contact_addr_opt == '2') ? $userData->contact_last_name : old('contact_last_name') }}" class="form-control @error('contact_last_name') is-invalid @enderror contact_field mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="100" size="100" {{ ((isset($userData->contact_addr_opt) && $userData->contact_addr_opt == '2') || old('contact_addr_opt') == '2') ? "" : "disabled" }} required>
-															<div class="invalid-feedback" role="alert">@if ($errors->any()) @error('contact_last_name') {{ $message }} @enderror @else {{ 'โปรดกรอกนามสกุล' }} @endif</div>
-														</div>
 														<div class="col-span-6 sm:col-span-3">
 															<label for="contact_mobile" class="block text-base font-medium text-gray-800">โทรศัพท์เคลื่อนที่ <span class="text-red-600">*</span></label>
 															<input type="text" name="contact_mobile" value="{{ (isset($userData->contact_mobile) && $userData->contact_addr_opt == '2') ? $userData->contact_mobile : old('contact_mobile') }}" class="form-control @error('contact_mobile') is-invalid @enderror contact_field mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="10" size="10" pattern="^\d{10}$" {{ ((isset($userData->contact_addr_opt) && $userData->contact_addr_opt == '2' ) || old('contact_addr_opt') == '2') ? "" : "disabled" }} required>
@@ -164,7 +166,7 @@ input[type="text"]:disabled{background: #eeeeee !important;}
 						</div>
 					</div>
 					<div class="text-center">
-						<a href="{{ route('register.personal.step2.get') }}" type="button" class="btn btn-warning btn-pills" style="width: 110px;"><i class="fal fa-arrow-left"></i> ก่อนหน้า</a>
+						<a href="{{ route('register.gov.step2.get') }}" type="button" class="btn btn-warning btn-pills" style="width: 110px;"><i class="fal fa-arrow-left"></i> ก่อนหน้า</a>
 						<button type="submit" class="btn btn-success btn-pills" style="width: 110px;">ถัดไป <i class="fal fa-arrow-right"></i></button>
 					</div>
 				</fieldset>
@@ -188,8 +190,6 @@ $(document).ready(function() {
 	$("#new_addr").on('change', function() {
 		if ($(this).prop("checked") == true) {
 			$('#old_addr').prop('checked', false);
-			$('.contact_title_name').prop('checked', false);
-			$('.contact_title_name').prop('disabled', false);
 			$('.contact_field').val('');
 			$('.contact_field').prop('disabled', false);
 			$('#contact_province').prop('selectedIndex', 0);
@@ -202,8 +202,6 @@ $(document).ready(function() {
 			$('#contact_postcode').val('');
 		} else {
 			$('#old_addr').prop('checked', true);
-			$('.contact_title_name').prop('checked', false);
-			$('.contact_title_name').prop('disabled', true);
 			$('.contact_field').val('');
 			$('.contact_field').prop('disabled', true);
 			$('#contact_province').prop('selectedIndex', 0);
@@ -218,10 +216,6 @@ $(document).ready(function() {
 	});
 	$("#old_addr").on('change', function() {
 		if ($(this).prop("checked") == true) {
-
-			$('.contact_title_name').prop('checked', false);
-			$('.contact_title_name').prop('disabled', true);
-
 			$('.contact_field').val('');
 			$('.contact_field').prop('disabled', true);
 
@@ -238,6 +232,7 @@ $(document).ready(function() {
 			$('#contact_postcode').prop('disabled', true);
 		}
 	});
+
 	$('#contact_province').change(function() {
 		if ($(this).val() != '') {
 			var id = $(this).val();

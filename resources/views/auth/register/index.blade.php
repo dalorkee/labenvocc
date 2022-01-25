@@ -101,7 +101,7 @@
 			<div class="card-body">
 				<p style="font-size:4rem"><i class="fal fa-user-plus mr-1"></i></p>
 			</div>
-			<a href="{{ route('registerStaff.create') }}" title="Register" class="btn btn-lg btn-info">หน่วยงานเอกชน</a>
+			<a href="{{ route('register.private.step2.get') }}" title="Register" class="btn btn-lg btn-info">หน่วยงานเอกชน</a>
 		</div>
 	</div>
 	<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
@@ -109,7 +109,7 @@
 			<div class="card-body">
 				<p style="font-size:4rem"><i class="fal fa-user-plus mr-1"></i></p>
 			</div>
-			<a href="{{ route('registerStaff.create') }}" title="Register" class="btn btn-lg btn-info">หน่วยงานภาครัฐ</a>
+			<a href="{{ route('register.gov.step2.get') }}" title="Register" class="btn btn-lg btn-info">หน่วยงานภาครัฐ</a>
 		</div>
 	</div>
 </div>

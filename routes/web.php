@@ -3,6 +3,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\{
 	HomeController,
 	RegisterController,
+	RegisterPersonalController,
+    RegisterPrivateAgencyController,
+    RegisterGovernmentController,
 	RegisterStaffController,
 	CustomerController
 };
@@ -22,27 +25,43 @@ Route::get('/logout', [HomeController::class, 'logout'])->name('logout');
 Route::resources([
 	'home' => HomeController::class,
 	'register' => RegisterController::class,
+	'registerPersonal' => RegisterPersonalController::class,
 	'registerStaff' => RegisterStaffController::class,
 	'roles' => RoleController::class,
 	'permissions' => PermissionController::class
 ]);
 Route::name('register.')->group(function() {
-	Route::get('/register/personal/step/2', [RegisterController::class, 'createPersonalStep2Get'])->name('personal.step2.get');
-	Route::post('register/personal/step/2', [RegisterController::class, 'createPersonalStep2Post'])->name('personal.step2.post');
+	Route::get('/register/personal/step/2', [RegisterPersonalController::class, 'createPersonalStep2Get'])->name('personal.step2.get');
+	Route::post('register/personal/step/2', [RegisterPersonalController::class, 'createPersonalStep2Post'])->name('personal.step2.post');
+	Route::get('/register/personal/step/3', [RegisterPersonalController::class, 'createPersonalStep3Get'])->name('personal.step3.get');
+	Route::post('register/personal/step/3', [RegisterPersonalController::class, 'createPersonalStep3Post'])->name('personal.step3.post');
+	Route::get('/register/personal/step/4', [RegisterPersonalController::class, 'createPersonalStep4Get'])->name('personal.step4.get');
+	Route::post('register/personal/step/4', [RegisterPersonalController::class, 'createPersonalStep4Post'])->name('personal.step4.post');
+	Route::get('/register/personal/step/5', [RegisterPersonalController::class, 'createPersonalStep5Get'])->name('personal.step5.get');
+	Route::post('register/personal/step/5', [RegisterPersonalController::class, 'createPersonalStep5Post'])->name('personal.step5.post');
 
-	Route::get('/register/personal/step/3', [RegisterController::class, 'createPersonalStep3Get'])->name('personal.step3.get');
-	Route::post('register/personal/step/3', [RegisterController::class, 'createPersonalStep3Post'])->name('personal.step3.post');
+    Route::get('/register/private/step/2', [RegisterPrivateAgencyController::class, 'createPrivateAgencyStep2Get'])->name('private.step2.get');
+	Route::post('register/private/step/2', [RegisterPrivateAgencyController::class, 'createPrivateAgencyStep2Post'])->name('private.step2.post');
+	Route::get('/register/private/step/3', [RegisterPrivateAgencyController::class, 'createPrivateAgencyStep3Get'])->name('private.step3.get');
+    Route::post('register/private/step/3', [RegisterPrivateAgencyController::class, 'createPrivateAgencyStep3Post'])->name('private.step3.post');
+	Route::get('/register/private/step/4', [RegisterPrivateAgencyController::class, 'createPrivateAgencyStep4Get'])->name('private.step4.get');
+	Route::post('register/private/step/4', [RegisterPrivateAgencyController::class, 'createPrivateAgencyStep4Post'])->name('private.step4.post');
+	Route::get('/register/private/step/5', [RegisterPrivateAgencyController::class, 'createPrivateAgencyStep5Get'])->name('private.step5.get');
+	Route::post('register/private/step/5', [RegisterPrivateAgencyController::class, 'createPrivateAgencyStep5Post'])->name('private.step5.post');
 
-	Route::get('/register/personal/step/4', [RegisterController::class, 'createPersonalStep4Get'])->name('personal.step4.get');
-	Route::post('register/personal/step/4', [RegisterController::class, 'createPersonalStep4Post'])->name('personal.step4.post');
-
-    Route::get('/register/personal/step/5', [RegisterController::class, 'createPersonalStep5Get'])->name('personal.step5.get');
-    Route::post('register/personal/step/5', [RegisterController::class, 'createPersonalStep5Post'])->name('personal.step5.post');
-
+    Route::get('/register/gov/step/2', [RegisterGovernmentController::class, 'createGovernmentStep2Get'])->name('gov.step2.get');
+	Route::post('register/gov/step/2', [RegisterGovernmentController::class, 'createGovernmentStep2Post'])->name('gov.step2.post');
+	Route::get('/register/gov/step/3', [RegisterGovernmentController::class, 'createGovernmentStep3Get'])->name('gov.step3.get');
+    Route::post('register/gov/step/3', [RegisterGovernmentController::class, 'createGovernmentStep3Post'])->name('gov.step3.post');
+	Route::get('/register/gov/step/4', [RegisterGovernmentController::class, 'createGovernmentStep4Get'])->name('gov.step4.get');
+	Route::post('register/gov/step/4', [RegisterGovernmentController::class, 'createGovernmentStep4Post'])->name('gov.step4.post');
+	Route::get('/register/gov/step/5', [RegisterGovernmentController::class, 'createGovernmentStep5Get'])->name('gov.step5.get');
+	Route::post('register/gov/step/5', [RegisterGovernmentController::class, 'createGovernmentStep5Post'])->name('gov.step5.post');
 
 	Route::post('province/district', [RegisterController::class, 'renderDistrictToHtmlSelect'])->name('district');
 	Route::post('province/district/subdistrict', [RegisterController::class, 'renderSubDistrictToHtmlSelect'])->name('subDistrict');
 	Route::post('province/subdistrict/postcode', [RegisterController::class, 'getPostCodeBySubDistrict'])->name('postcode');
+	Route::post('gov/dept', [RegisterController::class, 'renderGovernmentDeptToHtmlSelect'])->name('department');
 	Route::post('search/hospital', [RegisterController::class, 'searchHospitalByName'])->name('hospital');
 	Route::post('refresh-captcha', [RegisterController::class, 'refreshCaptcha'])->name('refresh-captcha');
 });

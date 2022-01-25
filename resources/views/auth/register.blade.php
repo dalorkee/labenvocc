@@ -39,7 +39,7 @@ input[type="text"]:disabled{background: #eeeeee !important;}
 <div class="row">
 	<div class="col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12">
 		<section class="multi_step_form">
-			<form action="{{ route('register.store') }}" method="POST" id="msform">
+			<form action="route('register.store')" method="POST" id="msform">
 				@csrf
 				<ul id="progressbar" class="pb-2">
 					<li class="active">ข้อมูลหน่วยงาน</li>

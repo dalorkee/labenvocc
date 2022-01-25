@@ -5,8 +5,10 @@
 @section('style')
 <link href="{{ URL::asset('css/step.css') }}" rel="stylesheet">
 <style type="text/css">
-.text-primary-1 {color: #1877F2 !important}
+.text-primary-1 {color: #1877F2}
 .panel-hdr h2{font-size: 1.275em;}
+fieldset h2{font-size: 1em;font-weight: 400;}
+.form-label, .custom-control-label{font-size: 1em;font-weight: 400;}
 ::-webkit-input-placeholder{ /* Edge */font-size: 1em;}
 :-ms-input-placeholder{ /* IE 10-11 */font-size: 1em;}
 ::placeholder{font-size: 1em;}
@@ -15,13 +17,13 @@
 @section('content')
 <div class="row font-prompt mt-4 mb-6">
 	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-		<h2 class="fw-600 mt-4 text-xl text-center">ลงทะเบียน : <span class="text-primary-1">บุคคลทั่วไป</span></h2>
+		<h2 class="fw-600 mt-4 text-xl text-center">ลงทะเบียน : <span class="text-primary-1">หน่วยงานรัฐบาล</span></h2>
 	</div>
 </div>
 <div class="row font-prompt mt-6 mb-6">
 	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
 		<ul class="list-unstyled multi-steps">
-			<li>บุคคลทั่วไป</li>
+			<li>หน่วยงานรัฐบาล</li>
 			<li class="is-active">ข้อมูลผู้รับบริการ</li>
 			<li>ข้อมูลติดต่อ</li>
 			<li>บัญชีผู้ใช้</li>
@@ -29,36 +31,15 @@
 		</ul>
 	</div>
 </div>
-{{-- <div class="row mt-10">
-	<div class="col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12">
-		<div class="alert alert-danger font-prompt">
-			<section>
-				<h2 class="text-red-900">เงื่อนไขในการกำหนด ชื่อผู้ใช้</h2>
-				<ol class="pl-2 text-red-500">
-					<li>1. มีความยาว 8-12 ตัวอักษร</li>
-					<li>2. ชื่อผู้ใช้สามารถเป็น A-Z a-z อักษรพิเศษ(#,?,!,@,$,%,^,&,*,-) หรือตัวเลข(0-9) อย่างใดอย่างหนึ่ง</li>
-				</ol>
-			</section>
-			<section class="mt-4">
-				<h2 class="text-red-900">เงื่อนไขในการกำหนด รหัสผ่าน</h2>
-				<ol class="pl-2 text-red-500">
-					<li>1. มีความยาว 8-12 ตัวอักษร</li>
-					<li>2. ตัวอักษรตัวแรกเป็นตัวพิมพ์ใหญ่ (A-Z)</li>
-					<li>3. ตัวอักษรถัดไปสามารถเป็น a-z อย่างน้อย 1 ตัวอักษร อักษรพิเศษ(#,?,!,@,$,%,^,&,*,-) อย่างน้อย 1 ตัวอักษร และตัวเลข(0-9) อย่างน้อย 1 ตัวอักษร</li>
-				</ol>
-			</section>
-		</div>
-	</div>
-</div> --}}
 <div class="row font-prompt">
 	<div class="col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12">
 		<section>
-			<form name="step2" action="{{ route('register.personal.step2.post') }}" method="POST" class="needs-validation" novalidate>
+			<form name="step2" action="{{ route('register.gov.step2.post') }}" method="POST" class="needs-validation" novalidate>
 				@csrf
 				<fieldset>
 					<div class="panel">
 						<div class="panel-hdr">
-							<h2 class="text-primary-1"><i class="fal fa-clipboard"></i>&nbsp;&nbsp;ข้อมูลผู้รับบริการ</h2>
+							<h2 class="text-primary"><i class="fal fa-clipboard"></i>&nbsp;&nbsp;ข้อมูลผู้รับบริการ</h2>
 							<div class="panel-toolbar">
 								<button class="btn btn-panel bg-transparent fs-xl w-auto h-auto rounded-0" data-action="panel-fullscreen" data-toggle="tooltip" data-offset="0,10" data-original-title="Fullscreen"><i class="fal fa-expand"></i></button>
 							</div>
@@ -71,58 +52,64 @@
 											<div class="overflow-hidden">
 												<div class="px-6 pt-2 pb-16">
 													<div class="grid grid-cols-6 gap-6">
+														<div class="col-span-6 sm:col-span-3 form-group">
+															<label for="agency_ministry" class="form-label block text-base font-medium text-gray-800">สังกัด/กระทรวง <span class="text-red-600">*</span></label>
+															<select name="agency_ministry" id="govs" class="form-control @error('agency_ministry') is-invalid @enderror" required="">
+																<option value="">-- โปรดเลือก --</option>
+																@if (isset($userData->agency_ministry))
+																	<option value="{{ $userData->agency_ministry }}" selected>{{ $governments[$userData->agency_ministry] }}</option>
+																@elseif (old('agency_ministry') > 0)
+																	<option value="{{ old('agency_ministry') }}" selected>{{ $governments[old('agency_ministry')] }}</option>
+																@endif
+																@foreach ($governments as $key => $val)
+																	<option value="{{ $key }}">{{ $val }}</option>
+																@endforeach
+															</select>
+															<span class="invalid-feedback" role="alert">@if ($errors->any()) @error('agency_ministry') {{ $message }} @enderror @else {{ 'โปรดเลือกสังกัด/กระทรวง' }} @endif</span>
+														</div>
+														<div class="col-span-6 sm:col-span-3">
+															<label for="agency_department" class="form-label block text-base font-medium text-gray-800">กอง/สำนัก <span class="text-red-600">*</span></label>
+															<select name="agency_department" id="agency_department" class="form-control @error('agency_department') is-invalid @enderror" required="">
+																<option value="">-- โปรดเลือก --</option>
+																@if (isset($userData->agency_department))
+																	<option value="{{ $userData->agency_department }}" selected>{{ $departments[$userData->agency_department] }}</option>
+																@elseif (old('agency_department') > 0)
+																	<option value="{{ old('agency_department') }}" selected>{{ $departments[old('agency_department')] }}</option>
+																@endif
+															</select>
+															<span class="invalid-feedback" role="alert">@if ($errors->any()) @error('agency_department') {{ $message }} @enderror @else {{ 'โปรดเลือกกอง/สำนัก' }} @endif</span>
+														</div>
+													</div>
+													<div class="grid grid-cols-6 gap-6">
 														<div class="col-span-6 sm:col-span-6">
-															<label for="title_name" class="block text-base font-medium text-gray-800">คำนำหน้าชื่อ <span class="text-red-600">*</span></label>
-															<div class="frame-wrap">
-																<div class="custom-control custom-switch custom-control-inline">
-																	<input type="radio" name="title_name" value="mr" id="mister" class="@error('title_name') is-invalid @enderror custom-control-input" {{ ((isset($userData->title_name) && $userData->title_name  == 'mr') || old('title_name') == 'mr') ? "checked" : "" }} required="">
-																	<label class="custom-control-label" for="mister">นาย</label>
-																</div>
-																<div class="custom-control custom-switch custom-control-inline">
-																	<input type="radio" name="title_name" value="mrs" id="mistress" class="@error('title_name') is-invalid @enderror custom-control-input" {{ ((isset($userData->title_name) && $userData->title_name  == 'mrs') || old('title_name') == 'mrs') ? "checked" : "" }} required="">
-																	<label class="custom-control-label" for="mistress">นาง</label>
-																</div>
-																<div class="custom-control custom-switch custom-control-inline">
-																	<input type="radio" name="title_name" value="miss" id="miss" class="@error('title_name') is-invalid @enderror custom-control-input" {{ ((isset($userData->title_name) && $userData->title_name  == 'miss') || old('title_name') == 'miss') ? "checked" : "" }} required="">
-																	<label class="custom-control-label" for="miss">นางสาว</label>
-																	<span class="invalid-feedback" role="alert">@if ($errors->any()) @error('title_name') {{ $message }} @enderror @else {{ 'โปรดเลือกคำนำหน้าชื่อ' }} @endif</span>
-																</div>
-															</div>
+															<label for="agency_name" class="block text-base font-medium text-gray-800">ชื่อหน่วยงาน <span class="text-red-600">*</span></label>
+															<input type="text" name="agency_name" value="{{ (isset($userData->agency_name)) ? $userData->agency_name : old('agency_name') }}" class="form-control @error('agency_name') is-invalid @enderror mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="100" size="100" required>
+															<span class="invalid-feedback" role="alert">@if ($errors->any()) @error('agency_name') {{ $message }} @enderror @else {{ 'โปรดเลือกชื่อหน่วยงาน' }} @endif</span>
 														</div>
 														<div class="col-span-6 sm:col-span-3">
-															<label for="first_name" class="block text-base font-medium text-gray-800">ชื่อ <span class="text-red-600">*</span></label>
-															<input type="text" name="first_name" value="{{ (isset($userData->first_name)) ? $userData->first_name : old('first_name') }}" class="form-control @error('first_name') is-invalid @enderror mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="100" size="100" required>
-															<span class="invalid-feedback" role="alert">@if ($errors->any()) @error('first_name') {{ $message }} @enderror @else {{ 'โปรดกรอกชื่อ' }} @endif</span>
+															<label for="agency_code" class="block text-base font-medium text-gray-800">รหัสหน่วยงาน</label>
+															<input type="text" name="agency_code" value="{{ (isset($userData->agency_code)) ? $userData->agency_code : old('agency_code') }}" class="form-control @error('agency_code') is-invalid @enderror mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="30" size="30">
+															<span class="invalid-feedback" role="alert">@if ($errors->any()) @error('agency_code') {{ $message }} @enderror @else {{ 'โปรดกรอกรหัสสถานประกอบการ' }} @endif</span>
 														</div>
 														<div class="col-span-6 sm:col-span-3">
-															<label for="last_name" class="block text-base font-medium text-gray-800">นามสกุล <span class="text-red-600">*</span></label>
-															<input type="text" name="last_name" value="{{ (isset($userData->last_name)) ? $userData->last_name : old('last_name') }}" class="form-control @error('last_name') is-invalid @enderror mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="100" size="100" required>
-															<span class="invalid-feedback" role="alert">@if ($errors->any()) @error('last_name') {{ $message }} @enderror @else {{ 'โปรดกรอกนามสกุล' }} @endif</span>
-														</div>
-														<div class="col-span-6 sm:col-span-3">
-															<label for="id_card" class="block text-base font-medium text-gray-800">เลขบัตรประชาชน <span class="text-red-600">*</span></label>
-															<input type="text" name="id_card" value="{{ (isset($userData->id_card)) ? $userData->id_card : old('id_card') }}" class="form-control @error('id_card') is-invalid @enderror mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="13" size="13" pattern="^\d{13}$" required>
-															<span class="invalid-feedback" role="alert">@if ($errors->any()) @error('id_card') {{ $message }} @enderror @else {{ 'โปรดกรอกเลขบัตรประชาชน' }} @endif</span>
-														</div>
-														<div class="col-span-6 sm:col-span-3">
-															<label for="taxpayer_no" class="block text-base font-medium text-gray-800">เลขผู้เสียภาษี</label>
+															<label for="taxpayer_no" class="block text-base font-medium text-gray-800">เลขผู้เสียภาษี <span class="text-red-600">*</span></label>
 															<input type="text" name="taxpayer_no" value="{{ (isset($userData->taxpayer_no)) ? $userData->taxpayer_no : old('taxpayer_no') }}" class="form-control @error('taxpayer_no') is-invalid @enderror mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="30" size="30" required>
 															<span class="invalid-feedback" role="alert">@if ($errors->any()) @error('taxpayer_no') {{ $message }} @enderror @else {{ 'โปรดกรอกเลขผู้เสียภาษี' }} @endif</span>
+														</div>
+														<div class="col-span-6 sm:col-span-3">
+															<label for="mobile" class="block text-base font-medium text-gray-800">หมายเลขโทรศัพท์ <span class="text-red-600">*</span></label>
+															<input type="tel" name="mobile" value="{{ (isset($userData->mobile)) ? $userData->mobile : old('mobile') }}" class="form-control @error('mobile') is-invalid @enderror mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="10" size="10" pattern="^\d{10}$" required>
+															<span class="invalid-feedback" role="alert">@if ($errors->any()) @error('mobile') {{ $message }} @enderror @else {{ 'โปรดกรอกโทรศัพท์เคลื่อนที่' }} @endif</span>
 														</div>
 														<div class="col-span-6 sm:col-span-3">
 															<label for="email" class="block text-base font-medium text-gray-800">อีเมล์ <span class="text-red-600">*</span></label>
 															<input type="text" name="email" value="{{ (isset($userData->email)) ? $userData->email : old('email') }}" class="form-control @error('email') is-invalid @enderror mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="90" size="90" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" required>
 															<span class="invalid-feedback" role="alert">@if ($errors->any()) @error('email') {{ $message }} @enderror @else {{ 'โปรดกรอกอีเมล์' }} @endif</span>
 														</div>
-														<div class="col-span-6 sm:col-span-3">
-															<label for="mobile" class="block text-base font-medium text-gray-800">โทรศัพท์เคลื่อนที่ <span class="text-red-600">*</span></label>
-															<input type="tel" name="mobile" value="{{ (isset($userData->mobile)) ? $userData->mobile : old('mobile') }}" class="form-control @error('mobile') is-invalid @enderror mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="10" size="10" pattern="^\d{10}$" required>
-															<span class="invalid-feedback" role="alert">@if ($errors->any()) @error('mobile') {{ $message }} @enderror @else {{ 'โปรดกรอกโทรศัพท์เคลื่อนที่' }} @endif</span>
-														</div>
 													</div>
 													<div class="grid grid-cols-6 gap-6 mt-4">
 														<div class="col-span-6 sm:col-span-6">
-															<label for="address" class="block text-base font-medium text-gray-800">ที่อยู่ (เลขที่ หมู่ที่ หมู่บ้าน/อาคาร ถนน) <span class="text-red-600">*</span></label>
+															<label for="address" class="block text-base font-medium text-gray-800">ที่อยู่หน่วยงาน (เลขที่ หมู่ที่ หมู่บ้าน/อาคาร ถนน) <span class="text-red-600">*</span></label>
 															<input type="text" name="address" value="{{ (isset($userData->address)) ? $userData->address : old('address') }}" class="form-control @error('address') is-invalid @enderror mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="200" size="200" required>
 															<span class="invalid-feedback" role="alert">@if ($errors->any()) @error('address') {{ $message }} @enderror @else {{ 'โปรดกรอกที่อยู่' }} @endif</span>
 														</div>
@@ -205,7 +192,7 @@ $(document).ready(function() {
 				dataType: "html",
 				data: {id:id},
 				success: function(response) {
-					// $('#district').html(response);
+					//$('#district').html(response);
 					document.getElementById("district").innerHTML = response;
 				},
 				error: function(jqXhr, textStatus, errorMessage) {
@@ -223,7 +210,7 @@ $(document).ready(function() {
 				dataType: "HTML",
 				data: {id:id},
 				success: function(response) {
-					// $('#sub_district').html(response);
+					//$('#sub_district').html(response);
 					document.getElementById("sub_district").innerHTML = response;
 				},
 				error: function(jqXhr, textStatus, errorMessage) {
@@ -241,7 +228,7 @@ $(document).ready(function() {
 				dataType: "HTML",
 				data: {id:id},
 				success: function(response) {
-					// $('#postcode').val(response);
+					//$('#postcode').val(response);
 					document.getElementById("postcode").value = response;
 				},
 				error: function(jqXhr, textStatus, errorMessage) {
@@ -250,39 +237,23 @@ $(document).ready(function() {
 			});
 		}
 	});
-});
-</script>
-<script>
-$(document).ready(function() {
-	$(function() {
-		$('.select2').select2();
-		$(".select2-placeholder-multiple").select2({placeholder: "-- โปรดระบุ --"});
-		$(".js-hide-search").select2({minimumResultsForSearch: 1 / 0});
-		$(".js-max-length").select2({maximumSelectionLength: 2, placeholder: "Select maximum 2 items"});
-		$(".select2-placeholder").select2({placeholder: "-- โปรดระบุ --", allowClear: true});
-		$(".js-select2-icons").select2({
-			minimumResultsForSearch: 1 / 0,
-			templateResult: icon,
-			templateSelection: icon,
-			escapeMarkup: function(elm){
-				return elm
-			}
-		});
-		function icon(elm){
-			elm.element;
-			return elm.id ? "<i class='" + $(elm.element).data("icon") + " mr-2'></i>" + elm.text : elm.text
+	$('#govs').change(function() {
+		if ($(this).val() != '') {
+			var id = $(this).val();
+			$.ajax({
+				method: "POST",
+				url: "{{ route('register.department') }}",
+				dataType: "html",
+				data: {id:id},
+				success: function(response) {
+					document.getElementById("agency_department").innerHTML = response;
+				},
+				error: function(jqXhr, textStatus, errorMessage) {
+					alert('GovDept error: ' + jqXhr.status + errorMessage);
+				}
+			});
 		}
 	});
-	function formatRepo (repo) {
-		if (repo.loading) return repo.text;
-		var markup = "<div class='select2-result-repository clearfix'>" +
-			"<div class='select2-result-repository__meta'>" +
-			"<div class='select2-result-repository__title'>" + repo.value + "</div></div></div>";
-			return markup;
-	}
-	function formatRepoSelection (repo) {
-		return repo.value || repo.text;
-	}
 });
 </script>
 <script>
