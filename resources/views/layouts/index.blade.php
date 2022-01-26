@@ -75,6 +75,7 @@ var resetSettings = function() {
 @yield('script')
 <script>
 $(document).ready(function() {
+    alert('jet');
 	let options = {
 		"closeButton": true,
 		"debug": false,
@@ -136,8 +137,9 @@ $(document).ready(function() {
 		toastr.success("{{ Session::get('success') }}", "Success", options);
 		Swal.fire({
 			type: "success",
-			title: "บันทึกข้อมูลสำเร็จแล้ว",
+			title: "<span style='color:##23923D';>บันทึกข้อมูลสำเร็จแล้ว</span>",
 			text: "เราได้รับข้อมูลของท่านแล้ว โปรดรอการติดต่อกลับจากเจ้าหน้าที่",
+			html: true,
 			confirmButtonText: "ตกลง",
 			footer: "LAB ENV-OCC DDC",
 			allowOutsideClick: false
@@ -156,7 +158,7 @@ $(document).ready(function() {
 		});
 		@php Session::forget("warning"); @endphp
 	@endif
-    @if (Session::has('error'))
+	@if (Session::has('error'))
 		toastr.error("{{ Session::get('error') }}", "LabEnvOcc", options);
 		@php Session::forget("error"); @endphp
 	@endif

@@ -69,7 +69,7 @@
 						<div class="panel-hdr">
 							<h2 class="text-primary-1"><i class="fal fa-clipboard"></i>&nbsp;&nbsp;บัญชีผู้ใช้</h2>
 							<div class="panel-toolbar">
-								<button class="btn btn-panel" data-action="panel-fullscreen" data-toggle="tooltip" data-offset="0,10" data-original-title="Fullscreen"></button>
+								<button class="btn btn-panel bg-transparent fs-xl w-auto h-auto rounded-0" data-action="panel-fullscreen" data-toggle="tooltip" data-offset="0,10" data-original-title="Fullscreen"><i class="fal fa-expand"></i></button>
 							</div>
 						</div>
 						<div class="panel-container show">

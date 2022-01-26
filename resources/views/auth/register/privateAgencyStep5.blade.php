@@ -62,7 +62,7 @@ input:disabled {background: none !important;}
 									<div class="panel-tag panel-tag-primary mt-2 bg-white">
 										<div class="form-group row">
 											<div class="col-md-4 mb-3">
-												<label class="form-label">ชื่อหน่วยงาน <span class="text-danger">*</span> </label>
+												<label class="form-label">ชื่อสถานประกอบการ <span class="text-danger">*</span> </label>
 												<input type="text" class="form-control form-control-sm border-dashed" value="{{ $userData->agency_name ?? "" }}" readonly>
 											</div>
 											<div class="col-md-4 mb-3">
@@ -176,16 +176,8 @@ input:disabled {background: none !important;}
 @section('script')
 <script>
 $(document).ready(function() {
-	$.ajaxSetup({headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}});
-	$('#refresh-captcha').click(function () {
-		$.ajax({
-			type: "POST",
-			url: "{{ route('register.refresh-captcha') }}",
-			success: function (data) {
-				$(".captcha").html(data.captcha);
-			}
-		});
-	});
+	$.ajaxSetup({headers:{'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')}});
+	$('#refresh-captcha').click(function(){$.ajax({type:"POST",url: "{{ route('register.refresh-captcha') }}",success:function(data){$(".captcha").html(data.captcha);}});});
 });
 </script>
 <script>
@@ -193,7 +185,6 @@ $(document).ready(function() {
 	'use strict';
 	window.addEventListener('load', function() {
 		var forms = document.getElementsByClassName('needs-validation');
-		// Loop over them and prevent submission
 		var validation = Array.prototype.filter.call(forms, function(form) {
 			form.addEventListener('submit', function(event) {
 				if (form.checkValidity() === false) {

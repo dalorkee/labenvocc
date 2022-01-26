@@ -52,7 +52,7 @@ input:disabled {background: none !important;}
 						<div class="panel-hdr">
 							<h2 class="text-primary-1"><i class="fal fa-clipboard"></i>&nbsp;&nbsp;ตรวจสอบข้อมูล</h2>
 							<div class="panel-toolbar">
-								<button class="btn btn-panel" data-action="panel-fullscreen" data-toggle="tooltip" data-offset="0,10" data-original-title="Fullscreen"></button>
+								<button class="btn btn-panel bg-transparent fs-xl w-auto h-auto rounded-0" data-action="panel-fullscreen" data-toggle="tooltip" data-offset="0,10" data-original-title="Fullscreen"><i class="fal fa-expand"></i></button>
 							</div>
 						</div>
 						<div class="panel-container show">
@@ -165,7 +165,7 @@ input:disabled {background: none !important;}
 					</div>
 					<div class="text-center">
 						<a href="{{ route('register.personal.step4.get') }}" type="button" class="btn btn-warning btn-pills" style="width: 116px;"><i class="fal fa-arrow-left"></i> ก่อนหน้า</a>
-						<button type="submit" class="btn btn-danger btn-pills" style="width: 116px;"><i class="fal fa-arrow-right"></i> ลงทะเบียน</button>
+						<button type="submit" class="btn btn-danger btn-pills" style="width: 116px;">ลงทะเบียน <i class="fal fa-arrow-right"></i></button>
 					</div>
 				</fieldset>
 			</form>
@@ -178,16 +178,8 @@ input:disabled {background: none !important;}
 <script src="{{ URL::asset('assets/js/notifications/sweetalert2/sweetalert2.bundle.js') }}"></script>
 <script>
 $(document).ready(function() {
-	$.ajaxSetup({headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}});
-	$('#refresh-captcha').click(function () {
-		$.ajax({
-			type: "POST",
-			url: "{{ route('register.refresh-captcha') }}",
-			success: function (data) {
-				$(".captcha").html(data.captcha);
-			}
-		});
-	});
+	$.ajaxSetup({headers:{'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')}});
+	$('#refresh-captcha').click(function(){$.ajax({type:"POST",url:"{{ route('register.refresh-captcha') }}",success:function(data){$(".captcha").html(data.captcha);}});});
 });
 </script>
 <script>
@@ -195,7 +187,6 @@ $(document).ready(function() {
 	'use strict';
 	window.addEventListener('load', function() {
 		var forms = document.getElementsByClassName('needs-validation');
-		// Loop over them and prevent submission
 		var validation = Array.prototype.filter.call(forms, function(form) {
 			form.addEventListener('submit', function(event) {
 				if (form.checkValidity() === false) {

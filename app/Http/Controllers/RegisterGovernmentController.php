@@ -188,7 +188,7 @@ class RegisterGovernmentController extends Controller
 			$request->session()->forget('userData');
 
 			if ($userLoginDataSaved == true && $userDataSaved == true) {
-				return redirect()->route('login')->with('success', 'ลงทะเบียนหน่วยงานรัฐบาลสำเร็จแล้ว โปรดรอผลการพิจารณาใช้ระบบฯ');
+				return redirect()->route('login')->with('success', 'ลงทะเบียน หน่วยงานรัฐบาล สำเร็จแล้ว โปรดรอผลการพิจารณาใช้ระบบฯ');
 			} else {
 				return redirect()->route('login')->with('error', 'ไม่สามารถลงทะเบียนได้สำเร็จ โปรดตรวจสอบ');
 			}

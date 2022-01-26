@@ -137,6 +137,7 @@ class RegisterPrivateAgencyController extends Controller
 				'approved' => 'n'
 			]);
 			$userLoginData->password = Hash::make($userLoginData->password);
+			$userLoginData->password = Hash::make($userLoginData->password_confirmation);
 			$userLoginDataSaved = $userLoginData->save();
 
 			$userData = $request->session()->get('userData');
@@ -152,7 +153,7 @@ class RegisterPrivateAgencyController extends Controller
 			$request->session()->forget('userData');
 
 			if ($userLoginDataSaved == true && $userDataSaved == true) {
-				return redirect()->route('login')->with('success', 'ลงทะเบียนหน่วยงานเอกชนสำเร็จแล้ว โปรดรอผลการพิจารณาใช้ระบบฯ');
+				return redirect()->route('login')->with('success', 'ลงทะเบียน หน่วยงานเอกชน สำเร็จแล้ว โปรดรอผลการพิจารณาใช้ระบบฯ');
 			} else {
 				return redirect()->route('login')->with('error', 'ไม่สามารถลงทะเบียนได้สำเร็จ โปรดตรวจสอบ');
 			}

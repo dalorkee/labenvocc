@@ -120,11 +120,11 @@ $(document).ready(function() {
 		toastr.success("{{ Session::get('success') }}", "Success", options);
 		Swal.fire({
 			type: "success",
-			title: "บันทึกข้อมูลสำเร็จแล้ว",
+			title: "<span class='text-success'>บันทึกข้อมูลสำเร็จแล้ว</span>",
 			text: "{{ Session::get('success') }}",
 			confirmButtonText: "ตกลง",
 			footer: "LAB ENV-OCC DDC",
-			allowOutsideClick: false
+			allowOutsideClick: false,
 		});
 		@php Session::forget("success"); @endphp
 	@endif
@@ -132,7 +132,7 @@ $(document).ready(function() {
 		toastr.error("{{ Session::get('error') }}", "Error", options);
 		Swal.fire({
 			type: "error",
-			title: "เกิดข้อผิดพลาด",
+			title: "<span class='text-danger'>เกิดข้อผิดพลาด</span>",
 			text: "{{ Session::get('error') }}",
 			confirmButtonText: "ตกลง",
 			footer: "LAB ENV-OCC DDC",

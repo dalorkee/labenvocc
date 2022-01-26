@@ -123,7 +123,7 @@ class RegisterPersonalController extends Controller
 
 	protected function createPersonalStep4Post(Request $request): object {
 		$validatedLoginData = $request->validate([
-			'username' => 'required|min:6|max:10|unique:users,username|regex:/^[a-zA-Z0-9 ]+$/',
+			'username' => 'required|min:6|max:10|unique:users,username|regex:/^[a-zA-Z0-9]+$/',
 			'email' => 'required|unique:users,email',
 			'password' => 'required|min:6|max:12|required_with:password_confirmation|same:password_confirmation',
 			'password_confirmation' => 'required|min:6|max:12'
@@ -183,7 +183,7 @@ class RegisterPersonalController extends Controller
 			$request->session()->forget('userData');
 
 			if ($userLoginDataSaved == true && $userDataSaved == true) {
-				return redirect()->route('login')->with('success', 'ลงทะเบียน &#39;บุคคลทั่วไป&#39 สำเร็จแล้ว โปรดรอผลการพิจารณาใช้ระบบฯ');
+				return redirect()->route('login')->with('success', 'ลงทะเบียน บุคคลทั่วไป สำเร็จแล้ว โปรดรอผลการพิจารณาใช้ระบบฯ');
 			} else {
 				return redirect()->route('login')->with('error', 'ไม่สามารถลงทะเบียนได้ โปรดตรวจสอบ');
 			}
