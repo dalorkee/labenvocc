@@ -4,8 +4,11 @@
 @endsection
 @section('style')
 <link rel="stylesheet" href="{{ URL::asset('css/register_staff.css') }}">
-<link rel="stylesheet" href="{{ URL::asset('assets/css/formplugins/select2/select2.bundle.css') }}">
+{{-- <link rel="stylesheet" href="{{ URL::asset('assets/css/formplugins/select2/select2.bundle.css') }}"> --}}
 <link rel="stylesheet" href="{{ URL::asset('assets/css/notifications/sweetalert2/sweetalert2.bundle.css') }}" media="screen, print">
+<style type="text/css">
+.captcha img{border: 1px solid blue;}
+</style>
 @endsection
 @section('content')
 <div class="wrapper">
@@ -18,14 +21,12 @@
 				<div class="form-row">
 					<div class="form-group col-md-6">
 						<label class="form-label" for="id_card">1.1 เลขบัตรประชาชน <span class="text-red-600">*</span></label>
-						<input type="text" name="id_card" id="id_card" value="{{ old('id_card') }}" class="form-control @error('id_card') is-invalid @enderror" required>
-						@error('id_card')
-							<div class="invalid-feedback" role="alert">{{ $message }}</div>
-						@enderror
+						<input type="text" name="id_card" id="id_card" value="{{ old('id_card') }}" class="form-control @error('id_card') is-invalid @enderror" maxlength="13" size="13" required>
+						@error('id_card')<div class="invalid-feedback" role="alert">{{ $message }}</div>@enderror
 					</div>
 					<div class="form-group col-md-6">
 						<label class="form-label" for="title_name">1.2 คำนำหน้าชื่อ <span class="text-red-600">*</span></label>
-						<select name="title_name" id="title_name" class="select2-hide-search form-control @error('title_name') is-invalid @enderror" required>
+						<select name="title_name" id="title_name" class="form-control @error('title_name') is-invalid @enderror" required="">
 							@if (old('title_name'))
 								<option value="{{ old('title_name') }}">{{ $title_name[old('title_name')] }}</option>
 							@endif
@@ -34,41 +35,31 @@
 								<option value="{{ $key }}">{{ $val }}</option>
 							@endforeach
 						</select>
-						@error('id_card')
-							<div class="invalid-feedback" role="alert">{{ $message }}</div>
-						@enderror
+						@error('id_card')<div class="invalid-feedback" role="alert">{{ $message }}</div>@enderror
 					</div>
 				</div>
 				<div class="form-row">
 					<div class="form-group col-md-6">
 						<label class="form-label" for="firstname">1.3 ชื่อ <span class="text-red-600">*</span></label>
-						<input type="text" name="firstname" value="{{ old('firstname') }}" class="form-control @error('firstname') is-invalid @enderror" required>
-						@error('firstname')
-							<div class="invalid-feedback" role="alert">{{ $message }}</div>
-						@enderror
+						<input type="text" name="firstname" value="{{ old('firstname') }}" class="form-control @error('firstname') is-invalid @enderror" maxlength="60" size="60" required>
+						@error('firstname')<div class="invalid-feedback" role="alert">{{ $message }}</div>@enderror
 					</div>
 					<div class="form-group col-md-6">
 						<label class="form-label" for="lastname">1.4 นามสกุล <span class="text-red-600">*</span></label>
-						<input type="text" name="lastname" value="{{ old('lastname') }}" class="form-control @error('lastname') is-invalid @enderror" required>
-						@error('lastname')
-							<div class="invalid-feedback" role="alert">{{ $message }}</div>
-						@enderror
+						<input type="text" name="lastname" value="{{ old('lastname') }}" class="form-control @error('lastname') is-invalid @enderror" maxlength="60" size="60" required>
+						@error('lastname')<div class="invalid-feedback" role="alert">{{ $message }}</div>@enderror
 					</div>
 				</div>
 				<div class="form-row">
 					<div class="form-group col-md-6">
 						<label class="form-label" for="mobile">1.5 โทรศัพท์เคลื่อนที่ <span class="text-red-600">*</span></label>
-						<input type="text" name="mobile" value="{{ old('mobile') }}" class="form-control @error('mobile') is-invalid @enderror" required>
-						@error('moblie')
-							<div class="invalid-feedback" role="alert">{{ $message }}</div>
-						@enderror
+						<input type="text" name="mobile" value="{{ old('mobile') }}" class="form-control @error('mobile') is-invalid @enderror" maxlength="60" size="60" required>
+						@error('moblie')<div class="invalid-feedback" role="alert">{{ $message }}</div>@enderror
 					</div>
 					<div class="form-group col-md-6">
 						<label class="form-label" for="email">1.6 อีเมล์ <span class="text-red-600">*</span></label>
-						<input type="email" name="email" value="{{ old('email') }}" id="email" class="form-control @error('email') is-invalid @enderror" required>
-						@error('email')
-							<div class="invalid-feedback" role="alert">{{ $message }}</div>
-						@enderror
+						<input type="email" name="email" value="{{ old('email') }}" id="email" class="form-control @error('email') is-invalid @enderror" maxlength="60" size="60" required>
+						@error('email')<div class="invalid-feedback" role="alert">{{ $message }}</div>@enderror
 					</div>
 				</div>
 			</section>
@@ -78,47 +69,43 @@
 				<div class="form-row">
 					<div class="form-group col-md-12">
 						<label class="form-label" for="affiliation">2.1 สังกัด <span class="text-red-600">*</span></label>
-						<select name="affiliation" class="select2-hide-search form-control" required>
+						<select name="affiliation" class="form-control @error('affiliation') is-invalid @enderror" required="">
 							@if (old('affiliation'))
-								<option value="{{ $affiliation[old('affiliation')] }}">-- โปรดเลือก --</option>
+								<option value="{{ old('affiliation') }}">{{ $affiliation[old('affiliation')] }}</option>
 							@endif
 							<option value="">-- โปรดเลือก --</option>
 							@foreach ($affiliation as $key => $val)
 								<option value="{{ $key }}">{{ $val }}</option>
 							@endforeach
 						</select>
-						@error('affiliation')
-							<div class="invalid-feedback" role="alert">{{ $message }}</div>
-						@enderror
+						@error('affiliation')<div class="invalid-feedback" role="alert">{{ $message }}</div>@enderror
 					</div>
 				</div>
 				<div class="form-row">
 					<div class="form-group col-md-6">
 						<label class="form-label" for="position">2.2 ตำแหน่ง <span class="text-red-600">*</span></label>
-						<select name="position" id="position" class="select2 form-control" required>
+						<select name="position" id="position" class="form-control @error('position') is-invalid @enderror" required>
 							@if (old('position'))
-								<option value="{{ $positions[old('position')] }}">-- โปรดเลือก --</option>
+								<option value="{{ old('position') }}">{{ $positions[old('position')] }}</option>
 							@endif
 							<option value="">-- โปรดเลือก --</option>
 							@foreach ($positions as $key => $val)
 								<option value="{{ $key }}">{{ $val }}</option>
 							@endforeach
 						</select>
-						@error('position')
-							<div class="invalid-feedback" role="alert">{{ $message }}</div>
-						@enderror
+						@error('position')<div class="invalid-feedback" role="alert">{{ $message }}</div>@enderror
 					</div>
 					<div class="form-group col-md-6">
 						<label class="form-label" for="position_other">2.3 ตำแหน่งอื่นๆ ระบุ</label>
-						<input type="text" name="position_other" id="position_other" class="form-control" disabled>
+						<input type="text" name="position_other" id="position_other" class="form-control" maxlength="80" size="80" disabled>
 					</div>
 				</div>
 				<div class="form-row">
 					<div class="form-group col-md-6">
 						<label class="form-label" for="position_level">2.4 ระดับตำแหน่ง</label>
-						<select name="position_level" id="position_level" class="select2 form-control">
+						<select name="position_level" id="position_level" class="form-control @error('position_level') is-invalid @enderror" required="">
 							@if (old('position_level'))
-								<option value="{{ $positions_level[old('position_level')] }}">-- โปรดเลือก --</option>
+								<option value="{{ old('position_level') }}">{{ $positions_level[old('position_level')] }}</option>
 							@endif
 							<option value="">-- โปรดเลือก --</option>
 							@foreach ($positions_level as $key => $val)
@@ -126,24 +113,20 @@
 							@endforeach
 							<option value="">-- โปรดเลือก --</option>
 						</select>
-						@error('position_level')
-							<div class="invalid-feedback" role="alert">{{ $message }}</div>
-						@enderror
+						@error('position_level')<div class="invalid-feedback" role="alert">{{ $message }}</div>@enderror
 					</div>
 					<div class="form-group col-md-6">
 						<label class="form-label" for="fname">2.5 หน้าที่ <span class="text-red-600">*</span></label>
-						<select name="duty" id="duty" class="select2 form-control">
+						<select name="duty" id="duty" class="form-control @error('duty') is-invalid @enderror" required="">
 							@if (old('duty'))
-								<option value="{{ $staffDuty[old('duty')] }}">-- โปรดเลือก --</option>
+								<option value="{{ old('duty') }}">{{ $staffDuty[old('duty')] }}</option>
 							@endif
 							<option value="">-- โปรดเลือก --</option>
 							@foreach ($staffDuty as $key => $val)
 								<option value="{{ $key }}">{{ $val }}</option>
 							@endforeach
 						</select>
-						@error('duty')
-							<div class="invalid-feedback" role="alert">{{ $message }}</div>
-						@enderror
+						@error('duty')<div class="invalid-feedback" role="alert">{{ $message }}</div>@enderror
 					</div>
 				</div>
 			</section>
@@ -153,36 +136,30 @@
 				<div class="form-row">
 					<div class="form-group col-md-12">
 						<label class="form-label" for="username">3.1 ชื่อผู้ใช้ <span class="text-red-600">*</span></label>
-						<input type="text" name="username" value="{{ old('username') }}" class="form-control" required>
-						@error('username')
-							<div class="invalid-feedback" role="alert">{{ $message }}</div>
-						@enderror
+						<input type="text" name="username" value="{{ old('username') }}" class="form-control @error('username') is-invalid @enderror" maxlength="40" size="40" required>
+						@error('username')<div class="invalid-feedback" role="alert">{{ $message }}</div>@enderror
 					</div>
 				</div>
 				<div class="form-row">
 					<div class="form-group col-md-6">
 						<label class="form-label" for="password">3.2 รหัสผ่าน <span class="text-red-600">*</span></label>
 						<div class="input-group">
-							<input type="password" name="password" id="password" class="form-control" required>
+							<input type="password" name="password" id="password" class="form-control @error('password') is-invalid @enderror" maxlength="40" size="40" required>
 							<div class="input-group-append">
 								<span class="input-group-text"><i class="fal fa-eye toggle-password" toggle="#password"></i></span>
 							</div>
 						</div>
-						@error('password')
-							<div class="invalid-feedback" role="alert">{{ $message }}</div>
-						@enderror
+						@error('password')<div class="invalid-feedback" role="alert">{{ $message }}</div>@enderror
 					</div>
 					<div class="form-group col-md-6">
 						<label class="form-label" for="password_confirmation">3.3 ยืนยันรหัสผ่าน <span class="text-red-600">*</span></label>
 						<div class="input-group">
-							<input type="password" name="password_confirmation" id="confirm_password" class="form-control" required>
+							<input type="password" name="password_confirmation" id="confirm_password" class="form-control @error('password_confirmation') is-invalid @enderror" maxlength="40" size="40" required>
 							<div class="input-group-append">
 								<span class="input-group-text"><i class="fal fa-eye toggle-confirm-password" toggle="#confirm_password"></i></span>
 							</div>
 						</div>
-						@error('password_confirmation')
-							<div class="invalid-feedback" role="alert">{{ $message }}</div>
-						@enderror
+						@error('password_confirmation')<div class="invalid-feedback" role="alert">{{ $message }}</div>@enderror
 					</div>
 				</div>
 				<div class="form-row">
@@ -194,8 +171,8 @@
 					</div>
 				</div>
 				<div class="form-row">
-					<div class="form-group col-md-6">
-						<input type="text" name="captcha" id="captcha" class="form-control" placeholder="ป้อนรหัสที่ท่านเห็น">
+					<div class="form-group col-md-12">
+						<input type="text" name="captcha" id="captcha" class="form-control" style="border: 1px solid #8E44AD" placeholder="ป้อนรหัสที่ท่านเห็น">
 					</div>
 				</div>
 			</section>
@@ -216,15 +193,7 @@
 <script src="{{ URL::asset('assets/js/formplugins/select2/select2.bundle.js') }}"></script>
 <script src="{{ URL::asset('assets/js/notifications/sweetalert2/sweetalert2.bundle.js') }}"></script>
 <script>
-$(document).ready(function() {
-	$.ajaxSetup({headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}});
-	$(function(){
-		$('.select2').select2();
-		$('.select2-hide-search').select2({
-			minimumResultsForSearch: 1/0
-		});
-	});
-});
+$(document).ready(function(){$.ajaxSetup({headers:{'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')}});});
 </script>
 <script>
 $(function(){
@@ -247,13 +216,7 @@ $(function(){
 				$('.steps ul').removeClass('step-3');
 				//$('.actions ul').removeClass('step-last');
 			}
-			// if ( newIndex === 3 ) {
-			// 	$('.steps ul').addClass('step-4');
-			// 	$('.actions ul').addClass('step-last');
-			// } else {
-			// 	$('.steps ul').removeClass('step-4');
-			// 	$('.actions ul').removeClass('step-last');
-			// }
+
 			return true;
 		},
 		labels: {
@@ -263,15 +226,15 @@ $(function(){
 		},
 		onFinished: function (event, currentIndex) {
 			Swal.fire({
-				title: "ยืนยันข้อมูลของท่าน?",
-				text: "โปรดตรวจสอบข้อมูลให้ถูกต้อง ก่อนบันทึกข้อมูลเสมอ!",
+				title: "<span class='text-danger'>ยืนยันข้อมูลของท่าน?</span>",
+				text: "โปรดตรวจสอบว่าได้กรอกข้อมูลครบแล้ว ก่อนบันทึกข้อมูลเสมอ!",
 				type: "warning",
 				showCancelButton: true,
 				cancelButtonText: "ยกเลิก",
 				confirmButtonText: "บันทึกข้อมูล",
 				allowOutsideClick: false
-			}).then(function(result){
-				if (result.value){
+			}).then(function(result) {
+				if (result.value) {
 					$("#form").submit();
 				}
 			});
@@ -284,17 +247,12 @@ $(function(){
 		$(this).parent().nextAll().removeClass('checked');
 	});
 	// Custom Button Jquery Steps
-	$('.forward').click(function(){
+	$('.forward').click(function() {
 	$("#wizard").steps('next');
 	})
-	$('.backward').click(function(){
+	$('.backward').click(function() {
 		$("#wizard").steps('previous');
 	})
-	// Checkbox
-	// $('.checkbox-circle label').click(function(){
-	// 	$('.checkbox-circle label').removeClass('active');
-	// 	$(this).addClass('active');
-	// })
 });
 </script>
 <script>
@@ -339,5 +297,23 @@ $(function(){
 		}
 	});
 });
+</script>
+<script>
+(function() {
+	'use strict';
+	window.addEventListener('load', function() {
+		var forms = document.getElementsByClassName('needs-validation');
+		var validation = Array.prototype.filter.call(forms, function(form) {
+			// form.addEventListener('submit', function(event) {
+			document.getElementById("form").addEventListener("click", function(event) {
+				if (form.checkValidity() === false) {
+					event.preventDefault();
+					event.stopPropagation();
+				}
+				form.classList.add('was-validated');
+			}, false);
+		});
+	}, false);
+})();
 </script>
 @endsection

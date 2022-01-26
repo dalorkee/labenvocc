@@ -40,16 +40,17 @@ class RegisterStaffController extends Controller
 	 */
 	protected function store(Request $request): object {
 		$request->validate([
-			'id_card'=>'bail|numeric|digits_between:1,13|required',
+			'id_card'=>'bail|numeric|digits_between:1,13|required|unique:users_staff_detail,id_card',
 			'title_name'=>'required',
 			'firstname'=>'required|min:3|max:100',
 			'lastname'=>'required|min:3|max:100',
-			'mobile'=>'required',
+			'mobile'=>'required|regex:/(0)[0-9]/|not_regex:/[a-z]/|min:10',
 			'email'=>'required|email|unique:users,email',
 
 			'affiliation'=>'required',
 			'position'=>'required|min:1|max:10',
 			'position_other'=>'required_if:position,81',
+			'position_level'=>'required',
 			'duty'=>'required',
 
 			'username'=>'required|unique:users,username',
