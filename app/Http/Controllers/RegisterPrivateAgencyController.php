@@ -23,7 +23,7 @@ class RegisterPrivateAgencyController extends Controller
 	protected function createPrivateAgencyStep2Post(Request $request): object {
 		$validatedData = $request->validate([
 			'agency_name' => 'required|max:100',
-			'agency_code' => 'required|max:30',
+			'agency_code' => 'required|min:1|max:14',
 			'taxpayer_no' => 'required|max:30',
 			'email' => 'required|unique:users_customer_detail,email',
 			'mobile' => 'required|regex:/(0)[0-9]/|not_regex:/[a-z]/|min:10',

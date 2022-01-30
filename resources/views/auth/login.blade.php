@@ -3,10 +3,10 @@
 <link rel="stylesheet" href="{{ URL::asset('css/register_staff.css') }}">
 <style>
 .input-group-text {
-    background-color: #F3F3F3 !important;
+	background-color: #F3F3F3 !important;
 }
 .toggle-password {
-    color: #1AB3A3;
+	color: #1AB3A3;
 }
 </style>
 @endsection
@@ -22,30 +22,26 @@
 						<div class="col-md-12">
 							<div class="form-group">
 								<label for="username" class="form-label">ชื่อผู้ใช้/อีเมล์</label>
-								<input name="identity" type="text" value="{{ old('identity') }}" id="username" class="form-control" required>
-								@error('identity')
-									<div class="invalid-feedback" role="alert">{{ $message }}</div>
-								 @enderror
-								<div class="help-block">สามารถใช้อีเมล์แทนชื่อผู้ใช้ได้</div>
+								<input name="identity" type="text" value="{{ old('identity') }}" id="username" class="form-control @error('identity') is-invalid @enderror" maxlength="90">
+								@if ($errors->has('identity'))
+									<span class="invalid-feedback" role="alert">{{ $errors->first('identity') }}</span>
+								@else
+									<div class="help-block">{{ 'สามารถใช้อีเมล์แทนชื่อผู้ใช้ได้' }}</div>
+								@endif
 							</div>
 							<div class="form-group">
 								<label class="form-label" for="password">รหัสผ่าน</label>
 								<div class="input-group">
-									<input name="password" type="password" id="password" class="form-control" required>
+									<input name="password" type="password" id="password" class="form-control @error('password') is-invalid @enderror" maxlength="90">
 									<div class="input-group-append">
 										<span class="input-group-text"><i class="fal fa-eye toggle-password" toggle="#password"></i></span>
 									</div>
 								</div>
-								@error('password')
-									<div class="invalid-feedback" role="alert">{{ $message }}</div>
-								@enderror
-								<div class="help-block">รหัสผ่านของคุณ</div>
-							</div>
-							<div class="form-group text-left">
-								<div class="custom-control custom-checkbox">
-									<input type="checkbox" name="remember" id="remember_me" class="custom-control-input">
-									<label class="custom-control-label" for="rememberme">จดจำผู้ใช้</label>
-								</div>
+									@if ($errors->has('password'))
+										<div class="help-block invalid-feedback d-block text-danger" role="alert">{{ $errors->first('password') }}</div>
+									@else
+										<div class="help-block">{{ 'รหัสผ่านของท่าน' }}</div>
+									@endif
 							</div>
 						</div>
 						<div class="col-md-12 mt-4">
@@ -53,14 +49,14 @@
 						</div>
 						<div class="col-md-12">
 							<nav class="row mt-4 text-sm">
-								<div class="col-sm-3">
+								<div class="col-sm-4">
 									<a href="#"><i class="fal fa-key"></i> ลืมรหัสผ่าน ?</a>
 								</div>
-								<div class="col-sm-3">
+								<div class="col-sm-4">
 									<a href="#"><i class="fal fa-book"></i> คู่มือการใช้งาน</a>
 								</div>
-								<div class="col-sm-6">
-									<span><i class="fal fa-user"></i> ยังไม่มีบัญชีผู้ใช้ ?</span>&nbsp;&nbsp;&nbsp;<a href="{{ route('register.index') }}" title="ลงทะเบียน">ลงทะเบียนใช้งาน</a>
+								<div class="col-sm-4">
+									<span><i class="fal fa-user"></i></span><a href="{{ route('register.index') }}" title="ลงทะเบียน"> ลงทะเบียนใหม่</a>
 								</div>
 							</nav>
 						</div>

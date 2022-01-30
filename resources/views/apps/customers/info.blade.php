@@ -5,6 +5,9 @@
 @section('style')
 <link href="{{ URL::asset('css/pj-step.css') }}" rel="stylesheet">
 <link href="{{ URL::asset('assets/css/formplugins/bootstrap-datepicker/bootstrap-datepicker.css') }}" rel="stylesheet" type="text/css">
+<style type="text/css">
+.input-date:read-only{background:#fefefe!important}
+</style>
 @endsection
 @section('content')
 <ol class="breadcrumb page-breadcrumb text-sm font-prompt">
@@ -33,14 +36,39 @@
 							<li class="undone"><p><i class="fal fa-user"></i> <span class="d-none d-sm-inline">ข้อมูลตัวอย่าง</span></p></li>
 							<li class="undone"><p><i class="fal fa-user"></i> <span class="d-none d-sm-inline">ตรวจสอบข้อมูล</span></p></li>
 						</ul>
-						<div class="form-row">
-							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
-								<label class="form-label" for="office_name">หน่วยงานที่ส่งตัวอย่าง <span class="text-red-600">*</span></label>
-								<input type="hidden" name="order_id" value="{{ $order[0]->id ?? null }}">
-								<input type="hidden" name="office_id" value="{{ $order[0]->ref_office_id ?? Auth::user()->userCustomer->office_id }}">
-								<input type="text" name="office_name" value="{{ $order[0]->ref_office_name ?? Auth::user()->userCustomer->office_name }}" class="form-control" readonly>
+						@switch (Auth::user()->userCustomer->customer_type)
+							@case('personal')
+								<div class="form-row">
+									<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
+										<label class="form-label" for="order_customer_name">ชื่อ-สกุล ผู้ส่งตัวอย่าง <span class="text-red-600">*</span></label>
+										<input type="hidden" name="order_id" value="{{ $order[0]->id ?? null }}">
+										<input type="hidden" name="personal_id" value="{{ Auth::user()->id }}">
+										<input type="text" name="personal_name" value="{{ $titleName[Auth::user()->userCustomer->title_name].Auth::user()->userCustomer->first_name." ".Auth::user()->userCustomer->last_name }}" class="form-control" maxlength="60" readonly>
+									</div>
+								</div>
+								@break;
+							{{-- @case('private')
+							<div class="form-row">
+								<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
+									<label class="form-label" for="office_name">หน่วยงานที่ส่งตัวอย่าง <span class="text-red-600">*</span></label>
+									<input type="hidden" name="order_id" value="{{ $order[0]->id ?? null }}">
+									<input type="hidden" name="office_id" value="{{ $order[0]->ref_office_id ?? Auth::user()->userCustomer->office_id }}">
+									<input type="text" name="office_name" value="{{ $order[0]->ref_office_name ?? Auth::user()->userCustomer->office_name }}" class="form-control" readonly>
+								</div>
 							</div>
-						</div>
+								@break;
+							@case('government')
+							<div class="form-row">
+								<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
+									<label class="form-label" for="office_name">หน่วยงานที่ส่งตัวอย่าง <span class="text-red-600">*</span></label>
+									<input type="hidden" name="order_id" value="{{ $order[0]->id ?? null }}">
+									<input type="hidden" name="office_id" value="{{ $order[0]->ref_office_id ?? Auth::user()->userCustomer->office_id }}">
+									<input type="text" name="office_name" value="{{ $order[0]->ref_office_name ?? Auth::user()->userCustomer->office_name }}" class="form-control" readonly>
+								</div>
+							</div>
+								@break; --}}
+						@endswitch
+
 						<div class="form-row">
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
 								<label class="form-label" for="type_of_work">ประเภทงาน <span class="text-red-600">*</span></label>
@@ -63,16 +91,16 @@
 						</div>
 						<div class="form-row">
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
-								<label class="form-label" for="book_no">เลขที่หนังสือนำส่ง <span class="text-red-600">*</span></label>
+								<label class="form-label" for="book_no">เลขที่หนังสือนำส่ง</label>
 								<input type="text" name="book_no" value="{{ $order[0]->book_no ?? null }}" class="form-control @error('book_no') is-invalid @enderror">
 								@error('book_no')
 									<div class="invalid-feedback" role="alert">{{ $message }}</div>
 								@enderror
 							</div>
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
-								<label class="form-label" for="book_date">ลงวันที่ <span class="text-red-600">*</span></label>
+								<label class="form-label" for="book_date">ลงวันที่</label>
 								<div class="input-group">
-									<input type="text" name="book_date" value="{{ $order[0]->book_date_js ?? '' }}" placeholder="เลือกวันที่" class="form-control @error('book_date_js') is-invalid @enderror" id="datepicker_book_date" readonly >
+									<input type="text" name="book_date" value="{{ $order[0]->book_date_js ?? '' }}" placeholder="เลือกวันที่" class="form-control @error('book_date_js') is-invalid @enderror input-date" id="datepicker_book_date" readonly >
 									<div class="input-group-append">
 										<span class="input-group-text fs-xl">
 											<i class="fal fa-calendar-alt"></i>
@@ -86,7 +114,7 @@
 						</div>
 						<div class="form-row">
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
-								<label class="form-label" for="inputGroupFile01">แนบไฟล์หนังสือนำส่ง <span class="text-red-600">*</span></label>
+								<label class="form-label" for="inputGroupFile01">แนบไฟล์หนังสือนำส่ง</label>
 								<div class="input-group">
 									<div class="custom-file">
 										<input type="file" name="book_file" class="custom-file-input @error('book_file') is-invalid @enderror" id="bookFile01" aria-describedby="bookFile01">

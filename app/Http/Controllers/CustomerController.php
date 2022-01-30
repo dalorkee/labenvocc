@@ -36,33 +36,67 @@ class CustomerController extends Controller
 	}
 	protected function createInfo(Request $request): object {
 		$type_of_work = $this->typeOfWork();
+		$titleName = $this->titleName();
 		if ($request->order_id == 'new') {
 			$order = null;
 		 } else {
 			 $order = Order::whereId($request->order_id)->with('uploads')->get();
 		 }
-		return view('apps.customers.info', [
-			'type_of_work' => $type_of_work,
-			'order' => $order
-		]);
+		return view('apps.customers.info', ['type_of_work' => $type_of_work, 'order' => $order, 'titleName' => $titleName]);
 	}
 	protected function storeInfo(Request $request) {
 		try {
-			$order = Order::updateOrCreate(
-				['id' => $request->order_id],
-				[
-					'ref_user_id' => $this->user->userCustomer->user->id,
-					'order_status' => 'pending',
-					'payment_status' => 'pending',
-					'ref_office_id' => $this->user->userCustomer->office_code,
-					'ref_office_name' => $this->user->userCustomer->office_name,
-					'type_of_work' => $request->type_of_work,
-					'type_of_work_other' => $request->type_of_work_other,
-					'book_no' => $request->book_no,
-					'book_date' => $this->convertJsDateToMySQL($request->book_date),
-					'book_upload' => ($request->hasFile('book_file')) ? 'y' : 'n'
-				]
-			);
+			switch ($this->user->userCustomer->customer_type) {
+				case 'personal':
+					$order = Order::updateOrCreate(['id' => $request->order_id], [
+						'customer_type' => $this->user->userCustomer->customer_type,
+						'ref_user_id' => $this->user->userCustomer->user->id,
+						'order_status' => 'pending',
+						'payment_status' => 'pending',
+						'type_of_work' => $request->type_of_work,
+						'type_of_work_other' => $request->type_of_work_other,
+						'book_no' => $request->book_no ?? null,
+						'book_date' => $this->convertJsDateToMySQL($request->book_date) ?? null,
+						'book_upload' => ($request->hasFile('book_file')) ? 'y' : 'n'
+					]);
+					break;
+				// case 'private':
+				// 	$order = Order::updateOrCreate(
+				// 		['id' => $request->order_id],
+				// 		[
+				// 			'order_type' => $this->user->userCustomer->customer_type,
+				// 			'ref_user_id' => $this->user->userCustomer->user->id,
+				// 			'order_status' => 'pending',
+				// 			'payment_status' => 'pending',
+				// 			'ref_agency_code' => $this->user->userCustomer->agency_code,
+				// 			'ref_agency_name' => $this->user->userCustomer->agency_name,
+				// 			'type_of_work' => $request->type_of_work,
+				// 			'type_of_work_other' => $request->type_of_work_other,
+				// 			'book_no' => $request->book_no,
+				// 			'book_date' => $this->convertJsDateToMySQL($request->book_date),
+				// 			'book_upload' => ($request->hasFile('book_file')) ? 'y' : 'n'
+				// 		]
+				// 	);
+				// 	break;
+				// case 'government':
+				// 	$order = Order::updateOrCreate(
+				// 		['id' => $request->order_id],
+				// 		[
+				// 			'order_type' => $this->user->userCustomer->customer_type,
+				// 			'ref_user_id' => $this->user->userCustomer->user->id,
+				// 			'order_status' => 'pending',
+				// 			'payment_status' => 'pending',
+				// 			'ref_agency_code' => $this->user->userCustomer->agency_code,
+				// 			'ref_agency_name' => $this->user->userCustomer->agency_name,
+				// 			'type_of_work' => $request->type_of_work,
+				// 			'type_of_work_other' => $request->type_of_work_other,
+				// 			'book_no' => $request->book_no,
+				// 			'book_date' => $this->convertJsDateToMySQL($request->book_date),
+				// 			'book_upload' => ($request->hasFile('book_file')) ? 'y' : 'n'
+				// 		]
+				// 	);
+				// 	break;
+			}
 			$last_insert_order_id = $order->id;
 			if ($request->hasFile('book_file')) {
 				/* Delete older files */
@@ -104,9 +138,9 @@ class CustomerController extends Controller
 				}
 			}
 			if ($order == true) {
-				return redirect()->route('customer.info.create', ['order_id' => $last_insert_order_id])->with(['success' => 'บันทึกร่าง [ข้อมูลทั่วไป] สำเร็จ']);
+				return redirect()->route('customer.info.create', ['order_id' => $last_insert_order_id])->with(['success' => 'บันทึกร่าง "ข้อมูลทั่วไป" สำเร็จ']);
 			} else {
-				return redirect()->back()->with('error', 'บันทึกร่าง [ข้อมูลทั่วไป] ไม่สำเร็จ');
+				return redirect()->back()->with('error', 'บันทึกร่าง "ข้อมูลทั่วไป" ผิดพลาด โปรดตรวจสอบ');
 			}
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
@@ -318,14 +352,17 @@ class CustomerController extends Controller
 					->when($request->threat_type_id > 0, function($q) use ($request) {
 						return $q->whereThreat_type_id($request->threat_type_id)->orderBy('id', 'ASC')->get();
 					});
-                    //dd($data->toArray());
+					//dd($data->toArray());
 				return DataTables::of($data)
 					->addIndexColumn()
-					->addColumn('action', function($row) use ($request) {
-						$actionBtn = "<a href=\"".route('customer.parameter.data.store', ['order_detail_id'=>$request->order_detail_id, 'id'=>$row->id])."\" class=\"btn btn-success btn-sm\"><i class=\"fal fa-plus\"></i></a>";
-						return $actionBtn;
-					})
-					->rawColumns(['action'])
+					// ->addColumn('select_paramet', static function ($row) {
+					// 	return '<input type="checkbox" name="paramets[]" value="'.$row->id.'"/>';
+					// })->rawColumns(['select_paramet'])
+					// ->addColumn('action', function($row) use ($request) {
+					// 	$actionBtn = "<a href=\"".route('customer.parameter.data.store', ['order_detail_id'=>$request->order_detail_id, 'id'=>$row->id])."\" class=\"btn btn-danger btn-sm\"><i class=\"fal fa-plus\"></i></a>";
+					// 	return $actionBtn;
+					// })
+					// ->rawColumns(['action', 'select_paramet'])
 					->make(true);
 			}
 		} catch (\Exception $e) {
@@ -478,5 +515,12 @@ class CustomerController extends Controller
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
 		}
+	}
+
+	protected function storeParamet(Request $request) {
+        dd($request->paramets);
+		foreach ($request->paramets as $key => $val) {
+            echo $val.'<br>';
+        }
 	}
 }

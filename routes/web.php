@@ -4,8 +4,8 @@ use App\Http\Controllers\{
 	HomeController,
 	RegisterController,
 	RegisterPersonalController,
-    RegisterPrivateAgencyController,
-    RegisterGovernmentController,
+	RegisterPrivateAgencyController,
+	RegisterGovernmentController,
 	RegisterStaffController,
 	CustomerController
 };
@@ -40,19 +40,19 @@ Route::name('register.')->group(function() {
 	Route::get('/register/personal/step/5', [RegisterPersonalController::class, 'createPersonalStep5Get'])->name('personal.step5.get');
 	Route::post('register/personal/step/5', [RegisterPersonalController::class, 'createPersonalStep5Post'])->name('personal.step5.post');
 
-    Route::get('/register/private/step/2', [RegisterPrivateAgencyController::class, 'createPrivateAgencyStep2Get'])->name('private.step2.get');
+	Route::get('/register/private/step/2', [RegisterPrivateAgencyController::class, 'createPrivateAgencyStep2Get'])->name('private.step2.get');
 	Route::post('register/private/step/2', [RegisterPrivateAgencyController::class, 'createPrivateAgencyStep2Post'])->name('private.step2.post');
 	Route::get('/register/private/step/3', [RegisterPrivateAgencyController::class, 'createPrivateAgencyStep3Get'])->name('private.step3.get');
-    Route::post('register/private/step/3', [RegisterPrivateAgencyController::class, 'createPrivateAgencyStep3Post'])->name('private.step3.post');
+	Route::post('register/private/step/3', [RegisterPrivateAgencyController::class, 'createPrivateAgencyStep3Post'])->name('private.step3.post');
 	Route::get('/register/private/step/4', [RegisterPrivateAgencyController::class, 'createPrivateAgencyStep4Get'])->name('private.step4.get');
 	Route::post('register/private/step/4', [RegisterPrivateAgencyController::class, 'createPrivateAgencyStep4Post'])->name('private.step4.post');
 	Route::get('/register/private/step/5', [RegisterPrivateAgencyController::class, 'createPrivateAgencyStep5Get'])->name('private.step5.get');
 	Route::post('register/private/step/5', [RegisterPrivateAgencyController::class, 'createPrivateAgencyStep5Post'])->name('private.step5.post');
 
-    Route::get('/register/gov/step/2', [RegisterGovernmentController::class, 'createGovernmentStep2Get'])->name('gov.step2.get');
+	Route::get('/register/gov/step/2', [RegisterGovernmentController::class, 'createGovernmentStep2Get'])->name('gov.step2.get');
 	Route::post('register/gov/step/2', [RegisterGovernmentController::class, 'createGovernmentStep2Post'])->name('gov.step2.post');
 	Route::get('/register/gov/step/3', [RegisterGovernmentController::class, 'createGovernmentStep3Get'])->name('gov.step3.get');
-    Route::post('register/gov/step/3', [RegisterGovernmentController::class, 'createGovernmentStep3Post'])->name('gov.step3.post');
+	Route::post('register/gov/step/3', [RegisterGovernmentController::class, 'createGovernmentStep3Post'])->name('gov.step3.post');
 	Route::get('/register/gov/step/4', [RegisterGovernmentController::class, 'createGovernmentStep4Get'])->name('gov.step4.get');
 	Route::post('register/gov/step/4', [RegisterGovernmentController::class, 'createGovernmentStep4Post'])->name('gov.step4.post');
 	Route::get('/register/gov/step/5', [RegisterGovernmentController::class, 'createGovernmentStep5Get'])->name('gov.step5.get');
@@ -89,6 +89,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 		Route::get('/customer/parameter/data/list/detail/{order_detail_id}/type/{threat_type_id}', [CustomerController::class, 'listParameterData'])->name('parameter.data.list');
 		Route::get('/customer/parameter/data/store/detail/{order_detail_id}/id/{id}', [CustomerController::class, 'storeParameterData'])->name('parameter.data.store');
 		Route::get('/customer/parameter/data/delete/id/{id}', [CustomerController::class, 'DestroyParameterData'])->name('parameter.data.destroy');
+
+		Route::post('/customer/paramet/store', [CustomerController::class, 'storeParamet'])->name('paramet.store');
 
 		Route::get('/customer/sample/create/order/{order_id}', [CustomerController::class, 'createSample'])->name('sample.create');
 		Route::post('customer/sample/store/order/{order_id}', [CustomerController::class, 'storeSample'])->name('sample.store');

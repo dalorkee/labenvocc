@@ -8,6 +8,7 @@
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('vendor/jquery-contextmenu/css/jquery.contextMenu.min.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/css/notifications/sweetalert2/sweetalert2.bundle.css') }}" media="screen, print">
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/css/formplugins/bootstrap-datepicker/bootstrap-datepicker.css') }}">
+<link type="text/css" href="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/css/dataTables.checkboxes.css" rel="stylesheet" />
 <style>
 .btn-group {margin:0 0 5px 0;padding:0;}
 .dataTables_filter label {margin-top: 8px;}
@@ -17,6 +18,27 @@
 .dt-btn {margin:0;padding:0;}
 #order-table thead {background-color:#297FB0;color: white;}
 .row-completed {width:180px;padding-right:14px;position:absolute;top:82px;right:10px;text-align:right;}
+table.dataTable.dt-checkboxes-select tbody tr,
+table.dataTable thead .dt-checkboxes-select-all {
+  cursor: pointer;
+}
+
+table.dataTable thead .dt-checkboxes-select-all {
+  text-align: center;
+}
+
+div.dataTables_wrapper span.select-info,
+div.dataTables_wrapper span.select-item {
+  margin-left: 0.5em;
+}
+
+@media screen and (max-width: 640px) {
+  div.dataTables_wrapper span.select-info,
+  div.dataTables_wrapper span.select-item {
+	margin-left: 0;
+	display: block;
+  }
+}
 </style>
 @endsection
 @section('content')
@@ -183,7 +205,7 @@
 <div class="modal font-prompt" id="add-parameter-modal" data-keyboard="false" data-backdrop="static" tabindex="-2" role="dialog" aria-hidden="true">
 	<div class="modal-dialog modal-xl modal-dialog-centered" role="document">
 		<div class="modal-content">
-			<form name="modal_new_parameter" action="#" method="POST">
+			<form id="add_paramets" action="{{ route('customer.paramet.store') }}" method="POST">
 				@csrf
 				<div class="modal-header bg-green-600 text-white">
 					<h5 class="modal-title"><i class="fal fa-plus-circle"></i> เพิ่มพารามิเตอร์ตัวอย่างชีวภาพ</h5>
@@ -192,7 +214,7 @@
 					</button>
 				</div>
 				<div class="modal-body">
-					<div class="form-row">
+					{{-- <div class="form-row">
 						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
 							<label class="form-label" for="parameter">กลุ่มรายงานตรวจวิเคราะห์</label>
 							<input type="hidden" name="aj_order_detail_id" value="" id="aj_order_detail_id">
@@ -204,18 +226,20 @@
 								<option value="4">กลุ่มสิ่งก่อกลายพันธุ์</option>
 							</select>
 						</div>
-					</div>
+					</div> --}}
 					<div class="form-row">
 						<div class="col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
-							<table class="table table-bordered text-sm dt-parameter">
+							<table id="pjza" class="table table-bordered text-sm dt-parameter">
 								<thead class="bg-gray-300">
 									<tr>
-										<th>ลำดับ</th>
+                                        <th></th>
+										<th>รหัส</th>
 										<th>พารามิเตอร์</th>
 										<th>สิ่งส่งตรวจ</th>
 										<th>ห้องปฏิบัติการ</th>
 										<th>ราคา (บาท)</th>
-										<th>#</th>
+										{{-- <th>เลือก</th> --}}
+										{{-- <th>#</th> --}}
 									</tr>
 								</thead>
 								<tbody>
@@ -223,8 +247,9 @@
 							</table>
 						</div>
 					</div>
-				</div>
+					<button type="submit" class="btn btn-danger btn-lg">บันทึกข้อมูล</button>
 			</form>
+
 		</div>
 	</div>
 </div>
@@ -236,6 +261,7 @@
 <script type="text/javascript" src="{{ URL::asset('assets/js/notifications/sweetalert2/sweetalert2.bundle.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('assets/js/formplugins/bootstrap-datepicker/bootstrap-datepicker.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('assets/js/formplugins/inputmask/inputmask.bundle.js') }}"></script>
+<script type="text/javascript" src="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js"></script>
 {{ $dataTable->scripts() }}
 <script>
 function newData(){$('#new-data-modal').modal('show');}
@@ -291,29 +317,52 @@ $(document).ready(function() {
 						let url = "{{ route('customer.parameter.data.list', ['order_detail_id'=>':order_detail_id','threat_type_id'=>0]) }}";
 						url = url.replace(':order_detail_id', order_detail_id);
 						$("#aj_order_detail_id").val(order_detail_id);
-						let table = $('.dt-parameter').DataTable({
-						processing: true,
-						serverSide: true,
-						paging: true,
-						searching: true,
-						bDestroy: true,
-						lengthMenu: [6, 12, 24],
-						language: {
-							'url': '/vendor/DataTables/i18n/thai.json'
-						},
-						ajax: url,
-						columns: [
-							/* {data: 'DT_RowIndex', name: 'DT_RowIndex'}, */
-							{data: 'id', name: 'id'},
-							{data: 'parameter_name', name: 'parameter_name'},
-							{data: 'sample_charecter_name', name: 'sample_charecter_name'},
-							{data: 'office_name', name: 'office_name'},
-							{data: 'price_name', name: 'price_name'},
-							{data: 'action', name: 'action', orderable: true, searchable: false},
-						],
-					});
-					$('#add-parameter-modal').modal('show');
-					/*table.destroy();*/
+						var table = $('#pjza').DataTable({
+							processing: true,
+							serverSide: true,
+							//stateSave : true,
+							paging: true,
+							searching: true,
+							deferRender: true,
+							bDestroy: true,
+							lengthMenu: [6, 12, 24],
+							language: {'url': '/vendor/DataTables/i18n/thai.json'},
+							ajax: url,
+							columns: [
+								{data: 'DT_RowIndex', name: 'DT_RowIndex'},
+								{data: 'parameter_id', name: 'parameter_id'},
+								{data: 'parameter_name', name: 'parameter_name'},
+								{data: 'sample_charecter_name', name: 'sample_charecter_name'},
+								{data: 'office_name', name: 'office_name'},
+								{data: 'price_name', name: 'price_name'},
+								// {data: 'select_paramet', name: 'select_paramet', searchable: false, orderable: false},
+								// {data: 'action', name: 'action', orderable: true, searchable: false},
+							],
+							columnDefs: [{
+								'targets': 0,
+								'checkboxes': {
+									'selectRow': true
+								}
+							}],
+							select: {
+								'style': 'multi'
+							},
+							'order': [[1, 'asc']]
+						});
+						$('#add-parameter-modal').modal('show');
+						/*table.destroy();*/
+
+						$('#add_paramets').on('submit', function(e) {
+							var form = $('#add_paramets');
+							var rows_selected = table.column(0).checkboxes.selected();
+							$.each(rows_selected, function(index, rowId) {
+                                var col = table.column(this).data();
+								$(form).append($('<input>').attr('type', 'hidden').attr('name', 'paramets[]').val(col[2]));
+							});
+
+							// $('input[name="paramets\[\]"]', form).remove();
+							// e.preventDefault();
+						});
 					break;
 				case 'unit':
 					alert('unit');
@@ -368,13 +417,13 @@ $(document).ready(function() {
 		let table = $('.dt-parameter').DataTable({
 			processing: true,
 			serverSide: true,
+			//stateSave: true,
 			paging: true,
 			searching: true,
+			deferRender: true,
 			bDestroy: true,
 			lengthMenu: [6, 12, 24],
-			language: {
-				'url': '/vendor/DataTables/i18n/thai.json'
-			},
+			language: {'url': '/vendor/DataTables/i18n/thai.json'},
 			ajax: url,
 			columns: [
 				{data: 'id', name: 'id'},
@@ -382,11 +431,13 @@ $(document).ready(function() {
 				{data: 'sample_charecter_name', name: 'sample_charecter_name'},
 				{data: 'office_name', name: 'office_name'},
 				{data: 'price_name', name: 'price_name'},
-				{data: 'action', name: 'action', orderable: true, searchable: false},
+				// {data: 'select_paramet', name: 'select_paramet', searchable: false, orderable: false},
+				// {data: 'action', name: 'action', orderable: true, searchable: false},
 			],
 		});
 		$('#add-parameter-modal').modal('show');
 	});
 });
 </script>
+
 @endsection

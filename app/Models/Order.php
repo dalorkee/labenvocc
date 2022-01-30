@@ -11,9 +11,9 @@ class Order extends Model
 	protected $table = 'orders';
 	protected $primaryKey = 'id';
 	public $timestamps = true;
-	protected $appends = ['book_date_js'];
 	protected $fillable = [
 		'id',
+		'customer_type',
 		'ref_user_id',
 		'order_status',
 		'payment_status',
@@ -25,6 +25,8 @@ class Order extends Model
 		'book_date',
 		'book_upload',
 	];
+
+	protected $appends = ['book_date_js'];
 
 	public function details() {
 		return $this->hasMany(OrderDetail::class);

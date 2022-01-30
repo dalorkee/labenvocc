@@ -11,6 +11,9 @@
 @yield('token')
 @include('layouts.style')
 @yield('style')
+<style type="text/css">
+    .swal2-popup {font-size: 1rem !important; font-family: "Prompt", Georgia, serif;}
+</style>
 </head>
 <body class="mod-bg-1 ">
 <script>
@@ -75,7 +78,6 @@ var resetSettings = function() {
 @yield('script')
 <script>
 $(document).ready(function() {
-    alert('jet');
 	let options = {
 		"closeButton": true,
 		"debug": false,
@@ -137,9 +139,8 @@ $(document).ready(function() {
 		toastr.success("{{ Session::get('success') }}", "Success", options);
 		Swal.fire({
 			type: "success",
-			title: "<span style='color:##23923D';>บันทึกข้อมูลสำเร็จแล้ว</span>",
-			text: "เราได้รับข้อมูลของท่านแล้ว โปรดรอการติดต่อกลับจากเจ้าหน้าที่",
-			html: true,
+			title: "<span class='text-success'>บันทึกข้อมูลสำเร็จแล้ว</span>",
+			html: "{{ Session::get('success') }}",
 			confirmButtonText: "ตกลง",
 			footer: "LAB ENV-OCC DDC",
 			allowOutsideClick: false
