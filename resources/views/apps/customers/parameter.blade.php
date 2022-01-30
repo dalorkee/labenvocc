@@ -232,7 +232,7 @@ div.dataTables_wrapper span.select-item {
 							<table id="pjza" class="table table-bordered text-sm dt-parameter">
 								<thead class="bg-gray-300">
 									<tr>
-                                        <th></th>
+										<th></th>
 										<th>รหัส</th>
 										<th>พารามิเตอร์</th>
 										<th>สิ่งส่งตรวจ</th>
@@ -324,7 +324,7 @@ $(document).ready(function() {
 							paging: true,
 							searching: true,
 							deferRender: true,
-							bDestroy: true,
+							// bDestroy: true,
 							lengthMenu: [6, 12, 24],
 							language: {'url': '/vendor/DataTables/i18n/thai.json'},
 							ajax: url,
@@ -356,12 +356,21 @@ $(document).ready(function() {
 							var form = $('#add_paramets');
 							var rows_selected = table.column(0).checkboxes.selected();
 							$.each(rows_selected, function(index, rowId) {
-                                var col = table.column(this).data();
-								$(form).append($('<input>').attr('type', 'hidden').attr('name', 'paramets[]').val(col[2]));
+								//console.log(table.row(parseInt(rowId)-1).data());
+								var d = table.row(parseInt(rowId)-1).data();
+                                console.log(d.parameter_name);
+
+								//console.log(parseInt(rowId)-1);
+
+
+							 //console.log(d);
+
+
+						//$(form).append($('<input>').attr('type', 'hidden').attr('name', 'paramets[]').val(d['parameter_name']));
 							});
 
 							// $('input[name="paramets\[\]"]', form).remove();
-							// e.preventDefault();
+							e.preventDefault();
 						});
 					break;
 				case 'unit':
