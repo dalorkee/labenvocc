@@ -404,8 +404,9 @@ class CustomerController extends Controller
 	}
 
 	protected function createSample(CustSampleDataTable $dataTable, Request $request) {
+		$order_detail = OrderDetail::select('id')->whereOrder_id($request->order_id)->whereCompleted('y')->get();
 		$sample_list = array();
-		OrderDetail::select('id')->whereOrder_id($request->order_id)->whereCompleted('y')->get()->each(function($value, $key) use (&$sample_list) {
+		$order_detail->each(function($value, $key) use (&$sample_list) {
 			$sample_list[$key] = $value->id;
 		});
 		$sample_charecter = $this->getSampleCharecter();
@@ -517,11 +518,11 @@ class CustomerController extends Controller
 	}
 
 	protected function storeParamet(Request $request) {
-        dd($request->paramets);
-        $x = "";
+		dd($request->paramets);
+		$x = "";
 		foreach ($request->paramets as $key => $val) {
-            $x .= $val.' ';
-        }
-        return redirect()->back()->with("success", 'isad');
+			$x .= $val.' ';
+		}
+		return redirect()->back()->with("success", 'isad');
 	}
 }

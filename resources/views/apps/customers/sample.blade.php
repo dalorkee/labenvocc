@@ -117,7 +117,33 @@
 							</select>
 						</div>
 					</div>
-					<div class="form-row">
+                    @switch (Auth::user()->userCustomer->customer_type)
+                        @case('personal')
+                        <div class="form-row">
+                            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
+                                <label class="form-label text-gray-800" for="sample_place_type">สถานที่เก็บตัวอย่าง <span class="text-red-600">*</span></label>
+                                <div class="frame-wrap">
+                                    <div class="custom-control custom-checkbox custom-control-inline">
+                                        <input type="checkbox" name="sample_place_type" value="1" id="chk_a" class="custom-control-input" checked>
+                                        <label class="custom-control-label" for="chk_a">สถานที่เดียวกับที่อยู่ผู้ส่งตัวอย่าง</label>
+                                    </div>
+                                    <div class="custom-control custom-checkbox custom-control-inline">
+                                        <input type="checkbox" name="sample_place_type" value="2" id="chk_b" class="custom-control-input">
+                                        <label class="custom-control-label" for="chk_b">กำหนดใหม่</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
+                                <label for="office_name_establishment" class="block text-base font-medium text-gray-700">ชื่อสถานที่เก็บตัวอย่าง <span class="text-red-600">*</span></label>
+                                <input type="text" name="sample_office_name" id="office_name_establishment" class="form-control" disabled>
+                            </div>
+                        </div>
+                            @break;
+                    @endswitch
+
+					{{-- <div class="form-row">
 						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
 							<label class="form-label text-gray-800" for="sample_place_type">สถานที่เก็บตัวอย่าง <span class="text-red-600">*</span></label>
 							<div class="frame-wrap">
@@ -131,8 +157,8 @@
 								</div>
 							</div>
 						</div>
-					</div>
-					<div class="grid grid-cols-6 gap-6">
+					</div> --}}
+					{{-- <div class="grid grid-cols-6 gap-6">
 						<div class="col-span-6 sm:col-span-6">
 							<label for="office_type" class="block text-gray-800">กรณีเลือกสถานที่เก็บตัวอย่างใหม่ โปรดกรอกข้อมูล <span class="text-red-600">*</span></label>
 							<div class="frame-wrap">
@@ -192,7 +218,7 @@
 							<label for="office_type_other_code" class="block text-base font-medium text-gray-700">รหัสหน่วยงาน <span class="text-red-600">*</span></label>
 							<input type="text" name="sample_office_id" id="agency_type_other_id" class="form-control">
 						</div>
-					</div>
+					</div> --}}
 					<div class="grid grid-cols-6 gap-6 mt-12">
 						<div class="col-span-6 sm:col-span-6">
 							<label for="address" class="block text-base font-medium text-gray-800">ที่อยู่ (เลขที่ หมู่ที่ ถนน หมู่บ้าน/อาคาร) <span class="text-red-600">*</span></label>
