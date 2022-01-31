@@ -352,17 +352,16 @@ class CustomerController extends Controller
 					->when($request->threat_type_id > 0, function($q) use ($request) {
 						return $q->whereThreat_type_id($request->threat_type_id)->orderBy('id', 'ASC')->get();
 					});
-					//dd($data->toArray());
 				return DataTables::of($data)
 					->addIndexColumn()
 					// ->addColumn('select_paramet', static function ($row) {
 					// 	return '<input type="checkbox" name="paramets[]" value="'.$row->id.'"/>';
 					// })->rawColumns(['select_paramet'])
-					// ->addColumn('action', function($row) use ($request) {
-					// 	$actionBtn = "<a href=\"".route('customer.parameter.data.store', ['order_detail_id'=>$request->order_detail_id, 'id'=>$row->id])."\" class=\"btn btn-danger btn-sm\"><i class=\"fal fa-plus\"></i></a>";
-					// 	return $actionBtn;
-					// })
-					// ->rawColumns(['action', 'select_paramet'])
+					->addColumn('action', function($row) use ($request) {
+						$actionBtn = "<a href=\"".route('customer.parameter.data.store', ['order_detail_id'=>$request->order_detail_id, 'id'=>$row->id])."\" class=\"btn btn-danger btn-sm\"><i class=\"fal fa-plus\"></i></a>";
+						return $actionBtn;
+					})
+					->rawColumns(['action'])
 					->make(true);
 			}
 		} catch (\Exception $e) {
@@ -519,8 +518,10 @@ class CustomerController extends Controller
 
 	protected function storeParamet(Request $request) {
         dd($request->paramets);
+        $x = "";
 		foreach ($request->paramets as $key => $val) {
-            echo $val.'<br>';
+            $x .= $val.' ';
         }
+        return redirect()->back()->with("success", 'isad');
 	}
 }

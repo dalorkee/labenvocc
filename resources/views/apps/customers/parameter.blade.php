@@ -205,7 +205,7 @@ div.dataTables_wrapper span.select-item {
 <div class="modal font-prompt" id="add-parameter-modal" data-keyboard="false" data-backdrop="static" tabindex="-2" role="dialog" aria-hidden="true">
 	<div class="modal-dialog modal-xl modal-dialog-centered" role="document">
 		<div class="modal-content">
-			<form id="add_paramets" action="{{ route('customer.paramet.store') }}" method="POST">
+			<form id="add_paramets" action="#" method="POST">
 				@csrf
 				<div class="modal-header bg-green-600 text-white">
 					<h5 class="modal-title"><i class="fal fa-plus-circle"></i> เพิ่มพารามิเตอร์ตัวอย่างชีวภาพ</h5>
@@ -214,7 +214,7 @@ div.dataTables_wrapper span.select-item {
 					</button>
 				</div>
 				<div class="modal-body">
-					{{-- <div class="form-row">
+					<div class="form-row">
 						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
 							<label class="form-label" for="parameter">กลุ่มรายงานตรวจวิเคราะห์</label>
 							<input type="hidden" name="aj_order_detail_id" value="" id="aj_order_detail_id">
@@ -226,20 +226,20 @@ div.dataTables_wrapper span.select-item {
 								<option value="4">กลุ่มสิ่งก่อกลายพันธุ์</option>
 							</select>
 						</div>
-					</div> --}}
+					</div>
 					<div class="form-row">
 						<div class="col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
 							<table id="pjza" class="table table-bordered text-sm dt-parameter">
 								<thead class="bg-gray-300">
 									<tr>
-										<th></th>
+										{{-- <th></th> --}}
 										<th>รหัส</th>
 										<th>พารามิเตอร์</th>
 										<th>สิ่งส่งตรวจ</th>
 										<th>ห้องปฏิบัติการ</th>
 										<th>ราคา (บาท)</th>
 										{{-- <th>เลือก</th> --}}
-										{{-- <th>#</th> --}}
+										<th>#</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -247,7 +247,7 @@ div.dataTables_wrapper span.select-item {
 							</table>
 						</div>
 					</div>
-					<button type="submit" class="btn btn-danger btn-lg">บันทึกข้อมูล</button>
+					{{-- <button type="submit" class="btn btn-danger btn-lg">บันทึกข้อมูล</button> --}}
 			</form>
 
 		</div>
@@ -324,21 +324,22 @@ $(document).ready(function() {
 							paging: true,
 							searching: true,
 							deferRender: true,
-							// bDestroy: true,
+							//destroy: true,
+							//bDestroy: true,
 							lengthMenu: [6, 12, 24],
 							language: {'url': '/vendor/DataTables/i18n/thai.json'},
 							ajax: url,
 							columns: [
-								{data: 'DT_RowIndex', name: 'DT_RowIndex'},
+								//{data: 'DT_RowIndex', name: 'DT_RowIndex'},
 								{data: 'parameter_id', name: 'parameter_id'},
 								{data: 'parameter_name', name: 'parameter_name'},
 								{data: 'sample_charecter_name', name: 'sample_charecter_name'},
 								{data: 'office_name', name: 'office_name'},
 								{data: 'price_name', name: 'price_name'},
 								// {data: 'select_paramet', name: 'select_paramet', searchable: false, orderable: false},
-								// {data: 'action', name: 'action', orderable: true, searchable: false},
+								{data: 'action', name: 'action', orderable: true, searchable: false},
 							],
-							columnDefs: [{
+							/*columnDefs: [{
 								'targets': 0,
 								'checkboxes': {
 									'selectRow': true
@@ -347,31 +348,21 @@ $(document).ready(function() {
 							select: {
 								'style': 'multi'
 							},
-							'order': [[1, 'asc']]
+							'order': [[1, 'asc']] */
 						});
 						$('#add-parameter-modal').modal('show');
-						/*table.destroy();*/
 
-						$('#add_paramets').on('submit', function(e) {
+						/*$('#add_paramets').on('submit', function(e) {
 							var form = $('#add_paramets');
+							$('input[name="paramets\[\]"]', form).remove();
 							var rows_selected = table.column(0).checkboxes.selected();
 							$.each(rows_selected, function(index, rowId) {
-								//console.log(table.row(parseInt(rowId)-1).data());
-								var d = table.row(parseInt(rowId)-1).data();
-                                console.log(d.parameter_name);
-
-								//console.log(parseInt(rowId)-1);
-
-
-							 //console.log(d);
-
-
-						//$(form).append($('<input>').attr('type', 'hidden').attr('name', 'paramets[]').val(d['parameter_name']));
+								var i = parseInt(rowId-1);
+							   var d = table.row(i).data();
+								$(form).append($('<input>').attr('type', 'hidden').attr('name', 'paramets[]').val(d.parameter_name));
 							});
-
-							// $('input[name="paramets\[\]"]', form).remove();
 							e.preventDefault();
-						});
+						});*/
 					break;
 				case 'unit':
 					alert('unit');

@@ -90,7 +90,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 		Route::get('/customer/parameter/data/store/detail/{order_detail_id}/id/{id}', [CustomerController::class, 'storeParameterData'])->name('parameter.data.store');
 		Route::get('/customer/parameter/data/delete/id/{id}', [CustomerController::class, 'DestroyParameterData'])->name('parameter.data.destroy');
 
-		Route::post('/customer/paramet/store', [CustomerController::class, 'storeParamet'])->name('paramet.store');
+		// Route::post('/customer/paramet/store', [CustomerController::class, 'storeParamet'])->name('paramet.store');
 
 		Route::get('/customer/sample/create/order/{order_id}', [CustomerController::class, 'createSample'])->name('sample.create');
 		Route::post('customer/sample/store/order/{order_id}', [CustomerController::class, 'storeSample'])->name('sample.store');
