@@ -10,6 +10,7 @@
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/css/formplugins/bootstrap-datepicker/bootstrap-datepicker.css') }}">
 <link type="text/css" href="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/css/dataTables.checkboxes.css" rel="stylesheet" />
 <style>
+.input-date:read-only{background:#fefefe!important}
 .btn-group {margin:0 0 5px 0;padding:0;}
 .dataTables_filter label {margin-top: 8px;}
 .dataTables_filter input:first-child {margin-top: -8px;}
@@ -153,20 +154,22 @@ div.dataTables_wrapper span.select-item {
 								<div class="invalid-feedback" role="alert">{{ $message }}</div>
 							@enderror
 						</div>
-						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
-							<label class="form-label" for="division">แผนก <span class="text-red-600">*</span></label>
-							<input type="text" name="division" value="{{ old('division') }}" class="form-control @error('division') is-invalid @enderror" >
-							@error('division')
-								<div class="invalid-feedback" role="alert">{{ $message }}</div>
-							@enderror
-						</div>
-						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
-							<label class="form-label" for="work_life_year">อายุงาน/ปี <span class="text-red-600">*</span></label>
-							<input type="number" name="work_life_year" value="{{ old('work_life_year') }}" min="1" max="100" class="form-control @error('work_life_year') is-invalid @enderror" >
-							@error('work_life_year')
-								<div class="invalid-feedback" role="alert">{{ $message }}</div>
-							@enderror
-						</div>
+                        @if (Auth::user()->userCustomer->customer_type == 'private')
+                            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
+                                <label class="form-label" for="division">แผนก <span class="text-red-600">*</span></label>
+                                <input type="text" name="division" value="{{ old('division') }}" class="form-control @error('division') is-invalid @enderror" >
+                                @error('division')
+                                    <div class="invalid-feedback" role="alert">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
+                                <label class="form-label" for="work_life_year">อายุงาน/ปี <span class="text-red-600">*</span></label>
+                                <input type="number" name="work_life_year" value="{{ old('work_life_year') }}" min="1" max="100" class="form-control @error('work_life_year') is-invalid @enderror" >
+                                @error('work_life_year')
+                                    <div class="invalid-feedback" role="alert">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        @endif
 						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
 							<label class="form-label" for="specimen_date">วันที่เก็บตัวอย่าง <span class="text-red-600">*</span></label>
 							<div class="input-group">

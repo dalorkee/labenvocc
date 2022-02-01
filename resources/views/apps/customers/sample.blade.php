@@ -82,7 +82,7 @@
 				<div class="modal-body">
 					<div class="form-row">
 						<div class="form-group col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6 mb-3">
-							<label class="form-label text-gray-800" for="title_name">ตัวอย่างที่ <span class="text-red-600">*</span></label>
+							<label class="form-label text-gray-800" for="title_name">ตัวอย่างที่</label>
 							<select name="sample_select_begin" class="select2 form-control">
 								<option value="">-- โปรดเลือก --</option>
 								@forelse ($data['sample_list'] as $key => $val)
@@ -93,7 +93,7 @@
 							</select>
 						</div>
 						<div class="form-group col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6 mb-3">
-							<label class="form-label text-gray-800" for="title_name">ถึง <span class="text-red-600">*</span></label>
+							<label class="form-label text-gray-800" for="title_name">ถึง</label>
 							<select name="sample_select_end" class="select2 form-control">
 								<option value="">-- โปรดเลือก --</option>
 								@forelse ($data['sample_list'] as $key => $val)
@@ -106,7 +106,7 @@
 					</div>
 					<div class="form-row">
 						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
-							<label class="form-label text-gray-800" for="title_name">ประเด็นมลพิษ <span class="text-red-600">*</span></label>
+							<label class="form-label text-gray-800" for="title_name">ประเด็นมลพิษ</label>
 							<select name="sample_charecter" class="form-control select2">
 								<option value="">-- โปรดเลือก --</option>
 								@forelse ($data['sample_charecter'] as $key => $val)
@@ -117,31 +117,33 @@
 							</select>
 						</div>
 					</div>
-                    @switch (Auth::user()->userCustomer->customer_type)
-                        @case('personal')
-                        <div class="form-row">
-                            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
-                                <label class="form-label text-gray-800" for="sample_place_type">สถานที่เก็บตัวอย่าง <span class="text-red-600">*</span></label>
-                                <div class="frame-wrap">
-                                    <div class="custom-control custom-checkbox custom-control-inline">
-                                        <input type="checkbox" name="sample_place_type" value="1" id="chk_a" class="custom-control-input" checked>
-                                        <label class="custom-control-label" for="chk_a">สถานที่เดียวกับที่อยู่ผู้ส่งตัวอย่าง</label>
-                                    </div>
-                                    <div class="custom-control custom-checkbox custom-control-inline">
-                                        <input type="checkbox" name="sample_place_type" value="2" id="chk_b" class="custom-control-input">
-                                        <label class="custom-control-label" for="chk_b">กำหนดใหม่</label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
-                                <label for="office_name_establishment" class="block text-base font-medium text-gray-700">ชื่อสถานที่เก็บตัวอย่าง <span class="text-red-600">*</span></label>
-                                <input type="text" name="sample_office_name" id="office_name_establishment" class="form-control" disabled>
-                            </div>
-                        </div>
-                            @break;
-                    @endswitch
+
+
+					@switch (Auth::user()->userCustomer->customer_type)
+						@case('personal')
+						<div class="form-row">
+							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
+								<label class="form-label text-gray-800" for="sample_location_define">สถานที่เก็บตัวอย่าง</label>
+								<div class="frame-wrap">
+									<div class="custom-control custom-checkbox custom-control-inline">
+										<input type="checkbox" name="sample_location_define" value="1" id="chk_a" class="custom-control-input" checked>
+										<label class="custom-control-label" for="chk_a">สถานที่เดียวกับที่อยู่ผู้ส่งตัวอย่าง</label>
+									</div>
+									<div class="custom-control custom-checkbox custom-control-inline">
+										<input type="checkbox" name="sample_location_define" value="2" id="chk_b" class="custom-control-input">
+										<label class="custom-control-label" for="chk_b">กำหนดใหม่</label>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="form-row">
+							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
+								<label for="sample_location" class="block text-base font-medium text-gray-700">ชื่อสถานที่เก็บตัวอย่าง</label>
+								<input type="text" name="sample_location" id="sample_location" class="form-control" disabled>
+							</div>
+						</div>
+							@break;
+					@endswitch
 
 					{{-- <div class="form-row">
 						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
@@ -219,13 +221,13 @@
 							<input type="text" name="sample_office_id" id="agency_type_other_id" class="form-control">
 						</div>
 					</div> --}}
-					<div class="grid grid-cols-6 gap-6 mt-12">
-						<div class="col-span-6 sm:col-span-6">
-							<label for="address" class="block text-base font-medium text-gray-800">ที่อยู่ (เลขที่ หมู่ที่ ถนน หมู่บ้าน/อาคาร) <span class="text-red-600">*</span></label>
+					<div class="form-row">
+						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
+							<label for="address" class="block text-base font-medium text-gray-800">ที่อยู่ (เลขที่ หมู่ที่ ถนน หมู่บ้าน/อาคาร)</label>
 							<input type="text" name="sample_office_addr" id="sample_office_addr" class="form-control" disabled>
 						</div>
-						<div class="col-span-6 sm:col-span-3">
-							<label for="province" class="block text-base font-medium text-gray-800">1.5 จังหวัด <span class="text-red-600">*</span></label>
+						<div class="form-group col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6 mb-3">
+							<label for="province" class="block text-base font-medium text-gray-800">1.5 จังหวัด</label>
 							<select name="sample_office_province" id="province" class="form-control chk-b" disabled>
 								<option value="">-- โปรดเลือก --</option>
 								@foreach ($data['provinces'] as $key => $val)
@@ -233,27 +235,27 @@
 								@endforeach
 							</select>
 						</div>
-						<div class="col-span-6 sm:col-span-3">
-							<label for="district" class="block text-base font-medium text-gray-800">1.6 เขต/อำเภอ <span class="text-red-600">*</span></label>
+						<div class="form-group col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6 mb-3">
+							<label for="district" class="block text-base font-medium text-gray-800">เขต/อำเภอ</label>
 							<select name="sample_office_district" id="district" class="form-control" disabled>
 								<option value="">-- โปรดเลือก --</option>
 							</select>
 						</div>
-						<div class="col-span-6 sm:col-span-3">
-							<label for="sub_district" class="block text-base font-medium text-gray-800">1.7 แขวง/ตำบล <span class="text-red-600">*</span></label>
+						<div class="form-group col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6 mb-3">
+							<label for="sub_district" class="block text-base font-medium text-gray-800">แขวง/ตำบล</label>
 							<select name="sample_office_sub_district" id="sub_district" class="form-control" disabled>
 								<option value="">-- โปรดเลือก --</option>
 							</select>
 						</div>
-						<div class="col-span-6 sm:col-span-3">
-							<label for="zip_code" class="block text-base font-medium text-gray-800">1.8 รหัสไปรษณีย์ <span class="text-red-600">*</span></label>
+						<div class="form-group col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6 mb-3">
+							<label for="zip_code" class="block text-base font-medium text-gray-800">รหัสไปรษณีย์</label>
 							<input type="text" name="sample_office_postal" id="postcode" class="form-control" disabled>
+						</div>
 					</div>
-
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-dismiss="modal">ยกเลิก</button>
-					<button type="submit" class="btn btn-success">บันทึกข้อมูล</button>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">ยกเลิก</button>
+						<button type="submit" class="btn btn-success">บันทึกข้อมูล</button>
+					</div>
 				</div>
 			</form>
 		</div>
@@ -271,10 +273,12 @@
 $(document).ready(function() {
 	$.ajaxSetup({headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}});
 	var order_id = $('#order_id').val();
-	$('input[name="sample_place_type"]').on('change', function() {
+	$('input[name="sample_location_define"]').on('change', function() {
 		$('input[name="' + this.name + '"]').not(this).prop('checked', false);
 	});
-	$('input[id="agency_type_establishment"]').on('change', function() {
+
+
+/* 	$('input[id="agency_type_establishment"]').on('change', function() {
 		if ($(this).prop("checked") == true) {
 			$('#office_name_establishment').val('');
 			$('#office_name_establishment').prop('disabled', false);
@@ -298,8 +302,8 @@ $(document).ready(function() {
 			$('#office_code_establishment').val('');
 			$('#office_code_establishment').prop('disabled', true);
 		 }
-	});
-	$("#agency_type_hospital").on('change', function() {
+	}); */
+/* 	$("#agency_type_hospital").on('change', function() {
 		if ($(this).prop("checked") == true) {
 			$("#hosp_search").empty().trigger('change');
 			$('#hosp_search').prop('disabled', false);
@@ -321,8 +325,8 @@ $(document).ready(function() {
 			$('#hosp_search').empty().trigger('change');
 			$('#hosp_search').prop('disabled', true);
 		}
-	});
-	$("#agency_type_border_check_point").on('change', function() {
+	}); */
+/* 	$("#agency_type_border_check_point").on('change', function() {
 		if ($(this).prop("checked") == true) {
 			$("#disease_border_search").empty().trigger('change');
 			$('#disease_border_search').prop('disabled', false);
@@ -344,8 +348,8 @@ $(document).ready(function() {
 			$('#disease_border_search').empty().trigger('change');
 			$('#disease_border_search').prop('disabled', true);
 		}
-	});
-	$("#agency_type_other").on('change', function() {
+	}); */
+/* 	$("#agency_type_other").on('change', function() {
 		if ($(this).prop("checked") == true) {
 			$('#agency_type_other_name').prop('disabled', false);
 			$('#agency_type_other_name').val('');
@@ -369,16 +373,21 @@ $(document).ready(function() {
 			$('#agency_type_other_id').val('');
 			$('#agency_type_other_id').prop('disabled', true);
 		}
-	});
+	}); */
 
 	$('#chk_a').on('change', function() {
+
+		$('#sample_location').prop('disabled', true);
+		$('#sample_location').prop('disabled', true);
+
+
 		$('#agency_type_establishment').prop('checked', false);
 		$('#agency_type_establishment').prop('disabled', true);
 		$('#office_name_establishment').prop('disabled', true);
 		$('#office_code_establishment').prop('disabled', true);
 
-        $('#agency_type_hospital').prop('checked', false);
-        $('#agency_type_hospital').prop('disabled', true);
+		$('#agency_type_hospital').prop('checked', false);
+		$('#agency_type_hospital').prop('disabled', true);
 		$('#hosp_search').empty().trigger('change');
 		$('#hosp_search').prop('disabled', true);
 
@@ -397,13 +406,17 @@ $(document).ready(function() {
 
 	$('#chk_b').on('change', function() {
 		if ($(this).prop("checked") == true) {
+			$('#sample_location').prop('disabled', false);
+			$('#sample_location').prop('disabled', false);
+
+
 			$('#agency_type_establishment').prop('checked', false);
 			$('#agency_type_establishment').prop('disabled', false);
 
-            $('#agency_type_hospital').prop('checked', true);
-            $('#agency_type_hospital').prop('disabled', false);
-		    $('#hosp_search').empty().trigger('change');
-		    $('#hosp_search').prop('disabled', false);
+			$('#agency_type_hospital').prop('checked', true);
+			$('#agency_type_hospital').prop('disabled', false);
+			$('#hosp_search').empty().trigger('change');
+			$('#hosp_search').prop('disabled', false);
 
 			$('#sample_office_addr').prop('disabled', false);
 			$('#sample_office_addr').val('');
