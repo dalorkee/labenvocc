@@ -83,7 +83,7 @@
 					<div class="form-row">
 						<div class="form-group col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6 mb-3">
 							<label class="form-label text-gray-800" for="title_name">ตัวอย่างที่</label>
-							<select name="sample_select_begin" class="select2 form-control">
+							<select name="sample_select_begin" class="form-control js-hide-search">
 								<option value="">-- โปรดเลือก --</option>
 								@forelse ($data['sample_list'] as $key => $val)
 									<option value="{{ $val }}">{{ $val }}</option>
@@ -94,7 +94,7 @@
 						</div>
 						<div class="form-group col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6 mb-3">
 							<label class="form-label text-gray-800" for="title_name">ถึง</label>
-							<select name="sample_select_end" class="select2 form-control">
+							<select name="sample_select_end" class="form-control js-hide-search">
 								<option value="">-- โปรดเลือก --</option>
 								@forelse ($data['sample_list'] as $key => $val)
 									<option value="{{ $val }}">{{ $val }}</option>
@@ -107,7 +107,7 @@
 					<div class="form-row">
 						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
 							<label class="form-label text-gray-800" for="title_name">ประเด็นมลพิษ</label>
-							<select name="sample_charecter" class="form-control select2">
+							<select name="sample_charecter" class="form-control js-hide-search">
 								<option value="">-- โปรดเลือก --</option>
 								@forelse ($data['sample_charecter'] as $key => $val)
 									<option value="{{ $key }}">{{ $val }}</option>
@@ -138,8 +138,8 @@
 						</div>
 						<div class="form-row">
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
-								<label for="sample_location" class="block text-base font-medium text-gray-700">ชื่อสถานที่เก็บตัวอย่าง</label>
-								<input type="text" name="sample_location" id="sample_location" class="form-control" disabled>
+								<label for="sample_location_place_name" class="block text-base font-medium text-gray-700">ชื่อสถานที่เก็บตัวอย่าง</label>
+								<input type="text" name="sample_location_place_name" id="sample_location_place_name" class="form-control" disabled>
 							</div>
 						</div>
 							@break;
@@ -223,33 +223,33 @@
 					</div> --}}
 					<div class="form-row">
 						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
-							<label for="address" class="block text-base font-medium text-gray-800">ที่อยู่ (เลขที่ หมู่ที่ ถนน หมู่บ้าน/อาคาร)</label>
-							<input type="text" name="sample_office_addr" id="sample_office_addr" class="form-control" disabled>
+							<label for="sample_location_place_address" class="block text-base font-medium text-gray-800">ที่อยู่ (เลขที่ หมู่ที่ ถนน หมู่บ้าน/อาคาร)</label>
+							<input type="text" name="sample_location_place_address" id="sample_location_place_address" class="form-control" disabled>
 						</div>
 						<div class="form-group col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6 mb-3">
-							<label for="province" class="block text-base font-medium text-gray-800">1.5 จังหวัด</label>
-							<select name="sample_office_province" id="province" class="form-control chk-b" disabled>
-								<option value="">-- โปรดเลือก --</option>
+							<label for="sample_location_place_province" class="block text-base font-medium text-gray-800">จังหวัด</label>
+							<select name="sample_location_place_province" id="sample_location_place_province" class="form-control select2 chk-b" disabled>
+								<option value="0">-- โปรดเลือก --</option>
 								@foreach ($data['provinces'] as $key => $val)
 									<option value="{{ $key }}">{{ $val }}</option>
 								@endforeach
 							</select>
 						</div>
 						<div class="form-group col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6 mb-3">
-							<label for="district" class="block text-base font-medium text-gray-800">เขต/อำเภอ</label>
-							<select name="sample_office_district" id="district" class="form-control" disabled>
+							<label for="sample_location_place_district" class="block text-base font-medium text-gray-800">อำเภอ</label>
+							<select name="sample_location_place_district" id="sample_location_place_district" class="form-control" disabled>
 								<option value="">-- โปรดเลือก --</option>
 							</select>
 						</div>
 						<div class="form-group col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6 mb-3">
-							<label for="sub_district" class="block text-base font-medium text-gray-800">แขวง/ตำบล</label>
-							<select name="sample_office_sub_district" id="sub_district" class="form-control" disabled>
+							<label for="sample_location_place_sub_district" class="block text-base font-medium text-gray-800">ตำบล</label>
+							<select name="sample_location_place_sub_district" id="sample_location_place_sub_district" class="form-control" disabled>
 								<option value="">-- โปรดเลือก --</option>
 							</select>
 						</div>
 						<div class="form-group col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6 mb-3">
-							<label for="zip_code" class="block text-base font-medium text-gray-800">รหัสไปรษณีย์</label>
-							<input type="text" name="sample_office_postal" id="postcode" class="form-control" disabled>
+							<label for="sample_location_place_postal" class="block text-base font-medium text-gray-800">รหัสไปรษณีย์</label>
+							<input type="text" name="sample_location_place_postal" id="sample_location_place_postal" class="form-control" disabled>
 						</div>
 					</div>
 					<div class="modal-footer">
@@ -376,71 +376,67 @@ $(document).ready(function() {
 	}); */
 
 	$('#chk_a').on('change', function() {
-
-		$('#sample_location').prop('disabled', true);
-		$('#sample_location').prop('disabled', true);
-
-
-		$('#agency_type_establishment').prop('checked', false);
-		$('#agency_type_establishment').prop('disabled', true);
-		$('#office_name_establishment').prop('disabled', true);
-		$('#office_code_establishment').prop('disabled', true);
-
-		$('#agency_type_hospital').prop('checked', false);
-		$('#agency_type_hospital').prop('disabled', true);
-		$('#hosp_search').empty().trigger('change');
-		$('#hosp_search').prop('disabled', true);
-
 		if ($(this).prop("checked") == true) {
-			$('#sample_office_addr').val('');
-			$('#sample_office_addr').prop('disabled', true);
-			$('#province').prop('disabled', true);
-			$('#district')[0].options.length = 1;
-			$('#district').prop('disabled', true);
-			$('#sub_district')[0].options.length = 1;
-			$('#sub_district').prop('disabled', true);
-			$('#postcode').val('');
-			$('#postcode').prop('disabled', true);
+            $('#sample_location_place_name').prop('disabled', true);
+		    $('#sample_location_place_name').val('');
+
+			$('#sample_location_place_address').val('');
+			$('#sample_location_place_address').prop('disabled', true);
+
+            $("#sample_location_place_province").val($("#sample_location_place_province option:first").val());
+			$('#sample_location_place_province').prop('disabled', true);
+
+			$('#sample_location_place_district')[0].options.length = 1;
+			$('#sample_location_place_district').prop('disabled', true);
+
+			$('#sample_location_place_sub_district')[0].options.length = 1;
+			$('#sample_location_place_sub_district').prop('disabled', true);
+
+			$('#sample_location_place_postal').val('');
+			$('#sample_location_place_postal').prop('disabled', true);
 		}
 	});
 
 	$('#chk_b').on('change', function() {
 		if ($(this).prop("checked") == true) {
-			$('#sample_location').prop('disabled', false);
-			$('#sample_location').prop('disabled', false);
+			$('#sample_location_place_name').prop('disabled', false);
+			$('#sample_location_place_name').val('');
 
+			$('#sample_location_place_address').prop('disabled', false);
+			$('#sample_location_place_address').val('');
 
-			$('#agency_type_establishment').prop('checked', false);
-			$('#agency_type_establishment').prop('disabled', false);
+			$('#sample_location_place_province').prop('disabled', false);
+            $("#sample_location_place_province").val($("#sample_location_place_province option:first").val());
 
-			$('#agency_type_hospital').prop('checked', true);
-			$('#agency_type_hospital').prop('disabled', false);
-			$('#hosp_search').empty().trigger('change');
-			$('#hosp_search').prop('disabled', false);
+			$('#sample_location_place_district').prop('disabled', false);
+			$('#sample_location_place_district')[0].options.length = 1;
 
-			$('#sample_office_addr').prop('disabled', false);
-			$('#sample_office_addr').val('');
-			$('#province').prop('disabled', false);
-			$('#district').prop('disabled', false);
-			$('#sub_district').prop('disabled', false);
-			$('#postcode').prop('disabled', false);
+			$('#sample_location_place_sub_district').prop('disabled', false);
+			$('#sample_location_place_sub_district')[0].options.length = 1;
+
+			$('#sample_location_place_postal').prop('disabled', false);
 		} else if ($(this).prop("checked") == false) {
-			$('#agency_type_establishment').prop('checked', false);
-			$('#agency_type_establishment').prop('disabled', true);
+			$('#sample_location_place_name').prop('disabled', true);
+			$('#sample_location_place_name').val('');
 
-			$('#sample_office_addr').val('');
-			$('#sample_office_addr').prop('disabled', true);
-			$('#province').prop('disabled', true);
-			$('#district')[0].options.length = 1;
-			$('#district').prop('disabled', true);
-			$('#sub_district')[0].options.length = 1;
-			$('#sub_district').prop('disabled', true);
-			$('#postcode').val('');
-			$('#postcode').prop('disabled', true);
+			$('#sample_location_place_address').val('');
+			$('#sample_location_place_address').prop('disabled', true);
+
+			$('#sample_location_place_province').prop('disabled', true);
+            $("#sample_location_place_province").val($("#sample_location_place_province option:first").val());
+
+			$('#sample_location_place_district').prop('disabled', true);
+			$('#sample_location_place_district')[0].options.length = 1;
+
+			$('#sample_location_place_sub_district').prop('disabled', true);
+			$('#sample_location_place_sub_district')[0].options.length = 1;
+
+			$('#sample_location_place_postal').val('');
+			$('#sample_location_place_postal').prop('disabled', true);
 		}
 	});
 
-	$('#province').change(function() {
+	$('#sample_location_place_province').change(function() {
 		if ($(this).val() != '') {
 			var id = $(this).val();
 			$.ajax({
@@ -449,7 +445,7 @@ $(document).ready(function() {
 				dataType: "html",
 				data: {id:id},
 				success: function(response) {
-					$('#district').html(response);
+					$('#sample_location_place_district').html(response);
 				},
 				error: function(jqXhr, textStatus, errorMessage) {
 					alert('Error code: ' + jqXhr.status + errorMessage);
@@ -457,7 +453,7 @@ $(document).ready(function() {
 			});
 		}
 	});
-	$('#district').change(function() {
+	$('#sample_location_place_district').change(function() {
 		if ($(this).val() != '') {
 			var id = $(this).val();
 			$.ajax({
@@ -466,7 +462,7 @@ $(document).ready(function() {
 				dataType: "HTML",
 				data: {id:id},
 				success: function(response) {
-					$('#sub_district').html(response);
+					$('#sample_location_place_sub_district').html(response);
 				},
 				error: function(jqXhr, textStatus, errorMessage) {
 					alert('Sub district error: ' + jqXhr.status + errorMessage);
@@ -474,7 +470,7 @@ $(document).ready(function() {
 			});
 		}
 	});
-	$('#sub_district').change(function() {
+	$('#sample_location_place_sub_district').change(function() {
 		var id = $(this).val();
 		if (id != "" || id != null || id !== undefined) {
 			$.ajax({
@@ -483,8 +479,8 @@ $(document).ready(function() {
 				dataType: "HTML",
 				data: {id:id},
 				success: function(response) {
-					if (!$('#postcode').is('disabled')) {
-						$('#postcode').val(response);
+					if (!$('#sample_location_place_postal').is('disabled')) {
+						$('#sample_location_place_postal').val(response);
 					}
 				},
 				error: function(jqXhr, textStatus, errorMessage) {
@@ -502,7 +498,7 @@ $(document).ready(function() {
 	$(function() {
 			$('.select2').select2({dropdownParent: $('#new-data-modal')});
 			$(".select2-placeholder-multiple").select2({placeholder: "-- โปรดระบุ --"});
-			$(".js-hide-search").select2({minimumResultsForSearch: 1 / 0});
+			$(".js-hide-search").select2({dropdownParent: $('#new-data-modal') ,minimumResultsForSearch: 1 / 0});
 			$(".js-max-length").select2({maximumSelectionLength: 2, placeholder: "Select maximum 2 items"});
 			$(".select2-placeholder").select2({placeholder: "-- โปรดระบุ --", allowClear: true,dropdownParent: $('#new-data-modal')});
 			$(".js-select2-icons").select2({

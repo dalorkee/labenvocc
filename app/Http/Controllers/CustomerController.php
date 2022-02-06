@@ -431,50 +431,94 @@ class CustomerController extends Controller
 				return redirect()->back()->with('warning', 'เลือกข้อมูลตัวอย่างไม่ถูกต้อง โปรดตรวจสอบ');
 			} else {
 				$saved = false;
-				switch ($request->sample_place_type) {
-					case 1:
-						$userDetail = User::find($request->user_id)->userCustomer;
-						for ($i=$request->sample_select_begin; $i<=$request->sample_select_end; $i++) {
-							$orderDetail = OrderDetail::find($i);
-							if (!is_null($orderDetail)) {
-								$orderDetail->sample_charecter = $request->sample_charecter;
-								$orderDetail->sample_place_type = $request->sample_place_type;
-								$orderDetail->sample_office_category = $request->sample_office_category;
-								$orderDetail->sample_office_id = $userDetail->office_code;
-								$orderDetail->sample_office_name = $userDetail->office_name;
-								$orderDetail->sample_office_addr = $userDetail->office_address;
-								$orderDetail->sample_office_sub_district = $userDetail->office_sub_district;
-								$orderDetail->sample_office_district = $userDetail->office_district;
-								$orderDetail->sample_office_province = $userDetail->office_province;
-								$orderDetail->sample_office_postal = $userDetail->office_postal;
-								$saved = $orderDetail->save();
-							}
+				switch ($this->user->userCustomer->customer_type) {
+					case 'personal':
+						switch ($request->sample_place_type) {
+							case 1:
+								$userDetail = User::find($request->user_id)->userCustomer;
+								for ($i=$request->sample_select_begin; $i<=$request->sample_select_end; $i++) {
+									$orderDetail = OrderDetail::find($i);
+									if (!is_null($orderDetail)) {
+										$orderDetail->sample_charecter = $request->sample_charecter;
+										$orderDetail->sample_location_define = $request->sample_location_define;
+										$orderDetail->sample_location_place_id = $userDetail->sample_location_place_id;
+										$orderDetail->sample_location_place_name = $userDetail->sample_location_place_name;
+										$orderDetail->sample_location_place_address = $userDetail->sample_location_place_address;
+										$orderDetail->sample_location_place_sub_district = $userDetail->sample_location_place_sub_district;
+										$orderDetail->sample_location_place_district = $userDetail->sample_location_place_district;
+										$orderDetail->sample_location_place_province = $userDetail->sample_location_place_province;
+										$orderDetail->sample_location_place_postal = $userDetail->sample_location_place_postal;
+										$saved = $orderDetail->save();
+									}
+								}
+								break;
+							case 2:
+								for ($i=$request->sample_select_begin; $i<=$request->sample_select_end; $i++) {
+									$orderDetail = OrderDetail::find($i);
+									if (!is_null($orderDetail)) {
+										$orderDetail->sample_charecter = $request->sample_charecter;
+										$orderDetail->sample_location_define = $request->sample_location_define;
+										$orderDetail->sample_location_place_id = $request->sample_location_place_id;
+										$orderDetail->sample_location_place_name = $request->sample_location_place_name;
+										$orderDetail->sample_location_place_address = $request->sample_location_place_address;
+										$orderDetail->sample_location_place_sub_district = $request->sample_location_place_sub_district;
+										$orderDetail->sample_location_place_district = $request->sample_location_place_district;
+										$orderDetail->sample_location_place_province = $request->sample_location_place_province;
+										$orderDetail->sample_location_place_postal = $request->sample_location_place_postal;
+										$saved = $orderDetail->save();
+									}
+								}
+								break;
+							default:
+								return redirect()->route('logout');
+								break;
 						}
 						break;
-					case 2:
-						for ($i=$request->sample_select_begin; $i<=$request->sample_select_end; $i++) {
-							$orderDetail = OrderDetail::find($i);
-							if (!is_null($orderDetail)) {
-								$orderDetail->sample_charecter = $request->sample_charecter;
-								$orderDetail->sample_place_type = $request->sample_place_type;
-								$orderDetail->sample_office_category = $request->sample_office_category;
-								$orderDetail->sample_office_id = $request->sample_office_id;
-								$orderDetail->sample_office_name = $request->sample_office_name;
-								$orderDetail->sample_office_addr = $request->sample_office_addr;
-								$orderDetail->sample_office_sub_district = $request->sample_office_sub_district;
-								$orderDetail->sample_office_district = $request->sample_office_district;
-								$orderDetail->sample_office_province = $request->sample_office_province;
-								$orderDetail->sample_office_postal = $request->sample_office_postal;
-								$saved = $orderDetail->save();
-							}
-						}
-						break;
-					default:
-						return redirect()->route('logout');
-						break;
-				}
+					}
+				// switch ($request->sample_place_type) {
+				// 	case 1:
+				// 		$userDetail = User::find($request->user_id)->userCustomer;
+				// 		for ($i=$request->sample_select_begin; $i<=$request->sample_select_end; $i++) {
+				// 			$orderDetail = OrderDetail::find($i);
+				// 			if (!is_null($orderDetail)) {
+				// 				$orderDetail->sample_charecter = $request->sample_charecter;
+				// 				$orderDetail->sample_place_type = $request->sample_place_type;
+				// 				$orderDetail->sample_office_category = $request->sample_office_category;
+				// 				$orderDetail->sample_office_id = $userDetail->office_code;
+				// 				$orderDetail->sample_office_name = $userDetail->office_name;
+				// 				$orderDetail->sample_office_addr = $userDetail->office_address;
+				// 				$orderDetail->sample_office_sub_district = $userDetail->office_sub_district;
+				// 				$orderDetail->sample_office_district = $userDetail->office_district;
+				// 				$orderDetail->sample_office_province = $userDetail->office_province;
+				// 				$orderDetail->sample_office_postal = $userDetail->office_postal;
+				// 				$saved = $orderDetail->save();
+				// 			}
+				// 		}
+				// 		break;
+				// 	case 2:
+				// 		for ($i=$request->sample_select_begin; $i<=$request->sample_select_end; $i++) {
+				// 			$orderDetail = OrderDetail::find($i);
+				// 			if (!is_null($orderDetail)) {
+				// 				$orderDetail->sample_charecter = $request->sample_charecter;
+				// 				$orderDetail->sample_place_type = $request->sample_place_type;
+				// 				$orderDetail->sample_office_category = $request->sample_office_category;
+				// 				$orderDetail->sample_office_id = $request->sample_office_id;
+				// 				$orderDetail->sample_office_name = $request->sample_office_name;
+				// 				$orderDetail->sample_office_addr = $request->sample_office_addr;
+				// 				$orderDetail->sample_office_sub_district = $request->sample_office_sub_district;
+				// 				$orderDetail->sample_office_district = $request->sample_office_district;
+				// 				$orderDetail->sample_office_province = $request->sample_office_province;
+				// 				$orderDetail->sample_office_postal = $request->sample_office_postal;
+				// 				$saved = $orderDetail->save();
+				// 			}
+				// 		}
+				// 		break;
+				// 	default:
+				// 		return redirect()->route('logout');
+				// 		break;
+				// }
 				if ($saved == true) {
-					return redirect()->back()->with('success', 'บันทึกข้อมูลแล้ว');
+					return redirect()->back()->with('success', 'บันทึกข้อมูล "ประเด็นมลพิษ" แล้ว');
 				} else {
 					return redirect()->back()->with('error', 'บันทึกข้อมูลไม่สมบูรณ์ โปรดตรวจสอบ');
 				}

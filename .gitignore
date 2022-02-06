@@ -18,3 +18,4 @@ composer.lock
 !.gitignore
 *.log
 .htaccess
+/database

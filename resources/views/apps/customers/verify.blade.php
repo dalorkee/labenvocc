@@ -112,7 +112,7 @@ table.dataTable thead th {background-color: #056676;color: white}
 								<a href="{{ route('customer.sample.create', ['order_id' => $data['order_id']]) }}" class="btn btn-warning ml-auto"><i class="fal fa-arrow-alt-left"></i> ก่อนหน้า</a>
 							</div>
 							<div style="width:100px;height:40px;">
-								<button type="submit" class="btn btn-success ml-auto">ส่งคำขอ <i class="fal fa-save"></i></button>
+								<button type="submit" class="btn btn-danger ml-auto">ส่งคำขอ <i class="fal fa-arrow-alt-right"></i></button>
 							</div>
 						</div>
 					</div>
