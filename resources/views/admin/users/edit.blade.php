@@ -71,14 +71,14 @@
 					<input type="text" class="form-control" id="ref_office_env_code" name="ref_office_env_code" value="{{ $value->ref_office_env_code }}">
 				</div>
 				<div class="col-md-4 mb-3">
-					<label class="form-label" for="office_code">รหัสสถานประกอบการ(Moph)</label>
-					<input type="text" class="form-control" id="office_code" name="office_code" value="{{ $value->office_code }}">
+					<label class="form-label" for="agency_code">รหัสสถานประกอบการ(Moph)</label>
+					<input type="text" class="form-control" id="agency_code" name="agency_code" value="{{ $value->agency_code }}">
 				</div>				
 			</div>
 			<div class="form-row">
 				<div class="col-md-6 mb-3">
-					<label class="form-label" for="office_name">OfficeName</label>
-					<input type="text" class="form-control" id="office_name" name="office_name" value="{{ $value->office_name }}">
+					<label class="form-label" for="agency_name">OfficeName</label>
+					<input type="text" class="form-control" id="agency_name" name="agency_name" value="{{ $value->agency_name }}">
 				</div>
 			</div>
 			<button type="submit" class="btn btn-primary">Submit</button>

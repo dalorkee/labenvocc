@@ -26,8 +26,7 @@ class UsersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
+    public function create(){
         //
     }
 
@@ -37,8 +36,7 @@ class UsersController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
+    public function store(Request $request){
         //
     }
 
@@ -48,8 +46,7 @@ class UsersController extends Controller
      * @param  \App\Models\User  $users
      * @return \Illuminate\Http\Response
      */
-    public function show(User $users)
-    {
+    public function show(User $users){
         //
     }
 
@@ -59,8 +56,7 @@ class UsersController extends Controller
      * @param  \App\Models\User  $users
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request)
-    {
+    public function edit(Request $request){
         $userCus = User::join('users_customer_detail','users.id','=','users_customer_detail.user_id')
             ->where('users.user_type','customer')
             ->where('users_customer_detail.user_id',$request->id)
@@ -76,8 +72,7 @@ class UsersController extends Controller
      * @param  \App\Models\User  $users
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, User $users)
-    {
+    public function update(Request $request, User $users){
         $this->validate($request,[
             'user_id'=>'required',
             'user_status'=>'required',
@@ -88,8 +83,8 @@ class UsersController extends Controller
         $user_cus_find->last_name = $request->last_name;
         $user_cus_find->ref_office_lab_code = $request->ref_office_lab_code;
         $user_cus_find->ref_office_env_code = $request->ref_office_env_code;
-        $user_cus_find->office_code = $request->office_code;
-        $user_cus_find->office_name = $request->office_name;
+        $user_cus_find->agency_code = $request->agency_code;
+        $user_cus_find->agency_name = $request->agency_name;
         $uc_up = $user_cus_find->save();
         if($uc_up==true){
             if($request->user_status === 'อนุญาต' AND $user_find->user_status !== 'อนุญาต'){
@@ -116,6 +111,12 @@ class UsersController extends Controller
             if($u_up==true){
                 return redirect()->route('users.index')->with('success', 'updated successfully');
             }
+            else{
+                return redirect()->route('users.index')->with('error', 'unsuccessfully');
+            }
+        }
+        else{
+            return redirect()->route('users.index')->with('error', 'unsuccessfully');
         }
     }
 
@@ -125,9 +126,26 @@ class UsersController extends Controller
      * @param  \App\Models\User  $users
      * @return \Illuminate\Http\Response
      */
-    public function destroy(User $Users)
-    {
-        //
+    public function destroy(Request $request,User $users){
+        $d_now = date('Y-m-d H:i:s');        
+        $user_find = $users->find($request->id);
+        $user_find->approved = 'n';
+        $user_find->user_status = 'ปิด';
+        $user_find->deleted_at = $d_now;
+        $u_del = $user_find->save();
+        if($u_del==true){
+            $user_cus_find = $user_find->userCustomer;
+            $user_cus_find->deleted_at = $d_now;
+            $ucus_del = $user_cus_find->save();
+            if($ucus_del==true){
+                DB::table('model_has_roles')->where('model_id', '=', $request->user_id)->delete();           
+            }
+            else{
+                return redirect()->route('users.index')->with('error', 'unsuccessfully');
+            }             
+        } 
+        else{
+            return redirect()->route('users.index')->with('error', 'unsuccessfully');
+        }       
     }
-
 }

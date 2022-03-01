@@ -38,10 +38,17 @@
 				var userCusId = $(this).data('id');
 				switch(key){
 					case 'edit':
-						let userCusUrl = '{{ route("users.edit", ":id") }}';
-						userCusUrl = userCusUrl.replace(':id', userCusId);
-						alert(userCusUrl);
-						window.open(userCusUrl, '_self');
+						let userCusEditUrl = '{{ route("users.edit", ":id") }}';
+						userCusEditUrl = userCusEditUrl.replace(':id', userCusId);
+						window.open(userCusEditUrl, '_self');
+					break;
+					case 'delete':
+						let userCusDelUrl = '{{ route("users.destroy", ":id") }}';
+						userCusDelUrl = userCusDelUrl.replace(':id', userCusId);						
+						window.open(userCusDelUrl, '_self');
+					break;
+					default :
+						alert('ยังไม่เปิดใช้งาน');
 					break;
 				}
 			},

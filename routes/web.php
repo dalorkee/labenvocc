@@ -100,6 +100,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 	});
 	Route::get('/admin/home', [AdminController::class, 'index'])->name('admin.index');
 	Route::get('/users/id/{id}/edit',[UsersController::class,'edit'])->name('users.edit');
+	Route::get('/users/id/{id}/destroy',[UsersController::class,'destroy'])->name('users.destroy');
 	Route::get('/office/id/{id}/edit',[OfficeController::class,'edit'])->name('office.edit');
 	Route::get('/advertise/id/{id}/edit',[AdvertiseController::class,'edit'])->name('advertise.edit');
 	Route::get('/advertise/id/{id}/destroy',[AdvertiseController::class,'destroy'])->name('advertise.destroy');
