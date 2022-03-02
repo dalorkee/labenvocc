@@ -47,9 +47,6 @@ class OfficeDataTable extends DataTable
 				elseif($userstaffchk->user_status == 'อนุญาต'){
 					return '<span class="badge badge-success text-dark">อนุญาต</span>';
 				}
-				elseif($userstaffchk->user_status == 'ปิด'){
-					return '<span class="badge badge-secondary">ปิด</span>';
-				}
 				elseif($userstaffchk->user_status == 'ไม่อนุญาต'){
 					return '<span class="badge badge-danger">ไม่อนุญาต</span>';
 				}
@@ -59,7 +56,7 @@ class OfficeDataTable extends DataTable
 	}
 
 	public function query(User $user) {
-		return $user->whereUser_type('staff')->with('userStaff')->orderBy('id', 'ASC');
+		return $user->whereNotIn('id',[2,3])->whereUser_type('staff')->with('userStaff')->orderBy('id', 'ASC');
 	}
 
 	public function html(): object {

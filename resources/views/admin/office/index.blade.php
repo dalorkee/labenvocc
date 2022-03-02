@@ -38,10 +38,27 @@
                 var userStaffId = $(this).data('id');
                 switch(key){
                     case 'edit':                       
-                        let userStaffUrl = '{{ route("office.edit", ":id") }}';
-                        userStaffUrl = userStaffUrl.replace(':id', userStaffId);
-                        alert(userStaffUrl);
-                        window.open(userStaffUrl, '_self');
+                        let userStaffEditUrl = '{{ route("office.edit", ":id") }}';
+                        userStaffEditUrl = userStaffEditUrl.replace(':id', userStaffId);                        
+                        window.open(userStaffEditUrl, '_self');
+                    break;
+                    case 'allow':                       
+                        let userStaffAllowUrl = '{{ route("office.allow", ":id") }}';
+                        userStaffAllowUrl = userStaffAllowUrl.replace(':id', userStaffId);                        
+                        window.open(userStaffAllowUrl, '_self');
+                    break;
+                    case 'deny':                       
+                        let userStaffDenyUrl = '{{ route("office.deny", ":id") }}';
+                        userStaffDenyUrl = userStaffDenyUrl.replace(':id', userStaffId);                        
+                        window.open(userStaffDenyUrl, '_self');
+                    break;
+                    case 'delete':                       
+                        let userStaffDeleteUrl = '{{ route("office.destroy", ":id") }}';
+                        userStaffDeleteUrl = userStaffDeleteUrl.replace(':id', userStaffId);                        
+                        window.open(userStaffDeleteUrl, '_self');
+                    break;
+                    default:
+                        alert('ยังไม่เปิดใช้งาน');
                     break;
                 }
             },
@@ -49,8 +66,7 @@
                 "edit": {name: "แก้ไข", icon: "fal fa-edit"},
                 "sep1":"--------",
                 "allow": {name: "อนุญาต", icon: "fal fa-lock-open-alt"},
-                "deny": {name: "ไม่อนุญาต", icon: "fal fa-lock-alt"},
-                "close": {name: "ปิดใช้งาน", icon: "fal fa-exclamation-triangle"},
+                "deny": {name: "ไม่อนุญาต", icon: "fal fa-lock-alt"},                
                 "delete": {name: "ลบ", icon: "fal fa-eraser"},
             }
         });

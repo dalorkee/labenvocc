@@ -56,7 +56,6 @@
 						<option value="">---เลือก---</option>
 						<option {{ ($value->user_status) == 'สมัครใหม่' ? 'selected' : '' }} value="สมัครใหม่">สมัครใหม่</option>
 						<option {{ ($value->user_status) == 'อนุญาต' ? 'selected' : '' }} value="อนุญาต">อนุญาต</option>
-						<option {{ ($value->user_status) == 'ปิด' ? 'selected' : '' }} value="ปิด">ปิด</option>
 						<option {{ ($value->user_status) == 'ไม่อนุญาต' ? 'selected' : '' }} value="ไม่อนุญาต">ไม่อนุญาต</option>
 					</select>
 				</div>

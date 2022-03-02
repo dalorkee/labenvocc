@@ -28,8 +28,8 @@ class UsersDataTable extends DataTable
 			->addColumn('ref_office_env_code', function($query) {
 				return $query->userCustomer->ref_office_env_code;
 			})
-			->addColumn('office_name', function($query) {
-				return $query->userCustomer->office_name;
+			->addColumn('agency_name', function($query) {
+				return $query->userCustomer->agency_name;
 			})
 			->addColumn('first_name', function($query) {
 				return $query->userCustomer->first_name;
@@ -43,9 +43,6 @@ class UsersDataTable extends DataTable
 				}
 				elseif($usercuschk->user_status == 'อนุญาต'){
 					return '<span class="badge badge-success text-dark">อนุญาต</span>';
-				}
-				elseif($usercuschk->user_status == 'ปิด'){
-					return '<span class="badge badge-secondary">ปิด</span>';
 				}
 				elseif($usercuschk->user_status == 'ไม่อนุญาต'){
 					return '<span class="badge badge-danger">ไม่อนุญาต</span>';
@@ -76,7 +73,7 @@ class UsersDataTable extends DataTable
 			Column::make('username')->title('username'),
 			Column::make('ref_office_lab_code')->title('รหัสหน่วยงาน'),
 			Column::make('ref_office_env_code')->title('รหัสหน่วยงาน(env)'),
-			Column::make('office_name')->title('ชื่อหน่วยงาน'),
+			Column::make('agency_name')->title('ชื่อหน่วยงาน'),
 			Column::make('first_name')->title('ชื่อ'),
 			Column::make('last_name')->title('นามสกุล'),
 			Column::make('user_status')->title('สถานะ'),

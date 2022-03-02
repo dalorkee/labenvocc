@@ -95,16 +95,19 @@ class UsersController extends Controller
                     'model_type'=>'App\Models\User',
                     'model_id'=>$request->user_id,
                 ]);    
-            }elseif($request->user_status !== 'อนุญาต' AND $user_find->user_status === 'อนุญาต'){
+            }
+            elseif($request->user_status !== 'อนุญาต' AND $user_find->user_status === 'อนุญาต'){
                 $user_find->approved = 'n';
                 $user_find->user_status = $request->user_status;
                 DB::table('model_has_roles')->where('model_id',$request->user_id)->delete();
             }
             elseif($request->user_status === 'อนุญาต' AND $user_find->user_status === 'อนุญาต'){
                 return redirect()->route('users.index')->with('success', 'updated successfully');
-            }elseif($request->user_status !== 'อนุญาต' AND $user_find->user_status !== 'อนุญาต'){
+            }
+            elseif($request->user_status !== 'อนุญาต' AND $user_find->user_status !== 'อนุญาต'){
                 $user_find->user_status = $request->user_status;                
-            }else{
+            }
+            else{
                 return redirect()->route('users.index')->with('error', 'unsuccessfully');
             }
             $u_up = $user_find->save();
@@ -130,7 +133,7 @@ class UsersController extends Controller
         $d_now = date('Y-m-d H:i:s');        
         $user_find = $users->find($request->id);
         $user_find->approved = 'n';
-        $user_find->user_status = 'ปิด';
+        $user_find->user_status = 'ไม่อนุญาต';
         $user_find->deleted_at = $d_now;
         $u_del = $user_find->save();
         if($u_del==true){
@@ -138,11 +141,47 @@ class UsersController extends Controller
             $user_cus_find->deleted_at = $d_now;
             $ucus_del = $user_cus_find->save();
             if($ucus_del==true){
-                DB::table('model_has_roles')->where('model_id', '=', $request->user_id)->delete();           
+                $del = DB::table('model_has_roles')->where('model_id', '=', $request->id)->delete();  
+                if($del==true){
+                    return redirect()->route('users.index')->with('success', 'delete successfully');         
+                }
+                else{
+                    return redirect()->route('users.index')->with('error', 'unsuccessfully');
+                }
             }
             else{
                 return redirect()->route('users.index')->with('error', 'unsuccessfully');
             }             
+        } 
+        else{
+            return redirect()->route('users.index')->with('error', 'unsuccessfully');
+        }       
+    }
+    public function allow(Request $request,User $users){       
+        $user_find = $users->find($request->id);
+        $user_find->approved = 'y';
+        $user_find->user_status = 'อนุญาต';
+        $u_allow = $user_find->save();
+        if($u_allow==true){
+            DB::table('model_has_roles')->insert([
+                'role_id'=>'4',
+                'model_type'=>'App\Models\User',
+                'model_id'=>$request->id,
+            ]);
+            return redirect()->route('users.index')->with('success', 'allow successfully');
+        } 
+        else{
+            return redirect()->route('users.index')->with('error', 'unsuccessfully');
+        }       
+    }
+    public function deny(Request $request,User $users){        
+        $user_find = $users->find($request->id);
+        $user_find->approved = 'n';
+        $user_find->user_status = 'ไม่อนุญาต';
+        $u_deny = $user_find->save();
+        if($u_deny==true){
+            DB::table('model_has_roles')->where('model_id', '=', $request->id)->delete(); 
+            return redirect()->route('users.index')->with('success', 'deny successfully');          
         } 
         else{
             return redirect()->route('users.index')->with('error', 'unsuccessfully');

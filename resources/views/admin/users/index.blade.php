@@ -42,6 +42,16 @@
 						userCusEditUrl = userCusEditUrl.replace(':id', userCusId);
 						window.open(userCusEditUrl, '_self');
 					break;
+					case 'allow':
+						let userCusAllowUrl = '{{ route("users.allow", ":id") }}';
+						userCusAllowUrl = userCusAllowUrl.replace(':id', userCusId);
+						window.open(userCusAllowUrl, '_self');
+					break;
+					case 'deny':
+						let userCusDenyUrl = '{{ route("users.deny", ":id") }}';
+						userCusDenyUrl = userCusDenyUrl.replace(':id', userCusId);
+						window.open(userCusDenyUrl, '_self');
+					break;
 					case 'delete':
 						let userCusDelUrl = '{{ route("users.destroy", ":id") }}';
 						userCusDelUrl = userCusDelUrl.replace(':id', userCusId);						
@@ -56,8 +66,7 @@
 				"edit": {name: "แก้ไข", icon: "fal fa-edit"},
 				"sep1":"--------",
 				"allow": {name: "อนุญาต", icon: "fal fa-lock-open-alt"},
-				"deny": {name: "ไม่อนุญาต", icon: "fal fa-lock-alt"},
-				"close": {name: "ปิดใช้งาน", icon: "fal fa-exclamation-triangle"},
+				"deny": {name: "ไม่อนุญาต", icon: "fal fa-lock-alt"},				
 				"delete": {name: "ลบ", icon: "fal fa-eraser"},
 			}
 		});

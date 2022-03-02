@@ -54,8 +54,7 @@
 					<select class="custom-select" name="user_status">
 						<option value="">---เลือก---</option>
 						<option {{ ($userStuff[0]->user_status) == 'สมัครใหม่' ? 'selected' : '' }} value="สมัครใหม่">สมัครใหม่</option>
-						<option {{ ($userStuff[0]->user_status) == 'อนุญาต' ? 'selected' : '' }} value="อนุญาต">อนุญาต</option>
-						<option {{ ($userStuff[0]->user_status) == 'ปิด' ? 'selected' : '' }} value="ปิด">ปิด</option>
+						<option {{ ($userStuff[0]->user_status) == 'อนุญาต' ? 'selected' : '' }} value="อนุญาต">อนุญาต</option>						
 						<option {{ ($userStuff[0]->user_status) == 'ไม่อนุญาต' ? 'selected' : '' }} value="ไม่อนุญาต">ไม่อนุญาต</option>
 					</select>
 				</div>
