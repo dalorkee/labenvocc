@@ -17,7 +17,7 @@ class AdvertiseController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(AdvertiseDataTable $dataTable) {
+    public function index(AdvertiseDataTable $dataTable){
 
         return $dataTable->render('admin.advertise.index');
     }
@@ -27,8 +27,7 @@ class AdvertiseController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
+    public function create(){
         return view('admin.advertise.create');
     }
 
@@ -38,8 +37,7 @@ class AdvertiseController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Advertise $advertise)
-    {
+    public function store(Request $request, Advertise $advertise){
         $this->validate($request,[
             'advertise_type'=>'required',
             'advertise_detail'=>'required'
@@ -58,9 +56,8 @@ class AdvertiseController extends Controller
      * @param  \App\Models\Admin\Advertise  $office
      * @return \Illuminate\Http\Response
      */
-    public function show(Advertise $advertise)
-    {
-        //
+    public function show(Advertise $advertise){
+        
     }
 
     /**
@@ -69,8 +66,7 @@ class AdvertiseController extends Controller
      * @param  \App\Models\Admin\Advertise  $office
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request, Advertise $advertise)
-    {
+    public function edit(Request $request, Advertise $advertise){
         $advertise = $advertise->find($request->id); 
         return view('admin.advertise.edit',compact('advertise'));
     }
@@ -82,8 +78,7 @@ class AdvertiseController extends Controller
      * @param  \App\Models\Admin\Advertise  $office
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Advertise $advertise)
-    {
+    public function update(Request $request, Advertise $advertise){
         $this->validate($request,[
             'adv_id'=>'required',
             'advertise_type'=>'required',
@@ -104,11 +99,10 @@ class AdvertiseController extends Controller
      * @param  \App\Models\Admin\Advertise  $office
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request,Advertise $advertise)
-    {
+    public function destroy(Request $request,Advertise $advertise){
         $adv_find = $advertise->find($request->id)->delete();
         if($adv_find == true){
-            return redirect()->route('advertise.index')->with('success', 'Role deleted successfully');
+            return redirect()->route('advertise.index')->with('success', 'Deleted successfully');
         }
     }
 }

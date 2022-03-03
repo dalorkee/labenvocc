@@ -42,7 +42,7 @@ class AdvertiseDataTable extends DataTable
 					->dom('Bfrtip')
 					->orderBy(1)
 					->buttons(
-						Button::make('create')->action("window.location = '".route('advertise.create')."';"),
+						Button::make('create')->text('<button class="btn btn-primary"><i class="fal fa-plus"></i> เพิ่มข่าว</button>')->action("window.location = '".route('advertise.create')."';"),
 					);
 	}
 

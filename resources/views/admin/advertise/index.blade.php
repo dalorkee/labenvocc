@@ -39,14 +39,12 @@
                 switch(key){
                     case 'edit':                       
                         let advUrl = '{{ route("advertise.edit", ":id") }}';
-                        advUrl = advUrl.replace(':id', advId);
-                        alert(advUrl);
+                        advUrl = advUrl.replace(':id', advId);                       
                         window.open(advUrl, '_self');
                     break;
                     case 'delete':
                         let advDesUrl = '{{ route("advertise.destroy", ":id") }}';
-                        advDesUrl = advDesUrl.replace(':id', advId);
-                        alert(advDesUrl);
+                        advDesUrl = advDesUrl.replace(':id', advId);                        
                         window.open(advDesUrl, '_self');
                     break;
                 }
