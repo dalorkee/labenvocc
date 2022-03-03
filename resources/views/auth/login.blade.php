@@ -50,7 +50,7 @@
 						<div class="col-md-12">
 							<nav class="row mt-4 text-sm">
 								<div class="col-sm-4">
-									<a href="#"><i class="fal fa-key"></i> {{ $user[0]->username }}ลืมรหัสผ่าน ?</a>
+									<a href="#"><i class="fal fa-key"></i> ลืมรหัสผ่าน ?</a>
 								</div>
 								<div class="col-sm-4">
 									<a href="#"><i class="fal fa-book"></i> คู่มือการใช้งาน</a>
@@ -89,7 +89,8 @@
 												<a href="#" class="btn btn-outline-success btn-sm btn-w-m">รายละเอียด</a>
 											</div>
 										</div>
-										<div class="alert border-faded bg-transparent text-secondary fade show" role="alert">
+										{{dd($advertise)}}
+										{{-- <div class="alert border-faded bg-transparent text-secondary fade show" role="alert">
 											<div class="d-flex align-items-center">
 												<div class="alert-icon">
 													<span class="icon-stack icon-stack-md">
@@ -116,7 +117,7 @@
 												</div>
 												<a href="#" class="btn btn-outline-success btn-sm btn-w-m">รายละเอียด</a>
 											</div>
-										</div>
+										</div> --}}
 									</section>
 								</div>
 							</div>

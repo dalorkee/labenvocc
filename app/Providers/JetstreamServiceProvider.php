@@ -6,7 +6,7 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Jetstream\Jetstream;
 use Laravel\Fortify\Fortify;
-use App\Models\{User};
+use App\Models\Admin\{Advertise};
 
 
 class JetstreamServiceProvider extends ServiceProvider
@@ -27,9 +27,9 @@ class JetstreamServiceProvider extends ServiceProvider
 	 * @return void
 	 */
 	public function boot() {
-        $user = User::whereId('1')->get();;
-        Fortify::loginView(function () use ($user) {
-            return view('auth.login', ['user' => $user]);
+        $advertise = Advertise::orderBy('id','Desc')->limit(3)->get();;
+        Fortify::loginView(function () use ($advertise) {
+            return view('auth.login', ['advertise' => $advertise]);
         });
 
 		// pj $this->configurePermissions(); */
