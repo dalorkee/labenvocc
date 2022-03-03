@@ -50,7 +50,7 @@
 						<div class="col-md-12">
 							<nav class="row mt-4 text-sm">
 								<div class="col-sm-4">
-									<a href="#"><i class="fal fa-key"></i> ลืมรหัสผ่าน ?</a>
+									<a href="#"><i class="fal fa-key"></i> {{ $user[0]->username }}ลืมรหัสผ่าน ?</a>
 								</div>
 								<div class="col-sm-4">
 									<a href="#"><i class="fal fa-book"></i> คู่มือการใช้งาน</a>
