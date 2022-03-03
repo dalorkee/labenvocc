@@ -56,7 +56,7 @@ class OfficeDataTable extends DataTable
 	}
 
 	public function query(User $user) {
-		return $user->whereNotIn('id',[2,3])->whereUser_type('staff')->with('userStaff')->orderBy('id', 'ASC');
+		return $user->whereUser_type('staff')->with('userStaff')->orderBy('id', 'ASC');
 	}
 
 	public function html(): object {
