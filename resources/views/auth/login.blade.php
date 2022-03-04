@@ -68,80 +68,53 @@
 	<div class="col-md-6">
 		<div class="row mt-4 mb-4">
 			<div class="col-md-12">
-				<form method="POST" action="{{ route('login') }}">
-					<fieldset style="padding:10px 30px; border: 1px solid #d3ebe8">
-						<legend style="width:auto;padding:2px;color:#39675D;font-size:1.10em">ข่าวสารประชาสัมพันธ์</legend>
-						<div class="card m-0 p-0 shadow-0" style="border:none;background: none;">
-							<div class="card-body p-0">
-								<div class="custom-scroll" style="height: 220px">
-									<section>
-										<div class="alert border-faded bg-transparent text-secondary fade show" role="alert">
-											<div class="d-flex align-items-center">
-												<div class="alert-icon">
-													<span class="icon-stack icon-stack-md">
-														<i class="base-7 icon-stack-3x color-success-600"></i>
-														<i class="fal fa-info icon-stack-1x text-white"></i>
-													</span>
-												</div>
-												<div class="flex-1">
-													<span class="h5 color-success-600">ขณะนี้ศูนย์อ้างอิงทางห้องปฏิบัติการและพิษวิทยาไม่สามารถให้บริการตรวจวิเคราะห์สารแปรรูปของเบนซีน (trans,trans-Muconic acid) ได้ชั่วคราว</span>
-												</div>
-												<a href="#" class="btn btn-outline-success btn-sm btn-w-m">รายละเอียด</a>
+				<fieldset style="padding:10px 30px; border: 1px solid #d3ebe8">
+					<legend style="width:auto;padding:2px;color:#39675D;font-size:1.10em">ข่าวสารประชาสัมพันธ์</legend>
+					<div class="card m-0 p-0 shadow-0" style="border:none;background: none;">
+						<div class="card-body p-0">
+							<div class="custom-scroll" style="height: 220px">
+								<section>
+								@foreach($advertise[0] AS $public_relate)
+									<div class="alert border-faded bg-transparent text-secondary fade show" role="alert">
+										<div class="d-flex align-items-center">
+											<div class="alert-icon">
+												<span class="icon-stack icon-stack-md">
+													<i class="base-7 icon-stack-3x color-success-600"></i>
+													<i class="fal fa-info icon-stack-1x text-white"></i>
+												</span>
 											</div>
+											<div class="flex-1">
+												<span class="h5 color-success-600">{{ $public_relate->advertise_detail }}</span>
+											</div>
+											<a href="{{ route('advertise.detail',$public_relate->id) }}" class="btn btn-outline-success btn-sm btn-w-m">รายละเอียด</a>
 										</div>
-										{{dd($advertise)}}
-										{{-- <div class="alert border-faded bg-transparent text-secondary fade show" role="alert">
-											<div class="d-flex align-items-center">
-												<div class="alert-icon">
-													<span class="icon-stack icon-stack-md">
-														<i class="base-7 icon-stack-3x color-success-600"></i>
-														<i class="fal fa-info icon-stack-1x text-white"></i>
-													</span>
-												</div>
-												<div class="flex-1">
-													<span class="h5 color-success-600">ขณะนี้ศูนย์อ้างอิงทางห้องปฏิบัติการและพิษวิทยาไม่สามารถให้บริการตรวจวิเคราะห์สารแปรรูปของเบนซีน (trans,trans-Muconic acid) ได้ชั่วคราว</span>
-												</div>
-												<a href="#" class="btn btn-outline-success btn-sm btn-w-m">รายละเอียด</a>
-											</div>
-										</div>
-										<div class="alert border-faded bg-transparent text-secondary fade show" role="alert">
-											<div class="d-flex align-items-center">
-												<div class="alert-icon">
-													<span class="icon-stack icon-stack-md">
-														<i class="base-7 icon-stack-3x color-success-600"></i>
-														<i class="fal fa-info icon-stack-1x text-white"></i>
-													</span>
-												</div>
-												<div class="flex-1">
-													<span class="h5 color-success-600">ขณะนี้ศูนย์อ้างอิงทางห้องปฏิบัติการและพิษวิทยาไม่สามารถให้บริการตรวจวิเคราะห์สารแปรรูปของเบนซีน (trans,trans-Muconic acid) ได้ชั่วคราว</span>
-												</div>
-												<a href="#" class="btn btn-outline-success btn-sm btn-w-m">รายละเอียด</a>
-											</div>
-										</div> --}}
-									</section>
-								</div>
+									</div>											
+								@endforeach										
+								</section>
 							</div>
-						</div>
-					</fieldset>
-				</form>
+						</div>							
+					</div>
+					<a class="btn btn-info text-white" href="{{ route('advertise.listall',['listall'=>'public']) }}">ดูทั้งหมด</a>
+				</fieldset>
 			</div>
-			<div class="col-md-12 mt-4">
-				<form method="POST" action="{{ route('login') }}">
-					<fieldset style="padding:30px; border: 1px solid #d3ebe8">
-						<legend style="width:auto;padding:2px;color:#39675D;font-size:1.10em">มาตรฐานคุณภาพ</legend>
-						<div class="card m-0 p-0 shadow-0" style="border:none;background: none;">
-							<div class="card-body p-0">
-								<div class="custom-scroll" style="height: 80px">
-									<section>
-										<div class="fs-xl fw-500 color-success-600">
-											ขณะนี้ศูนย์อ้างอิงทางห้องปฏิบัติการและพิษวิทยาไม่สามารถให้บริการตรวจวิเคราะห์สารแปรรูปของเบนซีน (trans,trans-Muconic acid) ได้ชั่วคราว
-										</div>
-									</section>
-								</div>
+			<div class="col-md-12 mt-4">				
+				<fieldset style="padding:30px; border: 1px solid #d3ebe8">
+					<legend style="width:auto;padding:2px;color:#39675D;font-size:1.10em">มาตรฐานคุณภาพ</legend>
+					<div class="card m-0 p-0 shadow-0" style="border:none;background: none;">
+						<div class="card-body p-0">
+							<div class="custom-scroll" style="height: 80px">
+								<section>
+									@foreach($advertise[1] AS $std_quality)
+									<div class="fs-xl fw-500 color-success-600">
+										<span class="h5 color-success-600">{{ $std_quality->advertise_detail }}</span>
+									</div>
+								@endforeach	
+								</section>
 							</div>
 						</div>
-					</fieldset>
-				</form>
+					</div>
+					<a class="btn btn-info text-white" href="{{ route('advertise.listall',['listall'=>'stdquality']) }}">ดูทั้งหมด</a>
+				</fieldset>
 			</div>
 		</div>
 	</div>

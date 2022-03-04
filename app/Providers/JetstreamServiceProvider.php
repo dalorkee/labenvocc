@@ -27,7 +27,9 @@ class JetstreamServiceProvider extends ServiceProvider
 	 * @return void
 	 */
 	public function boot() {
-        $advertise = Advertise::orderBy('id','Desc')->limit(3)->get();;
+        $public_relate = Advertise::where('advertise_type','ประชาสัมพันธ์')->orderBy('id','Desc')->limit(3)->get();
+		$std_quality = Advertise::where('advertise_type','มาตราฐานคุณภาพ')->orderBy('id','Desc')->limit(1)->get();
+		$advertise = array($public_relate,$std_quality);
         Fortify::loginView(function () use ($advertise) {
             return view('auth.login', ['advertise' => $advertise]);
         });
