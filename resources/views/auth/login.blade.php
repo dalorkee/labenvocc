@@ -84,7 +84,7 @@
 												</span>
 											</div>
 											<div class="flex-1">
-												<span class="h5 color-success-600">{{ $public_relate->advertise_detail }}</span>
+												<span class="h5 color-success-600">{{ $public_relate->advertise_title }}</span>
 											</div>
 											<a href="{{ route('advertise.detail',$public_relate->id) }}" class="btn btn-outline-success btn-sm btn-w-m">รายละเอียด</a>
 										</div>

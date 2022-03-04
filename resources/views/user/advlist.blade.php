@@ -1,4 +1,4 @@
-@extends('layouts.admin.index')
+@extends('layouts.guest.index')
 @section('style')
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('vendor/jquery-smartwizard/css/smart_wizard_arrows.min.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('vendor/DataTables/DataTables-1.10.22/css/jquery.dataTables.min.css') }}">
@@ -7,12 +7,8 @@
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('vendor/jquery-contextmenu/css/jquery.contextMenu.min.css') }}">
 @endsection
 @section('content')
-<ol class="breadcrumb page-breadcrumb">
-	<li class="breadcrumb-item"><a href="javascript:void(0);">Admin</a></li>
-	<li class="breadcrumb-item">Advertise Create</li>
-</ol>
 <div class="subheader">
-	<h1 class="subheader-title"><small>เพิ่มข้อมูลหน่วยงาน</small></h1>
+	<h1 class="subheader-title"><small>รายละเอียดข่าวประชาสัมพันธ์</small></h1>
 </div>
 @if (Session::get('success'))
 	<div class="alert alert-success">
@@ -25,30 +21,13 @@
 @endif
 <div class="fs-lg fw-300 p-5 bg-white border-faded rounded mb-g">
 	<div class="frame-wrap">
-		<form action="{{ route('advertise.store') }}" method="POST">
-		@csrf
-			<div class="form-row">
-				<div class="col-md-6 mb-3">
-					<label class="form-label" for="advertise_type">ประเภทหัวข้อ</label>
-					<select class="custom-select" name="advertise_type" required>
-						<option value="">---เลือก---</option>
-						<option value="ประชาสัมพันธ์">ประชาสัมพันธ์</option>
-						<option value="มาตราฐานคุณภาพ">มาตราฐานคุณภาพ</option>
-					</select>
-				</div>
-				<div class="col-md-6 mb-3">
-					<label class="form-label" for="advertise_title">หัวข้อข่าว</label>
-					<input type="text" class="form-control" id="advertise_title" name="advertise_title" required>			
-				</div>
-			</div>
-			<div class="form-row">
-				<div class="col-md-8 mb-3">
-					<label class="form-label" for="advertise_detail">รายละเอียด</label>
-					<textarea class="form-control" id="advertise_detail" name="advertise_detail" required></textarea>					
-				</div>				
-			</div>
-			<button type="submit" class="btn btn-primary">Submit</button>
-		</form>		
+		<div class="form-row">
+			<div class="col-md-6 mb3">
+				<label class="form-label text-info" for="advertise_date">ประเภทข่าว</label>
+				<span class="badge badge-primary">{{ $advertise[0]->advertise_type }}</span>
+			</div>	
+        </div>
+		<a class="btn btn-primary" href="{{ route('login') }}">กลับ</a>		
 	</div>
 </div>
 @endsection

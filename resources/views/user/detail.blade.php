@@ -27,10 +27,16 @@
 				<span class="badge badge-secondary">{{ date('Y-F-d',strtotime($advertise['advertise_date'])); }}</span>
 			</div>	
         </div>
+		<div class="form-row">
+			<div class="col-md-6 mb3">
+				<label class="form-label text-info" for="advertise_date">หัวข้อข่าว</label>
+				<span class="badge badge-primary">{{ $advertise['advertise_title'] }}</span>
+			</div>	
+        </div>
         <div class="form-row">
 			<div class="col-md-12 mb-6">
 				<label class="form-label text-info" for="advertise_detail">รายละเอียด</label>
-				<textarea class="form-control" id="advertise_detail" name="advertise_detail">{{ $advertise['advertise_detail'] }}</textarea>					
+				<textarea class="form-control" id="advertise_detail" name="advertise_detail" readonly>{{ $advertise['advertise_detail'] }}</textarea>					
 			</div>				
 		</div>
 		<a class="btn btn-primary" href="{{ route('login') }}">กลับ</a>		

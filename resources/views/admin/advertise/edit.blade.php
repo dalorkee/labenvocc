@@ -48,6 +48,12 @@
 					</select>
 				</div>
 				<div class="col-md-6 mb-3">
+					<label class="form-label" for="advertise_title">หัวข้อข่าว</label>
+					<input type="text" class="form-control" id="advertise_title" name="advertise_title" value="{{ $advertise['advertise_title'] }}">			
+				</div>
+			</div>
+			<div class="form-row">
+				<div class="col-md-8 mb-3">
 					<label class="form-label" for="advertise_detail">รายละเอียด</label>
 					<textarea class="form-control" id="advertise_detail" name="advertise_detail">{{ $advertise['advertise_detail'] }}</textarea>					
 				</div>				

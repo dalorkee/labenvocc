@@ -26,6 +26,9 @@ class AdvertiseDataTable extends DataTable
 					return '<span class="badge badge-success">มาตราฐานคุณภาพ</span>';
 				}
 			})
+			->editColumn('advertise_date',function($format_date){
+				return date('Y-F-d',strtotime($format_date->advertise_date));
+			})
 			->addColumn('action', '<button type="button" class="advertise-manage-nav btn btn-sm btn-info" data-id="{{$id}}">จัดการ<i class="fal fa-angle-down"></i> </button>')
 			->rawColumns(['advertise_type','action']);
 	}
@@ -49,7 +52,8 @@ class AdvertiseDataTable extends DataTable
 	protected function getColumns() {
 		return [
 			Column::make('id')->title('ลำดับ'),
-			Column::make('advertise_type')->title('ประเภทหัวข้อ'),
+			Column::make('advertise_type')->title('ประเภทข่าว'),
+			Column::make('advertise_title')->title('หัวข้อข่าว'),
 			Column::make('advertise_detail')->title('รายละเอียด'),
 			Column::make('advertise_date')->title('วันที่ลงรายการ'),
 			Column::make('action')->title('จัดการ'),

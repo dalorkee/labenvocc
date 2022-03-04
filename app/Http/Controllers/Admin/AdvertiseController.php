@@ -39,14 +39,19 @@ class AdvertiseController extends Controller
      */
     public function store(Request $request, Advertise $advertise){
         $this->validate($request,[
-            'advertise_type'=>'required',
-            'advertise_detail'=>'required'
+            'advertise_type'=>'required',            
+            'advertise_title'=>'required',
+            'advertise_detail'=>'required',
         ]);
         $advertise->advertise_type = $request->advertise_type;
+        $advertise->advertise_title = $request->advertise_title;
         $advertise->advertise_detail = $request->advertise_detail;
         $adv_up = $advertise->save();
         if($adv_up == true){
             return redirect()->route('advertise.index')->with('success', 'insert successfully');
+        }
+        else{
+            return redirect()->route('advertise.index')->with('error', 'unsuccessfully');
         }
     }
 
