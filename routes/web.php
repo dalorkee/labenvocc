@@ -7,7 +7,8 @@ use App\Http\Controllers\{
 	RegisterPrivateAgencyController,
 	RegisterGovernmentController,
 	RegisterStaffController,
-	CustomerController
+	CustomerController,
+	UserAdvertiseController
 };
 use App\Http\Controllers\Admin\{
 	AdminController,
@@ -112,4 +113,4 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 });
 Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
 Route::get('/advertise/id/{id}/detail',[AdvertiseController::class,'detail'])->name('advertise.detail');
-Route::get('/advertise/listall/{listall}',[AdvertiseController::class,'listall'])->name('advertise.listall');
+Route::get('/user/advertise/listall/{listall}',[UserAdvertiseController::class,'listall'])->name('user.advertise.listall');

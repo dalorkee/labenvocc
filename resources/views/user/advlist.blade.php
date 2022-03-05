@@ -8,27 +8,15 @@
 @endsection
 @section('content')
 <div class="subheader">
-	<h1 class="subheader-title"><small>รายละเอียดข่าวประชาสัมพันธ์</small></h1>
+	<h1 class="subheader-title"><small>รายละเอียดข่าว {{ $adv_type }}</small></h1>
 </div>
-@if (Session::get('success'))
-	<div class="alert alert-success">
-		<p>{{ Session::get('success') }}</p>
-	</div>
-@elseif (Session::get('error'))
-	<div class="alert alert-danger">
-		<p>{{ Session::get('error') }}</p>
-	</div>
-@endif
 <div class="fs-lg fw-300 p-5 bg-white border-faded rounded mb-g">
 	<div class="frame-wrap">
-		<div class="form-row">
-			<div class="col-md-6 mb3">
-				<label class="form-label text-info" for="advertise_date">ประเภทข่าว</label>
-				<span class="badge badge-primary">{{ $advertise[0]->advertise_type }}</span>
-			</div>	
-        </div>
-		<a class="btn btn-primary" href="{{ route('login') }}">กลับ</a>		
+		{{ $dataTable->table() }}
 	</div>
+</div>
+<div class="frame-wrap">		
+	<a class="btn btn-primary" href="{{ route('login') }}">กลับ</a>		
 </div>
 @endsection
 @section('script')
@@ -37,4 +25,5 @@
 <script type="text/javascript" src="{{ URL::asset('vendor/DataTables/Responsive-2.2.6/js/dataTables.responsive.min.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('vendor/jquery-contextmenu/js/jquery.contextMenu.min.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/buttons.server-side.js') }}"></script>
+	{{ $dataTable->scripts() }}
 @endsection

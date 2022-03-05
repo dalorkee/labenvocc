@@ -94,7 +94,7 @@
 							</div>
 						</div>							
 					</div>
-					<a class="btn btn-info text-white" href="{{ route('advertise.listall',['listall'=>'public']) }}">ดูทั้งหมด</a>
+					<a class="btn btn-info text-white" href="{{ route('user.advertise.listall',['listall'=>'public']) }}">ดูทั้งหมด</a>
 				</fieldset>
 			</div>
 			<div class="col-md-12 mt-4">				
@@ -113,7 +113,7 @@
 							</div>
 						</div>
 					</div>
-					<a class="btn btn-info text-white" href="{{ route('advertise.listall',['listall'=>'stdquality']) }}">ดูทั้งหมด</a>
+					<a class="btn btn-info text-white" href="{{ route('user.advertise.listall',['listall'=>'stdquality']) }}">ดูทั้งหมด</a>
 				</fieldset>
 			</div>
 		</div>
