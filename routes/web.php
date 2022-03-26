@@ -8,7 +8,8 @@ use App\Http\Controllers\{
 	RegisterGovernmentController,
 	RegisterStaffController,
 	CustomerController,
-	UserAdvertiseController
+	UserAdvertiseController,
+    SampleUploadController,
 };
 use App\Http\Controllers\Admin\{
 	AdminController,
@@ -109,7 +110,10 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 	Route::get('/office/id/{id}/allow',[OfficeController::class,'allow'])->name('office.allow');
 	Route::get('/office/id/{id}/deny',[OfficeController::class,'deny'])->name('office.deny');
 	Route::get('/advertise/id/{id}/edit',[AdvertiseController::class,'edit'])->name('advertise.edit');
-	Route::get('/advertise/id/{id}/destroy',[AdvertiseController::class,'destroy'])->name('advertise.destroy');	
+	Route::get('/advertise/id/{id}/destroy',[AdvertiseController::class,'destroy'])->name('advertise.destroy');
+
+    Route::get('sample/home', [SampleUploadController::class, 'index']);
+    Route::post('sample/import', [SampleUploadController::class, 'import']);
 });
 Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
 Route::get('/advertise/id/{id}/detail',[AdvertiseController::class,'detail'])->name('advertise.detail');
