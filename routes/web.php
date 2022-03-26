@@ -73,7 +73,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 		'office'=>OfficeController::class,
 		'paramet'=>ParametController::class,
 		'users'=>UsersController::class,
-		'advertise'=>AdvertiseController::class
+		'advertise'=>AdvertiseController::class,
+        'sampleupload'=>SampleUploadController::class,
 	]);
 	Route::get('/dashboard', function() {
 		return view('dashboard');
@@ -112,7 +113,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 	Route::get('/advertise/id/{id}/edit',[AdvertiseController::class,'edit'])->name('advertise.edit');
 	Route::get('/advertise/id/{id}/destroy',[AdvertiseController::class,'destroy'])->name('advertise.destroy');
 
-    Route::get('sample/home', [SampleUploadController::class, 'index']);
+    Route::get('sample/bio', [SampleUploadController::class, 'bio'])->name('sampleupload.bio');
+    Route::get('sample/env', [SampleUploadController::class, 'env'])->name('sampleupload.env');
     Route::post('sample/import', [SampleUploadController::class, 'import']);
 });
 Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');

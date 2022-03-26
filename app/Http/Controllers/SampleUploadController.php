@@ -13,7 +13,7 @@ class SampleUploadController extends Controller
     */
     public function index()
     {
-       return view('import-form');
+        //
     }
 
     /**
@@ -31,4 +31,12 @@ class SampleUploadController extends Controller
     /**
     * @return \Illuminate\Support\Collection
     */
+    public function bio()
+    {
+       return view('user.bioupload');
+    }
+    public function env()
+    {
+       return view('user.envupload');
+    }
 }

@@ -1,0 +1,55 @@
+@extends('layouts.index')
+@section('token')
+<meta name="csrf-token" content="{{ csrf_token() }}">
+@endsection
+@section('style')
+<link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/css/datagrid/datatables/datatables.bundle.css') }}">
+<style>
+    .btn-group {margin:0;padding:0;}
+    .dt-buttons {display:flex;flex-direction:row;flex-wrap:wrap;justify-content:flex-end;}
+    .dataTables_filter label {margin-top: 8px;}
+    .dataTables_filter input:first-child {margin-top: -8px;}
+    #order-table thead {background-color:#297FB0;color: white;}
+    /* Extra small devices (phones, 600px and down) */
+    @media only screen and (max-width:600px) {.pj-btn{position:absolute;top:10px;z-index:1;}}
+    /* Small devices (portrait tablets and large phones, 600px and up) */
+    @media only screen and (min-width:600px) {.pj-btn {position:absolute;top:10px;z-index:1;}}
+    /* Medium devices (landscape tablets, 768px and up) */
+    @media only screen and (min-width:768px) {.pj-btn {position:absolute;top:16px;z-index:1;}}
+    /* Large devices (laptops/desktops, 992px and up) */
+    @media only screen and (min-width:992px) {.pj-btn{position:absolute;top:16px;z-index:1;}}
+    /* Extra large devices (large laptops and desktops, 1200px and up) */
+    @media only screen and (min-width:1200px) {.pj-btn{position:absolute;top:16px;z-index:1;}}
+</style>
+@endsection
+@section('content')
+<ol class="breadcrumb page-breadcrumb text-sm font-prompt">
+	<li class="breadcrumb-item"><a href="javascript:void(0);">ส่งตัวอย่าง(upload)</a></li>
+	<li class="breadcrumb-item">นำเข้าข้อมูลตัวอย่าง</li>
+    <li class="breadcrumb-item">สิ่งแวดล้อม</li>
+</ol>
+<div class="row text-sm font-prompt">
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+		<div id="panel-customer" class="panel">
+			<div class="panel-hdr">
+				<h2 class="text-gray-600"><i class="fal fa-list"></i>&nbsp;รายการข้อมูลสิ่งแวดล้อม</h2>
+				<div class="panel-toolbar">
+					<button class="btn btn-panel bg-transparent fs-xl w-auto h-auto rounded-0" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="Collapse"><i class="fal fa-window-minimize"></i></button>
+					<button class="btn btn-panel bg-transparent fs-xl w-auto h-auto rounded-0" data-action="panel-fullscreen" data-toggle="tooltip" data-offset="0,10" data-original-title="Fullscreen"><i class="fal fa-expand"></i></button>
+					<button class="btn btn-panel bg-transparent fs-xl w-auto h-auto rounded-0" data-action="panel-close" data-toggle="tooltip" data-offset="0,10" data-original-title="Close"><i class="fal fa-times"></i></button>
+				</div>
+			</div>
+			<div class="panel-container show">
+				<div class="panel-content">
+                    table env
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+@endsection
+@section('script')
+<script type="text/javascript" src="{{ URL::asset('assets/js/datagrid/datatables/datatables.bundle.js') }}"></script>
+<script type="text/javascript" src="{{ URL::asset('js/buttons.server-side.js') }}"></script>
+<script type="text/javascript">$(document).ready(function(){$.ajaxSetup({headers:{'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')}});});</script>
+@endsection
