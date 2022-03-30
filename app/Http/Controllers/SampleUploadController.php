@@ -5,15 +5,16 @@ use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\SampleUploadImport;
 use App\Models\SampleUpload;
+use App\DataTables\UploadBioDataTable;
 
 class SampleUploadController extends Controller
 {
     /**
     * @return \Illuminate\Support\Collection
     */
-    public function index()
+    public function index(UploadBioDataTable $dataTable)
     {
-        //
+        return $dataTable->render('user.bioupload');
     }
 
     /**
@@ -33,7 +34,7 @@ class SampleUploadController extends Controller
     */
     public function bio()
     {
-       return view('user.bioupload');
+       //return view('user.bioupload');
     }
     public function env()
     {

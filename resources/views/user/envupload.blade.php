@@ -41,7 +41,10 @@
 			</div>
 			<div class="panel-container show">
 				<div class="panel-content">
-                    table env
+                    <div class="btn-group" role="group">
+                        <a class="btn btn-info" href="#"> <i class="fal fa-plus-circle"></i>นำเข้าข้อมูลตัวอย่าง</a>
+                     </div>
+                     data table
 				</div>
 			</div>
 		</div>

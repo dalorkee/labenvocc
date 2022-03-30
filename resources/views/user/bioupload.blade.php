@@ -41,7 +41,10 @@
 			</div>
 			<div class="panel-container show">
 				<div class="panel-content">
-                    table bio
+                    <div class="btn-group" role="group">
+                       <a class="btn btn-info" href="#"> <i class="fal fa-plus-circle"></i>นำเข้าข้อมูลตัวอย่าง</a>
+                    </div>
+                    {{ $dataTable->table() }}
 				</div>
 			</div>
 		</div>
@@ -52,4 +55,5 @@
 <script type="text/javascript" src="{{ URL::asset('assets/js/datagrid/datatables/datatables.bundle.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/buttons.server-side.js') }}"></script>
 <script type="text/javascript">$(document).ready(function(){$.ajaxSetup({headers:{'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')}});});</script>
+{{ $dataTable->scripts() }}
 @endsection

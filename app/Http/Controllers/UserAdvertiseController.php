@@ -9,7 +9,7 @@ use App\DataTables\UserAdvertiseDataTable;
 use Illuminate\Support\Facades\DB;
 use App\Traits\CommonTrait;
 
-class UserAdvertiseController extends Controller 
+class UserAdvertiseController extends Controller
 {
     use CommonTrait;
     /**
@@ -19,7 +19,7 @@ class UserAdvertiseController extends Controller
      */
     public function index(UserAdvertiseDataTable $dataTable){
 
-        return $dataTable->render('user.advertise.index');
+        //return $dataTable->render('user.advertise.index');
     }
 
     /**
@@ -28,7 +28,7 @@ class UserAdvertiseController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create(){
-        
+
     }
 
     /**
@@ -38,7 +38,7 @@ class UserAdvertiseController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request, Advertise $advertise){
-        
+
     }
 
     /**
@@ -58,7 +58,7 @@ class UserAdvertiseController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit(Request $request, Advertise $advertise){
-        
+
     }
 
     /**
@@ -69,7 +69,7 @@ class UserAdvertiseController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Advertise $advertise){
-        
+
     }
 
     /**
@@ -79,10 +79,10 @@ class UserAdvertiseController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy(Request $request,Advertise $advertise){
-        
+
     }
     public function detail(Request $request, Advertise $advertise){
-        $advertise = $advertise->find($request->id); 
+        $advertise = $advertise->find($request->id);
         return view('user.detail',compact('advertise'));
     }
     public function listall(Request $request, UserAdvertiseDataTable $dataTable){
