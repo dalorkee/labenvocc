@@ -23,19 +23,15 @@ class SampleUploadController extends Controller
     public function import(Request $request)
     {
         $validatedData = $request->validate([
-           'file' => 'required',
+           'uploadbio' => 'required',
         ]);
-        Excel::import(new SampleUploadImport,$request->file('file'));
-
-        return redirect('import-excel-csv')->with('status', 'The file has been imported in laravel 8');
+        Excel::import(new SampleUploadImport,$request->file('uploadbio'));
+        // return redirect('import-excel-csv')->with('status', 'The file has been imported in laravel 8');
+        return redirect()->back()->with('success','upload OK');
     }
     /**
     * @return \Illuminate\Support\Collection
     */
-    public function bio()
-    {
-       //return view('user.bioupload');
-    }
     public function env()
     {
        return view('user.envupload');

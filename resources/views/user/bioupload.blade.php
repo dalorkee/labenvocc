@@ -28,6 +28,15 @@
 	<li class="breadcrumb-item">นำเข้าข้อมูลตัวอย่าง</li>
     <li class="breadcrumb-item">ชีวภาพ</li>
 </ol>
+@if (Session::get('success'))
+	<div class="alert alert-success">
+		<p>{{ Session::get('success') }}</p>
+	</div>
+@elseif (Session::get('error'))
+	<div class="alert alert-danger">
+		<p>{{ Session::get('error') }}</p>
+	</div>
+@endif
 <div class="row text-sm font-prompt">
 	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
 		<div id="panel-customer" class="panel">
@@ -41,10 +50,23 @@
 			</div>
 			<div class="panel-container show">
 				<div class="panel-content">
-                    <div class="btn-group" role="group">
-                       <a class="btn btn-info" href="#"> <i class="fal fa-plus-circle"></i>นำเข้าข้อมูลตัวอย่าง</a>
+                    <form action="{{ route('sampleupload.import') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <div class="form-row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label" for="uploadbio">เลือกไฟล์</label>
+                                <input type="file" name="uploadbio" class="form-control" id="uploadbio"/>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                    <hr>
+                    <div>
+                        ตารางรายการตกค้าง
                     </div>
+                    <form action="" method="POST">
                     {{ $dataTable->table() }}
+                    </form>
 				</div>
 			</div>
 		</div>
