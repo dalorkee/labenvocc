@@ -20,26 +20,11 @@
 #order-table thead {background-color:#297FB0;color: white;}
 .row-completed {width:180px;padding-right:14px;position:absolute;top:82px;right:10px;text-align:right;}
 table.dataTable.dt-checkboxes-select tbody tr,
-table.dataTable thead .dt-checkboxes-select-all {
-  cursor: pointer;
-}
-
-table.dataTable thead .dt-checkboxes-select-all {
-  text-align: center;
-}
-
+table.dataTable thead .dt-checkboxes-select-all {cursor: pointer;}
+table.dataTable thead .dt-checkboxes-select-all {text-align: center;}
 div.dataTables_wrapper span.select-info,
-div.dataTables_wrapper span.select-item {
-  margin-left: 0.5em;
-}
-
-@media screen and (max-width: 640px) {
-  div.dataTables_wrapper span.select-info,
-  div.dataTables_wrapper span.select-item {
-	margin-left: 0;
-	display: block;
-  }
-}
+div.dataTables_wrapper span.select-item {margin-left: 0.5em;}
+@media screen and (max-width: 640px) {div.dataTables_wrapper span.select-info,div.dataTables_wrapper span.select-item {margin-left: 0;display: block;}}
 </style>
 @endsection
 @section('content')
@@ -154,22 +139,22 @@ div.dataTables_wrapper span.select-item {
 								<div class="invalid-feedback" role="alert">{{ $message }}</div>
 							@enderror
 						</div>
-                        @if (Auth::user()->userCustomer->customer_type == 'private')
-                            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
-                                <label class="form-label" for="division">แผนก <span class="text-red-600">*</span></label>
-                                <input type="text" name="division" value="{{ old('division') }}" class="form-control @error('division') is-invalid @enderror" >
-                                @error('division')
-                                    <div class="invalid-feedback" role="alert">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
-                                <label class="form-label" for="work_life_year">อายุงาน/ปี <span class="text-red-600">*</span></label>
-                                <input type="number" name="work_life_year" value="{{ old('work_life_year') }}" min="1" max="100" class="form-control @error('work_life_year') is-invalid @enderror" >
-                                @error('work_life_year')
-                                    <div class="invalid-feedback" role="alert">{{ $message }}</div>
-                                @enderror
-                            </div>
-                        @endif
+						@if (Auth::user()->userCustomer->customer_type == 'private')
+							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
+								<label class="form-label" for="division">แผนก <span class="text-red-600">*</span></label>
+								<input type="text" name="division" value="{{ old('division') }}" class="form-control @error('division') is-invalid @enderror" >
+								@error('division')
+									<div class="invalid-feedback" role="alert">{{ $message }}</div>
+								@enderror
+							</div>
+							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
+								<label class="form-label" for="work_life_year">อายุงาน/ปี <span class="text-red-600">*</span></label>
+								<input type="number" name="work_life_year" value="{{ old('work_life_year') }}" min="1" max="100" class="form-control @error('work_life_year') is-invalid @enderror" >
+								@error('work_life_year')
+									<div class="invalid-feedback" role="alert">{{ $message }}</div>
+								@enderror
+							</div>
+						@endif
 						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
 							<label class="form-label" for="specimen_date">วันที่เก็บตัวอย่าง <span class="text-red-600">*</span></label>
 							<div class="input-group">
@@ -208,17 +193,17 @@ div.dataTables_wrapper span.select-item {
 <div class="modal font-prompt" id="add-parameter-modal" data-keyboard="false" data-backdrop="static" tabindex="-2" role="dialog" aria-hidden="true">
 	<div class="modal-dialog modal-xl modal-dialog-centered" role="document">
 		<div class="modal-content">
-			<form id="add_paramets" action="#" method="POST">
-				@csrf
-				<div class="modal-header bg-green-600 text-white">
-					<h5 class="modal-title"><i class="fal fa-plus-circle"></i> เพิ่มพารามิเตอร์ตัวอย่างชีวภาพ</h5>
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true"><i class="fal fa-times"></i></span>
-					</button>
-				</div>
-				<div class="modal-body">
-					<div class="form-row">
-						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
+			<div class="modal-header bg-green-600 text-white">
+				<h5 class="modal-title"><i class="fal fa-plus-circle"></i> เพิ่มพารามิเตอร์ตัวอย่างชีวภาพ</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true"><i class="fal fa-times"></i></span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div class="form-row">
+					<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
+						<form id="add_paramets" action="{{ route('customer.parameter.data.store1') }}" method="POST">
+							@csrf
 							<label class="form-label" for="parameter">กลุ่มรายงานตรวจวิเคราะห์</label>
 							<input type="hidden" name="aj_order_detail_id" value="" id="aj_order_detail_id">
 							<select name="parameter_group" id="parameter_group" class="select2-placeholder mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
@@ -228,31 +213,34 @@ div.dataTables_wrapper span.select-item {
 								<option value="3">กลุ่มสารอินทรีย์แปรรูป</option>
 								<option value="4">กลุ่มสิ่งก่อกลายพันธุ์</option>
 							</select>
-						</div>
+						</form>
 					</div>
-					<div class="form-row">
-						<div class="col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
+				</div>
+				<div class="form-row">
+					<div class="col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
+						<form id="frm-example" action="{{ route('customer.parameter.data.store1') }}" method="POST">
+							@csrf
 							<table id="pjza" class="table table-bordered text-sm dt-parameter">
 								<thead class="bg-gray-300">
 									<tr>
-										{{-- <th></th> --}}
-										<th>รหัส</th>
+										<th>ลำดับ</th>
+										{{-- <th>รหัส</th> --}}
 										<th>พารามิเตอร์</th>
 										<th>สิ่งส่งตรวจ</th>
 										<th>ห้องปฏิบัติการ</th>
 										<th>ราคา (บาท)</th>
-										{{-- <th>เลือก</th> --}}
-										<th>#</th>
+										<th>เลือก</th>
+										{{-- <th>#</th> --}}
 									</tr>
 								</thead>
 								<tbody>
 								</tbody>
 							</table>
-						</div>
+							<button type="submit" class="btn btn-danger btn-lg">บันทึกข้อมูล</button>
+						</form>
 					</div>
-					{{-- <button type="submit" class="btn btn-danger btn-lg">บันทึกข้อมูล</button> --}}
-			</form>
-
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
@@ -287,6 +275,29 @@ $(document).ready(function() {
 		$('input[name="' + this.name + '"]').not(this).prop('checked', false);
 	});
 	$(":input").inputmask();
+
+	$('#frm-example').on('submit', function(e){
+   var form = this;
+
+   // Iterate over all checkboxes in the table
+   table.$('input[type="checkbox"]').each(function(){
+	  // If checkbox doesn't exist in DOM
+	  if(!$.contains(document, this)){
+		 // If checkbox is checked
+		 if(this.checked){
+			// Create a hidden element
+			$(form).append(
+			   $('<input>')
+				  .attr('type', 'hidden')
+				  .attr('name', this.name)
+				  .val(this.value)
+			);
+		 }
+	  }
+   });
+});
+
+
 	$.contextMenu({
 		selector: '.context-nav',
 		trigger: 'left',
@@ -320,10 +331,14 @@ $(document).ready(function() {
 						let url = "{{ route('customer.parameter.data.list', ['order_detail_id'=>':order_detail_id','threat_type_id'=>0]) }}";
 						url = url.replace(':order_detail_id', order_detail_id);
 						$("#aj_order_detail_id").val(order_detail_id);
+
+						$('#pjza').dataTable().fnClearTable();
+						$('#pjza').dataTable().fnDestroy();
+
 						var table = $('#pjza').DataTable({
 							processing: true,
-							serverSide: true,
-							//stateSave : true,
+							serverSide: false,
+							stateSave : true,
 							paging: true,
 							searching: true,
 							deferRender: true,
@@ -333,14 +348,14 @@ $(document).ready(function() {
 							language: {'url': '/vendor/DataTables/i18n/thai.json'},
 							ajax: url,
 							columns: [
-								//{data: 'DT_RowIndex', name: 'DT_RowIndex'},
-								{data: 'parameter_id', name: 'parameter_id'},
+								{data: 'DT_RowIndex', name: 'DT_RowIndex'},
+								// {data: 'parameter_id', name: 'parameter_id'},
 								{data: 'parameter_name', name: 'parameter_name'},
 								{data: 'sample_charecter_name', name: 'sample_charecter_name'},
 								{data: 'office_name', name: 'office_name'},
 								{data: 'price_name', name: 'price_name'},
-								// {data: 'select_paramet', name: 'select_paramet', searchable: false, orderable: false},
-								{data: 'action', name: 'action', orderable: true, searchable: false},
+								{data: 'select_paramet', name: 'select_paramet', searchable: false, orderable: false},
+								// {data: 'action', name: 'action', orderable: true, searchable: false},
 							],
 							/*columnDefs: [{
 								'targets': 0,
@@ -417,10 +432,14 @@ $(document).ready(function() {
 		let url = "{{ route('customer.parameter.data.list', ['order_detail_id'=>':order_detail_id', 'threat_type_id'=>':threat_type_id']) }}";
 		url = url.replace(':order_detail_id', order_detail_id);
 		url = url.replace(':threat_type_id', threat_type_id);
-		let table = $('.dt-parameter').DataTable({
+
+		$('#pjza').dataTable().fnClearTable();
+		$('#pjza').dataTable().fnDestroy();
+
+		let table = $('#pjza').DataTable({
 			processing: true,
-			serverSide: true,
-			//stateSave: true,
+			serverSide: false,
+			stateSave: true,
 			paging: true,
 			searching: true,
 			deferRender: true,
@@ -434,7 +453,7 @@ $(document).ready(function() {
 				{data: 'sample_charecter_name', name: 'sample_charecter_name'},
 				{data: 'office_name', name: 'office_name'},
 				{data: 'price_name', name: 'price_name'},
-				// {data: 'select_paramet', name: 'select_paramet', searchable: false, orderable: false},
+				{data: 'select_paramet', name: 'select_paramet', searchable: false, orderable: false},
 				// {data: 'action', name: 'action', orderable: true, searchable: false},
 			],
 		});

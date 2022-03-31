@@ -354,19 +354,23 @@ class CustomerController extends Controller
 					});
 				return DataTables::of($data)
 					->addIndexColumn()
-					// ->addColumn('select_paramet', static function ($row) {
-					// 	return '<input type="checkbox" name="paramets[]" value="'.$row->id.'"/>';
-					// })->rawColumns(['select_paramet'])
-					->addColumn('action', function($row) use ($request) {
-						$actionBtn = "<a href=\"".route('customer.parameter.data.store', ['order_detail_id'=>$request->order_detail_id, 'id'=>$row->id])."\" class=\"btn btn-danger btn-sm\"><i class=\"fal fa-plus\"></i></a>";
-						return $actionBtn;
+					->addColumn('select_paramet', static function ($row) {
+						return '<input type="checkbox" name="paramets[]" value="'.$row->id.'"/>';
 					})
-					->rawColumns(['action'])
+					// ->addColumn('action', function($row) use ($request) {
+					// 	$actionBtn = "<a href=\"".route('customer.parameter.data.store', ['order_detail_id'=>$request->order_detail_id, 'id'=>$row->id])."\" class=\"btn btn-danger btn-sm\"><i class=\"fal fa-plus\"></i></a>";
+					// 	return $actionBtn;
+					// })
+					->rawColumns(['select_paramet'])
 					->make(true);
 			}
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
 		}
+	}
+
+	protected function storeParameterData1(Parameter $parameter, Request $request): object {
+		dd($request->paramets);
 	}
 
 	protected function storeParameterData(Parameter $parameter, Request $request): object {
