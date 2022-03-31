@@ -19,7 +19,7 @@ class SampleUploadImport implements ToModel, WithHeadingRow
     */
     protected $uid;
 
-    public function __construct($uid='asd')
+    public function __construct($uid='7')
     {
         $this->uid = $uid;
     }
@@ -33,7 +33,6 @@ class SampleUploadImport implements ToModel, WithHeadingRow
             'age_year' => $row['age_year'],
             'division' => $row['division'],
             'work_life_year' => $row['work_life_year'],
-            'sample_date' => $row['sample_date'],
             'note' => $row['note'],
             'sample_sender_name' => $row['sample_sender_name'],
             'phone_sample_sender' => $row['phone_sample_sender'],
