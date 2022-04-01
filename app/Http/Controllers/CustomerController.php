@@ -336,14 +336,13 @@ class CustomerController extends Controller
 		}
 	}
 
-    #[Route("/customer/parameter/create/order/{order_id}", methods: ["GET"])]
 	protected function createParameter(Request $request, CustParameterDataTable $dataTable): object {
 		$order_id = $request->order_id;
 		$row_completed = OrderDetail::whereOrder_id($request->order_id)->whereCompleted('y')->count();
 		return $dataTable->render('apps.customers.parameter', compact('order_id', 'row_completed'));
 	}
 
-	protected function listParameterData(Request $request) {
+	protected function listParameterData(Request $request): object {
 		try {
 			if ($request->ajax()) {
 				$data = Parameter::query()
@@ -370,27 +369,32 @@ class CustomerController extends Controller
 		}
 	}
 
-	protected function storeParameterData(Parameter $parameter, Request $request): object {
+	protected function storeParameterData(Request $request): object {
 		try {
-            dd($request->paramet_id);
-			$paramet = $parameter->findOrfail($request->id);
-			$upserted = OrderDetailParameter::updateOrcreate(
-				['order_detail_id' => $request->order_detail_id, 'parameter_id' => $request->id],
-				[
-					'parameter_id' => $paramet->id,
-					'parameter_name' => $paramet->parameter_name,
-					'parameter_group'=> $paramet->sample_charecter_id,
-					'unit_id' => $paramet->unit_id,
-					'unit_name' => $paramet->unit_name
-				]
-			);
-			if ($upserted) {
+			$paramet_arr = $request->paramet_id_arr;
+			$i = 0;
+			foreach ($paramet_arr as $key => $val) {
+				$paramet = Parameter::findOrfail($val);
+				$upserted = OrderDetailParameter::updateOrcreate(
+					['order_detail_id' => $request->aj_order_detail_id, 'parameter_id' => $paramet->id],
+					[
+						'parameter_id' => $paramet->id,
+						'parameter_name' => $paramet->parameter_name,
+						'parameter_group'=> $paramet->sample_charecter_id,
+						'unit_id' => $paramet->unit_id,
+						'unit_name' => $paramet->unit_name
+					]
+				);
+				$i++;
+			}
+			if ($i > 0) {
 				return redirect()->back()->with('success', 'บันทึกข้อมูลพารามิเตอร์แล้ว');
 			} else {
-				redirect()->back()->with('error', 'บันทึกพารามิเตอร์ไม่ได้ โปรดตรวจสอบ');
+				return redirect()->back()->with('error', 'ไม่มีข้อมูลใหม่สำหรับรายการนี้');
 			}
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
+			return redirect()->back()->with('error', 'บันทึกพารามิเตอร์ไม่ได้ โปรดตรวจสอบ');
 		}
 	}
 

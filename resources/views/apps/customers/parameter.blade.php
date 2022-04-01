@@ -200,23 +200,22 @@ div.dataTables_wrapper span.select-item {margin-left: 0.5em;}
 				</button>
 			</div>
 			<div class="modal-body">
-				<div class="form-row">
-					<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
-						<label class="form-label" for="parameter">กลุ่มรายงานตรวจวิเคราะห์</label>
-						<input type="hidden" name="aj_order_detail_id" value="" id="aj_order_detail_id">
-						<select name="parameter_group" id="parameter_group" class="select2-placeholder mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-							<option value="0">-- ทั้งหมด --</option>
-							<option value="1">กลุ่มโลหะหนัก</option>
-							<option value="2">กลุ่มสารอินทรีย์ระเหยและสารประกอบอินทรีย์</option>
-							<option value="3">กลุ่มสารอินทรีย์แปรรูป</option>
-							<option value="4">กลุ่มสิ่งก่อกลายพันธุ์</option>
-						</select>
+				<form id="frm-example" action="{{ route('customer.parameter.data.store') }}" method="POST">
+					@csrf
+					<div class="row">
+						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
+							<label class="form-label" for="parameter">กลุ่มรายงานตรวจวิเคราะห์</label>
+							<select name="parameter_group" id="parameter_group" class="select2-placeholder mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+								<option value="0">-- ทั้งหมด --</option>
+								<option value="1">กลุ่มโลหะหนัก</option>
+								<option value="2">กลุ่มสารอินทรีย์ระเหยและสารประกอบอินทรีย์</option>
+								<option value="3">กลุ่มสารอินทรีย์แปรรูป</option>
+								<option value="4">กลุ่มสิ่งก่อกลายพันธุ์</option>
+							</select>
+						</div>
 					</div>
-				</div>
-				<div class="form-row">
-					<div class="col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
-						<form id="frm-example" action="{{ route('customer.parameter.data.store', ['order_detail_id' => 1, 'id' => 1 ]) }}" method="POST">
-							@csrf
+					<div class="row">
+						<div class="col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
 							<table id="pjza" class="table table-bordered text-sm dt-parameter">
 								<thead class="bg-gray-300">
 									<tr>
@@ -231,13 +230,18 @@ div.dataTables_wrapper span.select-item {margin-left: 0.5em;}
 										{{-- <th>#</th> --}}
 									</tr>
 								</thead>
-								<tbody>
-								</tbody>
+								<tfoot></tfoot>
+								<tbody></tbody>
 							</table>
-							<button type="" class="btn btn-danger btn-lg">บันทึกข้อมูล</button>
-						</form>
+						</div>
 					</div>
-				</div>
+					<div class="row">
+						<div class="col text-center">
+							<input type="hidden" name="aj_order_detail_id" value="" id="aj_order_detail_id">
+							<button type="submit" class="btn btn-success btn-lg">บันทึกข้อมูล</button>
+						</div>
+					</div>
+				</form>
 			</div>
 		</div>
 	</div>
@@ -312,7 +316,7 @@ $(document).ready(function() {
 						let table = $('#pjza').DataTable({
 							processing: true,
 							serverSide: true,
-							stateSave : true,
+							stateSave : false,
 							paging: true,
 							searching: true,
 							deferRender: true,
@@ -394,14 +398,6 @@ $(document).ready(function() {
 			"quit": {name: "ปิด", icon: "fal fa-times"}
 		}
 	});
-	$('#frm-example').on('submit', function(e) {
-		let form = this;
-		let table = $('#pjza').DataTable();
-		let rows_selected = table.column(0).checkboxes.selected();
-		$.each(rows_selected, function(index, rowId) {
-			$(form).append($('<input>').attr('type', 'hidden').attr('name', 'paramet_id[]').val(rowId));
-		});
-	});
 	$('#parameter_group').on('change', function() {
 		let order_detail_id = $("#aj_order_detail_id").val();
 		let threat_type_id = $(this).val();
@@ -435,6 +431,14 @@ $(document).ready(function() {
 				order: [[1, 'asc']]
 		});
 		$('#add-parameter-modal').modal('show');
+	});
+	$('#frm-example').on('submit', function(e) {
+		let form = this;
+		let table = $('#pjza').DataTable();
+		let rows_selected = table.column(0).checkboxes.selected();
+		$.each(rows_selected, function(index, rowId) {
+			$(form).append($('<input>').attr('type', 'hidden').attr('name', 'paramet_id_arr[]').val(rowId));
+		});
 	});
 });
 </script>
