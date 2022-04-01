@@ -336,13 +336,14 @@ class CustomerController extends Controller
 		}
 	}
 
+    #[Route("/customer/parameter/create/order/{order_id}", methods: ["GET"])]
 	protected function createParameter(Request $request, CustParameterDataTable $dataTable): object {
 		$order_id = $request->order_id;
 		$row_completed = OrderDetail::whereOrder_id($request->order_id)->whereCompleted('y')->count();
 		return $dataTable->render('apps.customers.parameter', compact('order_id', 'row_completed'));
 	}
 
-	protected function listParameterData(Request $request): object {
+	protected function listParameterData(Request $request) {
 		try {
 			if ($request->ajax()) {
 				$data = Parameter::query()
@@ -353,15 +354,15 @@ class CustomerController extends Controller
 						return $q->whereThreat_type_id($request->threat_type_id)->orderBy('id', 'ASC')->get();
 					});
 				return DataTables::of($data)
-					->addIndexColumn()
-					->addColumn('select_paramet', static function ($row) {
-						return '<input type="checkbox" name="paramets[]" value="'.$row->id.'"/>';
-					})
+					// ->addIndexColumn()
+					// ->addColumn('select_paramet', static function ($row) {
+					// 	return '<input type="checkbox" name="paramets[]" value="'.$row->id.'"/>';
+					// })
 					// ->addColumn('action', function($row) use ($request) {
 					// 	$actionBtn = "<a href=\"".route('customer.parameter.data.store', ['order_detail_id'=>$request->order_detail_id, 'id'=>$row->id])."\" class=\"btn btn-danger btn-sm\"><i class=\"fal fa-plus\"></i></a>";
 					// 	return $actionBtn;
 					// })
-					->rawColumns(['select_paramet'])
+					// ->rawColumns(['select_paramet', 'action'])
 					->make(true);
 			}
 		} catch (\Exception $e) {
@@ -369,12 +370,9 @@ class CustomerController extends Controller
 		}
 	}
 
-	protected function storeParameterData1(Parameter $parameter, Request $request): object {
-		dd($request->paramets);
-	}
-
 	protected function storeParameterData(Parameter $parameter, Request $request): object {
 		try {
+            dd($request->paramet_id);
 			$paramet = $parameter->findOrfail($request->id);
 			$upserted = OrderDetailParameter::updateOrcreate(
 				['order_detail_id' => $request->order_detail_id, 'parameter_id' => $request->id],

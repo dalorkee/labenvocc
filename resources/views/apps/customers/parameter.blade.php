@@ -202,41 +202,39 @@ div.dataTables_wrapper span.select-item {margin-left: 0.5em;}
 			<div class="modal-body">
 				<div class="form-row">
 					<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
-						<form id="add_paramets" action="{{ route('customer.parameter.data.store1') }}" method="POST">
-							@csrf
-							<label class="form-label" for="parameter">กลุ่มรายงานตรวจวิเคราะห์</label>
-							<input type="hidden" name="aj_order_detail_id" value="" id="aj_order_detail_id">
-							<select name="parameter_group" id="parameter_group" class="select2-placeholder mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-								<option value="0">-- ทั้งหมด --</option>
-								<option value="1">กลุ่มโลหะหนัก</option>
-								<option value="2">กลุ่มสารอินทรีย์ระเหยและสารประกอบอินทรีย์</option>
-								<option value="3">กลุ่มสารอินทรีย์แปรรูป</option>
-								<option value="4">กลุ่มสิ่งก่อกลายพันธุ์</option>
-							</select>
-						</form>
+						<label class="form-label" for="parameter">กลุ่มรายงานตรวจวิเคราะห์</label>
+						<input type="hidden" name="aj_order_detail_id" value="" id="aj_order_detail_id">
+						<select name="parameter_group" id="parameter_group" class="select2-placeholder mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+							<option value="0">-- ทั้งหมด --</option>
+							<option value="1">กลุ่มโลหะหนัก</option>
+							<option value="2">กลุ่มสารอินทรีย์ระเหยและสารประกอบอินทรีย์</option>
+							<option value="3">กลุ่มสารอินทรีย์แปรรูป</option>
+							<option value="4">กลุ่มสิ่งก่อกลายพันธุ์</option>
+						</select>
 					</div>
 				</div>
 				<div class="form-row">
 					<div class="col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
-						<form id="frm-example" action="{{ route('customer.parameter.data.store1') }}" method="POST">
+						<form id="frm-example" action="{{ route('customer.parameter.data.store', ['order_detail_id' => 1, 'id' => 1 ]) }}" method="POST">
 							@csrf
 							<table id="pjza" class="table table-bordered text-sm dt-parameter">
 								<thead class="bg-gray-300">
 									<tr>
-										<th>ลำดับ</th>
+										<th></th>
+										{{-- <th>ลำดับ</th> --}}
 										{{-- <th>รหัส</th> --}}
 										<th>พารามิเตอร์</th>
 										<th>สิ่งส่งตรวจ</th>
 										<th>ห้องปฏิบัติการ</th>
 										<th>ราคา (บาท)</th>
-										<th>เลือก</th>
+										{{-- <th>เลือก</th> --}}
 										{{-- <th>#</th> --}}
 									</tr>
 								</thead>
 								<tbody>
 								</tbody>
 							</table>
-							<button type="submit" class="btn btn-danger btn-lg">บันทึกข้อมูล</button>
+							<button type="" class="btn btn-danger btn-lg">บันทึกข้อมูล</button>
 						</form>
 					</div>
 				</div>
@@ -252,7 +250,7 @@ div.dataTables_wrapper span.select-item {margin-left: 0.5em;}
 <script type="text/javascript" src="{{ URL::asset('assets/js/notifications/sweetalert2/sweetalert2.bundle.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('assets/js/formplugins/bootstrap-datepicker/bootstrap-datepicker.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('assets/js/formplugins/inputmask/inputmask.bundle.js') }}"></script>
-<script type="text/javascript" src="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js"></script>
+<script type="text/javascript" src="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.7/js/dataTables.checkboxes.min.js"></script>
 {{ $dataTable->scripts() }}
 <script>
 function newData(){$('#new-data-modal').modal('show');}
@@ -275,28 +273,6 @@ $(document).ready(function() {
 		$('input[name="' + this.name + '"]').not(this).prop('checked', false);
 	});
 	$(":input").inputmask();
-
-	$('#frm-example').on('submit', function(e){
-   var form = this;
-
-   // Iterate over all checkboxes in the table
-   table.$('input[type="checkbox"]').each(function(){
-	  // If checkbox doesn't exist in DOM
-	  if(!$.contains(document, this)){
-		 // If checkbox is checked
-		 if(this.checked){
-			// Create a hidden element
-			$(form).append(
-			   $('<input>')
-				  .attr('type', 'hidden')
-				  .attr('name', this.name)
-				  .val(this.value)
-			);
-		 }
-	  }
-   });
-});
-
 
 	$.contextMenu({
 		selector: '.context-nav',
@@ -331,42 +307,34 @@ $(document).ready(function() {
 						let url = "{{ route('customer.parameter.data.list', ['order_detail_id'=>':order_detail_id','threat_type_id'=>0]) }}";
 						url = url.replace(':order_detail_id', order_detail_id);
 						$("#aj_order_detail_id").val(order_detail_id);
-
 						$('#pjza').dataTable().fnClearTable();
 						$('#pjza').dataTable().fnDestroy();
-
-						var table = $('#pjza').DataTable({
+						let table = $('#pjza').DataTable({
 							processing: true,
-							serverSide: false,
+							serverSide: true,
 							stateSave : true,
 							paging: true,
 							searching: true,
 							deferRender: true,
-							//destroy: true,
-							//bDestroy: true,
 							lengthMenu: [6, 12, 24],
 							language: {'url': '/vendor/DataTables/i18n/thai.json'},
 							ajax: url,
 							columns: [
-								{data: 'DT_RowIndex', name: 'DT_RowIndex'},
-								// {data: 'parameter_id', name: 'parameter_id'},
+								// {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+								{data: 'id', name: 'id'},
 								{data: 'parameter_name', name: 'parameter_name'},
 								{data: 'sample_charecter_name', name: 'sample_charecter_name'},
 								{data: 'office_name', name: 'office_name'},
 								{data: 'price_name', name: 'price_name'},
-								{data: 'select_paramet', name: 'select_paramet', searchable: false, orderable: false},
-								// {data: 'action', name: 'action', orderable: true, searchable: false},
+								//{data: 'select_paramet', name: 'select_paramet', searchable: false, orderable: false},
+								//{data: 'action', name: 'action', orderable: true, searchable: false},
 							],
-							/*columnDefs: [{
+							columnDefs: [{
 								'targets': 0,
-								'checkboxes': {
-									'selectRow': true
-								}
+								'checkboxes': {'selectRow': true}
 							}],
-							select: {
-								'style': 'multi'
-							},
-							'order': [[1, 'asc']] */
+							select: {'style': 'multi'},
+							order: [[1, 'asc']]
 						});
 						$('#add-parameter-modal').modal('show');
 
@@ -426,36 +394,45 @@ $(document).ready(function() {
 			"quit": {name: "ปิด", icon: "fal fa-times"}
 		}
 	});
+	$('#frm-example').on('submit', function(e) {
+		let form = this;
+		let table = $('#pjza').DataTable();
+		let rows_selected = table.column(0).checkboxes.selected();
+		$.each(rows_selected, function(index, rowId) {
+			$(form).append($('<input>').attr('type', 'hidden').attr('name', 'paramet_id[]').val(rowId));
+		});
+	});
 	$('#parameter_group').on('change', function() {
 		let order_detail_id = $("#aj_order_detail_id").val();
 		let threat_type_id = $(this).val();
 		let url = "{{ route('customer.parameter.data.list', ['order_detail_id'=>':order_detail_id', 'threat_type_id'=>':threat_type_id']) }}";
 		url = url.replace(':order_detail_id', order_detail_id);
 		url = url.replace(':threat_type_id', threat_type_id);
-
 		$('#pjza').dataTable().fnClearTable();
 		$('#pjza').dataTable().fnDestroy();
-
 		let table = $('#pjza').DataTable({
 			processing: true,
-			serverSide: false,
-			stateSave: true,
+			serverSide: true,
+			stateSave : true,
 			paging: true,
 			searching: true,
 			deferRender: true,
-			bDestroy: true,
 			lengthMenu: [6, 12, 24],
 			language: {'url': '/vendor/DataTables/i18n/thai.json'},
 			ajax: url,
-			columns: [
-				{data: 'id', name: 'id'},
-				{data: 'parameter_name', name: 'parameter_name'},
-				{data: 'sample_charecter_name', name: 'sample_charecter_name'},
-				{data: 'office_name', name: 'office_name'},
-				{data: 'price_name', name: 'price_name'},
-				{data: 'select_paramet', name: 'select_paramet', searchable: false, orderable: false},
-				// {data: 'action', name: 'action', orderable: true, searchable: false},
-			],
+				columns: [
+					{data: 'id', name: 'id'},
+					{data: 'parameter_name', name: 'parameter_name'},
+					{data: 'sample_charecter_name', name: 'sample_charecter_name'},
+					{data: 'office_name', name: 'office_name'},
+					{data: 'price_name', name: 'price_name'},
+				],
+				columnDefs: [{
+					'targets': 0,
+					'checkboxes': {'selectRow': true}
+				}],
+				select: {'style': 'multi'},
+				order: [[1, 'asc']]
 		});
 		$('#add-parameter-modal').modal('show');
 	});
