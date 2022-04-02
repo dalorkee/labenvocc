@@ -154,10 +154,16 @@ class CustomerController extends Controller
 			'order_id'=>'bail|required',
 			'id_card'=>'required',
 			'title_name'=>'required',
+			'firstname'=>'required',
+			'lastname'=>'required',
+			'sample_date'=>'required',
 		],[
 			'order_id.required'=>'ไม่พบรหัสคำสั่งซื้ัอ โปรดตรวจสอบ',
 			'id_card.required'=>'โปรดกรอกเลขบัตรประชาชน',
 			'title_name.required'=>'โปรดกรอกคำนำหน้าชื่อ',
+			'firstname.required'=>'โปรดกรอกชื่อ',
+			'lastname.required'=>'โปรดกรอกนามสกุล',
+			'sample_date.required'=>'โปรดกรอกวันที่เก็บตัวอย่าง',
 		]);
 		try {
 			$orderDetail = new OrderDetail;
@@ -256,17 +262,21 @@ class CustomerController extends Controller
 					<input type=\"text\" name=\"edit_lastname\" value=\"".$order_detail->lastname."\" class=\"form-control\">
 				</div>
 				<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3\">
-					<label class=\"form-label\" for=\"age_year\">อายุ/ปี <span class=\"text-red-600\">*</span></label>
+					<label class=\"form-label\" for=\"age_year\">อายุ/ปี</label>
 					<input type=\"number\" name=\"edit_age_year\" value=\"".$order_detail->age_year."\" min=\"1\" max=\"100\" class=\"form-control\">
-				</div>
-				<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3\">
-					<label class=\"form-label\" for=\"division\">แผนก <span class=\"text-red-600\">*</span></label>
-					<input type=\"text\" name=\"edit_division\" value=\"".$order_detail->division."\" class=\"form-control\">
-				</div>
-				<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3\">
-					<label class=\"form-label\" for=\"work_life_year\">อายุงาน/ปี <span class=\"text-red-600\">*</span></label>
-					<input type=\"number\" name=\"edit_work_life_year\" value=\"".$order_detail->work_life_year."\" min=\"1\" max=\"100\" class=\"form-control\">
-				</div>
+				</div>";
+				if (Auth::user()->userCustomer->customer_type == 'private') {
+					$htm .= "
+					<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3\">
+						<label class=\"form-label\" for=\"division\">แผนก <span class=\"text-red-600\">*</span></label>
+						<input type=\"text\" name=\"edit_division\" value=\"".$order_detail->division."\" class=\"form-control\">
+					</div>
+					<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3\">
+						<label class=\"form-label\" for=\"work_life_year\">อายุงาน/ปี <span class=\"text-red-600\">*</span></label>
+						<input type=\"number\" name=\"edit_work_life_year\" value=\"".$order_detail->work_life_year."\" min=\"1\" max=\"100\" class=\"form-control\">
+					</div>";
+				}
+				$htm .= "
 				<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3\">
 					<label class=\"form-label\" for=\"edit_sample_date\">วันที่เก็บตัวอย่าง <span class=\"text-red-600\">*</span></label>
 					<div class=\"input-group\">
@@ -296,10 +306,16 @@ class CustomerController extends Controller
 			'edit_order_id'=>'bail|required',
 			'edit_id_card'=>'required',
 			'edit_title_name'=>'required',
+			'edit_firstname'=>'required',
+			'edit_lastname'=>'required',
+			'edit_sample_date'=>'required',
 		],[
 			'edit_order_id.required'=>'ไม่พบรหัสคำสั่งซื้ัอ โปรดตรวจสอบ',
 			'edit_id_card.required'=>'โปรดกรอกเลขบัตรประชาชน',
 			'edit_title_name.required'=>'โปรดกรอกคำนำหน้าชื่อ',
+			'edit_firstname.required'=>'โปรดกรอกชื่อ',
+			'edit_lastname.required'=>'โปรดกรอกนามสกุล',
+			'edit_sample_date.required'=>'โปรดกรอกวันที่เก็บตัวอย่าง',
 		]);
 		try {
 			$orderDetail = OrderDetail::find($request->edit_id);

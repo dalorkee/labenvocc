@@ -113,28 +113,28 @@ div.dataTables_wrapper span.select-item {margin-left: 0.5em;}
 						</div>
 						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
 							<label class="form-label" for="passport">พาสปอร์ต</label>
-							<input type="text" name="passport" value="{{ old('passport') }}" class="form-control @error('passport') is-invalid @enderror" >
+							<input type="text" name="passport" value="{{ old('passport') }}" class="form-control @error('passport') is-invalid @enderror">
 							@error('passport')
 								<div class="invalid-feedback" role="alert">{{ $message }}</div>
 							@enderror
 						</div>
 						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
 							<label class="form-label" for="firstname">ชื่อ <span class="text-red-600">*</span></label>
-							<input type="text" name="firstname" value="{{ old('firstname') }}" class="form-control @error('firstname') is-invalid @enderror" >
+							<input type="text" name="firstname" value="{{ old('firstname') }}" class="form-control @error('firstname') is-invalid @enderror">
 							@error('firstname')
 								<div class="invalid-feedback" role="alert">{{ $message }}</div>
 							@enderror
 						</div>
 						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
 							<label class="form-label" for="lastname">นามสกุล <span class="text-red-600">*</span></label>
-							<input type="text" name="lastname" value="{{ old('lastname') }}" class="form-control @error('lastname') is-invalid @enderror" >
+							<input type="text" name="lastname" value="{{ old('lastname') }}" class="form-control @error('lastname') is-invalid @enderror">
 							@error('lastname')
 								<div class="invalid-feedback" role="alert">{{ $message }}</div>
 							@enderror
 						</div>
 						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
-							<label class="form-label" for="age_year">อายุ/ปี <span class="text-red-600">*</span></label>
-							<input type="number" name="age_year" value="{{ old('age_year') }}" min="1" max="100" class="form-control @error('age_year') is-invalid @enderror" >
+							<label class="form-label" for="age_year">อายุ/ปี</label>
+							<input type="number" name="age_year" value="{{ old('age_year') }}" min="1" max="100" class="form-control @error('age_year') is-invalid @enderror">
 							@error('age_year')
 								<div class="invalid-feedback" role="alert">{{ $message }}</div>
 							@enderror
@@ -142,14 +142,14 @@ div.dataTables_wrapper span.select-item {margin-left: 0.5em;}
 						@if (Auth::user()->userCustomer->customer_type == 'private')
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
 								<label class="form-label" for="division">แผนก <span class="text-red-600">*</span></label>
-								<input type="text" name="division" value="{{ old('division') }}" class="form-control @error('division') is-invalid @enderror" >
+								<input type="text" name="division" value="{{ old('division') }}" class="form-control @error('division') is-invalid @enderror">
 								@error('division')
 									<div class="invalid-feedback" role="alert">{{ $message }}</div>
 								@enderror
 							</div>
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
 								<label class="form-label" for="work_life_year">อายุงาน/ปี <span class="text-red-600">*</span></label>
-								<input type="number" name="work_life_year" value="{{ old('work_life_year') }}" min="1" max="100" class="form-control @error('work_life_year') is-invalid @enderror" >
+								<input type="number" name="work_life_year" value="{{ old('work_life_year') }}" min="1" max="100" class="form-control @error('work_life_year') is-invalid @enderror">
 								@error('work_life_year')
 									<div class="invalid-feedback" role="alert">{{ $message }}</div>
 								@enderror
@@ -168,7 +168,7 @@ div.dataTables_wrapper span.select-item {margin-left: 0.5em;}
 						</div>
 						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
 							<label class="form-label" for="note">หมายเหตุ</label>
-							<input type="text" name="note" value="{{ old('note') }}" class="form-control @error('note') is-invalid @enderror" >
+							<input type="text" name="note" value="{{ old('note') }}" class="form-control @error('note') is-invalid @enderror">
 							@error('note')
 								<div class="invalid-feedback" role="alert">{{ $message }}</div>
 							@enderror

@@ -83,7 +83,7 @@
 							</div>
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
 								<label class="form-label" for="type_of_work_other">ประเภทงานอื่นๆ ระบุ</label>
-								<input type="text" name="type_of_work_other" value="{{ $order[0]->motype_of_work_other ?? '' }}" id="type_of_work_other" class="form-control @error('type_of_work_other') is-invalid @enderror" disabled>
+								<input type="text" name="type_of_work_other" value="{{ $order[0]->type_of_work_other ?? '' }}" id="type_of_work_other" class="form-control @error('type_of_work_other') is-invalid @enderror" {{ ((isset($order[0]->type_of_work) && $order[0]->type_of_work == 5) || old('type_of_work_other') == 5) ? '' : 'disabled' }}>
 								@error('type_of_work_other')
 									<div class="invalid-feedback" role="alert">{{ $message }}</div>
 								@enderror
