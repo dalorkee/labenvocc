@@ -6,13 +6,15 @@
 <meta name="description" content="Introduction">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no, minimal-ui">
-<meta name="apple-mobile-web-app-capable" content="yes" />
-<meta name="msapplication-tap-highlight" content="no">
+<link rel="apple-touch-icon" sizes="50x50" href="{{ URL::asset('images/small-moph-logo.png') }}">
+<link rel="icon" type="image/png" sizes="32x32" href="{{ URL::asset('images/small-moph-logo-32x32.png') }}">
+<link rel="icon" type="image/png" sizes="16x16" href="{{ URL::asset('images/small-moph-logo-16x16.png') }}">
+<link rel="shortcut icon" href="{{ URL::asset('images/favicon.ico') }}">
 @yield('token')
 @include('layouts.style')
 @yield('style')
 <style type="text/css">
-    .swal2-popup {font-size: 1rem !important; font-family: "Prompt", Georgia, serif;}
+.swal2-popup {font-size: 1rem !important; font-family: "Prompt", Georgia, serif;}
 </style>
 </head>
 <body class="mod-bg-1 ">
@@ -133,7 +135,10 @@ $(document).ready(function() {
 		@foreach ($errors->all() as $error)
 			toastr.error("{{ $error }}", "Error", options);
 		@endforeach
-		@php Session::forget("$errors"); @endphp
+		@php
+			Session::forget("$errors");
+			Session::flush();
+		@endphp
 	@endif
 	@if (Session::has('success'))
 		toastr.success("{{ Session::get('success') }}", "Success", options);
@@ -145,7 +150,10 @@ $(document).ready(function() {
 			footer: "LAB ENV-OCC DDC",
 			allowOutsideClick: false
 		});
-		@php Session::forget("success"); @endphp
+		@php
+			Session::forget("success");
+			Session::flush();
+		@endphp
 	@endif
 	@if (Session::has('warning'))
 		toastr.warning("{{ Session::get('warning') }}", "Warning", options);
@@ -157,19 +165,31 @@ $(document).ready(function() {
 			footer: "LAB ENV-OCC DDC",
 			allowOutsideClick: false
 		});
-		@php Session::forget("warning"); @endphp
+		@php
+			Session::forget("warning");
+			Session::flush();
+		@endphp
 	@endif
 	@if (Session::has('error'))
 		toastr.error("{{ Session::get('error') }}", "LabEnvOcc", options);
-		@php Session::forget("error"); @endphp
+		@php
+			Session::forget("error");
+			Session::flush();
+		@endphp
 	@endif
 	@if (Session::has('action_notic'))
 		toastr.info("{{ Session::get('action_notic') }}", "LabEnvOcc", options2);
-		@php Session::forget("action_notic"); @endphp
+		@php
+			Session::forget("action_notic");
+			Session::flush();
+		@endphp
 	@endif
 	@if (Session::has('destroy'))
 		toastr.error("{{ Session::get('destroy') }}", "LabEnvOcc", options3);
-		@php Session::forget("destroy"); @endphp
+		@php
+			Session::forget("destroy");
+			Session::flush();
+		@endphp
 	@endif
 });
 </script>

@@ -24,12 +24,11 @@ class CustSampleDataTable extends DataTable
 				})
 				->addColumn('parameter', function (OrderDetail $detail) {
 					return $detail->parameters->map(function($parameter) {
-						return "<span class=\"badge badge-info mb-1\">".$parameter->parameter_name."</span>";
-					})->implode('<br>');
-				})
-				->addColumn('unit', function (OrderDetail $detail) {
-					return $detail->parameters->map(function($parameter) {
-						return $parameter->unit_name;
+						return "
+							<span class=\"badge badge-success\">".$parameter->parameter_name."</span>
+							<span class=\"badge badge-danger\">".$parameter->sample_charecter_name."</span>
+							<span class=\"badge badge-info\">".$parameter->unit_customer_name."</span>
+							<a href=\"".route('customer.parameter.data.destroy', ['id'=>$parameter->id])."\" data-toggle=\"tooltip\" data-placement=\"auto\" title=\"ลบ ".$parameter->parameter_name."\"><i class=\"fal fa-times-circle\"></i></a>";
 					})->implode('<br>');
 				})
 				->addColumn('action', '<button class="context-nav bg-purple-400 hover:bg-purple-500 text-white py-1 px-3 rounded" id="context-menu" data-id="{{$id}}">จัดการ <i class="fal fa-angle-down"></i></button>')
@@ -67,9 +66,9 @@ class CustSampleDataTable extends DataTable
 				)
 				->buttons(
 					Button::make('create')->addClass('btn btn-success font-prompt')->text('<i class="fal fa-plus-circle"></i> <span class="d-none d-sm-inline">เพิ่มประเด็นมลพิษ</span>')->action("javascript:newData()"),
-				// Button::make('export')->addClass('btn btn-info font-prompt')->text('<i class="fal fa-download"></i> <span class="d-none d-sm-inline">ส่งออก</span>'),
-				// Button::make('print')->addClass('btn btn-info font-prompt')->text('<i class="fal fa-print"></i> <span class="d-none d-sm-inline">print</span>')->action("javascript:alert('xx')"),
-				// Button::make('reload')->addClass('btn btn-info')->text('<i class="fal fa-redo"></i> โหลดใหม่'),
+					// Button::make('export')->addClass('btn btn-info font-prompt ml-2')->text('<i class="fal fa-download"></i> <span class="d-none d-sm-inline">ดาวน์โหลด</span>'),
+					// Button::make('print')->addClass('btn btn-info font-prompt')->text('<i class="fal fa-print"></i> <span class="d-none d-sm-inline">print</span>')->action("javascript:alert('xx')"),
+					// Button::make('reload')->addClass('btn btn-info')->text('<i class="fal fa-redo"></i> โหลดใหม่'),
 				)
 				->parameters([
 					'language'=>['url'=>url('/vendor/DataTables/i18n/thai.json')],
@@ -87,7 +86,6 @@ class CustSampleDataTable extends DataTable
 				Column::make('lastname')->title('นามสกุล'),
 				Column::make('sample_date')->title('วันที่เก็บตัวอย่าง'),
 				Column::make('parameter')->title('พารามิเตอร์'),
-				Column::make('unit')->title('หน่วย'),
 				Column::make('sample_charecter')->title('ประเด็นมลพิษ'),
 				Column::make('note')->title('หมายเหตุ'),
 				//Column::computed('action')->addClass('text-center')->title('#')

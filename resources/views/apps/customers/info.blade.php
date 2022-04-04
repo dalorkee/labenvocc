@@ -152,7 +152,8 @@ var runDatePicker = function() {
 		format: 'dd/mm/yyyy',
 		todayHighlight: true,
 		orientation: "bottom left",
-		templates: controls
+		templates: controls,
+		autoclose: true,
 	});
 }
 </script>

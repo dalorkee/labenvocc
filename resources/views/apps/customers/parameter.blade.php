@@ -158,7 +158,7 @@ div.dataTables_wrapper span.select-item {margin-left: 0.5em;}
 						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
 							<label class="form-label" for="specimen_date">วันที่เก็บตัวอย่าง <span class="text-red-600">*</span></label>
 							<div class="input-group">
-								<input type="text" name="sample_date" class="form-control " readonly placeholder="เลือกวันที่" id="datepicker_specimen_date">
+								<input type="text" name="sample_date" value="{{ old('sample_date') }}" class="form-control " readonly placeholder="เลือกวันที่" id="datepicker_specimen_date">
 								<div class="input-group-append">
 									<span class="input-group-text fs-xl">
 										<i class="fal fa-calendar-alt"></i>
@@ -354,9 +354,6 @@ $(document).ready(function() {
 							e.preventDefault();
 						});*/
 					break;
-				case 'unit':
-					alert('unit');
-					break;
 				case 'delete':
 					let del_id = $(this).data('id');
 					let del_url = "{{ route('customer.parameter.personal.destroy', ['id'=>':id']) }}";
@@ -391,7 +388,6 @@ $(document).ready(function() {
 			"edit": {name: "แก้ไขข้อมูล", icon: "fal fa-edit"},
 			"sep1": "---------",
 			"parameter": {name: "เพิ่มพารามิเตอร์", icon: "fal fa-tachometer"},
-			'unit': {name: "เพิ่มหน่วย", icon: "fal fa-underline"},
 			"sep2": "---------",
 			"delete": {name: "ลบข้อมูล", icon: "fal fa-trash-alt"},
 			"sep3": "---------",

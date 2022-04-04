@@ -1,13 +1,8 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\{Auth,Log,Storage,File};
-//use Spatie\Permission\Models\{Role,Permission};
-//use Illuminate\Routing\Redirector;
-//use Livewire\Controllers\FileUploadHandler;
-//use App\Traits\CommonTrait as TraitsCommonTrait;
 use App\Models\{Order,OrderDetail,Fileupload,OrderDetailParameter,Parameter,User,UserCustomer};
 use App\DataTables\{CustomersDataTable,CustParameterDataTable,CustSampleDataTable,CustVerifyDataTable};
 use App\Traits\{CustomerTrait,FileTrait,CommonTrait,JsonBoundaryTrait};
@@ -30,10 +25,13 @@ class CustomerController extends Controller
 			return $next($request);
 		});
 	}
+
+	#[Route('customer.index', methods: ['RESOURCE'])]
 	protected function index(CustomersDataTable $dataTable, $user_id=0): object {
-		$user_id = $this->user->id;
-		return $dataTable->with('id', $user_id)->render('apps.customers.index');
+		return $dataTable->with('user_id', $this->user->id)->render('apps.customers.index');
 	}
+
+	#[Route('customer.info.create', methods: ['GET'])]
 	protected function createInfo(Request $request): object {
 		$type_of_work = $this->typeOfWork();
 		$titleName = $this->titleName();
@@ -44,22 +42,23 @@ class CustomerController extends Controller
 		 }
 		return view('apps.customers.info', ['type_of_work' => $type_of_work, 'order' => $order, 'titleName' => $titleName]);
 	}
+
+	#[Route('customer.info.store', methods: ['POST'])]
 	protected function storeInfo(Request $request) {
 		try {
-			switch ($this->user->userCustomer->customer_type) {
-				case 'personal':
-					$order = Order::updateOrCreate(['id' => $request->order_id], [
-						'customer_type' => $this->user->userCustomer->customer_type,
-						'ref_user_id' => $this->user->userCustomer->user->id,
-						'order_status' => 'pending',
-						'payment_status' => 'pending',
-						'type_of_work' => $request->type_of_work,
-						'type_of_work_other' => $request->type_of_work_other,
-						'book_no' => $request->book_no ?? null,
-						'book_date' => $this->convertJsDateToMySQL($request->book_date) ?? null,
-						'book_upload' => ($request->hasFile('book_file')) ? 'y' : 'n'
-					]);
-					break;
+			$order = Order::updateOrCreate(
+				['id' => $request->order_id],
+				[
+					'customer_type' => $this->user->userCustomer->customer_type,
+					'ref_user_id' => $this->user->userCustomer->user->id,
+					'order_status' => 'pending',
+					'payment_status' => 'pending',
+					'type_of_work' => $request->type_of_work,
+					'type_of_work_other' => $request->type_of_work_other,
+					'book_no' => $request->book_no ?? null,
+					'book_date' => $this->convertJsDateToMySQL($request->book_date) ?? null,
+					'book_upload' => ($request->hasFile('book_file')) ? 'y' : 'n'
+				]);
 				// case 'private':
 				// 	$order = Order::updateOrCreate(
 				// 		['id' => $request->order_id],
@@ -96,7 +95,7 @@ class CustomerController extends Controller
 				// 		]
 				// 	);
 				// 	break;
-			}
+
 			$last_insert_order_id = $order->id;
 			if ($request->hasFile('book_file')) {
 				/* Delete older files */
@@ -149,6 +148,13 @@ class CustomerController extends Controller
 		}
 		//DB::commit();
 	}
+
+	protected function createParameter(Request $request, CustParameterDataTable $dataTable): object {
+		$order_id = $request->order_id;
+		$row_completed = OrderDetail::whereOrder_id($request->order_id)->whereSample_status('y')->whereParameter_status('y')->count();
+		return $dataTable->render('apps.customers.parameter', compact('order_id', 'row_completed'));
+	}
+
 	protected function storeParameterPersonal(Request $request) {
 		$request->validate([
 			'order_id'=>'bail|required',
@@ -352,11 +358,7 @@ class CustomerController extends Controller
 		}
 	}
 
-	protected function createParameter(Request $request, CustParameterDataTable $dataTable): object {
-		$order_id = $request->order_id;
-		$row_completed = OrderDetail::whereOrder_id($request->order_id)->whereCompleted('y')->count();
-		return $dataTable->render('apps.customers.parameter', compact('order_id', 'row_completed'));
-	}
+
 
 	protected function listParameterData(Request $request): object {
 		try {
@@ -391,16 +393,35 @@ class CustomerController extends Controller
 			$i = 0;
 			foreach ($paramet_arr as $key => $val) {
 				$paramet = Parameter::findOrfail($val);
-				$upserted = OrderDetailParameter::updateOrcreate(
-					['order_detail_id' => $request->aj_order_detail_id, 'parameter_id' => $paramet->id],
-					[
+				$upserted = OrderDetailParameter::updateOrcreate([
+						'order_detail_id' => $request->aj_order_detail_id,
+						'parameter_id' => $paramet->id],[
 						'parameter_id' => $paramet->id,
 						'parameter_name' => $paramet->parameter_name,
-						'parameter_group'=> $paramet->sample_charecter_id,
+						'sample_charecter_id'=> $paramet->sample_charecter_id,
+						'sample_charecter_name' => $paramet->sample_charecter_name,
+						'sample_type_id' => $paramet->sample_type_id,
+						'sample_type_name' => $paramet->sample_type_name,
 						'unit_id' => $paramet->unit_id,
-						'unit_name' => $paramet->unit_name
-					]
-				);
+						'unit_name' => $paramet->unit_name,
+						'unit_customer_name' => $paramet->unit_customer_name,
+						'price_id' => $paramet->price_id,
+						'price_name' => $paramet->price_name,
+						'main_analys_user_id' => $paramet->main_analys_user_id,
+						'main_analys_name' => $paramet->main_analys_name,
+						'sub_analys_user_id' => $paramet->sub_analys_user_id,
+						'sub_analys_name' => $paramet->sub_analys_name,
+						'control_analys_user_id' => $paramet->control_analys_user_id,
+						'control_analys_name' => $paramet->control_analys_name,
+						'technical_id' => $paramet->technical_id,
+						'technical_name' => $paramet->technical_name,
+						'method_analys_id' => $paramet->method_analys_id,
+						'method_analys_name' => $paramet->method_analys_name,
+						'machine_id' => $paramet->machine_id,
+						'machine_name' => $paramet->machine_name,
+						'office_id' => $paramet->office_id,
+						'office_name' => $paramet->office_name
+					]);
 				$i++;
 			}
 			if ($i > 0) {
@@ -427,7 +448,8 @@ class CustomerController extends Controller
 
 	protected function createSample(CustSampleDataTable $dataTable, Request $request) {
 		$order_detail = OrderDetail::select('id')->whereOrder_id($request->order_id)->whereCompleted('y')->get();
-		$sample_list = array();
+		dd($order_detail);
+		$sample_list = [];
 		$order_detail->each(function($value, $key) use (&$sample_list) {
 			$sample_list[$key] = $value->id;
 		});
