@@ -14,11 +14,9 @@ class Order extends Model
 	protected $fillable = [
 		'id',
 		'customer_type',
-		'ref_user_id',
+		'user_id',
 		'order_status',
 		'payment_status',
-		'ref_office_id',
-		'ref_office_name',
 		'type_of_work',
 		'type_of_work_other',
 		'book_no',

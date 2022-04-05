@@ -264,7 +264,8 @@ var runDatePicker = function() {
 		format: 'dd/mm/yyyy',
 		todayHighlight: true,
 		orientation: "bottom left",
-		templates: controls
+		templates: controls,
+		autoclose: true,
 	});
 }
 </script>
@@ -299,7 +300,8 @@ $(document).ready(function() {
 								format: 'dd/mm/yyyy',
 								todayHighlight: true,
 								orientation: "bottom left",
-								templates: controls
+								templates: controls,
+                                autoclose: true,
 							});
 							$('#edit-customer-personal-modal').modal({backdrop: 'static', keyboard: false});
 						},
