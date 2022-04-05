@@ -68,9 +68,7 @@ class CustomersDataTable extends DataTable
 	 * @return \Illuminate\Database\Eloquent\Builder
 	 */
 	public function query(Order $order) {
-		return $order->select('id', 'ref_user_id', 'lab_station_id', 'order_status', 'payment_status', 'detail', 'created_at')
-			->whereRef_user_id($this->user_id)
-			->orderBy('id', 'ASC');
+		return $order->whereUser_id($this->user_id)->orderBy('id', 'ASC');
 	}
 
 	/**

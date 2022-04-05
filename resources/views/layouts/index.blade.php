@@ -137,7 +137,6 @@ $(document).ready(function() {
 		@endforeach
 		@php
 			Session::forget("$errors");
-			Session::flush();
 		@endphp
 	@endif
 	@if (Session::has('success'))
@@ -152,7 +151,6 @@ $(document).ready(function() {
 		});
 		@php
 			Session::forget("success");
-			Session::flush();
 		@endphp
 	@endif
 	@if (Session::has('warning'))
@@ -167,28 +165,24 @@ $(document).ready(function() {
 		});
 		@php
 			Session::forget("warning");
-			Session::flush();
 		@endphp
 	@endif
 	@if (Session::has('error'))
 		toastr.error("{{ Session::get('error') }}", "LabEnvOcc", options);
 		@php
 			Session::forget("error");
-			Session::flush();
 		@endphp
 	@endif
 	@if (Session::has('action_notic'))
 		toastr.info("{{ Session::get('action_notic') }}", "LabEnvOcc", options2);
 		@php
 			Session::forget("action_notic");
-			Session::flush();
 		@endphp
 	@endif
 	@if (Session::has('destroy'))
 		toastr.error("{{ Session::get('destroy') }}", "LabEnvOcc", options3);
 		@php
 			Session::forget("destroy");
-			Session::flush();
 		@endphp
 	@endif
 });

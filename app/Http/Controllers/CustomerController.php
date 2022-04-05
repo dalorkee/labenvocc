@@ -33,14 +33,19 @@ class CustomerController extends Controller
 
 	#[Route('customer.info.create', methods: ['GET'])]
 	protected function createInfo(Request $request): object {
-		$type_of_work = $this->typeOfWork();
-		$titleName = $this->titleName();
-		if ($request->order_id == 'new') {
-			$order = null;
-		 } else {
-			 $order = Order::whereId($request->order_id)->with('uploads')->get();
-		 }
-		return view('apps.customers.info', ['type_of_work' => $type_of_work, 'order' => $order, 'titleName' => $titleName]);
+		try {
+			$type_of_work = $this->typeOfWork();
+			$titleName = $this->titleName();
+			if ($request->order_id == 'new') {
+				$order = null;
+			} else {
+				$order = Order::whereId($request->order_id)->with('uploads')->get();
+			}
+			return view('apps.customers.info', ['type_of_work' => $type_of_work, 'order' => $order, 'titleName' => $titleName]);
+		} catch (\Exception $e) {
+			Log::error($e->getMessage());
+			return redirect()->route('logout');
+		}
 	}
 
 	#[Route('customer.info.store', methods: ['POST'])]
@@ -50,7 +55,7 @@ class CustomerController extends Controller
 				['id' => $request->order_id],
 				[
 					'customer_type' => $this->user->userCustomer->customer_type,
-					'ref_user_id' => $this->user->userCustomer->user->id,
+					'user_id' => $this->user->userCustomer->user->id,
 					'order_status' => 'pending',
 					'payment_status' => 'pending',
 					'type_of_work' => $request->type_of_work,
@@ -58,59 +63,17 @@ class CustomerController extends Controller
 					'book_no' => $request->book_no ?? null,
 					'book_date' => $this->convertJsDateToMySQL($request->book_date) ?? null,
 					'book_upload' => ($request->hasFile('book_file')) ? 'y' : 'n'
-				]);
-				// case 'private':
-				// 	$order = Order::updateOrCreate(
-				// 		['id' => $request->order_id],
-				// 		[
-				// 			'order_type' => $this->user->userCustomer->customer_type,
-				// 			'ref_user_id' => $this->user->userCustomer->user->id,
-				// 			'order_status' => 'pending',
-				// 			'payment_status' => 'pending',
-				// 			'ref_agency_code' => $this->user->userCustomer->agency_code,
-				// 			'ref_agency_name' => $this->user->userCustomer->agency_name,
-				// 			'type_of_work' => $request->type_of_work,
-				// 			'type_of_work_other' => $request->type_of_work_other,
-				// 			'book_no' => $request->book_no,
-				// 			'book_date' => $this->convertJsDateToMySQL($request->book_date),
-				// 			'book_upload' => ($request->hasFile('book_file')) ? 'y' : 'n'
-				// 		]
-				// 	);
-				// 	break;
-				// case 'government':
-				// 	$order = Order::updateOrCreate(
-				// 		['id' => $request->order_id],
-				// 		[
-				// 			'order_type' => $this->user->userCustomer->customer_type,
-				// 			'ref_user_id' => $this->user->userCustomer->user->id,
-				// 			'order_status' => 'pending',
-				// 			'payment_status' => 'pending',
-				// 			'ref_agency_code' => $this->user->userCustomer->agency_code,
-				// 			'ref_agency_name' => $this->user->userCustomer->agency_name,
-				// 			'type_of_work' => $request->type_of_work,
-				// 			'type_of_work_other' => $request->type_of_work_other,
-				// 			'book_no' => $request->book_no,
-				// 			'book_date' => $this->convertJsDateToMySQL($request->book_date),
-				// 			'book_upload' => ($request->hasFile('book_file')) ? 'y' : 'n'
-				// 		]
-				// 	);
-				// 	break;
-
+				]
+			);
 			$last_insert_order_id = $order->id;
 			if ($request->hasFile('book_file')) {
 				/* Delete older files */
 				FileUpload::select('id', 'file_name')->whereOrder_id($request->order_id)->whereRef_user_id($this->user->id)->each(function($item, $key) {
 					if (Storage::disk('uploads')->exists($item->file_name)) {
-						/* uncomment this where need delete the file */
-						/*
-						Storage::disk('uploads')->delete($item->file_name);
-						FileUpload::whereFile_name($item->file_name)->forceDelete();
-						*/
 						FileUpload::find($item->id)->delete();
 						Log::warning($this->user->userCustomer->first_name.' ลบไฟล์หนังสือนำส่ง [id:'.$item->id.']');
 					}
 				});
-
 				/* Create new file */
 				$file = $request->file('book_file');
 				$file_mime = $file->getMimeType();
@@ -143,18 +106,23 @@ class CustomerController extends Controller
 			}
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
-			//DB::rollback();
 			return redirect()->route('customer.index')->with('error', $e->getMessage());
 		}
-		//DB::commit();
 	}
 
+	#[Route('customer.parameter.create', methods: ['GET'])]
 	protected function createParameter(Request $request, CustParameterDataTable $dataTable): object {
-		$order_id = $request->order_id;
-		$row_completed = OrderDetail::whereOrder_id($request->order_id)->whereSample_status('y')->whereParameter_status('y')->count();
-		return $dataTable->render('apps.customers.parameter', compact('order_id', 'row_completed'));
+		try {
+			$order_id = $request->order_id;
+			$count_status_rows = OrderDetail::whereOrder_id($request->order_id)->whereSample_status('y')->whereParameter_status('y')->count();
+			return $dataTable->render('apps.customers.parameter', compact('order_id', 'count_status_rows'));
+		} catch (\Exception $e) {
+			Log::error($e->getMessage());
+			return redirect()->route('customer.index')->with('error', $e->getMessage());
+		}
 	}
 
+    #[Route('customer.parameter.personal.store', methods: ['POST'])]
 	protected function storeParameterPersonal(Request $request) {
 		$request->validate([
 			'order_id'=>'bail|required',

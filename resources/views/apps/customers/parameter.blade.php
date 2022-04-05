@@ -45,7 +45,7 @@ div.dataTables_wrapper span.select-item {margin-left: 0.5em;}
 				</div>
 			</div>
 			<div class="panel-container relative">
-				<div class="row-completed"><span class="badge badge-danger p-2">จำนวน {{ number_format($row_completed) }} ตัวอย่าง</span></div>
+				<div class="row-completed"><span class="badge badge-danger p-2">จำนวน {{ number_format($count_status_rows) }} ตัวอย่าง</span></div>
 				<form>
 					<div class="panel-content">
 						<ul class="steps mb-3">
