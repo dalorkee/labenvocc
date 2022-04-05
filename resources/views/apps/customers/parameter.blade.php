@@ -301,7 +301,7 @@ $(document).ready(function() {
 								todayHighlight: true,
 								orientation: "bottom left",
 								templates: controls,
-                                autoclose: true,
+								autoclose: true,
 							});
 							$('#edit-customer-personal-modal').modal({backdrop: 'static', keyboard: false});
 						},

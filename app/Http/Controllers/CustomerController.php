@@ -114,7 +114,7 @@ class CustomerController extends Controller
 	protected function createParameter(Request $request, CustParameterDataTable $dataTable): object {
 		try {
 			$order_id = $request->order_id;
-			$count_status_rows = OrderDetail::whereOrder_id($request->order_id)->whereSample_status('y')->whereParameter_status('y')->count();
+			$count_status_rows = OrderDetail::whereOrder_id($order_id)->whereSample_status('y')->whereParameter_status('y')->count();
 			return $dataTable->render('apps.customers.parameter', compact('order_id', 'count_status_rows'));
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
@@ -122,7 +122,7 @@ class CustomerController extends Controller
 		}
 	}
 
-    #[Route('customer.parameter.personal.store', methods: ['POST'])]
+	#[Route('customer.parameter.personal.store', methods: ['POST'])]
 	protected function storeParameterPersonal(Request $request) {
 		$request->validate([
 			'order_id'=>'bail|required',
@@ -163,6 +163,8 @@ class CustomerController extends Controller
 			Log::error($e->getMessage());
 		}
 	}
+
+	#[Route('customer.parameter.personal.edit', methods: ['GET'])]
 	protected function editParameterPersonal(Request $request) {
 		$order_detail = OrderDetail::find($request->id);
 		switch ($order_detail->title_name) {
@@ -275,6 +277,8 @@ class CustomerController extends Controller
 		</form>";
 		return $htm;
 	}
+
+	#[Route('customer.parameter.personal.update', methods: ['POST'])]
 	protected function updateParameterPersonal(Request $request) {
 		$request->validate([
 			'edit_order_id'=>'bail|required',
@@ -315,6 +319,7 @@ class CustomerController extends Controller
 		}
 	}
 
+	#[Route('customer.parameter.personal.destroy', methods: ['GET'])]
 	protected function DestroyParameterPersonal(OrderDetail $orderDetail, Request $request): object {
 		try {
 			$deleted = $orderDetail->find($request->id)->delete();
@@ -326,8 +331,7 @@ class CustomerController extends Controller
 		}
 	}
 
-
-
+	#[Route('customer.parameter.data.list', methods: ['GET'])]
 	protected function listParameterData(Request $request): object {
 		try {
 			if ($request->ajax()) {
@@ -355,6 +359,7 @@ class CustomerController extends Controller
 		}
 	}
 
+	#[Route('customer.parameter.data.store', method: ['POST'])]
 	protected function storeParameterData(Request $request): object {
 		try {
 			$paramet_arr = $request->paramet_id_arr;
@@ -403,6 +408,7 @@ class CustomerController extends Controller
 		}
 	}
 
+	#[Route('customer.parameter.data.destroy', methods: ['GET'])]
 	protected function destroyParameterData(OrderDetailParameter $orderDetailParamet, Request $request): object {
 		try {
 			$deleted = $orderDetailParamet->find($request->id)->delete();
@@ -414,9 +420,11 @@ class CustomerController extends Controller
 		}
 	}
 
+	#[Route('customer.sample.create', methods: ['GET'])]
 	protected function createSample(CustSampleDataTable $dataTable, Request $request) {
-		$order_detail = OrderDetail::select('id')->whereOrder_id($request->order_id)->whereCompleted('y')->get();
-		dd($order_detail);
+		//$order_detail = OrderDetail::select('id')->whereOrder_id($request->order_id)->whereCompleted('y')->get();
+
+		$order_detail = OrderDetail::select('id')->whereOrder_id($request->order_id)->whereSample_status('y')->whereParameter_status('y')->get();
 		$sample_list = [];
 		$order_detail->each(function($value, $key) use (&$sample_list) {
 			$sample_list[$key] = $value->id;
@@ -432,6 +440,7 @@ class CustomerController extends Controller
 		return $dataTable->render('apps.customers.sample', ['data'=> $data]);
 	}
 
+	#[Route('customer.sample.store', methods: ['POST'])]
 	protected function storeSample(Request $request): object {
 		$request->validate([
 			'sample_charecter'=>'bail|required',
@@ -540,6 +549,7 @@ class CustomerController extends Controller
 		}
 	}
 
+	#[Route('customer.verify.create', methods: ['GET'])]
 	protected function createVerify(Request $request, CustVerifyDataTable $dataTable) {
 		try {
 			$sample_list = array();
@@ -565,6 +575,7 @@ class CustomerController extends Controller
 		}
 	}
 
+	#[Route('customer.verify.store', methods: ['GET'])]
 	protected function storeVerify(Request $request) {
 		try {
 			dd($request->order_id);
@@ -573,12 +584,12 @@ class CustomerController extends Controller
 		}
 	}
 
-	protected function storeParamet(Request $request) {
-		dd($request->paramets);
-		$x = "";
-		foreach ($request->paramets as $key => $val) {
-			$x .= $val.' ';
-		}
-		return redirect()->back()->with("success", 'isad');
-	}
+	// protected function storeParamet(Request $request) {
+	// 	dd($request->paramets);
+	// 	$x = "";
+	// 	foreach ($request->paramets as $key => $val) {
+	// 		$x .= $val.' ';
+	// 	}
+	// 	return redirect()->back()->with("success", 'isad');
+	// }
 }
