@@ -422,19 +422,16 @@ class CustomerController extends Controller
 
 	#[Route('customer.sample.create', methods: ['GET'])]
 	protected function createSample(CustSampleDataTable $dataTable, Request $request) {
-		//$order_detail = OrderDetail::select('id')->whereOrder_id($request->order_id)->whereCompleted('y')->get();
-
-		$order_detail = OrderDetail::select('id')->whereOrder_id($request->order_id)->whereSample_status('y')->whereParameter_status('y')->get();
 		$sample_list = [];
-		$order_detail->each(function($value, $key) use (&$sample_list) {
+		$order_detail = OrderDetail::select('id')->whereOrder_id($request->order_id)->get()->each(function($value, $key) use (&$sample_list) {
 			$sample_list[$key] = $value->id;
 		});
-		$sample_charecter = $this->getSampleCharecter();
+		$origin_threat = $this->getOriginThreat();
 		$provinces = $this->getMinProvince();
 		$data = [
 			'order_id' => $request->order_id,
 			'sample_list' => $sample_list,
-			'sample_charecter' => $sample_charecter,
+			'origin_threat' => $origin_threat,
 			'provinces' => $provinces
 		];
 		return $dataTable->render('apps.customers.sample', ['data'=> $data]);
@@ -443,26 +440,52 @@ class CustomerController extends Controller
 	#[Route('customer.sample.store', methods: ['POST'])]
 	protected function storeSample(Request $request): object {
 		$request->validate([
-			'sample_charecter'=>'bail|required',
+			'sample_select_begin' => 'bail|required',
+			'sample_select_end' => 'required',
+			'origin_threat' => 'required',
 		],[
-			'sample_charecter.required'=>'โปรดเลือกประเด็นมลพิษ',
+			'sample_select_begin' => 'โปรดเลือกตัวอย่างเริ่มต้น',
+			'sample_select_end' => 'โปรดเลือกตัวอย่างสิ้นสุด',
+			'origin_threat.required'=>'โปรดเลือกประเด็นมลพิษ',
 		]);
 		try {
 			if ($request->sample_select_begin > $request->sample_select_end) {
 				return redirect()->back()->with('warning', 'เลือกข้อมูลตัวอย่างไม่ถูกต้อง โปรดตรวจสอบ');
 			} else {
 				$saved = false;
+				$origin_threat_arr = $this->getOriginThreat();
 				switch ($this->user->userCustomer->customer_type) {
 					case 'personal':
-						switch ($request->sample_place_type) {
+						$userDetail = User::find($request->user_id)->userCustomer;
+						for ($i=$request->sample_select_begin; $i<=$request->sample_select_end; $i++) {
+							$orderDetail = OrderDetail::find($i);
+							if (!is_null($orderDetail)) {
+								$orderDetail->origin_threat_id = $request->origin_threat;
+								$orderDetail->origin_threat_name = $origin_threat_arr[$request->origin_threat];
+								$orderDetail->sample_location_define = 2;
+								$orderDetail->sample_location_place_name = $request->sample_location_place_name;
+								$orderDetail->sample_location_place_address = $request->sample_location_place_address;
+								$orderDetail->sample_location_place_sub_district = $request->sample_location_place_sub_district;
+								$orderDetail->sample_location_place_district = $request->sample_location_place_district;
+								$orderDetail->sample_location_place_province = $request->sample_location_place_province;
+								$orderDetail->sample_location_place_postal = $request->sample_location_place_postal;
+								$orderDetail->sample_status = 'y';
+								$saved = $orderDetail->save();
+							}
+						}
+						break;
+					case 'private':
+					case 'government':
+						switch ($request->sample_location_define) {
 							case 1:
 								$userDetail = User::find($request->user_id)->userCustomer;
 								for ($i=$request->sample_select_begin; $i<=$request->sample_select_end; $i++) {
 									$orderDetail = OrderDetail::find($i);
 									if (!is_null($orderDetail)) {
-										$orderDetail->sample_charecter = $request->sample_charecter;
+										$orderDetail->origin_threat_id = $request->origin_threat;
+										$orderDetail->origin_threat_name = $origin_threat_arr[$request->origin_threat];
 										$orderDetail->sample_location_define = $request->sample_location_define;
-										$orderDetail->sample_location_place_id = $userDetail->sample_location_place_id;
+										$orderDetail->sample_location_place_id = $userDetail->sample_location_place_id ?? '';
 										$orderDetail->sample_location_place_name = $userDetail->sample_location_place_name;
 										$orderDetail->sample_location_place_address = $userDetail->sample_location_place_address;
 										$orderDetail->sample_location_place_sub_district = $userDetail->sample_location_place_sub_district;
@@ -477,7 +500,8 @@ class CustomerController extends Controller
 								for ($i=$request->sample_select_begin; $i<=$request->sample_select_end; $i++) {
 									$orderDetail = OrderDetail::find($i);
 									if (!is_null($orderDetail)) {
-										$orderDetail->sample_charecter = $request->sample_charecter;
+										$orderDetail->origin_threat_id = $request->origin_threat_id;
+										$orderDetail->origin_threat_name = $origin_threat_arr[$request->origin_threat];
 										$orderDetail->sample_location_define = $request->sample_location_define;
 										$orderDetail->sample_location_place_id = $request->sample_location_place_id;
 										$orderDetail->sample_location_place_name = $request->sample_location_place_name;
@@ -495,49 +519,10 @@ class CustomerController extends Controller
 								break;
 						}
 						break;
-					}
-				// switch ($request->sample_place_type) {
-				// 	case 1:
-				// 		$userDetail = User::find($request->user_id)->userCustomer;
-				// 		for ($i=$request->sample_select_begin; $i<=$request->sample_select_end; $i++) {
-				// 			$orderDetail = OrderDetail::find($i);
-				// 			if (!is_null($orderDetail)) {
-				// 				$orderDetail->sample_charecter = $request->sample_charecter;
-				// 				$orderDetail->sample_place_type = $request->sample_place_type;
-				// 				$orderDetail->sample_office_category = $request->sample_office_category;
-				// 				$orderDetail->sample_office_id = $userDetail->office_code;
-				// 				$orderDetail->sample_office_name = $userDetail->office_name;
-				// 				$orderDetail->sample_office_addr = $userDetail->office_address;
-				// 				$orderDetail->sample_office_sub_district = $userDetail->office_sub_district;
-				// 				$orderDetail->sample_office_district = $userDetail->office_district;
-				// 				$orderDetail->sample_office_province = $userDetail->office_province;
-				// 				$orderDetail->sample_office_postal = $userDetail->office_postal;
-				// 				$saved = $orderDetail->save();
-				// 			}
-				// 		}
-				// 		break;
-				// 	case 2:
-				// 		for ($i=$request->sample_select_begin; $i<=$request->sample_select_end; $i++) {
-				// 			$orderDetail = OrderDetail::find($i);
-				// 			if (!is_null($orderDetail)) {
-				// 				$orderDetail->sample_charecter = $request->sample_charecter;
-				// 				$orderDetail->sample_place_type = $request->sample_place_type;
-				// 				$orderDetail->sample_office_category = $request->sample_office_category;
-				// 				$orderDetail->sample_office_id = $request->sample_office_id;
-				// 				$orderDetail->sample_office_name = $request->sample_office_name;
-				// 				$orderDetail->sample_office_addr = $request->sample_office_addr;
-				// 				$orderDetail->sample_office_sub_district = $request->sample_office_sub_district;
-				// 				$orderDetail->sample_office_district = $request->sample_office_district;
-				// 				$orderDetail->sample_office_province = $request->sample_office_province;
-				// 				$orderDetail->sample_office_postal = $request->sample_office_postal;
-				// 				$saved = $orderDetail->save();
-				// 			}
-				// 		}
-				// 		break;
-				// 	default:
-				// 		return redirect()->route('logout');
-				// 		break;
-				// }
+					default:
+						return redirect()->route('logout');
+						break;
+				}
 				if ($saved == true) {
 					return redirect()->back()->with('success', 'บันทึกข้อมูล "ประเด็นมลพิษ" แล้ว');
 				} else {
@@ -552,8 +537,8 @@ class CustomerController extends Controller
 	#[Route('customer.verify.create', methods: ['GET'])]
 	protected function createVerify(Request $request, CustVerifyDataTable $dataTable) {
 		try {
-			$sample_list = array();
-			OrderDetail::select('id')->whereOrder_id($request->order_id)->whereCompleted('y')->get()->each(function($value, $key) use (&$sample_list) {
+			$sample_list = [];
+			OrderDetail::select('id')->whereOrder_id($request->order_id)->get()->each(function($value, $key) use (&$sample_list) {
 				$sample_list[$key] = $value->id;
 			});
 

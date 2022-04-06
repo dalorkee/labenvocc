@@ -1,7 +1,7 @@
 <?php
 namespace App\Traits;
 
-use App\Models\{Position,PositionLevel,Duty,SampleCharecter};
+use App\Models\{Position,PositionLevel,Duty,SampleCharecter, OriginThreat};
 
 trait CommonTrait {
 	public function titleName(): array {
@@ -64,32 +64,41 @@ trait CommonTrait {
 		}
 	}
 	public function getPosition(): array {
-		$result = array();
+		$result = [];
 		Position::select('id', 'name')->get()->each(function($value, $key) use (&$result) {
 			$result[$value->id] = $value->name;
 		});
 		return $result;
 	}
 	public function getPositionLevel(): array {
-		$result = array();
+		$result = [];
 		PositionLevel::select('id', 'name_th')->get()->each(function($value, $key) use (&$result) {
 			$result[$value->id] = $value->name_th;
 		});
 		return $result;
 	}
 	public function getStaffDuty(): array {
-		$result = array();
+		$result = [];
 		Duty::select('id', 'duty_name')->get()->each(function($value, $key) use (&$result) {
 			$result[$value->id] = $value->duty_name;
 		});
 		return $result;
 	}
 	public function getSampleCharecter(): array {
-		$result = array();
+		$result = [];
 		SampleCharecter::select('id', 'sample_charecter_name')->whereSample_charecter_status(1)->get()->each(function($value, $key) use (&$result) {
 			$result[$value->id] = $value->sample_charecter_name;
 		});
 		return $result;
 	}
+
+	public function getOriginThreat(): array {
+		$result = [];
+		OriginThreat::select('id', 'origin_threat_name')->get()->each(function($value, $key) use (&$result) {
+			$result[$value->id] = $value->origin_threat_name;
+		});
+		return $result;
+	}
+
 }
 ?>

@@ -17,7 +17,7 @@ class CustVerifyDataTable extends DataTable
 	public function dataTable($query) {
 		try {
 			$sample_office_category = $this->sampleOfficeCategory();
-			$sample_charecter_arr = $this->getSampleCharecter();
+			$origin_threat_arr = $this->getOriginThreat();
 			return datatables()
 				->eloquent($query)
 				->addColumn('id', function($field) {
@@ -35,8 +35,8 @@ class CustVerifyDataTable extends DataTable
 				->addColumn('sample_date', function($field) {
 					return "<div style=\"width: 120px\">".Carbon::parse($field->created_at)->format('d/m/Y')."</div>";
 				})
-				->addColumn('sample_charecter', function($field) use ($sample_charecter_arr) {
-					$rs = $sample_charecter_arr[$field->sample_charecter] ?? null;
+				->addColumn('origin_threat', function($field) use ($origin_threat_arr) {
+					$rs = $origin_threat_arr[$field->origin_threat_id] ?? null;
 					return "<div style=\"width: 200px\">".$rs."</div>";
 				})
 				->addColumn('parameter', function ($parameters) {
@@ -53,27 +53,27 @@ class CustVerifyDataTable extends DataTable
 					$rs = $sample_office_category[$field->sample_office_category] ?? null;
 					return "<div style=\"width: 180px\">".$rs."</div>";
 				})
-				// ->addColumn('sample_office_id', function($field) {
-				// 	return "<div style=\"width: 100px\">".$field->sample_office_id."</div>";
-				// })
-				// ->addColumn('sample_office_name', function($field) {
-				// 	return "<div style=\"width: 300px\">".$field->sample_office_name."</div>";
-				// })
-				// ->addColumn('sample_office_addr', function($field) {
-				// 	return "<div style=\"width: 300px\">".$field->sample_office_addr."</div>";
-				// })
-				// ->addColumn('sample_office_sub_district_name', function($field) {
-				// 	return "<div style=\"width: 150px\">".$field->sample_office_sub_district_name."</div>";
-				// })
-				// ->addColumn('sample_office_district_name', function($field) {
-				// 	return "<div style=\"width: 150px\">".$field->sample_office_district_name."</div>";
-				// })
-				// ->addColumn('sample_office_province_name', function($field) {
-				// 	return "<div style=\"width: 150px\">".$field->sample_office_province_name."</div>";
-				// })
-				// ->addColumn('sample_office_postal', function($field) {
-				// 	return "<div style=\"width: 100px\">".$field->sample_office_postal."</div>";
-				// })
+				->addColumn('sample_office_id', function($field) {
+					return "<div style=\"width: 100px\">".$field->sample_office_id."</div>";
+				})
+				->addColumn('sample_office_name', function($field) {
+					return "<div style=\"width: 300px\">".$field->sample_office_name."</div>";
+				})
+				->addColumn('sample_office_addr', function($field) {
+					return "<div style=\"width: 300px\">".$field->sample_office_addr."</div>";
+				})
+				->addColumn('sample_office_sub_district_name', function($field) {
+					return "<div style=\"width: 150px\">".$field->sample_office_sub_district_name."</div>";
+				})
+				->addColumn('sample_office_district_name', function($field) {
+					return "<div style=\"width: 150px\">".$field->sample_office_district_name."</div>";
+				})
+				->addColumn('sample_office_province_name', function($field) {
+					return "<div style=\"width: 150px\">".$field->sample_office_province_name."</div>";
+				})
+				->addColumn('sample_office_postal', function($field) {
+					return "<div style=\"width: 100px\">".$field->sample_office_postal."</div>";
+				})
 				->addColumn('action', '<button class="context-nav bg-purple-400 hover:bg-purple-500 text-white py-1 px-3 rounded" id="context-menu" data-id="{{$id}}">จัดการ <i class="fal fa-angle-down"></i></button>')
 				->rawColumns([
 					'id',
@@ -81,7 +81,7 @@ class CustVerifyDataTable extends DataTable
 					'division',
 					'work_life_year',
 					'sample_date',
-					'sample_charecter',
+					'origin_threat',
 					'parameter',
 					'unit',
 					'sample_office_category',
@@ -158,7 +158,7 @@ class CustVerifyDataTable extends DataTable
 				Column::make('division')->title('หน่วยงาน'),
 				Column::make('work_life_year')->title('อายุงาน/ปี'),
 				Column::make('sample_date')->title('วันที่เก็บตัวอย่าง'),
-				Column::make('sample_charecter')->title('ประเด็นมลพิษ'),
+				Column::make('origin_threat')->title('ประเด็นมลพิษ'),
 				Column::make('parameter')->title('พารามิเตอร์'),
 				Column::make('unit')->title('หน่วย'),
 				Column::make('sample_office_category')->title('ประเภทสถานที่เก็บตัวอย่าง'),

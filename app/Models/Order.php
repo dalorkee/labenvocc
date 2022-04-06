@@ -23,11 +23,14 @@ class Order extends Model
 		'book_date',
 		'book_upload',
 	];
-
 	protected $appends = ['book_date_js'];
 
-	public function details() {
+	public function orderDetails() {
 		return $this->hasMany(OrderDetail::class);
+	}
+
+	public function parameters(){
+		return $this->hasManyThrough(Parameter::class, orderDetails::class);
 	}
 
 	public function uploads() {

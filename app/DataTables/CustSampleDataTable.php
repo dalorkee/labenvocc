@@ -32,7 +32,7 @@ class CustSampleDataTable extends DataTable
 					})->implode('<br>');
 				})
 				->addColumn('action', '<button class="context-nav bg-purple-400 hover:bg-purple-500 text-white py-1 px-3 rounded" id="context-menu" data-id="{{$id}}">จัดการ <i class="fal fa-angle-down"></i></button>')
-				->rawColumns(['parameter', 'unit', 'action']);
+				->rawColumns(['parameter', 'action']);
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
 		}
@@ -86,7 +86,7 @@ class CustSampleDataTable extends DataTable
 				Column::make('lastname')->title('นามสกุล'),
 				Column::make('sample_date')->title('วันที่เก็บตัวอย่าง'),
 				Column::make('parameter')->title('พารามิเตอร์'),
-				Column::make('sample_charecter')->title('ประเด็นมลพิษ'),
+				Column::make('origin_threat_name')->title('ประเด็นมลพิษ'),
 				Column::make('note')->title('หมายเหตุ'),
 				//Column::computed('action')->addClass('text-center')->title('#')
 			];
