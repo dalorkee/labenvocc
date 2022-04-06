@@ -2,7 +2,7 @@
 
 namespace App\DataTables;
 
-use App\Models\SampleUpload;
+use App\Models\{User,SampleUpload};
 use Yajra\DataTables\Html\{Button,Column};
 use Yajra\DataTables\Html\Editor\{Editor,Fields};
 use Yajra\DataTables\Services\DataTable;
@@ -10,18 +10,19 @@ use Illuminate\Http\Request;
 
 class UploadBioDataTable extends DataTable
 {
+
 	public function dataTable($query): object {
 		return datatables()
 			->eloquent($query)
-            ->editColumn('choose',static function ($id){
-                return '<input type="checkbox" name="choose[]" value="'.$id.'"/>';
+            ->addColumn('id', function ($dataupload){
+                return '<input type="checkbox" name="biobox" id="biochk" value="'.$dataupload->id.'"/>';
             })
-            ->addColumn('action', '<button type="button" class="advertise-manage-nav btn btn-sm btn-info" data-id="{{$id}}">จัดการ<i class="fal fa-angle-down"></i> </button>')
-            ->rawColumns(['choose','action']);
+            ->addColumn('action', '<button type="button" class="bioupload-manage-nav btn btn-sm btn-info" data-id="{{$id}}">จัดการ<i class="fal fa-angle-down"></i> </button>')
+            ->rawColumns(['id','action']);
 	}
 
 	public function query(SampleUpload $sample_upload) {
-		return $sample_upload->orderBy('id', 'ASC');
+		return $sample_upload->whereUser_entry(auth()->user()->id)->orderBy('id', 'ASC');
 	}
 
 	public function html(): object {
@@ -30,7 +31,7 @@ class UploadBioDataTable extends DataTable
 					->columns($this->getColumns())
 					->minifiedAjax()
 					->orderBy(1)
-                    ->dom('')
+                    ->dom('rtip')
                     ->parameters([
                         'language'=>['url'=>url('/vendor/DataTables/i18n/thai.json')],
                     ]);
@@ -38,7 +39,7 @@ class UploadBioDataTable extends DataTable
 
 	protected function getColumns() {
 		return [
-			Column::make('choose')->title('check'),
+			Column::make('id')->title('check'),
 			Column::make('firstname')->title('ชื่อ'),
             Column::make('lastname')->title('นามสกุล'),
 			Column::make('age_year')->title('อายุปี'),

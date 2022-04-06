@@ -122,11 +122,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 	Route::get('/advertise/id/{id}/edit',[AdvertiseController::class,'edit'])->name('advertise.edit');
 	Route::get('/advertise/id/{id}/destroy',[AdvertiseController::class,'destroy'])->name('advertise.destroy');
 
-	//Route::get('sample/bio', [SampleUploadController::class, 'bio'])->name('sampleupload.bio');
 	Route::get('sample/env', [SampleUploadController::class, 'env'])->name('sampleupload.env');
-	Route::post('sample/import', [SampleUploadController::class, 'import']);
-	Route::get('sample/env', [SampleUploadController::class, 'env'])->name('sampleupload.env');
-	Route::post('sample/import', [SampleUploadController::class, 'import'])->name('sampleupload.import');
+	Route::post('sample/bio/create/id/{id}', [SampleUploadController::class, 'biocreate'])->name('sampleupload.biocreate');
+	Route::post('sample/bio/import', [SampleUploadController::class, 'bioimport'])->name('sampleupload.bioimport');
 });
 Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
 Route::get('/advertise/id/{id}/detail',[AdvertiseController::class,'detail'])->name('advertise.detail');
