@@ -19,8 +19,8 @@ class CustSampleDataTable extends DataTable
 			//$lab_station = $this->latStation();
 			return datatables()
 				->eloquent($query)
-				->editColumn('created_at', function($field) {
-					return Carbon::parse($field->created_at)->format('d/m/Y');
+				->editColumn('sample_date', function($field) {
+					return Carbon::parse($field->sample_date)->format('d/m/Y');
 				})
 				->addColumn('parameter', function (OrderDetail $detail) {
 					return $detail->parameters->map(function($parameter) {

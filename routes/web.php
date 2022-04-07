@@ -2,6 +2,7 @@
 use Illuminate\Support\Facades\{Route,Artisan};
 use App\Http\Controllers\{
 	HomeController,
+	BoundaryController,
 	RegisterController,
 	RegisterPersonalController,
 	RegisterPrivateAgencyController,
@@ -86,6 +87,10 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 	Route::get('/dashboard', function() {
 		return view('dashboard');
 	})->name('dashboard');
+	Route::name('boundary.')->group(function() {
+		Route::get('province/province/district', [BoundaryController::class, 'renderDistrictToHtmlSelect'])->name('fetch.district');
+		Route::get('province/district/sub/district', [BoundaryController::class, 'renderSubDistrictToHtmlSelect'])->name('fetch.sub.district');
+	});
 	Route::name('customer.')->group(function() {
 		Route::prefix('customer/info')->group(function() {
 			Route::get('/create/order/{order_id}', [CustomerController::class, 'createInfo'])->name('info.create');

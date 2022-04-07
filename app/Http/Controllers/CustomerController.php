@@ -456,6 +456,7 @@ class CustomerController extends Controller
 				$origin_threat_arr = $this->getOriginThreat();
 				switch ($this->user->userCustomer->customer_type) {
 					case 'personal':
+                        dd($request->sample_location_place_province);
 						$userDetail = User::find($request->user_id)->userCustomer;
 						for ($i=$request->sample_select_begin; $i<=$request->sample_select_end; $i++) {
 							$orderDetail = OrderDetail::find($i);

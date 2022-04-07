@@ -135,7 +135,7 @@
 								<select name="sample_location_place_province" id="sample_location_place_province" class="form-control select2 chk-b">
 									<option value="">-- โปรดเลือก --</option>
 									@foreach ($data['provinces'] as $key => $val)
-										<option value="{{ $key }}">{{ $val }}</option>
+										<option value="{{ $key.'|'.$val }}">{{ $val }}</option>
 									@endforeach
 								</select>
 							</div>
@@ -304,12 +304,12 @@ $(document).ready(function() {
 
 	$('#sample_location_place_province').change(function() {
 		if ($(this).val() != '') {
-			var id = $(this).val();
+			let prov_txt = $(this).val().split('|');
 			$.ajax({
-				method: "POST",
-				url: "{{ route('register.district') }}",
+				method: "GET",
+				url: "{{ route('boundary.fetch.district') }}",
 				dataType: "html",
-				data: {id:id},
+				data: {id: prov_txt[0]},
 				success: function(response) {
 					$('#sample_location_place_district').html(response);
 				},
@@ -321,12 +321,12 @@ $(document).ready(function() {
 	});
 	$('#sample_location_place_district').change(function() {
 		if ($(this).val() != '') {
-			var id = $(this).val();
+			let dist_txt = $(this).val().split('|');
 			$.ajax({
-				method: "POST",
-				url: "{{ route('register.subDistrict') }}",
+				method: "GET",
+				url: "{{ route('boundary.fetch.sub.district') }}",
 				dataType: "HTML",
-				data: {id:id},
+				data: {id: dist_txt[0]},
 				success: function(response) {
 					$('#sample_location_place_sub_district').html(response);
 				},
@@ -337,13 +337,13 @@ $(document).ready(function() {
 		}
 	});
 	$('#sample_location_place_sub_district').change(function() {
-		var id = $(this).val();
-		if (id != "" || id != null || id !== undefined) {
+		if ($(this).val() != '') {
+			let sub_dist_txt = $(this).val().split('|');
 			$.ajax({
 				method: "POST",
 				url: "{{ route('register.postcode') }}",
 				dataType: "HTML",
-				data: {id:id},
+				data: {id: sub_dist_txt[0]},
 				success: function(response) {
 					if (!$('#sample_location_place_postal').is('disabled')) {
 						$('#sample_location_place_postal').val(response);

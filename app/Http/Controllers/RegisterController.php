@@ -19,7 +19,7 @@ class RegisterController extends Controller
 		return view('auth.register.index');
 	}
 
-    public function refreshCaptcha() {
+	public function refreshCaptcha() {
 		return response()->json(['captcha'=> captcha_img('flat')]);
 	}
 
