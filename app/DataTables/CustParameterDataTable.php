@@ -20,24 +20,37 @@ class CustParameterDataTable extends DataTable
 				case 'personal':
 					return datatables()
 						->eloquent($query)
-						->editColumn('sample_date', function($field) {
-							return Carbon::parse($field->sample_date)->format('d/m/Y');
+						->editColumn('firstname', function(OrderDetail $orderDetail) {
+							return "<div style=\"width: 160px\">".$orderDetail->firstname."</div>";
 						})
-						->addColumn('parameter', function (OrderDetail $detail) {
-							return $detail->parameters->map(function($parameter) {
+						->editColumn('lastname', function(OrderDetail $orderDetail) {
+							return "<div style=\"width: 180px\">".$orderDetail->lastname."</div>";
+						})
+						->editColumn('sample_date', function(Orderdetail $orderDetail) {
+							return Carbon::parse($orderDetail->sample_date)->format('d/m/Y');
+						})
+						->addColumn('parameter', function (OrderDetail $orderDetail) {
+							return $orderDetail->parameters->map(function($parameter) {
 								return "
-								<div>
+								<div style=\"width: 500px\">
 									<span class=\"badge badge-warning\">".$parameter->parameter_name."</span>
-									<span class=\"badge badge-danger\">".$parameter->sample_charecter_name."</span>
-									<span class=\"badge badge-info\">".$parameter->unit_customer_name."</span>
+									<span class=\"badge badge-info\">".$parameter->sample_charecter_name."</span>
+									<span class=\"badge badge-success\">".$parameter->unit_customer_name."</span>
 									<a href=\"".route('customer.parameter.data.destroy', ['id'=>$parameter->id])."\" data-toggle=\"tooltip\" data-placement=\"auto\" title=\"ลบ ".$parameter->parameter_name."\">
-										<i class=\"fal fa-times-circle\"></i>
+										<i class=\"fal fa-times-circle text-danger\"></i>
 									</a>
 								</div>";
 							})->implode('<br>');
 						})
+						->addColumn('total_price', function (OrderDetail $orderDetail) {
+							$sum_price = 0;
+							$calc = $orderDetail->parameters->map(function($parameter) use (&$sum_price) {
+								$sum_price += (int)$parameter->price_name;
+							});
+							return number_format($sum_price);
+						})
 						->addColumn('action', '<button class="context-nav bg-purple-400 hover:bg-purple-500 text-white py-1 px-3 rounded" id="context-menu" data-id="{{$id}}">จัดการ <i class="fal fa-angle-down"></i></button>')
-						->rawColumns(['parameter', 'action']);
+						->rawColumns(['firstname', 'lastname', 'parameter', 'total_price', 'action']);
 					break;
 				case 'private':
 				case 'government':
@@ -111,12 +124,13 @@ class CustParameterDataTable extends DataTable
 			switch (auth()->user()->userCustomer->customer_type) {
 				case 'personal':
 					return [
-						Column::make('id')->title('รหัสตัวอย่าง'),
+						Column::make('id')->title('รหัส'),
 						Column::make('firstname')->title('ชื่อ'),
 						Column::make('lastname')->title('นามสกุล'),
 						Column::make('age_year')->title('อายุ'),
 						Column::make('sample_date')->title('วันที่เก็บ ตย.'),
 						Column::make('parameter')->title('พารามิเตอร์'),
+						Column::make('total_price')->title('ราคา'),
 						Column::make('note')->title('หมายเหตุ'),
 						Column::computed('action')->addClass('text-center')->title('#')
 					];

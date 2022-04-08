@@ -21,17 +21,19 @@ class CustVerifyDataTable extends DataTable
 				case 'personal':
 					return datatables()
 					->eloquent($query)
-					->editColumn('id', '{{ $id }}')
-					->addColumn('fullname', function(OrderDetail $orderDetail) {
-						return "<div style=\"width: 200px\">".$orderDetail->firstname." ".$orderDetail->lastname."</div>";
+					->editColumn('firstname', function(OrderDetail $orderDetail) {
+						return "<div style=\"width: 160px\">".$orderDetail->firstname."</div>";
 					})
-					->editColumn('sample_date', function(OrderDetail $orderDetail) {
-						return "<div style=\"width: 120px\">".Carbon::parse($orderDetail->sample_date)->format('d/m/Y')."</div>";
+					->editColumn('lastname', function(OrderDetail $orderDetail) {
+						return "<div style=\"width: 180px\">".$orderDetail->lastname."</div>";
 					})
+                    ->editColumn('sample_date', function(Orderdetail $orderDetail) {
+                        return Carbon::parse($orderDetail->sample_date)->format('d/m/Y');
+                    })
 					->addColumn('parameter', function (OrderDetail $orderDetail) {
 						return $orderDetail->parameters->map(function($paramet) {
 							return "
-								<div>
+                            <div style=\"width: 500px\">
 									<span class=\"badge badge-warning\">".$paramet->parameter_name."</span>
 									<span class=\"badge badge-danger\">".$paramet->sample_charecter_name."</span>
 									<span class=\"badge badge-success\">".$paramet->unit_customer_name."</span>
@@ -41,7 +43,9 @@ class CustVerifyDataTable extends DataTable
 								</div>";
 						})->implode('<br>');
 					})
-					->editColumn('origin_threat_name', '{{ $origin_threat_name }}')
+                    ->editColumn('origin_threat_name', function(OrderDetail $orderDetail) {
+                        return "<div style=\"width: 310px\">".$orderDetail->origin_threat_name."</div>";
+                    })
 					->editColumn('sample_location_place_name', '{{ $sample_location_place_name }}')
 					->editColumn('sample_location_place_sub_district_name', '{{ $sample_location_place_sub_district_name }}')
 					// ->addColumn('sample_office_district_name', function($orderDetail) {
@@ -53,21 +57,7 @@ class CustVerifyDataTable extends DataTable
 					// ->addColumn('sample_office_postal', function($orderDetail) {
 					// 	return "<div style=\"width: 100px\">".$orderDetail->sample_office_postal."</div>";
 					// })
-					->rawColumns([
-						'id',
-						'fullname',
-						'sample_date',
-						'parameter',
-						'origin_threat',
-						'origin_threat_name',
-						'sample_location_place_name',
-						'sample_location_place_sub_district_name',
-						// 'sample_office_addr',
-						// 'sample_office_sub_district_name',
-						// 'sample_office_district_name',
-						// 'sample_office_province_name',
-						// 'sample_office_postal',
-					]);
+					->rawColumns(['firstname', 'lastname', 'parameter', 'origin_threat_name']);
 					break;
 				case 'private':
 				case 'government':
@@ -203,7 +193,8 @@ class CustVerifyDataTable extends DataTable
 				case 'personal':
 					return [
 						Column::make('id')->title('รหัส')->className('bg-red-200'),
-						Column::make('fullname')->title('ชื่อ-สกุล'),
+						Column::make('firstname')->title('ชื่อ'),
+						Column::make('lastname')->title('สกุล'),
 						Column::make('age_year')->title('อายุ'),
 						Column::make('sample_date')->title('วันที่เก็บ ตย.'),
 						Column::make('parameter')->title('พารามิเตอร์'),

@@ -17,23 +17,39 @@ class CustSampleDataTable extends DataTable
 				case 'personal':
 					return datatables()
 						->eloquent($query)
-						->editColumn('sample_date', function($field) {
-							return Carbon::parse($field->sample_date)->format('d/m/Y');
+						->editColumn('firstname', function(OrderDetail $orderDetail) {
+							return "<div style=\"width: 160px\">".$orderDetail->firstname."</div>";
 						})
-						->editColumn('parameter', function (OrderDetail $detail) {
-							return $detail->parameters->map(function($parameter) {
+						->editColumn('lastname', function(OrderDetail $orderDetail) {
+							return "<div style=\"width: 180px\">".$orderDetail->lastname."</div>";
+						})
+						->editColumn('sample_date', function(Orderdetail $orderDetail) {
+							return Carbon::parse($orderDetail->sample_date)->format('d/m/Y');
+						})
+						->addColumn('parameter', function (OrderDetail $orderDetail) {
+							return $orderDetail->parameters->map(function($parameter) {
 								return "
-								<div>
+								<div style=\"width: 500px\">
 									<span class=\"badge badge-warning\">".$parameter->parameter_name."</span>
-									<span class=\"badge badge-danger\">".$parameter->sample_charecter_name."</span>
-									<span class=\"badge badge-info\">".$parameter->unit_customer_name."</span>
+									<span class=\"badge badge-info\">".$parameter->sample_charecter_name."</span>
+									<span class=\"badge badge-success\">".$parameter->unit_customer_name."</span>
 									<a href=\"".route('customer.parameter.data.destroy', ['id'=>$parameter->id])."\" data-toggle=\"tooltip\" data-placement=\"auto\" title=\"ลบ ".$parameter->parameter_name."\">
 										<i class=\"fal fa-times-circle\"></i>
 									</a>
 								</div>";
 							})->implode('<br>');
 						})
-						->rawColumns(['parameter']);
+						->addColumn('total_price', function (OrderDetail $orderDetail) {
+							$sum_price = 0;
+							$calc = $orderDetail->parameters->map(function($parameter) use (&$sum_price) {
+								$sum_price += (int)$parameter->price_name;
+							});
+							return number_format($sum_price);
+						})
+						->editColumn('origin_threat_name', function(OrderDetail $orderDetail) {
+							return "<div style=\"width: 310px\">".$orderDetail->origin_threat_name."</div>";
+						})
+						->rawColumns(['firstname', 'lastname', 'parameter', 'origin_threat_name']);
 					break;
 				case 'private':
 				case 'government':
@@ -95,6 +111,7 @@ class CustSampleDataTable extends DataTable
 						Column::make('age_year')->title('อายุ'),
 						Column::make('sample_date')->title('วันที่เก็บตัวอย่าง'),
 						Column::make('parameter')->title('พารามิเตอร์'),
+						Column::make('total_price')->title('ราคา'),
 						Column::make('origin_threat_name')->title('ประเด็นมลพิษ'),
 						Column::make('sample_location_place_name')->title('สถานที่เก็บ ตย.'),
 						Column::make('sample_location_place_address')->title('ที่อยู่'),
