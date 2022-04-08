@@ -45,7 +45,7 @@
 	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
 		<div id="panel-customer" class="panel">
 			<div class="panel-hdr">
-				<h2 class="text-gray-600"><i class="fal fa-list"></i>&nbsp;รายการข้อมูลชีวภาพ</h2>
+				<h2 class="text-gray-600"><i class="fal fa-list"></i>&nbsp;อัพโหลดไฟล์</h2>
 				<div class="panel-toolbar">
 					<button class="btn btn-panel bg-transparent fs-xl w-auto h-auto rounded-0" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="Collapse"><i class="fal fa-window-minimize"></i></button>
 					<button class="btn btn-panel bg-transparent fs-xl w-auto h-auto rounded-0" data-action="panel-fullscreen" data-toggle="tooltip" data-offset="0,10" data-original-title="Fullscreen"><i class="fal fa-expand"></i></button>
@@ -65,10 +65,18 @@
                         <button type="submit" class="btn btn-primary upload">อัพโหลดไฟล์</button>
                     </form>
                 </div>
-                <hr>
+			</div>
+		</div>
+	</div>
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+        <div id="panel-customer" class="panel">
+            <div class="panel-hdr">
+				<h2 class="text-gray-600"><i class="fal fa-list"></i>&nbsp;รายการข้อมูลชีวภาพ</h2>
+            </div>
+            <div class="panel-container show">
                 <div class="panel-content">
                     <div class="form-row">
-                        ตารางรายการตกค้าง
+                        <button class="btn btn-primary chkall">เลือกทั้งหมด</button>
                         <div class="col-md-12 mb-6">
                             <form action="" method="POST">
                                 {{ $dataTable->table() }}
@@ -77,9 +85,9 @@
                         </div>
                     </div>
 				</div>
-			</div>
-		</div>
-	</div>
+            </div>
+        </div>
+    </div>
 </div>
 @endsection
 @section('script')
@@ -122,10 +130,10 @@
             $.each($("input[name='biobox']:checked"),function(){
                 chkbio.push($(this).val());
             });
-            let biourl = '{{ route("sampleupload.biocreate", ":id") }}';
-            biourl = biourl.replace(':id',chkbio);
-            alert(biourl);
-            window.open(biourl,'_self');
+            // let biourl = '{{ route("sampleupload.biocreate", ":id") }}';
+            // biourl = biourl.replace(':id',chkbio);
+            // alert(biourl);
+            // window.open(biourl,'_self');
         });
 	});
 </script>

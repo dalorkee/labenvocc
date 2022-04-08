@@ -17,8 +17,8 @@ class UploadBioDataTable extends DataTable
             ->addColumn('id', function ($dataupload){
                 return '<input type="checkbox" name="biobox" id="biochk" value="'.$dataupload->id.'"/>';
             })
-            ->addColumn('action', '<button type="button" class="bioupload-manage-nav btn btn-sm btn-info" data-id="{{$id}}">จัดการ<i class="fal fa-angle-down"></i> </button>')
-            ->rawColumns(['id','action']);
+            ->addColumn('checkall', '<button type="button" class="bioupload-manage-nav btn btn-sm btn-info" data-id="{{$id}}">จัดการ<i class="fal fa-angle-down"></i> </button>')
+            ->rawColumns(['id','checkall']);
 	}
 
 	public function query(SampleUpload $sample_upload) {
@@ -34,6 +34,7 @@ class UploadBioDataTable extends DataTable
                     ->dom('rtip')
                     ->parameters([
                         'language'=>['url'=>url('/vendor/DataTables/i18n/thai.json')],
+                        'lengthMenu'=>[[-1], ["All"]]
                     ]);
 	}
 
@@ -45,7 +46,7 @@ class UploadBioDataTable extends DataTable
 			Column::make('age_year')->title('อายุปี'),
 			Column::make('division')->title('แผนก'),
 			Column::make('work_life_year')->title('อายุงาน'),
-			Column::make('action')->title('manage'),
+			Column::make('checkall')->title('all'),
 		];
 	}
 
