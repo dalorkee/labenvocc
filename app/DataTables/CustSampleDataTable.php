@@ -8,31 +8,53 @@ use Yajra\DataTables\Services\DataTable;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 use App\Models\{OrderDetail,User,UserCustomer};
-//use App\Traits\CommonTrait;
 
 class CustSampleDataTable extends DataTable
 {
-	//use CommonTrait;
-
 	public function dataTable($query) {
 		try {
-			//$lab_station = $this->latStation();
-			return datatables()
-				->eloquent($query)
-				->editColumn('sample_date', function($field) {
-					return Carbon::parse($field->sample_date)->format('d/m/Y');
-				})
-				->addColumn('parameter', function (OrderDetail $detail) {
-					return $detail->parameters->map(function($parameter) {
-						return "
-							<span class=\"badge badge-success\">".$parameter->parameter_name."</span>
-							<span class=\"badge badge-danger\">".$parameter->sample_charecter_name."</span>
-							<span class=\"badge badge-info\">".$parameter->unit_customer_name."</span>
-							<a href=\"".route('customer.parameter.data.destroy', ['id'=>$parameter->id])."\" data-toggle=\"tooltip\" data-placement=\"auto\" title=\"ลบ ".$parameter->parameter_name."\"><i class=\"fal fa-times-circle\"></i></a>";
-					})->implode('<br>');
-				})
-				->addColumn('action', '<button class="context-nav bg-purple-400 hover:bg-purple-500 text-white py-1 px-3 rounded" id="context-menu" data-id="{{$id}}">จัดการ <i class="fal fa-angle-down"></i></button>')
-				->rawColumns(['parameter', 'action']);
+			switch (auth()->user()->userCustomer->customer_type) {
+				case 'personal':
+					return datatables()
+						->eloquent($query)
+						->editColumn('firstname', function(OrderDetail $orderDetail) {
+							return "<div style=\"width: 160px\">".$orderDetail->firstname."</div>";
+						})
+						->editColumn('lastname', function(OrderDetail $orderDetail) {
+							return "<div style=\"width: 180px\">".$orderDetail->lastname."</div>";
+						})
+						->editColumn('sample_date', function(Orderdetail $orderDetail) {
+							return Carbon::parse($orderDetail->sample_date)->format('d/m/Y');
+						})
+						->addColumn('parameter', function (OrderDetail $orderDetail) {
+							return $orderDetail->parameters->map(function($parameter) {
+								return "
+								<div style=\"width: 500px\">
+									<span class=\"badge badge-warning\">".$parameter->parameter_name."</span>
+									<span class=\"badge badge-info\">".$parameter->sample_charecter_name."</span>
+									<span class=\"badge badge-success\">".$parameter->unit_customer_name."</span>
+									<a href=\"".route('customer.parameter.data.destroy', ['id'=>$parameter->id])."\" data-toggle=\"tooltip\" data-placement=\"auto\" title=\"ลบ ".$parameter->parameter_name."\">
+										<i class=\"fal fa-times-circle\"></i>
+									</a>
+								</div>";
+							})->implode('<br>');
+						})
+						->addColumn('total_price', function (OrderDetail $orderDetail) {
+							$sum_price = 0;
+							$calc = $orderDetail->parameters->map(function($parameter) use (&$sum_price) {
+								$sum_price += (int)$parameter->price_name;
+							});
+							return number_format($sum_price);
+						})
+						->editColumn('origin_threat_name', function(OrderDetail $orderDetail) {
+							return "<div style=\"width: 310px\">".$orderDetail->origin_threat_name."</div>";
+						})
+						->rawColumns(['firstname', 'lastname', 'parameter', 'origin_threat_name']);
+					break;
+				case 'private':
+				case 'government':
+					break;
+				}
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
 		}
@@ -80,16 +102,28 @@ class CustSampleDataTable extends DataTable
 
 	protected function getColumns() {
 		try {
-			return [
-				Column::make('id')->title('รหัส'),
-				Column::make('firstname')->title('ชื่อ'),
-				Column::make('lastname')->title('นามสกุล'),
-				Column::make('sample_date')->title('วันที่เก็บตัวอย่าง'),
-				Column::make('parameter')->title('พารามิเตอร์'),
-				Column::make('origin_threat_name')->title('ประเด็นมลพิษ'),
-				Column::make('note')->title('หมายเหตุ'),
-				//Column::computed('action')->addClass('text-center')->title('#')
-			];
+			switch (auth()->user()->userCustomer->customer_type) {
+				case 'personal':
+					return [
+						Column::make('id')->title('รหัส'),
+						Column::make('firstname')->title('ชื่อ'),
+						Column::make('lastname')->title('นามสกุล'),
+						Column::make('age_year')->title('อายุ'),
+						Column::make('sample_date')->title('วันที่เก็บตัวอย่าง'),
+						Column::make('parameter')->title('พารามิเตอร์'),
+						Column::make('total_price')->title('ราคา'),
+						Column::make('origin_threat_name')->title('ประเด็นมลพิษ'),
+						Column::make('sample_location_place_name')->title('สถานที่เก็บ ตย.'),
+						Column::make('sample_location_place_address')->title('ที่อยู่'),
+						Column::make('sample_location_place_sub_district_name')->title('ตำบล'),
+						Column::make('sample_location_place_district_name')->title('อำเภอ'),
+						Column::make('sample_location_place_province_name')->title('จังหวัด'),
+						Column::make('note')->title('หมายเหตุ'),
+					];
+				case 'private':
+				case 'government':
+					break;
+				}
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
 		}

@@ -82,7 +82,7 @@
 				<div class="modal-body">
 					<div class="form-row">
 						<div class="form-group col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6 mb-3">
-							<label class="form-label text-gray-800" for="sample_select_begin">ตัวอย่างที่</label>
+							<label class="form-label text-gray-800" for="sample_select_begin">ตัวอย่างที่ <span class="text-danger">*</span></label>
 							<select name="sample_select_begin" class="form-control js-hide-search">
 								<option value="">-- โปรดเลือก --</option>
 								@forelse ($data['sample_list'] as $key => $val)
@@ -93,7 +93,7 @@
 							</select>
 						</div>
 						<div class="form-group col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6 mb-3">
-							<label class="form-label text-gray-800" for="sample_select_end">ถึง</label>
+							<label class="form-label text-gray-800" for="sample_select_end">ถึง <span class="text-danger">*</span></label>
 							<select name="sample_select_end" class="form-control js-hide-search">
 								<option value="">-- โปรดเลือก --</option>
 								@forelse ($data['sample_list'] as $key => $val)
@@ -106,7 +106,7 @@
 					</div>
 					<div class="form-row">
 						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
-							<label class="form-label text-gray-800" for="origin_threat">ประเด็นมลพิษ</label>
+							<label class="form-label text-gray-800" for="origin_threat">ประเด็นมลพิษ <span class="text-danger">*</span></label>
 							<select name="origin_threat" class="form-control js-hide-search">
 								<option value="">-- โปรดเลือก --</option>
 								@forelse ($data['origin_threat'] as $key => $val)
@@ -121,7 +121,7 @@
 						@case('personal')
 						<div class="form-row">
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
-								<label for="sample_location_place_name" class="block text-base font-medium text-gray-700">ชื่อสถานที่เก็บตัวอย่าง</label>
+								<label for="sample_location_place_name" class="block text-base font-medium text-gray-700">ชื่อสถานที่เก็บตัวอย่าง <span class="text-danger">*</span></label>
 								<input type="text" name="sample_location_place_name" id="sample_location_place_name" class="form-control">
 							</div>
 						</div>
@@ -131,7 +131,7 @@
 								<input type="text" name="sample_location_place_address" id="sample_location_place_address" class="form-control">
 							</div>
 							<div class="form-group col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6 mb-3">
-								<label for="sample_location_place_province" class="block text-base font-medium text-gray-800">จังหวัด</label>
+								<label for="sample_location_place_province" class="block text-base font-medium text-gray-800">จังหวัด <span class="text-danger">*</span></label>
 								<select name="sample_location_place_province" id="sample_location_place_province" class="form-control select2 chk-b">
 									<option value="">-- โปรดเลือก --</option>
 									@foreach ($data['provinces'] as $key => $val)
@@ -140,13 +140,13 @@
 								</select>
 							</div>
 							<div class="form-group col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6 mb-3">
-								<label for="sample_location_place_district" class="block text-base font-medium text-gray-800">อำเภอ</label>
+								<label for="sample_location_place_district" class="block text-base font-medium text-gray-800">อำเภอ <span class="text-danger">*</span></label>
 								<select name="sample_location_place_district" id="sample_location_place_district" class="form-control">
 									<option value="">-- โปรดเลือก --</option>
 								</select>
 							</div>
 							<div class="form-group col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6 mb-3">
-								<label for="sample_location_place_sub_district" class="block text-base font-medium text-gray-800">ตำบล</label>
+								<label for="sample_location_place_sub_district" class="block text-base font-medium text-gray-800">ตำบล <span class="text-danger">*</span></label>
 								<select name="sample_location_place_sub_district" id="sample_location_place_sub_district" class="form-control">
 									<option value="">-- โปรดเลือก --</option>
 								</select>
@@ -239,8 +239,6 @@ $(document).ready(function() {
 	$('input[name="sample_location_define"]').on('change', function() {
 		$('input[name="' + this.name + '"]').not(this).prop('checked', false);
 	});
-
-
 	$('#chk_a').on('change', function() {
 		if ($(this).prop("checked") == true) {
 			$('#sample_location_place_name').prop('disabled', true);
@@ -340,8 +338,8 @@ $(document).ready(function() {
 		if ($(this).val() != '') {
 			let sub_dist_txt = $(this).val().split('|');
 			$.ajax({
-				method: "POST",
-				url: "{{ route('register.postcode') }}",
+				method: "GET",
+				url: "{{ route('boundary.fetch.postcode') }}",
 				dataType: "HTML",
 				data: {id: sub_dist_txt[0]},
 				success: function(response) {
