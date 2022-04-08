@@ -104,6 +104,20 @@ div.dataTables_wrapper span.select-item {margin-left: 0.5em;}
 					</div>
 					<div class="form-row">
 						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
+							<label class="form-label" for="firstname">ชื่อ <span class="text-red-600">*</span></label>
+							<input type="text" name="firstname" value="{{ old('firstname') }}" class="form-control @error('firstname') is-invalid @enderror">
+							@error('firstname')
+								<div class="invalid-feedback" role="alert">{{ $message }}</div>
+							@enderror
+						</div>
+						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
+							<label class="form-label" for="lastname">นามสกุล <span class="text-red-600">*</span></label>
+							<input type="text" name="lastname" value="{{ old('lastname') }}" class="form-control @error('lastname') is-invalid @enderror">
+							@error('lastname')
+								<div class="invalid-feedback" role="alert">{{ $message }}</div>
+							@enderror
+						</div>
+						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
 							<label class="form-label" for="id_card">เลขบัตรประชาชน <span class="text-red-600">*</span></label>
 							<input type="hidden" name="order_id" value="{{ $order_id }}" id="order_id">
 							<input type="text" name="id_card" value="{{ old('id_card') }}" placeholder="" data-inputmask="'mask': '9-9999-99999-99-9'" maxlength="18" class="form-control @error('id_card') is-invalid @enderror">
@@ -115,20 +129,6 @@ div.dataTables_wrapper span.select-item {margin-left: 0.5em;}
 							<label class="form-label" for="passport">พาสปอร์ต</label>
 							<input type="text" name="passport" value="{{ old('passport') }}" class="form-control @error('passport') is-invalid @enderror">
 							@error('passport')
-								<div class="invalid-feedback" role="alert">{{ $message }}</div>
-							@enderror
-						</div>
-						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
-							<label class="form-label" for="firstname">ชื่อ <span class="text-red-600">*</span></label>
-							<input type="text" name="firstname" value="{{ old('firstname') }}" class="form-control @error('firstname') is-invalid @enderror">
-							@error('firstname')
-								<div class="invalid-feedback" role="alert">{{ $message }}</div>
-							@enderror
-						</div>
-						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
-							<label class="form-label" for="lastname">นามสกุล <span class="text-red-600">*</span></label>
-							<input type="text" name="lastname" value="{{ old('lastname') }}" class="form-control @error('lastname') is-invalid @enderror">
-							@error('lastname')
 								<div class="invalid-feedback" role="alert">{{ $message }}</div>
 							@enderror
 						</div>

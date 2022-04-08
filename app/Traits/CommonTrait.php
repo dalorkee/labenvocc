@@ -99,6 +99,13 @@ trait CommonTrait {
 		});
 		return $result;
 	}
+	public function explodeStrToArr(string $str, string $separate='|') {
+		if ($str != "") {
+			$result = explode($separate, $str);
+		}
+		return $result;
+	}
+
 
 }
 ?>

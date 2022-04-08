@@ -88,8 +88,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 		return view('dashboard');
 	})->name('dashboard');
 	Route::name('boundary.')->group(function() {
-		Route::get('province/province/district', [BoundaryController::class, 'renderDistrictToHtmlSelect'])->name('fetch.district');
-		Route::get('province/district/sub/district', [BoundaryController::class, 'renderSubDistrictToHtmlSelect'])->name('fetch.sub.district');
+		Route::get('province/district', [BoundaryController::class, 'districtToHtmlSelect'])->name('fetch.district');
+		Route::get('province/district/sub/district', [BoundaryController::class, 'subDistrictToHtmlSelect'])->name('fetch.sub.district');
+		Route::get('province/district/sub/district/postcode', [BoundaryController::class, 'postCodeBySubDistrict'])->name('fetch.postcode');
 	});
 	Route::name('customer.')->group(function() {
 		Route::prefix('customer/info')->group(function() {

@@ -17,7 +17,6 @@ class CustVerifyDataTable extends DataTable
 	public function dataTable($query) {
 		try {
 			$sample_office_category = $this->sampleOfficeCategory();
-			//$origin_threat_arr = $this->getOriginThreat();
 			switch (auth()->user()->userCustomer->customer_type) {
 				case 'personal':
 					return datatables()
@@ -210,12 +209,11 @@ class CustVerifyDataTable extends DataTable
 						Column::make('parameter')->title('พารามิเตอร์'),
 						Column::make('origin_threat_name')->title('ประเด็นมลพิษ'),
 						Column::make('sample_location_place_name')->title('สถานที่เก็บ ตย.'),
-						// Column::make('sample_office_addr')->title('ที่อยู่'),
+						Column::make('sample_location_place_address')->title('ที่อยู่'),
 						Column::make('sample_location_place_sub_district_name')->title('ตำบล'),
-						// Column::make('sample_office_district_name')->title('อำเภอ'),
-						// Column::make('sample_office_province_name')->title('จังหวัด'),
-						// Column::make('sample_office_postal')->title('รหัสไปรษณีย์'),
-						// Column::make('note')->title('หมายเหตุ'),
+						Column::make('sample_location_place_district_name')->title('อำเภอ'),
+						Column::make('sample_location_place_province_name')->title('จังหวัด'),
+						Column::make('note')->title('หมายเหตุ'),
 					];
 					break;
 				case 'private':

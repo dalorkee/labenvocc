@@ -5,7 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\{Auth,Log,Storage,File};
 use App\Models\{Order,OrderDetail,Fileupload,OrderDetailParameter,Parameter,User,UserCustomer};
 use App\DataTables\{CustomersDataTable,CustParameterDataTable,CustSampleDataTable,CustVerifyDataTable};
-use App\Traits\{CustomerTrait,FileTrait,CommonTrait,JsonBoundaryTrait};
+use App\Traits\{FileTrait,CommonTrait,JsonBoundaryTrait};
 use Yajra\DataTables\Facades\DataTables;
 
 class CustomerController extends Controller
@@ -13,7 +13,7 @@ class CustomerController extends Controller
 	private object $user;
 	private string $user_role;
 
-	use CustomerTrait, FileTrait, CommonTrait, JsonBoundaryTrait;
+	use FileTrait, CommonTrait, JsonBoundaryTrait;
 
 	public function __construct() {
 		$this->middleware('auth');
@@ -49,7 +49,7 @@ class CustomerController extends Controller
 	}
 
 	#[Route('customer.info.store', methods: ['POST'])]
-	protected function storeInfo(Request $request) {
+	protected function storeInfo(Request $request): object {
 		try {
 			$order = Order::updateOrCreate(
 				['id' => $request->order_id],
@@ -443,32 +443,45 @@ class CustomerController extends Controller
 			'sample_select_begin' => 'bail|required',
 			'sample_select_end' => 'required',
 			'origin_threat' => 'required',
+			'sample_location_place_name' => 'required',
+			'sample_location_place_province' => 'required',
+			'sample_location_place_district' => 'required',
+			'sample_location_place_sub_district' => 'required'
 		],[
 			'sample_select_begin' => 'โปรดเลือกตัวอย่างเริ่มต้น',
 			'sample_select_end' => 'โปรดเลือกตัวอย่างสิ้นสุด',
 			'origin_threat.required'=>'โปรดเลือกประเด็นมลพิษ',
+			'sample_location_place_name.required' => 'โปรดกรอกสถานที่เก็บตัวอย่าง',
+			'sample_location_place_province.required' => 'โปรดเลือกจังหวัด',
+			'sample_location_place_district.required' => 'โปรดเลือกอำเภอ',
+			'sample_location_place_sub_district.required' => 'โปรดเลือกตำบล'
 		]);
 		try {
 			if ($request->sample_select_begin > $request->sample_select_end) {
-				return redirect()->back()->with('warning', 'เลือกข้อมูลตัวอย่างไม่ถูกต้อง โปรดตรวจสอบ');
+				return redirect()->back()->with('warning', 'ลำดับข้อมูลตัวอย่างไม่ถูกต้อง โปรดตรวจสอบ');
 			} else {
 				$saved = false;
 				$origin_threat_arr = $this->getOriginThreat();
 				switch ($this->user->userCustomer->customer_type) {
 					case 'personal':
-                        dd($request->sample_location_place_province);
 						$userDetail = User::find($request->user_id)->userCustomer;
 						for ($i=$request->sample_select_begin; $i<=$request->sample_select_end; $i++) {
 							$orderDetail = OrderDetail::find($i);
 							if (!is_null($orderDetail)) {
+								$prov_arr = $this->explodeStrToArr($request->sample_location_place_province);
+								$dist_arr = $this->explodeStrToArr($request->sample_location_place_district);
+								$sub_dist_arr = $this->explodeStrToArr($request->sample_location_place_sub_district);
 								$orderDetail->origin_threat_id = $request->origin_threat;
 								$orderDetail->origin_threat_name = $origin_threat_arr[$request->origin_threat];
 								$orderDetail->sample_location_define = 2;
 								$orderDetail->sample_location_place_name = $request->sample_location_place_name;
 								$orderDetail->sample_location_place_address = $request->sample_location_place_address;
-								$orderDetail->sample_location_place_sub_district = $request->sample_location_place_sub_district;
-								$orderDetail->sample_location_place_district = $request->sample_location_place_district;
-								$orderDetail->sample_location_place_province = $request->sample_location_place_province;
+								$orderDetail->sample_location_place_sub_district = $sub_dist_arr[0];
+								$orderDetail->sample_location_place_sub_district_name = $sub_dist_arr[1];
+								$orderDetail->sample_location_place_district = $dist_arr[0];
+								$orderDetail->sample_location_place_district_name = $dist_arr[1];
+								$orderDetail->sample_location_place_province = $prov_arr[0];
+								$orderDetail->sample_location_place_province_name = $prov_arr[1];
 								$orderDetail->sample_location_place_postal = $request->sample_location_place_postal;
 								$orderDetail->sample_status = 'y';
 								$saved = $orderDetail->save();
