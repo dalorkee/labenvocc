@@ -30,7 +30,8 @@ table.dataTable thead th {background-color: #056676;color: white}
 				</div>
 			</div>
 			<div class="panel-container relative">
-				<form name="custVerify" action="{{ route('customer.verify.store', ['order_id' => $data['order_id']]) }}" method="GET">
+				<form name="custVerify" action="{{ route('customer.verify.store', ['order_id' => $data['order_id']]) }}" method="POST">
+				{{-- <form action="#" method="GET"> --}}
 					@csrf
 					<div class="panel-content">
 						<ul class="steps mb-3">
@@ -151,8 +152,28 @@ table.dataTable thead th {background-color: #056676;color: white}
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-4">
 								<div class="frame-wrap">
 									<div class="custom-control custom-checkbox custom-control-inline">
-										<input type="checkbox" name="confirm_chk" value="1" class="custom-control-input" id="confirm_chk">
+										<input type="checkbox" name="confirm_chk" value="1" class="custom-control-input @error('confirm_chk') is-invalid @enderror" id="confirm_chk" {{ ((isset($data['order'][0]->confirm_chk) == '1') || old('confirm_chk') == '1') ? "checked" : "" }}>
 										<label class="custom-control-label" for="confirm_chk">ฉันได้ตรวจสอบความถูกต้องของข้อมูลแล้ว</label>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- Modal Confirmation -->
+						<div class="modal fade" id="default-example-modal-center" tabindex="-1" role="dialog" aria-hidden="true">
+							<div class="modal-dialog modal-dialog-centered" role="document">
+								<div class="modal-content">
+									<div class="modal-header border-bottom">
+										<h4 class="modal-title">ยืนยัน</h4>
+										<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+											<span aria-hidden="true"><i class="fal fa-times"></i></span>
+										</button>
+									</div>
+									<div class="modal-body">
+										<span class="text-danger mt-2 mb-2">โปรดตรวจสอบ เมื่อส่งคำขอแล้ว จะไม่สามารถแก้ไขข้อมูลได้อีก !!</span>
+									</div>
+									<div class="modal-footer">
+										<button type="button" class="btn btn-secondary" data-dismiss="modal">ยกเลิก</button>
+										<button type="submit" class="btn btn-success">ส่งคำขอ</button>
 									</div>
 								</div>
 							</div>
@@ -162,7 +183,9 @@ table.dataTable thead th {background-color: #056676;color: white}
 								<a href="{{ route('customer.sample.create', ['order_id' => $data['order_id']]) }}" class="btn btn-warning ml-auto"><i class="fal fa-arrow-alt-left"></i> ก่อนหน้า</a>
 							</div>
 							<div style="width:100px;height:40px;">
-								<button type="submit" class="btn btn-danger ml-auto">ส่งคำขอ <i class="fal fa-arrow-alt-right"></i></button>
+								{{-- <a href="javascript:void(0);" class="btn btn-outline-primary" id="js-sweetalert2-example-7">Try me!</a> --}}
+								{{-- <button type="submit" class="btn btn-danger ml-auto">ส่งคำขอ <i class="fal fa-arrow-alt-right"></i></button> --}}
+								<button type="button" class="btn btn-success" data-toggle="modal" data-target="#default-example-modal-center" data-backdrop="static" data-keyboard="false">ส่งคำขอ</button>
 							</div>
 						</div>
 					</div>
@@ -180,6 +203,25 @@ table.dataTable thead th {background-color: #056676;color: white}
 <script>
 $(document).ready(function() {
 	$.ajaxSetup({headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}});
+
+
+	$("#js-sweetalert2-example-7").on("click", function()
+				{
+					Swal.fire(
+					{
+						title: "Are you sure?",
+						text: "You won't be able to revert this!",
+						type: "warning",
+						showCancelButton: true,
+						confirmButtonText: "Yes, delete it!"
+					}).then(function(result)
+					{
+						if (result.value)
+						{
+							Swal.fire("Deleted!", "Your file has been deleted.", "success");
+						}
+					});
+				}); // ... and by passing a parameter, you can execute something else for "Cancel".
 });
 </script>
 @endsection

@@ -2,12 +2,12 @@
 
 namespace App\DataTables;
 
-use App\Models\{Order,FileUpload,OrderDetail};
 use Yajra\DataTables\Html\{Button,Column};
 use Yajra\DataTables\Html\Editor\{Editor,Fields};
 use Yajra\DataTables\Services\DataTable;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
+use App\Models\{Order,FileUpload};
 use App\Traits\CommonTrait;
 
 class CustomersDataTable extends DataTable
@@ -24,11 +24,11 @@ class CustomersDataTable extends DataTable
 			$lab_station = $this->latStation();
 			return datatables()
 				->eloquent($query)
-				->editColumn('created_at', function($field) {
-					return Carbon::parse($field->created_at)->format('d/m/Y');
+				->editColumn('created_at', function($order) {
+					return Carbon::parse($order->created_at)->format('d/m/Y');
 				})
-				->editColumn('lab_station_id', function($field) use ($lab_station) {
-					return $lab_station[$field->lab_station_id] ?? null;
+				->editColumn('lab_station_id', function($order) use ($lab_station) {
+					return $lab_station[$order->lab_station_id] ?? null;
 				})
 				->addColumn('status', function() {
 					$htm = "<form>";
@@ -47,13 +47,13 @@ class CustomersDataTable extends DataTable
 					$htm .= "</form>";
 					return $htm;
 				})
-				->editColumn('detail', function($field) {
-					$htm = "<ul><li><a href=\"".$field->id."\"><i class=\"fal fa-print\"></i> ใบปะนำส่ง</a></li>";
-					$htm .= "<li><a href=\"".$field->id."\"><i class=\"fal fa-print\"></i> รายงานผล</a></li></ul>";
+				->editColumn('detail', function($order) {
+					$htm = "<ul><li><a href=\"".$order->id."\"><i class=\"fal fa-print\"></i> ใบปะนำส่ง</a></li>";
+					$htm .= "<li><a href=\"".$order->id."\"><i class=\"fal fa-print\"></i> รายงานผล</a></li></ul>";
 					return $htm;
 				})
-				->addColumn('action', function($field) {
-					return "<a href=\"".route('customer.info.create', ['order_id' => $field->id])."\" title=\"แก้ไข\" class=\"btn btn-warning\"><i class=\"fal fa-pencil\"></i></a>";
+				->addColumn('action', function($order) {
+					return "<a href=\"".route('customer.info.create', ['order_id' => $order->id])."\" title=\"แก้ไข\" class=\"btn btn-warning\"><i class=\"fal fa-pencil\"></i></a>";
 				 })
 				->rawColumns(['status', 'detail', 'action']);
 		} catch (\Exception $e) {

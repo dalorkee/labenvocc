@@ -4,11 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\{Model,SoftDeletes};
 
-class OrderDetail extends Model
+class OrderSample extends Model
 {
 	use SoftDeletes;
 
-	protected $table = 'order_detail';
+	protected $table = 'order_sample';
 	protected $primaryKey = 'id';
 
 	public function order() {
@@ -16,13 +16,13 @@ class OrderDetail extends Model
 	}
 
 	public function parameters() {
-		return $this->hasMany(OrderDetailParameter::class, 'order_detail_id');
+		return $this->hasMany(OrderSampleParameter::class, 'order_sample_id');
 	}
 
 	public static function boot() {
 		parent::boot();
-		self::deleting(function($orderDetail) {
-			$orderDetail->parameters()->each(function($parameter) {
+		self::deleting(function($orderSample) {
+			$orderSample->parameters()->each(function($parameter) {
 				$parameter->delete();
 			});
 		});

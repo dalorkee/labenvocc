@@ -7,7 +7,7 @@ use Yajra\DataTables\Html\{Button,Column};
 use Yajra\DataTables\Services\DataTable;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
-use App\Models\OrderDetail;
+use App\Models\OrderSample;
 use App\Traits\CommonTrait;
 
 class CustParameterDataTable extends DataTable
@@ -20,17 +20,17 @@ class CustParameterDataTable extends DataTable
 				case 'personal':
 					return datatables()
 						->eloquent($query)
-						->editColumn('firstname', function(OrderDetail $orderDetail) {
-							return "<div style=\"width: 160px\">".$orderDetail->firstname."</div>";
+						->editColumn('firstname', function($orderSample) {
+							return "<div style=\"width: 160px\">".$orderSample->firstname."</div>";
 						})
-						->editColumn('lastname', function(OrderDetail $orderDetail) {
-							return "<div style=\"width: 180px\">".$orderDetail->lastname."</div>";
+						->editColumn('lastname', function($orderSample) {
+							return "<div style=\"width: 180px\">".$orderSample->lastname."</div>";
 						})
-						->editColumn('sample_date', function(Orderdetail $orderDetail) {
-							return Carbon::parse($orderDetail->sample_date)->format('d/m/Y');
+						->editColumn('sample_date', function($orderSample) {
+							return Carbon::parse($orderSample->sample_date)->format('d/m/Y');
 						})
-						->addColumn('parameter', function (OrderDetail $orderDetail) {
-							return $orderDetail->parameters->map(function($parameter) {
+						->addColumn('parameter', function ($orderSample) {
+							return $orderSample->parameters->map(function($parameter) {
 								return "
 								<div style=\"width: 500px\">
 									<span class=\"badge badge-warning\">".$parameter->parameter_name."</span>
@@ -42,9 +42,9 @@ class CustParameterDataTable extends DataTable
 								</div>";
 							})->implode('<br>');
 						})
-						->addColumn('total_price', function (OrderDetail $orderDetail) {
+						->addColumn('total_price', function ($orderSample) {
 							$sum_price = 0;
-							$calc = $orderDetail->parameters->map(function($parameter) use (&$sum_price) {
+							$calc = $orderSample->parameters->map(function($parameter) use (&$sum_price) {
 								$sum_price += (int)$parameter->price_name;
 							});
 							return number_format($sum_price);
@@ -56,10 +56,10 @@ class CustParameterDataTable extends DataTable
 				case 'government':
 					return datatables()
 						->eloquent($query)
-						->editColumn('sample_date', function($field) {
-							return Carbon::parse($field->sample_date)->format('d/m/Y');
+						->editColumn('sample_date', function($orderSample) {
+							return Carbon::parse($orderSample->sample_date)->format('d/m/Y');
 						})
-						->addColumn('parameter', function (OrderDetail $detail) {
+						->addColumn('parameter', function ($orderSample) {
 							return $detail->parameters->map(function($parameter) {
 								return "
 								<div>
@@ -81,8 +81,8 @@ class CustParameterDataTable extends DataTable
 		}
 	}
 
-	public function query(Request $request, OrderDetail $orderDetail) {
-		return $orderDetail::with('parameters')->select('*')->whereOrder_id($request->order_id)->orderBy('id', 'ASC');
+	public function query(Request $request, OrderSample $orderSample) {
+		return $orderSample::with('parameters')->select('*')->whereOrder_id($request->order_id)->orderBy('id', 'ASC');
 	}
 
 	public function html() {

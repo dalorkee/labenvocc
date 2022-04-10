@@ -4,11 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\{Model,SoftDeletes};
 
-class OrderDetailParameter extends Model
+class OrderSampleParameter extends Model
 {
 	use SoftDeletes;
 
-	protected $table = 'order_detail_parameters';
+	protected $table = 'order_sample_parameters';
 	protected $primaryKey = 'id';
 
 	protected $fillable = [
@@ -43,7 +43,7 @@ class OrderDetailParameter extends Model
 		'office_name'
 	];
 
-	public function orderDetail() {
-		return $this->belongTo(OrderDetail::class)->withDefault();
+	public function orderSample() {
+		return $this->belongTo(OrderSample::class)->withDefault();
 	}
 }

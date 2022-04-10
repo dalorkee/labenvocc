@@ -3,7 +3,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\{Auth,Log,Storage,File};
-use App\Models\{Order,OrderDetail,Fileupload,OrderDetailParameter,Parameter,User,UserCustomer};
+use App\Models\{Order,OrderSample,OrderDetailParameter,Fileupload,Parameter,User,UserCustomer};
 use App\DataTables\{CustomersDataTable,CustParameterDataTable,CustSampleDataTable,CustVerifyDataTable};
 use App\Traits\{FileTrait,CommonTrait,JsonBoundaryTrait};
 use Yajra\DataTables\Facades\DataTables;
@@ -56,13 +56,13 @@ class CustomerController extends Controller
 				[
 					'customer_type' => $this->user->userCustomer->customer_type,
 					'user_id' => $this->user->userCustomer->user->id,
-					'order_status' => 'pending',
-					'payment_status' => 'pending',
 					'type_of_work' => $request->type_of_work,
 					'type_of_work_other' => $request->type_of_work_other,
 					'book_no' => $request->book_no ?? null,
 					'book_date' => $this->convertJsDateToMySQL($request->book_date) ?? null,
-					'book_upload' => ($request->hasFile('book_file')) ? 'y' : 'n'
+					'book_upload' => ($request->hasFile('book_file')) ? 'y' : 'n',
+					'order_status' => 'pending',
+					'payment_status' => 'pending',
 				]
 			);
 			$last_insert_order_id = $order->id;
@@ -114,7 +114,7 @@ class CustomerController extends Controller
 	protected function createParameter(Request $request, CustParameterDataTable $dataTable): object {
 		try {
 			$order_id = $request->order_id;
-			$count_status_rows = OrderDetail::whereOrder_id($order_id)->whereSample_status('y')->whereParameter_status('y')->count();
+			$count_status_rows = OrderSample::whereOrder_id($order_id)->whereHas_parameter('y')->count();
 			return $dataTable->render('apps.customers.parameter', compact('order_id', 'count_status_rows'));
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
@@ -448,8 +448,8 @@ class CustomerController extends Controller
 			'sample_location_place_district' => 'required',
 			'sample_location_place_sub_district' => 'required'
 		],[
-			'sample_select_begin' => 'โปรดเลือกตัวอย่างเริ่มต้น',
-			'sample_select_end' => 'โปรดเลือกตัวอย่างสิ้นสุด',
+			'sample_select_begin.required' => 'โปรดเลือกตัวอย่างเริ่มต้น',
+			'sample_select_end.required' => 'โปรดเลือกตัวอย่างสิ้นสุด',
 			'origin_threat.required'=>'โปรดเลือกประเด็นมลพิษ',
 			'sample_location_place_name.required' => 'โปรดกรอกสถานที่เก็บตัวอย่าง',
 			'sample_location_place_province.required' => 'โปรดเลือกจังหวัด',
@@ -574,10 +574,17 @@ class CustomerController extends Controller
 		}
 	}
 
-	#[Route('customer.verify.store', methods: ['GET'])]
-	protected function storeVerify(Request $request) {
+	#[Route('customer.verify.store', methods: ['POST'])]
+	protected function storeVerify(Request $request): object {
+		$request->validate([
+			'order_id' => 'bail|required',
+			'confirm_chk' => 'required',
+		],[
+			'order_id.required' => 'ไม่พบรหัสการสั่งซื้อนี้ โปรดตรวจสอบ',
+			'confirm_chk.required' => 'โปรดเลือกการตรวจสอบความถูกต้องของข้อมูล',
+		]);
 		try {
-			dd($request->order_id);
+			dd($request->order_id.'|'.$request->confirm_chk);
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
 		}
