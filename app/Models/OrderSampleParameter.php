@@ -8,12 +8,12 @@ class OrderSampleParameter extends Model
 {
 	use SoftDeletes;
 
-	protected $table = 'order_sample_parameters';
+	protected $table = 'order_sample_parameter';
 	protected $primaryKey = 'id';
 
 	protected $fillable = [
 		'id',
-		'order_detail_id',
+		'order_sample_id',
 		'parameter_id',
 		'parameter_name',
 		'sample_charecter_id',

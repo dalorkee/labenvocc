@@ -2,8 +2,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\{Auth,Log,Storage,File};
-use App\Models\{Order,OrderSample,OrderDetailParameter,Fileupload,Parameter,User,UserCustomer};
+use Illuminate\Support\Facades\{Auth,Log,Storage,File,Route};
+use App\Models\{Order,OrderSample,OrderSampleParameter,Fileupload,Parameter,User};
 use App\DataTables\{CustomersDataTable,CustParameterDataTable,CustSampleDataTable,CustVerifyDataTable};
 use App\Traits\{FileTrait,CommonTrait,JsonBoundaryTrait};
 use Yajra\DataTables\Facades\DataTables;
@@ -140,20 +140,20 @@ class CustomerController extends Controller
 			'sample_date.required'=>'โปรดกรอกวันที่เก็บตัวอย่าง',
 		]);
 		try {
-			$orderDetail = new OrderDetail;
-			$orderDetail->order_id = $request->order_id;
-			$orderDetail->id_card = $request->id_card;
-			$orderDetail->passport = $request->passport;
-			$orderDetail->title_name = $request->title_name;
-			$orderDetail->firstname = $request->firstname;
-			$orderDetail->lastname = $request->lastname;
-			$orderDetail->age_year = $request->age_year;
-			$orderDetail->division = $request->division;
-			$orderDetail->work_life_year = $request->work_life_year;
-			$orderDetail->sample_date = $this->convertJsDateToMySQL($request->sample_date);
-			$orderDetail->note = $request->note;
-			$saved = $orderDetail->save();
-			$last_insert_id = $orderDetail->id;
+			$order_sample = new OrderSample();
+			$order_sample->order_id = $request->order_id;
+			$order_sample->id_card = $request->id_card;
+			$order_sample->passport = $request->passport;
+			$order_sample->title_name = $request->title_name;
+			$order_sample->firstname = $request->firstname;
+			$order_sample->lastname = $request->lastname;
+			$order_sample->age_year = $request->age_year;
+			$order_sample->division = $request->division;
+			$order_sample->work_life_year = $request->work_life_year;
+			$order_sample->sample_date = $this->convertJsDateToMySQL($request->sample_date);
+			$order_sample->note = $request->note;
+			$saved = $order_sample->save();
+			$last_insert_id = $order_sample->id;
 			if ($saved == true) {
 				return redirect()->back()->with('success', 'บันทึกข้อมูลแล้ว');
 			} else {
@@ -166,8 +166,8 @@ class CustomerController extends Controller
 
 	#[Route('customer.parameter.personal.edit', methods: ['GET'])]
 	protected function editParameterPersonal(Request $request) {
-		$order_detail = OrderDetail::find($request->id);
-		switch ($order_detail->title_name) {
+		$order_sample = OrderSample::find($request->id);
+		switch ($order_sample->title_name) {
 			case "mr":
 				$mr_chk = "checked";
 				$mrs_chk = null;
@@ -188,7 +188,7 @@ class CustomerController extends Controller
 				$mrs_chk = null;
 				$miss_chk = null;
 		}
-		$edit_sample_date = $this->convertMySQLDateToJs($order_detail->sample_date);
+		$edit_sample_date = $this->convertMySQLDateToJs($order_sample->sample_date);
 		$htm = "
 		<form name=\"modal_new_data\" action=\"".route('customer.parameter.personal.update')."\" method=\"POST\">
 		<div class=\"modal-header bg-red-500 text-white\">
@@ -202,8 +202,8 @@ class CustomerController extends Controller
 				<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3\">
 					<label class=\"form-label\" for=\"title_name\">คำนำหน้าชื่อ <span class=\"text-red-600\">*</span></label>
 					<input type=\"hidden\" name=\"_token\" value=\"".csrf_token()."\">
-					<input type=\"hidden\" name=\"edit_id\" value=\"".$order_detail->id."\">
-					<input type=\"hidden\" name=\"edit_order_id\" value=\"".$order_detail->order_id."\">
+					<input type=\"hidden\" name=\"edit_id\" value=\"".$order_sample->id."\">
+					<input type=\"hidden\" name=\"edit_order_id\" value=\"".$order_sample->order_id."\">
 					<div class=\"frame-wrap\">
 						<div class=\"custom-control custom-checkbox custom-control-inline\">
 							<input type=\"checkbox\" name=\"edit_title_name\" value=\"mr\" class=\"custom-control-input\" id=\"edit_chk_mr\"".$mr_chk.">
@@ -223,33 +223,33 @@ class CustomerController extends Controller
 			<div class=\"form-row\">
 				<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3\">
 					<label class=\"form-label\" for=\"id_card\">เลขบัตรประชาชน <span class=\"text-red-600\">*</span></label>
-					<input type=\"text\" name=\"edit_id_card\" value=\"".$order_detail->id_card."\" placeholder=\"\" data-inputmask=\"'mask': '9-9999-99999-99-9'\" maxlength=\"18\" class=\"form-control\">
+					<input type=\"text\" name=\"edit_id_card\" value=\"".$order_sample->id_card."\" placeholder=\"\" data-inputmask=\"'mask': '9-9999-99999-99-9'\" maxlength=\"18\" class=\"form-control\">
 				</div>
 				<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3\">
 					<label class=\"form-label\" for=\"passport\">พาสปอร์ต</label>
-					<input type=\"text\" name=\"edit_passport\" value=\"".$order_detail->passport."\" maxlength=\"30\" class=\"form-control\">
+					<input type=\"text\" name=\"edit_passport\" value=\"".$order_sample->passport."\" maxlength=\"30\" class=\"form-control\">
 				</div>
 				<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3\">
 					<label class=\"form-label\" for=\"firstname\">ชื่อ <span class=\"text-red-600\">*</span></label>
-					<input type=\"text\" name=\"edit_firstname\" value=\"".$order_detail->firstname."\" class=\"form-control\">
+					<input type=\"text\" name=\"edit_firstname\" value=\"".$order_sample->firstname."\" class=\"form-control\">
 				</div>
 				<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3\">
 					<label class=\"form-label\" for=\"lastname\">นามสกุล <span class=\"text-red-600\">*</span></label>
-					<input type=\"text\" name=\"edit_lastname\" value=\"".$order_detail->lastname."\" class=\"form-control\">
+					<input type=\"text\" name=\"edit_lastname\" value=\"".$order_sample->lastname."\" class=\"form-control\">
 				</div>
 				<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3\">
 					<label class=\"form-label\" for=\"age_year\">อายุ/ปี</label>
-					<input type=\"number\" name=\"edit_age_year\" value=\"".$order_detail->age_year."\" min=\"1\" max=\"100\" class=\"form-control\">
+					<input type=\"number\" name=\"edit_age_year\" value=\"".$order_sample->age_year."\" min=\"1\" max=\"100\" class=\"form-control\">
 				</div>";
 				if (Auth::user()->userCustomer->customer_type == 'private') {
 					$htm .= "
 					<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3\">
 						<label class=\"form-label\" for=\"division\">แผนก <span class=\"text-red-600\">*</span></label>
-						<input type=\"text\" name=\"edit_division\" value=\"".$order_detail->division."\" class=\"form-control\">
+						<input type=\"text\" name=\"edit_division\" value=\"".$order_sample->division."\" class=\"form-control\">
 					</div>
 					<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3\">
 						<label class=\"form-label\" for=\"work_life_year\">อายุงาน/ปี <span class=\"text-red-600\">*</span></label>
-						<input type=\"number\" name=\"edit_work_life_year\" value=\"".$order_detail->work_life_year."\" min=\"1\" max=\"100\" class=\"form-control\">
+						<input type=\"number\" name=\"edit_work_life_year\" value=\"".$order_sample->work_life_year."\" min=\"1\" max=\"100\" class=\"form-control\">
 					</div>";
 				}
 				$htm .= "
@@ -266,7 +266,7 @@ class CustomerController extends Controller
 				</div>
 				<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3\">
 					<label class=\"form-label\" for=\"note\">หมายเหตุ</label>
-					<input type=\"text\" name=\"edit_note\" value=\"".$order_detail->note."\" class=\"form-control\">
+					<input type=\"text\" name=\"edit_note\" value=\"".$order_sample->note."\" class=\"form-control\">
 				</div>
 			</div>
 		</div>
@@ -296,19 +296,19 @@ class CustomerController extends Controller
 			'edit_sample_date.required'=>'โปรดกรอกวันที่เก็บตัวอย่าง',
 		]);
 		try {
-			$orderDetail = OrderDetail::find($request->edit_id);
-			$orderDetail->order_id = $request->edit_order_id;
-			$orderDetail->id_card = $request->edit_id_card;
-			$orderDetail->passport = $request->edit_passport;
-			$orderDetail->title_name = $request->edit_title_name;
-			$orderDetail->firstname = $request->edit_firstname;
-			$orderDetail->lastname = $request->edit_lastname;
-			$orderDetail->age_year = $request->edit_age_year;
-			$orderDetail->division = $request->edit_division;
-			$orderDetail->work_life_year = $request->edit_work_life_year;
-			$orderDetail->sample_date = $this->convertJsDateToMySQL($request->edit_sample_date);
-			$orderDetail->note = $request->edit_note;
-			$saved = $orderDetail->save();
+			$order_sample = OrderSample::find($request->edit_id);
+			$order_sample->order_id = $request->edit_order_id;
+			$order_sample->id_card = $request->edit_id_card;
+			$order_sample->passport = $request->edit_passport;
+			$order_sample->title_name = $request->edit_title_name;
+			$order_sample->firstname = $request->edit_firstname;
+			$order_sample->lastname = $request->edit_lastname;
+			$order_sample->age_year = $request->edit_age_year;
+			$order_sample->division = $request->edit_division;
+			$order_sample->work_life_year = $request->edit_work_life_year;
+			$order_sample->sample_date = $this->convertJsDateToMySQL($request->edit_sample_date);
+			$order_sample->note = $request->edit_note;
+			$saved = $order_sample->save();
 			if ($saved == true) {
 				return redirect()->back()->with('success', 'แก้ไขข้อมูลแล้ว');
 			} else {
@@ -320,9 +320,9 @@ class CustomerController extends Controller
 	}
 
 	#[Route('customer.parameter.personal.destroy', methods: ['GET'])]
-	protected function DestroyParameterPersonal(OrderDetail $orderDetail, Request $request): object {
+	protected function DestroyParameterPersonal(OrderSample $order_sample, Request $request): object {
 		try {
-			$deleted = $orderDetail->find($request->id)->delete();
+			$deleted = $order_sample->find($request->id)->delete();
 			if ($deleted == true) {
 				return redirect()->back()->with('destroy', 'ลบข้อมูลตัวอย่างแล้ว');
 			}
@@ -366,8 +366,8 @@ class CustomerController extends Controller
 			$i = 0;
 			foreach ($paramet_arr as $key => $val) {
 				$paramet = Parameter::findOrfail($val);
-				$upserted = OrderDetailParameter::updateOrcreate([
-						'order_detail_id' => $request->aj_order_detail_id,
+				$upserted = OrderSampleParameter::updateOrcreate([
+						'order_sample_id' => $request->hidden_order_sample_id,
 						'parameter_id' => $paramet->id],[
 						'parameter_id' => $paramet->id,
 						'parameter_name' => $paramet->parameter_name,
@@ -409,7 +409,7 @@ class CustomerController extends Controller
 	}
 
 	#[Route('customer.parameter.data.destroy', methods: ['GET'])]
-	protected function destroyParameterData(OrderDetailParameter $orderDetailParamet, Request $request): object {
+	protected function destroyParameterData(OrderSampleParameter $orderDetailParamet, Request $request): object {
 		try {
 			$deleted = $orderDetailParamet->find($request->id)->delete();
 			if ($deleted == true) {
@@ -423,7 +423,7 @@ class CustomerController extends Controller
 	#[Route('customer.sample.create', methods: ['GET'])]
 	protected function createSample(CustSampleDataTable $dataTable, Request $request) {
 		$sample_list = [];
-		$order_detail = OrderDetail::select('id')->whereOrder_id($request->order_id)->get()->each(function($value, $key) use (&$sample_list) {
+		$order_detail = OrderSample::select('id')->whereOrder_id($request->order_id)->get()->each(function($value, $key) use (&$sample_list) {
 			$sample_list[$key] = $value->id;
 		});
 		$origin_threat = $this->getOriginThreat();
@@ -464,75 +464,74 @@ class CustomerController extends Controller
 				$origin_threat_arr = $this->getOriginThreat();
 				switch ($this->user->userCustomer->customer_type) {
 					case 'personal':
-						$userDetail = User::find($request->user_id)->userCustomer;
+						//$userDetail = User::find($request->user_id)->userCustomer;
 						for ($i=$request->sample_select_begin; $i<=$request->sample_select_end; $i++) {
-							$orderDetail = OrderDetail::find($i);
-							if (!is_null($orderDetail)) {
+							$order_sample = OrderSample::find($i);
+							if (!is_null($order_sample)) {
 								$prov_arr = $this->explodeStrToArr($request->sample_location_place_province);
 								$dist_arr = $this->explodeStrToArr($request->sample_location_place_district);
 								$sub_dist_arr = $this->explodeStrToArr($request->sample_location_place_sub_district);
-								$orderDetail->origin_threat_id = $request->origin_threat;
-								$orderDetail->origin_threat_name = $origin_threat_arr[$request->origin_threat];
-								$orderDetail->sample_location_define = 2;
-								$orderDetail->sample_location_place_name = $request->sample_location_place_name;
-								$orderDetail->sample_location_place_address = $request->sample_location_place_address;
-								$orderDetail->sample_location_place_sub_district = $sub_dist_arr[0];
-								$orderDetail->sample_location_place_sub_district_name = $sub_dist_arr[1];
-								$orderDetail->sample_location_place_district = $dist_arr[0];
-								$orderDetail->sample_location_place_district_name = $dist_arr[1];
-								$orderDetail->sample_location_place_province = $prov_arr[0];
-								$orderDetail->sample_location_place_province_name = $prov_arr[1];
-								$orderDetail->sample_location_place_postal = $request->sample_location_place_postal;
-								$orderDetail->sample_status = 'y';
-								$saved = $orderDetail->save();
+								$order_sample->origin_threat_id = $request->origin_threat;
+								$order_sample->origin_threat_name = $origin_threat_arr[$request->origin_threat];
+								$order_sample->sample_location_define = 2;
+								$order_sample->sample_location_place_name = $request->sample_location_place_name;
+								$order_sample->sample_location_place_address = $request->sample_location_place_address;
+								$order_sample->sample_location_place_sub_district = $sub_dist_arr[0];
+								$order_sample->sample_location_place_sub_district_name = $sub_dist_arr[1];
+								$order_sample->sample_location_place_district = $dist_arr[0];
+								$order_sample->sample_location_place_district_name = $dist_arr[1];
+								$order_sample->sample_location_place_province = $prov_arr[0];
+								$order_sample->sample_location_place_province_name = $prov_arr[1];
+								$order_sample->sample_location_place_postal = $request->sample_location_place_postal;
+								$saved = $order_sample->save();
 							}
 						}
 						break;
-					case 'private':
-					case 'government':
-						switch ($request->sample_location_define) {
-							case 1:
-								$userDetail = User::find($request->user_id)->userCustomer;
-								for ($i=$request->sample_select_begin; $i<=$request->sample_select_end; $i++) {
-									$orderDetail = OrderDetail::find($i);
-									if (!is_null($orderDetail)) {
-										$orderDetail->origin_threat_id = $request->origin_threat;
-										$orderDetail->origin_threat_name = $origin_threat_arr[$request->origin_threat];
-										$orderDetail->sample_location_define = $request->sample_location_define;
-										$orderDetail->sample_location_place_id = $userDetail->sample_location_place_id ?? '';
-										$orderDetail->sample_location_place_name = $userDetail->sample_location_place_name;
-										$orderDetail->sample_location_place_address = $userDetail->sample_location_place_address;
-										$orderDetail->sample_location_place_sub_district = $userDetail->sample_location_place_sub_district;
-										$orderDetail->sample_location_place_district = $userDetail->sample_location_place_district;
-										$orderDetail->sample_location_place_province = $userDetail->sample_location_place_province;
-										$orderDetail->sample_location_place_postal = $userDetail->sample_location_place_postal;
-										$saved = $orderDetail->save();
-									}
-								}
-								break;
-							case 2:
-								for ($i=$request->sample_select_begin; $i<=$request->sample_select_end; $i++) {
-									$orderDetail = OrderDetail::find($i);
-									if (!is_null($orderDetail)) {
-										$orderDetail->origin_threat_id = $request->origin_threat_id;
-										$orderDetail->origin_threat_name = $origin_threat_arr[$request->origin_threat];
-										$orderDetail->sample_location_define = $request->sample_location_define;
-										$orderDetail->sample_location_place_id = $request->sample_location_place_id;
-										$orderDetail->sample_location_place_name = $request->sample_location_place_name;
-										$orderDetail->sample_location_place_address = $request->sample_location_place_address;
-										$orderDetail->sample_location_place_sub_district = $request->sample_location_place_sub_district;
-										$orderDetail->sample_location_place_district = $request->sample_location_place_district;
-										$orderDetail->sample_location_place_province = $request->sample_location_place_province;
-										$orderDetail->sample_location_place_postal = $request->sample_location_place_postal;
-										$saved = $orderDetail->save();
-									}
-								}
-								break;
-							default:
-								return redirect()->route('logout');
-								break;
-						}
-						break;
+					// case 'private':
+					// case 'government':
+					// 	switch ($request->sample_location_define) {
+					// 		case 1:
+					// 			$userDetail = User::find($request->user_id)->userCustomer;
+					// 			for ($i=$request->sample_select_begin; $i<=$request->sample_select_end; $i++) {
+					// 				$order_sample = OrderSample::find($i);
+					// 				if (!is_null($order_sample)) {
+					// 					$order_sample->origin_threat_id = $request->origin_threat;
+					// 					$order_sample->origin_threat_name = $origin_threat_arr[$request->origin_threat];
+					// 					$order_sample->sample_location_define = $request->sample_location_define;
+					// 					$order_sample->sample_location_place_id = $userDetail->sample_location_place_id ?? '';
+					// 					$order_sample->sample_location_place_name = $userDetail->sample_location_place_name;
+					// 					$order_sample->sample_location_place_address = $userDetail->sample_location_place_address;
+					// 					$order_sample->sample_location_place_sub_district = $userDetail->sample_location_place_sub_district;
+					// 					$order_sample->sample_location_place_district = $userDetail->sample_location_place_district;
+					// 					$order_sample->sample_location_place_province = $userDetail->sample_location_place_province;
+					// 					$order_sample->sample_location_place_postal = $userDetail->sample_location_place_postal;
+					// 					$saved = $order_sample->save();
+					// 				}
+					// 			}
+					// 			break;
+					// 		case 2:
+					// 			for ($i=$request->sample_select_begin; $i<=$request->sample_select_end; $i++) {
+					// 				$order_sample = OrderSample::find($i);
+					// 				if (!is_null($order_sample)) {
+					// 					$order_sample->origin_threat_id = $request->origin_threat_id;
+					// 					$order_sample->origin_threat_name = $origin_threat_arr[$request->origin_threat];
+					// 					$order_sample->sample_location_define = $request->sample_location_define;
+					// 					$order_sample->sample_location_place_id = $request->sample_location_place_id;
+					// 					$order_sample->sample_location_place_name = $request->sample_location_place_name;
+					// 					$order_sample->sample_location_place_address = $request->sample_location_place_address;
+					// 					$order_sample->sample_location_place_sub_district = $request->sample_location_place_sub_district;
+					// 					$order_sample->sample_location_place_district = $request->sample_location_place_district;
+					// 					$order_sample->sample_location_place_province = $request->sample_location_place_province;
+					// 					$order_sample->sample_location_place_postal = $request->sample_location_place_postal;
+					// 					$saved = $order_sample->save();
+					// 				}
+					// 			}
+					// 			break;
+						// 	default:
+						// 		return redirect()->route('logout');
+						// 		break;
+						// }
+						// break;
 					default:
 						return redirect()->route('logout');
 						break;
@@ -540,7 +539,7 @@ class CustomerController extends Controller
 				if ($saved == true) {
 					return redirect()->back()->with('success', 'บันทึกข้อมูล "ประเด็นมลพิษ" แล้ว');
 				} else {
-					return redirect()->back()->with('error', 'บันทึกข้อมูลไม่สมบูรณ์ โปรดตรวจสอบ');
+					return redirect()->back()->with('error', 'บันทึกข้อมูลไม่สำเร็จ โปรดลองใหม่');
 				}
 			}
 		} catch (\Exception $e) {
@@ -552,7 +551,7 @@ class CustomerController extends Controller
 	protected function createVerify(Request $request, CustVerifyDataTable $dataTable) {
 		try {
 			$sample_list = [];
-			OrderDetail::select('id')->whereOrder_id($request->order_id)->get()->each(function($value, $key) use (&$sample_list) {
+			OrderSample::select('id')->whereOrder_id($request->order_id)->get()->each(function($value, $key) use (&$sample_list) {
 				$sample_list[$key] = $value->id;
 			});
 

@@ -2,7 +2,6 @@
 namespace App\DataTables;
 
 use Illuminate\Http\Request;
-
 use Yajra\DataTables\Html\{Button,Column};
 use Yajra\DataTables\Services\DataTable;
 use Illuminate\Support\Carbon;
@@ -60,7 +59,7 @@ class CustParameterDataTable extends DataTable
 							return Carbon::parse($orderSample->sample_date)->format('d/m/Y');
 						})
 						->addColumn('parameter', function ($orderSample) {
-							return $detail->parameters->map(function($parameter) {
+							return $orderSample->parameters->map(function($parameter) {
 								return "
 								<div>
 									<span class=\"badge badge-warning\">".$parameter->parameter_name."</span>

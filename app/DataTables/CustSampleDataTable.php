@@ -2,12 +2,11 @@
 namespace App\DataTables;
 
 use Illuminate\Http\Request;
-
 use Yajra\DataTables\Html\{Button,Column};
 use Yajra\DataTables\Services\DataTable;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
-use App\Models\{OrderDetail,User,UserCustomer};
+use App\Models\OrderSample;
 
 class CustSampleDataTable extends DataTable
 {
@@ -17,17 +16,17 @@ class CustSampleDataTable extends DataTable
 				case 'personal':
 					return datatables()
 						->eloquent($query)
-						->editColumn('firstname', function(OrderDetail $orderDetail) {
-							return "<div style=\"width: 160px\">".$orderDetail->firstname."</div>";
+						->editColumn('firstname', function($order_sample) {
+							return "<div style=\"width: 160px\">".$order_sample->firstname."</div>";
 						})
-						->editColumn('lastname', function(OrderDetail $orderDetail) {
-							return "<div style=\"width: 180px\">".$orderDetail->lastname."</div>";
+						->editColumn('lastname', function($order_sample) {
+							return "<div style=\"width: 180px\">".$order_sample->lastname."</div>";
 						})
-						->editColumn('sample_date', function(Orderdetail $orderDetail) {
-							return Carbon::parse($orderDetail->sample_date)->format('d/m/Y');
+						->editColumn('sample_date', function($order_sample) {
+							return Carbon::parse($order_sample->sample_date)->format('d/m/Y');
 						})
-						->addColumn('parameter', function (OrderDetail $orderDetail) {
-							return $orderDetail->parameters->map(function($parameter) {
+						->addColumn('parameter', function ($order_sample) {
+							return $order_sample->parameters->map(function($parameter) {
 								return "
 								<div style=\"width: 500px\">
 									<span class=\"badge badge-warning\">".$parameter->parameter_name."</span>
@@ -39,15 +38,15 @@ class CustSampleDataTable extends DataTable
 								</div>";
 							})->implode('<br>');
 						})
-						->addColumn('total_price', function (OrderDetail $orderDetail) {
+						->addColumn('total_price', function ($order_sample) {
 							$sum_price = 0;
-							$calc = $orderDetail->parameters->map(function($parameter) use (&$sum_price) {
+							$calc = $order_sample->parameters->map(function($parameter) use (&$sum_price) {
 								$sum_price += (int)$parameter->price_name;
 							});
 							return number_format($sum_price);
 						})
-						->editColumn('origin_threat_name', function(OrderDetail $orderDetail) {
-							return "<div style=\"width: 310px\">".$orderDetail->origin_threat_name."</div>";
+						->editColumn('origin_threat_name', function($order_sample) {
+							return "<div style=\"width: 310px\">".$order_sample->origin_threat_name."</div>";
 						})
 						->rawColumns(['firstname', 'lastname', 'parameter', 'origin_threat_name']);
 					break;
@@ -60,8 +59,8 @@ class CustSampleDataTable extends DataTable
 		}
 	}
 
-	public function query(Request $request, OrderDetail $orderDetail) {
-		return $orderDetail::with('parameters')->select('*')->whereOrder_id($request->order_id)->orderBy('id', 'ASC');
+	public function query(Request $request, OrderSample $order_sample) {
+		return $order_sample::with('parameters')->select('*')->whereOrder_id($request->order_id)->orderBy('id', 'ASC');
 	}
 
 	public function html() {

@@ -200,7 +200,7 @@ div.dataTables_wrapper span.select-item {margin-left: 0.5em;}
 				</button>
 			</div>
 			<div class="modal-body">
-				<form id="frm-example" action="{{ route('customer.parameter.data.store') }}" method="POST">
+				<form id="frm-parameter" action="{{ route('customer.parameter.data.store') }}" method="POST">
 					@csrf
 					<div class="row">
 						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
@@ -237,7 +237,7 @@ div.dataTables_wrapper span.select-item {margin-left: 0.5em;}
 					</div>
 					<div class="row">
 						<div class="col text-center">
-							<input type="hidden" name="aj_order_detail_id" value="" id="aj_order_detail_id">
+							<input type="hidden" name="hidden_order_sample_id" value="" id="hidden_order_sample_id">
 							<button type="submit" class="btn btn-success btn-lg">บันทึกข้อมูล</button>
 						</div>
 					</div>
@@ -309,10 +309,10 @@ $(document).ready(function() {
 					});
 					break;
 				case 'parameter':
-						let order_detail_id = $(this).data('id');
-						let url = "{{ route('customer.parameter.data.list', ['order_detail_id'=>':order_detail_id','threat_type_id'=>0]) }}";
-						url = url.replace(':order_detail_id', order_detail_id);
-						$("#aj_order_detail_id").val(order_detail_id);
+						let order_sample_id = $(this).data('id');
+						let url = "{{ route('customer.parameter.data.list', ['order_sample_id'=>':order_sample_id','threat_type_id'=>0]) }}";
+						url = url.replace(':order_sample_id', order_sample_id);
+						$("#hidden_order_sample_id").val(order_sample_id);
 						$('#pjza').dataTable().fnClearTable();
 						$('#pjza').dataTable().fnDestroy();
 						let table = $('#pjza').DataTable({
@@ -397,10 +397,10 @@ $(document).ready(function() {
 		}
 	});
 	$('#parameter_group').on('change', function() {
-		let order_detail_id = $("#aj_order_detail_id").val();
+		let order_sample_id = $("#hidden_order_sample_id").val();
 		let threat_type_id = $(this).val();
-		let url = "{{ route('customer.parameter.data.list', ['order_detail_id'=>':order_detail_id', 'threat_type_id'=>':threat_type_id']) }}";
-		url = url.replace(':order_detail_id', order_detail_id);
+		let url = "{{ route('customer.parameter.data.list', ['order_sample_id'=>':order_sample_id', 'threat_type_id'=>':threat_type_id']) }}";
+		url = url.replace(':order_sample_id', order_sample_id);
 		url = url.replace(':threat_type_id', threat_type_id);
 		$('#pjza').dataTable().fnClearTable();
 		$('#pjza').dataTable().fnDestroy();
@@ -430,7 +430,7 @@ $(document).ready(function() {
 		});
 		$('#add-parameter-modal').modal('show');
 	});
-	$('#frm-example').on('submit', function(e) {
+	$('#frm-parameter').on('submit', function(e) {
 		let form = this;
 		let table = $('#pjza').DataTable();
 		let rows_selected = table.column(0).checkboxes.selected();

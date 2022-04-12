@@ -157,7 +157,7 @@ $(document).ready(function() {
 		toastr.warning("{{ Session::get('warning') }}", "Warning", options);
 		Swal.fire({
 			type: "warning",
-			title: "เกิดข้อผิดพลาด",
+			title: "Warning",
 			text: "{{ Session::get('warning') }}",
 			confirmButtonText: "ตกลง",
 			footer: "LAB ENV-OCC DDC",
@@ -167,8 +167,16 @@ $(document).ready(function() {
 			Session::forget("warning");
 		@endphp
 	@endif
-	@if (Session::has('error'))
-		toastr.error("{{ Session::get('error') }}", "LabEnvOcc", options);
+    @if (Session::has('error'))
+        toastr.error("{{ Session::get('error') }}", "LabEnvOcc", options);
+		Swal.fire({
+			type: "error",
+			title: "Error",
+			text: "{{ Session::get('error') }}",
+			confirmButtonText: "ตกลง",
+			footer: "LAB ENV-OCC DDC",
+			allowOutsideClick: false
+		});
 		@php
 			Session::forget("error");
 		@endphp
