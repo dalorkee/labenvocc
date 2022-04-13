@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+// use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\{Auth,Log,Storage,File,Route};
 use App\Models\{Order,OrderSample,OrderSampleParameter,Fileupload,Parameter,User};
 use App\DataTables\{CustomersDataTable,CustParameterDataTable,CustSampleDataTable,CustVerifyDataTable};
@@ -52,17 +53,15 @@ class CustomerController extends Controller
 	protected function storeInfo(Request $request): object {
 		try {
 			$order = Order::updateOrCreate(
-				['id' => $request->order_id],
-				[
-					'customer_type' => $this->user->userCustomer->customer_type,
+				['id' => $request->order_id],[
+					'order_type' => 1,
 					'user_id' => $this->user->userCustomer->user->id,
+					'customer_type' => $this->user->userCustomer->customer_type,
 					'type_of_work' => $request->type_of_work,
 					'type_of_work_other' => $request->type_of_work_other,
 					'book_no' => $request->book_no ?? null,
 					'book_date' => $this->convertJsDateToMySQL($request->book_date) ?? null,
 					'book_upload' => ($request->hasFile('book_file')) ? 'y' : 'n',
-					'order_status' => 'pending',
-					'payment_status' => 'pending',
 				]
 			);
 			$last_insert_order_id = $order->id;
@@ -583,18 +582,34 @@ class CustomerController extends Controller
 			'confirm_chk.required' => 'โปรดเลือกการตรวจสอบความถูกต้องของข้อมูล',
 		]);
 		try {
-			dd($request->order_id.'|'.$request->confirm_chk);
+			if ($request->confirm_chk == 'y') {
+				$order = Order::find($request->order_id);
+				$order->order_no = $this->setOrderNo('PS', $request->order_id);
+				$order->order_no_ref = $this->setOrderNoRef('RPS');
+				$order->order_confirmed = date('Y-m-d H:i:s');
+				$saved = $order->save();
+				return redirect()->route('customer.index')->with('success', 'บันทึกข้อมูล "ประเด็นมลพิษ" แล้ว');
+			} else {
+				return redirect()->back()->with('error', 'บันทึกข้อมูลไม่สำเร็จx โปรดลองใหม่');
+			}
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
 		}
 	}
 
-	// protected function storeParamet(Request $request) {
-	// 	dd($request->paramets);
-	// 	$x = "";
-	// 	foreach ($request->paramets as $key => $val) {
-	// 		$x .= $val.' ';
-	// 	}
-	// 	return redirect()->back()->with("success", 'isad');
-	// }
+	private function setOrderNo(string $prefix, int $order_id): string {
+		$tmp = sprintf("%08d", $order_id);
+		return $prefix.$tmp;
+	}
+
+	private function setOrderNoRef(string $prefix): string {
+		$char = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+		$length = 8;
+		$max = (strlen($char) - 1);
+		$str = $prefix.'0';
+		for ($i=0; $i<$length; ++$i) {
+			$str .= $char[random_int(0, $max)];
+		}
+		return $str;
+	}
 }

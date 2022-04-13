@@ -34,6 +34,9 @@ trait CommonTrait {
 	public function sampleOfficeCategory(): array {
 		return [1=>'สถานประกอบการ', 2=>'สถานพยาบาล', 3=>'ด่านควบคุมโรค', 4=>'อื่นๆ'];
 	}
+	public function OrderType(): array {
+		return [1=>'ตัวอย่างชีวภาพ', 2=>'ตัวอย่างสิ่งแวดล้อม'];
+	}
 	public function calcPercent($data=0, $allData=0): float {
 		return (($data*100)/$allData);
 	}
@@ -105,7 +108,6 @@ trait CommonTrait {
 		}
 		return $result;
 	}
-
 
 }
 ?>

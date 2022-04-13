@@ -21,24 +21,38 @@ class CustomersDataTable extends DataTable
 	 */
 	public function dataTable($query) {
 		try {
-			$lab_station = $this->latStation();
+			//$type_of_work_arr = $this->typeOfWork();
 			return datatables()
 				->eloquent($query)
-				->editColumn('created_at', function($order) {
-					return Carbon::parse($order->created_at)->format('d/m/Y');
+				->editColumn('order_confirmed', function($order) {
+					return Carbon::parse($order->order_confirmed)->format('d/m/Y');
 				})
-				->editColumn('lab_station_id', function($order) use ($lab_station) {
-					return $lab_station[$order->lab_station_id] ?? null;
+				->addColumn('lab', function ($order) {
+					return $order->parameters->map(function($parameter) {
+						return "
+						<div>
+							<span class=\"badge badge-info\">".$parameter->parameter_name."</span>
+							<span class=\"badge badge-warning\">".$parameter->office_name."</span>
+						</div>";
+					})->implode('<br>');
 				})
-				->addColumn('status', function() {
+				->addColumn('status', function($order) {
 					$htm = "<form>";
 					$htm .= "<div class=\"custom-control custom-checkbox\">";
-					$htm .= "<input type=\"checkbox\" class=\"custom-control-input\" checked disabled>";
-					$htm .= "<label class=\"custom-control-label\" for=\"receive\">รับตัวอย่างแล้ว</label>";
+					$htm .= "<input type=\"checkbox\" class=\"custom-control-input\"";
+					(!is_null($order->order_confirmed)) ? $htm .= " checked" : $htm .= "";
+					$htm .=" disabled>";
+					$htm .= "<label class=\"custom-control-label\" for=\"receive\">ส่งคำขอ</label>";
+					$htm .= "</div>";
+					$htm .= "<div class=\"custom-control custom-checkbox\">";
+					$htm .= "<input type=\"checkbox\" class=\"custom-control-input\"";
+					(!is_null($order->order_)) ? $htm .= " checked" : $htm .= "";
+					$htm .= " disabled>";
+					$htm .= "<label class=\"custom-control-label\" for=\"receive\">รับตัวอย่าง</label>";
 					$htm .= "</div>";
 					$htm .= "<div class=\"custom-control custom-checkbox\">";
 					$htm .= "<input type=\"checkbox\" class=\"custom-control-input\" disabled>";
-					$htm .= "<label class=\"custom-control-label\" for=\"pending\">ชำระเงินแล้ว</label>";
+					$htm .= "<label class=\"custom-control-label\" for=\"pending\">ชำระเงิน</label>";
 					$htm .= "</div>";
 					$htm .= "<div class=\"custom-control custom-checkbox\">";
 					$htm .= "<input type=\"checkbox\" class=\"custom-control-input\" disabled>";
@@ -53,9 +67,13 @@ class CustomersDataTable extends DataTable
 					return $htm;
 				})
 				->addColumn('action', function($order) {
-					return "<a href=\"".route('customer.info.create', ['order_id' => $order->id])."\" title=\"แก้ไข\" class=\"btn btn-warning\"><i class=\"fal fa-pencil\"></i></a>";
+					if (is_null($order->order_confirmed)) {
+						return "<a href=\"".route('customer.info.create', ['order_id' => $order->id])."\" title=\"แก้ไข\" class=\"btn btn-warning btn-lg btn-icon rounded-circle\"><i class=\"fal fa-pencil\"></i> แก้ไข</a>";
+					} else {
+						return "<a href=\"javascript:void(0);\" class=\"btn btn-secondary btn-lg btn-icon rounded-circle\"><i class=\"fal fa-pencil fs-md\"></i></a>";
+					}
 				 })
-				->rawColumns(['status', 'detail', 'action']);
+				->rawColumns(['lab', 'status', 'detail', 'action']);
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
 		}
@@ -68,7 +86,7 @@ class CustomersDataTable extends DataTable
 	 * @return \Illuminate\Database\Eloquent\Builder
 	 */
 	public function query(Order $order) {
-		return $order->whereUser_id($this->user_id)->orderBy('id', 'ASC');
+		return $order->whereUser_id($this->user_id)->with('parameters')->orderBy('id', 'ASC');
 	}
 
 	/**
@@ -133,12 +151,13 @@ class CustomersDataTable extends DataTable
 	protected function getColumns() {
 		try {
 			return [
-				Column::make('id')->title('เลขที่'),
-				Column::make('created_at')->title('วันที่สร้าง'),
-				Column::make('lab_station_id')->title('ส่งที่'),
+				//Column::make('id')->title('รหัส'),
+				Column::make('order_no')->title('เลขที่คำขอ'),
+				Column::make('order_confirmed')->title('วันที่สร้าง'),
+				Column::make('lab')->title('ตัวอย่าง/ส่งที่'),
 				Column::make('status')->title('สถานะ'),
 				Column::make('detail')->title('รายละเอียด'),
-				Column::make('action')->title('จัดการ')->addClass('text-right'),
+				Column::make('action')->title('จัดการ')->addClass('text-center'),
 				// Column::computed('action')
 				// ->exportable(false)
 				// ->printable(false)

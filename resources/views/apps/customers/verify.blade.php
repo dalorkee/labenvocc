@@ -30,8 +30,7 @@ table.dataTable thead th {background-color: #056676;color: white}
 				</div>
 			</div>
 			<div class="panel-container relative">
-				<form name="custVerify" action="{{ route('customer.verify.store', ['order_id' => $data['order_id']]) }}" method="POST">
-				{{-- <form action="#" method="GET"> --}}
+				<form name="custVerify" action="{{ route('customer.verify.store') }}" method="POST">
 					@csrf
 					<div class="panel-content">
 						<ul class="steps mb-3">
@@ -152,7 +151,7 @@ table.dataTable thead th {background-color: #056676;color: white}
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-4">
 								<div class="frame-wrap">
 									<div class="custom-control custom-checkbox custom-control-inline">
-										<input type="checkbox" name="confirm_chk" value="1" class="custom-control-input @error('confirm_chk') is-invalid @enderror" id="confirm_chk" {{ ((isset($data['order'][0]->confirm_chk) == '1') || old('confirm_chk') == '1') ? "checked" : "" }}>
+										<input type="checkbox" name="confirm_chk" value="y" class="custom-control-input @error('confirm_chk') is-invalid @enderror" id="confirm_chk" {{ ((isset($data['order'][0]->confirm_chk) == 'y') || old('confirm_chk') == 'y') ? "checked" : "" }}>
 										<label class="custom-control-label" for="confirm_chk">ฉันได้ตรวจสอบความถูกต้องของข้อมูลแล้ว</label>
 									</div>
 								</div>

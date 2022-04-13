@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\{Model,SoftDeletes};
@@ -13,15 +12,20 @@ class Order extends Model
 	public $timestamps = true;
 	protected $fillable = [
 		'id',
-		'customer_type',
+		'order_no',
+		'order_no_ref',
+		'order_type',
 		'user_id',
-		'order_status',
-		'payment_status',
+		'customer_type',
 		'type_of_work',
 		'type_of_work_other',
 		'book_no',
 		'book_date',
 		'book_upload',
+		'detail',
+		'order_confirmed',
+		'order_payment',
+		'order_received'
 	];
 	protected $appends = ['book_date_js'];
 

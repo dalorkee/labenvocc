@@ -113,7 +113,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 		});
 		Route::prefix('customer/verify')->group(function() {
 			Route::get('/create/order/{order_id}', [CustomerController::class, 'createVerify'])->name('verify.create');
-			Route::post('/store/order/{order_id}', [CustomerController::class, 'storeVerify'])->name('verify.store');
+			Route::post('/store/order', [CustomerController::class, 'storeVerify'])->name('verify.store');
 		});
 	});
 	Route::get('/admin/home', [AdminController::class, 'index'])->name('admin.index');
