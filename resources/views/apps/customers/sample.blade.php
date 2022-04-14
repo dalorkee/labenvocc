@@ -83,7 +83,7 @@
 					<div class="form-row">
 						<div class="form-group col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6 mb-3">
 							<label class="form-label text-gray-800" for="sample_select_begin">ตัวอย่างที่ <span class="text-danger">*</span></label>
-							<select name="sample_select_begin" class="form-control js-hide-search">
+							<select name="sample_select_begin" class="form-control @error('sample_select_begin') is-invalid @enderror">
 								<option value="">-- โปรดเลือก --</option>
 								@forelse ($data['sample_list'] as $key => $val)
 									<option value="{{ $val }}">{{ $val }}</option>
@@ -91,10 +91,13 @@
 									<option value="">ไม่พบข้อมูล</option>
 								@endforelse
 							</select>
+							@error('sample_select_begin')
+								<div class="invalid-feedback" role="alert">{{ $message }}</div>
+							@enderror
 						</div>
 						<div class="form-group col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6 mb-3">
 							<label class="form-label text-gray-800" for="sample_select_end">ถึง <span class="text-danger">*</span></label>
-							<select name="sample_select_end" class="form-control js-hide-search">
+							<select name="sample_select_end" class="form-control @error('sample_select_end') is-invalid @enderror">
 								<option value="">-- โปรดเลือก --</option>
 								@forelse ($data['sample_list'] as $key => $val)
 									<option value="{{ $val }}">{{ $val }}</option>
@@ -102,12 +105,15 @@
 									<option value="">ไม่พบข้อมูล</option>
 								@endforelse
 							</select>
+							@error('sample_select_end')
+								<div class="invalid-feedback" role="alert">{{ $message }}</div>
+							@enderror
 						</div>
 					</div>
 					<div class="form-row">
 						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
 							<label class="form-label text-gray-800" for="origin_threat">ประเด็นมลพิษ <span class="text-danger">*</span></label>
-							<select name="origin_threat" class="form-control js-hide-search">
+							<select name="origin_threat" class="form-control js-hide-search @error('sample_select_end') is-invalid @enderror">
 								<option value="">-- โปรดเลือก --</option>
 								@forelse ($data['origin_threat'] as $key => $val)
 									<option value="{{ $key }}">{{ $val }}</option>
@@ -115,6 +121,9 @@
 									<option value="">-- ไม่พบข้อมูล --</option>
 								@endforelse
 							</select>
+							@error('origin_threat')
+								<div class="invalid-feedback" role="alert">{{ $message }}</div>
+							@enderror
 						</div>
 					</div>
 					@switch (Auth::user()->userCustomer->customer_type)
@@ -122,7 +131,10 @@
 						<div class="form-row">
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
 								<label for="sample_location_place_name" class="block text-base font-medium text-gray-700">ชื่อสถานที่เก็บตัวอย่าง <span class="text-danger">*</span></label>
-								<input type="text" name="sample_location_place_name" id="sample_location_place_name" class="form-control">
+								<input type="text" name="sample_location_place_name" id="sample_location_place_name" class="form-control @error('sample_location_place_name') is-invalid @enderror">
+								@error('sample_location_place_name')
+									<div class="invalid-feedback" role="alert">{{ $message }}</div>
+								@enderror
 							</div>
 						</div>
 						<div class="form-row">
@@ -132,24 +144,33 @@
 							</div>
 							<div class="form-group col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6 mb-3">
 								<label for="sample_location_place_province" class="block text-base font-medium text-gray-800">จังหวัด <span class="text-danger">*</span></label>
-								<select name="sample_location_place_province" id="sample_location_place_province" class="form-control select2 chk-b">
+								<select name="sample_location_place_province" id="sample_location_place_province" class="form-control select2 chk-b @error('sample_location_place_province') is-invalid @enderror">
 									<option value="">-- โปรดเลือก --</option>
 									@foreach ($data['provinces'] as $key => $val)
 										<option value="{{ $key.'|'.$val }}">{{ $val }}</option>
 									@endforeach
 								</select>
+								@error('sample_location_place_province')
+									<div class="invalid-feedback" role="alert">{{ $message }}</div>
+								@enderror
 							</div>
 							<div class="form-group col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6 mb-3">
 								<label for="sample_location_place_district" class="block text-base font-medium text-gray-800">อำเภอ <span class="text-danger">*</span></label>
-								<select name="sample_location_place_district" id="sample_location_place_district" class="form-control">
+								<select name="sample_location_place_district" id="sample_location_place_district" class="form-control @error('sample_location_place_district') is-invalid @enderror">
 									<option value="">-- โปรดเลือก --</option>
 								</select>
+								@error('sample_location_place_district')
+									<div class="invalid-feedback" role="alert">{{ $message }}</div>
+								@enderror
 							</div>
 							<div class="form-group col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6 mb-3">
 								<label for="sample_location_place_sub_district" class="block text-base font-medium text-gray-800">ตำบล <span class="text-danger">*</span></label>
-								<select name="sample_location_place_sub_district" id="sample_location_place_sub_district" class="form-control">
+								<select name="sample_location_place_sub_district" id="sample_location_place_sub_district" class="form-control @error('sample_location_place_sub_district') is-invalid @enderror">
 									<option value="">-- โปรดเลือก --</option>
 								</select>
+								@error('sample_location_place_sub_district')
+									<div class="invalid-feedback" role="alert">{{ $message }}</div>
+								@enderror
 							</div>
 							<div class="form-group col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6 mb-3">
 								<label for="sample_location_place_postal" class="block text-base font-medium text-gray-800">รหัสไปรษณีย์</label>

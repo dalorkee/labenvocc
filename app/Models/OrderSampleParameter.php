@@ -7,12 +7,14 @@ use Illuminate\Database\Eloquent\{Model,SoftDeletes};
 class OrderSampleParameter extends Model
 {
 	use SoftDeletes;
+	use \Znck\Eloquent\Traits\BelongsToThrough;
 
 	protected $table = 'order_sample_parameter';
 	protected $primaryKey = 'id';
 
 	protected $fillable = [
 		'id',
+		'order_id',
 		'order_sample_id',
 		'parameter_id',
 		'parameter_name',
@@ -45,5 +47,9 @@ class OrderSampleParameter extends Model
 
 	public function orderSample() {
 		return $this->belongTo(OrderSample::class)->withDefault();
+	}
+
+	public function order() {
+		return $this->belongsToThrough(Order::class, orderSample::class);
 	}
 }

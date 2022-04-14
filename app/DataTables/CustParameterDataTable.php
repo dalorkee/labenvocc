@@ -71,7 +71,11 @@ class CustParameterDataTable extends DataTable
 								</div>";
 							})->implode('<br>');
 						})
-						->addColumn('action', '<button class="context-nav bg-purple-400 hover:bg-purple-500 text-white py-1 px-3 rounded" id="context-menu" data-id="{{$id}}">จัดการ <i class="fal fa-angle-down"></i></button>')
+						->addColumn('action', function($orderSample) {
+							// return "<button class=\"context-nav bg-purple-400 hover:bg-purple-500 text-white py-1 px-3 rounded\" id=\"context-menu\" data-oid=\"".$orderSample->order_id."\" data-osid=\"".$orderSample->id."\">จัดการ <i class=\"fal fa-angle-down\"></i></button>";
+							return "<button class=\"context-nav bg-purple-400 hover:bg-purple-500 text-white py-1 px-3 rounded\" data-id=\"{{$orderSample->id}}\">จัดการ <i class=\"fal fa-angle-down\"></i></button>";
+
+						})
 						->rawColumns(['parameter', 'action']);
 					break;
 			}

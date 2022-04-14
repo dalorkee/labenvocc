@@ -68,9 +68,13 @@ class CustomersDataTable extends DataTable
 				})
 				->addColumn('action', function($order) {
 					if (is_null($order->order_confirmed)) {
-						return "<a href=\"".route('customer.info.create', ['order_id' => $order->id])."\" title=\"แก้ไข\" class=\"btn btn-warning btn-lg btn-icon rounded-circle\"><i class=\"fal fa-pencil\"></i> แก้ไข</a>";
+						return "
+							<a href=\"".route('customer.info.create', ['order_id' => $order->id])."\" title=\"แก้ไข\" class=\"btn btn-warning btn-sm \"><i class=\"fal fa-pencil\"></i> แก้ไข</a>
+							<a href=\"javascript:void(0);\" class=\"btn btn-danger btn-sm \">ลบ <i class=\"fal fa-times\"></i></a>";
 					} else {
-						return "<a href=\"javascript:void(0);\" class=\"btn btn-secondary btn-lg btn-icon rounded-circle\"><i class=\"fal fa-pencil fs-md\"></i></a>";
+						return "
+							<a href=\"javascript:void(0);\" class=\"btn btn-secondary btn-sm \"><i class=\"fal fa-pencil\"></i> แก้ไข</a>
+							<a href=\"javascript:void(0);\" class=\"btn btn-secondary btn-sm \">ลบ <i class=\"fal fa-times\"></i></a>";
 					}
 				 })
 				->rawColumns(['lab', 'status', 'detail', 'action']);

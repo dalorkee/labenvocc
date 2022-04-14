@@ -113,8 +113,8 @@ class CustomerController extends Controller
 	protected function createParameter(Request $request, CustParameterDataTable $dataTable): object {
 		try {
 			$order_id = $request->order_id;
-			$count_status_rows = OrderSample::whereOrder_id($order_id)->whereHas_parameter('y')->count();
-			return $dataTable->render('apps.customers.parameter', compact('order_id', 'count_status_rows'));
+			$orders = Order::withCount('parameters')->get();
+			return $dataTable->render('apps.customers.parameter', compact('order_id', 'orders'));
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
 			return redirect()->route('customer.index')->with('error', $e->getMessage());
@@ -366,9 +366,11 @@ class CustomerController extends Controller
 			foreach ($paramet_arr as $key => $val) {
 				$paramet = Parameter::findOrfail($val);
 				$upserted = OrderSampleParameter::updateOrcreate([
+						'order_id' => $request->hidden_order_id,
 						'order_sample_id' => $request->hidden_order_sample_id,
-						'parameter_id' => $paramet->id],[
-						'parameter_id' => $paramet->id,
+						'parameter_id' => $paramet->id
+					],[
+						//'parameter_id' => $paramet->id,
 						'parameter_name' => $paramet->parameter_name,
 						'sample_charecter_id'=> $paramet->sample_charecter_id,
 						'sample_charecter_name' => $paramet->sample_charecter_name,
@@ -397,6 +399,9 @@ class CustomerController extends Controller
 				$i++;
 			}
 			if ($i > 0) {
+				$order_sample = OrderSample::find($request->hidden_order_sample_id);
+				$order_sample->has_parameter = 'y';
+				$updated = $order_sample->save();
 				return redirect()->back()->with('success', 'บันทึกข้อมูลพารามิเตอร์แล้ว');
 			} else {
 				return redirect()->back()->with('error', 'ไม่มีข้อมูลใหม่สำหรับรายการนี้');

@@ -45,7 +45,7 @@ div.dataTables_wrapper span.select-item {margin-left: 0.5em;}
 				</div>
 			</div>
 			<div class="panel-container relative">
-				<div class="row-completed"><span class="badge badge-danger p-2">จำนวน {{ number_format($count_status_rows) }} ตัวอย่าง</span></div>
+				<div class="row-completed"><span class="badge badge-danger p-2">จำนวน {{ number_format($orders[0]->parameters_count) }} ตัวอย่าง</span></div>
 				<form>
 					<div class="panel-content">
 						<ul class="steps mb-3">
@@ -237,6 +237,7 @@ div.dataTables_wrapper span.select-item {margin-left: 0.5em;}
 					</div>
 					<div class="row">
 						<div class="col text-center">
+							<input type="hedden" name="hidden_order_id" value="{{ $order_id }}" id="hidden_order_id">
 							<input type="hidden" name="hidden_order_sample_id" value="" id="hidden_order_sample_id">
 							<button type="submit" class="btn btn-success btn-lg">บันทึกข้อมูล</button>
 						</div>
@@ -291,7 +292,7 @@ $(document).ready(function() {
 					$.ajax({
 						method: 'GET',
 						url: '{{ route("customer.parameter.personal.edit") }}',
-						data: {id:id},
+						data: {id: id},
 						dataType: 'HTML',
 						success: function(data) {
 							$('#edit-customer-personal').html(data);
