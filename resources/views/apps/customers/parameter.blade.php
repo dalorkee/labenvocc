@@ -139,7 +139,7 @@ div.dataTables_wrapper span.select-item {margin-left: 0.5em;}
 								<div class="invalid-feedback" role="alert">{{ $message }}</div>
 							@enderror
 						</div>
-						@if (Auth::user()->userCustomer->customer_type == 'private')
+						@if (auth()->user()->userCustomer->customer_type == 'private')
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
 								<label class="form-label" for="division">แผนก <span class="text-red-600">*</span></label>
 								<input type="text" name="division" value="{{ old('division') }}" class="form-control @error('division') is-invalid @enderror">

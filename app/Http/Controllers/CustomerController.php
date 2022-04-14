@@ -51,19 +51,26 @@ class CustomerController extends Controller
 
 	#[Route('customer.info.store', methods: ['POST'])]
 	protected function storeInfo(Request $request): object {
+		$request->validate([
+			'customer_name'=>'bail|required',
+			'type_of_work'=>'required'
+		],[
+			'customer_name.required'=>'โปรดกรอกผู้ส่งตัวอย่าง',
+			'type_of_work.required'=>'โปรดกรอกประเภทงาน'
+		]);
 		try {
-			$order = Order::updateOrCreate(
-				['id' => $request->order_id],[
+			$order = Order::updateOrCreate([
+				'id' => $request->order_id],[
 					'order_type' => 1,
 					'user_id' => $this->user->userCustomer->user->id,
 					'customer_type' => $this->user->userCustomer->customer_type,
+					'customer_name' => $request->customer_name,
 					'type_of_work' => $request->type_of_work,
 					'type_of_work_other' => $request->type_of_work_other,
 					'book_no' => $request->book_no ?? null,
 					'book_date' => $this->convertJsDateToMySQL($request->book_date) ?? null,
 					'book_upload' => ($request->hasFile('book_file')) ? 'y' : 'n',
-				]
-			);
+			]);
 			$last_insert_order_id = $order->id;
 			if ($request->hasFile('book_file')) {
 				/* Delete older files */
@@ -123,36 +130,75 @@ class CustomerController extends Controller
 
 	#[Route('customer.parameter.personal.store', methods: ['POST'])]
 	protected function storeParameterPersonal(Request $request) {
-		$request->validate([
-			'order_id'=>'bail|required',
-			'id_card'=>'required',
-			'title_name'=>'required',
-			'firstname'=>'required',
-			'lastname'=>'required',
-			'sample_date'=>'required',
-		],[
-			'order_id.required'=>'ไม่พบรหัสคำสั่งซื้ัอ โปรดตรวจสอบ',
-			'id_card.required'=>'โปรดกรอกเลขบัตรประชาชน',
-			'title_name.required'=>'โปรดกรอกคำนำหน้าชื่อ',
-			'firstname.required'=>'โปรดกรอกชื่อ',
-			'lastname.required'=>'โปรดกรอกนามสกุล',
-			'sample_date.required'=>'โปรดกรอกวันที่เก็บตัวอย่าง',
-		]);
 		try {
-			$order_sample = new OrderSample();
-			$order_sample->order_id = $request->order_id;
-			$order_sample->id_card = $request->id_card;
-			$order_sample->passport = $request->passport;
-			$order_sample->title_name = $request->title_name;
-			$order_sample->firstname = $request->firstname;
-			$order_sample->lastname = $request->lastname;
-			$order_sample->age_year = $request->age_year;
-			$order_sample->division = $request->division;
-			$order_sample->work_life_year = $request->work_life_year;
-			$order_sample->sample_date = $this->convertJsDateToMySQL($request->sample_date);
-			$order_sample->note = $request->note;
-			$saved = $order_sample->save();
-			$last_insert_id = $order_sample->id;
+			switch ($this->user->userCustomer->customer_type) {
+				case 'personal':
+					$request->validate([
+						'order_id' => 'bail|required',
+						'title_name' => 'required',
+						'firstname' => 'required',
+						'lastname' => 'required',
+						'id_card' => 'required',
+						'sample_date' => 'required',
+					],[
+						'order_id.required'=>'ไม่พบรหัสคำสั่งซื้ัอ โปรดตรวจสอบ',
+						'title_name.required'=>'โปรดกรอกคำนำหน้าชื่อ',
+						'firstname.required'=>'โปรดกรอกชื่อ',
+						'lastname.required'=>'โปรดกรอกนามสกุล',
+						'id_card.required'=>'โปรดกรอกเลขบัตรประชาชน',
+						'sample_date.required'=>'โปรดกรอกวันที่เก็บตัวอย่าง',
+					]);
+					$order_sample = new OrderSample();
+					$order_sample->order_id = $request->order_id;
+					$order_sample->title_name = $request->title_name;
+					$order_sample->firstname = $request->firstname;
+					$order_sample->lastname = $request->lastname;
+					$order_sample->id_card = $request->id_card;
+					$order_sample->passport = $request->passport;
+					$order_sample->age_year = $request->age_year;
+					$order_sample->sample_date = $this->convertJsDateToMySQL($request->sample_date);
+					$order_sample->note = $request->note;
+					$saved = $order_sample->save();
+					$last_insert_id = $order_sample->id;
+					break;
+				case 'private':
+				case 'government':
+					$request->validate([
+						'order_id' => 'bail|required',
+						'title_name' => 'required',
+						'firstname' => 'required',
+						'lastname' => 'required',
+						'id_card' => 'required',
+						'division' => 'required',
+						'work_life_year' => 'required',
+						'sample_date' => 'required',
+					],[
+						'order_id.required' => 'ไม่พบรหัสคำสั่งซื้ัอ โปรดตรวจสอบ',
+						'title_name.required' => 'โปรดกรอกคำนำหน้าชื่อ',
+						'firstname.required' => 'โปรดกรอกชื่อ',
+						'lastname.required' => 'โปรดกรอกนามสกุล',
+						'id_card.required' => 'โปรดกรอกเลขบัตรประชาชน',
+						'division.required' => 'โปรดกรอกแผนก',
+						'work_life_year.required' => 'โปรดกรอกอายุงาน',
+						'sample_date.required' => 'โปรดกรอกวันที่เก็บตัวอย่าง',
+					]);
+                    $sample_date = (!empty($request->sample_date)) ? $this->convertJsDateToMySQL($request->sample_date) : null;
+					$order_sample = new OrderSample();
+					$order_sample->order_id = $request->order_id;
+					$order_sample->id_card = $request->id_card;
+					$order_sample->passport = $request->passport;
+					$order_sample->title_name = $request->title_name;
+					$order_sample->firstname = $request->firstname;
+					$order_sample->lastname = $request->lastname;
+					$order_sample->age_year = $request->age_year;
+					$order_sample->division = $request->division;
+					$order_sample->work_life_year = $request->work_life_year;
+					$order_sample->sample_date = $sample_date;
+					$order_sample->note = $request->note;
+					$saved = $order_sample->save();
+					$last_insert_id = $order_sample->id;
+					break;
+			}
 			if ($saved == true) {
 				return redirect()->back()->with('success', 'บันทึกข้อมูลแล้ว');
 			} else {

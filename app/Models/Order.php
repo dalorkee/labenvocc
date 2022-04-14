@@ -17,6 +17,7 @@ class Order extends Model
 		'order_type',
 		'user_id',
 		'customer_type',
+		'customer_name',
 		'type_of_work',
 		'type_of_work_other',
 		'book_no',
