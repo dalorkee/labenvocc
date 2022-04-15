@@ -45,7 +45,7 @@ div.dataTables_wrapper span.select-item {margin-left: 0.5em;}
 				</div>
 			</div>
 			<div class="panel-container relative">
-				<div class="row-completed"><span class="badge badge-danger p-2">จำนวน {{ number_format($orders[0]->parameters_count) }} ตัวอย่าง</span></div>
+				<div class="row-completed"><span class="badge badge-danger p-2">จำนวน {{ number_format($order[0]->parameters_count) }} ตัวอย่าง</span></div>
 				<form>
 					<div class="panel-content">
 						<ul class="steps mb-3">
@@ -60,8 +60,8 @@ div.dataTables_wrapper span.select-item {margin-left: 0.5em;}
 						<div class="form-row">
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
 								{{-- <button class="btn btn-primary ml-auto" type="button"><i class="fal fa-save"></i> บันทึกร่าง</button> --}}
-								<a href="{{ route('customer.info.create', ['order_id' => $order_id]) }}" class="btn btn-warning ml-auto"><i class="fal fa-arrow-alt-left"></i> ก่อนหน้า</a>
-								<a href="{{ route('customer.sample.create', ['order_id' => $order_id]) }}" class="btn btn-warning ml-auto">ถัดไป <i class="fal fa-arrow-alt-right"></i></a>
+								<a href="{{ route('customer.info.create', ['order_id' => $order[0]->id]) }}" class="btn btn-warning ml-auto"><i class="fal fa-arrow-alt-left"></i> ก่อนหน้า</a>
+								<a href="{{ route('customer.sample.create', ['order_id' => $order[0]->id]) }}" class="btn btn-warning ml-auto">ถัดไป <i class="fal fa-arrow-alt-right"></i></a>
 							</div>
 						</div>
 					</div>
@@ -76,6 +76,8 @@ div.dataTables_wrapper span.select-item {margin-left: 0.5em;}
 		<div class="modal-content">
 			<form name="modal_new_data" action="{{ route('customer.parameter.personal.store') }}" method="POST">
 				@csrf
+				<input type="hidden" name="order_id" value="{{ $order[0]->id }}" id="order_id">
+				<input type="hidden" name="customer_type" value="{{ $order[0]->customer_type }}">
 				<div class="modal-header bg-green-600 text-white">
 					<h5 class="modal-title"><i class="fal fa-plus-circle"></i> เพิ่มข้อมูลตัวอย่างใหม่</h5>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -88,15 +90,15 @@ div.dataTables_wrapper span.select-item {margin-left: 0.5em;}
 							<label class="form-label" for="title_name">คำนำหน้าชื่อ <span class="text-red-600">*</span></label>
 							<div class="frame-wrap">
 								<div class="custom-control custom-checkbox custom-control-inline">
-									<input type="checkbox" name="title_name" value="mr" class="custom-control-input" id="chk_mr" @if (old('title_name') == 'mr') checked @endif>
+									<input type="checkbox" name="title_name" value="mr" class="custom-control-input @error('title_name') is-invalid @enderror" id="chk_mr" @if (old('title_name') == 'mr') checked @endif>
 									<label class="custom-control-label" for="chk_mr">นาย</label>
 								</div>
 								<div class="custom-control custom-checkbox custom-control-inline">
-									<input type="checkbox" name="title_name" value="mrs" class="custom-control-input" id="chk_mrs" @if (old('title_name') == 'mrs') checked @endif>
+									<input type="checkbox" name="title_name" value="mrs" class="custom-control-input @error('title_name') is-invalid @enderror" id="chk_mrs" @if (old('title_name') == 'mrs') checked @endif>
 									<label class="custom-control-label" for="chk_mrs">นาง</label>
 								</div>
 								<div class="custom-control custom-checkbox custom-control-inline">
-									<input type="checkbox" name="title_name" value="miss" class="custom-control-input" id="chk_miss" @if (old('title_name') == 'miss') checked @endif>
+									<input type="checkbox" name="title_name" value="miss" class="custom-control-input @error('title_name') is-invalid @enderror" id="chk_miss" @if (old('title_name') == 'miss') checked @endif>
 									<label class="custom-control-label" for="chk_miss">นางสาว</label>
 								</div>
 							</div>
@@ -105,36 +107,35 @@ div.dataTables_wrapper span.select-item {margin-left: 0.5em;}
 					<div class="form-row">
 						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
 							<label class="form-label" for="firstname">ชื่อ <span class="text-red-600">*</span></label>
-							<input type="text" name="firstname" value="{{ old('firstname') }}" class="form-control @error('firstname') is-invalid @enderror">
+							<input type="text" name="firstname" value="{{ old('firstname') }}" placeholder="ชื่อ" class="form-control @error('firstname') is-invalid @enderror">
 							@error('firstname')
 								<div class="invalid-feedback" role="alert">{{ $message }}</div>
 							@enderror
 						</div>
 						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
 							<label class="form-label" for="lastname">นามสกุล <span class="text-red-600">*</span></label>
-							<input type="text" name="lastname" value="{{ old('lastname') }}" class="form-control @error('lastname') is-invalid @enderror">
+							<input type="text" name="lastname" value="{{ old('lastname') }}" placeholder="นามสกุล" class="form-control @error('lastname') is-invalid @enderror">
 							@error('lastname')
 								<div class="invalid-feedback" role="alert">{{ $message }}</div>
 							@enderror
 						</div>
 						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
 							<label class="form-label" for="id_card">เลขบัตรประชาชน <span class="text-red-600">*</span></label>
-							<input type="hidden" name="order_id" value="{{ $order_id }}" id="order_id">
-							<input type="text" name="id_card" value="{{ old('id_card') }}" placeholder="" data-inputmask="'mask': '9-9999-99999-99-9'" maxlength="18" class="form-control @error('id_card') is-invalid @enderror">
+							<input type="text" name="id_card" value="{{ old('id_card') }}" placeholder="เลขบัตรประชาชน" maxlength="13" class="form-control @error('id_card') is-invalid @enderror">
 							@error('id_card')
 								<div class="invalid-feedback" role="alert">{{ $message }}</div>
 							@enderror
 						</div>
 						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
 							<label class="form-label" for="passport">พาสปอร์ต</label>
-							<input type="text" name="passport" value="{{ old('passport') }}" class="form-control @error('passport') is-invalid @enderror">
+							<input type="text" name="passport" value="{{ old('passport') }}" placeholder="พาสปอร์ต" class="form-control @error('passport') is-invalid @enderror">
 							@error('passport')
 								<div class="invalid-feedback" role="alert">{{ $message }}</div>
 							@enderror
 						</div>
 						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
 							<label class="form-label" for="age_year">อายุ/ปี</label>
-							<input type="number" name="age_year" value="{{ old('age_year') }}" min="1" max="100" class="form-control @error('age_year') is-invalid @enderror">
+							<input type="number" name="age_year" value="{{ old('age_year') }}" placeholder="อายุ" min="1" max="100" class="form-control @error('age_year') is-invalid @enderror">
 							@error('age_year')
 								<div class="invalid-feedback" role="alert">{{ $message }}</div>
 							@enderror
@@ -142,14 +143,14 @@ div.dataTables_wrapper span.select-item {margin-left: 0.5em;}
 						@if (auth()->user()->userCustomer->customer_type == 'private')
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
 								<label class="form-label" for="division">แผนก <span class="text-red-600">*</span></label>
-								<input type="text" name="division" value="{{ old('division') }}" class="form-control @error('division') is-invalid @enderror">
+								<input type="text" name="division" value="{{ old('division') }}" placeholder="แผนก" class="form-control @error('division') is-invalid @enderror">
 								@error('division')
 									<div class="invalid-feedback" role="alert">{{ $message }}</div>
 								@enderror
 							</div>
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
 								<label class="form-label" for="work_life_year">อายุงาน/ปี <span class="text-red-600">*</span></label>
-								<input type="number" name="work_life_year" value="{{ old('work_life_year') }}" min="1" max="100" class="form-control @error('work_life_year') is-invalid @enderror">
+								<input type="number" name="work_life_year" value="{{ old('work_life_year') }}" placeholder="อายุงาน" min="1" max="100" class="form-control @error('work_life_year') is-invalid @enderror">
 								@error('work_life_year')
 									<div class="invalid-feedback" role="alert">{{ $message }}</div>
 								@enderror
@@ -158,17 +159,20 @@ div.dataTables_wrapper span.select-item {margin-left: 0.5em;}
 						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
 							<label class="form-label" for="specimen_date">วันที่เก็บตัวอย่าง <span class="text-red-600">*</span></label>
 							<div class="input-group">
-								<input type="text" name="sample_date" value="{{ old('sample_date') }}" class="form-control " readonly placeholder="เลือกวันที่" id="datepicker_specimen_date">
+								<input type="text" name="sample_date" value="{{ old('sample_date') }}" placeholder="วันที่เก็บตัวอย่าง" class="form-control @error('sample_date') is-invalid @enderror " readonly placeholder="เลือกวันที่" id="datepicker_specimen_date">
 								<div class="input-group-append">
 									<span class="input-group-text fs-xl">
 										<i class="fal fa-calendar-alt"></i>
 									</span>
 								</div>
+								@error('sample_date')
+									<div class="invalid-feedback" role="alert">{{ $message }}</div>
+								@enderror
 							</div>
 						</div>
 						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
 							<label class="form-label" for="note">หมายเหตุ</label>
-							<input type="text" name="note" value="{{ old('note') }}" class="form-control @error('note') is-invalid @enderror">
+							<input type="text" name="note" value="{{ old('note') }}" placeholder="หมายเหตุ" class="form-control @error('note') is-invalid @enderror">
 							@error('note')
 								<div class="invalid-feedback" role="alert">{{ $message }}</div>
 							@enderror
@@ -184,9 +188,32 @@ div.dataTables_wrapper span.select-item {margin-left: 0.5em;}
 	</div>
 </div>
 <!-- Modal update personal Data-->
-<div class="modal fade font-prompt" id="edit-customer-personal-modal" data-keyboard="false" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
+{{-- <div class="modal fade font-prompt" id="edit-customer-personal-modal" data-keyboard="false" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
 	<div class="modal-dialog modal-lg modal-dialog-centered" role="document">
 		<div class="modal-content" id="edit-customer-personal"></div>
+	</div>
+</div> --}}
+<!-- Modal update by json personal Data-->
+<div class="modal fade font-prompt" id="edit-customer-personal-modal-by-json" data-keyboard="false" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+		<div class="modal-content" id="edit-customer-personal-by-json">
+            <form name="edit_data" method="POST">
+                <div class="modal-header bg-red-500 text-white">
+                    <h5 class="modal-title"><i class="fal fa-pencil"></i> แก้ไขข้อมูล รหัส </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true"><i class="fal fa-times"></i></span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
+                            <label class="form-label" for="id_card">เลขบัตรประชาชน <span class="text-red-600">*</span></label>
+                            <input type="text" name="edit_id_card" id="edit_id_card" placeholder="" maxlength="18" class="form-control">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
 	</div>
 </div>
 <!-- Modal add parameter-->
@@ -220,14 +247,10 @@ div.dataTables_wrapper span.select-item {margin-left: 0.5em;}
 								<thead class="bg-gray-300">
 									<tr>
 										<th></th>
-										{{-- <th>ลำดับ</th> --}}
-										{{-- <th>รหัส</th> --}}
 										<th>พารามิเตอร์</th>
 										<th>สิ่งส่งตรวจ</th>
 										<th>ห้องปฏิบัติการ</th>
 										<th>ราคา (บาท)</th>
-										{{-- <th>เลือก</th> --}}
-										{{-- <th>#</th> --}}
 									</tr>
 								</thead>
 								<tfoot></tfoot>
@@ -237,7 +260,7 @@ div.dataTables_wrapper span.select-item {margin-left: 0.5em;}
 					</div>
 					<div class="row">
 						<div class="col text-center">
-							<input type="hedden" name="hidden_order_id" value="{{ $order_id }}" id="hidden_order_id">
+							<input type="hedden" name="hidden_order_id" value="{{ $order[0]->id }}" id="hidden_order_id">
 							<input type="hidden" name="hidden_order_sample_id" value="" id="hidden_order_sample_id">
 							<button type="submit" class="btn btn-success btn-lg">บันทึกข้อมูล</button>
 						</div>
@@ -287,12 +310,29 @@ $(document).ready(function() {
 		className: 'data-title',
 		callback: function(itemKey, opt) {
 			switch (itemKey) {
-				case 'edit':
-					let id = $(this).data('id');
+                case 'editt':
+                let edit_order_sample_id = $(this).data('id');
+					let edit_url = "{{ route('customer.parameter.personal.edit', ['order_sample_id'=>':order_sample_id']) }}";
+					edit_url = edit_url.replace(':order_sample_id', edit_order_sample_id);
 					$.ajax({
 						method: 'GET',
-						url: '{{ route("customer.parameter.personal.edit") }}',
-						data: {id: id},
+						url: edit_url,
+						dataType: 'json',
+						success: function(data) {
+                            alert(data.id_card);
+                            $('#edit-customer-personal-modal-by-json').modal({backdrop: 'static', keyboard: false});
+							$('#edit_id_card').val(data.id_card);
+                        },
+                        error: function(data, status, error) {alert(error);}
+					});
+                    break;
+				/*case 'edit':
+					let edit_order_sample_id = $(this).data('id');
+					let edit_url = "{{ route('customer.parameter.personal.edit', ['order_sample_id'=>':order_sample_id']) }}";
+					edit_url = edit_url.replace(':order_sample_id', edit_order_sample_id);
+					$.ajax({
+						method: 'GET',
+						url: edit_url,
 						dataType: 'HTML',
 						success: function(data) {
 							$('#edit-customer-personal').html(data);
@@ -308,7 +348,7 @@ $(document).ready(function() {
 						},
 						error: function(data, status, error) {alert(error);}
 					});
-					break;
+					break;*/
 				case 'parameter':
 						let order_sample_id = $(this).data('id');
 						let url = "{{ route('customer.parameter.data.list', ['order_sample_id'=>':order_sample_id','threat_type_id'=>0]) }}";
@@ -388,7 +428,8 @@ $(document).ready(function() {
 			}
 		},
 		items: {
-			"edit": {name: "แก้ไขข้อมูล", icon: "fal fa-edit"},
+            "editt": {name: "แก้ไขจ้า", icon: "fal fa-edit"},
+			/*"edit": {name: "แก้ไขข้อมูล", icon: "fal fa-edit"},*/
 			"sep1": "---------",
 			"parameter": {name: "เพิ่มพารามิเตอร์", icon: "fal fa-tachometer"},
 			"sep2": "---------",

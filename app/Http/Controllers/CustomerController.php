@@ -106,7 +106,7 @@ class CustomerController extends Controller
 				}
 			}
 			if ($order == true) {
-				return redirect()->route('customer.info.create', ['order_id' => $last_insert_order_id])->with(['success' => 'บันทึกร่าง "ข้อมูลทั่วไป" สำเร็จ']);
+				return redirect()->route('customer.info.create', ['order_id' => $last_insert_order_id])->with(['success' => 'บันทึกร่างข้อมูลทั่วไปแล้ว โปรดทำขั้นตอนต่อไป']);
 			} else {
 				return redirect()->back()->with('error', 'บันทึกร่าง "ข้อมูลทั่วไป" ผิดพลาด โปรดตรวจสอบ');
 			}
@@ -119,9 +119,8 @@ class CustomerController extends Controller
 	#[Route('customer.parameter.create', methods: ['GET'])]
 	protected function createParameter(Request $request, CustParameterDataTable $dataTable): object {
 		try {
-			$order_id = $request->order_id;
-			$orders = Order::withCount('parameters')->get();
-			return $dataTable->render('apps.customers.parameter', compact('order_id', 'orders'));
+			$order = Order::whereId($request->order_id)->withCount('parameters')->get();
+			return $dataTable->render('apps.customers.parameter', compact('order'));
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
 			return redirect()->route('customer.index')->with('error', $e->getMessage());
@@ -130,75 +129,44 @@ class CustomerController extends Controller
 
 	#[Route('customer.parameter.personal.store', methods: ['POST'])]
 	protected function storeParameterPersonal(Request $request) {
+		$request->validate([
+			'order_id' => 'bail|required',
+			'customer_type' => 'required',
+			'title_name' => 'required',
+			'firstname' => 'required',
+			'lastname' => 'required',
+			'id_card' => 'required|numeric|digits:13',
+			'passport' => 'nullable',
+			'age_year' => 'nullable',
+			'division' => 'required_if:customer_type,==,private|required_if:customer_type,==,government',
+			'work_life_year' => 'required_if:customer_type,==,private|required_if:customer_type,==,government',
+			'sample_date' => 'required',
+		],[
+			'order_id.required' => 'ไม่พบรหัสคำสั่งซื้ัอ โปรดตรวจสอบ',
+			'title_name.required' => 'โปรดกรอกคำนำหน้าชื่อ',
+			'firstname.required' => 'โปรดกรอกชื่อ',
+			'lastname.required' => 'โปรดกรอกนามสกุล',
+			'id_card.required' => 'โปรดกรอกเลขบัตรประชาชน',
+			'division.required_if' => 'โปรดกรอกแผนก',
+			'work_life_year.required_if' => 'โปรดกรอกอายุงาน',
+			'sample_date.required' => 'โปรดกรอกวันที่เก็บตัวอย่าง',
+		]);
+
 		try {
-			switch ($this->user->userCustomer->customer_type) {
-				case 'personal':
-					$request->validate([
-						'order_id' => 'bail|required',
-						'title_name' => 'required',
-						'firstname' => 'required',
-						'lastname' => 'required',
-						'id_card' => 'required',
-						'sample_date' => 'required',
-					],[
-						'order_id.required'=>'ไม่พบรหัสคำสั่งซื้ัอ โปรดตรวจสอบ',
-						'title_name.required'=>'โปรดกรอกคำนำหน้าชื่อ',
-						'firstname.required'=>'โปรดกรอกชื่อ',
-						'lastname.required'=>'โปรดกรอกนามสกุล',
-						'id_card.required'=>'โปรดกรอกเลขบัตรประชาชน',
-						'sample_date.required'=>'โปรดกรอกวันที่เก็บตัวอย่าง',
-					]);
-					$order_sample = new OrderSample();
-					$order_sample->order_id = $request->order_id;
-					$order_sample->title_name = $request->title_name;
-					$order_sample->firstname = $request->firstname;
-					$order_sample->lastname = $request->lastname;
-					$order_sample->id_card = $request->id_card;
-					$order_sample->passport = $request->passport;
-					$order_sample->age_year = $request->age_year;
-					$order_sample->sample_date = $this->convertJsDateToMySQL($request->sample_date);
-					$order_sample->note = $request->note;
-					$saved = $order_sample->save();
-					$last_insert_id = $order_sample->id;
-					break;
-				case 'private':
-				case 'government':
-					$request->validate([
-						'order_id' => 'bail|required',
-						'title_name' => 'required',
-						'firstname' => 'required',
-						'lastname' => 'required',
-						'id_card' => 'required',
-						'division' => 'required',
-						'work_life_year' => 'required',
-						'sample_date' => 'required',
-					],[
-						'order_id.required' => 'ไม่พบรหัสคำสั่งซื้ัอ โปรดตรวจสอบ',
-						'title_name.required' => 'โปรดกรอกคำนำหน้าชื่อ',
-						'firstname.required' => 'โปรดกรอกชื่อ',
-						'lastname.required' => 'โปรดกรอกนามสกุล',
-						'id_card.required' => 'โปรดกรอกเลขบัตรประชาชน',
-						'division.required' => 'โปรดกรอกแผนก',
-						'work_life_year.required' => 'โปรดกรอกอายุงาน',
-						'sample_date.required' => 'โปรดกรอกวันที่เก็บตัวอย่าง',
-					]);
-                    $sample_date = (!empty($request->sample_date)) ? $this->convertJsDateToMySQL($request->sample_date) : null;
-					$order_sample = new OrderSample();
-					$order_sample->order_id = $request->order_id;
-					$order_sample->id_card = $request->id_card;
-					$order_sample->passport = $request->passport;
-					$order_sample->title_name = $request->title_name;
-					$order_sample->firstname = $request->firstname;
-					$order_sample->lastname = $request->lastname;
-					$order_sample->age_year = $request->age_year;
-					$order_sample->division = $request->division;
-					$order_sample->work_life_year = $request->work_life_year;
-					$order_sample->sample_date = $sample_date;
-					$order_sample->note = $request->note;
-					$saved = $order_sample->save();
-					$last_insert_id = $order_sample->id;
-					break;
-			}
+			$order_sample = new OrderSample();
+			$order_sample->order_id = $request->order_id;
+			$order_sample->id_card = $request->id_card;
+			$order_sample->passport = $request->passport;
+			$order_sample->title_name = $request->title_name;
+			$order_sample->firstname = $request->firstname;
+			$order_sample->lastname = $request->lastname;
+			$order_sample->age_year = $request->age_year;
+			$order_sample->division = $request->division ?? null;
+			$order_sample->work_life_year = $request->work_life_year ?? null;
+			$order_sample->sample_date = $this->convertJsDateToMySQL($request->sample_date);
+			$order_sample->note = $request->note;
+			$saved = $order_sample->save();
+			$last_insert_id = $order_sample->id;
 			if ($saved == true) {
 				return redirect()->back()->with('success', 'บันทึกข้อมูลแล้ว');
 			} else {
@@ -211,116 +179,118 @@ class CustomerController extends Controller
 
 	#[Route('customer.parameter.personal.edit', methods: ['GET'])]
 	protected function editParameterPersonal(Request $request) {
-		$order_sample = OrderSample::find($request->id);
-		switch ($order_sample->title_name) {
-			case "mr":
-				$mr_chk = "checked";
-				$mrs_chk = null;
-				$miss_chk = null;
-				break;
-			case "mrs":
-				$mr_chk = null;
-				$mrs_chk = "checked";
-				$miss_chk = null;
-				break;
-			case "miss":
-				$mr_chk = null;
-				$mrs_chk = null;
-				$miss_chk = "checked";
-				break;
-			default:
-				$mr_chk = null;
-				$mrs_chk = null;
-				$miss_chk = null;
-		}
-		$edit_sample_date = $this->convertMySQLDateToJs($order_sample->sample_date);
-		$htm = "
-		<form name=\"modal_new_data\" action=\"".route('customer.parameter.personal.update')."\" method=\"POST\">
-		<div class=\"modal-header bg-red-500 text-white\">
-			<h5 class=\"modal-title\"><i class=\"fal fa-pencil\"></i> แก้ไขข้อมูล รหัส ".$request->id."</h5>
-			<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">
-				<span aria-hidden=\"true\"><i class=\"fal fa-times\"></i></span>
-			</button>
-		</div>
-		<div class=\"modal-body\">
-			<div class=\"form-row\">
-				<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3\">
-					<label class=\"form-label\" for=\"title_name\">คำนำหน้าชื่อ <span class=\"text-red-600\">*</span></label>
-					<input type=\"hidden\" name=\"_token\" value=\"".csrf_token()."\">
-					<input type=\"hidden\" name=\"edit_id\" value=\"".$order_sample->id."\">
-					<input type=\"hidden\" name=\"edit_order_id\" value=\"".$order_sample->order_id."\">
-					<div class=\"frame-wrap\">
-						<div class=\"custom-control custom-checkbox custom-control-inline\">
-							<input type=\"checkbox\" name=\"edit_title_name\" value=\"mr\" class=\"custom-control-input\" id=\"edit_chk_mr\"".$mr_chk.">
-							<label class=\"custom-control-label\" for=\"edit_chk_mr\">นาย</label>
-						</div>
-						<div class=\"custom-control custom-checkbox custom-control-inline\">
-							<input type=\"checkbox\" name=\"edit_title_name\" value=\"mrs\" class=\"custom-control-input\" id=\"edit_chk_mrs\"".$mrs_chk.">
-							<label class=\"custom-control-label\" for=\"edit_chk_mrs\">นาง</label>
-						</div>
-						<div class=\"custom-control custom-checkbox custom-control-inline\">
-							<input type=\"checkbox\" name=\"edit_title_name\" value=\"miss\" class=\"custom-control-input\" id=\"edit_chk_miss\"".$miss_chk.">
-							<label class=\"custom-control-label\" for=\"edit_chk_miss\">นางสาว</label>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class=\"form-row\">
-				<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3\">
-					<label class=\"form-label\" for=\"id_card\">เลขบัตรประชาชน <span class=\"text-red-600\">*</span></label>
-					<input type=\"text\" name=\"edit_id_card\" value=\"".$order_sample->id_card."\" placeholder=\"\" data-inputmask=\"'mask': '9-9999-99999-99-9'\" maxlength=\"18\" class=\"form-control\">
-				</div>
-				<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3\">
-					<label class=\"form-label\" for=\"passport\">พาสปอร์ต</label>
-					<input type=\"text\" name=\"edit_passport\" value=\"".$order_sample->passport."\" maxlength=\"30\" class=\"form-control\">
-				</div>
-				<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3\">
-					<label class=\"form-label\" for=\"firstname\">ชื่อ <span class=\"text-red-600\">*</span></label>
-					<input type=\"text\" name=\"edit_firstname\" value=\"".$order_sample->firstname."\" class=\"form-control\">
-				</div>
-				<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3\">
-					<label class=\"form-label\" for=\"lastname\">นามสกุล <span class=\"text-red-600\">*</span></label>
-					<input type=\"text\" name=\"edit_lastname\" value=\"".$order_sample->lastname."\" class=\"form-control\">
-				</div>
-				<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3\">
-					<label class=\"form-label\" for=\"age_year\">อายุ/ปี</label>
-					<input type=\"number\" name=\"edit_age_year\" value=\"".$order_sample->age_year."\" min=\"1\" max=\"100\" class=\"form-control\">
-				</div>";
-				if (Auth::user()->userCustomer->customer_type == 'private') {
-					$htm .= "
-					<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3\">
-						<label class=\"form-label\" for=\"division\">แผนก <span class=\"text-red-600\">*</span></label>
-						<input type=\"text\" name=\"edit_division\" value=\"".$order_sample->division."\" class=\"form-control\">
-					</div>
-					<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3\">
-						<label class=\"form-label\" for=\"work_life_year\">อายุงาน/ปี <span class=\"text-red-600\">*</span></label>
-						<input type=\"number\" name=\"edit_work_life_year\" value=\"".$order_sample->work_life_year."\" min=\"1\" max=\"100\" class=\"form-control\">
-					</div>";
-				}
-				$htm .= "
-				<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3\">
-					<label class=\"form-label\" for=\"edit_sample_date\">วันที่เก็บตัวอย่าง <span class=\"text-red-600\">*</span></label>
-					<div class=\"input-group\">
-						<input type=\"text\" name=\"edit_sample_date\" value=\"".$edit_sample_date."\" class=\"form-control\" placeholder=\"เลือกวันที่\" id=\"datepicker_edit_specimen_date\" readonly>
-						<div class=\"input-group-append\">
-							<span class=\"input-group-text fs-xl\">
-								<i class=\"fal fa-calendar-alt\"></i>
-							</span>
-						</div>
-					</div>
-				</div>
-				<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3\">
-					<label class=\"form-label\" for=\"note\">หมายเหตุ</label>
-					<input type=\"text\" name=\"edit_note\" value=\"".$order_sample->note."\" class=\"form-control\">
-				</div>
-			</div>
-		</div>
-		<div class=\"modal-footer\">
-				<button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">ยกเลิก</button>
-				<button type=\"submit\" class=\"btn btn-danger\">แก้ไขข้อมูล</button>
-			</div>
-		</form>";
-		return $htm;
+        $personal = OrderSample::find($request->order_sample_id);
+        return response()->json($personal);
+        // $order_sample = OrderSample::find($request->order_sample_id);
+		// switch ($order_sample->title_name) {
+		// 	case "mr":
+		// 		$mr_chk = "checked";
+		// 		$mrs_chk = null;
+		// 		$miss_chk = null;
+		// 		break;
+		// 	case "mrs":
+		// 		$mr_chk = null;
+		// 		$mrs_chk = "checked";
+		// 		$miss_chk = null;
+		// 		break;
+		// 	case "miss":
+		// 		$mr_chk = null;
+		// 		$mrs_chk = null;
+		// 		$miss_chk = "checked";
+		// 		break;
+		// 	default:
+		// 		$mr_chk = null;
+		// 		$mrs_chk = null;
+		// 		$miss_chk = null;
+		// }
+		// $edit_sample_date = $this->convertMySQLDateToJs($order_sample->sample_date);
+		// $htm = "
+		// <form name=\"modal_new_data\" action=\"".route('customer.parameter.personal.update')."\" method=\"POST\">
+		// <div class=\"modal-header bg-red-500 text-white\">
+		// 	<h5 class=\"modal-title\"><i class=\"fal fa-pencil\"></i> แก้ไขข้อมูล รหัส ".$request->order_sample_id."</h5>
+		// 	<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">
+		// 		<span aria-hidden=\"true\"><i class=\"fal fa-times\"></i></span>
+		// 	</button>
+		// </div>
+		// <div class=\"modal-body\">
+		// 	<div class=\"form-row\">
+		// 		<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3\">
+		// 			<label class=\"form-label\" for=\"title_name\">คำนำหน้าชื่อ <span class=\"text-red-600\">*</span></label>
+		// 			<input type=\"hidden\" name=\"_token\" value=\"".csrf_token()."\">
+		// 			<input type=\"hidden\" name=\"edit_id\" value=\"".$order_sample->id."\">
+		// 			<input type=\"hidden\" name=\"edit_order_id\" value=\"".$order_sample->order_id."\">
+		// 			<div class=\"frame-wrap\">
+		// 				<div class=\"custom-control custom-checkbox custom-control-inline\">
+		// 					<input type=\"checkbox\" name=\"edit_title_name\" value=\"mr\" class=\"custom-control-input\" id=\"edit_chk_mr\"".$mr_chk.">
+		// 					<label class=\"custom-control-label\" for=\"edit_chk_mr\">นาย</label>
+		// 				</div>
+		// 				<div class=\"custom-control custom-checkbox custom-control-inline\">
+		// 					<input type=\"checkbox\" name=\"edit_title_name\" value=\"mrs\" class=\"custom-control-input\" id=\"edit_chk_mrs\"".$mrs_chk.">
+		// 					<label class=\"custom-control-label\" for=\"edit_chk_mrs\">นาง</label>
+		// 				</div>
+		// 				<div class=\"custom-control custom-checkbox custom-control-inline\">
+		// 					<input type=\"checkbox\" name=\"edit_title_name\" value=\"miss\" class=\"custom-control-input\" id=\"edit_chk_miss\"".$miss_chk.">
+		// 					<label class=\"custom-control-label\" for=\"edit_chk_miss\">นางสาว</label>
+		// 				</div>
+		// 			</div>
+		// 		</div>
+		// 	</div>
+		// 	<div class=\"form-row\">
+		// 		<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3\">
+		// 			<label class=\"form-label\" for=\"id_card\">เลขบัตรประชาชน <span class=\"text-red-600\">*</span></label>
+		// 			<input type=\"text\" name=\"edit_id_card\" value=\"".$order_sample->id_card."\" placeholder=\"\" data-inputmask=\"'mask': '9-9999-99999-99-9'\" maxlength=\"18\" class=\"form-control\">
+		// 		</div>
+		// 		<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3\">
+		// 			<label class=\"form-label\" for=\"passport\">พาสปอร์ต</label>
+		// 			<input type=\"text\" name=\"edit_passport\" value=\"".$order_sample->passport."\" maxlength=\"30\" class=\"form-control\">
+		// 		</div>
+		// 		<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3\">
+		// 			<label class=\"form-label\" for=\"firstname\">ชื่อ <span class=\"text-red-600\">*</span></label>
+		// 			<input type=\"text\" name=\"edit_firstname\" value=\"".$order_sample->firstname."\" class=\"form-control\">
+		// 		</div>
+		// 		<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3\">
+		// 			<label class=\"form-label\" for=\"lastname\">นามสกุล <span class=\"text-red-600\">*</span></label>
+		// 			<input type=\"text\" name=\"edit_lastname\" value=\"".$order_sample->lastname."\" class=\"form-control\">
+		// 		</div>
+		// 		<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3\">
+		// 			<label class=\"form-label\" for=\"age_year\">อายุ/ปี</label>
+		// 			<input type=\"number\" name=\"edit_age_year\" value=\"".$order_sample->age_year."\" min=\"1\" max=\"100\" class=\"form-control\">
+		// 		</div>";
+		// 		if (Auth::user()->userCustomer->customer_type == 'private') {
+		// 			$htm .= "
+		// 			<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3\">
+		// 				<label class=\"form-label\" for=\"division\">แผนก <span class=\"text-red-600\">*</span></label>
+		// 				<input type=\"text\" name=\"edit_division\" value=\"".$order_sample->division."\" class=\"form-control\">
+		// 			</div>
+		// 			<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3\">
+		// 				<label class=\"form-label\" for=\"work_life_year\">อายุงาน/ปี <span class=\"text-red-600\">*</span></label>
+		// 				<input type=\"number\" name=\"edit_work_life_year\" value=\"".$order_sample->work_life_year."\" min=\"1\" max=\"100\" class=\"form-control\">
+		// 			</div>";
+		// 		}
+		// 		$htm .= "
+		// 		<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3\">
+		// 			<label class=\"form-label\" for=\"edit_sample_date\">วันที่เก็บตัวอย่าง <span class=\"text-red-600\">*</span></label>
+		// 			<div class=\"input-group\">
+		// 				<input type=\"text\" name=\"edit_sample_date\" value=\"".$edit_sample_date."\" class=\"form-control\" placeholder=\"เลือกวันที่\" id=\"datepicker_edit_specimen_date\" readonly>
+		// 				<div class=\"input-group-append\">
+		// 					<span class=\"input-group-text fs-xl\">
+		// 						<i class=\"fal fa-calendar-alt\"></i>
+		// 					</span>
+		// 				</div>
+		// 			</div>
+		// 		</div>
+		// 		<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3\">
+		// 			<label class=\"form-label\" for=\"note\">หมายเหตุ</label>
+		// 			<input type=\"text\" name=\"edit_note\" value=\"".$order_sample->note."\" class=\"form-control\">
+		// 		</div>
+		// 	</div>
+		// </div>
+		// <div class=\"modal-footer\">
+		// 		<button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">ยกเลิก</button>
+		// 		<button type=\"submit\" class=\"btn btn-danger\">แก้ไขข้อมูล</button>
+		// 	</div>
+		// </form>";
+		// return $htm;
 	}
 
 	#[Route('customer.parameter.personal.update', methods: ['POST'])]

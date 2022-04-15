@@ -29,7 +29,7 @@ class RegisterPersonalController extends Controller
 			'title_name' => 'required|max:20',
 			'first_name' => 'required|max:200',
 			'last_name' => 'required|max:200',
-			'id_card' => 'required|numeric|digits_between:1,13',
+			'id_card' => 'required|numeric|digits:13',
 			'taxpayer_no' => 'required|max:60',
 			'email' => 'required|unique:users_customer_detail,email',
 			'mobile' => 'required|regex:/(0)[0-9]/|not_regex:/[a-z]/|min:10',

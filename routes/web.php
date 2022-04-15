@@ -100,7 +100,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 		Route::prefix('customer/parameter')->group(function() {
 			Route::get('/create/order/{order_id}', [CustomerController::class, 'createParameter'])->name('parameter.create');
 			Route::post('personal/store', [CustomerController::class, 'storeParameterPersonal'])->name('parameter.personal.store');
-			Route::get('/personal/edit', [CustomerController::class, 'editParameterPersonal'])->name('parameter.personal.edit');
+			Route::get('/personal/edit/{order_sample_id}', [CustomerController::class, 'editParameterPersonal'])->name('parameter.personal.edit');
 			Route::post('personal/update', [CustomerController::class, 'updateParameterPersonal'])->name('parameter.personal.update');
 			Route::get('/personal/delete/id/{id}', [CustomerController::class, 'DestroyParameterPersonal'])->name('parameter.personal.destroy');
 			Route::get('/data/list/sample/{order_sample_id}/type/{threat_type_id}', [CustomerController::class, 'listParameterData'])->name('parameter.data.list');
