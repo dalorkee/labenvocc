@@ -197,23 +197,90 @@ div.dataTables_wrapper span.select-item {margin-left: 0.5em;}
 <div class="modal fade font-prompt" id="edit-customer-personal-modal-by-json" data-keyboard="false" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
 	<div class="modal-dialog modal-lg modal-dialog-centered" role="document">
 		<div class="modal-content" id="edit-customer-personal-by-json">
-            <form name="edit_data" method="POST">
-                <div class="modal-header bg-red-500 text-white">
-                    <h5 class="modal-title"><i class="fal fa-pencil"></i> แก้ไขข้อมูล รหัส </h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true"><i class="fal fa-times"></i></span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="form-row">
-                        <div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
-                            <label class="form-label" for="id_card">เลขบัตรประชาชน <span class="text-red-600">*</span></label>
-                            <input type="text" name="edit_id_card" id="edit_id_card" placeholder="" maxlength="18" class="form-control">
-                        </div>
-                    </div>
-                </div>
-            </form>
-        </div>
+			<form name="edit_data" method="POST">
+				<div class="modal-header bg-red-500 text-white">
+					<h5 class="modal-title"><i class="fal fa-pencil"></i> แก้ไขข้อมูล รหัส <span id="edit_modal_title"></span></h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true"><i class="fal fa-times"></i></span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div class="form-row">
+						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
+							<label class="form-label" for="title_name">คำนำหน้าชื่อ <span class="text-red-600">*</span></label>
+							<input type="hidden" name="_token" value="{{ csrf_token() }}">
+							<input type="hidden" name="edit_id" id="edit_id">
+							<input type="hidden" name="edit_order_id" id="edit_order_id">
+							<div class="frame-wrap">
+								<div class="custom-control custom-checkbox custom-control-inline">
+									<input type="checkbox" name="edit_title_name" value="mr" class="custom-control-input" id="edit_chk_mr">
+									<label class="custom-control-label" for="edit_chk_mr">นาย</label>
+								</div>
+								<div class="custom-control custom-checkbox custom-control-inline">
+									<input type="checkbox" name="edit_title_name" value="mrs" class="custom-control-input" id="edit_chk_mrs">
+									<label class="custom-control-label" for="edit_chk_mrs">นาง</label>
+								</div>
+								<div class="custom-control custom-checkbox custom-control-inline">
+									<input type="checkbox" name="edit_title_name" value="miss" class="custom-control-input" id="edit_chk_miss">
+									<label class="custom-control-label" for="edit_chk_miss">นางสาว</label>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
+							<label class="form-label" for="id_card">เลขบัตรประชาชน <span class="text-red-600">*</span></label>
+							<input type="text" name="edit_id_card" id="edit_id_card" placeholder="เลขบัตรประชาชน" maxlength="13" class="form-control">
+						</div>
+						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
+							<label class="form-label" for="passport">พาสปอร์ต</label>
+							<input type="text" name="edit_passport" id="edit_passport" placeholder="พาสปอร์ต" maxlength="30" class="form-control">
+						</div>
+						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
+							<label class="form-label" for="firstname">ชื่อ <span class="text-red-600">*</span></label>
+							<input type="text" name="edit_firstname" id="edit_firstname" placeholder="ชื่อ" class="form-control">
+						</div>
+						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
+							<label class="form-label" for="lastname">นามสกุล <span class="text-red-600">*</span></label>
+							<input type="text" name="edit_lastname" id="edit_lastname" placeholder="นามสกุล" class="form-control">
+						</div>
+						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
+							<label class="form-label" for="age_year">อายุ/ปี</label>
+							<input type="number" name="edit_age_year" id="edit_age_year" placeholder="อายุ" min="1" max="100" class="form-control">
+						</div>
+						@if (auth()->user()->userCustomer->customer_type == 'private')
+							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
+								<label class="form-label" for="division">แผนก <span class="text-red-600">*</span></label>
+								<input type="text" name="edit_division" id="edit_division" placeholder="แผนก" class="form-control">
+							</div>
+							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
+								<label class="form-label" for="work_life_year">อายุงาน/ปี <span class="text-red-600">*</span></label>
+								<input type="number" name="edit_work_life_year" id="edit_work_life_year" placeholder="อายุงาน" min="1" max="100" class="form-control">
+							</div>
+						@endif
+						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
+							<label class="form-label" for="edit_sample_date">วันที่เก็บตัวอย่าง <span class="text-red-600">*</span></label>
+							<div class="input-group">
+								<input type="text" name="edit_sample_date" id="edit_sample_date" class="form-control" placeholder="เลือกวันที่" id="datepicker_edit_specimen_date" readonly>
+								<div class="input-group-append">
+									<span class="input-group-text fs-xl">
+										<i class="fal fa-calendar-alt"></i>
+									</span>
+								</div>
+							</div>
+						</div>
+						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
+							<label class="form-label" for="note">หมายเหตุ</label>
+							<input type="text" name="edit_note" id="edit_note" placeholder="หมายเหตุ" class="form-control">
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">ยกเลิก</button>
+					<button type="submit" class="btn btn-danger">แก้ไขข้อมูล</button>
+				</div>
+			</form>
+		</div>
 	</div>
 </div>
 <!-- Modal add parameter-->
@@ -310,8 +377,8 @@ $(document).ready(function() {
 		className: 'data-title',
 		callback: function(itemKey, opt) {
 			switch (itemKey) {
-                case 'editt':
-                let edit_order_sample_id = $(this).data('id');
+				case 'editt':
+				let edit_order_sample_id = $(this).data('id');
 					let edit_url = "{{ route('customer.parameter.personal.edit', ['order_sample_id'=>':order_sample_id']) }}";
 					edit_url = edit_url.replace(':order_sample_id', edit_order_sample_id);
 					$.ajax({
@@ -319,13 +386,28 @@ $(document).ready(function() {
 						url: edit_url,
 						dataType: 'json',
 						success: function(data) {
-                            alert(data.id_card);
-                            $('#edit-customer-personal-modal-by-json').modal({backdrop: 'static', keyboard: false});
+							$('#edit_modal_title').html(data.id);
 							$('#edit_id_card').val(data.id_card);
-                        },
-                        error: function(data, status, error) {alert(error);}
+							$('#edit_passport').val(data.passport);
+							$('#edit_firstname').val(data.firstname);
+							$('#edit_lastname').val(data.lastname);
+							$('#edit_age_year').val(data.age_year);
+							$('#edit_division').val(data.division);
+							$('#edit_work_life_year').val(data.work_life_year);
+							$('#edit_sample_date').val(data.sample_date_in_js);
+							$('#edit_note').val(data.note);
+							$('#edit_sample_date').datepicker({
+								format: 'dd/mm/yyyy',
+								todayHighlight: true,
+								orientation: "bottom left",
+								templates: controls,
+								autoclose: true,
+							});
+							$('#edit-customer-personal-modal-by-json').modal({backdrop: 'static', keyboard: false});
+						},
+						error: function(data, status, error) {alert(error);}
 					});
-                    break;
+					break;
 				/*case 'edit':
 					let edit_order_sample_id = $(this).data('id');
 					let edit_url = "{{ route('customer.parameter.personal.edit', ['order_sample_id'=>':order_sample_id']) }}";
@@ -428,7 +510,7 @@ $(document).ready(function() {
 			}
 		},
 		items: {
-            "editt": {name: "แก้ไขจ้า", icon: "fal fa-edit"},
+			"editt": {name: "แก้ไขจ้า", icon: "fal fa-edit"},
 			/*"edit": {name: "แก้ไขข้อมูล", icon: "fal fa-edit"},*/
 			"sep1": "---------",
 			"parameter": {name: "เพิ่มพารามิเตอร์", icon: "fal fa-tachometer"},

@@ -26,6 +26,17 @@ class OrderSample extends Model
 				$parameter->delete();
 			});
 		});
-
 	}
+
+	public function getSampleDateInJsAttribute() {
+		if (strlen($this->sample_date) > 0) {
+			$exp = explode("-", $this->sample_date);
+			$str = $exp[2]."/".$exp[1]."/".$exp[0];
+		} else {
+			$str = "";
+		}
+		return $str;
+	}
+
+	protected $appends = ['sample_date_in_js'];
 }
