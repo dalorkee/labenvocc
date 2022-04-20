@@ -197,7 +197,7 @@ div.dataTables_wrapper span.select-item {margin-left: 0.5em;}
 <div class="modal fade font-prompt" id="edit-customer-personal-modal-by-json" data-keyboard="false" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
 	<div class="modal-dialog modal-lg modal-dialog-centered" role="document">
 		<div class="modal-content" id="edit-customer-personal-by-json">
-			<form name="edit_data" method="POST">
+			<form name="edit_data" action="{{ route('customer.parameter.personal.update') }}" method="POST">
 				<div class="modal-header bg-red-500 text-white">
 					<h5 class="modal-title"><i class="fal fa-pencil"></i> แก้ไขข้อมูล รหัส <span id="edit_modal_title"></span></h5>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -229,20 +229,20 @@ div.dataTables_wrapper span.select-item {margin-left: 0.5em;}
 					</div>
 					<div class="form-row">
 						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
-							<label class="form-label" for="id_card">เลขบัตรประชาชน <span class="text-red-600">*</span></label>
-							<input type="text" name="edit_id_card" id="edit_id_card" placeholder="เลขบัตรประชาชน" maxlength="13" class="form-control">
-						</div>
-						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
-							<label class="form-label" for="passport">พาสปอร์ต</label>
-							<input type="text" name="edit_passport" id="edit_passport" placeholder="พาสปอร์ต" maxlength="30" class="form-control">
-						</div>
-						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
 							<label class="form-label" for="firstname">ชื่อ <span class="text-red-600">*</span></label>
 							<input type="text" name="edit_firstname" id="edit_firstname" placeholder="ชื่อ" class="form-control">
 						</div>
 						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
 							<label class="form-label" for="lastname">นามสกุล <span class="text-red-600">*</span></label>
 							<input type="text" name="edit_lastname" id="edit_lastname" placeholder="นามสกุล" class="form-control">
+						</div>
+						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
+							<label class="form-label" for="id_card">เลขบัตรประชาชน <span class="text-red-600">*</span></label>
+							<input type="text" name="edit_id_card" id="edit_id_card" placeholder="เลขบัตรประชาชน" maxlength="13" class="form-control">
+						</div>
+						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
+							<label class="form-label" for="passport">พาสปอร์ต</label>
+							<input type="text" name="edit_passport" id="edit_passport" placeholder="พาสปอร์ต" maxlength="30" class="form-control">
 						</div>
 						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
 							<label class="form-label" for="age_year">อายุ/ปี</label>
@@ -368,8 +368,10 @@ $(document).ready(function() {
 	$('input[name="title_name"]').on('change', function() {
 		$('input[name="' + this.name + '"]').not(this).prop('checked', false);
 	});
-	$(":input").inputmask();
-
+    $('input[name="edit_title_name"]').on('change', function() {
+		$('input[name="' + this.name + '"]').not(this).prop('checked', false);
+	});
+	//$(":input").inputmask();
 	$.contextMenu({
 		selector: '.context-nav',
 		trigger: 'left',
@@ -387,10 +389,27 @@ $(document).ready(function() {
 						dataType: 'json',
 						success: function(data) {
 							$('#edit_modal_title').html(data.id);
-							$('#edit_id_card').val(data.id_card);
-							$('#edit_passport').val(data.passport);
+							$('#edit_id').val(data.id);
+							$('#edit_order_id').val(data.order_id);
+							$('#edit_chk_mr').prop('checked', false);
+							$('#edit_chk_mrs').prop('checked', false);
+							$('#edit_chk_miss').prop('checked', false);
+							switch (data.title_name) {
+								case 'mr':
+									$('#edit_chk_mr').prop('checked', true);
+									break;
+								case 'mrs':
+									$('#edit_chk_mrs').prop('checked', true);
+									break;
+								case 'miss':
+									$('#edit_chk_miss').prop('checked', true);
+									break;
+							}
+							// $('#edit_title_name').val(data.title_name);
 							$('#edit_firstname').val(data.firstname);
 							$('#edit_lastname').val(data.lastname);
+							$('#edit_id_card').val(data.id_card);
+							$('#edit_passport').val(data.passport);
 							$('#edit_age_year').val(data.age_year);
 							$('#edit_division').val(data.division);
 							$('#edit_work_life_year').val(data.work_life_year);
@@ -510,7 +529,7 @@ $(document).ready(function() {
 			}
 		},
 		items: {
-			"editt": {name: "แก้ไขจ้า", icon: "fal fa-edit"},
+			"editt": {name: "แก้ไขข้อมูล", icon: "fal fa-edit"},
 			/*"edit": {name: "แก้ไขข้อมูล", icon: "fal fa-edit"},*/
 			"sep1": "---------",
 			"parameter": {name: "เพิ่มพารามิเตอร์", icon: "fal fa-tachometer"},
