@@ -6,8 +6,10 @@
 <meta name="description" content="Login">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no, minimal-ui">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="msapplication-tap-highlight" content="no">
+<link rel="apple-touch-icon" sizes="50x50" href="{{ URL::asset('images/small-moph-logo.png') }}">
+<link rel="icon" type="image/png" sizes="32x32" href="{{ URL::asset('images/small-moph-logo-32x32.png') }}">
+<link rel="icon" type="image/png" sizes="16x16" href="{{ URL::asset('images/small-moph-logo-16x16.png') }}">
+<link rel="shortcut icon" href="{{ URL::asset('images/favicon.ico') }}">
 @yield('meta-token')
 @include('layouts.guest.style')
 @yield('style')

@@ -20,7 +20,7 @@ class SampleUploadController extends Controller
     /**
     * @return \Illuminate\Support\Collection
     */
-    public function import(Request $request)
+    public function bioimport(Request $request)
     {
         $validatedData = $request->validate([
            'uploadbio' => 'required',
@@ -28,6 +28,13 @@ class SampleUploadController extends Controller
         Excel::import(new SampleUploadImport,$request->file('uploadbio'));
         // return redirect('import-excel-csv')->with('status', 'The file has been imported in laravel 8');
         return redirect()->back()->with('success','upload OK');
+    }
+    public function bioicreate(Request $request)
+    {
+        $validatedData = $request->validate([
+           'biobox' => 'required',
+        ]);
+       dd($request->id);
     }
     /**
     * @return \Illuminate\Support\Collection

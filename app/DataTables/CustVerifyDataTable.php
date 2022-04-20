@@ -2,12 +2,11 @@
 namespace App\DataTables;
 
 use Illuminate\Http\Request;
-
 use Yajra\DataTables\Html\{Button,Column};
 use Yajra\DataTables\Services\DataTable;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\{Auth,Log};
-use App\Models\{Order, OrderDetail};
+use App\Models\{OrderSample};
 use App\Traits\CommonTrait;
 
 class CustVerifyDataTable extends DataTable
@@ -17,90 +16,67 @@ class CustVerifyDataTable extends DataTable
 	public function dataTable($query) {
 		try {
 			$sample_office_category = $this->sampleOfficeCategory();
-			$sample_charecter_arr = $this->getSampleCharecter();
-			return datatables()
-				->eloquent($query)
-				->addColumn('id', function($field) {
-					return "<div style=\"width: 80px\">".$field->id."</div>";
-				})
-				->addColumn('fullname', function($field) {
-					return "<div style=\"width: 200px\">".$field->firstname." ".$field->lastname."</div>";
-				})
-				->addColumn('division', function($field) {
-					return "<div style=\"width: 200px\">".$field->division."</div>";
-				})
-				->addColumn('work_life_year', function($field) {
-					return "<div style=\"width: 100px\">".$field->work_life_year."</div>";
-				})
-				->addColumn('sample_date', function($field) {
-					return "<div style=\"width: 120px\">".Carbon::parse($field->created_at)->format('d/m/Y')."</div>";
-				})
-				->addColumn('sample_charecter', function($field) use ($sample_charecter_arr) {
-					$rs = $sample_charecter_arr[$field->sample_charecter] ?? null;
-					return "<div style=\"width: 200px\">".$rs."</div>";
-				})
-				->addColumn('parameter', function ($parameters) {
-					return $parameters->parameters->map(function($parameter) {
-						return "<span class=\"badge badge-info mb-1\">".$parameter->parameter_name."</span>";
-					})->implode('<br />');
-				})
-				->addColumn('unit', function ($units) {
-					return $units->parameters->map(function($parameter) {
-						return "<span class=\"badge badge-info mb-1\">".$parameter->unit_name."</span>";
-					})->implode('<br />');
-				})
-				->editColumn('sample_office_category', function($field) use ($sample_office_category) {
-					$rs = $sample_office_category[$field->sample_office_category] ?? null;
-					return "<div style=\"width: 180px\">".$rs."</div>";
-				})
-				// ->addColumn('sample_office_id', function($field) {
-				// 	return "<div style=\"width: 100px\">".$field->sample_office_id."</div>";
-				// })
-				// ->addColumn('sample_office_name', function($field) {
-				// 	return "<div style=\"width: 300px\">".$field->sample_office_name."</div>";
-				// })
-				// ->addColumn('sample_office_addr', function($field) {
-				// 	return "<div style=\"width: 300px\">".$field->sample_office_addr."</div>";
-				// })
-				// ->addColumn('sample_office_sub_district_name', function($field) {
-				// 	return "<div style=\"width: 150px\">".$field->sample_office_sub_district_name."</div>";
-				// })
-				// ->addColumn('sample_office_district_name', function($field) {
-				// 	return "<div style=\"width: 150px\">".$field->sample_office_district_name."</div>";
-				// })
-				// ->addColumn('sample_office_province_name', function($field) {
-				// 	return "<div style=\"width: 150px\">".$field->sample_office_province_name."</div>";
-				// })
-				// ->addColumn('sample_office_postal', function($field) {
-				// 	return "<div style=\"width: 100px\">".$field->sample_office_postal."</div>";
-				// })
-				->addColumn('action', '<button class="context-nav bg-purple-400 hover:bg-purple-500 text-white py-1 px-3 rounded" id="context-menu" data-id="{{$id}}">จัดการ <i class="fal fa-angle-down"></i></button>')
-				->rawColumns([
-					'id',
-					'fullname',
-					'division',
-					'work_life_year',
-					'sample_date',
-					'sample_charecter',
-					'parameter',
-					'unit',
-					'sample_office_category',
-					'sample_office_id',
-					'sample_office_name',
-					'sample_office_addr',
-					'sample_office_sub_district_name',
-					'sample_office_district_name',
-					'sample_office_province_name',
-					'sample_office_postal',
-					'action'
-				]);
+			switch (auth()->user()->userCustomer->customer_type) {
+				case 'personal':
+					return datatables()
+					->eloquent($query)
+					->editColumn('firstname', function($order_sample) {
+						return "<div style=\"width: 160px\">".$order_sample->firstname."</div>";
+					})
+					->editColumn('lastname', function($order_sample) {
+						return "<div style=\"width: 180px\">".$order_sample->lastname."</div>";
+					})
+					->editColumn('sample_date', function($order_sample) {
+						return Carbon::parse($order_sample->sample_date)->format('d/m/Y');
+					})
+					->addColumn('parameter', function ($order_sample) {
+						return $order_sample->parameters->map(function($parameter) {
+							return "
+							<div style=\"width: 500px\">
+									<span class=\"badge badge-warning\">".$parameter->parameter_name."</span>
+									<span class=\"badge badge-danger\">".$parameter->sample_charecter_name."</span>
+									<span class=\"badge badge-success\">".$parameter->unit_customer_name."</span>
+									<a href=\"".route('customer.parameter.data.destroy', ['id'=>$parameter->id])."\" data-toggle=\"tooltip\" data-placement=\"auto\" title=\"ลบ ".$parameter->parameter_name."\">
+										<i class=\"fal fa-times-circle\"></i>
+									</a>
+								</div>";
+						})->implode('<br>');
+					})
+					->addColumn('total_price', function ($order_sample) {
+						$sum_price = 0;
+						$calc = $order_sample->parameters->map(function($parameter) use (&$sum_price) {
+							$sum_price += (int)$parameter->price_name;
+						});
+						return number_format($sum_price);
+					})
+                    ->editColumn('origin_threat_name', function($order_sample) {
+                        return "<div style=\"width: 310px\">".$order_sample->origin_threat_name."</div>";
+                    })
+					->editColumn('sample_location_place_name', '{{ $sample_location_place_name }}')
+					->editColumn('sample_location_place_sub_district_name', '{{ $sample_location_place_sub_district_name }}')
+					// ->addColumn('sample_office_district_name', function($orderDetail) {
+					// 	return "<div style=\"width: 150px\">".$orderDetail->sample_office_district_name."</div>";
+					// })
+					// ->addColumn('sample_office_province_name', function($orderDetail) {
+					// 	return "<div style=\"width: 150px\">".$orderDetail->sample_office_province_name."</div>";
+					// })
+					// ->addColumn('sample_office_postal', function($orderDetail) {
+					// 	return "<div style=\"width: 100px\">".$orderDetail->sample_office_postal."</div>";
+					// })
+					->rawColumns(['firstname', 'lastname', 'parameter', 'origin_threat_name']);
+					break;
+				case 'private':
+				case 'government':
+
+						break;
+					}
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
 		}
 	}
 
-	public function query(Request $request, OrderDetail $orderDetail) {
-		return $orderDetail->with('parameters')->whereOrder_id($request->order_id)->orderBy('id', 'ASC');
+	public function query(Request $request, OrderSample $order_sample) {
+		return $order_sample->with('parameters')->whereOrder_id($request->order_id)->orderBy('id', 'ASC');
 	}
 
 	public function html() {
@@ -151,27 +127,28 @@ class CustVerifyDataTable extends DataTable
 
 	protected function getColumns() {
 		try {
-			return [
-				Column::make('id')->title('รหัส ตย.')->className('bg-red-200'),
-				Column::make('fullname')->title('ชื่อ-สกุล'),
-				Column::make('age_year')->title('อายุ'),
-				Column::make('division')->title('หน่วยงาน'),
-				Column::make('work_life_year')->title('อายุงาน/ปี'),
-				Column::make('sample_date')->title('วันที่เก็บตัวอย่าง'),
-				Column::make('sample_charecter')->title('ประเด็นมลพิษ'),
-				Column::make('parameter')->title('พารามิเตอร์'),
-				Column::make('unit')->title('หน่วย'),
-				Column::make('sample_office_category')->title('ประเภทสถานที่เก็บตัวอย่าง'),
-				Column::make('sample_office_id')->title('รหัสสถานที่'),
-				Column::make('sample_office_name')->title('ชื่อสถานที่'),
-				Column::make('sample_office_addr')->title('ที่อยู่'),
-				Column::make('sample_office_sub_district_name')->title('ตำบล'),
-				Column::make('sample_office_district_name')->title('อำเภอ'),
-				Column::make('sample_office_province_name')->title('จังหวัด'),
-				Column::make('sample_office_postal')->title('รหัสไปรษณีย์'),
-				Column::make('note')->title('หมายเหตุ'),
-				Column::computed('action')->addClass('text-center')->title('#')
-			];
+			switch (auth()->user()->userCustomer->customer_type) {
+				case 'personal':
+					return [
+						Column::make('id')->title('รหัส')->className('bg-red-200'),
+						Column::make('firstname')->title('ชื่อ'),
+						Column::make('lastname')->title('สกุล'),
+						Column::make('age_year')->title('อายุ'),
+						Column::make('sample_date')->title('วันที่เก็บ ตย.'),
+						Column::make('parameter')->title('พารามิเตอร์'),
+						Column::make('total_price')->title('ราคา'),
+						Column::make('origin_threat_name')->title('ประเด็นมลพิษ'),
+						Column::make('sample_location_place_name')->title('สถานที่เก็บ ตย.'),
+						Column::make('sample_location_place_address')->title('ที่อยู่'),
+						Column::make('sample_location_place_sub_district_name')->title('ตำบล'),
+						Column::make('sample_location_place_district_name')->title('อำเภอ'),
+						Column::make('sample_location_place_province_name')->title('จังหวัด'),
+						Column::make('note')->title('หมายเหตุ'),
+					];
+					break;
+				case 'private':
+				case 'government':
+			}
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
 		}

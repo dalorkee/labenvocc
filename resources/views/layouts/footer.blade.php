@@ -1,6 +1,6 @@
 <div class="d-flex align-items-center flex-1 text-muted">
-	2021 © ENV-OCC &nbsp;
-	<a href='#' class='text-primary fw-500' title='ddc.moph.go.th' target='_blank'>ddc.moph.go.th</a>
+	2022 © LAB ENV-OCC &nbsp;
+	<a href='http://patsri.local' class='text-primary fw-500' title='ddc.moph.go.th' target='_blank'>ddc.moph.go.th</a>
 
 </div>
 {{-- <div>

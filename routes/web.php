@@ -2,6 +2,7 @@
 use Illuminate\Support\Facades\{Route,Artisan};
 use App\Http\Controllers\{
 	HomeController,
+	BoundaryController,
 	RegisterController,
 	RegisterPersonalController,
 	RegisterPrivateAgencyController,
@@ -86,6 +87,11 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 	Route::get('/dashboard', function() {
 		return view('dashboard');
 	})->name('dashboard');
+	Route::name('boundary.')->group(function() {
+		Route::get('province/district', [BoundaryController::class, 'districtToHtmlSelect'])->name('fetch.district');
+		Route::get('province/district/sub/district', [BoundaryController::class, 'subDistrictToHtmlSelect'])->name('fetch.sub.district');
+		Route::get('province/district/sub/district/postcode', [BoundaryController::class, 'postCodeBySubDistrict'])->name('fetch.postcode');
+	});
 	Route::name('customer.')->group(function() {
 		Route::prefix('customer/info')->group(function() {
 			Route::get('/create/order/{order_id}', [CustomerController::class, 'createInfo'])->name('info.create');
@@ -94,13 +100,11 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 		Route::prefix('customer/parameter')->group(function() {
 			Route::get('/create/order/{order_id}', [CustomerController::class, 'createParameter'])->name('parameter.create');
 			Route::post('personal/store', [CustomerController::class, 'storeParameterPersonal'])->name('parameter.personal.store');
-			Route::get('/personal/edit', [CustomerController::class, 'editParameterPersonal'])->name('parameter.personal.edit');
+			Route::get('/personal/edit/{order_sample_id}', [CustomerController::class, 'editParameterPersonal'])->name('parameter.personal.edit');
 			Route::post('personal/update', [CustomerController::class, 'updateParameterPersonal'])->name('parameter.personal.update');
 			Route::get('/personal/delete/id/{id}', [CustomerController::class, 'DestroyParameterPersonal'])->name('parameter.personal.destroy');
-			Route::get('/data/list/detail/{order_detail_id}/type/{threat_type_id}', [CustomerController::class, 'listParameterData'])->name('parameter.data.list');
-			Route::get('/data/store/detail/{order_detail_id}/id/{id}', [CustomerController::class, 'storeParameterData'])->name('parameter.data.store');
-
-
+			Route::get('/data/list/sample/{order_sample_id}/type/{threat_type_id}', [CustomerController::class, 'listParameterData'])->name('parameter.data.list');
+			Route::post('/data/store', [CustomerController::class, 'storeParameterData'])->name('parameter.data.store');
 			Route::get('/data/delete/id/{id}', [CustomerController::class, 'DestroyParameterData'])->name('parameter.data.destroy');
 		});
 		Route::prefix('customer/sample')->group(function() {
@@ -109,7 +113,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 		});
 		Route::prefix('customer/verify')->group(function() {
 			Route::get('/create/order/{order_id}', [CustomerController::class, 'createVerify'])->name('verify.create');
-			Route::get('/store/order/{order_id}', [CustomerController::class, 'storeVerify'])->name('verify.store');
+			Route::post('/store/order', [CustomerController::class, 'storeVerify'])->name('verify.store');
 		});
 	});
 	Route::get('/admin/home', [AdminController::class, 'index'])->name('admin.index');
@@ -124,11 +128,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 	Route::get('/advertise/id/{id}/edit',[AdvertiseController::class,'edit'])->name('advertise.edit');
 	Route::get('/advertise/id/{id}/destroy',[AdvertiseController::class,'destroy'])->name('advertise.destroy');
 
-	//Route::get('sample/bio', [SampleUploadController::class, 'bio'])->name('sampleupload.bio');
 	Route::get('sample/env', [SampleUploadController::class, 'env'])->name('sampleupload.env');
-	Route::post('sample/import', [SampleUploadController::class, 'import']);
-    Route::get('sample/env', [SampleUploadController::class, 'env'])->name('sampleupload.env');
-    Route::post('sample/import', [SampleUploadController::class, 'import'])->name('sampleupload.import');
+	Route::post('sample/bio/create/id/{id}', [SampleUploadController::class, 'biocreate'])->name('sampleupload.biocreate');
+	Route::post('sample/bio/import', [SampleUploadController::class, 'bioimport'])->name('sampleupload.bioimport');
 });
 Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
 Route::get('/advertise/id/{id}/detail',[AdvertiseController::class,'detail'])->name('advertise.detail');

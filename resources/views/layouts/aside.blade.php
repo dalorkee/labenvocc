@@ -37,24 +37,24 @@
 				<span class="nav-link-text">คำขอส่งตัวอย่าง</span>
 			</a>
 		</li>
-        <li>
-            <a href="#" title="Upload" data-filter-tags="upload">
-                <i class="fal fa-upload"></i>
-                <span class="nav-link-text" data-i18n="nav.upload">ส่งตัวอย่าง(Upload)</span>
-            </a>
-            <ul>
-                <li>
-                    <a href="{{ route('sampleupload.index') }}" title="Biological" data-filter-tags="biological">
-                        <span class="nav-link-text" data-i18n="nav.biological">ตัวอย่างชีวภาพ</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('sampleupload.env') }}" title="Environment" data-filter-tags="environment"> <!-- รอแก้ route-->
-                        <span class="nav-link-text" data-i18n="nav.environment">ตัวอย่างสิ่งแวดล้อม</span>
-                    </a>
-                </li>
-            </ul>
-        </li>
+		<li>
+			<a href="#" title="Upload" data-filter-tags="upload">
+				<i class="fal fa-upload"></i>
+				<span class="nav-link-text" data-i18n="nav.upload">ส่งตัวอย่าง(Upload)</span>
+			</a>
+			<ul>
+				<li>
+					<a href="{{ route('sampleupload.index') }}" title="Biological" data-filter-tags="biological">
+						<span class="nav-link-text" data-i18n="nav.biological">ตัวอย่างชีวภาพ</span>
+					</a>
+				</li>
+				<li>
+					<a href="{{ route('sampleupload.env') }}" title="Environment" data-filter-tags="environment"> <!-- รอแก้ route-->
+						<span class="nav-link-text" data-i18n="nav.environment">ตัวอย่างสิ่งแวดล้อม</span>
+					</a>
+				</li>
+			</ul>
+		</li>
 		<li class="nav-title">Common</li>
 		<li>
 			<a href="#" title="Application Intel" data-filter-tags="application intel">

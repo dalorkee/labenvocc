@@ -17,12 +17,6 @@ class SampleUploadImport implements ToModel, WithHeadingRow
     * @return \Illuminate\Database\Eloquent\Model|null
 
     */
-    protected $uid;
-
-    public function __construct($uid='7')
-    {
-        $this->uid = $uid;
-    }
 
     public function model(array $row)
     {
@@ -37,7 +31,7 @@ class SampleUploadImport implements ToModel, WithHeadingRow
             'sample_sender_name' => $row['sample_sender_name'],
             'phone_sample_sender' => $row['phone_sample_sender'],
             'email_sample_sender' => $row['email_sample_sender'],
-            'user_entry' => $this->uid
+            'user_entry' => auth()->user()->id
         ]);
     }
 }
