@@ -14,6 +14,8 @@ class CustSampleDataTable extends DataTable
 		try {
 			switch (auth()->user()->userCustomer->customer_type) {
 				case 'personal':
+				case 'private':
+				case 'government':
 					return datatables()
 						->eloquent($query)
 						->editColumn('firstname', function($order_sample) {
@@ -49,9 +51,6 @@ class CustSampleDataTable extends DataTable
 							return "<div style=\"width: 310px\">".$order_sample->origin_threat_name."</div>";
 						})
 						->rawColumns(['firstname', 'lastname', 'parameter', 'origin_threat_name']);
-					break;
-				case 'private':
-				case 'government':
 					break;
 				}
 		} catch (\Exception $e) {
@@ -103,6 +102,8 @@ class CustSampleDataTable extends DataTable
 		try {
 			switch (auth()->user()->userCustomer->customer_type) {
 				case 'personal':
+				case 'private':
+				case 'government':
 					return [
 						Column::make('id')->title('รหัส'),
 						Column::make('firstname')->title('ชื่อ'),
@@ -119,8 +120,6 @@ class CustSampleDataTable extends DataTable
 						Column::make('sample_location_place_province_name')->title('จังหวัด'),
 						Column::make('note')->title('หมายเหตุ'),
 					];
-				case 'private':
-				case 'government':
 					break;
 				}
 		} catch (\Exception $e) {

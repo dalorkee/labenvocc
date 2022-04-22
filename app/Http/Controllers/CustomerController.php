@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\{Auth,Log,Storage,File,Route};
 use App\Models\{Order,OrderSample,OrderSampleParameter,Fileupload,Parameter,User};
 use App\DataTables\{CustomersDataTable,CustParameterDataTable,CustSampleDataTable,CustVerifyDataTable};
-use App\Traits\{FileTrait,CommonTrait,JsonBoundaryTrait};
+use App\Traits\{FileTrait,CommonTrait,JsonBoundaryTrait,DbBoundaryTrait};
 use Yajra\DataTables\Facades\DataTables;
 
 class CustomerController extends Controller
@@ -14,7 +14,7 @@ class CustomerController extends Controller
 	private object $user;
 	private string $user_role;
 
-	use FileTrait, CommonTrait, JsonBoundaryTrait;
+	use FileTrait, CommonTrait, JsonBoundaryTrait, DbBoundaryTrait;
 
 	public function __construct() {
 		$this->middleware('auth');
@@ -179,118 +179,8 @@ class CustomerController extends Controller
 
 	#[Route('customer.parameter.personal.edit', methods: ['GET'])]
 	protected function editParameterPersonal(Request $request) {
-        $personal = OrderSample::find($request->order_sample_id);
-        return response()->json($personal);
-        // $order_sample = OrderSample::find($request->order_sample_id);
-		// switch ($order_sample->title_name) {
-		// 	case "mr":
-		// 		$mr_chk = "checked";
-		// 		$mrs_chk = null;
-		// 		$miss_chk = null;
-		// 		break;
-		// 	case "mrs":
-		// 		$mr_chk = null;
-		// 		$mrs_chk = "checked";
-		// 		$miss_chk = null;
-		// 		break;
-		// 	case "miss":
-		// 		$mr_chk = null;
-		// 		$mrs_chk = null;
-		// 		$miss_chk = "checked";
-		// 		break;
-		// 	default:
-		// 		$mr_chk = null;
-		// 		$mrs_chk = null;
-		// 		$miss_chk = null;
-		// }
-		// $edit_sample_date = $this->convertMySQLDateToJs($order_sample->sample_date);
-		// $htm = "
-		// <form name=\"modal_new_data\" action=\"".route('customer.parameter.personal.update')."\" method=\"POST\">
-		// <div class=\"modal-header bg-red-500 text-white\">
-		// 	<h5 class=\"modal-title\"><i class=\"fal fa-pencil\"></i> แก้ไขข้อมูล รหัส ".$request->order_sample_id."</h5>
-		// 	<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">
-		// 		<span aria-hidden=\"true\"><i class=\"fal fa-times\"></i></span>
-		// 	</button>
-		// </div>
-		// <div class=\"modal-body\">
-		// 	<div class=\"form-row\">
-		// 		<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3\">
-		// 			<label class=\"form-label\" for=\"title_name\">คำนำหน้าชื่อ <span class=\"text-red-600\">*</span></label>
-		// 			<input type=\"hidden\" name=\"_token\" value=\"".csrf_token()."\">
-		// 			<input type=\"hidden\" name=\"edit_id\" value=\"".$order_sample->id."\">
-		// 			<input type=\"hidden\" name=\"edit_order_id\" value=\"".$order_sample->order_id."\">
-		// 			<div class=\"frame-wrap\">
-		// 				<div class=\"custom-control custom-checkbox custom-control-inline\">
-		// 					<input type=\"checkbox\" name=\"edit_title_name\" value=\"mr\" class=\"custom-control-input\" id=\"edit_chk_mr\"".$mr_chk.">
-		// 					<label class=\"custom-control-label\" for=\"edit_chk_mr\">นาย</label>
-		// 				</div>
-		// 				<div class=\"custom-control custom-checkbox custom-control-inline\">
-		// 					<input type=\"checkbox\" name=\"edit_title_name\" value=\"mrs\" class=\"custom-control-input\" id=\"edit_chk_mrs\"".$mrs_chk.">
-		// 					<label class=\"custom-control-label\" for=\"edit_chk_mrs\">นาง</label>
-		// 				</div>
-		// 				<div class=\"custom-control custom-checkbox custom-control-inline\">
-		// 					<input type=\"checkbox\" name=\"edit_title_name\" value=\"miss\" class=\"custom-control-input\" id=\"edit_chk_miss\"".$miss_chk.">
-		// 					<label class=\"custom-control-label\" for=\"edit_chk_miss\">นางสาว</label>
-		// 				</div>
-		// 			</div>
-		// 		</div>
-		// 	</div>
-		// 	<div class=\"form-row\">
-		// 		<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3\">
-		// 			<label class=\"form-label\" for=\"id_card\">เลขบัตรประชาชน <span class=\"text-red-600\">*</span></label>
-		// 			<input type=\"text\" name=\"edit_id_card\" value=\"".$order_sample->id_card."\" placeholder=\"\" data-inputmask=\"'mask': '9-9999-99999-99-9'\" maxlength=\"18\" class=\"form-control\">
-		// 		</div>
-		// 		<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3\">
-		// 			<label class=\"form-label\" for=\"passport\">พาสปอร์ต</label>
-		// 			<input type=\"text\" name=\"edit_passport\" value=\"".$order_sample->passport."\" maxlength=\"30\" class=\"form-control\">
-		// 		</div>
-		// 		<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3\">
-		// 			<label class=\"form-label\" for=\"firstname\">ชื่อ <span class=\"text-red-600\">*</span></label>
-		// 			<input type=\"text\" name=\"edit_firstname\" value=\"".$order_sample->firstname."\" class=\"form-control\">
-		// 		</div>
-		// 		<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3\">
-		// 			<label class=\"form-label\" for=\"lastname\">นามสกุล <span class=\"text-red-600\">*</span></label>
-		// 			<input type=\"text\" name=\"edit_lastname\" value=\"".$order_sample->lastname."\" class=\"form-control\">
-		// 		</div>
-		// 		<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3\">
-		// 			<label class=\"form-label\" for=\"age_year\">อายุ/ปี</label>
-		// 			<input type=\"number\" name=\"edit_age_year\" value=\"".$order_sample->age_year."\" min=\"1\" max=\"100\" class=\"form-control\">
-		// 		</div>";
-		// 		if (Auth::user()->userCustomer->customer_type == 'private') {
-		// 			$htm .= "
-		// 			<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3\">
-		// 				<label class=\"form-label\" for=\"division\">แผนก <span class=\"text-red-600\">*</span></label>
-		// 				<input type=\"text\" name=\"edit_division\" value=\"".$order_sample->division."\" class=\"form-control\">
-		// 			</div>
-		// 			<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3\">
-		// 				<label class=\"form-label\" for=\"work_life_year\">อายุงาน/ปี <span class=\"text-red-600\">*</span></label>
-		// 				<input type=\"number\" name=\"edit_work_life_year\" value=\"".$order_sample->work_life_year."\" min=\"1\" max=\"100\" class=\"form-control\">
-		// 			</div>";
-		// 		}
-		// 		$htm .= "
-		// 		<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3\">
-		// 			<label class=\"form-label\" for=\"edit_sample_date\">วันที่เก็บตัวอย่าง <span class=\"text-red-600\">*</span></label>
-		// 			<div class=\"input-group\">
-		// 				<input type=\"text\" name=\"edit_sample_date\" value=\"".$edit_sample_date."\" class=\"form-control\" placeholder=\"เลือกวันที่\" id=\"datepicker_edit_specimen_date\" readonly>
-		// 				<div class=\"input-group-append\">
-		// 					<span class=\"input-group-text fs-xl\">
-		// 						<i class=\"fal fa-calendar-alt\"></i>
-		// 					</span>
-		// 				</div>
-		// 			</div>
-		// 		</div>
-		// 		<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3\">
-		// 			<label class=\"form-label\" for=\"note\">หมายเหตุ</label>
-		// 			<input type=\"text\" name=\"edit_note\" value=\"".$order_sample->note."\" class=\"form-control\">
-		// 		</div>
-		// 	</div>
-		// </div>
-		// <div class=\"modal-footer\">
-		// 		<button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">ยกเลิก</button>
-		// 		<button type=\"submit\" class=\"btn btn-danger\">แก้ไขข้อมูล</button>
-		// 	</div>
-		// </form>";
-		// return $htm;
+		$personal = OrderSample::find($request->order_sample_id);
+		return response()->json($personal);
 	}
 
 	#[Route('customer.parameter.personal.update', methods: ['POST'])]
@@ -463,15 +353,18 @@ class CustomerController extends Controller
 			'sample_select_begin' => 'bail|required',
 			'sample_select_end' => 'required',
 			'origin_threat' => 'required',
-			'sample_location_place_name' => 'required',
-			'sample_location_place_province' => 'required',
-			'sample_location_place_district' => 'required',
-			'sample_location_place_sub_district' => 'required'
+
+			'sample_location_place_name' => 'required_if:sample_location_define,==,2',
+			'sample_location_place_id' => 'required_if:sample_location_define,==,2',
+			'sample_location_place_province' => 'required_if:sample_location_define,==,2',
+			'sample_location_place_district' => 'required_if:sample_location_define,==,2',
+			'sample_location_place_sub_district' => 'required_if:sample_location_define,==,2'
 		],[
 			'sample_select_begin.required' => 'โปรดเลือกตัวอย่างเริ่มต้น',
 			'sample_select_end.required' => 'โปรดเลือกตัวอย่างสิ้นสุด',
 			'origin_threat.required'=>'โปรดเลือกประเด็นมลพิษ',
-			'sample_location_place_name.required' => 'โปรดกรอกสถานที่เก็บตัวอย่าง',
+			'sample_location_place_name.required_if' => 'โปรดกรอกชื่อสถานที่เก็บตัวอย่าง',
+			'sample_location_place_id.required' => 'โปรดกรอกรหัสหน่วยงาน',
 			'sample_location_place_province.required' => 'โปรดเลือกจังหวัด',
 			'sample_location_place_district.required' => 'โปรดเลือกอำเภอ',
 			'sample_location_place_sub_district.required' => 'โปรดเลือกตำบล'
@@ -484,7 +377,6 @@ class CustomerController extends Controller
 				$origin_threat_arr = $this->getOriginThreat();
 				switch ($this->user->userCustomer->customer_type) {
 					case 'personal':
-						//$userDetail = User::find($request->user_id)->userCustomer;
 						for ($i=$request->sample_select_begin; $i<=$request->sample_select_end; $i++) {
 							$order_sample = OrderSample::find($i);
 							if (!is_null($order_sample)) {
@@ -504,54 +396,72 @@ class CustomerController extends Controller
 								$order_sample->sample_location_place_province_name = $prov_arr[1];
 								$order_sample->sample_location_place_postal = $request->sample_location_place_postal;
 								$saved = $order_sample->save();
+							} else {
+								continue;
 							}
 						}
 						break;
-					// case 'private':
-					// case 'government':
-					// 	switch ($request->sample_location_define) {
-					// 		case 1:
-					// 			$userDetail = User::find($request->user_id)->userCustomer;
-					// 			for ($i=$request->sample_select_begin; $i<=$request->sample_select_end; $i++) {
-					// 				$order_sample = OrderSample::find($i);
-					// 				if (!is_null($order_sample)) {
-					// 					$order_sample->origin_threat_id = $request->origin_threat;
-					// 					$order_sample->origin_threat_name = $origin_threat_arr[$request->origin_threat];
-					// 					$order_sample->sample_location_define = $request->sample_location_define;
-					// 					$order_sample->sample_location_place_id = $userDetail->sample_location_place_id ?? '';
-					// 					$order_sample->sample_location_place_name = $userDetail->sample_location_place_name;
-					// 					$order_sample->sample_location_place_address = $userDetail->sample_location_place_address;
-					// 					$order_sample->sample_location_place_sub_district = $userDetail->sample_location_place_sub_district;
-					// 					$order_sample->sample_location_place_district = $userDetail->sample_location_place_district;
-					// 					$order_sample->sample_location_place_province = $userDetail->sample_location_place_province;
-					// 					$order_sample->sample_location_place_postal = $userDetail->sample_location_place_postal;
-					// 					$saved = $order_sample->save();
-					// 				}
-					// 			}
-					// 			break;
-					// 		case 2:
-					// 			for ($i=$request->sample_select_begin; $i<=$request->sample_select_end; $i++) {
-					// 				$order_sample = OrderSample::find($i);
-					// 				if (!is_null($order_sample)) {
-					// 					$order_sample->origin_threat_id = $request->origin_threat_id;
-					// 					$order_sample->origin_threat_name = $origin_threat_arr[$request->origin_threat];
-					// 					$order_sample->sample_location_define = $request->sample_location_define;
-					// 					$order_sample->sample_location_place_id = $request->sample_location_place_id;
-					// 					$order_sample->sample_location_place_name = $request->sample_location_place_name;
-					// 					$order_sample->sample_location_place_address = $request->sample_location_place_address;
-					// 					$order_sample->sample_location_place_sub_district = $request->sample_location_place_sub_district;
-					// 					$order_sample->sample_location_place_district = $request->sample_location_place_district;
-					// 					$order_sample->sample_location_place_province = $request->sample_location_place_province;
-					// 					$order_sample->sample_location_place_postal = $request->sample_location_place_postal;
-					// 					$saved = $order_sample->save();
-					// 				}
-					// 			}
-					// 			break;
-						// 	default:
-						// 		return redirect()->route('logout');
-						// 		break;
-						// }
-						// break;
+					case 'private':
+					case 'government':
+						switch ($request->sample_location_define) {
+							case "1":
+								$userDetail = User::find($request->user_id)->userCustomer;
+								$user_sub_district_name = $this->subDistrictNameBySubDistId($userDetail->sub_district);
+								$user_district_name = $this->districtNameByDistId($userDetail->district);
+								$user_province_name = $this->provinceNameByProvId($userDetail->province);
+								for ($i=$request->sample_select_begin; $i<=$request->sample_select_end; $i++) {
+									$order_sample = OrderSample::find($i);
+									if (!is_null($order_sample)) {
+										$order_sample->origin_threat_id = $request->origin_threat;
+										$order_sample->origin_threat_name = $origin_threat_arr[$request->origin_threat];
+										$order_sample->sample_location_define = $request->sample_location_define;
+										$order_sample->sample_location_place_name = $userDetail->agency_name;
+										$order_sample->sample_location_place_id = $userDetail->agency_code;
+										$order_sample->sample_location_place_address = $userDetail->address;
+										$order_sample->sample_location_place_sub_district = $userDetail->sub_district;
+										$order_sample->sample_location_place_sub_district_name = $user_sub_district_name;
+										$order_sample->sample_location_place_district = $userDetail->district;
+										$order_sample->sample_location_place_district_name = $user_district_name;
+										$order_sample->sample_location_place_province = $userDetail->province;
+										$order_sample->sample_location_place_province_name = $user_province_name;
+										$order_sample->sample_location_place_postal = $userDetail->postcode;
+										$saved = $order_sample->save();
+									} else {
+										continue;
+									}
+								}
+								break;
+							case "2":
+								for ($i=$request->sample_select_begin; $i<=$request->sample_select_end; $i++) {
+									$order_sample = OrderSample::find($i);
+									if (!is_null($order_sample)) {
+										$prov_arr = $this->explodeStrToArr($request->sample_location_place_province);
+										$dist_arr = $this->explodeStrToArr($request->sample_location_place_district);
+										$sub_dist_arr = $this->explodeStrToArr($request->sample_location_place_sub_district);
+										$order_sample->origin_threat_id = $request->origin_threat;
+										$order_sample->origin_threat_name = $origin_threat_arr[$request->origin_threat];
+										$order_sample->sample_location_define = $request->sample_location_define;
+										$order_sample->sample_location_place_name = $request->sample_location_place_name;
+										$order_sample->sample_location_place_id = $request->sample_location_place_id;
+										$order_sample->sample_location_place_address = $request->sample_location_place_address;
+										$order_sample->sample_location_place_sub_district = $sub_dist_arr[0];
+										$order_sample->sample_location_place_sub_district_name = $sub_dist_arr[1];
+										$order_sample->sample_location_place_district = $dist_arr[0];
+										$order_sample->sample_location_place_district_name = $dist_arr[1];
+										$order_sample->sample_location_place_province = $prov_arr[0];
+										$order_sample->sample_location_place_province_name = $prov_arr[1];
+										$order_sample->sample_location_place_postal = $request->sample_location_place_postal;
+										$saved = $order_sample->save();
+									} else {
+										continue;
+									}
+								}
+								break;
+							default:
+								return redirect()->route('logout');
+								break;
+						}
+						break;
 					default:
 						return redirect()->route('logout');
 						break;
