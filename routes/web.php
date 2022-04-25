@@ -11,6 +11,7 @@ use App\Http\Controllers\{
 	CustomerController,
 	UserAdvertiseController,
 	SampleUploadController,
+	HospitalController
 };
 use App\Http\Controllers\Admin\{
 	AdminController,
@@ -91,6 +92,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 		Route::get('province/district', [BoundaryController::class, 'districtToHtmlSelect'])->name('fetch.district');
 		Route::get('province/district/sub/district', [BoundaryController::class, 'subDistrictToHtmlSelect'])->name('fetch.sub.district');
 		Route::get('province/district/sub/district/postcode', [BoundaryController::class, 'postCodeBySubDistrict'])->name('fetch.postcode');
+	});
+	Route::name('hospital.')->group(function() {
+		Route::get('hospital/type', [HospitalController::class, 'hospTypeToHtmlSelect'])->name('fetch.type');
 	});
 	Route::name('customer.')->group(function() {
 		Route::prefix('customer/info')->group(function() {

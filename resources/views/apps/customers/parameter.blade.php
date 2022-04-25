@@ -327,7 +327,7 @@ div.dataTables_wrapper span.select-item {margin-left: 0.5em;}
 					</div>
 					<div class="row">
 						<div class="col text-center">
-							<input type="hedden" name="hidden_order_id" value="{{ $order[0]->id }}" id="hidden_order_id">
+							<input type="hidden" name="hidden_order_id" value="{{ $order[0]->id }}" id="hidden_order_id">
 							<input type="hidden" name="hidden_order_sample_id" value="" id="hidden_order_sample_id">
 							<button type="submit" class="btn btn-success btn-lg">บันทึกข้อมูล</button>
 						</div>

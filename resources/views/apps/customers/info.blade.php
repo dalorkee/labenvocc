@@ -29,6 +29,7 @@
 			<div class="panel-container show">
 				<form name="saveInfo" action="{{ route('customer.info.store') }}" method="POST" enctype="multipart/form-data">
 					@csrf
+                    <input type="hidden" name="order_id" value="{{ $order[0]->id ?? null }}">
 					<div class="panel-content">
 						<ul class="steps">
 							<li class="active"><a href=""><i class="fal fa-user"></i> <span class="d-none d-sm-inline">ข้อมูลทั่วไป</span></a></li>
@@ -36,13 +37,12 @@
 							<li class="undone"><p><i class="fal fa-user"></i> <span class="d-none d-sm-inline">ข้อมูลตัวอย่าง</span></p></li>
 							<li class="undone"><p><i class="fal fa-user"></i> <span class="d-none d-sm-inline">ตรวจสอบข้อมูล</span></p></li>
 						</ul>
-						<input type="hidden" name="order_id" value="{{ $order[0]->id ?? null }}">
 						@switch (auth()->user()->userCustomer->customer_type)
 							@case('personal')
 								<div class="form-row">
 									<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
 										<label class="form-label" for="personal_name">ชื่อ-สกุล ผู้ส่งตัวอย่าง <span class="text-red-600">*</span></label>
-										<input type="text" name="customer_name" value="{{ $titleName[auth()->user()->userCustomer->title_name].auth()->user()->userCustomer->first_name." ".auth()->user()->userCustomer->last_name }}" class="form-control" maxlength="60" readonly>
+										<input type="text" name="customer_name" value="{{ $order[0]->customer_agency_name ?? auth()->user()->userCustomer->first_name }}" class="form-control" maxlength="60" readonly>
 									</div>
 								</div>
 								@break;
@@ -51,7 +51,7 @@
 								<div class="form-row">
 									<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
 										<label class="form-label" for="office_name">หน่วยงานที่ส่งตัวอย่าง <span class="text-red-600">*</span></label>
-										<input type="text" name="customer_name" value="{{ $order[0]->customer_name ?? old('customer_name') }}" class="form-control @error('customer_name') is-invalid @enderror" maxlength="80">
+										<input type="text" name="customer_name" value="{{ $order[0]->customer_agency_name ?? auth()->user()->userCustomer->agency_name }}" class="form-control @error('customer_name') is-invalid @enderror" maxlength="80" readonly>
 										@error('customer_name')
 											<div class="invalid-feedback" role="alert">{{ $message }}</div>
 										@enderror

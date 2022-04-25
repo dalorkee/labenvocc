@@ -2666,16 +2666,16 @@
         },
         {
             "name": "maatwebsite/excel",
-            "version": "3.1.38",
+            "version": "3.1.39",
             "source": {
                 "type": "git",
                 "url": "https://github.com/SpartnerNL/Laravel-Excel.git",
-                "reference": "dff132ce4d30b19863f4e84de1613fca99604992"
+                "reference": "5165334de44c6f7788a5818a1d019aa71a43e092"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SpartnerNL/Laravel-Excel/zipball/dff132ce4d30b19863f4e84de1613fca99604992",
-                "reference": "dff132ce4d30b19863f4e84de1613fca99604992",
+                "url": "https://api.github.com/repos/SpartnerNL/Laravel-Excel/zipball/5165334de44c6f7788a5818a1d019aa71a43e092",
+                "reference": "5165334de44c6f7788a5818a1d019aa71a43e092",
                 "shasum": ""
             },
             "require": {
@@ -2728,7 +2728,7 @@
             ],
             "support": {
                 "issues": "https://github.com/SpartnerNL/Laravel-Excel/issues",
-                "source": "https://github.com/SpartnerNL/Laravel-Excel/tree/3.1.38"
+                "source": "https://github.com/SpartnerNL/Laravel-Excel/tree/3.1.39"
             },
             "funding": [
                 {
@@ -2740,7 +2740,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-03-24T16:00:29+00:00"
+            "time": "2022-04-23T11:44:18+00:00"
         },
         {
             "name": "maennchen/zipstream-php",
@@ -5499,13 +5499,8 @@
             "time": "2022-03-18T16:06:28+00:00"
         },
         {
-<<<<<<< HEAD
-            "name": "symfony/polyfill-ctype",
-            "version": "v1.25.0",
-=======
             "name": "symfony/mime",
             "version": "v6.0.7",
->>>>>>> origin/main
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/mime.git",
@@ -5566,11 +5561,7 @@
                 "mime-type"
             ],
             "support": {
-<<<<<<< HEAD
-                "source": "https://github.com/symfony/polyfill-ctype/tree/v1.25.0"
-=======
                 "source": "https://github.com/symfony/mime/tree/v6.0.7"
->>>>>>> origin/main
             },
             "funding": [
                 {
@@ -5589,11 +5580,7 @@
             "time": "2022-03-13T20:10:05+00:00"
         },
         {
-<<<<<<< HEAD
-            "name": "symfony/polyfill-iconv",
-=======
             "name": "symfony/polyfill-ctype",
->>>>>>> origin/main
             "version": "v1.25.0",
             "source": {
                 "type": "git",
@@ -5656,11 +5643,7 @@
                 "portable"
             ],
             "support": {
-<<<<<<< HEAD
-                "source": "https://github.com/symfony/polyfill-iconv/tree/v1.25.0"
-=======
                 "source": "https://github.com/symfony/polyfill-ctype/tree/v1.25.0"
->>>>>>> origin/main
             },
             "funding": [
                 {
@@ -6090,88 +6073,6 @@
             "time": "2021-05-27T09:17:38+00:00"
         },
         {
-<<<<<<< HEAD
-            "name": "symfony/polyfill-php73",
-            "version": "v1.25.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/polyfill-php73.git",
-                "reference": "cc5db0e22b3cb4111010e48785a97f670b350ca5"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-php73/zipball/cc5db0e22b3cb4111010e48785a97f670b350ca5",
-                "reference": "cc5db0e22b3cb4111010e48785a97f670b350ca5",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=7.1"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-main": "1.23-dev"
-                },
-                "thanks": {
-                    "name": "symfony/polyfill",
-                    "url": "https://github.com/symfony/polyfill"
-                }
-            },
-            "autoload": {
-                "files": [
-                    "bootstrap.php"
-                ],
-                "psr-4": {
-                    "Symfony\\Polyfill\\Php73\\": ""
-                },
-                "classmap": [
-                    "Resources/stubs"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Nicolas Grekas",
-                    "email": "p@tchwork.com"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "https://symfony.com/contributors"
-                }
-            ],
-            "description": "Symfony polyfill backporting some PHP 7.3+ features to lower PHP versions",
-            "homepage": "https://symfony.com",
-            "keywords": [
-                "compatibility",
-                "polyfill",
-                "portable",
-                "shim"
-            ],
-            "support": {
-                "source": "https://github.com/symfony/polyfill-php73/tree/v1.25.0"
-            },
-            "funding": [
-                {
-                    "url": "https://symfony.com/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
-            ],
-            "time": "2021-06-05T21:20:04+00:00"
-        },
-        {
-=======
->>>>>>> origin/main
             "name": "symfony/polyfill-php80",
             "version": "v1.25.0",
             "source": {
@@ -10193,16 +10094,16 @@
         },
         {
             "name": "spatie/ignition",
-            "version": "1.2.7",
+            "version": "1.2.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/ignition.git",
-                "reference": "2f059cf42b48f7c522efbba1c05ad59fc2c1a3f2"
+                "reference": "db25202fab2d5c14613b8914a1bb374998bbf870"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/ignition/zipball/2f059cf42b48f7c522efbba1c05ad59fc2c1a3f2",
-                "reference": "2f059cf42b48f7c522efbba1c05ad59fc2c1a3f2",
+                "url": "https://api.github.com/repos/spatie/ignition/zipball/db25202fab2d5c14613b8914a1bb374998bbf870",
+                "reference": "db25202fab2d5c14613b8914a1bb374998bbf870",
                 "shasum": ""
             },
             "require": {
@@ -10259,7 +10160,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-03-29T08:48:34+00:00"
+            "time": "2022-04-23T20:37:21+00:00"
         },
         {
             "name": "spatie/laravel-ignition",
@@ -10479,5 +10380,5 @@
         "php": "^8.0"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.1.0"
+    "plugin-api-version": "2.2.0"
 }

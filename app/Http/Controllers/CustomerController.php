@@ -64,7 +64,8 @@ class CustomerController extends Controller
 					'order_type' => 1,
 					'user_id' => $this->user->userCustomer->user->id,
 					'customer_type' => $this->user->userCustomer->customer_type,
-					'customer_name' => $request->customer_name,
+					'customer_agency_code' => $this->user->userCustomer->agency_code,
+					'customer_agency_name' => $request->customer_name,
 					'type_of_work' => $request->type_of_work,
 					'type_of_work_other' => $request->type_of_work_other,
 					'book_no' => $request->book_no ?? null,
@@ -338,11 +339,14 @@ class CustomerController extends Controller
 		});
 		$origin_threat = $this->getOriginThreat();
 		$provinces = $this->getMinProvince();
+		$sampleCategory = $this->sampleOfficeCategory();
+
 		$data = [
 			'order_id' => $request->order_id,
 			'sample_list' => $sample_list,
 			'origin_threat' => $origin_threat,
-			'provinces' => $provinces
+			'provinces' => $provinces,
+			'sample_category' => $sampleCategory
 		];
 		return $dataTable->render('apps.customers.sample', ['data'=> $data]);
 	}

@@ -109,8 +109,6 @@
 								<div class="invalid-feedback" role="alert">{{ $message }}</div>
 							@enderror
 						</div>
-					</div>
-					<div class="form-row">
 						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
 							<label class="form-label text-gray-800" for="origin_threat">ประเด็นมลพิษ <span class="text-danger">*</span></label>
 							<select name="origin_threat" class="form-control @error('sample_select_end') is-invalid @enderror">
@@ -126,135 +124,144 @@
 							@enderror
 						</div>
 					</div>
-					@switch (auth()->user()->userCustomer->customer_type)
-						@case('personal')
-							<div class="form-row">
-								<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
-									<label for="sample_location_place_name" class="block text-base font-medium text-gray-700">ชื่อสถานที่เก็บตัวอย่าง <span class="text-danger">*</span></label>
-									<input type="hidden" name="sample_location_define" value="2">
-									<input type="text" name="sample_location_place_name" id="sample_location_place_name" class="form-control @error('sample_location_place_name') is-invalid @enderror">
-									@error('sample_location_place_name')
-										<div class="invalid-feedback" role="alert">{{ $message }}</div>
-									@enderror
-								</div>
+
+					@if (auth()->user()->userCustomer->customer_type == 'personal')
+						<div class="form-row">
+							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
+								<label for="sample_location_place_name" class="block text-base font-medium text-gray-700">ชื่อสถานที่เก็บตัวอย่าง <span class="text-danger">*</span></label>
+								<input type="hidden" name="sample_location_define" value="2">
+								<input type="text" name="sample_location_place_name" id="sample_location_place_name" class="form-control @error('sample_location_place_name') is-invalid @enderror">
+								@error('sample_location_place_name')
+									<div class="invalid-feedback" role="alert">{{ $message }}</div>
+								@enderror
 							</div>
-							<div class="form-row">
-								<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
-									<label for="sample_location_place_address" class="block text-base font-medium text-gray-800">ที่อยู่ (เลขที่ หมู่ที่ ถนน หมู่บ้าน/อาคาร)</label>
-									<input type="text" name="sample_location_place_address" id="sample_location_place_address" class="form-control">
-								</div>
-								<div class="form-group col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6 mb-3">
-									<label for="sample_location_place_province" class="block text-base font-medium text-gray-800">จังหวัด <span class="text-danger">*</span></label>
-									<select name="sample_location_place_province" id="sample_location_place_province" class="form-control select2 chk-b @error('sample_location_place_province') is-invalid @enderror">
-										<option value="">-- โปรดเลือก --</option>
-										@foreach ($data['provinces'] as $key => $val)
-											<option value="{{ $key.'|'.$val }}">{{ $val }}</option>
-										@endforeach
-									</select>
-									@error('sample_location_place_province')
-										<div class="invalid-feedback" role="alert">{{ $message }}</div>
-									@enderror
-								</div>
-								<div class="form-group col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6 mb-3">
-									<label for="sample_location_place_district" class="block text-base font-medium text-gray-800">อำเภอ <span class="text-danger">*</span></label>
-									<select name="sample_location_place_district" id="sample_location_place_district" class="form-control @error('sample_location_place_district') is-invalid @enderror">
-										<option value="">-- โปรดเลือก --</option>
-									</select>
-									@error('sample_location_place_district')
-										<div class="invalid-feedback" role="alert">{{ $message }}</div>
-									@enderror
-								</div>
-								<div class="form-group col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6 mb-3">
-									<label for="sample_location_place_sub_district" class="block text-base font-medium text-gray-800">ตำบล <span class="text-danger">*</span></label>
-									<select name="sample_location_place_sub_district" id="sample_location_place_sub_district" class="form-control @error('sample_location_place_sub_district') is-invalid @enderror">
-										<option value="">-- โปรดเลือก --</option>
-									</select>
-									@error('sample_location_place_sub_district')
-										<div class="invalid-feedback" role="alert">{{ $message }}</div>
-									@enderror
-								</div>
-								<div class="form-group col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6 mb-3">
-									<label for="sample_location_place_postal" class="block text-base font-medium text-gray-800">รหัสไปรษณีย์</label>
-									<input type="text" name="sample_location_place_postal" id="sample_location_place_postal" class="form-control" readonly>
-								</div>
-							</div>
-							@break
-						@case('private')
-							<div class="form-row">
-								<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
-									<label class="form-label text-gray-800" for="sample_location_define">สถานที่เก็บตัวอย่าง <span class="text-danger">*</span></label>
-									<div class="frame-wrap">
-										<div class="custom-control custom-checkbox custom-control-inline">
-											<input type="checkbox" name="sample_location_define" value="1" id="chk_a" class="custom-control-input" checked>
-											<label class="custom-control-label" for="chk_a">สถานที่เดียวกับหน่วยงานผู้ส่งตัวอย่าง</label>
-										</div>
-										<div class="custom-control custom-checkbox custom-control-inline">
-											<input type="checkbox" name="sample_location_define" value="2" id="chk_b" class="custom-control-input">
-											<label class="custom-control-label" for="chk_b">กำหนดใหม่</label>
-										</div>
+						</div>
+					@endif
+
+					@if (auth()->user()->userCustomer->customer_type == 'private' || auth()->user()->userCustomer->customer_type == 'government')
+						<div class="form-row">
+							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
+								<label class="form-label text-gray-800" for="sample_location_define">สถานที่เก็บตัวอย่าง <span class="text-danger">*</span></label>
+								<div class="frame-wrap">
+									<div class="custom-control custom-checkbox custom-control-inline">
+										<input type="checkbox" name="sample_location_define" value="1" id="chk_a" class="custom-control-input" checked>
+										<label class="custom-control-label" for="chk_a">สถานที่เดียวกับหน่วยงานผู้ส่งตัวอย่าง</label>
+									</div>
+									<div class="custom-control custom-checkbox custom-control-inline">
+										<input type="checkbox" name="sample_location_define" value="2" id="chk_b" class="custom-control-input">
+										<label class="custom-control-label" for="chk_b">กำหนดใหม่</label>
 									</div>
 								</div>
 							</div>
-							<div class="form-row">
-								<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
-									<label for="sample_location_place_name" class="block text-base font-medium text-gray-700">ชื่อหน่วยงาน <span class="text-danger">*</span></label>
-									<input type="text" name="sample_location_place_name" id="sample_location_place_name" class="form-control @error('sample_location_place_name') is-invalid @enderror" disabled>
-									@error('sample_location_place_name')
-										<div class="invalid-feedback" role="alert">{{ $message }}</div>
-									@enderror
-								</div>
-								<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
-									<label for="sample_location_place_id" class="block text-base font-medium text-gray-700">รหัสสถานประกอบการ <span class="text-danger">*</span></label>
-									<input type="text" name="sample_location_place_id" id="sample_location_place_id" class="form-control @error('sample_location_place_id') is-invalid @enderror" disabled>
-									@error('sample_location_place_id')
-										<div class="invalid-feedback" role="alert">{{ $message }}</div>
-									@enderror
-								</div>
+						</div>
+					@endif
+
+					@if (auth()->user()->userCustomer->customer_type == 'private')
+						<div class="form-row">
+							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
+								<label for="sample_location_place_name" class="block text-base font-medium text-gray-700">ชื่อหน่วยงาน <span class="text-danger">*</span></label>
+								<input type="text" name="sample_location_place_name" id="sample_location_place_name" class="form-control @error('sample_location_place_name') is-invalid @enderror" {{(auth()->user()->userCustomer->customer_type=='personal')?'':'disabled'}}>
+								@error('sample_location_place_name')
+									<div class="invalid-feedback" role="alert">{{ $message }}</div>
+								@enderror
 							</div>
-							<div class="form-row">
-								<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
-									<label for="sample_location_place_address" class="block text-base font-medium text-gray-800">ที่อยู่ (เลขที่ หมู่ที่ ถนน หมู่บ้าน/อาคาร)</label>
-									<input type="text" name="sample_location_place_address" id="sample_location_place_address" class="form-control" disabled>
-								</div>
-								<div class="form-group col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6 mb-3">
-									<label for="sample_location_place_province" class="block text-base font-medium text-gray-800">จังหวัด <span class="text-danger">*</span></label>
-									<select name="sample_location_place_province" id="sample_location_place_province" class="form-control select2 chk-b @error('sample_location_place_province') is-invalid @enderror" disabled>
-										<option value="">-- โปรดเลือก --</option>
-										@foreach ($data['provinces'] as $key => $val)
-											<option value="{{ $key.'|'.$val }}">{{ $val }}</option>
-										@endforeach
-									</select>
-									@error('sample_location_place_province')
-										<div class="invalid-feedback" role="alert">{{ $message }}</div>
-									@enderror
-								</div>
-								<div class="form-group col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6 mb-3">
-									<label for="sample_location_place_district" class="block text-base font-medium text-gray-800">อำเภอ <span class="text-danger">*</span></label>
-									<select name="sample_location_place_district" id="sample_location_place_district" class="form-control @error('sample_location_place_district') is-invalid @enderror" disabled>
-										<option value="">-- โปรดเลือก --</option>
-									</select>
-									@error('sample_location_place_district')
-										<div class="invalid-feedback" role="alert">{{ $message }}</div>
-									@enderror
-								</div>
-								<div class="form-group col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6 mb-3">
-									<label for="sample_location_place_sub_district" class="block text-base font-medium text-gray-800">ตำบล <span class="text-danger">*</span></label>
-									<select name="sample_location_place_sub_district" id="sample_location_place_sub_district" class="form-control @error('sample_location_place_sub_district') is-invalid @enderror" disabled>
-										<option value="">-- โปรดเลือก --</option>
-									</select>
-									@error('sample_location_place_sub_district')
-										<div class="invalid-feedback" role="alert">{{ $message }}</div>
-									@enderror
-								</div>
-								<div class="form-group col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6 mb-3">
-									<label for="sample_location_place_postal" class="block text-base font-medium text-gray-800">รหัสไปรษณีย์</label>
-									<input type="text" name="sample_location_place_postal" id="sample_location_place_postal" class="form-control" readonly>
-								</div>
+							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
+								<label for="sample_location_place_id" class="block text-base font-medium text-gray-700">รหัสสถานประกอบการ <span class="text-danger">*</span></label>
+								<input type="text" name="sample_location_place_id" id="sample_location_place_id" class="form-control @error('sample_location_place_id') is-invalid @enderror" {{(auth()->user()->userCustomer->customer_type=='personal')?'':'disabled'}}>
+								@error('sample_location_place_id')
+									<div class="invalid-feedback" role="alert">{{ $message }}</div>
+								@enderror
 							</div>
-							@break
-						@case('government')
-							@break
-					@endswitch
+						</div>
+					@endif
+
+					@if (auth()->user()->userCustomer->customer_type == 'government')
+					<div class="form-row">
+						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
+							<label for="sample_location_place_type" class="block text-base font-medium text-gray-700">ประเภทหน่วยงาน <span class="text-danger">*</span></label>
+							<select name="sample_location_place_type" id="sample_location_place_type" class="form-control select2 chk-b @error('sample_location_place_type') is-invalid @enderror" {{(auth()->user()->userCustomer->customer_type=='personal')?'':'disabled'}}>
+								<option value="">-- โปรดเลือก --</option>
+								@foreach ($data['sample_category'] as $key => $val)
+									@if ($key == 1 || $key == 3)
+										@continue
+									@else
+										<option value="{{ $key }}">{{ $val }}</option>
+									@endif
+								@endforeach
+							</select>
+							@error('sample_location_place_type')
+								<div class="invalid-feedback" role="alert">{{ $message }}</div>
+							@enderror
+						</div>
+						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
+							<label for="sample_location_place_belong_to" class="block text-base font-medium text-gray-700">สังกัด <span class="text-danger">*</span></label>
+							<select name="sample_location_place_belong_to" id="sample_location_place_belong_to" class="form-control select2 chk-b @error('sample_location_place_belong_to') is-invalid @enderror" {{(auth()->user()->userCustomer->customer_type=='personal')?'':'disabled'}}>
+								<option value="">-- โปรดเลือก --</option>
+							</select>
+							@error('sample_location_place_belong_to')
+								<div class="invalid-feedback" role="alert">{{ $message }}</div>
+							@enderror
+						</div>
+						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
+							<label for="sample_location_place_name" class="block text-base font-medium text-gray-700">ชื่อหน่วยงาน <span class="text-danger">*</span></label>
+							<select name="sample_location_place_name" id="sample_location_place_name" class="form-control select2 chk-b @error('sample_location_place_name') is-invalid @enderror" {{(auth()->user()->userCustomer->customer_type=='personal')?'':'disabled'}}>
+								<option value="">-- โปรดเลือก --</option>
+							</select>
+							@error('sample_location_place_name')
+								<div class="invalid-feedback" role="alert">{{ $message }}</div>
+							@enderror
+						</div>
+						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
+							<label for="sample_location_place_name_oth" class="block text-base font-medium text-gray-700">ชื่อหน่วยงานอื่นๆ ระบุ <span class="text-danger">*</span></label>
+							<input type="text" name="sample_location_place_name_oth" id="sample_location_place_name_oth" class="form-control @error('sample_location_place_name_oth') is-invalid @enderror" {{(auth()->user()->userCustomer->customer_type=='personal')?'':'disabled'}}>
+							@error('sample_location_place_name_oth')
+								<div class="invalid-feedback" role="alert">{{ $message }}</div>
+							@enderror
+						</div>
+					</div>
+					@endif
+
+					<div class="form-row">
+						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
+							<label for="sample_location_place_address" class="block text-base font-medium text-gray-800">ที่อยู่ (เลขที่ หมู่ที่ ถนน หมู่บ้าน/อาคาร)</label>
+							<input type="text" name="sample_location_place_address" id="sample_location_place_address" class="form-control" {{(auth()->user()->userCustomer->customer_type=='personal')?'':'disabled'}}>
+						</div>
+						<div class="form-group col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6 mb-3">
+							<label for="sample_location_place_province" class="block text-base font-medium text-gray-800">จังหวัด <span class="text-danger">*</span></label>
+							<select name="sample_location_place_province" id="sample_location_place_province" class="form-control select2 chk-b @error('sample_location_place_province') is-invalid @enderror" {{(auth()->user()->userCustomer->customer_type=='personal')?'':'disabled'}}>
+								<option value="">-- โปรดเลือก --</option>
+								@foreach ($data['provinces'] as $key => $val)
+									<option value="{{ $key.'|'.$val }}">{{ $val }}</option>
+								@endforeach
+							</select>
+							@error('sample_location_place_province')
+								<div class="invalid-feedback" role="alert">{{ $message }}</div>
+							@enderror
+						</div>
+						<div class="form-group col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6 mb-3">
+							<label for="sample_location_place_district" class="block text-base font-medium text-gray-800">อำเภอ <span class="text-danger">*</span></label>
+							<select name="sample_location_place_district" id="sample_location_place_district" class="form-control @error('sample_location_place_district') is-invalid @enderror" {{(auth()->user()->userCustomer->customer_type=='personal')?'':'disabled'}}>
+								<option value="">-- โปรดเลือก --</option>
+							</select>
+							@error('sample_location_place_district')
+								<div class="invalid-feedback" role="alert">{{ $message }}</div>
+							@enderror
+						</div>
+						<div class="form-group col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6 mb-3">
+							<label for="sample_location_place_sub_district" class="block text-base font-medium text-gray-800">ตำบล <span class="text-danger">*</span></label>
+							<select name="sample_location_place_sub_district" id="sample_location_place_sub_district" class="form-control @error('sample_location_place_sub_district') is-invalid @enderror" {{(auth()->user()->userCustomer->customer_type=='personal')?'':'disabled'}}>
+								<option value="">-- โปรดเลือก --</option>
+							</select>
+							@error('sample_location_place_sub_district')
+								<div class="invalid-feedback" role="alert">{{ $message }}</div>
+							@enderror
+						</div>
+						<div class="form-group col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6 mb-3">
+							<label for="sample_location_place_postal" class="block text-base font-medium text-gray-800">รหัสไปรษณีย์</label>
+							<input type="text" name="sample_location_place_postal" id="sample_location_place_postal" class="form-control" readonly>
+						</div>
+					</div>
+
 					<div class="modal-footer">
 						<button type="button" class="btn btn-secondary" data-dismiss="modal">ยกเลิก</button>
 						<button type="submit" class="btn btn-success">บันทึกข้อมูล</button>
@@ -282,6 +289,9 @@ $(document).ready(function() {
 	});
 	$('#chk_a').on('change', function() {
 		if ($(this).prop("checked") == true) {
+			$('#sample_location_place_type').prop('disabled', true);
+			$("#sample_location_place_type").val($("#sample_location_place_type option:first").val());
+
 			$('#sample_location_place_name').prop('disabled', true);
 			$('#sample_location_place_name').val('');
 
@@ -307,6 +317,9 @@ $(document).ready(function() {
 
 	$('#chk_b').on('change', function() {
 		if ($(this).prop("checked") == true) {
+			$('#sample_location_place_type').prop('disabled', false);
+			$("#sample_location_place_type").val($("#sample_location_place_type option:first").val());
+
 			$('#sample_location_place_name').prop('disabled', false);
 			$('#sample_location_place_name').val('');
 
@@ -327,6 +340,9 @@ $(document).ready(function() {
 
 			$('#sample_location_place_postal').prop('disabled', false);
 		} else if ($(this).prop("checked") == false) {
+			$('#sample_location_place_type').prop('disabled', true);
+			$("#sample_location_place_type").val($("#sample_location_place_type option:first").val());
+
 			$('#sample_location_place_id').prop('disabled', true);
 			$('#sample_location_place_id').val('');
 
@@ -399,6 +415,27 @@ $(document).ready(function() {
 				},
 				error: function(jqXhr, textStatus, errorMessage) {
 					alert('Postcode error: ' + jqXhr.status + errorMessage);
+				}
+			});
+		} else {
+			return false;
+		}
+	});
+	$('#sample_location_place_type').change(function() {
+		if ($(this).val() != '') {
+			let idx = $(this).val();
+			$.ajax({
+				method: "GET",
+				url: "{{ route('hospital.fetch.type') }}",
+				dataType: "HTML",
+				data: {id: idx},
+				success: function(response) {
+					if (!$('#sample_location_place_belong_to').is('disabled')) {
+						$('#sample_location_place_belong_to').val(response);
+					}
+				},
+				error: function(jqXhr, textStatus, errorMessage) {
+					alert('Hospital type error: ' + jqXhr.status + errorMessage);
 				}
 			});
 		} else {
