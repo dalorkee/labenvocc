@@ -18,7 +18,7 @@ trait DbHospitalTrait {
 		}
 	}
 
-	public function getHospitalByHospType(array $hosp_type): array {
+	public static function getHospitalByHospType(array $hosp_type): array {
 		try {
 			return Hospital::select('hospcode', 'hosp_name')
 			->whereIn('hosp_type_code', $hosp_type)
@@ -34,7 +34,9 @@ trait DbHospitalTrait {
 		try {
 			return Hospital::select('hosp_type_code', 'hosp_type_detail')
 				->groupBy('hosp_type_code')
-				->get();
+				->get()
+				->keyBy('hosp_type_code')
+				->toArray();
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
 		}
@@ -86,7 +88,6 @@ trait DbHospitalTrait {
 
 	public function hospTypeToHtmlSelect() {
 		$hosp_type_arr = $this->getHospitalType();
-        dd($hosp_type_arr);
 		$htm = "<option value=\"\">-- โปรดเลือก --</option>";
 		foreach ($hosp_type_arr as $key => $val) {
 			$htm .= "<option value=\"".$key."\">".$val['hosp_type_detail']."</option>";

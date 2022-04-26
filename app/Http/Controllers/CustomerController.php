@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\{Auth,Log,Storage,File,Route};
 use App\Models\{Order,OrderSample,OrderSampleParameter,Fileupload,Parameter,User};
 use App\DataTables\{CustomersDataTable,CustParameterDataTable,CustSampleDataTable,CustVerifyDataTable};
-use App\Traits\{FileTrait,CommonTrait,JsonBoundaryTrait,DbBoundaryTrait};
+use App\Traits\{FileTrait,CommonTrait,JsonBoundaryTrait,DbBoundaryTrait,GovernmentTrait};
 use Yajra\DataTables\Facades\DataTables;
 
 class CustomerController extends Controller
@@ -14,7 +14,7 @@ class CustomerController extends Controller
 	private object $user;
 	private string $user_role;
 
-	use FileTrait, CommonTrait, JsonBoundaryTrait, DbBoundaryTrait;
+	use FileTrait, CommonTrait, JsonBoundaryTrait, DbBoundaryTrait, GovernmentTrait;
 
 	public function __construct() {
 		$this->middleware('auth');
@@ -152,7 +152,6 @@ class CustomerController extends Controller
 			'work_life_year.required_if' => 'โปรดกรอกอายุงาน',
 			'sample_date.required' => 'โปรดกรอกวันที่เก็บตัวอย่าง',
 		]);
-
 		try {
 			$order_sample = new OrderSample();
 			$order_sample->order_id = $request->order_id;
@@ -339,14 +338,14 @@ class CustomerController extends Controller
 		});
 		$origin_threat = $this->getOriginThreat();
 		$provinces = $this->getMinProvince();
-		$sampleCategory = $this->sampleOfficeCategory();
+		$governments = $this->getGovernmentToArray();
 
 		$data = [
 			'order_id' => $request->order_id,
 			'sample_list' => $sample_list,
 			'origin_threat' => $origin_threat,
 			'provinces' => $provinces,
-			'sample_category' => $sampleCategory
+			'governments' => $governments
 		];
 		return $dataTable->render('apps.customers.sample', ['data'=> $data]);
 	}

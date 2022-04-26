@@ -178,43 +178,32 @@
 					@if (auth()->user()->userCustomer->customer_type == 'government')
 					<div class="form-row">
 						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
-							<label for="sample_location_place_type" class="block text-base font-medium text-gray-700">ประเภทหน่วยงาน <span class="text-danger">*</span></label>
-							<select name="sample_location_place_type" id="sample_location_place_type" class="form-control select2 chk-b @error('sample_location_place_type') is-invalid @enderror" {{(auth()->user()->userCustomer->customer_type=='personal')?'':'disabled'}}>
+							<label for="agency_ministry" class="form-label block text-base font-medium text-gray-800">สังกัด/กระทรวง <span class="text-red-600">*</span></label>
+							<select name="agency_ministry" id="govs" class="form-control @error('agency_ministry') is-invalid @enderror" required="">
 								<option value="">-- โปรดเลือก --</option>
-								@foreach ($data['sample_category'] as $key => $val)
-									@if ($key == 1 || $key == 3)
-										@continue
-									@else
-										<option value="{{ $key }}">{{ $val }}</option>
-									@endif
+								@foreach ($data['governments'] as $key => $val)
+									<option value="{{ $key }}">{{ $val }}</option>
 								@endforeach
 							</select>
-							@error('sample_location_place_type')
+							@error('agency_ministry')
 								<div class="invalid-feedback" role="alert">{{ $message }}</div>
 							@enderror
 						</div>
 						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
-							<label for="sample_location_place_belong_to" class="block text-base font-medium text-gray-700">สังกัด <span class="text-danger">*</span></label>
-							<select name="sample_location_place_belong_to" id="sample_location_place_belong_to" class="form-control select2 chk-b @error('sample_location_place_belong_to') is-invalid @enderror" {{(auth()->user()->userCustomer->customer_type=='personal')?'':'disabled'}}>
+							<label for="agency_department" class="form-label block text-base font-medium text-gray-800">กอง/สำนัก <span class="text-red-600">*</span></label>
+							<select name="agency_department" id="agency_department" class="form-control @error('agency_department') is-invalid @enderror" required="">
 								<option value="">-- โปรดเลือก --</option>
 							</select>
-							@error('sample_location_place_belong_to')
-								<div class="invalid-feedback" role="alert">{{ $message }}</div>
-							@enderror
+							@error('agency_department')
+							<div class="invalid-feedback" role="alert">{{ $message }}</div>
+						@enderror
 						</div>
-						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
+						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
 							<label for="sample_location_place_name" class="block text-base font-medium text-gray-700">ชื่อหน่วยงาน <span class="text-danger">*</span></label>
 							<select name="sample_location_place_name" id="sample_location_place_name" class="form-control select2 chk-b @error('sample_location_place_name') is-invalid @enderror" {{(auth()->user()->userCustomer->customer_type=='personal')?'':'disabled'}}>
 								<option value="">-- โปรดเลือก --</option>
 							</select>
 							@error('sample_location_place_name')
-								<div class="invalid-feedback" role="alert">{{ $message }}</div>
-							@enderror
-						</div>
-						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
-							<label for="sample_location_place_name_oth" class="block text-base font-medium text-gray-700">ชื่อหน่วยงานอื่นๆ ระบุ <span class="text-danger">*</span></label>
-							<input type="text" name="sample_location_place_name_oth" id="sample_location_place_name_oth" class="form-control @error('sample_location_place_name_oth') is-invalid @enderror" {{(auth()->user()->userCustomer->customer_type=='personal')?'':'disabled'}}>
-							@error('sample_location_place_name_oth')
 								<div class="invalid-feedback" role="alert">{{ $message }}</div>
 							@enderror
 						</div>
@@ -278,7 +267,40 @@
 <script type="text/javascript" src="{{ URL::asset('assets/js/notifications/sweetalert2/sweetalert2.bundle.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('assets/js/formplugins/inputmask/inputmask.bundle.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/buttons.server-side.js') }}"></script>
-<script>function newData(){$('#new-data-modal').modal('show');}</script>
+<script>
+function newData() {
+	@if (auth()->user()->userCustomer->customer_type == 'government')
+		$('#chk_b').prop('checked', false);
+		$('#chk_a').prop('checked', true);
+		$('#sample_location_place_type').val($("#sample_location_place_type option:first").val());
+		$('#sample_location_place_type').prop('disabled', true);
+		$('#sample_location_place_belong_to').html('<option value="">-- โปรดเลือก --</option>');
+		$('#sample_location_place_belong_to').prop('disabled', true);
+		$('#sample_location_place_name').val('');
+		$('#sample_location_place_name').prop('disabled', true);
+
+		// $('#sample_location_place_id').prop('disabled', true);
+		// $('#sample_location_place_id').val('');
+
+		$('#sample_location_place_address').val('');
+		$('#sample_location_place_address').prop('disabled', true);
+
+		$("#sample_location_place_province").val($("#sample_location_place_province option:first").val());
+		$('#sample_location_place_province').prop('disabled', true);
+
+		$('#sample_location_place_district')[0].options.length = 1;
+		$('#sample_location_place_district').prop('disabled', true);
+
+		$('#sample_location_place_sub_district')[0].options.length = 1;
+		$('#sample_location_place_sub_district').prop('disabled', true);
+
+		$('#sample_location_place_postal').val('');
+		$('#sample_location_place_postal').prop('disabled', true);
+	@endif
+	$('#new-data-modal').modal('show');
+
+}
+</script>
 {{ $dataTable->scripts() }}
 <script>
 $(document).ready(function() {
@@ -289,8 +311,11 @@ $(document).ready(function() {
 	});
 	$('#chk_a').on('change', function() {
 		if ($(this).prop("checked") == true) {
-			$('#sample_location_place_type').prop('disabled', true);
 			$("#sample_location_place_type").val($("#sample_location_place_type option:first").val());
+			$('#sample_location_place_type').prop('disabled', true);
+
+			$("#sample_location_place_belong_to").val($("#sample_location_place_belong_to option:first").val());
+			$('#sample_location_place_belong_to').prop('disabled', true);
 
 			$('#sample_location_place_name').prop('disabled', true);
 			$('#sample_location_place_name').val('');
@@ -320,6 +345,9 @@ $(document).ready(function() {
 			$('#sample_location_place_type').prop('disabled', false);
 			$("#sample_location_place_type").val($("#sample_location_place_type option:first").val());
 
+			$('#sample_location_place_belong_to').prop('disabled', false);
+			$("#sample_location_place_belong_to").val($("#sample_location_place_belong_to option:first").val());
+
 			$('#sample_location_place_name').prop('disabled', false);
 			$('#sample_location_place_name').val('');
 
@@ -339,31 +367,35 @@ $(document).ready(function() {
 			$('#sample_location_place_sub_district')[0].options.length = 1;
 
 			$('#sample_location_place_postal').prop('disabled', false);
-		} else if ($(this).prop("checked") == false) {
-			$('#sample_location_place_type').prop('disabled', true);
-			$("#sample_location_place_type").val($("#sample_location_place_type option:first").val());
-
-			$('#sample_location_place_id').prop('disabled', true);
-			$('#sample_location_place_id').val('');
-
-			$('#sample_location_place_name').prop('disabled', true);
-			$('#sample_location_place_name').val('');
-
-			$('#sample_location_place_address').val('');
-			$('#sample_location_place_address').prop('disabled', true);
-
-			$('#sample_location_place_province').prop('disabled', true);
-			$("#sample_location_place_province").val($("#sample_location_place_province option:first").val());
-
-			$('#sample_location_place_district').prop('disabled', true);
-			$('#sample_location_place_district')[0].options.length = 1;
-
-			$('#sample_location_place_sub_district').prop('disabled', true);
-			$('#sample_location_place_sub_district')[0].options.length = 1;
-
-			$('#sample_location_place_postal').val('');
-			$('#sample_location_place_postal').prop('disabled', true);
 		}
+		// } else if ($(this).prop("checked") == false) {
+		// 	$('#sample_location_place_type').prop('disabled', true);
+		// 	$("#sample_location_place_type").val($("#sample_location_place_type option:first").val());
+
+		// 	$('#sample_location_place_belong_to').prop('disabled', false);
+		// 	$("#sample_location_place_belong_to").val($("#sample_location_place_belong_to option:first").val());
+
+		// 	$('#sample_location_place_id').prop('disabled', true);
+		// 	$('#sample_location_place_id').val('');
+
+		// 	$('#sample_location_place_name').prop('disabled', true);
+		// 	$('#sample_location_place_name').val('');
+
+		// 	$('#sample_location_place_address').val('');
+		// 	$('#sample_location_place_address').prop('disabled', true);
+
+		// 	$('#sample_location_place_province').prop('disabled', true);
+		// 	$("#sample_location_place_province").val($("#sample_location_place_province option:first").val());
+
+		// 	$('#sample_location_place_district').prop('disabled', true);
+		// 	$('#sample_location_place_district')[0].options.length = 1;
+
+		// 	$('#sample_location_place_sub_district').prop('disabled', true);
+		// 	$('#sample_location_place_sub_district')[0].options.length = 1;
+
+		// 	$('#sample_location_place_postal').val('');
+		// 	$('#sample_location_place_postal').prop('disabled', true);
+		// }
 	});
 
 	$('#sample_location_place_province').change(function() {
@@ -389,7 +421,7 @@ $(document).ready(function() {
 			$.ajax({
 				method: "GET",
 				url: "{{ route('boundary.fetch.sub.district') }}",
-				dataType: "HTML",
+				dataType: "html",
 				data: {id: dist_txt[0]},
 				success: function(response) {
 					$('#sample_location_place_sub_district').html(response);
@@ -406,7 +438,7 @@ $(document).ready(function() {
 			$.ajax({
 				method: "GET",
 				url: "{{ route('boundary.fetch.postcode') }}",
-				dataType: "HTML",
+				dataType: "html",
 				data: {id: sub_dist_txt[0]},
 				success: function(response) {
 					if (!$('#sample_location_place_postal').is('disabled')) {
@@ -421,25 +453,21 @@ $(document).ready(function() {
 			return false;
 		}
 	});
-	$('#sample_location_place_type').change(function() {
+	$('#govs').change(function() {
 		if ($(this).val() != '') {
-			let idx = $(this).val();
+			var id = $(this).val();
 			$.ajax({
-				method: "GET",
-				url: "{{ route('hospital.fetch.type') }}",
-				dataType: "HTML",
-				data: {id: idx},
+				method: "POST",
+				url: "{{ route('register.department') }}",
+				dataType: "html",
+				data: {id:id},
 				success: function(response) {
-					if (!$('#sample_location_place_belong_to').is('disabled')) {
-						$('#sample_location_place_belong_to').val(response);
-					}
+					$("#agency_department").html(response);
 				},
 				error: function(jqXhr, textStatus, errorMessage) {
-					alert('Hospital type error: ' + jqXhr.status + errorMessage);
+					alert('GovDept error: ' + jqXhr.status + errorMessage);
 				}
 			});
-		} else {
-			return false;
 		}
 	});
 });
