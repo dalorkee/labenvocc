@@ -69,7 +69,7 @@
 <div class="modal fade font-prompt" id="new-data-modal" data-keyboard="false" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
 	<div class="modal-dialog modal-xl modal-dialog-centered" role="document">
 		<div class="modal-content">
-			<form name="add_origin_threat" action="{{ route('customer.sample.store', ['order_id' => $data['order_id']]) }}" method="POST">
+			<form name="add_origin_threat" id="add_origin_threat" action="{{ route('customer.sample.store', ['order_id' => $data['order_id']]) }}" method="POST">
 				@csrf
 				<div class="modal-header bg-green-600 text-white">
 					<h5 class="modal-title"><i class="fal fa-plus-circle"></i> เพิ่มประเด็นมลพิษ</h5>
@@ -123,134 +123,146 @@
 								<div class="invalid-feedback" role="alert">{{ $message }}</div>
 							@enderror
 						</div>
-					</div>
-
-					@if (auth()->user()->userCustomer->customer_type == 'personal')
-						<div class="form-row">
-							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
-								<label for="sample_location_place_name" class="block text-base font-medium text-gray-700">ชื่อสถานที่เก็บตัวอย่าง <span class="text-danger">*</span></label>
-								<input type="hidden" name="sample_location_define" value="2">
-								<input type="text" name="sample_location_place_name" id="sample_location_place_name" class="form-control @error('sample_location_place_name') is-invalid @enderror">
-								@error('sample_location_place_name')
-									<div class="invalid-feedback" role="alert">{{ $message }}</div>
-								@enderror
-							</div>
-						</div>
-					@endif
-
-					@if (auth()->user()->userCustomer->customer_type == 'private' || auth()->user()->userCustomer->customer_type == 'government')
-						<div class="form-row">
-							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
-								<label class="form-label text-gray-800" for="sample_location_define">สถานที่เก็บตัวอย่าง <span class="text-danger">*</span></label>
-								<div class="frame-wrap">
-									<div class="custom-control custom-checkbox custom-control-inline">
-										<input type="checkbox" name="sample_location_define" value="1" id="chk_a" class="custom-control-input" checked>
-										<label class="custom-control-label" for="chk_a">สถานที่เดียวกับหน่วยงานผู้ส่งตัวอย่าง</label>
-									</div>
-									<div class="custom-control custom-checkbox custom-control-inline">
-										<input type="checkbox" name="sample_location_define" value="2" id="chk_b" class="custom-control-input">
-										<label class="custom-control-label" for="chk_b">กำหนดใหม่</label>
-									</div>
+						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
+							<label class="form-label text-gray-800" for="sample_location_define">สถานที่เก็บตัวอย่าง <span class="text-danger">*</span></label>
+							<div class="frame-wrap">
+								<div class="custom-control custom-switch custom-control-inline">
+									<input type="radio" name="sample_location_define" value="1" id="chk_a" class="custom-control-input" checked>
+									<label class="custom-control-label" for="chk_a">สถานที่เดียวกับหน่วยงานผู้ส่งตัวอย่าง</label>
+								</div>
+								<div class="custom-control custom-switch custom-control-inline">
+									<input type="radio" name="sample_location_define" value="2" id="chk_b" class="custom-control-input">
+									<label class="custom-control-label" for="chk_b">กำหนดเอง</label>
 								</div>
 							</div>
 						</div>
-					@endif
-
-					@if (auth()->user()->userCustomer->customer_type == 'private')
-						<div class="form-row">
-							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
-								<label for="sample_location_place_name" class="block text-base font-medium text-gray-700">ชื่อหน่วยงาน <span class="text-danger">*</span></label>
-								<input type="text" name="sample_location_place_name" id="sample_location_place_name" class="form-control @error('sample_location_place_name') is-invalid @enderror" {{(auth()->user()->userCustomer->customer_type=='personal')?'':'disabled'}}>
-								@error('sample_location_place_name')
-									<div class="invalid-feedback" role="alert">{{ $message }}</div>
-								@enderror
-							</div>
-							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
-								<label for="sample_location_place_id" class="block text-base font-medium text-gray-700">รหัสสถานประกอบการ <span class="text-danger">*</span></label>
-								<input type="text" name="sample_location_place_id" id="sample_location_place_id" class="form-control @error('sample_location_place_id') is-invalid @enderror" {{(auth()->user()->userCustomer->customer_type=='personal')?'':'disabled'}}>
-								@error('sample_location_place_id')
-									<div class="invalid-feedback" role="alert">{{ $message }}</div>
-								@enderror
-							</div>
-						</div>
-					@endif
-
-					@if (auth()->user()->userCustomer->customer_type == 'government')
-					<div class="form-row">
-						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
-							<label for="agency_ministry" class="form-label block text-base font-medium text-gray-800">สังกัด/กระทรวง <span class="text-red-600">*</span></label>
-							<select name="agency_ministry" id="govs" class="form-control @error('agency_ministry') is-invalid @enderror" required="">
-								<option value="">-- โปรดเลือก --</option>
-								@foreach ($data['governments'] as $key => $val)
-									<option value="{{ $key }}">{{ $val }}</option>
-								@endforeach
-							</select>
-							@error('agency_ministry')
-								<div class="invalid-feedback" role="alert">{{ $message }}</div>
-							@enderror
-						</div>
-						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
-							<label for="agency_department" class="form-label block text-base font-medium text-gray-800">กอง/สำนัก <span class="text-red-600">*</span></label>
-							<select name="agency_department" id="agency_department" class="form-control @error('agency_department') is-invalid @enderror" required="">
-								<option value="">-- โปรดเลือก --</option>
-							</select>
-							@error('agency_department')
-							<div class="invalid-feedback" role="alert">{{ $message }}</div>
-						@enderror
-						</div>
-						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
-							<label for="sample_location_place_name" class="block text-base font-medium text-gray-700">ชื่อหน่วยงาน <span class="text-danger">*</span></label>
-							<select name="sample_location_place_name" id="sample_location_place_name" class="form-control select2 chk-b @error('sample_location_place_name') is-invalid @enderror" {{(auth()->user()->userCustomer->customer_type=='personal')?'':'disabled'}}>
-								<option value="">-- โปรดเลือก --</option>
-							</select>
-							@error('sample_location_place_name')
-								<div class="invalid-feedback" role="alert">{{ $message }}</div>
-							@enderror
-						</div>
-					</div>
-					@endif
-
-					<div class="form-row">
-						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
-							<label for="sample_location_place_address" class="block text-base font-medium text-gray-800">ที่อยู่ (เลขที่ หมู่ที่ ถนน หมู่บ้าน/อาคาร)</label>
-							<input type="text" name="sample_location_place_address" id="sample_location_place_address" class="form-control" {{(auth()->user()->userCustomer->customer_type=='personal')?'':'disabled'}}>
-						</div>
-						<div class="form-group col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6 mb-3">
-							<label for="sample_location_place_province" class="block text-base font-medium text-gray-800">จังหวัด <span class="text-danger">*</span></label>
-							<select name="sample_location_place_province" id="sample_location_place_province" class="form-control select2 chk-b @error('sample_location_place_province') is-invalid @enderror" {{(auth()->user()->userCustomer->customer_type=='personal')?'':'disabled'}}>
-								<option value="">-- โปรดเลือก --</option>
-								@foreach ($data['provinces'] as $key => $val)
-									<option value="{{ $key.'|'.$val }}">{{ $val }}</option>
-								@endforeach
-							</select>
-							@error('sample_location_place_province')
-								<div class="invalid-feedback" role="alert">{{ $message }}</div>
-							@enderror
-						</div>
-						<div class="form-group col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6 mb-3">
-							<label for="sample_location_place_district" class="block text-base font-medium text-gray-800">อำเภอ <span class="text-danger">*</span></label>
-							<select name="sample_location_place_district" id="sample_location_place_district" class="form-control @error('sample_location_place_district') is-invalid @enderror" {{(auth()->user()->userCustomer->customer_type=='personal')?'':'disabled'}}>
-								<option value="">-- โปรดเลือก --</option>
-							</select>
-							@error('sample_location_place_district')
-								<div class="invalid-feedback" role="alert">{{ $message }}</div>
-							@enderror
-						</div>
-						<div class="form-group col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6 mb-3">
-							<label for="sample_location_place_sub_district" class="block text-base font-medium text-gray-800">ตำบล <span class="text-danger">*</span></label>
-							<select name="sample_location_place_sub_district" id="sample_location_place_sub_district" class="form-control @error('sample_location_place_sub_district') is-invalid @enderror" {{(auth()->user()->userCustomer->customer_type=='personal')?'':'disabled'}}>
-								<option value="">-- โปรดเลือก --</option>
-							</select>
-							@error('sample_location_place_sub_district')
-								<div class="invalid-feedback" role="alert">{{ $message }}</div>
-							@enderror
-						</div>
-						<div class="form-group col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6 mb-3">
-							<label for="sample_location_place_postal" class="block text-base font-medium text-gray-800">รหัสไปรษณีย์</label>
-							<input type="text" name="sample_location_place_postal" id="sample_location_place_postal" class="form-control" readonly>
-						</div>
 					</div>
 
+					<div class="row">
+						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mt-3 mb-3">
+							<div class="card border shadow-0 mb-g shadow-sm-hover">
+								<div class="card-body" id="new_location_place">
+									<div class="form-row">
+										<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
+											<div class="custom-control custom-switch">
+												<input type="radio" name="sample_location_place_type" value="private" class="custom-control-input radio_location_type" id="sample_location_place_type_private" disabled>
+												<label class="custom-control-label" for="sample_location_place_type_private">สถานประกอบการ</label>
+											</div>
+										</div>
+										<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
+											<label for="sample_location_place_private_name" class="block text-base font-medium text-gray-700">ชื่อหน่วยงาน <span class="text-danger">*</span></label>
+											<input type="text" name="sample_location_place_private_name" id="sample_location_place_private_name" class="form-control input-private-group @error('sample_location_place_private_name') is-invalid @enderror" disabled>
+											@error('sample_location_place_private_name')
+												<div class="invalid-feedback" role="alert">{{ $message }}</div>
+											@enderror
+										</div>
+										<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
+											<label for="sample_location_place_private_id" class="block text-base font-medium text-gray-700">รหัสสถานประกอบการ <span class="text-danger">*</span></label>
+											<input type="text" name="sample_location_place_private_id" id="sample_location_place_private_id" class="form-control input-private-group @error('sample_location_place_private_id') is-invalid @enderror" disabled>
+											@error('sample_location_place_private_id')
+												<div class="invalid-feedback" role="alert">{{ $message }}</div>
+											@enderror
+										</div>
+									</div>
+
+									<div class="form-row">
+										<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mt-3 mb-3">
+											<div class="custom-control custom-switch">
+												<input type="radio" name="sample_location_place_type" value="government" class="custom-control-input radio_location_type" id="sample_location_place_type_government" disabled>
+												<label class="custom-control-label" for="sample_location_place_type_government">หน่วยงานราชการ</label>
+											</div>
+										</div>
+										<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
+											<label for="agency_ministry" class="form-label block text-base font-medium text-gray-800">สังกัด/กระทรวง <span class="text-red-600">*</span></label>
+											<select name="sample_location_place_ministry" id="sample_location_place_ministry" class="form-control input-goverment-group-select @error('sample_location_place_ministry') is-invalid @enderror" required="" disabled>
+												<option value="">-- โปรดเลือก --</option>
+												@foreach ($data['governments'] as $key => $val)
+													<option value="{{ $key }}">{{ $val }}</option>
+												@endforeach
+											</select>
+											@error('sample_location_place_ministry')
+												<div class="invalid-feedback" role="alert">{{ $message }}</div>
+											@enderror
+										</div>
+										<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
+											<label for="sample_location_place_department" class="form-label block text-base font-medium text-gray-800">กอง/สำนัก <span class="text-red-600">*</span></label>
+											<select name="sample_location_place_department" id="sample_location_place_department" class="form-control input-goverment-group-select @error('sample_location_place_department') is-invalid @enderror" required="" disabled>
+												<option value="">-- โปรดเลือก --</option>
+											</select>
+											@error('sample_location_place_department')
+												<div class="invalid-feedback" role="alert">{{ $message }}</div>
+											@enderror
+										</div>
+										<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
+											<label for="sample_location_place_name_government" class="block text-base font-medium text-gray-700">ชื่อส่วนราชการ <span class="text-danger">*</span></label>
+											<input type="text" name="sample_location_place_name_government" id="sample_location_place_name_government" class="form-control input-goverment-group @error('sample_location_place_name_government') is-invalid @enderror" disabled>
+											@error('sample_location_place_name_government')
+												<div class="invalid-feedback" role="alert">{{ $message }}</div>
+											@enderror
+										</div>
+									</div>
+
+									<div class="form-row">
+										<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mt-3 mb-3">
+											<div class="custom-control custom-switch">
+												<input type="radio" name="sample_location_place_type" value="other" class="custom-control-input radio_location_type" id="sample_location_place_type_other" disabled>
+												<label class="custom-control-label" for="sample_location_place_type_other">อื่นๆ</label>
+											</div>
+										</div>
+										<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
+											<label for="sample_location_place_other_name" class="block text-base font-medium text-gray-700">โปรดระบุ <span class="text-danger">*</span></label>
+											<input type="text" name="sample_location_place_other_name" id="sample_location_place_other_name" class="form-control @error('sample_location_place_other_name') is-invalid @enderror" disabled>
+											@error('sample_location_place_other_name')
+												<div class="invalid-feedback" role="alert">{{ $message }}</div>
+											@enderror
+										</div>
+									</div>
+
+									<div class="form-row mt-3">
+										<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
+											<label for="sample_location_place_address" class="block text-base font-medium text-gray-800">ที่อยู่ (เลขที่ หมู่ที่ ถนน หมู่บ้าน/อาคาร)</label>
+											<input type="text" name="sample_location_place_address" id="sample_location_place_address" class="form-control" disabled>
+										</div>
+										<div class="form-group col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6 mb-3">
+											<label for="sample_location_place_province" class="block text-base font-medium text-gray-800">จังหวัด <span class="text-danger">*</span></label>
+											<select name="sample_location_place_province" id="sample_location_place_province" class="form-control select2 chk-b @error('sample_location_place_province') is-invalid @enderror" disabled>
+												<option value="">-- โปรดเลือก --</option>
+												@foreach ($data['provinces'] as $key => $val)
+													<option value="{{ $key.'|'.$val }}">{{ $val }}</option>
+												@endforeach
+											</select>
+											@error('sample_location_place_province')
+												<div class="invalid-feedback" role="alert">{{ $message }}</div>
+											@enderror
+										</div>
+										<div class="form-group col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6 mb-3">
+											<label for="sample_location_place_district" class="block text-base font-medium text-gray-800">อำเภอ <span class="text-danger">*</span></label>
+											<select name="sample_location_place_district" id="sample_location_place_district" class="form-control @error('sample_location_place_district') is-invalid @enderror" disabled>
+												<option value="">-- โปรดเลือก --</option>
+											</select>
+											@error('sample_location_place_district')
+												<div class="invalid-feedback" role="alert">{{ $message }}</div>
+											@enderror
+										</div>
+										<div class="form-group col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6 mb-3">
+											<label for="sample_location_place_sub_district" class="block text-base font-medium text-gray-800">ตำบล <span class="text-danger">*</span></label>
+											<select name="sample_location_place_sub_district" id="sample_location_place_sub_district" class="form-control @error('sample_location_place_sub_district') is-invalid @enderror" disabled>
+												<option value="">-- โปรดเลือก --</option>
+											</select>
+											@error('sample_location_place_sub_district')
+												<div class="invalid-feedback" role="alert">{{ $message }}</div>
+											@enderror
+										</div>
+										<div class="form-group col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6 mb-3">
+											<label for="sample_location_place_postal" class="block text-base font-medium text-gray-800">รหัสไปรษณีย์</label>
+											<input type="text" name="sample_location_place_postal" id="sample_location_place_postal" class="form-control" readonly>
+										</div>
+									</div>
+
+								</div>
+							</div>
+						</div>
+					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-secondary" data-dismiss="modal">ยกเลิก</button>
 						<button type="submit" class="btn btn-success">บันทึกข้อมูล</button>
@@ -269,36 +281,36 @@
 <script type="text/javascript" src="{{ URL::asset('js/buttons.server-side.js') }}"></script>
 <script>
 function newData() {
-	@if (auth()->user()->userCustomer->customer_type == 'government')
-		$('#chk_b').prop('checked', false);
-		$('#chk_a').prop('checked', true);
-		$('#sample_location_place_type').val($("#sample_location_place_type option:first").val());
-		$('#sample_location_place_type').prop('disabled', true);
-		$('#sample_location_place_belong_to').html('<option value="">-- โปรดเลือก --</option>');
-		$('#sample_location_place_belong_to').prop('disabled', true);
-		$('#sample_location_place_name').val('');
-		$('#sample_location_place_name').prop('disabled', true);
+    $('#chk_b').prop('checked', false);
+    $('#chk_a').prop('checked', true);
+	$('.radio_location_type').prop('checked', false);
 
-		// $('#sample_location_place_id').prop('disabled', true);
-		// $('#sample_location_place_id').val('');
+	$('.input-private-group').val('');
+	$('.input-private-group').prop('disabled', true);
 
-		$('#sample_location_place_address').val('');
-		$('#sample_location_place_address').prop('disabled', true);
+	$('.input-goverment-group-select').val($('.input-goverment-group-select option:first').val());
+	$('.input-goverment-group-select').prop('disabled', true);
+	$('#sample_location_place_name_government').val('');
+	$('#sample_location_place_name_government').prop('disabled', true);
 
-		$("#sample_location_place_province").val($("#sample_location_place_province option:first").val());
-		$('#sample_location_place_province').prop('disabled', true);
+	$('#sample_location_place_other_name').val('');
+	$('#sample_location_place_other_name').prop('disabled', true);
 
-		$('#sample_location_place_district')[0].options.length = 1;
-		$('#sample_location_place_district').prop('disabled', true);
+	$('#sample_location_place_address').val('');
+	$('#sample_location_place_address').prop('disabled', true);
 
-		$('#sample_location_place_sub_district')[0].options.length = 1;
-		$('#sample_location_place_sub_district').prop('disabled', true);
+	$("#sample_location_place_province").val($("#sample_location_place_province option:first").val());
+	$('#sample_location_place_province').prop('disabled', true);
 
-		$('#sample_location_place_postal').val('');
-		$('#sample_location_place_postal').prop('disabled', true);
-	@endif
+	$('#sample_location_place_district')[0].options.length = 1;
+	$('#sample_location_place_district').prop('disabled', true);
+
+	$('#sample_location_place_sub_district')[0].options.length = 1;
+	$('#sample_location_place_sub_district').prop('disabled', true);
+
+	$('#sample_location_place_postal').val('');
+
 	$('#new-data-modal').modal('show');
-
 }
 </script>
 {{ $dataTable->scripts() }}
@@ -306,22 +318,36 @@ function newData() {
 $(document).ready(function() {
 	$.ajaxSetup({headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}});
 	var order_id = $('#order_id').val();
-	$('input[name="sample_location_define"]').on('change', function() {
-		$('input[name="' + this.name + '"]').not(this).prop('checked', false);
-	});
-	$('#chk_a').on('change', function() {
-		if ($(this).prop("checked") == true) {
-			$("#sample_location_place_type").val($("#sample_location_place_type option:first").val());
-			$('#sample_location_place_type').prop('disabled', true);
+	$('input[type=radio][name=sample_location_define]').on('change', function() {
+		$('.radio_location_type').prop('checked', false);
+		$('.input-private-group').val('');
+		$('.input-private-group').prop('disabled', true);
 
-			$("#sample_location_place_belong_to").val($("#sample_location_place_belong_to option:first").val());
-			$('#sample_location_place_belong_to').prop('disabled', true);
+		$('.input-goverment-group-select').val($('.input-goverment-group-select option:first').val());
+		$('.input-goverment-group-select').prop('disabled', true);
+		$('#sample_location_place_name_government').val('');
+		$('#sample_location_place_name_government').prop('disabled', true);
 
-			$('#sample_location_place_name').prop('disabled', true);
-			$('#sample_location_place_name').val('');
+		$('#sample_location_place_other_name').val('');
+		$('#sample_location_place_other_name').prop('disabled', true);
+		if (this.value === '2') {
+			$('.radio_location_type').attr('disabled', false);
 
-			$('#sample_location_place_id').prop('disabled', true);
-			$('#sample_location_place_id').val('');
+			$('#sample_location_place_address').prop('disabled', false);
+			$('#sample_location_place_address').val('');
+
+			$('#sample_location_place_province').prop('disabled', false);
+			$("#sample_location_place_province").val($("#sample_location_place_province option:first").val());
+
+			$('#sample_location_place_district').prop('disabled', false);
+			$('#sample_location_place_district')[0].options.length = 1;
+
+			$('#sample_location_place_sub_district').prop('disabled', false);
+			$('#sample_location_place_sub_district')[0].options.length = 1;
+
+			$('#sample_location_place_postal').val('');
+		} else {
+			$('.radio_location_type').attr('disabled', true);
 
 			$('#sample_location_place_address').val('');
 			$('#sample_location_place_address').prop('disabled', true);
@@ -336,66 +362,48 @@ $(document).ready(function() {
 			$('#sample_location_place_sub_district').prop('disabled', true);
 
 			$('#sample_location_place_postal').val('');
-			$('#sample_location_place_postal').prop('disabled', true);
 		}
 	});
 
-	$('#chk_b').on('change', function() {
-		if ($(this).prop("checked") == true) {
-			$('#sample_location_place_type').prop('disabled', false);
-			$("#sample_location_place_type").val($("#sample_location_place_type option:first").val());
+	$('input[type=radio][name=sample_location_place_type]').on('change', function() {
+		switch (this.value) {
+			case 'private':
+				$('.input-private-group').prop('disabled', false);
+				$('.input-private-group').val('');
 
-			$('#sample_location_place_belong_to').prop('disabled', false);
-			$("#sample_location_place_belong_to").val($("#sample_location_place_belong_to option:first").val());
+				$('.input-goverment-group-select').val($('.input-goverment-group-select option:first').val());
+				$('.input-goverment-group-select').prop('disabled', true);
+				$('#sample_location_place_name_government').val('');
+				$('#sample_location_place_name_government').prop('disabled', true);
 
-			$('#sample_location_place_name').prop('disabled', false);
-			$('#sample_location_place_name').val('');
+				$('#sample_location_place_other_name').val('');
+				$('#sample_location_place_other_name').prop('disabled', true);
+				break;
+			case 'government':
+				$('.input-goverment-group-select').prop('disabled', false);
+				$('.input-goverment-group-select').val($('.input-goverment-group-select option:first').val());
+				$('#sample_location_place_name_government').prop('disabled', false);
+				$('#sample_location_place_name_government').val('');
 
-			$('#sample_location_place_id').prop('disabled', false);
-			$('#sample_location_place_id').val('');
+				$('.input-private-group').val('');
+				$('.input-private-group').prop('disabled', true);
 
-			$('#sample_location_place_address').prop('disabled', false);
-			$('#sample_location_place_address').val('');
+				$('#sample_location_place_other_name').val('');
+				$('#sample_location_place_other_name').prop('disabled', true);
+				break;
+			case 'other':
+				$('#sample_location_place_other_name').prop('disabled', false);
+				$('#sample_location_place_other_name').val('');
 
-			$('#sample_location_place_province').prop('disabled', false);
-			$("#sample_location_place_province").val($("#sample_location_place_province option:first").val());
+				$('.input-private-group').val('');
+				$('.input-private-group').prop('disabled', true);
 
-			$('#sample_location_place_district').prop('disabled', false);
-			$('#sample_location_place_district')[0].options.length = 1;
-
-			$('#sample_location_place_sub_district').prop('disabled', false);
-			$('#sample_location_place_sub_district')[0].options.length = 1;
-
-			$('#sample_location_place_postal').prop('disabled', false);
+				$('.input-goverment-group-select').val($('.input-goverment-group-select option:first').val());
+				$('.input-goverment-group-select').prop('disabled', true);
+				$('#sample_location_place_name_government').val('');
+				$('#sample_location_place_name_government').prop('disabled', true);
+				break;
 		}
-		// } else if ($(this).prop("checked") == false) {
-		// 	$('#sample_location_place_type').prop('disabled', true);
-		// 	$("#sample_location_place_type").val($("#sample_location_place_type option:first").val());
-
-		// 	$('#sample_location_place_belong_to').prop('disabled', false);
-		// 	$("#sample_location_place_belong_to").val($("#sample_location_place_belong_to option:first").val());
-
-		// 	$('#sample_location_place_id').prop('disabled', true);
-		// 	$('#sample_location_place_id').val('');
-
-		// 	$('#sample_location_place_name').prop('disabled', true);
-		// 	$('#sample_location_place_name').val('');
-
-		// 	$('#sample_location_place_address').val('');
-		// 	$('#sample_location_place_address').prop('disabled', true);
-
-		// 	$('#sample_location_place_province').prop('disabled', true);
-		// 	$("#sample_location_place_province").val($("#sample_location_place_province option:first").val());
-
-		// 	$('#sample_location_place_district').prop('disabled', true);
-		// 	$('#sample_location_place_district')[0].options.length = 1;
-
-		// 	$('#sample_location_place_sub_district').prop('disabled', true);
-		// 	$('#sample_location_place_sub_district')[0].options.length = 1;
-
-		// 	$('#sample_location_place_postal').val('');
-		// 	$('#sample_location_place_postal').prop('disabled', true);
-		// }
 	});
 
 	$('#sample_location_place_province').change(function() {
@@ -453,7 +461,7 @@ $(document).ready(function() {
 			return false;
 		}
 	});
-	$('#govs').change(function() {
+	$('#sample_location_place_ministry').change(function() {
 		if ($(this).val() != '') {
 			var id = $(this).val();
 			$.ajax({
@@ -462,7 +470,7 @@ $(document).ready(function() {
 				dataType: "html",
 				data: {id:id},
 				success: function(response) {
-					$("#agency_department").html(response);
+					$("#sample_location_place_department").html(response);
 				},
 				error: function(jqXhr, textStatus, errorMessage) {
 					alert('GovDept error: ' + jqXhr.status + errorMessage);
