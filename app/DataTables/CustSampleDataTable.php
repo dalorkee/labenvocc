@@ -50,7 +50,14 @@ class CustSampleDataTable extends DataTable
 						->editColumn('origin_threat_name', function($order_sample) {
 							return "<div style=\"width: 310px\">".$order_sample->origin_threat_name."</div>";
 						})
-						->rawColumns(['firstname', 'lastname', 'parameter', 'origin_threat_name']);
+						->editColumn('place_name', function($order_sample) {
+							return "<div style=\"width: 310px\">"
+								.$order_sample->sample_location_place_ministry_name." "
+								.$order_sample->sample_location_place_department_name. " "
+								.$order_sample->sample_location_place_name
+								."</div>";
+						})
+						->rawColumns(['firstname', 'lastname', 'parameter', 'origin_threat_name', 'place_name']);
 					break;
 				}
 		} catch (\Exception $e) {
@@ -113,7 +120,7 @@ class CustSampleDataTable extends DataTable
 						Column::make('parameter')->title('พารามิเตอร์'),
 						Column::make('total_price')->title('ราคา'),
 						Column::make('origin_threat_name')->title('ประเด็นมลพิษ'),
-						Column::make('sample_location_place_name')->title('สถานที่เก็บ ตย.'),
+						Column::make('place_name')->title('สถานที่เก็บ ตย.'),
 						Column::make('sample_location_place_address')->title('ที่อยู่'),
 						Column::make('sample_location_place_sub_district_name')->title('ตำบล'),
 						Column::make('sample_location_place_district_name')->title('อำเภอ'),

@@ -73,6 +73,7 @@ Route::name('register.')->group(function() {
 	Route::post('province/district/subdistrict', [RegisterController::class, 'renderSubDistrictToHtmlSelect'])->name('subDistrict');
 	Route::post('province/subdistrict/postcode', [RegisterController::class, 'getPostCodeBySubDistrict'])->name('postcode');
 	Route::post('gov/dept', [RegisterController::class, 'renderGovernmentDeptToHtmlSelect'])->name('department');
+	Route::post('gov/deps/v2', [RegisterController::class, 'renderGovernmentDeptToHtmlSelectV2'])->name('department.v2');
 	Route::post('search/hospital', [RegisterController::class, 'searchHospitalByName'])->name('hospital');
 	Route::post('refresh-captcha', [RegisterController::class, 'refreshCaptcha'])->name('refresh-captcha');
 });

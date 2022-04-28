@@ -177,7 +177,7 @@
 											<select name="sample_location_place_ministry" id="sample_location_place_ministry" class="form-control input-goverment-group-select @error('sample_location_place_ministry') is-invalid @enderror" required="" disabled>
 												<option value="">-- โปรดเลือก --</option>
 												@foreach ($data['governments'] as $key => $val)
-													<option value="{{ $key }}">{{ $val }}</option>
+													<option value="{{ $key.'|'.$val }}">{{ $val }}</option>
 												@endforeach
 											</select>
 											@error('sample_location_place_ministry')
@@ -185,7 +185,7 @@
 											@enderror
 										</div>
 										<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
-											<label for="sample_location_place_department" class="form-label block text-base font-medium text-gray-800">กอง/สำนัก <span class="text-red-600">*</span></label>
+											<label for="sample_location_place_department" class="form-label block text-base font-medium text-gray-800">สังกัด/กรม <span class="text-red-600">*</span></label>
 											<select name="sample_location_place_department" id="sample_location_place_department" class="form-control input-goverment-group-select @error('sample_location_place_department') is-invalid @enderror" required="" disabled>
 												<option value="">-- โปรดเลือก --</option>
 											</select>
@@ -281,8 +281,8 @@
 <script type="text/javascript" src="{{ URL::asset('js/buttons.server-side.js') }}"></script>
 <script>
 function newData() {
-    $('#chk_b').prop('checked', false);
-    $('#chk_a').prop('checked', true);
+	$('#chk_b').prop('checked', false);
+	$('#chk_a').prop('checked', true);
 	$('.radio_location_type').prop('checked', false);
 
 	$('.input-private-group').val('');
@@ -466,7 +466,7 @@ $(document).ready(function() {
 			var id = $(this).val();
 			$.ajax({
 				method: "POST",
-				url: "{{ route('register.department') }}",
+				url: "{{ route('register.department.v2') }}",
 				dataType: "html",
 				data: {id:id},
 				success: function(response) {

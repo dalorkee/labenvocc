@@ -351,118 +351,127 @@ class CustomerController extends Controller
 	}
 
 	#[Route('customer.sample.store', methods: ['POST'])]
-	protected function storeSample(Request $request): object {
-		$request->validate([
-			'sample_select_begin' => 'bail|required',
-			'sample_select_end' => 'required',
-			'origin_threat' => 'required',
+	protected function storeSample(Request $request) {
+		// $request->validate([
+		// 	'sample_select_begin' => 'bail|required',
+		// 	'sample_select_end' => 'required',
+		// 	'origin_threat' => 'required',
 
-			'sample_location_place_name' => 'required_if:sample_location_define,==,2',
-			'sample_location_place_id' => 'required_if:sample_location_define,==,2',
-			'sample_location_place_province' => 'required_if:sample_location_define,==,2',
-			'sample_location_place_district' => 'required_if:sample_location_define,==,2',
-			'sample_location_place_sub_district' => 'required_if:sample_location_define,==,2'
-		],[
-			'sample_select_begin.required' => 'โปรดเลือกตัวอย่างเริ่มต้น',
-			'sample_select_end.required' => 'โปรดเลือกตัวอย่างสิ้นสุด',
-			'origin_threat.required'=>'โปรดเลือกประเด็นมลพิษ',
-			'sample_location_place_name.required_if' => 'โปรดกรอกชื่อสถานที่เก็บตัวอย่าง',
-			'sample_location_place_id.required' => 'โปรดกรอกรหัสหน่วยงาน',
-			'sample_location_place_province.required' => 'โปรดเลือกจังหวัด',
-			'sample_location_place_district.required' => 'โปรดเลือกอำเภอ',
-			'sample_location_place_sub_district.required' => 'โปรดเลือกตำบล'
-		]);
+		// 	'sample_location_define' => 'required',
+
+		// 	'sample_location_place_type' => 'required_if:sample_location_define,==,2',
+
+		// 	'sample_location_place_private_name' => 'required_if:sample_location_place_type,==,private',
+		// 	'sample_location_place_private_id' => 'required_if:sample_location_place_type,==,private',
+
+		// 	'sample_location_place_ministry' => 'required_if:sample_location_place_type,==,government',
+		// 	'sample_location_place_department' => 'required_if:sample_location_place_type,==,government',
+		// 	'sample_location_place_name_government' => 'required_if:sample_location_place_type,==,government',
+
+		// 	'sample_location_place_other_name' => 'required_if:sample_location_place_type,==,other',
+
+		// 	'sample_location_place_province' => 'required_if:sample_location_define,==,2',
+		// 	'sample_location_place_district' => 'required_if:sample_location_define,==,2',
+		// 	'sample_location_place_sub_district' => 'required_if:sample_location_define,==,2'
+		// ],[
+		// 	'sample_select_begin.required' => 'โปรดเลือกตัวอย่างเริ่มต้น',
+		// 	'sample_select_end.required' => 'โปรดเลือกตัวอย่างสิ้นสุด',
+		// 	'origin_threat.required'=>'โปรดเลือกประเด็นมลพิษ',
+
+		// 	'sample_location_place_private_name.required_if' => 'โปรดกรอกชื่อสถานที่เก็บตัวอย่าง',
+		// 	'sample_location_place_private_id.required_if' => 'โปรดกรอกรหัสหน่วยงาน',
+
+		// 	'sample_location_place_ministry.required_if' => 'โปรดเลือก สังกัด/กระทรวง',
+		// 	'sample_location_place_department.required_if' => 'โปรดเลือก สังกัด/กรม',
+		// 	'sample_location_place_name_government.required_if' => 'โปรดกรอกชื่อสถานที่เก็บตัวอย่าง',
+
+		// 	'sample_location_place_other_name.required_if' => 'โปรดกรอกชื่อสถานที่เก็บตัวอย่าง',
+
+		// 	'sample_location_place_province.required_if' => 'โปรดเลือกจังหวัด',
+		// 	'sample_location_place_district.required_if' => 'โปรดเลือกอำเภอ',
+		// 	'sample_location_place_sub_district.required_if' => 'โปรดเลือกตำบล'
+		// ]);
 		try {
 			if ($request->sample_select_begin > $request->sample_select_end) {
 				return redirect()->back()->with('warning', 'ลำดับข้อมูลตัวอย่างไม่ถูกต้อง โปรดตรวจสอบ');
 			} else {
 				$saved = false;
 				$origin_threat_arr = $this->getOriginThreat();
-				switch ($this->user->userCustomer->customer_type) {
-					case 'personal':
+				switch ($request->sample_location_define) {
+					case "1":
+						$userDetail = User::find($request->user_id)->userCustomer;
+						$user_ministry_name = $this->getGovernmentNameById($userDetail->agency_ministry);
+						$user_department_name = $this->getDepartmentNameById($userDetail->agency_department);
+						$user_sub_district_name = $this->subDistrictNameBySubDistId($userDetail->sub_district);
+						$user_district_name = $this->districtNameByDistId($userDetail->district);
+						$user_province_name = $this->provinceNameByProvId($userDetail->province);
 						for ($i=$request->sample_select_begin; $i<=$request->sample_select_end; $i++) {
 							$order_sample = OrderSample::find($i);
 							if (!is_null($order_sample)) {
-								$prov_arr = $this->explodeStrToArr($request->sample_location_place_province);
-								$dist_arr = $this->explodeStrToArr($request->sample_location_place_district);
-								$sub_dist_arr = $this->explodeStrToArr($request->sample_location_place_sub_district);
 								$order_sample->origin_threat_id = $request->origin_threat;
 								$order_sample->origin_threat_name = $origin_threat_arr[$request->origin_threat];
-								$order_sample->sample_location_define = 2;
-								$order_sample->sample_location_place_name = $request->sample_location_place_name;
-								$order_sample->sample_location_place_address = $request->sample_location_place_address;
-								$order_sample->sample_location_place_sub_district = $sub_dist_arr[0];
-								$order_sample->sample_location_place_sub_district_name = $sub_dist_arr[1];
-								$order_sample->sample_location_place_district = $dist_arr[0];
-								$order_sample->sample_location_place_district_name = $dist_arr[1];
-								$order_sample->sample_location_place_province = $prov_arr[0];
-								$order_sample->sample_location_place_province_name = $prov_arr[1];
-								$order_sample->sample_location_place_postal = $request->sample_location_place_postal;
+								$order_sample->sample_location_define = $request->sample_location_define;
+								$order_sample->sample_location_place_type = ($userDetail->customer_type == 'personal') ? 'other' : $userDetail->customer_type;
+
+								$order_sample->sample_location_place_ministry_id = $userDetail->agency_ministry;
+								$order_sample->sample_location_place_ministry_name = $user_ministry_name ?? null;
+
+								$order_sample->sample_location_place_department_id = $userDetail->agency_department;
+								$order_sample->sample_location_place_department_name = $user_department_name ?? null;
+
+								$order_sample->sample_location_place_id = $userDetail->agency_code;
+								$order_sample->sample_location_place_name = $userDetail->agency_name;
+
+								$order_sample->sample_location_place_address = $userDetail->address;
+								$order_sample->sample_location_place_sub_district = $userDetail->sub_district;
+								$order_sample->sample_location_place_sub_district_name = $user_sub_district_name;
+								$order_sample->sample_location_place_district = $userDetail->district;
+								$order_sample->sample_location_place_district_name = $user_district_name;
+								$order_sample->sample_location_place_province = $userDetail->province;
+								$order_sample->sample_location_place_province_name = $user_province_name;
+								$order_sample->sample_location_place_postal = $userDetail->postcode;
 								$saved = $order_sample->save();
 							} else {
 								continue;
 							}
 						}
 						break;
-					case 'private':
-					case 'government':
-						switch ($request->sample_location_define) {
-							case "1":
-								$userDetail = User::find($request->user_id)->userCustomer;
-								$user_sub_district_name = $this->subDistrictNameBySubDistId($userDetail->sub_district);
-								$user_district_name = $this->districtNameByDistId($userDetail->district);
-								$user_province_name = $this->provinceNameByProvId($userDetail->province);
-								for ($i=$request->sample_select_begin; $i<=$request->sample_select_end; $i++) {
-									$order_sample = OrderSample::find($i);
-									if (!is_null($order_sample)) {
-										$order_sample->origin_threat_id = $request->origin_threat;
-										$order_sample->origin_threat_name = $origin_threat_arr[$request->origin_threat];
-										$order_sample->sample_location_define = $request->sample_location_define;
-										$order_sample->sample_location_place_name = $userDetail->agency_name;
-										$order_sample->sample_location_place_id = $userDetail->agency_code;
-										$order_sample->sample_location_place_address = $userDetail->address;
-										$order_sample->sample_location_place_sub_district = $userDetail->sub_district;
-										$order_sample->sample_location_place_sub_district_name = $user_sub_district_name;
-										$order_sample->sample_location_place_district = $userDetail->district;
-										$order_sample->sample_location_place_district_name = $user_district_name;
-										$order_sample->sample_location_place_province = $userDetail->province;
-										$order_sample->sample_location_place_province_name = $user_province_name;
-										$order_sample->sample_location_place_postal = $userDetail->postcode;
-										$saved = $order_sample->save();
-									} else {
-										continue;
-									}
-								}
-								break;
-							case "2":
-								for ($i=$request->sample_select_begin; $i<=$request->sample_select_end; $i++) {
-									$order_sample = OrderSample::find($i);
-									if (!is_null($order_sample)) {
-										$prov_arr = $this->explodeStrToArr($request->sample_location_place_province);
-										$dist_arr = $this->explodeStrToArr($request->sample_location_place_district);
-										$sub_dist_arr = $this->explodeStrToArr($request->sample_location_place_sub_district);
-										$order_sample->origin_threat_id = $request->origin_threat;
-										$order_sample->origin_threat_name = $origin_threat_arr[$request->origin_threat];
-										$order_sample->sample_location_define = $request->sample_location_define;
-										$order_sample->sample_location_place_name = $request->sample_location_place_name;
-										$order_sample->sample_location_place_id = $request->sample_location_place_id;
-										$order_sample->sample_location_place_address = $request->sample_location_place_address;
-										$order_sample->sample_location_place_sub_district = $sub_dist_arr[0];
-										$order_sample->sample_location_place_sub_district_name = $sub_dist_arr[1];
-										$order_sample->sample_location_place_district = $dist_arr[0];
-										$order_sample->sample_location_place_district_name = $dist_arr[1];
-										$order_sample->sample_location_place_province = $prov_arr[0];
-										$order_sample->sample_location_place_province_name = $prov_arr[1];
-										$order_sample->sample_location_place_postal = $request->sample_location_place_postal;
-										$saved = $order_sample->save();
-									} else {
-										continue;
-									}
-								}
-								break;
-							default:
-								return redirect()->route('logout');
-								break;
+					case "2":
+						for ($i=$request->sample_select_begin; $i<=$request->sample_select_end; $i++) {
+							$order_sample = OrderSample::find($i);
+							if (!is_null($order_sample)) {
+								$ministry_arr = (!empty($request->sample_location_place_ministry)) ? $this->explodeStrToArr($request->sample_location_place_ministry) : null;
+								$dept_arr = (!empty($request->sample_location_place_department)) ? $this->explodeStrToArr($request->sample_location_place_department) : null;
+								$prov_arr = (!empty($request->sample_location_place_province)) ? $this->explodeStrToArr($request->sample_location_place_province) : null;
+								$dist_arr = (!empty($request->sample_location_place_district)) ? $this->explodeStrToArr($request->sample_location_place_district) : null;
+								$sub_dist_arr = (!empty($request->sample_location_place_sub_district)) ? $this->explodeStrToArr($request->sample_location_place_sub_district) : null;
+
+								$order_sample->origin_threat_id = $request->origin_threat;
+								$order_sample->origin_threat_name = $origin_threat_arr[$request->origin_threat];
+								$order_sample->sample_location_define = $request->sample_location_define;
+								$order_sample->sample_location_place_type = $request->sample_location_place_type;
+
+								$order_sample->sample_location_place_ministry_id = $ministry_arr[0] ?? null;
+								$order_sample->sample_location_place_ministry_name = $ministry_arr[1] ?? null;
+
+								$order_sample->sample_location_place_department_id = $dept_arr[0] ?? null;
+								$order_sample->sample_location_place_department_name = $dept_arr[1] ?? null;
+
+								$order_sample->sample_location_place_id = $request->sample_location_place_id ?? null;
+								$order_sample->sample_location_place_name = $request->sample_location_place_name ?? null;
+
+								$order_sample->sample_location_place_address = $request->sample_location_place_address ?? null;
+								$order_sample->sample_location_place_sub_district = $sub_dist_arr[0] ?? null;
+								$order_sample->sample_location_place_sub_district_name = $sub_dist_arr[1] ?? null;
+								$order_sample->sample_location_place_district = $dist_arr[0] ?? null;
+								$order_sample->sample_location_place_district_name = $dist_arr[1] ?? null;
+								$order_sample->sample_location_place_province = $prov_arr[0] ?? null;
+								$order_sample->sample_location_place_province_name = $prov_arr[1] ?? null;
+								$order_sample->sample_location_place_postal = $request->sample_location_place_postal ?? null;
+								$saved = $order_sample->save();
+							} else {
+								continue;
+							}
 						}
 						break;
 					default:
