@@ -352,45 +352,45 @@ class CustomerController extends Controller
 
 	#[Route('customer.sample.store', methods: ['POST'])]
 	protected function storeSample(Request $request) {
-		// $request->validate([
-		// 	'sample_select_begin' => 'bail|required',
-		// 	'sample_select_end' => 'required',
-		// 	'origin_threat' => 'required',
+		$request->validate([
+			'sample_select_begin' => 'bail|required',
+			'sample_select_end' => 'required',
+			'origin_threat' => 'required',
+			'sample_location_define' => 'required',
+			'sample_location_place_type' => 'required_if:sample_location_define,==,2',
 
-		// 	'sample_location_define' => 'required',
+			'sample_location_place_private_name' => 'required_if:sample_location_place_type,==,private',
+			'sample_location_place_private_id' => 'required_if:sample_location_place_type,==,private',
 
-		// 	'sample_location_place_type' => 'required_if:sample_location_define,==,2',
+			'sample_location_place_ministry' => 'required_if:sample_location_place_type,==,government',
+			'sample_location_place_department' => 'required_if:sample_location_place_type,==,government',
+			'sample_location_place_name_government' => 'required_if:sample_location_place_type,==,government',
 
-		// 	'sample_location_place_private_name' => 'required_if:sample_location_place_type,==,private',
-		// 	'sample_location_place_private_id' => 'required_if:sample_location_place_type,==,private',
+			'sample_location_place_other_name' => 'required_if:sample_location_place_type,==,other',
 
-		// 	'sample_location_place_ministry' => 'required_if:sample_location_place_type,==,government',
-		// 	'sample_location_place_department' => 'required_if:sample_location_place_type,==,government',
-		// 	'sample_location_place_name_government' => 'required_if:sample_location_place_type,==,government',
+			'sample_location_place_province' => 'required_if:sample_location_define,==,2',
+			'sample_location_place_district' => 'required_if:sample_location_define,==,2',
+			'sample_location_place_sub_district' => 'required_if:sample_location_define,==,2'
+		],[
+			'sample_select_begin.required' => 'โปรดเลือกตัวอย่างเริ่มต้น',
+			'sample_select_end.required' => 'โปรดเลือกตัวอย่างสิ้นสุด',
+			'origin_threat.required' => 'โปรดเลือกประเด็นมลพิษ',
+			'sample_location_define.required' => 'โปรดเลือกสถานที่เก็บตัวอย่าง',
+			'sample_location_place_type.required_if' => 'โปรดเลือกประเภทสถานที่เก็บตัวอย่าง',
 
-		// 	'sample_location_place_other_name' => 'required_if:sample_location_place_type,==,other',
+			'sample_location_place_private_name.required_if' => 'โปรดกรอกชื่อสถานที่เก็บตัวอย่าง',
+			'sample_location_place_private_id.required_if' => 'โปรดกรอกรหัสหน่วยงาน',
 
-		// 	'sample_location_place_province' => 'required_if:sample_location_define,==,2',
-		// 	'sample_location_place_district' => 'required_if:sample_location_define,==,2',
-		// 	'sample_location_place_sub_district' => 'required_if:sample_location_define,==,2'
-		// ],[
-		// 	'sample_select_begin.required' => 'โปรดเลือกตัวอย่างเริ่มต้น',
-		// 	'sample_select_end.required' => 'โปรดเลือกตัวอย่างสิ้นสุด',
-		// 	'origin_threat.required'=>'โปรดเลือกประเด็นมลพิษ',
+			'sample_location_place_ministry.required_if' => 'โปรดเลือก สังกัด/กระทรวง',
+			'sample_location_place_department.required_if' => 'โปรดเลือก สังกัด/กรม',
+			'sample_location_place_name_government.required_if' => 'โปรดกรอกชื่อสถานที่เก็บตัวอย่าง',
 
-		// 	'sample_location_place_private_name.required_if' => 'โปรดกรอกชื่อสถานที่เก็บตัวอย่าง',
-		// 	'sample_location_place_private_id.required_if' => 'โปรดกรอกรหัสหน่วยงาน',
+			'sample_location_place_other_name.required_if' => 'โปรดกรอกชื่อสถานที่เก็บตัวอย่าง',
 
-		// 	'sample_location_place_ministry.required_if' => 'โปรดเลือก สังกัด/กระทรวง',
-		// 	'sample_location_place_department.required_if' => 'โปรดเลือก สังกัด/กรม',
-		// 	'sample_location_place_name_government.required_if' => 'โปรดกรอกชื่อสถานที่เก็บตัวอย่าง',
-
-		// 	'sample_location_place_other_name.required_if' => 'โปรดกรอกชื่อสถานที่เก็บตัวอย่าง',
-
-		// 	'sample_location_place_province.required_if' => 'โปรดเลือกจังหวัด',
-		// 	'sample_location_place_district.required_if' => 'โปรดเลือกอำเภอ',
-		// 	'sample_location_place_sub_district.required_if' => 'โปรดเลือกตำบล'
-		// ]);
+			'sample_location_place_province.required_if' => 'โปรดเลือกจังหวัด',
+			'sample_location_place_district.required_if' => 'โปรดเลือกอำเภอ',
+			'sample_location_place_sub_district.required_if' => 'โปรดเลือกตำบล'
+		]);
 		try {
 			if ($request->sample_select_begin > $request->sample_select_end) {
 				return redirect()->back()->with('warning', 'ลำดับข้อมูลตัวอย่างไม่ถูกต้อง โปรดตรวจสอบ');
@@ -437,15 +437,33 @@ class CustomerController extends Controller
 						}
 						break;
 					case "2":
+						$ministry_arr = (!empty($request->sample_location_place_ministry)) ? $this->explodeStrToArr($request->sample_location_place_ministry) : null;
+						$dept_arr = (!empty($request->sample_location_place_department)) ? $this->explodeStrToArr($request->sample_location_place_department) : null;
+						$prov_arr = (!empty($request->sample_location_place_province)) ? $this->explodeStrToArr($request->sample_location_place_province) : null;
+						$dist_arr = (!empty($request->sample_location_place_district)) ? $this->explodeStrToArr($request->sample_location_place_district) : null;
+						$sub_dist_arr = (!empty($request->sample_location_place_sub_district)) ? $this->explodeStrToArr($request->sample_location_place_sub_district) : null;
+
+						switch ($request->sample_location_place_type) {
+							case 'private':
+								$sample_location_place_id = $request->sample_location_place_private_id ?? null;
+								$sample_location_place_name = $request->sample_location_place_private_name ?? null;
+								break;
+							case 'government':
+								$sample_location_place_id = null;
+								$sample_location_place_name = $request->sample_location_place_name_government ?? null;
+								break;
+							case 'other':
+								$sample_location_place_id = null;
+								$sample_location_place_name = $request->sample_location_place_other_name ?? null;
+								break;
+							default:
+								$sample_location_place_id = null;
+								$sample_location_place_name = null;
+						}
+
 						for ($i=$request->sample_select_begin; $i<=$request->sample_select_end; $i++) {
 							$order_sample = OrderSample::find($i);
 							if (!is_null($order_sample)) {
-								$ministry_arr = (!empty($request->sample_location_place_ministry)) ? $this->explodeStrToArr($request->sample_location_place_ministry) : null;
-								$dept_arr = (!empty($request->sample_location_place_department)) ? $this->explodeStrToArr($request->sample_location_place_department) : null;
-								$prov_arr = (!empty($request->sample_location_place_province)) ? $this->explodeStrToArr($request->sample_location_place_province) : null;
-								$dist_arr = (!empty($request->sample_location_place_district)) ? $this->explodeStrToArr($request->sample_location_place_district) : null;
-								$sub_dist_arr = (!empty($request->sample_location_place_sub_district)) ? $this->explodeStrToArr($request->sample_location_place_sub_district) : null;
-
 								$order_sample->origin_threat_id = $request->origin_threat;
 								$order_sample->origin_threat_name = $origin_threat_arr[$request->origin_threat];
 								$order_sample->sample_location_define = $request->sample_location_define;
@@ -457,8 +475,8 @@ class CustomerController extends Controller
 								$order_sample->sample_location_place_department_id = $dept_arr[0] ?? null;
 								$order_sample->sample_location_place_department_name = $dept_arr[1] ?? null;
 
-								$order_sample->sample_location_place_id = $request->sample_location_place_id ?? null;
-								$order_sample->sample_location_place_name = $request->sample_location_place_name ?? null;
+								$order_sample->sample_location_place_id = $sample_location_place_id;
+								$order_sample->sample_location_place_name = $sample_location_place_name;
 
 								$order_sample->sample_location_place_address = $request->sample_location_place_address ?? null;
 								$order_sample->sample_location_place_sub_district = $sub_dist_arr[0] ?? null;
@@ -479,7 +497,7 @@ class CustomerController extends Controller
 						break;
 				}
 				if ($saved == true) {
-					return redirect()->back()->with('success', 'บันทึกข้อมูล "ประเด็นมลพิษ" แล้ว');
+					return redirect()->back()->with('success', 'บันทึกข้อมูล "ประเด็นมลพิษ" สำเร็จ');
 				} else {
 					return redirect()->back()->with('error', 'บันทึกข้อมูลไม่สำเร็จ โปรดลองใหม่');
 				}

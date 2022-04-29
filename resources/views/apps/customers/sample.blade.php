@@ -83,7 +83,7 @@
 					<div class="form-row">
 						<div class="form-group col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6 mb-3">
 							<label class="form-label text-gray-800" for="sample_select_begin">ตัวอย่างที่ <span class="text-danger">*</span></label>
-							<select name="sample_select_begin" class="form-control @error('sample_select_begin') is-invalid @enderror">
+							<select name="sample_select_begin" class="form-control js-hide-search @error('sample_select_begin') is-invalid @enderror">
 								<option value="">-- โปรดเลือก --</option>
 								@forelse ($data['sample_list'] as $key => $val)
 									<option value="{{ $val }}">{{ $loop->iteration }}</option>
@@ -97,7 +97,7 @@
 						</div>
 						<div class="form-group col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6 mb-3">
 							<label class="form-label text-gray-800" for="sample_select_end">ถึง <span class="text-danger">*</span></label>
-							<select name="sample_select_end" class="form-control @error('sample_select_end') is-invalid @enderror">
+							<select name="sample_select_end" class="form-control js-hide-search @error('sample_select_end') is-invalid @enderror">
 								<option value="">-- โปรดเลือก --</option>
 								@forelse ($data['sample_list'] as $key => $val)
 									<option value="{{ $val }}">{{ $loop->iteration }}</option>
@@ -111,7 +111,7 @@
 						</div>
 						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
 							<label class="form-label text-gray-800" for="origin_threat">ประเด็นมลพิษ <span class="text-danger">*</span></label>
-							<select name="origin_threat" class="form-control @error('sample_select_end') is-invalid @enderror">
+							<select name="origin_threat" class="form-control js-hide-search @error('origin_threat') is-invalid @enderror">
 								<option value="">-- โปรดเลือก --</option>
 								@forelse ($data['origin_threat'] as $key => $val)
 									<option value="{{ $key }}">{{ $val }}</option>
@@ -127,13 +127,16 @@
 							<label class="form-label text-gray-800" for="sample_location_define">สถานที่เก็บตัวอย่าง <span class="text-danger">*</span></label>
 							<div class="frame-wrap">
 								<div class="custom-control custom-switch custom-control-inline">
-									<input type="radio" name="sample_location_define" value="1" id="chk_a" class="custom-control-input" checked>
+									<input type="radio" name="sample_location_define" value="1" id="chk_a" class="custom-control-input @error('sample_location_define') is-invalid @enderror">
 									<label class="custom-control-label" for="chk_a">สถานที่เดียวกับหน่วยงานผู้ส่งตัวอย่าง</label>
 								</div>
 								<div class="custom-control custom-switch custom-control-inline">
-									<input type="radio" name="sample_location_define" value="2" id="chk_b" class="custom-control-input">
-									<label class="custom-control-label" for="chk_b">กำหนดเอง</label>
+									<input type="radio" name="sample_location_define" value="2" id="chk_b" class="custom-control-input @error('sample_location_define') is-invalid @enderror">
+									<label class="custom-control-label" for="chk_b">กำหนดสถานที่ใหม่</label>
 								</div>
+                                @error('sample_location_define')
+                                    <div class="invalid-feedback" role="alert">{{ $message }}</div>
+                                @enderror
 							</div>
 						</div>
 					</div>
@@ -145,7 +148,7 @@
 									<div class="form-row">
 										<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
 											<div class="custom-control custom-switch">
-												<input type="radio" name="sample_location_place_type" value="private" class="custom-control-input radio_location_type" id="sample_location_place_type_private" disabled>
+												<input type="radio" name="sample_location_place_type" value="private" class="custom-control-input radio_location_type @error('sample_location_place_type') is-invalid @enderror" id="sample_location_place_type_private" disabled>
 												<label class="custom-control-label" for="sample_location_place_type_private">สถานประกอบการ</label>
 											</div>
 										</div>
@@ -168,13 +171,13 @@
 									<div class="form-row">
 										<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mt-3 mb-3">
 											<div class="custom-control custom-switch">
-												<input type="radio" name="sample_location_place_type" value="government" class="custom-control-input radio_location_type" id="sample_location_place_type_government" disabled>
+												<input type="radio" name="sample_location_place_type" value="government" class="custom-control-input radio_location_type @error('sample_location_place_type') is-invalid @enderror" id="sample_location_place_type_government" disabled>
 												<label class="custom-control-label" for="sample_location_place_type_government">หน่วยงานราชการ</label>
 											</div>
 										</div>
 										<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
 											<label for="agency_ministry" class="form-label block text-base font-medium text-gray-800">สังกัด/กระทรวง <span class="text-red-600">*</span></label>
-											<select name="sample_location_place_ministry" id="sample_location_place_ministry" class="form-control input-goverment-group-select @error('sample_location_place_ministry') is-invalid @enderror" required="" disabled>
+											<select name="sample_location_place_ministry" id="sample_location_place_ministry" class="form-control input-goverment-group-select select2-placeholder @error('sample_location_place_ministry') is-invalid @enderror" required="" disabled>
 												<option value="">-- โปรดเลือก --</option>
 												@foreach ($data['governments'] as $key => $val)
 													<option value="{{ $key.'|'.$val }}">{{ $val }}</option>
@@ -186,7 +189,7 @@
 										</div>
 										<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
 											<label for="sample_location_place_department" class="form-label block text-base font-medium text-gray-800">สังกัด/กรม <span class="text-red-600">*</span></label>
-											<select name="sample_location_place_department" id="sample_location_place_department" class="form-control input-goverment-group-select @error('sample_location_place_department') is-invalid @enderror" required="" disabled>
+											<select name="sample_location_place_department" id="sample_location_place_department" class="form-control input-goverment-group-select select2-placeholder @error('sample_location_place_department') is-invalid @enderror" required="" disabled>
 												<option value="">-- โปรดเลือก --</option>
 											</select>
 											@error('sample_location_place_department')
@@ -194,7 +197,7 @@
 											@enderror
 										</div>
 										<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
-											<label for="sample_location_place_name_government" class="block text-base font-medium text-gray-700">ชื่อส่วนราชการ <span class="text-danger">*</span></label>
+											<label for="sample_location_place_name_government" class="block text-base font-medium text-gray-700">ชื่อหน่วยงาน/กอง/สำนัก/อื่นๆ  <span class="text-danger">*</span></label>
 											<input type="text" name="sample_location_place_name_government" id="sample_location_place_name_government" class="form-control input-goverment-group @error('sample_location_place_name_government') is-invalid @enderror" disabled>
 											@error('sample_location_place_name_government')
 												<div class="invalid-feedback" role="alert">{{ $message }}</div>
@@ -205,7 +208,7 @@
 									<div class="form-row">
 										<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mt-3 mb-3">
 											<div class="custom-control custom-switch">
-												<input type="radio" name="sample_location_place_type" value="other" class="custom-control-input radio_location_type" id="sample_location_place_type_other" disabled>
+												<input type="radio" name="sample_location_place_type" value="other" class="custom-control-input radio_location_type @error('sample_location_place_type') is-invalid @enderror" id="sample_location_place_type_other" disabled>
 												<label class="custom-control-label" for="sample_location_place_type_other">อื่นๆ</label>
 											</div>
 										</div>
@@ -281,35 +284,26 @@
 <script type="text/javascript" src="{{ URL::asset('js/buttons.server-side.js') }}"></script>
 <script>
 function newData() {
-	$('#chk_b').prop('checked', false);
-	$('#chk_a').prop('checked', true);
-	$('.radio_location_type').prop('checked', false);
-
-	$('.input-private-group').val('');
-	$('.input-private-group').prop('disabled', true);
-
-	$('.input-goverment-group-select').val($('.input-goverment-group-select option:first').val());
-	$('.input-goverment-group-select').prop('disabled', true);
-	$('#sample_location_place_name_government').val('');
-	$('#sample_location_place_name_government').prop('disabled', true);
-
-	$('#sample_location_place_other_name').val('');
-	$('#sample_location_place_other_name').prop('disabled', true);
-
-	$('#sample_location_place_address').val('');
-	$('#sample_location_place_address').prop('disabled', true);
-
-	$("#sample_location_place_province").val($("#sample_location_place_province option:first").val());
-	$('#sample_location_place_province').prop('disabled', true);
-
-	$('#sample_location_place_district')[0].options.length = 1;
-	$('#sample_location_place_district').prop('disabled', true);
-
-	$('#sample_location_place_sub_district')[0].options.length = 1;
-	$('#sample_location_place_sub_district').prop('disabled', true);
-
-	$('#sample_location_place_postal').val('');
-
+	// $('#chk_b').prop('checked', false);
+	// $('#chk_a').prop('checked', true);
+	// $('.radio_location_type').prop('checked', false);
+	// $('.input-private-group').val('');
+	// $('.input-private-group').prop('disabled', true);
+	// $('.input-goverment-group-select').val($('.input-goverment-group-select option:first').val());
+	// $('.input-goverment-group-select').prop('disabled', true);
+	// $('#sample_location_place_name_government').val('');
+	// $('#sample_location_place_name_government').prop('disabled', true);
+	// $('#sample_location_place_other_name').val('');
+	// $('#sample_location_place_other_name').prop('disabled', true);
+	// $('#sample_location_place_address').val('');
+	// $('#sample_location_place_address').prop('disabled', true);
+	// $("#sample_location_place_province").val($("#sample_location_place_province option:first").val());
+	// $('#sample_location_place_province').prop('disabled', true);
+	// $('#sample_location_place_district')[0].options.length = 1;
+	// $('#sample_location_place_district').prop('disabled', true);
+	// $('#sample_location_place_sub_district')[0].options.length = 1;
+	// $('#sample_location_place_sub_district').prop('disabled', true);
+	// $('#sample_location_place_postal').val('');
 	$('#new-data-modal').modal('show');
 }
 </script>
@@ -483,11 +477,11 @@ $(document).ready(function() {
 <script>
 $(document).ready(function() {
 	$(function() {
-			// $('.select2').select2({dropdownParent: $('#new-data-modal')});
+			$('.select2').select2({dropdownParent: $('#new-data-modal')});
 			// $(".select2-placeholder-multiple").select2({placeholder: "-- โปรดระบุ --"});
 			$(".js-hide-search").select2({dropdownParent: $('#new-data-modal') ,minimumResultsForSearch: 1 / 0});
 			// $(".js-max-length").select2({maximumSelectionLength: 2, placeholder: "Select maximum 2 items"});
-			// $(".select2-placeholder").select2({placeholder: "-- โปรดระบุ --", allowClear: true,dropdownParent: $('#new-data-modal')});
+			$(".select2-placeholder").select2({placeholder: "-- โปรดเลือก --", allowClear: true,dropdownParent: $('#new-data-modal')});
 			// $(".js-select2-icons").select2({
 			// 	minimumResultsForSearch: 1 / 0,
 			// 	templateResult: icon,
