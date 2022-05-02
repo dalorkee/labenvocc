@@ -59,6 +59,8 @@ class CustSampleDataTable extends DataTable
 						})
 						->rawColumns(['firstname', 'lastname', 'parameter', 'origin_threat_name', 'place_name']);
 					break;
+				default:
+						return redirect()->route('logout');
 				}
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());

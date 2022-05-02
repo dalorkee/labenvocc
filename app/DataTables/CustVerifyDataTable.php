@@ -18,6 +18,8 @@ class CustVerifyDataTable extends DataTable
 			$sample_office_category = $this->sampleOfficeCategory();
 			switch (auth()->user()->userCustomer->customer_type) {
 				case 'personal':
+				case 'private':
+				case 'government':
 					return datatables()
 					->eloquent($query)
 					->editColumn('firstname', function($order_sample) {
@@ -49,34 +51,28 @@ class CustVerifyDataTable extends DataTable
 						});
 						return number_format($sum_price);
 					})
-                    ->editColumn('origin_threat_name', function($order_sample) {
-                        return "<div style=\"width: 310px\">".$order_sample->origin_threat_name."</div>";
-                    })
-					->editColumn('sample_location_place_name', '{{ $sample_location_place_name }}')
-					->editColumn('sample_location_place_sub_district_name', '{{ $sample_location_place_sub_district_name }}')
-					// ->addColumn('sample_office_district_name', function($orderDetail) {
-					// 	return "<div style=\"width: 150px\">".$orderDetail->sample_office_district_name."</div>";
-					// })
-					// ->addColumn('sample_office_province_name', function($orderDetail) {
-					// 	return "<div style=\"width: 150px\">".$orderDetail->sample_office_province_name."</div>";
-					// })
-					// ->addColumn('sample_office_postal', function($orderDetail) {
-					// 	return "<div style=\"width: 100px\">".$orderDetail->sample_office_postal."</div>";
-					// })
-					->rawColumns(['firstname', 'lastname', 'parameter', 'origin_threat_name']);
+					->editColumn('origin_threat_name', function($order_sample) {
+						return "<div style=\"width: 310px\">".$order_sample->origin_threat_name."</div>";
+					})
+					->editColumn('place_name', function($order_sample) {
+						return "<div style=\"width: 310px\">"
+							.$order_sample->sample_location_place_ministry_name." "
+							.$order_sample->sample_location_place_department_name. " "
+							.$order_sample->sample_location_place_name
+							."</div>";
+					})
+					->rawColumns(['firstname', 'lastname', 'parameter', 'origin_threat_name', 'place_name']);
 					break;
-				case 'private':
-				case 'government':
-
-						break;
-					}
+				default:
+					return redirect()->route('logout');
+			}
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
 		}
 	}
 
 	public function query(Request $request, OrderSample $order_sample) {
-		return $order_sample->with('parameters')->whereOrder_id($request->order_id)->orderBy('id', 'ASC');
+		return $order_sample::with('parameters')->select('*')->whereOrder_id($request->order_id)->orderBy('id', 'ASC');
 	}
 
 	public function html() {
@@ -129,25 +125,25 @@ class CustVerifyDataTable extends DataTable
 		try {
 			switch (auth()->user()->userCustomer->customer_type) {
 				case 'personal':
-					return [
-						Column::make('id')->title('รหัส')->className('bg-red-200'),
-						Column::make('firstname')->title('ชื่อ'),
-						Column::make('lastname')->title('สกุล'),
-						Column::make('age_year')->title('อายุ'),
-						Column::make('sample_date')->title('วันที่เก็บ ตย.'),
-						Column::make('parameter')->title('พารามิเตอร์'),
-						Column::make('total_price')->title('ราคา'),
-						Column::make('origin_threat_name')->title('ประเด็นมลพิษ'),
-						Column::make('sample_location_place_name')->title('สถานที่เก็บ ตย.'),
-						Column::make('sample_location_place_address')->title('ที่อยู่'),
-						Column::make('sample_location_place_sub_district_name')->title('ตำบล'),
-						Column::make('sample_location_place_district_name')->title('อำเภอ'),
-						Column::make('sample_location_place_province_name')->title('จังหวัด'),
-						Column::make('note')->title('หมายเหตุ'),
-					];
-					break;
-				case 'private':
-				case 'government':
+					case 'private':
+					case 'government':
+						return [
+							Column::make('id')->title('รหัส'),
+							Column::make('firstname')->title('ชื่อ'),
+							Column::make('lastname')->title('นามสกุล'),
+							Column::make('age_year')->title('อายุ'),
+							Column::make('sample_date')->title('วันที่เก็บตัวอย่าง'),
+							Column::make('parameter')->title('พารามิเตอร์'),
+							Column::make('total_price')->title('ราคา'),
+							Column::make('origin_threat_name')->title('ประเด็นมลพิษ'),
+							Column::make('place_name')->title('สถานที่เก็บ ตย.'),
+							Column::make('sample_location_place_address')->title('ที่อยู่'),
+							Column::make('sample_location_place_sub_district_name')->title('ตำบล'),
+							Column::make('sample_location_place_district_name')->title('อำเภอ'),
+							Column::make('sample_location_place_province_name')->title('จังหวัด'),
+							Column::make('note')->title('หมายเหตุ'),
+						];
+						break;
 			}
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());

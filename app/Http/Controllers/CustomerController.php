@@ -129,7 +129,7 @@ class CustomerController extends Controller
 	}
 
 	#[Route('customer.parameter.personal.store', methods: ['POST'])]
-	protected function storeParameterPersonal(Request $request) {
+	protected function storeParameterPersonal(Request $request): object {
 		$request->validate([
 			'order_id' => 'bail|required',
 			'customer_type' => 'required',
@@ -518,7 +518,7 @@ class CustomerController extends Controller
 			$sample_charecter = $this->getSampleCharecter();
 			$type_of_work = $this->typeOfWork();
 			$provinces = $this->getMinProvince();
-			$order = Order::whereId($request->order_id)->with('uploads')->get();
+			$order = Order::whereId($request->order_id)->with(['orderSamples', 'uploads'])->get();
 			$data = [
 				'order_id' => $request->order_id,
 				'order' => $order,

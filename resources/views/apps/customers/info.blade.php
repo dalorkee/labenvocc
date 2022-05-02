@@ -29,7 +29,7 @@
 			<div class="panel-container show">
 				<form name="saveInfo" action="{{ route('customer.info.store') }}" method="POST" enctype="multipart/form-data">
 					@csrf
-                    <input type="hidden" name="order_id" value="{{ $order[0]->id ?? null }}">
+					<input type="hidden" name="order_id" value="{{ $order[0]->id ?? null }}">
 					<div class="panel-content">
 						<ul class="steps">
 							<li class="active"><a href=""><i class="fal fa-user"></i> <span class="d-none d-sm-inline">ข้อมูลทั่วไป</span></a></li>
@@ -41,11 +41,11 @@
 							@case('personal')
 								<div class="form-row">
 									<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
-										<label class="form-label" for="personal_name">ชื่อ-สกุล ผู้ส่งตัวอย่าง <span class="text-red-600">*</span></label>
+										<label class="form-label" for="personal_name">ผู้ส่งตัวอย่าง <span class="text-red-600">*</span></label>
 										<input type="text" name="customer_name" value="{{ $order[0]->customer_agency_name ?? auth()->user()->userCustomer->first_name }}" class="form-control" maxlength="60" readonly>
 									</div>
 								</div>
-								@break;
+								@break
 							@case('private')
 							@case('government')
 								<div class="form-row">
@@ -57,7 +57,7 @@
 										@enderror
 									</div>
 								</div>
-								@break;
+								@break
 						@endswitch
 						<div class="form-row">
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
