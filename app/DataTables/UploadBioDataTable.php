@@ -15,10 +15,10 @@ class UploadBioDataTable extends DataTable
 		return datatables()
 			->eloquent($query)
             ->addColumn('id', function ($dataupload){
-                return '<input type="checkbox" name="biobox" id="biochk" value="'.$dataupload->id.'"/>';
+                return '<input type="checkbox" name="biobox" class="biochk" value="'.$dataupload->id.'"/>';
             })
-            ->addColumn('checkall', '<button type="button" class="bioupload-manage-nav btn btn-sm btn-info" data-id="{{$id}}">จัดการ<i class="fal fa-angle-down"></i> </button>')
-            ->rawColumns(['id','checkall']);
+            ->addColumn('managebio', '<button type="button" class="bioupload-manage-nav btn btn-sm btn-info" data-id="{{$id}}">จัดการ<i class="fal fa-angle-down"></i> </button>')
+            ->rawColumns(['id','managebio']);
 	}
 
 	public function query(SampleUpload $sample_upload) {
@@ -46,7 +46,7 @@ class UploadBioDataTable extends DataTable
 			Column::make('age_year')->title('อายุปี'),
 			Column::make('division')->title('แผนก'),
 			Column::make('work_life_year')->title('อายุงาน'),
-			Column::make('checkall')->title('all'),
+			Column::make('managebio')->title('จัดการ'),
 		];
 	}
 

@@ -76,7 +76,7 @@
             <div class="panel-container show">
                 <div class="panel-content">
                     <div class="form-row">
-                        <button class="btn btn-primary chkall">เลือกทั้งหมด</button>
+                        <input type="checkbox" id="chkall"/><span>เลือกทั้งหมด</span>
                         <div class="col-md-12 mb-6">
                             <form action="" method="POST">
                                 {{ $dataTable->table() }}
@@ -125,15 +125,24 @@
                 "delete": {name: "ลบ", icon: "fal fa-eraser"},
             }
         });
+        $("#chkall").click(function(){
+            if(this.checked){
+                $('.biochk').prop('checked', true);
+            }
+            else{
+                $('.biochk').prop('checked', false);
+            }
+           
+        });
         $('.checkbox').click(function(){
             var chkbio = [];
             $.each($("input[name='biobox']:checked"),function(){
                 chkbio.push($(this).val());
             });
-            // let biourl = '{{ route("sampleupload.biocreate", ":id") }}';
-            // biourl = biourl.replace(':id',chkbio);
-            // alert(biourl);
-            // window.open(biourl,'_self');
+            let biourl = '{{ route("sampleupload.biocreate", ":id") }}';
+            biourl = biourl.replace(':id',chkbio);
+            alert(biourl);
+            window.open(biourl,'_self');
         });
 	});
 </script>
