@@ -42,7 +42,7 @@
 								<div class="form-row">
 									<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
 										<label class="form-label" for="personal_name">ผู้ส่งตัวอย่าง <span class="text-red-600">*</span></label>
-										<input type="text" name="customer_name" value="{{ $order[0]->customer_agency_name ?? auth()->user()->userCustomer->first_name }}" class="form-control" maxlength="60" readonly>
+										<input type="text" name="customer_name" value="{{ $order[0]->customer_agency_name ?? auth()->user()->userCustomer->first_name." ".auth()->user()->userCustomer->last_name }}" class="form-control" maxlength="60" readonly>
 									</div>
 								</div>
 								@break
@@ -120,9 +120,11 @@
 					<div class="panel-content border-faded border-left-0 border-right-0 border-bottom-0 d-flex flex-row align-items-center">
 						<div class="form-row">
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
-								<button type="submit" class="btn btn-primary ml-auto"><i class="fal fa-save"></i> บันทึกร่าง</button>
 								@if (!is_null($order) && count($order) > 0)
-									<a href="{{ route('customer.parameter.create', ['order_id' => $order[0]->id]) }}" class="btn btn-warning ml-auto">ถัดไป <i class="fal fa-arrow-alt-right"></i></a>
+									<button type="submit" class="btn btn-warning ml-auto"><i class="fal fa-pencil"></i> แก้ไขข้อมูล</button>
+									<a href="{{ route('customer.parameter.create', ['order_id' => $order[0]->id]) }}" class="btn btn-info ml-auto">ถัดไป <i class="fal fa-arrow-alt-right"></i></a>
+								@else
+									<button type="submit" class="btn btn-primary ml-auto"><i class="fal fa-save"></i> บันทึกร่าง</button>
 								@endif
 							</div>
 						</div>

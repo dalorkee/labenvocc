@@ -52,14 +52,14 @@ class CustVerifyDataTable extends DataTable
 						return number_format($sum_price);
 					})
 					->editColumn('origin_threat_name', function($order_sample) {
-						return "<div style=\"width: 310px\">".$order_sample->origin_threat_name."</div>";
+						return "<span style=\"width: 310px; display:inline-block;\">".$order_sample->origin_threat_name."</span>";
 					})
 					->editColumn('place_name', function($order_sample) {
-						return "<div style=\"width: 310px\">"
+						return "<span style=\"width: 310px; display:inline-block;\">"
 							.$order_sample->sample_location_place_ministry_name." "
 							.$order_sample->sample_location_place_department_name. " "
 							.$order_sample->sample_location_place_name
-							."</div>";
+							."</span>";
 					})
 					->rawColumns(['firstname', 'lastname', 'parameter', 'origin_threat_name', 'place_name']);
 					break;
