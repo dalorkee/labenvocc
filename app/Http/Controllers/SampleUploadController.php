@@ -31,10 +31,10 @@ class SampleUploadController extends Controller
     }
     public function biocreate(Request $request)
     {
-        $validatedData = $request->validate([
-           'biobox' => 'required',
-        ]);
-       dd($request->id);
+        // $validatedData = $request->validate([
+        //    'biobox' => 'required'
+        // ]);
+       dd($request->all);
     }
     /**
     * @return \Illuminate\Support\Collection
@@ -42,12 +42,5 @@ class SampleUploadController extends Controller
     public function env()
     {
        return view('user.envupload');
-    }
-    public function store(Request $request)
-    {
-        $validatedData = $request->validate([
-           'biobox' => 'required',
-        ]);
-       dd($request->id);
     }
 }

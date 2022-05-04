@@ -78,7 +78,7 @@
                     <div class="form-row">
                         <input type="checkbox" id="chkall"/><span>&nbsp;เลือกทั้งหมด</span>
                         <div class="col-md-12 mb-6">
-                            <form action="" method="POST">
+                            <form action="{{ route("sampleupload.biocreate") }}" method="POST">
                                 @csrf
                                 {{ $dataTable->table() }}
                                 <div><button type="submit" class="btn btn-info sendchkbio">ส่งข้อมูล</button></div>
@@ -135,16 +135,16 @@
             }
 
         });
-        $('.sendchkbio').click(function(){
-            var chkbio = [];
-            $.each($("input[name='biobox']:checked"),function(){
-                chkbio.push($(this).val());
-            });
-            let biourl = '{{ route("sampleupload.biocreate", ":id") }}';
-            biourl = biourl.replace(':id',chkbio);
-            alert(biourl);
-            window.open(biourl,'_self');
-        });
+        // $('.sendchkbio').click(function(){
+        //     var chkbio = [];
+        //     $.each($("input[name='biobox']:checked"),function(){
+        //         chkbio.push($(this).val());
+        //     });
+        //     let biourl = '{{ route("sampleupload.biocreate", ":id") }}';
+        //     biourl = biourl.replace(':id',chkbio);
+        //     alert(biourl);
+        //     window.open(biourl,'_self');
+        // });
 	});
 </script>
 @endsection

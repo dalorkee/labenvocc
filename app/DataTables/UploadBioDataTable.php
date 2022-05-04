@@ -15,7 +15,7 @@ class UploadBioDataTable extends DataTable
 		return datatables()
 			->eloquent($query)
             ->addColumn('id', function ($dataupload){
-                return '<input type="checkbox" name="biobox" class="biochk" value="'.$dataupload->id.'"/>';
+                return '<input type="checkbox" name="biobox[]" class="biochk" value="'.$dataupload->id.'"/>';
             })
             ->addColumn('managebio', '<button type="button" class="bioupload-manage-nav btn btn-sm btn-info" data-id="{{$id}}">จัดการ<i class="fal fa-angle-down"></i> </button>')
             ->rawColumns(['id','managebio']);
