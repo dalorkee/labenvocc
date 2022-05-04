@@ -31,10 +31,15 @@ class SampleUploadController extends Controller
     }
     public function biocreate(Request $request)
     {
-        // $validatedData = $request->validate([
-        //    'biobox' => 'required'
-        // ]);
-       dd($request->all);
+        $validatedData = $request->validate([
+           'biobox' => 'required'
+        ]);
+        $dataReceive = $request->biobox;
+       foreach($dataReceive AS $val){
+           $bioId[] = $val;
+       }
+       $bioId = implode(',',$bioId);
+       echo $bioId;
     }
     /**
     * @return \Illuminate\Support\Collection
