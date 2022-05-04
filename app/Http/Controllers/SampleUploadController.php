@@ -29,7 +29,7 @@ class SampleUploadController extends Controller
         // return redirect('import-excel-csv')->with('status', 'The file has been imported in laravel 8');
         return redirect()->back()->with('success','upload OK');
     }
-    public function bioicreate(Request $request)
+    public function biocreate(Request $request)
     {
         $validatedData = $request->validate([
            'biobox' => 'required',
@@ -42,5 +42,12 @@ class SampleUploadController extends Controller
     public function env()
     {
        return view('user.envupload');
+    }
+    public function store(Request $request)
+    {
+        $validatedData = $request->validate([
+           'biobox' => 'required',
+        ]);
+       dd($request->id);
     }
 }

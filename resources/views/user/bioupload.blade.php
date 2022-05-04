@@ -76,11 +76,12 @@
             <div class="panel-container show">
                 <div class="panel-content">
                     <div class="form-row">
-                        <input type="checkbox" id="chkall"/><span>เลือกทั้งหมด</span>
+                        <input type="checkbox" id="chkall"/><span>&nbsp;เลือกทั้งหมด</span>
                         <div class="col-md-12 mb-6">
                             <form action="" method="POST">
+                                @csrf
                                 {{ $dataTable->table() }}
-                                <div><button type="submit" class="btn btn-info checkbox">ส่งข้อมูล</button></div>
+                                <div><button type="submit" class="btn btn-info sendchkbio">ส่งข้อมูล</button></div>
                             </form>
                         </div>
                     </div>
@@ -132,9 +133,9 @@
             else{
                 $('.biochk').prop('checked', false);
             }
-           
+
         });
-        $('.checkbox').click(function(){
+        $('.sendchkbio').click(function(){
             var chkbio = [];
             $.each($("input[name='biobox']:checked"),function(){
                 chkbio.push($(this).val());
