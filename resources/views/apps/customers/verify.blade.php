@@ -104,7 +104,7 @@ table.dataTable thead th {background-color: #056676;color: white}
 						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
 							<label class="form-label" for="attach_file">แนบไฟล์หนังสือนำส่ง</label>
 							<div class="input-group">
-								<input type="text" name="book_file" value="{{ $data['order'][0]['uploads'][0]->file_name }}" class="form-control" readonly>
+								<input type="text" name="book_file" value="{{ $data['order'][0]['uploads'][0]->file_name ?? '' }}" class="form-control" readonly>
 								<div class="input-group-append">
 									<span class="input-group-text fs-xl">
 										<i class="fal fa-file-pdf"></i>
@@ -148,7 +148,7 @@ table.dataTable thead th {background-color: #056676;color: white}
 						</div>
 						<div class="d-flex flex-row justify-content-between">
 							<div style="width:102px;height:40px;">
-								<a href="{{ route('customer.sample.create', ['order_id' => $data['order_id']]) }}" class="btn btn-warning ml-auto"><i class="fal fa-arrow-alt-left"></i> ก่อนหน้า</a>
+								<a href="{{ route('customer.sample.create', ['order_id' => $data['order_id']]) }}" class="btn btn-info ml-auto"><i class="fal fa-arrow-alt-left"></i> ก่อนหน้า</a>
 							</div>
 							<div style="width:100px;height:40px;">
 								{{-- <a href="javascript:void(0);" class="btn btn-outline-primary" id="js-sweetalert2-example-7">Try me!</a> --}}

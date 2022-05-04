@@ -276,12 +276,13 @@ class CustomerController extends Controller
 						'order_sample_id' => $request->hidden_order_sample_id,
 						'parameter_id' => $paramet->id
 					],[
-						//'parameter_id' => $paramet->id,
 						'parameter_name' => $paramet->parameter_name,
 						'sample_charecter_id'=> $paramet->sample_charecter_id,
 						'sample_charecter_name' => $paramet->sample_charecter_name,
 						'sample_type_id' => $paramet->sample_type_id,
 						'sample_type_name' => $paramet->sample_type_name,
+						'threat_type_id' => $paramet->threat_type_id,
+						'threat_type_name' => $paramet->threat_type_name,
 						'unit_id' => $paramet->unit_id,
 						'unit_name' => $paramet->unit_name,
 						'unit_customer_name' => $paramet->unit_customer_name,
@@ -543,15 +544,20 @@ class CustomerController extends Controller
 			'confirm_chk.required' => 'โปรดเลือกการตรวจสอบความถูกต้องของข้อมูล',
 		]);
 		try {
+			$order_no_prefix = match ($this->user->userCustomer->customer_type) {
+				'personal' => 'PS',
+				'private' => 'PV',
+				'government' => 'GM',
+			};
 			if ($request->confirm_chk == 'y') {
 				$order = Order::find($request->order_id);
-				$order->order_no = $this->setOrderNo('PS', $request->order_id);
-				$order->order_no_ref = $this->setOrderNoRef('RPS');
+				$order->order_no = $this->setOrderNo($order_no_prefix, $request->order_id);
+				$order->order_no_ref = $this->setOrderNoRef($order_no_prefix);
 				$order->order_confirmed = date('Y-m-d H:i:s');
 				$saved = $order->save();
 				return redirect()->route('customer.index')->with('success', 'บันทึกข้อมูล "ประเด็นมลพิษ" แล้ว');
 			} else {
-				return redirect()->back()->with('error', 'บันทึกข้อมูลไม่สำเร็จx โปรดลองใหม่');
+				return redirect()->back()->with('error', 'บันทึกข้อมูลไม่สำเร็จ โปรดลองใหม่');
 			}
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
@@ -567,7 +573,7 @@ class CustomerController extends Controller
 		$char = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 		$length = 8;
 		$max = (strlen($char) - 1);
-		$str = $prefix.'0';
+		$str = 'R'.$prefix.'0';
 		for ($i=0; $i<$length; ++$i) {
 			$str .= $char[random_int(0, $max)];
 		}

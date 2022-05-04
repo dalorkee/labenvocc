@@ -60,8 +60,8 @@ div.dataTables_wrapper span.select-item {margin-left: 0.5em;}
 						<div class="form-row">
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
 								{{-- <button class="btn btn-primary ml-auto" type="button"><i class="fal fa-save"></i> บันทึกร่าง</button> --}}
-								<a href="{{ route('customer.info.create', ['order_id' => $order[0]->id]) }}" class="btn btn-warning ml-auto"><i class="fal fa-arrow-alt-left"></i> ก่อนหน้า</a>
-								<a href="{{ route('customer.sample.create', ['order_id' => $order[0]->id]) }}" class="btn btn-warning ml-auto">ถัดไป <i class="fal fa-arrow-alt-right"></i></a>
+								<a href="{{ route('customer.info.create', ['order_id' => $order[0]->id]) }}" class="btn btn-info ml-auto"><i class="fal fa-arrow-alt-left"></i> ก่อนหน้า</a>
+								<a href="{{ route('customer.sample.create', ['order_id' => $order[0]->id]) }}" class="btn btn-info ml-auto">ถัดไป <i class="fal fa-arrow-alt-right"></i></a>
 							</div>
 						</div>
 					</div>
@@ -140,10 +140,10 @@ div.dataTables_wrapper span.select-item {margin-left: 0.5em;}
 								<div class="invalid-feedback" role="alert">{{ $message }}</div>
 							@enderror
 						</div>
-						@if (auth()->user()->userCustomer->customer_type == 'private')
+						@if (auth()->user()->userCustomer->customer_type == 'private' || auth()->user()->userCustomer->customer_type == 'government')
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
-								<label class="form-label" for="division">แผนก <span class="text-red-600">*</span></label>
-								<input type="text" name="division" value="{{ old('division') }}" placeholder="แผนก" class="form-control @error('division') is-invalid @enderror">
+								<label class="form-label" for="division">กลุ่ม/ฝ่าย/แผนก <span class="text-red-600">*</span></label>
+								<input type="text" name="division" value="{{ old('division') }}" placeholder="สังกัด" class="form-control @error('division') is-invalid @enderror">
 								@error('division')
 									<div class="invalid-feedback" role="alert">{{ $message }}</div>
 								@enderror
