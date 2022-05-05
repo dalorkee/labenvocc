@@ -30,6 +30,8 @@
 				<form name="saveInfo" action="{{ route('customer.info.store') }}" method="POST" enctype="multipart/form-data">
 					@csrf
 					<input type="hidden" name="order_id" value="{{ $order[0]->id ?? null }}">
+					<input type="hidden" name="order_type" value="1">
+					<input type="hidden" name="order_type_name" value="ตัวอย่างชีวภาพ">
 					<div class="panel-content">
 						<ul class="steps">
 							<li class="active"><a href=""><i class="fal fa-user"></i> <span class="d-none d-sm-inline">ข้อมูลทั่วไป</span></a></li>
@@ -65,7 +67,7 @@
 								<div class="frame-wrap">
 									@foreach ($type_of_work as $key => $val)
 									<div class="custom-control custom-checkbox custom-control-inline">
-										<input type="checkbox" name="type_of_work" value="{{ $key }}" class="custom-control-input type-of-work @error('type_of_work') is-invalid @enderror"" id="type_of_work{{ $key }}" {{ (isset($order[0]->type_of_work) && $order[0]->type_of_work == $key) ? 'checked' : '' }}>
+										<input type="checkbox" name="type_of_work" value="{{ $key.'|'.$val }}" class="custom-control-input type-of-work @error('type_of_work') is-invalid @enderror" id="type_of_work{{ $key }}" {{ (isset($order[0]->type_of_work) && $order[0]->type_of_work == $key) ? 'checked' : null }}>
 										<label class="custom-control-label" for="type_of_work{{ $key }}">{{ $val }}</label>
 									</div>
 									@endforeach
@@ -73,7 +75,7 @@
 							</div>
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
 								<label class="form-label" for="type_of_work_other">ประเภทงานอื่นๆ ระบุ</label>
-								<input type="text" name="type_of_work_other" value="{{ $order[0]->type_of_work_other ?? '' }}" id="type_of_work_other" class="form-control @error('type_of_work_other') is-invalid @enderror" {{ ((isset($order[0]->type_of_work) && $order[0]->type_of_work == 5) || old('type_of_work_other') == 5) ? '' : 'disabled' }}>
+								<input type="text" name="type_of_work_other" value="{{ $order[0]->type_of_work_other ?? '' }}" id="type_of_work_other" class="form-control @error('type_of_work_other') is-invalid @enderror" {{ ((isset($order[0]->type_of_work) && $order[0]->type_of_work == 5) || old('type_of_work_other') == 5) ? null : 'disabled' }}>
 								@error('type_of_work_other')
 									<div class="invalid-feedback" role="alert">{{ $message }}</div>
 								@enderror

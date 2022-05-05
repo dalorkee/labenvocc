@@ -59,17 +59,20 @@ class CustomerController extends Controller
 			'type_of_work.required'=>'โปรดกรอกประเภทงาน'
 		]);
 		try {
+			$typeOfWork = $this->explodeStrToArr(str: $request->type_of_work, separator: '|');
 			$order = Order::updateOrCreate([
 				'id' => $request->order_id],[
-					'order_type' => 1,
+					'order_type' => $request->order_type,
+					'order_type_name' => $request->order_type_name,
 					'user_id' => $this->user->userCustomer->user->id,
 					'customer_type' => $this->user->userCustomer->customer_type,
 					'customer_agency_code' => $this->user->userCustomer->agency_code,
 					'customer_agency_name' => $request->customer_name,
-					'type_of_work' => $request->type_of_work,
-					'type_of_work_other' => $request->type_of_work_other,
+					'type_of_work' => $typeOfWork[0] ?? null,
+					'type_of_work_name' => $typeOfWork[1] ?? null,
+					'type_of_work_other' => $request->type_of_work_other ?? null,
 					'book_no' => $request->book_no ?? null,
-					'book_date' => $this->convertJsDateToMySQL($request->book_date) ?? null,
+					'book_date' => $this->convertJsDateToMySQL(date: $request->book_date, separator: '/'),
 					'book_upload' => ($request->hasFile('book_file')) ? 'y' : 'n',
 			]);
 			$last_insert_order_id = $order->id;
@@ -88,7 +91,7 @@ class CustomerController extends Controller
 				$file_size = ($file_size_byte/1024);
 				$file_name = $file->getClientOriginalName();
 				$file_extension = $file->extension();
-				$new_name = $this->renameFile('cust_book', $this->user->userCustomer->user->id, $file_extension);
+				$new_name = $this->renameFile(prefix: 'cust_book', free_txt: $this->user->userCustomer->user->id, file_extension: $file_extension);
 				$uploaded = Storage::disk('uploads')->put($new_name, File::get($file));
 				if ($uploaded) {
 					$file_upload = new FileUpload;
@@ -121,7 +124,8 @@ class CustomerController extends Controller
 	protected function createParameter(Request $request, CustParameterDataTable $dataTable): object {
 		try {
 			$order = Order::whereId($request->order_id)->withCount('parameters')->get();
-			return $dataTable->render('apps.customers.parameter', compact('order'));
+            $count_order_sample_has_parameter = OrderSample::whereOrder_id($request->order_id)->whereHas_parameter('n')->count();
+			return $dataTable->render('apps.customers.parameter', compact('order', 'count_order_sample_has_parameter'));
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
 			return redirect()->route('customer.index')->with('error', $e->getMessage());
@@ -163,7 +167,7 @@ class CustomerController extends Controller
 			$order_sample->age_year = $request->age_year;
 			$order_sample->division = $request->division ?? null;
 			$order_sample->work_life_year = $request->work_life_year ?? null;
-			$order_sample->sample_date = $this->convertJsDateToMySQL($request->sample_date);
+			$order_sample->sample_date = $this->convertJsDateToMySQL(date: $request->sample_date, separator: '/');
 			$order_sample->note = $request->note;
 			$saved = $order_sample->save();
 			$last_insert_id = $order_sample->id;
@@ -211,7 +215,7 @@ class CustomerController extends Controller
 			$order_sample->age_year = $request->edit_age_year;
 			$order_sample->division = $request->edit_division;
 			$order_sample->work_life_year = $request->edit_work_life_year;
-			$order_sample->sample_date = $this->convertJsDateToMySQL($request->edit_sample_date);
+			$order_sample->sample_date = $this->convertJsDateToMySQL(date: $request->edit_sample_date, separator: '/');
 			$order_sample->note = $request->edit_note;
 			$saved = $order_sample->save();
 			if ($saved == true) {
@@ -564,11 +568,13 @@ class CustomerController extends Controller
 		}
 	}
 
+	#[Attributes([])]
 	private function setOrderNo(string $prefix, int $order_id): string {
 		$tmp = sprintf("%08d", $order_id);
 		return $prefix.$tmp;
 	}
 
+	#[MethodAttribute]
 	private function setOrderNoRef(string $prefix): string {
 		$char = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 		$length = 8;

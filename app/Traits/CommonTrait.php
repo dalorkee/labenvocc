@@ -40,19 +40,19 @@ trait CommonTrait {
 	public function calcPercent($data=0, $allData=0): float {
 		return (($data*100)/$allData);
 	}
-	public function convertJsDateToMySQL($date='00/00/0000'): string {
+	public function convertJsDateToMySQL($date='00/00/0000', $separator='/'): ?string {
 		if (!is_null($date) && !empty($date)) {
-			$ep = explode("/", $date);
-			$string = $ep[2]."-".$ep[1]."-".$ep[0];
+			$ep = explode($separator, $date);
+			$string = $ep[2].'-'.$ep[1].'-'.$ep[0];
 		} else {
 			$string = null;
 		}
 		return $string;
 	}
-	public function convertMySQLDateToJs($date='0000-00-00', $seperator="/"): string {
+	public function convertMySQLDateToJs($date='0000-00-00', $separator='-'): ?string {
 		if (!is_null($date) && !empty($date)) {
-			$ep = explode("-", $date);
-			$string = $ep[2].$seperator.$ep[1].$seperator.$ep[0];
+			$ep = explode($separator, $date);
+			$string = $ep[2].'/'.$ep[1].'/'.$ep[0];
 		} else {
 			$string = null;
 		}
@@ -102,11 +102,13 @@ trait CommonTrait {
 		});
 		return $result;
 	}
-	public function explodeStrToArr(string $str, string $separate='|') {
-		if ($str != "") {
-			$result = explode($separate, $str);
+	public function explodeStrToArr(string $str, string $separator='|'): ?array {
+		if (!empty($str)) {
+			$result = explode($separator, $str);
+			return $result;
+		} else {
+			return null;
 		}
-		return $result;
 	}
 
 }

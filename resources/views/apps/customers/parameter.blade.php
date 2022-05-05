@@ -8,7 +8,7 @@
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('vendor/jquery-contextmenu/css/jquery.contextMenu.min.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/css/notifications/sweetalert2/sweetalert2.bundle.css') }}" media="screen, print">
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/css/formplugins/bootstrap-datepicker/bootstrap-datepicker.css') }}">
-<link type="text/css" href="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/css/dataTables.checkboxes.css" rel="stylesheet" />
+<link rel="stylesheet" type="text/css" href="{{ URL::asset('vendor/jquery-datatables-checkboxes/dataTables.checkboxes.css') }}">
 <style>
 .input-date:read-only{background:#fefefe!important}
 .btn-group {margin:0 0 5px 0;padding:0;}
@@ -45,7 +45,7 @@ div.dataTables_wrapper span.select-item {margin-left: 0.5em;}
 				</div>
 			</div>
 			<div class="panel-container relative">
-				<div class="row-completed"><span class="badge badge-danger p-2">จำนวน {{ number_format($order[0]->parameters_count) }} ตัวอย่าง</span></div>
+				<div class="row-completed"><span class="badge badge-danger p-2">จำนวนตัวอย่าง: {{ number_format($order[0]->parameters_count) }}</span></div>
 				<form>
 					<div class="panel-content">
 						<ul class="steps mb-3">
@@ -61,7 +61,11 @@ div.dataTables_wrapper span.select-item {margin-left: 0.5em;}
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
 								{{-- <button class="btn btn-primary ml-auto" type="button"><i class="fal fa-save"></i> บันทึกร่าง</button> --}}
 								<a href="{{ route('customer.info.create', ['order_id' => $order[0]->id]) }}" class="btn btn-info ml-auto"><i class="fal fa-arrow-alt-left"></i> ก่อนหน้า</a>
-								<a href="{{ route('customer.sample.create', ['order_id' => $order[0]->id]) }}" class="btn btn-info ml-auto">ถัดไป <i class="fal fa-arrow-alt-right"></i></a>
+                                @if ($count_order_sample_has_parameter == 0)
+								    <a href="{{ route('customer.sample.create', ['order_id' => $order[0]->id]) }}" class="btn btn-info ml-auto">ถัดไป <i class="fal fa-arrow-alt-right"></i></a>
+                                @else
+								    <button class="btn btn-info ml-auto" disabled>ถัดไป <i class="fal fa-arrow-alt-right"></i></button>
+                                @endif
 							</div>
 						</div>
 					</div>
@@ -248,10 +252,10 @@ div.dataTables_wrapper span.select-item {margin-left: 0.5em;}
 							<label class="form-label" for="age_year">อายุ/ปี</label>
 							<input type="number" name="edit_age_year" id="edit_age_year" placeholder="อายุ" min="1" max="100" class="form-control">
 						</div>
-						@if (auth()->user()->userCustomer->customer_type == 'private')
+						@if (auth()->user()->userCustomer->customer_type == 'private' || auth()->user()->userCustomer->customer_type == 'government')
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
-								<label class="form-label" for="division">แผนก <span class="text-red-600">*</span></label>
-								<input type="text" name="edit_division" id="edit_division" placeholder="แผนก" class="form-control">
+								<label class="form-label" for="division">กลุ่ม/ฝ่าย/แผนก <span class="text-red-600">*</span></label>
+								<input type="text" name="edit_division" id="edit_division" placeholder="สังกัด" class="form-control">
 							</div>
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
 								<label class="form-label" for="work_life_year">อายุงาน/ปี <span class="text-red-600">*</span></label>
@@ -344,8 +348,8 @@ div.dataTables_wrapper span.select-item {margin-left: 0.5em;}
 <script type="text/javascript" src="{{ URL::asset('vendor/jquery-contextmenu/js/jquery.contextMenu.min.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('assets/js/notifications/sweetalert2/sweetalert2.bundle.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('assets/js/formplugins/bootstrap-datepicker/bootstrap-datepicker.js') }}"></script>
-<script type="text/javascript" src="{{ URL::asset('assets/js/formplugins/inputmask/inputmask.bundle.js') }}"></script>
-<script type="text/javascript" src="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.7/js/dataTables.checkboxes.min.js"></script>
+{{-- <script type="text/javascript" src="{{ URL::asset('assets/js/formplugins/inputmask/inputmask.bundle.js') }}"></script> --}}
+<script type="text/javascript" src="{{ URL::asset('vendor/jquery-datatables-checkboxes/dataTables.checkboxes.min.js') }}"></script>
 {{ $dataTable->scripts() }}
 <script>
 function newData(){$('#new-data-modal').modal('show');}
@@ -368,7 +372,7 @@ $(document).ready(function() {
 	$('input[name="title_name"]').on('change', function() {
 		$('input[name="' + this.name + '"]').not(this).prop('checked', false);
 	});
-    $('input[name="edit_title_name"]').on('change', function() {
+	$('input[name="edit_title_name"]').on('change', function() {
 		$('input[name="' + this.name + '"]').not(this).prop('checked', false);
 	});
 	//$(":input").inputmask();
