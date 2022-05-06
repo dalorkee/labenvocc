@@ -61,11 +61,11 @@ div.dataTables_wrapper span.select-item {margin-left: 0.5em;}
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
 								{{-- <button class="btn btn-primary ml-auto" type="button"><i class="fal fa-save"></i> บันทึกร่าง</button> --}}
 								<a href="{{ route('customer.info.create', ['order_id' => $order[0]->id]) }}" class="btn btn-info ml-auto"><i class="fal fa-arrow-alt-left"></i> ก่อนหน้า</a>
-                                @if ($count_order_sample_has_parameter == 0)
-								    <a href="{{ route('customer.sample.create', ['order_id' => $order[0]->id]) }}" class="btn btn-info ml-auto">ถัดไป <i class="fal fa-arrow-alt-right"></i></a>
-                                @else
-								    <button class="btn btn-info ml-auto" disabled>ถัดไป <i class="fal fa-arrow-alt-right"></i></button>
-                                @endif
+								@if ($count_order_sample_has_parameter == 0)
+									<a href="{{ route('customer.sample.create', ['order_id' => $order[0]->id]) }}" class="btn btn-info ml-auto">ถัดไป <i class="fal fa-arrow-alt-right"></i></a>
+								@else
+									<button class="btn btn-info ml-auto" disabled>ถัดไป <i class="fal fa-arrow-alt-right"></i></button>
+								@endif
 							</div>
 						</div>
 					</div>

@@ -20,7 +20,7 @@ trait GovernmentTrait {
 	}
 
 	public function getGovernmentNameById($id=0): ?string {
-        $gov = (!empty($id)) ? Government::select('gov_name')->whereId($id)->get() : null;
+		$gov = (!empty($id)) ? Government::select('gov_name')->whereId($id)->get() : null;
 		return $gov[0]->gov_name ?? null;
 	}
 

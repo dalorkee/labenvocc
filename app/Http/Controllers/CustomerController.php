@@ -40,12 +40,12 @@ class CustomerController extends Controller
 			if ($request->order_id == 'new') {
 				$order = null;
 			} else {
-				$order = Order::whereId($request->order_id)->with('uploads')->get();
+				$order = Order::whereId($request->order_id)->with(relations: 'uploads')->get();
 			}
-			return view('apps.customers.info', ['type_of_work' => $type_of_work, 'order' => $order, 'titleName' => $titleName]);
+			return view(view: 'apps.customers.info', data: ['type_of_work' => $type_of_work, 'order' => $order, 'titleName' => $titleName]);
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
-			return redirect()->route('logout');
+			return redirect()->route(route: 'logout');
 		}
 	}
 
@@ -110,7 +110,7 @@ class CustomerController extends Controller
 				}
 			}
 			if ($order == true) {
-				return redirect()->route('customer.info.create', ['order_id' => $last_insert_order_id])->with(['success' => 'บันทึกร่างข้อมูลทั่วไปแล้ว โปรดทำขั้นตอนต่อไป']);
+				return redirect()->route(route: 'customer.info.create', parameters: ['order_id' => $last_insert_order_id])->with(['success' => 'บันทึกร่างข้อมูลทั่วไปแล้ว โปรดทำขั้นตอนต่อไป']);
 			} else {
 				return redirect()->back()->with('error', 'บันทึกร่าง "ข้อมูลทั่วไป" ผิดพลาด โปรดตรวจสอบ');
 			}
@@ -124,11 +124,11 @@ class CustomerController extends Controller
 	protected function createParameter(Request $request, CustParameterDataTable $dataTable): object {
 		try {
 			$order = Order::whereId($request->order_id)->withCount('parameters')->get();
-            $count_order_sample_has_parameter = OrderSample::whereOrder_id($request->order_id)->whereHas_parameter('n')->count();
+			$count_order_sample_has_parameter = OrderSample::whereOrder_id($request->order_id)->whereHas_parameter('n')->count();
 			return $dataTable->render('apps.customers.parameter', compact('order', 'count_order_sample_has_parameter'));
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
-			return redirect()->route('customer.index')->with('error', $e->getMessage());
+			return redirect()->route(route: 'customer.index')->with('error', $e->getMessage());
 		}
 	}
 
@@ -313,22 +313,22 @@ class CustomerController extends Controller
 				$order_sample = OrderSample::find($request->hidden_order_sample_id);
 				$order_sample->has_parameter = 'y';
 				$updated = $order_sample->save();
-				return redirect()->back()->with('success', 'บันทึกข้อมูลพารามิเตอร์แล้ว');
+				return redirect()->back()->with(key: 'success', value: 'บันทึกข้อมูลพารามิเตอร์แล้ว');
 			} else {
-				return redirect()->back()->with('error', 'ไม่มีข้อมูลใหม่สำหรับรายการนี้');
+				return redirect()->back()->with(key: 'error', value: 'ไม่มีข้อมูลใหม่สำหรับรายการนี้');
 			}
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
-			return redirect()->back()->with('error', 'บันทึกพารามิเตอร์ไม่ได้ โปรดตรวจสอบ');
+			return redirect()->back()->with(key: 'error', value: 'บันทึกพารามิเตอร์ไม่ได้ โปรดตรวจสอบ');
 		}
 	}
 
 	#[Route('customer.parameter.data.destroy', methods: ['GET'])]
-	protected function destroyParameterData(OrderSampleParameter $orderDetailParamet, Request $request): object {
+	protected function destroyParameterData(OrderSampleParameter $orderSampleParameter, Request $request): object {
 		try {
-			$deleted = $orderDetailParamet->find($request->id)->delete();
+			$deleted = $orderSampleParameter->find($request->id)->delete();
 			if ($deleted == true) {
-				return redirect()->back()->with('destroy', 'ลบข้อมูลพารามิเตอร์แล้ว');
+				return redirect()->back()->with(key: 'destroy', value: 'ลบข้อมูลพารามิเตอร์แล้ว');
 			}
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
@@ -398,18 +398,18 @@ class CustomerController extends Controller
 		]);
 		try {
 			if ($request->sample_select_begin > $request->sample_select_end) {
-				return redirect()->back()->with('warning', 'ลำดับข้อมูลตัวอย่างไม่ถูกต้อง โปรดตรวจสอบ');
+				return redirect()->back()->with(key: 'warning', value: 'ลำดับข้อมูลตัวอย่างไม่ถูกต้อง โปรดตรวจสอบ');
 			} else {
 				$saved = false;
 				$origin_threat_arr = $this->getOriginThreat();
 				switch ($request->sample_location_define) {
 					case "1":
 						$userDetail = User::find($request->user_id)->userCustomer;
-						$user_ministry_name = $this->getGovernmentNameById($userDetail->agency_ministry);
-						$user_department_name = $this->getDepartmentNameById($userDetail->agency_department);
-						$user_sub_district_name = $this->subDistrictNameBySubDistId($userDetail->sub_district);
-						$user_district_name = $this->districtNameByDistId($userDetail->district);
-						$user_province_name = $this->provinceNameByProvId($userDetail->province);
+						$user_ministry_name = $this->getGovernmentNameById(id: $userDetail->agency_ministry);
+						$user_department_name = $this->getDepartmentNameById(id: $userDetail->agency_department);
+						$user_sub_district_name = $this->subDistrictNameBySubDistId(sub_dist_id: $userDetail->sub_district);
+						$user_district_name = $this->districtNameByDistId(dist_id: $userDetail->district);
+						$user_province_name = $this->provinceNameByProvId(prov_id: $userDetail->province);
 						for ($i=$request->sample_select_begin; $i<=$request->sample_select_end; $i++) {
 							$order_sample = OrderSample::find($i);
 							if (!is_null($order_sample)) {
@@ -442,11 +442,11 @@ class CustomerController extends Controller
 						}
 						break;
 					case "2":
-						$ministry_arr = (!empty($request->sample_location_place_ministry)) ? $this->explodeStrToArr($request->sample_location_place_ministry) : null;
-						$dept_arr = (!empty($request->sample_location_place_department)) ? $this->explodeStrToArr($request->sample_location_place_department) : null;
-						$prov_arr = (!empty($request->sample_location_place_province)) ? $this->explodeStrToArr($request->sample_location_place_province) : null;
-						$dist_arr = (!empty($request->sample_location_place_district)) ? $this->explodeStrToArr($request->sample_location_place_district) : null;
-						$sub_dist_arr = (!empty($request->sample_location_place_sub_district)) ? $this->explodeStrToArr($request->sample_location_place_sub_district) : null;
+						$ministry_arr = (!empty($request->sample_location_place_ministry)) ? $this->explodeStrToArr(str: $request->sample_location_place_ministry) : null;
+						$dept_arr = (!empty($request->sample_location_place_department)) ? $this->explodeStrToArr(str: $request->sample_location_place_department) : null;
+						$prov_arr = (!empty($request->sample_location_place_province)) ? $this->explodeStrToArr(str: $request->sample_location_place_province) : null;
+						$dist_arr = (!empty($request->sample_location_place_district)) ? $this->explodeStrToArr(str: $request->sample_location_place_district) : null;
+						$sub_dist_arr = (!empty($request->sample_location_place_sub_district)) ? $this->explodeStrToArr(str: $request->sample_location_place_sub_district) : null;
 
 						switch ($request->sample_location_place_type) {
 							case 'private':

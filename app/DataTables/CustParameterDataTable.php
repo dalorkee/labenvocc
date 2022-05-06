@@ -35,7 +35,7 @@ class CustParameterDataTable extends DataTable
 									<span class=\"badge badge-warning\">".$parameter->parameter_name."</span>
 									<span class=\"badge badge-info\">".$parameter->sample_charecter_name."</span>
 									<span class=\"badge badge-success\">".$parameter->unit_customer_name."</span>
-									<a href=\"".route('customer.parameter.data.destroy', ['id'=>$parameter->id])."\" data-toggle=\"tooltip\" data-placement=\"auto\" title=\"ลบ ".$parameter->parameter_name."\">
+									<a href=\"".route('customer.parameter.data.destroy', ['id'=>$parameter->id,'sample'=>$parameter->order_sample_id])."\" data-toggle=\"tooltip\" data-placement=\"auto\" title=\"ลบ ".$parameter->parameter_name."\">
 										<i class=\"fal fa-times-circle text-danger\"></i>
 									</a>
 								</div>";
