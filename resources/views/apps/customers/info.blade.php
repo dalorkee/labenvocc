@@ -158,7 +158,7 @@ $(document).ready(function() {
 	$('input[name="type_of_work"]').on('change', function() {
 		$('input[name="' + this.name + '"]').not(this).prop('checked', false);
 		let chk = this.value;
-		if (chk === '5') {
+		if (chk === '5|อื่นๆ') {
 			$('#type_of_work_other').prop('disabled', false);
 		} else {
 			$('#type_of_work_other').val('');

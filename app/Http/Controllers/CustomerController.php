@@ -29,7 +29,7 @@ class CustomerController extends Controller
 
 	#[Route('customer.index', methods: ['RESOURCE'])]
 	protected function index(CustomersDataTable $dataTable, $user_id=0): object {
-		return $dataTable->with('user_id', $this->user->id)->render('apps.customers.index');
+		return $dataTable->with('user_id', $this->user->id)->render(view: 'apps.customers.index');
 	}
 
 	#[Route('customer.info.create', methods: ['GET'])]
@@ -110,13 +110,13 @@ class CustomerController extends Controller
 				}
 			}
 			if ($order == true) {
-				return redirect()->route(route: 'customer.info.create', parameters: ['order_id' => $last_insert_order_id])->with(['success' => 'บันทึกร่างข้อมูลทั่วไปแล้ว โปรดทำขั้นตอนต่อไป']);
+				return redirect()->route(route: 'customer.info.create', parameters: ['order_id' => $last_insert_order_id])->with(key: 'success', value: 'บันทึกร่างข้อมูลทั่วไปแล้ว โปรดทำขั้นตอนต่อไป');
 			} else {
-				return redirect()->back()->with('error', 'บันทึกร่าง "ข้อมูลทั่วไป" ผิดพลาด โปรดตรวจสอบ');
+				return redirect()->back()->with(key: 'error', value: 'บันทึกร่าง "ข้อมูลทั่วไป" ผิดพลาด โปรดตรวจสอบ');
 			}
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
-			return redirect()->route('customer.index')->with('error', $e->getMessage());
+			return redirect()->route(route: 'customer.index')->with(key: 'error', value: $e->getMessage());
 		}
 	}
 
@@ -128,7 +128,7 @@ class CustomerController extends Controller
 			return $dataTable->render('apps.customers.parameter', compact('order', 'count_order_sample_has_parameter'));
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
-			return redirect()->route(route: 'customer.index')->with('error', $e->getMessage());
+			return redirect()->route(route: 'customer.index')->with(key: 'error', value: $e->getMessage());
 		}
 	}
 
@@ -172,9 +172,9 @@ class CustomerController extends Controller
 			$saved = $order_sample->save();
 			$last_insert_id = $order_sample->id;
 			if ($saved == true) {
-				return redirect()->back()->with('success', 'บันทึกข้อมูลแล้ว');
+				return redirect()->back()->with(key: 'success', value: 'บันทึกข้อมูลแล้ว');
 			} else {
-				return redirect()->back()->with('error', 'ไม่สามารถบันทึกข้อมูลได้');
+				return redirect()->back()->with(key: 'error', value: 'ไม่สามารถบันทึกข้อมูลได้');
 			}
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
@@ -219,9 +219,9 @@ class CustomerController extends Controller
 			$order_sample->note = $request->edit_note;
 			$saved = $order_sample->save();
 			if ($saved == true) {
-				return redirect()->back()->with('success', 'แก้ไขข้อมูลแล้ว');
+				return redirect()->back()->with(key: 'success', value: 'แก้ไขข้อมูลแล้ว');
 			} else {
-				return redirect()->back()->with('error', 'ไม่สามารถแก้ไขข้อมูลได้');
+				return redirect()->back()->with(key: 'error', value: 'ไม่สามารถแก้ไขข้อมูลได้');
 			}
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
@@ -233,7 +233,7 @@ class CustomerController extends Controller
 		try {
 			$deleted = $order_sample->find($request->id)->delete();
 			if ($deleted == true) {
-				return redirect()->back()->with('destroy', 'ลบข้อมูลตัวอย่างแล้ว');
+				return redirect()->back()->with(key: 'destroy', value: 'ลบข้อมูลตัวอย่างแล้ว');
 			}
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
@@ -251,17 +251,7 @@ class CustomerController extends Controller
 					->when($request->threat_type_id > 0, function($q) use ($request) {
 						return $q->whereThreat_type_id($request->threat_type_id)->orderBy('id', 'ASC')->get();
 					});
-				return DataTables::of($data)
-					// ->addIndexColumn()
-					// ->addColumn('select_paramet', static function ($row) {
-					// 	return '<input type="checkbox" name="paramets[]" value="'.$row->id.'"/>';
-					// })
-					// ->addColumn('action', function($row) use ($request) {
-					// 	$actionBtn = "<a href=\"".route('customer.parameter.data.store', ['order_detail_id'=>$request->order_detail_id, 'id'=>$row->id])."\" class=\"btn btn-danger btn-sm\"><i class=\"fal fa-plus\"></i></a>";
-					// 	return $actionBtn;
-					// })
-					// ->rawColumns(['select_paramet', 'action'])
-					->make(true);
+				return DataTables::of($data)->make(true);
 			}
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
@@ -328,7 +318,15 @@ class CustomerController extends Controller
 		try {
 			$deleted = $orderSampleParameter->find($request->id)->delete();
 			if ($deleted == true) {
+				$find_parameters = $orderSampleParameter->find($request->order_sample_id);
+				if (blank(value: $find_parameters)) {
+					$orderSample = OrderSample::find($request->order_sample_id);
+					$orderSample->has_parameter = 'n';
+					$orderSample->save();
+				}
 				return redirect()->back()->with(key: 'destroy', value: 'ลบข้อมูลพารามิเตอร์แล้ว');
+			} else {
+				return redirect(to: 'logout');
 			}
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
@@ -344,7 +342,6 @@ class CustomerController extends Controller
 		$origin_threat = $this->getOriginThreat();
 		$provinces = $this->getMinProvince();
 		$governments = $this->getGovernmentToArray();
-
 		$data = [
 			'order_id' => $request->order_id,
 			'sample_list' => $sample_list,
@@ -352,7 +349,7 @@ class CustomerController extends Controller
 			'provinces' => $provinces,
 			'governments' => $governments
 		];
-		return $dataTable->render('apps.customers.sample', ['data'=> $data]);
+		return $dataTable->render(view: 'apps.customers.sample', data: ['data'=> $data]);
 	}
 
 	#[Route('customer.sample.store', methods: ['POST'])]
@@ -498,13 +495,13 @@ class CustomerController extends Controller
 						}
 						break;
 					default:
-						return redirect()->route('logout');
+						return redirect()->route(route: 'logout');
 						break;
 				}
 				if ($saved == true) {
-					return redirect()->back()->with('success', 'บันทึกข้อมูล "ประเด็นมลพิษ" สำเร็จ');
+					return redirect()->back()->with(key: 'success', value: 'บันทึกข้อมูล "ประเด็นมลพิษ" สำเร็จ');
 				} else {
-					return redirect()->back()->with('error', 'บันทึกข้อมูลไม่สำเร็จ โปรดลองใหม่');
+					return redirect()->back()->with(key: 'error', value: 'บันทึกข้อมูลไม่สำเร็จ โปรดลองใหม่');
 				}
 			}
 		} catch (\Exception $e) {
@@ -519,11 +516,10 @@ class CustomerController extends Controller
 			OrderSample::select('id')->whereOrder_id($request->order_id)->get()->each(function($value, $key) use (&$sample_list) {
 				$sample_list[$key] = $value->id;
 			});
-
 			$sample_charecter = $this->getSampleCharecter();
 			$type_of_work = $this->typeOfWork();
 			$provinces = $this->getMinProvince();
-			$order = Order::whereId($request->order_id)->with(['orderSamples', 'uploads'])->get();
+			$order = Order::whereId($request->order_id)->with(relations: ['orderSamples', 'uploads'])->get();
 			$data = [
 				'order_id' => $request->order_id,
 				'order' => $order,
@@ -532,7 +528,7 @@ class CustomerController extends Controller
 				'type_of_work' => $type_of_work,
 				'provinces' => $provinces
 			];
-			return $dataTable->render('apps.customers.verify', ['data'=> $data]);
+			return $dataTable->render(view: 'apps.customers.verify', data: ['data'=> $data]);
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
 		}
@@ -555,8 +551,8 @@ class CustomerController extends Controller
 			};
 			if ($request->confirm_chk == 'y') {
 				$order = Order::find($request->order_id);
-				$order->order_no = $this->setOrderNo($order_no_prefix, $request->order_id);
-				$order->order_no_ref = $this->setOrderNoRef($order_no_prefix);
+				$order->order_no = $this->setOrderNo(prefix: $order_no_prefix, order_id: $request->order_id);
+				$order->order_no_ref = $this->setOrderNoRef(prefix: $order_no_prefix);
 				$order->order_confirmed = date('Y-m-d H:i:s');
 				$saved = $order->save();
 				return redirect()->route('customer.index')->with('success', 'บันทึกข้อมูล "ประเด็นมลพิษ" แล้ว');

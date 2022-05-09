@@ -136,7 +136,7 @@ table.dataTable thead th {background-color: #056676;color: white}
 											<span aria-hidden="true"><i class="fal fa-times"></i></span>
 										</button>
 									</div>
-									<div class="modal-body">
+									<div class="modal-body mt-2 mb-2">
 										<span class="text-danger mt-2 mb-2">โปรดตรวจสอบ เมื่อส่งคำขอแล้ว จะไม่สามารถแก้ไขข้อมูลได้อีก !!</span>
 									</div>
 									<div class="modal-footer">
