@@ -2,7 +2,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-// use Illuminate\Support\Carbon;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\{Auth,Log,Storage,File,Route};
 use App\Models\{Order,OrderSample,OrderSampleParameter,Fileupload,Parameter,User};
 use App\DataTables\{CustomersDataTable,CustParameterDataTable,CustSampleDataTable,CustVerifyDataTable};
@@ -318,8 +318,8 @@ class CustomerController extends Controller
 		try {
 			$deleted = $orderSampleParameter->find($request->id)->delete();
 			if ($deleted == true) {
-				$find_parameters = $orderSampleParameter->find($request->order_sample_id);
-				if (blank(value: $find_parameters)) {
+				$find_parameters = $orderSampleParameter->whereOrder_sample_id($request->order_sample_id)->count();
+				if ($find_parameters <= 0) {
 					$orderSample = OrderSample::find($request->order_sample_id);
 					$orderSample->has_parameter = 'n';
 					$orderSample->save();
@@ -336,9 +336,10 @@ class CustomerController extends Controller
 	#[Route('customer.sample.create', methods: ['GET'])]
 	protected function createSample(CustSampleDataTable $dataTable, Request $request) {
 		$sample_list = [];
-		$order_detail = OrderSample::select('id')->whereOrder_id($request->order_id)->get()->each(function($value, $key) use (&$sample_list) {
+		$orders = OrderSample::select('id', 'origin_threat_id')->whereOrder_id($request->order_id)->get()->each(function($value, $key) use (&$sample_list) {
 			$sample_list[$key] = $value->id;
 		});
+		$count_order_has_origin_threat = $orders->where('origin_threat_id', '>', 0)->count();
 		$origin_threat = $this->getOriginThreat();
 		$provinces = $this->getMinProvince();
 		$governments = $this->getGovernmentToArray();
@@ -347,7 +348,9 @@ class CustomerController extends Controller
 			'sample_list' => $sample_list,
 			'origin_threat' => $origin_threat,
 			'provinces' => $provinces,
-			'governments' => $governments
+			'governments' => $governments,
+			'count_order_has_origin_threat' => $count_order_has_origin_threat
+
 		];
 		return $dataTable->render(view: 'apps.customers.sample', data: ['data'=> $data]);
 	}
@@ -462,7 +465,6 @@ class CustomerController extends Controller
 								$sample_location_place_id = null;
 								$sample_location_place_name = null;
 						}
-
 						for ($i=$request->sample_select_begin; $i<=$request->sample_select_end; $i++) {
 							$order_sample = OrderSample::find($i);
 							if (!is_null($order_sample)) {
@@ -544,10 +546,10 @@ class CustomerController extends Controller
 			'confirm_chk.required' => 'โปรดเลือกการตรวจสอบความถูกต้องของข้อมูล',
 		]);
 		try {
-			$order_no_prefix = match ($this->user->userCustomer->customer_type) {
-				'personal' => 'PS',
-				'private' => 'PV',
-				'government' => 'GM',
+			$order_no_prefix = match($this->user->userCustomer->customer_type) {
+				'personal' => 'ps',
+				'private' => 'pv',
+				'government' => 'gv',
 			};
 			if ($request->confirm_chk == 'y') {
 				$order = Order::find($request->order_id);
@@ -555,22 +557,22 @@ class CustomerController extends Controller
 				$order->order_no_ref = $this->setOrderNoRef(prefix: $order_no_prefix);
 				$order->order_confirmed = date('Y-m-d H:i:s');
 				$saved = $order->save();
-				return redirect()->route('customer.index')->with('success', 'บันทึกข้อมูล "ประเด็นมลพิษ" แล้ว');
+				return redirect()->route(route: 'customer.index')->with(key: 'success', value: 'บันทึกข้อมูลสำเร็จแล้ว');
 			} else {
-				return redirect()->back()->with('error', 'บันทึกข้อมูลไม่สำเร็จ โปรดลองใหม่');
+				return redirect()->back()->with(key: 'error', value: 'บันทึกข้อมูลไม่สำเร็จ โปรดลองใหม่');
 			}
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
 		}
 	}
 
-	#[Attributes([])]
+	#[Setup]
 	private function setOrderNo(string $prefix, int $order_id): string {
 		$tmp = sprintf("%08d", $order_id);
 		return $prefix.$tmp;
 	}
 
-	#[MethodAttribute]
+	#[Setup]
 	private function setOrderNoRef(string $prefix): string {
 		$char = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 		$length = 8;

@@ -64,7 +64,7 @@ div.dataTables_wrapper span.select-item {margin-left: 0.5em;}
 								@if ($count_order_sample_has_parameter == 0)
 									<a href="{{ route('customer.sample.create', ['order_id' => $order[0]->id]) }}" class="btn btn-info ml-auto">ถัดไป <i class="fal fa-arrow-alt-right"></i></a>
 								@else
-									<button class="btn btn-info ml-auto" disabled>ถัดไป <i class="fal fa-arrow-alt-right"></i></button>
+									<a href="javascript:void(0);" class="btn btn-info ml-auto" id="validateParameters">ถัดไป <i class="fal fa-arrow-alt-right"></i></a>
 								@endif
 							</div>
 						</div>
@@ -163,7 +163,7 @@ div.dataTables_wrapper span.select-item {margin-left: 0.5em;}
 						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
 							<label class="form-label" for="specimen_date">วันที่เก็บตัวอย่าง <span class="text-red-600">*</span></label>
 							<div class="input-group">
-								<input type="text" name="sample_date" value="{{ old('sample_date') }}" placeholder="วันที่เก็บตัวอย่าง" class="form-control @error('sample_date') is-invalid @enderror " readonly placeholder="เลือกวันที่" id="datepicker_specimen_date">
+								<input type="text" name="sample_date" value="{{ old('sample_date') }}" placeholder="วันที่เก็บตัวอย่าง"  id="datepicker_specimen_date" class="form-control @error('sample_date') is-invalid @enderror" readonly>
 								<div class="input-group-append">
 									<span class="input-group-text fs-xl">
 										<i class="fal fa-calendar-alt"></i>
@@ -265,7 +265,7 @@ div.dataTables_wrapper span.select-item {margin-left: 0.5em;}
 						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
 							<label class="form-label" for="edit_sample_date">วันที่เก็บตัวอย่าง <span class="text-red-600">*</span></label>
 							<div class="input-group">
-								<input type="text" name="edit_sample_date" id="edit_sample_date" class="form-control" placeholder="เลือกวันที่" id="datepicker_edit_specimen_date" readonly>
+								<input type="text" name="edit_sample_date" id="edit_sample_date" class="form-control" placeholder="เลือกวันที่" readonly>
 								<div class="input-group-append">
 									<span class="input-group-text fs-xl">
 										<i class="fal fa-calendar-alt"></i>
@@ -352,12 +352,14 @@ div.dataTables_wrapper span.select-item {margin-left: 0.5em;}
 <script type="text/javascript" src="{{ URL::asset('vendor/jquery-datatables-checkboxes/dataTables.checkboxes.min.js') }}"></script>
 {{ $dataTable->scripts() }}
 <script>
-function newData(){$('#new-data-modal').modal('show');}
+function newData(){$('#new-data-modal').modal('show')}
 var controls = {leftArrow: '<i class="fal fa-angle-left" style="font-size: 1.25rem"></i>', rightArrow: '<i class="fal fa-angle-right" style="font-size: 1.25rem"></i>'}
 var runDatePicker = function() {
 	$('#datepicker_specimen_date').datepicker({
 		format: 'dd/mm/yyyy',
 		todayHighlight: true,
+		startDate: '-3M',
+		endDate: "today",
 		orientation: "bottom left",
 		templates: controls,
 		autoclose: true,
@@ -422,6 +424,8 @@ $(document).ready(function() {
 							$('#edit_sample_date').datepicker({
 								format: 'dd/mm/yyyy',
 								todayHighlight: true,
+								startDate: '-3M',
+								endDate: "today",
 								orientation: "bottom left",
 								templates: controls,
 								autoclose: true,
@@ -431,29 +435,6 @@ $(document).ready(function() {
 						error: function(data, status, error) {alert(error);}
 					});
 					break;
-				/*case 'edit':
-					let edit_order_sample_id = $(this).data('id');
-					let edit_url = "{{ route('customer.parameter.personal.edit', ['order_sample_id'=>':order_sample_id']) }}";
-					edit_url = edit_url.replace(':order_sample_id', edit_order_sample_id);
-					$.ajax({
-						method: 'GET',
-						url: edit_url,
-						dataType: 'HTML',
-						success: function(data) {
-							$('#edit-customer-personal').html(data);
-							$(":input").inputmask();
-							$('#datepicker_edit_specimen_date').datepicker({
-								format: 'dd/mm/yyyy',
-								todayHighlight: true,
-								orientation: "bottom left",
-								templates: controls,
-								autoclose: true,
-							});
-							$('#edit-customer-personal-modal').modal({backdrop: 'static', keyboard: false});
-						},
-						error: function(data, status, error) {alert(error);}
-					});
-					break;*/
 				case 'parameter':
 						let order_sample_id = $(this).data('id');
 						let url = "{{ route('customer.parameter.data.list', ['order_sample_id'=>':order_sample_id','threat_type_id'=>0]) }}";
@@ -518,7 +499,7 @@ $(document).ready(function() {
 						confirmButtonText: "ลบทันที",
 						cancelButtonText: 'ยกเลิก',
 						reverseButtons: true,
-						footer: "LAB ENV-OCC DDC",
+						footer: "Lab-EnvOcc",
 						allowOutsideClick: false
 					}).then(function(result) {
 						if (result.value) {
@@ -583,6 +564,20 @@ $(document).ready(function() {
 		let rows_selected = table.column(0).checkboxes.selected();
 		$.each(rows_selected, function(index, rowId) {
 			$(form).append($('<input>').attr('type', 'hidden').attr('name', 'paramet_id_arr[]').val(rowId));
+		});
+	});
+	$("#validateParameters").on("click", function() {
+		var swalWithBootstrapButtons = Swal.mixin({
+			customClass:{confirmButton: "btn btn-danger"},
+			buttonsStyling: false
+		});
+		swalWithBootstrapButtons.fire({
+			type: "error",
+			title: "ข้อมูลไม่ถูกต้อง...",
+			text: "โปรดตรวจสอบข้อมูลพารามิเตอร์!",
+			confirmButtonText: "ตกลง",
+			allowOutsideClick: false,
+			footer: "<a>Lab-EnvOcc</a>"
 		});
 	});
 });

@@ -56,7 +56,11 @@
 						<div class="form-row">
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
 								<a href="{{ route('customer.parameter.create', ['order_id' => $data['order_id']]) }}" class="btn btn-info ml-auto"><i class="fal fa-arrow-alt-left"></i> ก่อนหน้า</a>
-								<a href="{{ route('customer.verify.create', ['order_id' => $data['order_id']]) }}" class="btn btn-info ml-auto">ถัดไป <i class="fal fa-arrow-alt-right"></i></a>
+								@if ($data['count_order_has_origin_threat'] != count($data['sample_list']))
+									<a href="javascript:void(0);" class="btn btn-info ml-auto" id="validateOriginThreat">ถัดไป <i class="fal fa-arrow-alt-right"></i></a>
+								@else
+									<a href="{{ route('customer.verify.create', ['order_id' => $data['order_id']]) }}" class="btn btn-info ml-auto">ถัดไป <i class="fal fa-arrow-alt-right"></i></a>
+								@endif
 							</div>
 						</div>
 					</div>
@@ -294,31 +298,7 @@
 <script type="text/javascript" src="{{ URL::asset('assets/js/notifications/sweetalert2/sweetalert2.bundle.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('assets/js/formplugins/inputmask/inputmask.bundle.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/buttons.server-side.js') }}"></script>
-<script>
-function newData() {
-	// $('#chk_b').prop('checked', false);
-	// $('#chk_a').prop('checked', true);
-	// $('.radio_location_type').prop('checked', false);
-	// $('.input-private-group').val('');
-	// $('.input-private-group').prop('disabled', true);
-	// $('.input-goverment-group-select').val($('.input-goverment-group-select option:first').val());
-	// $('.input-goverment-group-select').prop('disabled', true);
-	// $('#sample_location_place_name_government').val('');
-	// $('#sample_location_place_name_government').prop('disabled', true);
-	// $('#sample_location_place_other_name').val('');
-	// $('#sample_location_place_other_name').prop('disabled', true);
-	// $('#sample_location_place_address').val('');
-	// $('#sample_location_place_address').prop('disabled', true);
-	// $("#sample_location_place_province").val($("#sample_location_place_province option:first").val());
-	// $('#sample_location_place_province').prop('disabled', true);
-	// $('#sample_location_place_district')[0].options.length = 1;
-	// $('#sample_location_place_district').prop('disabled', true);
-	// $('#sample_location_place_sub_district')[0].options.length = 1;
-	// $('#sample_location_place_sub_district').prop('disabled', true);
-	// $('#sample_location_place_postal').val('');
-	$('#new-data-modal').modal('show');
-}
-</script>
+<script>function newData(){$('#new-data-modal').modal('show')}</script>
 {{ $dataTable->scripts() }}
 <script>
 $(document).ready(function() {
@@ -484,106 +464,28 @@ $(document).ready(function() {
 			});
 		}
 	});
-});
-</script>
-<script>
-$(document).ready(function() {
+
 	$(function() {
-			$('.select2').select2({dropdownParent: $('#new-data-modal')});
-			// $(".select2-placeholder-multiple").select2({placeholder: "-- โปรดระบุ --"});
-			$(".js-hide-search").select2({dropdownParent: $('#new-data-modal') ,minimumResultsForSearch: 1/0});
-			// $(".js-max-length").select2({maximumSelectionLength: 2, placeholder: "Select maximum 2 items"});
-			$(".select2-placeholder").select2({placeholder: "-- โปรดเลือก --", allowClear: true,dropdownParent: $('#new-data-modal')});
-			// $(".js-select2-icons").select2({
-			// 	minimumResultsForSearch: 1 / 0,
-			// 	templateResult: icon,
-			// 	templateSelection: icon,
-			// 	escapeMarkup: function(elm){
-			// 		return elm
-			// 	}
-			// });
-
-			// function icon(elm){
-			// 	elm.element;
-			// 	return elm.id ? "<i class='" + $(elm.element).data("icon") + " mr-2'></i>" + elm.text : elm.text
-			// }
-			/* hospital search by name */
-			// $("#hosp_search").select2({
-			// 	ajax: {
-			// 		method: "POST",
-			// 		url: "{{ route('register.hospital') }}",
-			// 		dataType: 'json',
-			// 		delay: 250,
-			// 		data: function (params) {
-			// 			return {
-			// 				q: params.term,
-			// 				page: params.page
-			// 			};
-			// 		},
-			// 		processResults: function (data, params) {
-			// 			params.page = params.page || 1;
-			// 			return {
-			// 				results: data.items,
-			// 				pagination: {
-			// 					more: (params.page * 30) < data.total_count
-			// 				}
-			// 			};
-			// 		},
-			// 		cache: true
-			// 	},
-			// 	escapeMarkup: function (markup) { return markup; },
-			// 	placeholder: "โปรดกรอกข้อมูล",
-			// 	minimumInputLength: 3,
-			// 	maximumInputLength: 20,
-			// 	templateResult: formatRepo,
-			// 	templateSelection: formatRepoSelection,
-			// 	dropdownParent: $('#new-data-modal')
-			// });
-
-			/* disease border search by name */
-			// $("#disease_border_search").select2({
-			// 	ajax: {
-			// 		method: "POST",
-			// 		url: "{{ route('register.hospital') }}",
-			// 		dataType: 'json',
-			// 		delay: 250,
-			// 		data: function (params) {
-			// 			return {
-			// 				q: params.term,
-			// 				page: params.page
-			// 			};
-			// 		},
-			// 		processResults: function (data, params) {
-			// 			params.page = params.page || 1;
-			// 			return {
-			// 				results: data.items,
-			// 				pagination: {
-			// 					more: (params.page * 30) < data.total_count
-			// 				}
-			// 			};
-			// 		},
-			// 		cache: true
-			// 	},
-			// 	escapeMarkup: function (markup) { return markup; },
-			// 	placeholder: "โปรดกรอกข้อมูล",
-			// 	minimumInputLength: 3,
-			// 	maximumInputLength: 20,
-			// 	templateResult: formatRepo,
-			// 	templateSelection: formatRepoSelection,
-			// 	dropdownParent: $('#new-data-modal')
-			// });
-
+		$(".select2").select2({dropdownParent: $('#new-data-modal')});
+		$(".select2-placeholder-multiple").select2({placeholder: "-- โปรดระบุ --"});
+		$(".js-hide-search").select2({dropdownParent: $('#new-data-modal') ,minimumResultsForSearch: 1/0});
+		$(".js-max-length").select2({maximumSelectionLength: 2, placeholder: "Select maximum 2 items"});
+		$(".select2-placeholder").select2({placeholder: "-- โปรดเลือก --", allowClear: true,dropdownParent: $('#new-data-modal')});
 	});
-	// function formatRepo (repo) {
-	// 	if (repo.loading) return repo.text;
-	// 	var markup = "<div class='select2-result-repository clearfix'>" +
-	// 		"<div class='select2-result-repository__meta'>" +
-	// 		"<div class='select2-result-repository__title'>" + repo.value + "</div></div></div>";
-	// 		return markup;
-	// }
-	// function formatRepoSelection (repo) {
-	// 	return repo.value || repo.text;
-	// }
+	$("#validateOriginThreat").on("click", function() {
+		var swalWithBootstrapButtons = Swal.mixin({
+			customClass:{confirmButton: "btn btn-danger"},
+			buttonsStyling: false
+		});
+		swalWithBootstrapButtons.fire({
+			type: "error",
+			title: "ข้อมูลไม่ถูกต้อง...",
+			text: "โปรดตรวจสอบข้อมูลประเด็นมลพิษ!",
+			confirmButtonText: "ตกลง",
+			allowOutsideClick: false,
+			footer: "<a>Lab-EnvOcc</a>"
+		});
+	});
 });
 </script>
 @endsection
