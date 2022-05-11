@@ -90,7 +90,10 @@ class CustomersDataTable extends DataTable
 	 * @return \Illuminate\Database\Eloquent\Builder
 	 */
 	public function query(Order $order): object {
-		return $order->whereUser_id($this->user_id)->whereIn('order_status', ['pending', 'progress', 'completed'])->with('parameters')->orderBy('id', 'ASC');
+		return $order->whereUser_id($this->user_id)
+			->whereIn('order_status', ['pending', 'progress', 'completed'])
+			->with('parameters')
+			->orderBy('id', 'ASC');
 	}
 
 	/**

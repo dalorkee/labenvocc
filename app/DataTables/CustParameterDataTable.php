@@ -35,7 +35,7 @@ class CustParameterDataTable extends DataTable
 									<span class=\"badge badge-warning\">".$parameter->parameter_name."</span>
 									<span class=\"badge badge-info\">".$parameter->sample_charecter_name."</span>
 									<span class=\"badge badge-success\">".$parameter->unit_customer_name."</span>
-									<a href=\"".route('customer.parameter.data.destroy', ['id' => $parameter->id, 'order_sample_id' => $parameter->order_sample_id])."\" data-toggle=\"tooltip\" data-placement=\"auto\" title=\"ลบพารามิเตอร์ ".$parameter->parameter_name."\">
+									<a href=\"".route('customer.parameter.data.destroy', ['id'=>$parameter->id, 'order_sample_id'=>$parameter->order_sample_id, 'order_id'=>$parameter->order_id])."\" data-toggle=\"tooltip\" data-placement=\"auto\" title=\"ลบพารามิเตอร์ ".$parameter->parameter_name."\">
 										<i class=\"fal fa-times-circle text-danger\"></i>
 									</a>
 								</div>";
@@ -48,7 +48,9 @@ class CustParameterDataTable extends DataTable
 							});
 							return number_format($sum_price);
 						})
-						->addColumn('action', '<button class="context-nav bg-purple-400 hover:bg-purple-500 text-white py-1 px-3 rounded" id="context-menu" data-id="{{$id}}">xจัดการ <i class="fal fa-angle-down"></i></button>')
+						->addColumn('action', function($orderSample) {
+							return "<button class=\"context-nav bg-purple-400 hover:bg-purple-500 text-white py-1 px-3 rounded\" id=\"context-menu\" data-order_id=\"".$orderSample->order_id."\" data-id=\"".$orderSample->id."\">จัดการ <i class=\"fal fa-angle-down\"></i></button>";
+						})
 						->rawColumns(['firstname', 'lastname', 'parameter', 'total_price', 'action']);
 					break;
 				case 'private':
@@ -65,7 +67,7 @@ class CustParameterDataTable extends DataTable
 									<span class=\"badge badge-warning\">".$parameter->parameter_name."</span>
 									<span class=\"badge badge-danger\">".$parameter->sample_charecter_name."</span>
 									<span class=\"badge badge-info\">".$parameter->unit_customer_name."</span>
-									<a href=\"".route('customer.parameter.data.destroy', ['id' => $parameter->id, 'order_sample_id' => $parameter->order_sample_id])."\" data-toggle=\"tooltip\" data-placement=\"auto\" title=\"ลบพารามิเตอร์ ".$parameter->parameter_name."\">
+									<a href=\"".route('customer.parameter.data.destroy', ['id'=>$parameter->id, 'order_sample_id'=>$parameter->order_sample_id, 'order_id'=>$parameter->order_id])."\" data-toggle=\"tooltip\" data-placement=\"auto\" title=\"ลบพารามิเตอร์ ".$parameter->parameter_name."\">
 										<i class=\"fal fa-times-circle\"></i>
 									</a>
 								</div>";
@@ -73,7 +75,7 @@ class CustParameterDataTable extends DataTable
 						})
 						->addColumn('action', function($orderSample) {
 							//return "<button class=\"context-nav bg-purple-400 hover:bg-purple-500 text-white py-1 px-3 rounded\" id=\"context-menu\" data-oid=\"".$orderSample->order_id."\" data-osid=\"".$orderSample->id."\">จัดการ <i class=\"fal fa-angle-down\"></i></button>";
-							return "<button class=\"context-nav bg-purple-600 hover:bg-purple-500 text-white py-1 px-3 rounded\" data-id=\"".$orderSample->id."\">จัดการ <i class=\"fal fa-angle-down\"></i></button>";
+							return "<button class=\"context-nav bg-purple-600 hover:bg-purple-500 text-white py-1 px-3 rounded\" data-order_id=\"".$orderSample->order_id."\" data-id=\"".$orderSample->id."\">จัดการ <i class=\"fal fa-angle-down\"></i></button>";
 
 						})
 						->rawColumns(['parameter', 'action']);

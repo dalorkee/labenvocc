@@ -331,6 +331,7 @@ div.dataTables_wrapper span.select-item {margin-left: 0.5em;}
 					</div>
 					<div class="row">
 						<div class="col text-center">
+							<input type="hidden" name="order_id" value="{{ $order[0]->id }}">
 							<input type="hidden" name="hidden_order_id" value="{{ $order[0]->id }}" id="hidden_order_id">
 							<input type="hidden" name="hidden_order_sample_id" value="" id="hidden_order_sample_id">
 							<button type="submit" class="btn btn-success btn-lg">บันทึกข้อมูล</button>
@@ -470,23 +471,13 @@ $(document).ready(function() {
 							order: [[1, 'asc']]
 						});
 						$('#add-parameter-modal').modal('show');
-
-						/*$('#add_paramets').on('submit', function(e) {
-							var form = $('#add_paramets');
-							$('input[name="paramets\[\]"]', form).remove();
-							var rows_selected = table.column(0).checkboxes.selected();
-							$.each(rows_selected, function(index, rowId) {
-								var i = parseInt(rowId-1);
-							   var d = table.row(i).data();
-								$(form).append($('<input>').attr('type', 'hidden').attr('name', 'paramets[]').val(d.parameter_name));
-							});
-							e.preventDefault();
-						});*/
 					break;
 				case 'delete':
 					let del_id = $(this).data('id');
-					let del_url = "{{ route('customer.parameter.personal.destroy', ['id'=>':id']) }}";
+					let order_id = $(this).data('order_id');
+					let del_url = "{{ route('customer.parameter.personal.destroy', ['id'=>':id', 'order_id'=>':order_id']) }}";
 					del_url = del_url.replace(':id', del_id);
+					del_url = del_url.replace(':order_id', order_id);
 					var swalWithBootstrapButtons = Swal.mixin({
 						customClass:{confirmButton: "btn btn-danger",cancelButton: "btn btn-primary mr-2"},
 						buttonsStyling: false

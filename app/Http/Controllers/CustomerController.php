@@ -19,6 +19,7 @@ class CustomerController extends Controller
 	public function __construct() {
 		$this->middleware('auth');
 		$this->middleware(['role:root|admin|customer']);
+		$this->middleware('is_order_confirmed');
 		$this->middleware(function($request, $next) {
 			$this->user = Auth::user();
 			$user_role_arr = $this->user->roles->pluck('name')->all();
@@ -27,17 +28,9 @@ class CustomerController extends Controller
 		});
 	}
 
-	private function isOrderConfirmed(int $order_id=0): bool {
-		$order = Order::select('id')->whereId($order_id)->whereNotNull('order_confirmed')->count();
-		if ($order > 0) {
-			return true;
-		}
-		return false;
-	}
-
 	#[Route('customer.index', methods: ['RESOURCE'])]
-	protected function index(CustomersDataTable $dataTable, $user_id=0): object {
-		return $dataTable->with('user_id', $this->user->id)->render(view: 'apps.customers.index');
+	protected function index(CustomersDataTable $dataTable, int $user_id=0): object {
+		return $dataTable->with('user_id', (int)$this->user->id)->render(view: 'apps.customers.index');
 	}
 
 	#[Route('customer.info.create', methods: ['GET'])]
