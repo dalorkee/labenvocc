@@ -9,6 +9,7 @@ use App\Http\Controllers\{
 	RegisterGovernmentController,
 	RegisterStaffController,
 	CustomerController,
+	StaffController,
 	UserAdvertiseController,
 	SampleUploadController,
 	HospitalController
@@ -79,12 +80,13 @@ Route::name('register.')->group(function() {
 });
 Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 	Route::resources([
-		'customer'=> CustomerController::class,
-		'office'=>OfficeController::class,
-		'paramet'=>ParametController::class,
-		'users'=>UsersController::class,
-		'advertise'=>AdvertiseController::class,
-		'sampleupload'=>SampleUploadController::class,
+		'customer' => CustomerController::class,
+		'staff' => StaffController::class,
+		'office' => OfficeController::class,
+		'paramet' => ParametController::class,
+		'users' => UsersController::class,
+		'advertise' => AdvertiseController::class,
+		'sampleupload' => SampleUploadController::class,
 	]);
 	Route::get('/dashboard', function() {
 		return view('dashboard');
@@ -121,6 +123,10 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 			Route::post('/store/order', [CustomerController::class, 'storeVerify'])->name('verify.store');
 		});
 	});
+	// Route::name('staff.')->group(function() {
+	// 	Route::prefix('staff')->group(function() {
+	// 	});
+	// });
 	Route::get('/admin/home', [AdminController::class, 'index'])->name('admin.index');
 	Route::get('/users/id/{id}/edit',[UsersController::class,'edit'])->name('users.edit');
 	Route::get('/users/id/{id}/destroy',[UsersController::class,'destroy'])->name('users.destroy');

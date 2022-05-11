@@ -27,19 +27,19 @@ class JetstreamServiceProvider extends ServiceProvider
 	 * @return void
 	 */
 	public function boot() {
-        $public_relate = Advertise::where('advertise_type','ประชาสัมพันธ์')->orderBy('id','Desc')->limit(3)->get();
+		$public_relate = Advertise::where('advertise_type','ประชาสัมพันธ์')->orderBy('id','Desc')->limit(3)->get();
 		$std_quality = Advertise::where('advertise_type','มาตราฐานคุณภาพ')->orderBy('id','Desc')->limit(1)->get();
 		$advertise = array($public_relate,$std_quality);
-        Fortify::loginView(function () use ($advertise) {
-            return view('auth.login', ['advertise' => $advertise]);
-        });
+		Fortify::loginView(function () use ($advertise) {
+			return view('auth.login', ['advertise' => $advertise]);
+		});
 
-		// pj $this->configurePermissions(); */
+		/* pj $this->configurePermissions(); */
 
-		// pj Jetstream::deleteUsersUsing(DeleteUser::class); */
+		/* pj Jetstream::deleteUsersUsing(DeleteUser::class); */
 
 		// we now register our new classes to override the default classes for but normal login and two factor authentication
-/* 		PJ $this->app->singleton(
+		/* PJ $this->app->singleton(
 			\Laravel\Fortify\Contracts\LoginResponse::class,
 			\App\Http\Responses\LoginResponse::class
 		);

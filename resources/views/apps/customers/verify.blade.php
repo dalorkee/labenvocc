@@ -136,8 +136,9 @@ table.dataTable thead th {background-color: #056676;color: white}
 											<span aria-hidden="true"><i class="fal fa-times"></i></span>
 										</button>
 									</div>
-									<div class="modal-body mt-2 mb-2">
-										<span class="text-danger mt-2 mb-2">โปรดตรวจสอบ เมื่อส่งคำขอแล้ว จะไม่สามารถแก้ไขข้อมูลได้อีก !!</span>
+									<div class="modal-body">
+										<h3 class="text-center text-danger mt-2 mb-4">โปรดตรวจสอบข้อมูล !!</h3>
+										<p class="text-center text-primary">เมื่อส่งคำขอแล้ว จะไม่สามารถแก้ไขข้อมูลได้อีก !!</p>
 									</div>
 									<div class="modal-footer">
 										<button type="button" class="btn btn-secondary" data-dismiss="modal">ยกเลิก</button>
@@ -171,25 +172,6 @@ table.dataTable thead th {background-color: #056676;color: white}
 <script>
 $(document).ready(function() {
 	$.ajaxSetup({headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}});
-
-
-	$("#js-sweetalert2-example-7").on("click", function()
-				{
-					Swal.fire(
-					{
-						title: "Are you sure?",
-						text: "You won't be able to revert this!",
-						type: "warning",
-						showCancelButton: true,
-						confirmButtonText: "Yes, delete it!"
-					}).then(function(result)
-					{
-						if (result.value)
-						{
-							Swal.fire("Deleted!", "Your file has been deleted.", "success");
-						}
-					});
-				});
 });
 </script>
 @endsection
