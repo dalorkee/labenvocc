@@ -17,11 +17,11 @@ class LoginResponse implements ContractsLoginResponse
 		//return redirect()->intended(config('fortify.admin.home'));
 
 		/* by pj */
-        dd(Auth::user());
-		if (Auth::user()->user_status == 'อนุญาต' && Auth::user()->approved == 'y') {
-			return redirect()->route('home.index');
-		} else {
-			return redirect()->route('logout');
-		}
+		dd('pj');
+		// if (Auth::user()->user_status == 'อนุญาต' && Auth::user()->approved == 'y') {
+		// 	return redirect()->route('home.index');
+		// } else {
+		// 	return redirect()->route('logout');
+		// }
 	}
 }

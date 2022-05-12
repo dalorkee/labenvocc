@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Auth;
 class HomeController extends Controller
 {
 	public function index(): object {
-		if (Auth::check() == 'true') {
+		if (Auth::check() == 'true' && Auth::user()->user_status == 'อนุญาต' && Auth::user()->approved == 'y') {
 			switch ($this->userRole()) {
 				case 'root':
 				case 'admin':

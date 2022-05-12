@@ -10,7 +10,7 @@
 		"guzzlehttp/guzzle": "^7.0.1",
 		"illuminate/database": "^9.8",
 		"kineticamobile/lumki": "^0.1.9",
-		"laravel/framework": "^9.0",
+		"laravel/framework": "^9.1",
 		"laravel/jetstream": "^2.3",
 		"laravel/sanctum": "^2.6",
 		"laravel/tinker": "^2.5",

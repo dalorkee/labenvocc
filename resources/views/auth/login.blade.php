@@ -2,12 +2,8 @@
 @section('style')
 <link rel="stylesheet" href="{{ URL::asset('css/register_staff.css') }}">
 <style>
-.input-group-text {
-	background-color: #F3F3F3 !important;
-}
-.toggle-password {
-	color: #1AB3A3;
-}
+.input-group-text {background-color: #F3F3F3 !important;}
+.toggle-password {color: #1AB3A3;}
 </style>
 @endsection
 @section('content')
@@ -88,16 +84,16 @@
 											</div>
 											<a href="{{ route('advertise.detail',$public_relate->id) }}" class="btn btn-outline-success btn-sm btn-w-m">รายละเอียด</a>
 										</div>
-									</div>											
-								@endforeach										
+									</div>
+								@endforeach
 								</section>
 							</div>
-						</div>							
+						</div>
 					</div>
 					<a class="btn btn-info text-white" href="{{ route('user.advertise.listall',['listall'=>'public']) }}">ดูทั้งหมด</a>
 				</fieldset>
 			</div>
-			<div class="col-md-12 mt-4">				
+			<div class="col-md-12 mt-4">
 				<fieldset style="padding:30px; border: 1px solid #d3ebe8">
 					<legend style="width:auto;padding:2px;color:#39675D;font-size:1.10em">มาตรฐานคุณภาพ</legend>
 					<div class="card m-0 p-0 shadow-0" style="border:none;background: none;">
@@ -108,7 +104,7 @@
 									<div class="fs-xl fw-500 color-success-600">
 										<span class="h5 color-success-600">{{ $std_quality->advertise_detail }}</span>
 									</div>
-								@endforeach	
+								@endforeach
 								</section>
 							</div>
 						</div>

@@ -2,7 +2,7 @@
 						<div class="page-logo">
 							<a href="#" class="page-logo-link press-scale-down d-flex align-items-center position-relative" data-toggle="modal" data-target="#modal-shortcut">
 								<img src="{{ URL::asset('assets/img/small-moph-logo.png') }}" alt="pj logo" aria-roledescription="logo">
-								<span class="page-logo-text mr-1">LAB ENV-OCC</span>
+								<span class="page-logo-text mr-1">{{ env('APP_NAME') }}</span>
 								<span class="position-absolute text-white opacity-50 small pos-top pos-right mr-2 mt-n2"></span>
 								<i class="fal fa-angle-down d-inline-block ml-1 fs-lg color-primary-300"></i>
 							</a>
@@ -424,9 +424,6 @@
 										</div>
 									</div>
 									<div class="dropdown-divider m-0"></div>
-									<a href="#" class="dropdown-item" data-action="app-reset">
-										<span data-i18n="drpdwn.reset_layout">Reset Layout</span>
-									</a>
 									<a href="#" class="dropdown-item" data-toggle="modal" data-target=".js-modal-settings">
 										<span data-i18n="drpdwn.settings">Settings</span>
 									</a>
