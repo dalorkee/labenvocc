@@ -31,7 +31,7 @@
 		<div class="border px-3 pt-3 pb-0 rounded">
 			<ul class="nav nav-pills" role="tablist">
 				<li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#js_pill_border_icon-1"><i class="fal fa-user mr-1"></i>ข้อมูลส่วนตัว</a></li>
-				<li class="nav-item"><a class="nav-link" data-toggle="tab" href="#js_pill_border_icon-2"><i class="fal fa-envelope mr-1"></i>กล่องข้อความ</a></li>
+				<li class="nav-item"><a class="nav-link" data-toggle="tab" href="#js_pill_border_icon-2" id="jetkhe"><i class="fal fa-envelope mr-1"></i>กล่องข้อความ</a></li>
 				<li class="nav-item"><a class="nav-link" data-toggle="tab" href="#js_pill_border_icon-3"><i class="fal fa-calendar-check mr-1"></i>ปฏิทินงาน</a></li>
 			</ul>
 			<div class="tab-content py-3">
@@ -53,58 +53,44 @@
 													<i class="fal fa-circle"></i>
 												</a>
 												<a href="javascript:void(0);" class="fs-xl" style="color:#38A1F3">
-                                                    <i class="fal fa-circle"></i>
+													<i class="fal fa-circle"></i>
 												</a>
 												<a href="javascript:void(0);" class="fs-xl" style="color:#db3236">
-                                                    <i class="fal fa-circle"></i>
+													<i class="fal fa-circle"></i>
 												</a>
 												<a href="javascript:void(0);" class="fs-xl" style="color:#0077B5">
-                                                    <i class="fal fa-circle"></i>
+													<i class="fal fa-circle"></i>
 												</a>
 												<a href="javascript:void(0);" class="fs-xl" style="color:#000000">
-                                                    <i class="fal fa-circle"></i>
+													<i class="fal fa-circle"></i>
 												</a>
 												<a href="javascript:void(0);" class="fs-xl" style="color:#00AFF0">
-                                                    <i class="fal fa-circle"></i>
+													<i class="fal fa-circle"></i>
 												</a>
 												<a href="javascript:void(0);" class="fs-xl" style="color:#0063DC">
-                                                    <i class="fal fa-circle"></i>
+													<i class="fal fa-circle"></i>
 												</a>
 											</div>
 										</div>
 									</div>
 									<div class="col-12">
 										<div class="text-center py-3">
-
-                                            <div class="ml-3">
-                                                <strong>
-                                                    ชื่อ-สกุล
-                                                </strong>
-                                                <br>
-                                                {{ auth()->user()->userStaff->first_name.' '.auth()->user()->userStaff->last_name }}
-                                            </div>
-                                            <div class="mt-3 ml-3">
-                                                <strong>
-                                                    ตำแหน่ง
-                                                </strong>
-                                                <br>
-                                                นักวิทยาศาสตร์การแพทย์
-                                            </div>
-                                            <div class="mt-3 ml-3">
-                                                <strong>
-                                                    สังกัด
-                                                </strong>
-                                                <br>
-                                                ศูนย์อ้างอิงทางห้องปฏิบัติการและพิษวิทยา
-                                            </div>
-                                            <div class="mt-3 ml-3">
-                                                <strong>
-                                                    หน้าที่รับผิดชอบ
-                                                </strong>
-                                                <br>
-                                                ผู้รับตัวอย่าง
-
-                                            </div>
+											<div class="ml-3">
+												<strong>ชื่อ-สกุล</strong>
+												<p class="text-indigo-400">{{ auth()->user()->userStaff->first_name.' '.auth()->user()->userStaff->last_name }}</p>
+											</div>
+											<div class="mt-3 ml-3">
+												<strong>ตำแหน่ง</strong>
+												<p class="text-indigo-400">นักวิทยาศาสตร์การแพทย์</p>
+											</div>
+											<div class="mt-3 ml-3">
+												<strong>สังกัด</strong>
+												<p class="text-indigo-400">ศูนย์อ้างอิงทางห้องปฏิบัติการและพิษวิทยา</p>
+											</div>
+											<div class="mt-3 ml-3">
+												<strong>หน้าที่รับผิดชอบ</strong>
+												<p class="text-indigo-400">ผู้รับตัวอย่าง</p>
+											</div>
 										</div>
 									</div>
 									<div class="col-12">
@@ -114,9 +100,9 @@
 									</div>
 								</div>
 							</div>
-                        </div>
+						</div>
 
-                    </div>
+					</div>
 
 
 				</div>
@@ -124,10 +110,24 @@
 
 
 				<div class="tab-pane fade" id="js_pill_border_icon-2" role="tabpanel">
-					Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl cillum PBR. Homo nostrud organic.
+					<div class="row">
+						<div class="col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
+							<table id="talek_team" class="table table-bordered text-sm">
+								<thead class="bg-gray-300">
+									<tr>
+										<th>Id</th>
+										<th>order_no</th>
+										<th>order_type</th>
+									</tr>
+								</thead>
+								<tfoot></tfoot>
+								<tbody></tbody>
+							</table>
+						</div>
+					</div>
 				</div>
 				<div class="tab-pane fade" id="js_pill_border_icon-3" role="tabpanel">
-					Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney's organic lomo retro fanny pack lo-fi farm-to-table readymade. Messenger bag gentrify pitchfork tattooed craft beer, iphone skateboard locavore carles etsy salvia banksy hoodie helvetica. DIY synth PBR banksy irony. Leggings gentrify squid 8-bit cred pitchfork.
+					this calendar
 				</div>
 			</div>
 		</div>
@@ -138,5 +138,22 @@
 <script type="text/javascript" src="{{ URL::asset('assets/js/datagrid/datatables/datatables.bundle.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/buttons.server-side.js') }}"></script>
 <script type="text/javascript">$(document).ready(function(){$.ajaxSetup({headers:{'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')}});});</script>
-{{-- {{ $dataTable->scripts() }} --}}
+<script type="text/javascript">
+$(function() {
+	$('#jetkhe').on('click', function() {
+		$('#talek_team').dataTable().fnClearTable();
+		$('#talek_team').dataTable().fnDestroy();
+		$('#talek_team').DataTable({
+			processing: true,
+			serverSide: true,
+			ajax: "{{ route('staff.list') }}",
+			columns: [
+				{ data: 'id', name: 'id' },
+				{ data: 'order_no', name: 'order_no' },
+				{ data: 'order_type', name: 'order_type' }
+			]
+		});
+	});
+});
+</script>
 @endsection

@@ -37,7 +37,8 @@ Route::resources([
 	'registerPersonal' => RegisterPersonalController::class,
 	'registerStaff' => RegisterStaffController::class,
 	'roles' => RoleController::class,
-	'permissions' => PermissionController::class
+	'permissions' => PermissionController::class,
+    'staff' => StaffController::class,
 ]);
 Route::name('register.')->group(function() {
 	Route::prefix('register/personal')->group(function() {
@@ -81,7 +82,7 @@ Route::name('register.')->group(function() {
 Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 	Route::resources([
 		'customer' => CustomerController::class,
-		'staff' => StaffController::class,
+		//'staff' => StaffController::class,
 		'office' => OfficeController::class,
 		'paramet' => ParametController::class,
 		'users' => UsersController::class,
@@ -123,10 +124,10 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 			Route::post('/store/order', [CustomerController::class, 'storeVerify'])->name('verify.store');
 		});
 	});
-	// Route::name('staff.')->group(function() {
-	// 	Route::prefix('staff')->group(function() {
-	// 	});
-	// });
+
+	Route::name('staff.')->group(function() {
+        Route::get('/list', [StaffController::class, 'createx'])->name('list');
+	});
 	Route::get('/admin/home', [AdminController::class, 'index'])->name('admin.index');
 	Route::get('/users/id/{id}/edit',[UsersController::class,'edit'])->name('users.edit');
 	Route::get('/users/id/{id}/destroy',[UsersController::class,'destroy'])->name('users.destroy');

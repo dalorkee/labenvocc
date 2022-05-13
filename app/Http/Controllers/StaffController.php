@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use App\Models\Order;
+use Yajra\DataTables\Facades\DataTables;
 
 class StaffController extends Controller
 {
@@ -20,9 +23,12 @@ class StaffController extends Controller
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function create()
-	{
-		//
+	public function createx() {
+        try {
+		    return Datatables::of(Order::query())->make(true);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+        }
 	}
 
 	/**

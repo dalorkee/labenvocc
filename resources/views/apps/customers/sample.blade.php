@@ -300,7 +300,7 @@
 <script type="text/javascript" src="{{ URL::asset('js/buttons.server-side.js') }}"></script>
 <script>function newData(){$('#new-data-modal').modal('show')}</script>
 {{ $dataTable->scripts() }}
-<script>
+<script type="text/javascript">
 $(document).ready(function() {
 	$.ajaxSetup({headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}});
 	var order_id = $('#order_id').val();
