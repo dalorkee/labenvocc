@@ -3,7 +3,6 @@
 <meta name="csrf-token" content="{{ csrf_token() }}">
 @endsection
 @section('style')
-<link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/css/datagrid/datatables/datatables.bundle.css') }}">
 <style>
 .btn-group {margin:0;padding:0;}
 .dt-buttons {display:flex;flex-direction:row;flex-wrap:wrap;justify-content:flex-end;}
@@ -26,17 +25,16 @@
 <ol class="breadcrumb page-breadcrumb text-sm font-prompt">
 	<li class="breadcrumb-item"><i class="fal fa-home mr-1"></i> <a href="{{ route('staff.index') }}">หน้าหลัก</a></li>
 </ol>
-<div class="row text-sm font-prompt">
+<div class="row font-prompt">
 	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
 		<div class="border px-3 pt-3 pb-0 rounded">
-			<ul class="nav nav-pills" role="tablist">
-				<li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#js_pill_border_icon-1"><i class="fal fa-user mr-1"></i>ข้อมูลส่วนตัว</a></li>
-				<li class="nav-item"><a class="nav-link" data-toggle="tab" href="#js_pill_border_icon-2" id="jetkhe"><i class="fal fa-envelope mr-1"></i>กล่องข้อความ</a></li>
-				<li class="nav-item"><a class="nav-link" data-toggle="tab" href="#js_pill_border_icon-3"><i class="fal fa-calendar-check mr-1"></i>ปฏิทินงาน</a></li>
+			<ul class="nav" role="tablist">
+				<li class="nav-item"><a class="nav-link btn btn-sm btn-danger" href="{{ route('staff.index') }}"><i class="fal fa-user mr-1"></i>ข้อมูลส่วนตัว</a></li>
+				<li class="nav-item"><a class="nav-link" href="{{ route('staff.inbox') }}"><i class="fal fa-envelope mr-1"></i>กล่องข้อความ</a></li>
+				<li class="nav-item"><a class="nav-link" href="{{ route('staff.calendar') }}"><i class="fal fa-calendar-check mr-1"></i>ปฏิทินงาน</a></li>
 			</ul>
 			<div class="tab-content py-3">
 				<div class="tab-pane fade show active" id="js_pill_border_icon-1" role="tabpanel">
-
 					<div class="row">
 						<div class="col-lg-12 col-xl-12 order-lg-1 order-xl-1">
 							<div class="card mb-g rounded-top">
@@ -101,33 +99,7 @@
 								</div>
 							</div>
 						</div>
-
 					</div>
-
-
-				</div>
-
-
-
-				<div class="tab-pane fade" id="js_pill_border_icon-2" role="tabpanel">
-					<div class="row">
-						<div class="col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
-							<table id="talek_team" class="table table-bordered text-sm">
-								<thead class="bg-gray-300">
-									<tr>
-										<th>Id</th>
-										<th>order_no</th>
-										<th>order_type</th>
-									</tr>
-								</thead>
-								<tfoot></tfoot>
-								<tbody></tbody>
-							</table>
-						</div>
-					</div>
-				</div>
-				<div class="tab-pane fade" id="js_pill_border_icon-3" role="tabpanel">
-					this calendar
 				</div>
 			</div>
 		</div>
@@ -135,25 +107,9 @@
 </div>
 @endsection
 @section('script')
-<script type="text/javascript" src="{{ URL::asset('assets/js/datagrid/datatables/datatables.bundle.js') }}"></script>
-<script type="text/javascript" src="{{ URL::asset('js/buttons.server-side.js') }}"></script>
-<script type="text/javascript">$(document).ready(function(){$.ajaxSetup({headers:{'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')}});});</script>
 <script type="text/javascript">
-$(function() {
-	$('#jetkhe').on('click', function() {
-		$('#talek_team').dataTable().fnClearTable();
-		$('#talek_team').dataTable().fnDestroy();
-		$('#talek_team').DataTable({
-			processing: true,
-			serverSide: true,
-			ajax: "{{ route('staff.list') }}",
-			columns: [
-				{ data: 'id', name: 'id' },
-				{ data: 'order_no', name: 'order_no' },
-				{ data: 'order_type', name: 'order_type' }
-			]
-		});
-	});
+$(document).ready(function() {
+	$.ajaxSetup({headers:{'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')}});
 });
 </script>
 @endsection

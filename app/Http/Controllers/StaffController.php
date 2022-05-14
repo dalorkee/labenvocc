@@ -23,13 +23,21 @@ class StaffController extends Controller
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function createx() {
+	public function profile() {
         try {
 		    return Datatables::of(Order::query())->make(true);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
         }
 	}
+
+    public function inbox() {
+        return view('apps.staff.inbox');
+    }
+
+    public function calendar() {
+        return view('apps.staff.calendar');
+    }
 
 	/**
 	 * Store a newly created resource in storage.

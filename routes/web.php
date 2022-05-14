@@ -126,7 +126,10 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 	});
 
 	Route::name('staff.')->group(function() {
-        Route::get('/list', [StaffController::class, 'createx'])->name('list');
+        Route::get('/profile', [StaffController::class, 'profile'])->name('profile');
+        Route::get('/inbox', [StaffController::class, 'inbox'])->name('inbox');
+        Route::get('/calendar', [StaffController::class, 'calendar'])->name('calendar');
+
 	});
 	Route::get('/admin/home', [AdminController::class, 'index'])->name('admin.index');
 	Route::get('/users/id/{id}/edit',[UsersController::class,'edit'])->name('users.edit');

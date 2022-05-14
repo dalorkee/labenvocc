@@ -88,7 +88,7 @@
 			@case('staff')
 				<li class="nav-title">Navigation</li>
 				<li class="active open">
-					<a href="#" title="หน้าหลัก" data-filter-tags="home">
+					<a href="{{ route('staff.index') }}" title="หน้าหลัก" data-filter-tags="home">
 						<i class="fal fa-home"></i>
 						<span class="nav-link-text">หน้าหลัก</span>
 					</a>
