@@ -46,7 +46,7 @@
 					</a>
 					<ul>
 						<li>
-							<a href="{{ route('sampleupload.index') }}" title="Biological" data-filter-tags="biological">
+							<a href="{{ route('sampleupload.index',['order_id' => 'new']) }}" title="Biological" data-filter-tags="biological">
 								<span class="nav-link-text" data-i18n="nav.biological">ตัวอย่างชีวภาพ</span>
 							</a>
 						</li>
