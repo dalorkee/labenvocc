@@ -9,7 +9,8 @@ use App\Http\Controllers\{
 	RegisterGovernmentController,
 	RegisterStaffController,
 	CustomerController,
-	StaffController,
+	StaffHomeController,
+	StaffSampleReceiveController,
 	UserAdvertiseController,
 	SampleUploadController,
 	HospitalController
@@ -38,7 +39,6 @@ Route::resources([
 	'registerStaff' => RegisterStaffController::class,
 	'roles' => RoleController::class,
 	'permissions' => PermissionController::class,
-    'staff' => StaffController::class,
 ]);
 Route::name('register.')->group(function() {
 	Route::prefix('register/personal')->group(function() {
@@ -82,12 +82,12 @@ Route::name('register.')->group(function() {
 Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 	Route::resources([
 		'customer' => CustomerController::class,
-		//'staff' => StaffController::class,
 		'office' => OfficeController::class,
 		'paramet' => ParametController::class,
 		'users' => UsersController::class,
 		'advertise' => AdvertiseController::class,
 		'sampleupload' => SampleUploadController::class,
+		'staffReceive' => StaffSampleReceiveController::class,
 	]);
 	Route::get('/dashboard', function() {
 		return view('dashboard');
@@ -126,9 +126,11 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 	});
 
 	Route::name('staff.')->group(function() {
-        Route::get('/profile', [StaffController::class, 'profile'])->name('profile');
-        Route::get('/inbox', [StaffController::class, 'inbox'])->name('inbox');
-        Route::get('/calendar', [StaffController::class, 'calendar'])->name('calendar');
+		Route::get('/home', [StaffHomeController::class, 'index'])->name('index');
+		Route::get('/profile', [StaffHomeController::class, 'profile'])->name('profile');
+		Route::get('/inbox', [StaffHomeController::class, 'inbox'])->name('inbox');
+		Route::get('/inbox/list', [StaffHomeController::class, 'getInbox'])->name('get.inbox');
+		Route::get('/calendar', [StaffHomeController::class, 'calendar'])->name('calendar');
 
 	});
 	Route::get('/admin/home', [AdminController::class, 'index'])->name('admin.index');

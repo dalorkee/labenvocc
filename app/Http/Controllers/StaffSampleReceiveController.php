@@ -3,19 +3,17 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
-use App\Models\Order;
-use Yajra\DataTables\Facades\DataTables;
 
-class StaffController extends Controller
+class StaffSampleReceiveController extends Controller
 {
 	/**
 	 * Display a listing of the resource.
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function index(): object {
-		return view(view: 'apps.staff.index');
+	public function index()
+	{
+		return view(view: 'apps.receive.index');
 	}
 
 	/**
@@ -23,21 +21,10 @@ class StaffController extends Controller
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function profile() {
-        try {
-		    return Datatables::of(Order::query())->make(true);
-        } catch (\Exception $e) {
-            Log::error($e->getMessage());
-        }
+	public function create()
+	{
+		//
 	}
-
-    public function inbox() {
-        return view('apps.staff.inbox');
-    }
-
-    public function calendar() {
-        return view('apps.staff.calendar');
-    }
 
 	/**
 	 * Store a newly created resource in storage.

@@ -94,7 +94,7 @@
 					</a>
 				</li>
 				<li>
-					<a href="#" title="งานรับตัวอย่าง" data-filter-tags="specimen">
+					<a href="{{ route('staffReceive.index') }}" title="งานรับตัวอย่าง" data-filter-tags="specimen">
 						<i class="fal fa-cube"></i>
 						<span class="nav-link-text">งานรับตัวอย่าง</span>
 					</a>
