@@ -87,14 +87,14 @@
 			@case('admin')
 			@case('staff')
 				<li class="nav-title">Navigation</li>
-				<li class="active open">
+				<li class="{{ (Request::is('staff/*'))  ? 'active' : '' }}">
 					<a href="{{ route('staff.index') }}" title="หน้าหลัก" data-filter-tags="home">
 						<i class="fal fa-home"></i>
 						<span class="nav-link-text">หน้าหลัก</span>
 					</a>
 				</li>
-				<li>
-					<a href="{{ route('staffReceive.index') }}" title="งานรับตัวอย่าง" data-filter-tags="specimen">
+				<li class="{{ (Request::is('sample/receive'))  ? 'active' : '' }}">
+					<a href="{{ route('sample.receive.index') }}" title="งานรับตัวอย่าง" data-filter-tags="specimen">
 						<i class="fal fa-cube"></i>
 						<span class="nav-link-text">งานรับตัวอย่าง</span>
 					</a>

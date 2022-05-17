@@ -9,8 +9,8 @@ use App\Http\Controllers\{
 	RegisterGovernmentController,
 	RegisterStaffController,
 	CustomerController,
-	StaffHomeController,
-	StaffSampleReceiveController,
+	StaffController,
+	SampleReceiveController,
 	UserAdvertiseController,
 	SampleUploadController,
 	HospitalController
@@ -87,8 +87,10 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 		'users' => UsersController::class,
 		'advertise' => AdvertiseController::class,
 		'sampleupload' => SampleUploadController::class,
-		'staffReceive' => StaffSampleReceiveController::class,
 	]);
+	Route::prefix('sample')->name('sample.')->group(function() {
+		Route::resource('receive', SampleReceiveController::class);
+	});
 	Route::get('/dashboard', function() {
 		return view('dashboard');
 	})->name('dashboard');
@@ -124,13 +126,12 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 			Route::post('/store/order', [CustomerController::class, 'storeVerify'])->name('verify.store');
 		});
 	});
-
-	Route::name('staff.')->group(function() {
-		Route::get('/home', [StaffHomeController::class, 'index'])->name('index');
-		Route::get('/profile', [StaffHomeController::class, 'profile'])->name('profile');
-		Route::get('/inbox', [StaffHomeController::class, 'inbox'])->name('inbox');
-		Route::get('/inbox/list', [StaffHomeController::class, 'getInbox'])->name('get.inbox');
-		Route::get('/calendar', [StaffHomeController::class, 'calendar'])->name('calendar');
+	Route::prefix('staff')->name('staff.')->group(function() {
+		Route::get('/home', [StaffController::class, 'index'])->name('index');
+		Route::get('/profile', [StaffController::class, 'profile'])->name('profile');
+		Route::get('/inbox', [StaffController::class, 'inbox'])->name('inbox');
+		Route::get('/inbox/list', [StaffController::class, 'getInbox'])->name('get.inbox');
+		Route::get('/calendar', [StaffController::class, 'calendar'])->name('calendar');
 
 	});
 	Route::get('/admin/home', [AdminController::class, 'index'])->name('admin.index');

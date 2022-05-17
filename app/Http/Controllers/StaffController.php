@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\{Auth,Log};
 use App\Models\Order,User;
 use Yajra\DataTables\Facades\DataTables;
 
-class StaffHomeController extends Controller
+class StaffController extends Controller
 {
 	private object $user;
 	private string $user_role;
@@ -37,7 +37,6 @@ class StaffHomeController extends Controller
 	}
 
 	public function inbox() {
-		$x = $this->user->load(['userStaff'])->toArray();
 		return view('apps.staff.inbox');
 	}
 
