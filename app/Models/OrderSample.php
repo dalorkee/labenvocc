@@ -12,11 +12,11 @@ class OrderSample extends Model
 	protected $primaryKey = 'id';
 
 	public function order() {
-		return $this->belongTo(Order::class)->withDefault();
+		return $this->belongTo(related: Order::class)->withDefault();
 	}
 
 	public function parameters() {
-		return $this->hasMany(OrderSampleParameter::class, 'order_sample_id');
+		return $this->hasMany(related: OrderSampleParameter::class, foreignKey: 'order_sample_id');
 	}
 
 	public static function boot() {

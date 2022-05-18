@@ -28,7 +28,7 @@ class CustomerController extends Controller
 		});
 	}
 
-	#[Route('customer.index', methods: ['resource'])]
+	#[Route('customer.index', methods: ['RESOURCE'])]
 	protected function index(CustomersDataTable $dataTable, int $user_id=0): object {
 		return $dataTable->with('user_id', (int)$this->user->id)->render(view: 'apps.customers.index');
 	}

@@ -34,15 +34,15 @@ class Order extends Model
 	protected $appends = ['book_date_js'];
 
 	public function orderSamples() {
-		return $this->hasMany(OrderSample::class);
+		return $this->hasMany(related: OrderSample::class);
 	}
 
 	public function parameters(){
-		return $this->hasManyThrough(OrderSampleParameter::class, OrderSample::class);
+		return $this->hasManyThrough(related: OrderSampleParameter::class, through: OrderSample::class);
 	}
 
 	public function uploads() {
-		return $this->hasMany(FileUpload::class);
+		return $this->hasMany(related: FileUpload::class);
 	}
 
 	public function getBookDateJsAttribute(): string {

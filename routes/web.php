@@ -90,6 +90,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 	]);
 	Route::prefix('sample')->name('sample.')->group(function() {
 		Route::resource('receive', SampleReceiveController::class);
+		Route::get('/receive/order/{order_id}/step01', [SampleReceiveController::class, 'step01'])->name('receive.step01');
 	});
 	Route::get('/dashboard', function() {
 		return view('dashboard');
