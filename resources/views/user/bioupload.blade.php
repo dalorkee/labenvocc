@@ -11,9 +11,9 @@
 @endsection
 @section('content')
 <ol class="breadcrumb page-breadcrumb text-sm font-prompt">
-	<li class="breadcrumb-item"><a href="javascript:void(0);">ส่งตัวอย่าง(upload)</a></li>
+	<li class="breadcrumb-item">ส่งตัวอย่าง (Upload)</li>
     <li class="breadcrumb-item">ชีวภาพ</li>
-    <li class="breadcrumb-item">ข้อมูลทั่วไป</li>
+    <li class="breadcrumb-item"><a href="javascript:void(0);">ข้อมูลทั่วไป</a></li>
 </ol>
 @if (Session::get('success'))
 	<div class="alert alert-success">
@@ -28,7 +28,7 @@
 	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
 		<div id="panel-customer" class="panel">
 			<div class="panel-hdr">
-				<h2 class="text-gray-600"><i class="fal fa-clipboard"></i>&nbsp;คำขอส่งตัวอย่างชีวภาพ</h2>
+				<h2 class="text-gray-600 text-primary"><i class="fal fa-clipboard"></i>&nbsp;คำขอส่งตัวอย่างชีวภาพ (Upload)</h2>
 				<div class="panel-toolbar">
 					<button class="btn btn-panel bg-transparent fs-xl w-auto h-auto rounded-0" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="Collapse"><i class="fal fa-window-minimize"></i></button>
 					<button class="btn btn-panel bg-transparent fs-xl w-auto h-auto rounded-0" data-action="panel-fullscreen" data-toggle="tooltip" data-offset="0,10" data-original-title="Fullscreen"><i class="fal fa-expand"></i></button>
@@ -51,7 +51,7 @@
 							@case('personal')
 								<div class="form-row">
 									<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
-										<label class="form-label" for="personal_name">ผู้ส่งตัวอย่าง <span class="text-red-600">*</span></label>
+										<label class="form-label text-primary" for="personal_name">ผู้ส่งตัวอย่าง <span class="text-red-600">*</span></label>
 										<input type="text" name="customer_name" value="{{$auth->userCustomer->first_name}} {{$auth->userCustomer->last_name}}" class="form-control" maxlength="60" readonly>
 									</div>
 								</div>
@@ -60,7 +60,7 @@
 							@case('government')
 								<div class="form-row">
 									<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
-										<label class="form-label" for="office_name">หน่วยงานที่ส่งตัวอย่าง <span class="text-red-600">*</span></label>
+										<label class="form-label text-primary" for="office_name">หน่วยงานที่ส่งตัวอย่าง <span class="text-red-600">*</span></label>
 										<input type="text" name="customer_name" value="{{$auth->userCustomer->first_name}} {{$auth->userCustomer->last_name}}" class="form-control" maxlength="80" readonly>
 										@error('customer_name')
 											<div class="invalid-feedback" role="alert">{{ $message }}</div>
@@ -71,7 +71,7 @@
 						@endswitch
 						<div class="form-row">                       {{--  edit to checked once --}}
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
-								<label class="form-label" for="type_of_work">ประเภทงาน <span class="text-red-600">*</span></label>
+								<label class="form-label text-primary" for="type_of_work">ประเภทงาน <span class="text-red-600">*</span></label>
 								<div class="frame-wrap">
 									<div class="custom-control custom-checkbox custom-control-inline">
 										<input type="checkbox" name="type_of_work" value="1" class="custom-control-input type-of-work1" id="type_of_work1">
@@ -96,8 +96,8 @@
 								</div>
 							</div>
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
-								<label class="form-label" for="type_of_work_other">ประเภทงานอื่นๆ ระบุ</label>
-								<input type="text" name="type_of_work_other" value="" id="type_of_work_other" class="form-control">
+								<label class="form-label text-primary" for="type_of_work_other">ประเภทงานอื่นๆ ระบุ</label>
+								<input type="text" name="type_of_work_other" id="type_of_work_other" class="form-control" disabled>
 								@error('type_of_work_other')
 									<div class="invalid-feedback" role="alert">{{ $message }}</div>
 								@enderror
@@ -105,14 +105,14 @@
 						</div>
 						<div class="form-row">
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
-								<label class="form-label" for="book_no">เลขที่หนังสือนำส่ง</label>
+								<label class="form-label text-primary" for="book_no">เลขที่หนังสือนำส่ง</label>
 								<input type="text" name="book_no" value="" class="form-control">
 								@error('book_no')
 									<div class="invalid-feedback" role="alert">{{ $message }}</div>
 								@enderror
 							</div>
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
-								<label class="form-label" for="book_date">ลงวันที่</label>
+								<label class="form-label text-primary" for="book_date">ลงวันที่</label>
 								<div class="input-group">
 									<input type="text" name="book_date" value="" placeholder="เลือกวันที่" class="form-control input-date" id="datepicker_book_date" readonly >
 									<div class="input-group-append">
@@ -128,7 +128,7 @@
 						</div>
 						<div class="form-row">
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
-								<label class="form-label" for="inputGroupFile01">แนบไฟล์หนังสือนำส่ง</label>
+								<label class="form-label text-primary" for="inputGroupFile01">แนบไฟล์หนังสือนำส่ง</label>
 								<div class="input-group">
 									<div class="custom-file">
 										<input type="file" name="book_file" class="custom-file-input" id="bookFile01" aria-describedby="bookFile01">
@@ -153,21 +153,6 @@
 		</div>
 	</div>
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -200,7 +185,7 @@
 			</div>
 		</div>
 	</div>
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+    {{-- <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
         <div id="panel-customer" class="panel">
             <div class="panel-hdr">
 				<h2 class="text-gray-600"><i class="fal fa-list"></i>&nbsp;รายการข้อมูลชีวภาพ</h2>
@@ -212,7 +197,7 @@
                         <div class="col-md-12 mb-6">
                             <form action="{{ route("sampleupload.biocreate") }}" method="POST">
                                 @csrf
-                                {{-- {{ $dataTable->table() }} --}}
+                                {{ $dataTable->table() }}
                                 <div><button type="submit" class="btn btn-info sendchkbio">ส่งข้อมูล</button></div>
                             </form>
                         </div>
@@ -220,7 +205,7 @@
 				</div>
             </div>
         </div>
-    </div>
+    </div> --}}
 </div>
 @endsection
 @section('script')
@@ -277,6 +262,17 @@
         //     alert(biourl);
         //     window.open(biourl,'_self');
         // });
+        $('input[name="type_of_work"]').on('change', function() {
+		$('input[name="' + this.name + '"]').not(this).prop('checked', false);
+		let chk = this.value;
+        alert(chk);
+		if (chk === '5') {
+			$('#type_of_work_other').prop('disabled', false);
+		} else {
+			$('#type_of_work_other').val('');
+			$('#type_of_work_other').prop('disabled', true);
+		}
+	});
 	});
 </script>
 @endsection
