@@ -28,7 +28,6 @@ class SampleUploadController extends Controller
     */
     public function index(){
         $auth =$this->user->load(['userCustomer']);
-        //dd($auth->userCustomer);
         return view('user.bioupload',compact('auth'));
     }
 
@@ -40,22 +39,10 @@ class SampleUploadController extends Controller
            'uploadbio' => 'required'
         ],[
             'uploadbio' => 'โปรดแนบไฟล์ Xls,Xlsx'
-        ]
-        );
+        ]);
         Excel::import(new SampleUploadImport,$request->file('uploadbio'));
         // return redirect('import-excel-csv')->with('status', 'The file has been imported in laravel 8');
         return redirect()->back()->with('success','upload OK');
-    }
-    public function biocreate(Request $request){
-        $validatedData = $request->validate([
-           'biobox' => 'required'
-        ]);
-        $dataReceive = $request->biobox;
-       foreach($dataReceive AS $val){
-           $bioId[] = $val;
-       }
-       $bioId = implode(',',$bioId);
-       echo $bioId;
     }
     /**
     * @return \Illuminate\Support\Collection

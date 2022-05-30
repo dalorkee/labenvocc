@@ -36,7 +36,7 @@
 				</div>
 			</div>
 			<div class="panel-container show">
-				<form name="saveInfo" action="{{ route('customer.info.store') }}" method="POST" enctype="multipart/form-data">
+				<form name="saveInfo" action="{{ route('sampleupload.bioimport') }}" method="POST" enctype="multipart/form-data">
 					@csrf
 					<input type="hidden" name="order_type" value="1">
 					<input type="hidden" name="order_type_name" value="ตัวอย่างชีวภาพ">
@@ -102,37 +102,14 @@
 									<div class="invalid-feedback" role="alert">{{ $message }}</div>
 								@enderror
 							</div>
-						</div>
+						</div>				
 						<div class="form-row">
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
-								<label class="form-label text-primary" for="book_no">เลขที่หนังสือนำส่ง</label>
-								<input type="text" name="book_no" value="" class="form-control">
-								@error('book_no')
-									<div class="invalid-feedback" role="alert">{{ $message }}</div>
-								@enderror
-							</div>
-							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
-								<label class="form-label text-primary" for="book_date">ลงวันที่</label>
-								<div class="input-group">
-									<input type="text" name="book_date" value="" placeholder="เลือกวันที่" class="form-control input-date" id="datepicker_book_date" readonly >
-									<div class="input-group-append">
-										<span class="input-group-text fs-xl">
-											<i class="fal fa-calendar-alt"></i>
-										</span>
-									</div>
-								</div>
-								@error('book_date_js')
-									<div class="invalid-feedback" role="alert">{{ $message }}</div>
-								@enderror
-							</div>
-						</div>
-						<div class="form-row">
-							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
-								<label class="form-label text-primary" for="inputGroupFile01">แนบไฟล์หนังสือนำส่ง</label>
+								<label class="form-label text-primary" for="uploadbio">อัพโหลดไฟล์</label>
 								<div class="input-group">
 									<div class="custom-file">
-										<input type="file" name="book_file" class="custom-file-input" id="bookFile01" aria-describedby="bookFile01">
-										<label class="custom-file-label" for="bookFile01">no file</label>
+										<input type="file" name="uploadbio" class="custom-file-input" id="uploadbio" aria-describedby="uploadbio">
+										<label class="custom-file-label" for="uploadbio">เลือกไฟล์</label>
 									</div>
 								</div>
 								@error('book_file')
@@ -144,7 +121,7 @@
 					<div class="panel-content border-faded border-left-0 border-right-0 border-bottom-0 d-flex flex-row align-items-center">
 						<div class="form-row">
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
-									<button type="submit" class="btn btn-primary ml-auto"><i class="fal fa-save"></i> บันทึกร่าง</button>
+									<button type="submit" class="btn btn-primary ml-auto"><i class="fal fa-save"></i> บันทึก</button>
 							</div>
 						</div>
 					</div>
@@ -152,60 +129,6 @@
 			</div>
 		</div>
 	</div>
-</div>
-
-
-
-
-
-<div class="row text-sm font-prompt">
-	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-		<div id="panel-customer" class="panel">
-			<div class="panel-hdr">
-				<h2 class="text-gray-600"><i class="fal fa-list"></i>&nbsp;อัพโหลดไฟล์</h2>
-				<div class="panel-toolbar">
-					<button class="btn btn-panel bg-transparent fs-xl w-auto h-auto rounded-0" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="Collapse"><i class="fal fa-window-minimize"></i></button>
-					<button class="btn btn-panel bg-transparent fs-xl w-auto h-auto rounded-0" data-action="panel-fullscreen" data-toggle="tooltip" data-offset="0,10" data-original-title="Fullscreen"><i class="fal fa-expand"></i></button>
-					<button class="btn btn-panel bg-transparent fs-xl w-auto h-auto rounded-0" data-action="panel-close" data-toggle="tooltip" data-offset="0,10" data-original-title="Close"><i class="fal fa-times"></i></button>
-				</div>
-			</div>
-			<div class="panel-container show">
-				<div class="panel-content">
-                    <form action="{{ route('sampleupload.bioimport') }}" method="POST" enctype="multipart/form-data">
-                        @csrf
-                        <div class="form-row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label" for="uploadbio">เลือกไฟล์</label>
-                                <input type="file" name="uploadbio" class="form-control" id="uploadbio"/>
-                            </div>
-                        </div>
-                        <button type="submit" class="btn btn-primary upload">อัพโหลดไฟล์</button>
-                    </form>
-                </div>
-			</div>
-		</div>
-	</div>
-    {{-- <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-        <div id="panel-customer" class="panel">
-            <div class="panel-hdr">
-				<h2 class="text-gray-600"><i class="fal fa-list"></i>&nbsp;รายการข้อมูลชีวภาพ</h2>
-            </div>
-            <div class="panel-container show">
-                <div class="panel-content">
-                    <div class="form-row">
-                        <input type="checkbox" id="chkall"/><span>&nbsp;เลือกทั้งหมด</span>
-                        <div class="col-md-12 mb-6">
-                            <form action="{{ route("sampleupload.biocreate") }}" method="POST">
-                                @csrf
-                                {{ $dataTable->table() }}
-                                <div><button type="submit" class="btn btn-info sendchkbio">ส่งข้อมูล</button></div>
-                            </form>
-                        </div>
-                    </div>
-				</div>
-            </div>
-        </div>
-    </div> --}}
 </div>
 @endsection
 @section('script')
@@ -215,64 +138,20 @@
 <script type="text/javascript" src="{{ URL::asset('vendor/jquery-contextmenu/js/jquery.contextMenu.min.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/buttons.server-side.js') }}"></script>
 <script type="text/javascript">$(document).ready(function(){$.ajaxSetup({headers:{'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')}});});</script>
-{{-- {{ $dataTable->scripts() }} --}}
 <script>
 	$(document).ready(function() {
-        $.ajaxSetup({headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}});
-		$.contextMenu({
-            selector: '.bioupload-manage-nav',
-            trigger:'left',
-            callback: function(key, options) {
-                var advId = $(this).data('id');
-                switch(key){
-                    case 'edit':
-                        let advUrl = '{{ route("sampleupload.edit", ":id") }}';
-                        advUrl = advUrl.replace(':id', advId);
-                        window.open(advUrl, '_self');
-                    break;
-                    case 'delete':
-                        let advDesUrl = '{{ route("sampleupload.destroy", ":id") }}';
-                        advDesUrl = advDesUrl.replace(':id', advId);
-                        window.open(advDesUrl, '_self');
-                    break;
-                }
-            },
-            items: {
-                "edit": {name: "แก้ไข", icon: "fal fa-edit"},
-                "sep1":"--------",
-                "delete": {name: "ลบ", icon: "fal fa-eraser"},
-            }
-        });
-        $("#chkall").click(function(){
-            if(this.checked){
-                $('.biochk').prop('checked', true);
-            }
-            else{
-                $('.biochk').prop('checked', false);
-            }
-
-        });
-        // $('.sendchkbio').click(function(){
-        //     var chkbio = [];
-        //     $.each($("input[name='biobox']:checked"),function(){
-        //         chkbio.push($(this).val());
-        //     });
-        //     let biourl = '{{ route("sampleupload.biocreate", ":id") }}';
-        //     biourl = biourl.replace(':id',chkbio);
-        //     alert(biourl);
-        //     window.open(biourl,'_self');
-        // });
         $('input[name="type_of_work"]').on('change', function() {
-		$('input[name="' + this.name + '"]').not(this).prop('checked', false);
-		let chk = this.value;
-        alert(chk);
-		if (chk === '5') {
-			$('#type_of_work_other').prop('disabled', false);
-		} else {
-			$('#type_of_work_other').val('');
-			$('#type_of_work_other').prop('disabled', true);
-		}
-	});
+			$('input[name="' + this.name + '"]').not(this).prop('checked', false);
+			let chk = this.value;
+			alert(chk);
+			if (chk === '5') {
+				$('#type_of_work_other').prop('disabled', false);
+			} 
+			else {
+				$('#type_of_work_other').val('');
+				$('#type_of_work_other').prop('disabled', true);
+			}
+		});
 	});
 </script>
 @endsection
