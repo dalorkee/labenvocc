@@ -83,8 +83,6 @@
 					</a>
 				</li>
 				@break
-			@case('root')
-			@case('admin')
 			@case('staff')
 				<li class="nav-title">Navigation</li>
 				<li class="{{ (Request::is('staff/*'))  ? 'active' : '' }}">
@@ -118,13 +116,24 @@
 					</a>
 				</li>
 				<li class="nav-title">Administrator</li>
+				@break
+			@case('root')
+			@case('admin')
+				<li class="nav-title">Navigation</li>
+				<li class="{{ (Request::is('admin/*'))  ? 'active' : '' }}">
+					<a href="{{ route('staff.index') }}" title="หน้าหลัก" data-filter-tags="home">
+						<i class="fal fa-home"></i>
+						<span class="nav-link-text">หน้าหลัก</span>
+					</a>
+				</li>
+				<li class="nav-title">Administrator</li>
 				<li>
-					<a href="{{ route('office.index') }}" title="Application Intel" data-filter-tags="application intel">
+					<a href="#" title="Application Intel" data-filter-tags="application intel">
 						<i class="fal fa-cog"></i>
 						<span class="nav-link-text" data-i18n="nav.application_intel">จัดการผู้ใช้</span>
 					</a>
-				</li>
-			@break
+			</li>
+				@break
 		@endswitch
 	</ul>
 	<div class="filter-message js-filter-message bg-danger-600">aaa</div>

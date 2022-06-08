@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
 <meta charset="utf-8">
-<title>{{ config('app.name', 'pj.x10') }}</title>
+<title>{{ config('app.name', 'talek-team') }}</title>
 <meta name="description" content="Introduction">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no, minimal-ui">
@@ -18,7 +18,6 @@
 </style>
 </head>
 <body class="mod-bg-1 ">
-<!-- BEGIN Page Wrapper -->
 <div class="page-wrapper">
 	<div class="page-inner">
 		<aside class="page-sidebar">
