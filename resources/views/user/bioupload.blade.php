@@ -36,7 +36,7 @@
 				</div>
 			</div>
 			<div class="panel-container show">
-				<form name="saveInfo" action="{{ route('sampleupload.bioimport') }}" method="POST" enctype="multipart/form-data">
+				<form name="bioUpload" action="{{ route('sampleupload.bioimport') }}" method="POST" enctype="multipart/form-data">
 					@csrf
 					<input type="hidden" name="order_type" value="1">
 					<input type="hidden" name="order_type_name" value="ตัวอย่างชีวภาพ">
@@ -51,7 +51,7 @@
 							@case('personal')
 								<div class="form-row">
 									<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
-										<label class="form-label text-primary" for="personal_name">ผู้ส่งตัวอย่าง <span class="text-red-600">*</span></label>
+										<label class="form-label text-primary" for="customer_name">ผู้ส่งตัวอย่าง <span class="text-red-600">*</span></label>
 										<input type="text" name="customer_name" value="{{$auth->userCustomer->first_name}} {{$auth->userCustomer->last_name}}" class="form-control" maxlength="60" readonly>
 									</div>
 								</div>
@@ -61,7 +61,7 @@
 								<div class="form-row">
 									<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
 										<label class="form-label text-primary" for="office_name">หน่วยงานที่ส่งตัวอย่าง <span class="text-red-600">*</span></label>
-										<input type="text" name="customer_name" value="{{$auth->userCustomer->first_name}} {{$auth->userCustomer->last_name}}" class="form-control" maxlength="80" readonly>
+										<input type="text" name="office_name" value="{{$auth->userCustomer->agency_name}}" class="form-control" maxlength="80" readonly>
 										@error('customer_name')
 											<div class="invalid-feedback" role="alert">{{ $message }}</div>
 										@enderror
@@ -102,14 +102,14 @@
 									<div class="invalid-feedback" role="alert">{{ $message }}</div>
 								@enderror
 							</div>
-						</div>				
+						</div>
 						<div class="form-row">
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
-								<label class="form-label text-primary" for="uploadbio">อัพโหลดไฟล์</label>
+								<label class="form-label text-primary" for="uploadbio">อัพโหลดไฟล์ Excel</label>
 								<div class="input-group">
 									<div class="custom-file">
 										<input type="file" name="uploadbio" class="custom-file-input" id="uploadbio" aria-describedby="uploadbio">
-										<label class="custom-file-label" for="uploadbio">เลือกไฟล์</label>
+										<label class="custom-file-label" for="uploadbio">เลือกไฟล์ Excel</label>
 									</div>
 								</div>
 								@error('book_file')
@@ -143,15 +143,18 @@
         $('input[name="type_of_work"]').on('change', function() {
 			$('input[name="' + this.name + '"]').not(this).prop('checked', false);
 			let chk = this.value;
-			alert(chk);
 			if (chk === '5') {
 				$('#type_of_work_other').prop('disabled', false);
-			} 
+			}
 			else {
 				$('#type_of_work_other').val('');
 				$('#type_of_work_other').prop('disabled', true);
 			}
 		});
+        $('#uploadbio').on('change',function() {
+		let fileName = $(this).val();
+		$(this).next('.custom-file-label').html(fileName);
+	})
 	});
 </script>
 @endsection

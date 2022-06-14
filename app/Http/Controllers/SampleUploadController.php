@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\SampleUploadImport;
 use App\Models\SampleUpload;
+use App\Http\Requests\biouploadRequest;
 // use App\DataTables\UploadBioDataTable;
 
 class SampleUploadController extends Controller
@@ -34,12 +35,8 @@ class SampleUploadController extends Controller
     /**
     * @return \Illuminate\Support\Collection
     */
-    public function bioimport(Request $request){
-        $validatedData = $request->validate([
-           'uploadbio' => 'required'
-        ],[
-            'uploadbio' => 'โปรดแนบไฟล์ Xls,Xlsx'
-        ]);
+    public function bioimport(biouploadRequest $request){
+        dd($request);
         Excel::import(new SampleUploadImport,$request->file('uploadbio'));
         // return redirect('import-excel-csv')->with('status', 'The file has been imported in laravel 8');
         return redirect()->back()->with('success','upload OK');
