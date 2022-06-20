@@ -64,12 +64,17 @@ class SampleUploadController extends Controller
         $requestForm->type_of_work = $request->type_of_work;
         $requestForm->type_of_work_name = $type_of_work_name;
         $requestForm->type_of_work_other = $request->type_of_work_other;
-
-        dd($requestForm);
-
-        Excel::import(new SampleUploadImport,$request->file('uploadbio'));
-        // return redirect('import-excel-csv')->with('status', 'The file has been imported in laravel 8');
-        return redirect()->back()->with('success','upload OK');
+        $result = $requestForm->save();
+        dd($request);
+        if($result){
+            $lastId = $requestForm->id;
+            Excel::import(new SampleUploadImport,$request->file('uploadbio'));
+            // return redirect('import-excel-csv')->with('status', 'The file has been imported in laravel 8');
+            return redirect()->back()->with('success','upload OK');
+        }
+        else{
+            return redirect()->back()->with('error','Upload Unsuccessfully');
+        }
     }
     /**
     * @return \Illuminate\Support\Collection

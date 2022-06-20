@@ -456,7 +456,7 @@ $(document).ready(function() {
 							ajax: url,
 							columns: [
 								// {data: 'DT_RowIndex', name: 'DT_RowIndex'},
-								{data: 'id', name: 'id', width: 5%},
+								{data: 'id', name: 'id', width: '5%'},
 								{data: 'parameter_name', name: 'parameter_name'},
 								{data: 'sample_charecter_name', name: 'sample_charecter_name'},
 								{data: 'office_name', name: 'office_name'},
