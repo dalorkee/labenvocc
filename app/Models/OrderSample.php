@@ -39,4 +39,14 @@ class OrderSample extends Model
 	}
 
 	protected $appends = ['sample_date_in_js'];
+    protected $fillable = [
+        'order_id',
+		'title_name',
+        'firstname',
+        'lastname',
+        'age_year',
+        'division',
+        'work_life_year',
+        'note'
+	];
 }

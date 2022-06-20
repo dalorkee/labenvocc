@@ -2,7 +2,7 @@
 
 namespace App\Imports;
 
-use App\Models\SampleUpload;
+use App\Models\OrderSample;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
@@ -17,10 +17,16 @@ class SampleUploadImport implements ToModel, WithHeadingRow
     * @return \Illuminate\Database\Eloquent\Model|null
 
     */
+    protected $orderId;
+    public function __construct($orderId)
+    {
+        $this->orderId = $orderId;
+    }
 
     public function model(array $row)
     {
-        return new SampleUpload([
+        return new OrderSample([
+            'order_id' => $this->orderId,
             'title_name' => $row['title_name'],
             'firstname' => $row['firstname'],
             'lastname' => $row['lastname'],
