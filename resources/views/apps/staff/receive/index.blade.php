@@ -35,7 +35,7 @@
 						<table id="receive_table" class="table table-bordered responsive style="cursor:pointer;width:100%"">
 							<thead class="bg-green-600 text-white m-0" style="width:100%">
 								<tr>
-									<th>ไอดี</th>
+									<th>รหัส</th>
 									<th>เลขที่คำขอ</th>
 									<th>หน่วยงานที่ส่ง</th>
 									<th>วันที่ส่ง</th>
