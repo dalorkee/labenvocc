@@ -33,11 +33,7 @@ class SampleUploadImport implements ToModel, WithHeadingRow
             'age_year' => $row['age_year'],
             'division' => $row['division'],
             'work_life_year' => $row['work_life_year'],
-            'note' => $row['note'],
-            'sample_sender_name' => $row['sample_sender_name'],
-            'phone_sample_sender' => $row['phone_sample_sender'],
-            'email_sample_sender' => $row['email_sample_sender'],
-            'user_entry' => auth()->user()->id
+            'note' => $row['note']
         ]);
     }
 }

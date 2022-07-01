@@ -37,6 +37,7 @@ class SampleUploadController extends Controller
     */
     public function bioimport(biouploadRequest $request){
         $auth = $this->user->load(['userCustomer']);
+        dd($auth);
         switch($request->type_of_work){
             case('1');
                 $type_of_work_name = 'บริการ';
@@ -60,7 +61,7 @@ class SampleUploadController extends Controller
         $requestForm->user_id = $auth->userCustomer->user_id;
         $requestForm->customer_type = $auth->userCustomer->customer_type;
         $requestForm->customer_agency_code = $auth->userCustomer->agency_code;
-        $requestForm->customer_agency_name = $request->customer_name;
+        $requestForm->customer_agency_name = ($auth->userCustomer->customer_type === 'personal')? $auth->userCustomer->customer_name:$request->office_name;
         $requestForm->type_of_work = $request->type_of_work;
         $requestForm->type_of_work_name = $type_of_work_name;
         $requestForm->type_of_work_other = $request->type_of_work_other;
