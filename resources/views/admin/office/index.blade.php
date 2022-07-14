@@ -1,4 +1,4 @@
-@extends('layouts.admin.index')
+@extends('layouts.index')
 @section('style')
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('vendor/jquery-smartwizard/css/smart_wizard_arrows.min.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('vendor/DataTables/DataTables-1.10.22/css/jquery.dataTables.min.css') }}">
