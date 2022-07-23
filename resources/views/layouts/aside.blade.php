@@ -128,9 +128,9 @@
 				</li>
 				<li class="nav-title">Administrator</li>
 				<li>
-					<a href="#" title="Application Intel" data-filter-tags="application intel">
+					<a href="{{ route('admin.index') }}" title="Application Intel" data-filter-tags="application intel">
 						<i class="fal fa-cog"></i>
-						<span class="nav-link-text" data-i18n="nav.application_intel">จัดการผู้ใช้</span>
+						<span class="nav-link-text" data-i18n="nav.application_intel">จัดการข้อมูล</span>
 					</a>
 			</li>
 				@break
