@@ -36,7 +36,15 @@
 							</div>
 						</div>
 					</div>
-					<div class="p-6 border border-gray-200">
+                    <div class="p-6 border border-gray-200">
+						<div class="flex items-center">
+							<i class="fal fa-braille fa-lg"></i>
+							<div class="ml-4 text-lg text-gray-600 leading-7 font-semibold">
+								<a href="#">จัดการข้อมูลพารามิเตอร์</a>
+							</div>
+						</div>
+					</div>
+					{{-- <div class="p-6 border border-gray-200">
 						<div class="flex items-center">
 							<i class="fal fa-asterisk fa-lg"></i>
 							<div class="ml-4 text-lg text-gray-600 leading-7 font-semibold">
@@ -73,14 +81,6 @@
 							<i class="fal fa-vials fa-lg"></i>
 							<div class="ml-4 text-lg text-gray-600 leading-7 font-semibold">
 								<a href="#">จัดการข้อมูลลักษณะตัวอย่าง</a>
-							</div>
-						</div>
-					</div>
-					<div class="p-6 border border-gray-200">
-						<div class="flex items-center">
-							<i class="fal fa-braille fa-lg"></i>
-							<div class="ml-4 text-lg text-gray-600 leading-7 font-semibold">
-								<a href="#">จัดการข้อมูลพารามิเตอร์</a>
 							</div>
 						</div>
 					</div>
@@ -123,7 +123,7 @@
 								<a href="#">จัดการข้อมูลเครื่องวิเคราะห์</a>
 							</div>
 						</div>
-					</div>
+					</div> --}}
 				</div>
 			</div>
 		</div>

@@ -76,6 +76,7 @@ class UsersController extends Controller
             'user_status'=>'required',
         ]);
         $user_find = $users->find($request->user_id);
+        dd($user_find);
         $user_cus_find = $user_find->userCustomer;
         $user_cus_find->first_name = $request->first_name;
         $user_cus_find->last_name = $request->last_name;
@@ -92,7 +93,7 @@ class UsersController extends Controller
                     'role_id'=>'4',
                     'model_type'=>'App\Models\User',
                     'model_id'=>$request->user_id,
-                ]);    
+                ]);
             }
             elseif($request->user_status !== 'อนุญาต' AND $user_find->user_status === 'อนุญาต'){
                 $user_find->approved = 'n';
@@ -103,7 +104,7 @@ class UsersController extends Controller
                 return redirect()->route('users.index')->with('success', 'updated successfully');
             }
             elseif($request->user_status !== 'อนุญาต' AND $user_find->user_status !== 'อนุญาต'){
-                $user_find->user_status = $request->user_status;                
+                $user_find->user_status = $request->user_status;
             }
             else{
                 return redirect()->route('users.index')->with('error', 'unsuccessfully');
@@ -128,7 +129,7 @@ class UsersController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy(Request $request,User $users){
-        $d_now = date('Y-m-d H:i:s');        
+        $d_now = date('Y-m-d H:i:s');
         $user_find = $users->find($request->id);
         $user_find->approved = 'n';
         $user_find->user_status = 'ไม่อนุญาต';
@@ -139,9 +140,9 @@ class UsersController extends Controller
             $user_cus_find->deleted_at = $d_now;
             $ucus_del = $user_cus_find->save();
             if($ucus_del==true){
-                $del = DB::table('model_has_roles')->where('model_id', '=', $request->id)->delete();  
+                $del = DB::table('model_has_roles')->where('model_id', '=', $request->id)->delete();
                 if($del==true){
-                    return redirect()->route('users.index')->with('success', 'delete successfully');         
+                    return redirect()->route('users.index')->with('success', 'delete successfully');
                 }
                 else{
                     return redirect()->route('users.index')->with('error', 'unsuccessfully');
@@ -149,13 +150,13 @@ class UsersController extends Controller
             }
             else{
                 return redirect()->route('users.index')->with('error', 'unsuccessfully');
-            }             
-        } 
+            }
+        }
         else{
             return redirect()->route('users.index')->with('error', 'unsuccessfully');
-        }       
+        }
     }
-    public function allow(Request $request,User $users){       
+    public function allow(Request $request,User $users){
         $user_find = $users->find($request->id);
         $user_find->approved = 'y';
         $user_find->user_status = 'อนุญาต';
@@ -167,22 +168,22 @@ class UsersController extends Controller
                 'model_id'=>$request->id,
             ]);
             return redirect()->route('users.index')->with('success', 'allow successfully');
-        } 
+        }
         else{
             return redirect()->route('users.index')->with('error', 'unsuccessfully');
-        }       
+        }
     }
-    public function deny(Request $request,User $users){        
+    public function deny(Request $request,User $users){
         $user_find = $users->find($request->id);
         $user_find->approved = 'n';
         $user_find->user_status = 'ไม่อนุญาต';
         $u_deny = $user_find->save();
         if($u_deny==true){
-            DB::table('model_has_roles')->where('model_id', '=', $request->id)->delete(); 
-            return redirect()->route('users.index')->with('success', 'deny successfully');          
-        } 
+            DB::table('model_has_roles')->where('model_id', '=', $request->id)->delete();
+            return redirect()->route('users.index')->with('success', 'deny successfully');
+        }
         else{
             return redirect()->route('users.index')->with('error', 'unsuccessfully');
-        }       
+        }
     }
 }

@@ -29,16 +29,31 @@
 		<form action="{{ route('users.update',$value->user_id) }}" method="POST">
 		@csrf
 		@method('PUT')
-			<div class="form-row">
+            <div class="form-row">
 				<div class="col-md-6 mb-3">
-					<label class="form-label" for="user_id">UserId</label>
-					<input type="text" class="form-control" id="user_id" name="user_id" value="{{ $value->user_id }}" readonly>
+					<label class="form-label text-info" for="user_id">UserId: {{ $value->user_id }}</label>
+                    <input type="hidden" name="user_id" value="{{ $value->user_id }}">
 				</div>
+			</div>
+			<div class="form-row">
 				<div class="col-md-6 mb-3">
 					<label class="form-label" for="username">UserName</label>
 					<input type="text" class="form-control" id="username" name="username" value="{{ $value->username }}" readonly>
-				</div>				
+				</div>
 			</div>
+            <div class="form-row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label" for="password">Password</label>
+                    <input type="text" class="form-control" id="password" name="password" readonly>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <div class="custom-control custom-switch mt-5 mb-5">
+                        <input type="checkbox" class="custom-control-input" id="change_password" name="change_password" value="pw_chk">
+                        <label class="custom-control-label" for="change_password">Change Password</label>
+                    </div>
+                </div>
+            </div>
+
 			<div class="form-row">
 				<div class="col-md-6 mb-3">
 					<label class="form-label" for="first_name">FirstName</label>
@@ -47,7 +62,7 @@
 				<div class="col-md-6 mb-3">
 					<label class="form-label" for="last_name">LastName</label>
 					<input type="text" class="form-control" id="last_name" name="last_name" value="{{ $value->last_name }}">
-				</div>				
+				</div>
 			</div>
 			<div class="form-row form-group">
 				<div class="col-md-4 mb-3">
@@ -72,7 +87,7 @@
 				<div class="col-md-4 mb-3">
 					<label class="form-label" for="agency_code">รหัสสถานประกอบการ(Moph)</label>
 					<input type="text" class="form-control" id="agency_code" name="agency_code" value="{{ $value->agency_code }}">
-				</div>				
+				</div>
 			</div>
 			<div class="form-row">
 				<div class="col-md-6 mb-3">
@@ -81,7 +96,7 @@
 				</div>
 			</div>
 			<button type="submit" class="btn btn-primary">Submit</button>
-		</form>		
+		</form>
 	</div>
 	@endforeach
 </div>
@@ -92,4 +107,17 @@
 <script type="text/javascript" src="{{ URL::asset('vendor/DataTables/Responsive-2.2.6/js/dataTables.responsive.min.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('vendor/jquery-contextmenu/js/jquery.contextMenu.min.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/buttons.server-side.js') }}"></script>
+<script>
+    $(document).ready(function() {
+        $('#change_password').change(function(){
+            if(this.checked){
+                $('#password').prop('readonly',false);
+            }
+            else{
+                $('#password').prop('readonly',true);
+                $('#change_password').prop('checked',false)
+            }
+        });
+    });
+</script>
 @endsection
