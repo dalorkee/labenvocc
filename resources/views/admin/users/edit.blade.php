@@ -42,9 +42,18 @@
 				</div>
 			</div>
             <div class="form-row">
-                <div class="col-md-6 mb-3">
-                    <label class="form-label" for="password">Password</label>
-                    <input type="text" class="form-control" id="password" name="password" readonly>
+                <div class="col-md-6 mb-3 input-group">
+                    <div class="form-group col">
+                        <label class="form-label" for="password">Password</label>
+                        <div class="input-group">
+                            <input type="password" class="form-control border-right-0" id="password" name="password" readonly>
+                            <div class="input-group-append">
+                                <span class="input-group-text bg-transparent border-left-0">
+                                    <i class="fal fa-eye toggle-password" toggle="#password"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="col-md-6 mb-3">
                     <div class="custom-control custom-switch mt-5 mb-5">
@@ -53,7 +62,6 @@
                     </div>
                 </div>
             </div>
-
 			<div class="form-row">
 				<div class="col-md-6 mb-3">
 					<label class="form-label" for="first_name">FirstName</label>
@@ -115,8 +123,21 @@
             }
             else{
                 $('#password').prop('readonly',true);
-                $('#change_password').prop('checked',false)
+                $('#change_password').prop('checked',false);
+                $('#password').val('');
             }
+        });
+        $(function(){
+	        $(".toggle-password").click(function() {
+		        $(this).toggleClass("fa-eye fa-eye-slash");
+		        var type = $($(this).attr("toggle"));
+		        if (type.attr("type") == "password") {
+			        type.attr("type", "text");
+		        }
+                else {
+			        type.attr("type", "password");
+		        }
+	        });
         });
     });
 </script>

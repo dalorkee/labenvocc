@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\{Hash};
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\DataTables\UsersDataTable;
@@ -76,50 +77,67 @@ class UsersController extends Controller
             'user_status'=>'required',
         ]);
         $user_find = $users->find($request->user_id);
-        dd($user_find);
-        $user_cus_find = $user_find->userCustomer;
-        $user_cus_find->first_name = $request->first_name;
-        $user_cus_find->last_name = $request->last_name;
-        $user_cus_find->ref_office_lab_code = $request->ref_office_lab_code;
-        $user_cus_find->ref_office_env_code = $request->ref_office_env_code;
-        $user_cus_find->agency_code = $request->agency_code;
-        $user_cus_find->agency_name = $request->agency_name;
-        $uc_up = $user_cus_find->save();
-        if($uc_up==true){
-            if($request->user_status === 'อนุญาต' AND $user_find->user_status !== 'อนุญาต'){
-                $user_find->user_status = $request->user_status;
-                $user_find->approved = 'y';
-                DB::table('model_has_roles')->insert([
-                    'role_id'=>'4',
-                    'model_type'=>'App\Models\User',
-                    'model_id'=>$request->user_id,
-                ]);
-            }
-            elseif($request->user_status !== 'อนุญาต' AND $user_find->user_status === 'อนุญาต'){
-                $user_find->approved = 'n';
-                $user_find->user_status = $request->user_status;
-                DB::table('model_has_roles')->where('model_id',$request->user_id)->delete();
-            }
-            elseif($request->user_status === 'อนุญาต' AND $user_find->user_status === 'อนุญาต'){
-                return redirect()->route('users.index')->with('success', 'updated successfully');
-            }
-            elseif($request->user_status !== 'อนุญาต' AND $user_find->user_status !== 'อนุญาต'){
-                $user_find->user_status = $request->user_status;
+        if($request->change_password == 'pw_chk' && $request->password != ''){
+            $request->password = Hash::make($request->password);
+            $user_find->password = $request->password;
+            $user_find->password_confirmation = $request->password;
+        }
+        elseif($request->change_password == 'pw_chk' && $request->password == ''){
+            return redirect()->route('users.edit',$request->user_id)->with('error', 'password require');
+        }
+        elseif($request->change_password == '' && $request->password != ''){
+            return redirect()->route('users.edit',$request->user_id)->with('error', 'check password condition');
+        }
+        $u_pw = $user_find->save();
+        if($u_pw == true){
+            $user_cus_find = $user_find->userCustomer;
+            $user_cus_find->first_name = $request->first_name;
+            $user_cus_find->last_name = $request->last_name;
+            $user_cus_find->ref_office_lab_code = $request->ref_office_lab_code;
+            $user_cus_find->ref_office_env_code = $request->ref_office_env_code;
+            $user_cus_find->agency_code = $request->agency_code;
+            $user_cus_find->agency_name = $request->agency_name;
+            $uc_up = $user_cus_find->save();
+            if($uc_up==true){
+                if($request->user_status === 'อนุญาต' AND $user_find->user_status !== 'อนุญาต'){
+                    $user_find->user_status = $request->user_status;
+                    $user_find->approved = 'y';
+                    DB::table('model_has_roles')->insert([
+                        'role_id'=>'4',
+                        'model_type'=>'App\Models\User',
+                        'model_id'=>$request->user_id,
+                    ]);
+                }
+                elseif($request->user_status !== 'อนุญาต' AND $user_find->user_status === 'อนุญาต'){
+                    $user_find->approved = 'n';
+                    $user_find->user_status = $request->user_status;
+                    DB::table('model_has_roles')->where('model_id',$request->user_id)->delete();
+                }
+                elseif($request->user_status === 'อนุญาต' AND $user_find->user_status === 'อนุญาต'){
+                    return redirect()->route('users.index')->with('success', 'updated successfully');
+                }
+                elseif($request->user_status !== 'อนุญาต' AND $user_find->user_status !== 'อนุญาต'){
+                    $user_find->user_status = $request->user_status;
+                }
+                else{
+                    return redirect()->route('users.edit',$request->user_id)->with('error', 'permissions unsuccessful');
+                }
+                $u_up = $user_find->save();
+                if($u_up==true){
+                    return redirect()->route('users.index')->with('success', 'updated successfully');
+                }
+                else{
+                    return redirect()->route('users.edit',$request->user_id)->with('error', 'permission update unsuccessfully');
+                }
             }
             else{
-                return redirect()->route('users.index')->with('error', 'unsuccessfully');
-            }
-            $u_up = $user_find->save();
-            if($u_up==true){
-                return redirect()->route('users.index')->with('success', 'updated successfully');
-            }
-            else{
-                return redirect()->route('users.index')->with('error', 'unsuccessfully');
+                return redirect()->route('users.edit',$request->user_id)->with('error', 'update profile unsuccessfully');
             }
         }
         else{
-            return redirect()->route('users.index')->with('error', 'unsuccessfully');
+            return redirect()->route('users.edit',$request->user_id)->with('error', 'unsuccessfully');
         }
+
     }
 
     /**
@@ -170,7 +188,7 @@ class UsersController extends Controller
             return redirect()->route('users.index')->with('success', 'allow successfully');
         }
         else{
-            return redirect()->route('users.index')->with('error', 'unsuccessfully');
+            return redirect()->route('users.edit',$request->id)->with('error', 'unsuccessfully');
         }
     }
     public function deny(Request $request,User $users){
