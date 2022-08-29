@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Admin\Paramet;
+use App\Models\Parameter;
 use Illuminate\Http\Request;
+use App\DataTables\ParametDataTable;
+use Illuminate\Support\Facades\DB;
 
 class ParametController extends Controller
 {
@@ -15,7 +17,7 @@ class ParametController extends Controller
      */
     public function index()
     {
-        //
+        return view('admin.paramet.index');
     }
 
     /**
@@ -45,7 +47,7 @@ class ParametController extends Controller
      * @param  \App\Models\Admin\Paramet  $paramet
      * @return \Illuminate\Http\Response
      */
-    public function show(Paramet $paramet)
+    public function show(Parameter $Parameter)
     {
         //
     }
@@ -56,7 +58,7 @@ class ParametController extends Controller
      * @param  \App\Models\Admin\Paramet  $paramet
      * @return \Illuminate\Http\Response
      */
-    public function edit(Paramet $paramet)
+    public function edit(Parameter $Parameter)
     {
         //
     }
@@ -68,7 +70,7 @@ class ParametController extends Controller
      * @param  \App\Models\Admin\Paramet  $paramet
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Paramet $paramet)
+    public function update(Request $request, Parameter $Parameter)
     {
         //
     }
@@ -79,7 +81,7 @@ class ParametController extends Controller
      * @param  \App\Models\Admin\Paramet  $paramet
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Paramet $paramet)
+    public function destroy(Parameter $Parameter)
     {
         //
     }

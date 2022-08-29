@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\{Hash};
 use App\DataTables\OfficeDataTable;
 use Illuminate\Support\Facades\DB;
 use App\Traits\CommonTrait;
@@ -81,39 +82,66 @@ class OfficeController extends Controller
             'user_status'=>'required',
         ]);
         $user_find = $users->find($request->user_id);
-        $user_staff_find = $user_find->userStaff;
-        $user_staff_find->first_name = $request->first_name;
-        $user_staff_find->last_name = $request->last_name;
-        $user_staff_find->position = $request->position;
-        $user_staff_find->position_level = $request->position_level;
-        $user_staff_find->duty = $request->duty;
-        $user_staff_find->mobile = $request->mobile;
-        $us_up = $user_staff_find->save();
-        if($us_up == true){
-            if($request->user_status === 'อนุญาต' AND $user_find->user_status !== 'อนุญาต'){
-                $user_find->user_status = $request->user_status;
-                $user_find->approved = 'y';
-                DB::table('model_has_roles')->insert([
-                    'role_id'=>'3',
-                    'model_type'=>'App\Models\User',
-                    'model_id'=>$request->user_id,
-                ]);    
-            }elseif($request->user_status !== 'อนุญาต' AND $user_find->user_status === 'อนุญาต'){
-                $user_find->approved = 'n';
-                $user_find->user_status = $request->user_status;
-                DB::table('model_has_roles')->where('model_id',$request->user_id)->delete();
-            }elseif($request->user_status === 'อนุญาต' AND $user_find->user_status === 'อนุญาต'){
-                return redirect()->route('office.index')->with('success', 'updated successfully');
-            }elseif($request->user_status !== 'อนุญาต' AND $user_find->user_status !== 'อนุญาต'){
-                $user_find->user_status = $request->user_status;                
-            }else{
-                return redirect()->route('office.index')->with('error', 'unsuccessfully');
+        if($request->change_password == 'pw_chk' && $request->password != ''){
+            $request->password = Hash::make($request->password);
+            $user_find->password = $request->password;
+            $user_find->password_confirmation = $request->password;
+        }
+        elseif($request->change_password == 'pw_chk' && $request->password == ''){
+            return redirect()->route('office.edit',$request->user_id)->with('error', 'password require');
+        }
+        elseif($request->change_password == '' && $request->password != ''){
+            return redirect()->route('office.edit',$request->user_id)->with('error', 'check password condition');
+        }
+        $us_pw = $user_find->save();
+        if($us_pw == true){
+            $user_staff_find = $user_find->userStaff;        
+            $user_staff_find->first_name = $request->first_name;
+            $user_staff_find->last_name = $request->last_name;
+            $user_staff_find->position = $request->position;
+            $user_staff_find->position_level = $request->position_level;
+            $user_staff_find->duty = $request->duty;
+            $user_staff_find->mobile = $request->mobile;
+            $us_pf = $user_staff_find->save();
+            if($us_pf == true){
+                if($request->user_status === 'อนุญาต' AND $user_find->user_status !== 'อนุญาต'){
+                    $user_find->user_status = $request->user_status;
+                    $user_find->approved = 'y';
+                    DB::table('model_has_roles')->insert([
+                        'role_id'=>'3',
+                        'model_type'=>'App\Models\User',
+                        'model_id'=>$request->user_id,
+                    ]);    
+                }
+                elseif($request->user_status !== 'อนุญาต' AND $user_find->user_status === 'อนุญาต'){
+                    $user_find->approved = 'n';
+                    $user_find->user_status = $request->user_status;
+                    DB::table('model_has_roles')->where('model_id',$request->user_id)->delete();
+                }
+                elseif($request->user_status === 'อนุญาต' AND $user_find->user_status === 'อนุญาต'){
+                    return redirect()->route('office.index')->with('success', 'updated successfully');
+                }
+                elseif($request->user_status !== 'อนุญาต' AND $user_find->user_status !== 'อนุญาต'){
+                    $user_find->user_status = $request->user_status;                
+                }
+                else{
+                    return redirect()->route('office.edit',$request->user_id)->with('error', 'permissions unsuccessfully');
+                }
+                $us_ps = $user_find->save();
+                if($us_ps==true){
+                    return redirect()->route('office.index')->with('success', 'updated successfully');
+                }
+                else{
+                    return redirect()->route('office.edit',$request->user_id)->with('error', 'permission update unsuccessfully');
+                }
             }
-            $u_up = $user_find->save();
-            if($u_up==true){
-                return redirect()->route('office.index')->with('success', 'updated successfully');
+            else{
+                return redirect()->route('office.edit',$request->user_id)->with('error', 'update profile unsuccessfully');
             }
         }
+        else{
+            return redirect()->route('office.edit',$request->user_id)->with('error', 'unsuccessfully');
+        }        
     }
 
     /**

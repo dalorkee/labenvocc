@@ -5,11 +5,11 @@
 @section('content')
 <ol class="breadcrumb page-breadcrumb">
 	<li class="breadcrumb-item"><a href="javascript:void(0);">Home</a></li>
-	<li class="breadcrumb-item">ตั้งค่าพารามิเตอร์</li>
+	<li class="breadcrumb-item">หน้าหลัก</li>
 	{{-- <li class="position-absolute pos-top pos-right d-none d-sm-block"><span class="js-get-date"></span></li> --}}
 </ol>
 <div class="subheader">
-	<h1 class="subheader-title"><i class='fal fa-home'></i><small>ตั้งค่าพารามิเตอร์</small></h1>
+	<h1 class="subheader-title"><i class='fal fa-home'></i> หน้าหลัก<small>Sub title here!!</small></h1>
 </div>
 <div class="fs-lg fw-300 p-5 bg-white border-faded rounded mb-g">
 	<div id="smartwizard">
@@ -137,14 +137,67 @@
 </div>
 @endsection
 @section('script')
-<script type="text/javascript" src="{{ URL::asset('vendor/DataTables/DataTables-1.10.22/js/jquery.dataTables.min.js') }}"></script>
-<script type="text/javascript" src="{{ URL::asset('vendor/DataTables/Buttons-1.6.5/js/dataTables.buttons.min.js') }}"></script>
-<script type="text/javascript" src="{{ URL::asset('vendor/DataTables/Responsive-2.2.6/js/dataTables.responsive.min.js') }}"></script>
-<script type="text/javascript" src="{{ URL::asset('vendor/jquery-contextmenu/js/jquery.contextMenu.min.js') }}"></script>
-<script type="text/javascript" src="{{ URL::asset('js/buttons.server-side.js') }}"></script>
+<script src="{{ URL::asset('vendor/jquery-smartwizard/js/jquery.smartWizard.min.js') }}" type="text/javascript"></script>
 <script>
 $(document).ready(function() {
-	
+	// Toolbar extra buttons
+	var btnFinish = $('<button></button>').text('บันทึก')
+		.addClass('btn btn-info')
+		.on('click', function(){ alert('Finish Clicked'); });
+	var btnCancel = $('<button></button>').text('ยกเลิก')
+		.addClass('btn btn-danger')
+		.on('click', function(){ $('#smartwizard').smartWizard("reset"); });
+
+	// Step show event
+	$("#smartwizard").on("showStep", function(e, anchorObject, stepNumber, stepDirection, stepPosition) {
+		$("#prev-btn").removeClass('disabled');
+		$("#next-btn").removeClass('disabled');
+		if (stepPosition === 'first') {
+			$("#prev-btn").addClass('disabled');
+		} else if (stepPosition === 'last') {
+			$("#next-btn").addClass('disabled');
+		} else {
+			$("#prev-btn").removeClass('disabled');
+			$("#next-btn").removeClass('disabled');
+		}
+	});
+
+	// Smart Wizard
+	$('#smartwizard').smartWizard({
+		selected: 0,
+		theme: 'arrows',
+		justified: true,
+		darkMode:false,
+		autoAdjustHeight: true, 
+		cycleSteps: false, 
+		backButtonSupport: true,
+		enableURLhash: true,
+		transition: {
+			animation: 'slide-horizontal',
+		},
+		toolbarSettings: {
+			toolbarPosition: 'bottom',
+			toolbarExtraButtons: [btnFinish, btnCancel]
+		},
+		lang: {
+			next: 'ต่อไป',
+			previous: 'ก่อนหน้า'
+		},
+	});
+
+	// External Button Events
+	$("#reset-btn").on("click", function() {
+		$('#smartwizard').smartWizard("reset");
+		return true;
+	});
+	$("#prev-btn").on("click", function() {
+		$('#smartwizard').smartWizard("prev");
+		return true;
+	});
+	$("#next-btn").on("click", function() {
+		$('#smartwizard').smartWizard("next");
+		return true;
+	});
 });
 </script>
 @endsection

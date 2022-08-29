@@ -40,7 +40,7 @@
 						<div class="flex items-center">
 							<i class="fal fa-braille fa-lg"></i>
 							<div class="ml-4 text-lg text-gray-600 leading-7 font-semibold">
-								<a href="#">จัดการข้อมูลพารามิเตอร์</a>
+								<a href="{{route('paramet.index')}}">จัดการข้อมูลพารามิเตอร์</a>
 							</div>
 						</div>
 					</div>
