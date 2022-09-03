@@ -32,8 +32,8 @@
 						<li class="undone"><p><span class="d-none d-sm-inline">รายงานผล</span></p></li>
 					</ul> --}}
 					<div class="table-responsive">
-						<table id="receive_table" class="table table-bordered responsive style="cursor:pointer;width:100%"">
-							<thead class="bg-green-600 text-white m-0" style="width:100%">
+						<table id="receive_table" class="table table-bordered responsive style="cursor:pointer;width:100%">
+							<thead class="bg-blue-600 text-white m-0" style="width:100%">
 								<tr>
 									<th>รหัส</th>
 									<th>เลขที่คำขอ</th>

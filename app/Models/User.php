@@ -22,11 +22,6 @@ class User extends Authenticatable
 	use Notifiable;
 	use TwoFactorAuthenticatable;
 
-	/**
-	 * The attributes that are mass assignable.
-	 *
-	 * @var array
-	 */
 	protected $fillable = [
 		'user_type',
 		'username',
@@ -34,14 +29,12 @@ class User extends Authenticatable
 		'password_confirmation',
 		'email',
 		'user_status',
-		'approved'
+		'approved',
+		'approved_by_user',
+		'profile_photo_url',
+		'is_admin'
 	];
 
-	/**
-	 * The attributes that should be hidden for arrays.
-	 *
-	 * @var array
-	 */
 	protected $hidden = [
 		'password',
 		'remember_token',
@@ -49,20 +42,10 @@ class User extends Authenticatable
 		'two_factor_secret',
 	];
 
-	/**
-	 * The attributes that should be cast to native types.
-	 *
-	 * @var array
-	 */
 	protected $casts = [
 		'email_verified_at' => 'datetime',
 	];
 
-	/**
-	 * The accessors to append to the model's array form.
-	 *
-	 * @var array
-	 */
 	protected $appends = [
 		'profile_photo_url',
 	];

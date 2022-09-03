@@ -51,7 +51,7 @@
 										<div class="text-center py-3">
 											<div class="ml-3">
 												<strong>ชื่อ-สกุล</strong>
-												<p class="text-indigo-400">{{ auth()->user()->userStaff->first_name.' '.auth()->user()->userStaff->last_name }}</p>
+												<p class="text-indigo-400">{{ auth()->user()->userStaff->first_name ?? '' }} {{ auth()->user()->userStaff->last_name ?? '' }}</p>
 											</div>
 											<div class="mt-3 ml-3">
 												<strong>ตำแหน่ง</strong>
