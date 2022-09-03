@@ -20,7 +20,6 @@ class HomeController extends Controller
 					break;
 				default:
 					return redirect()->route(route: 'logout');
-					break;
 			}
 		} else {
 			return redirect()->route(route: 'logout');
