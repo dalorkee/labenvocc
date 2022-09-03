@@ -84,19 +84,85 @@
 				</li>
 				@break
 			@case('staff')
-				<li class="nav-title">Navigation</li>
 				<li class="{{ (Request::is('staff/*'))  ? 'active' : '' }}">
 					<a href="{{ route('staff.index') }}" title="หน้าหลัก" data-filter-tags="home">
 						<i class="fal fa-home"></i>
 						<span class="nav-link-text">หน้าหลัก</span>
 					</a>
 				</li>
-				<li class="{{ (Request::is('sample/receive*'))  ? 'active' : '' }}">
-					<a href="{{ route('sample.receive.index') }}" title="งานรับตัวอย่าง" data-filter-tags="specimen">
+				<li class="{{ (Request::is('*sample*'))  ? 'active open' : '' }}">
+					<a href="javascript:void(0);" title="Example received" data-filter-tags="example_received" class="waves-effect waves-themed" aria-expanded="true">
 						<i class="fal fa-cube"></i>
-						<span class="nav-link-text">งานรับตัวอย่าง</span>
+						<span class="nav-link-text" data-i18n="nav.pages_example_received">งานรับตัวอย่าง</span>
 					</a>
+					<ul>
+						<li class="{{ (Request::is('*sample/receive'))  ? 'active open' : '' }}">
+							<a href="#" title="รายการคำขอ" data-filter-tags="specimen">
+								<span class="nav-link-text">รายการคำขอ</span>
+							</a>
+							<ul>
+								<li class="{{ (Request::is('*sample/receive'))  ? 'active' : '' }}">
+									<a href="{{ route('sample.receive.index') }}" title="รายการคำขอ" data-filter-tags="specimen">
+										<span class="nav-link-text">ใบคำขอ</span>
+									</a>
+								</li>
+							</ul>
+						</li>
+						<li>
+							<a href="#" title="รายการคำขอ" data-filter-tags="specimen">
+								<span class="nav-link-text">รับตัวอย่าง</span>
+							</a>
+							<ul>
+								<li>
+									<a href="#" title="รายการคำขอ" data-filter-tags="specimen">
+										<span class="nav-link-text">ใบรับตัวอย่าง</span>
+									</a>
+								</li>
+								<li>
+									<a href="#" title="รายการคำขอ" data-filter-tags="specimen">
+										<span class="nav-link-text">ใบแจ้งหนี้</span>
+									</a>
+								</li>
+								<li>
+									<a href="#" title="รายการคำขอ" data-filter-tags="specimen">
+										<span class="nav-link-text">กำหนดหมายเลขทดสอบ</span>
+									</a>
+								</li>
+							</ul>
+						</li>
+						<li>
+							<a href="#" title="รายการคำขอ" data-filter-tags="specimen">
+								<span class="nav-link-text">การตรวจวิเคราะห์</span>
+							</a>
+							<ul>
+								<li>
+									<a href="#" title="รายการคำขอ" data-filter-tags="specimen">
+										<span class="nav-link-text">เบิกตัวอย่าง</span>
+									</a>
+								</li>
+							</ul>
+						</li>
+						<li>
+							<a href="#" title="รายการคำขอ" data-filter-tags="specimen">
+								<span class="nav-link-text">รายงานผล</span>
+							</a>
+							<ul>
+								<li>
+									<a href="#" title="รายการคำขอ" data-filter-tags="specimen">
+										<span class="nav-link-text">ออกรายงานผล</span>
+									</a>
+								</li>
+								<li>
+									<a href="#" title="รายการคำขอ" data-filter-tags="specimen">
+										<span class="nav-link-text">คืนผลลูกค้า</span>
+									</a>
+								</li>
+							</ul>
+						</li>
+					</ul>
 				</li>
+
+
 				<li>
 					<a href="#" title="งานตรวจวิเคราะห์" data-filter-tags="verify">
 						<i class="fal fa-flask"></i>
@@ -115,18 +181,15 @@
 						<span class="nav-link-text">งานทำลายตัวอย่าง</span>
 					</a>
 				</li>
-				<li class="nav-title">Administrator</li>
 				@break
 			@case('root')
 			@case('admin')
-				<li class="nav-title">Navigation</li>
 				<li class="{{ (Request::is('admin/*'))  ? 'active' : '' }}">
 					<a href="{{ route('staff.index') }}" title="หน้าหลัก" data-filter-tags="home">
 						<i class="fal fa-home"></i>
 						<span class="nav-link-text">หน้าหลัก</span>
 					</a>
 				</li>
-				<li class="nav-title">Administrator</li>
 				<li>
 					<a href="{{ route('admin.index') }}" title="Application Intel" data-filter-tags="application intel">
 						<i class="fal fa-cog"></i>

@@ -2,10 +2,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\{Model,SoftDeletes};
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use App\Traits\DateTimeTrait;
 
 class Order extends Model
 {
-	use SoftDeletes;
+	use SoftDeletes, DateTimeTrait;
 
 	protected $table = 'orders';
 	protected $primaryKey = 'id';
@@ -53,5 +55,12 @@ class Order extends Model
 			$str = "";
 		}
 		return $str;
+	}
+
+	protected function bookDate(): Attribute {
+		return new Attribute(
+			get: fn ($value) => $this->convertMySQLDateTimeToJs(date: $value),
+			set: fn ($value) => $this->convertJsDateTimeToMySQL(date: $value),
+		);
 	}
 }

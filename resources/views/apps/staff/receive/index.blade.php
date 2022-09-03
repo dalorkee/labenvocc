@@ -9,14 +9,15 @@
 @endsection
 @section('content')
 <ol class="breadcrumb page-breadcrumb text-sm font-prompt">
-	<li class="breadcrumb-item"><i class="fal fa-home mr-1"></i> <a href="{{ route('sample.receive.index') }}">งานรับตัวอย่าง</a></li>
+	<li class="breadcrumb-item"><i class="fal fa-home mr-1"></i> งานรับตัวอย่าง</li>
 	<li class="breadcrumb-item">รายการคำขอ</li>
+	<li class="breadcrumb-item"><a href="{{ route('sample.receive.index') }}">ใบคำขอ</a></li>
 </ol>
 <div class="row text-sm font-prompt">
 	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
 		<div id="panel-1" class="panel">
 			<div class="panel-hdr">
-				<h2><span class="text-blue-500"><i class="fal fa-th-list"></i>&nbsp;รายการตัวอย่าง</span></h2>
+				<h2><span class="text-blue-500"><i class="fal fa-th-list"></i>&nbsp;รายการใบคำขอ</span></h2>
 				<div class="panel-toolbar">
 					<button class="btn btn-panel bg-transparent fs-xl w-auto h-auto rounded-0" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="Collapse"><i class="fal fa-window-minimize"></i></button>
 					<button class="btn btn-panel bg-transparent fs-xl w-auto h-auto rounded-0" data-action="panel-fullscreen" data-toggle="tooltip" data-offset="0,10" data-original-title="Fullscreen"><i class="fal fa-expand"></i></button>
@@ -40,7 +41,7 @@
 									<th>หน่วยงานที่ส่ง</th>
 									<th>วันที่ส่ง</th>
 									<th>รหัสลูกค้า</th>
-									<th>จำนวนตัวอย่าง/รายการทดสอบ</th>
+									<th>จำนวน ตย./พารามิเตอร์</th>
 									<th>จัดการ</th>
 								</tr>
 							</thead>
