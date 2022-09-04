@@ -19,10 +19,10 @@ class HomeController extends Controller
 					return redirect()->route(route: 'staff.index');
 					break;
 				default:
-					return redirect()->route(route: 'logout');
+					return redirect()->route(route: 'logout')->with(key: 'error', value: 'ไม่พบข้อมูลผู้ใช้');
 			}
 		} else {
-			return redirect()->route(route: 'logout');
+			return redirect()->route(route: 'logout')->with(key: 'error', value: 'โปรดตรวจสอบสิทธิ์ผู้ใช้');
 		}
 	}
 

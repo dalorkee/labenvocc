@@ -33,7 +33,7 @@ class Order extends Model
 		'order_payment',
 		'order_received'
 	];
-	protected $appends = ['book_date_js'];
+	//protected $appends = ['book_date_js'];
 
 	public function orderSamples() {
 		return $this->hasMany(related: OrderSample::class);
@@ -47,20 +47,29 @@ class Order extends Model
 		return $this->hasMany(related: FileUpload::class);
 	}
 
-	public function getBookDateJsAttribute(): string {
-		if (!is_null($this->book_date) && !empty($this->book_date)) {
-			$exp = explode("-", $this->book_date);
-			$str = $exp[2]."/".$exp[1]."/".$exp[0];
-		} else {
-			$str = "";
-		}
-		return $str;
-	}
+	// public function getBookDateJsAttribute(): string {
+	// 	if (!is_null($this->book_date) && !empty($this->book_date)) {
+	// 		$exp = explode("-", $this->book_date);
+	// 		$str = $exp[2]."/".$exp[1]."/".$exp[0];
+	// 	} else {
+	// 		$str = "";
+	// 	}
+	// 	return $str;
+	// }
 
 	protected function bookDate(): Attribute {
+		return new Attribute(
+			get: fn ($value) => $this->convertMySQLDateToJs(date: $value),
+			set: fn ($value) => $this->convertJsDateToMySQL(date: $value),
+		);
+	}
+
+	protected function orderConfirmed(): Attribute {
 		return new Attribute(
 			get: fn ($value) => $this->convertMySQLDateTimeToJs(date: $value),
 			set: fn ($value) => $this->convertJsDateTimeToMySQL(date: $value),
 		);
 	}
+
+
 }

@@ -40,32 +40,32 @@ trait CommonTrait {
 	public function calcPercent($data=0, $allData=0): float {
 		return (($data*100)/$allData);
 	}
-	public function convertJsDateToMySQL($date='00/00/0000', $separator='/'): ?string {
-		if (!is_null($date) && !empty($date)) {
-			$ep = explode($separator, $date);
-			$string = $ep[2].'-'.$ep[1].'-'.$ep[0];
-		} else {
-			$string = null;
-		}
-		return $string;
-	}
-	public function convertMySQLDateToJs($date='0000-00-00', $separator='-'): ?string {
-		if (!is_null($date) && !empty($date)) {
-			$ep = explode($separator, $date);
-			$string = $ep[2].'/'.$ep[1].'/'.$ep[0];
-		} else {
-			$string = null;
-		}
-		return $string;
-	}
-	public function checkValidMysqlDateTime($mysql_date_time): bool {
-		$pattern = "/^([0-9]{2,4})-([0-1][0-9])-([0-3][0-9])(?:( [0-2][0-9]):([0-5][0-9]):([0-5][0-9]))?(.[0-9]{1,6})?$/";
-		if (preg_match($pattern, $mysql_date_time)) {
-			return true;
-		} else {
-			return false;
-		}
-	}
+	// public function convertJsDateToMySQL($date='00/00/0000', $separator='/'): ?string {
+	// 	if (!is_null($date) && !empty($date)) {
+	// 		$ep = explode($separator, $date);
+	// 		$string = $ep[2].'-'.$ep[1].'-'.$ep[0];
+	// 	} else {
+	// 		$string = null;
+	// 	}
+	// 	return $string;
+	// }
+	// public function convertMySQLDateToJs($date='0000-00-00', $separator='-'): ?string {
+	// 	if (!is_null($date) && !empty($date)) {
+	// 		$ep = explode($separator, $date);
+	// 		$string = $ep[2].'/'.$ep[1].'/'.$ep[0];
+	// 	} else {
+	// 		$string = null;
+	// 	}
+	// 	return $string;
+	// }
+	// public function checkValidMysqlDateTime($mysql_date_time): bool {
+	// 	$pattern = "/^([0-9]{2,4})-([0-1][0-9])-([0-3][0-9])(?:( [0-2][0-9]):([0-5][0-9]):([0-5][0-9]))?(.[0-9]{1,6})?$/";
+	// 	if (preg_match($pattern, $mysql_date_time)) {
+	// 		return true;
+	// 	} else {
+	// 		return false;
+	// 	}
+	// }
 	public function getPosition(): array {
 		$result = [];
 		Position::select('id', 'name')->get()->each(function($value, $key) use (&$result) {

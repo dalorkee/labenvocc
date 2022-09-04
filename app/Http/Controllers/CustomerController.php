@@ -73,7 +73,7 @@ class CustomerController extends Controller
 					'type_of_work_name' => $typeOfWork[1] ?? null,
 					'type_of_work_other' => $request->type_of_work_other ?? null,
 					'book_no' => $request->book_no ?? null,
-					'book_date' => $this->convertJsDateToMySQL(date: $request->book_date, separator: '/'),
+					'book_date' => $request->book_date,
 					'book_upload' => ($request->hasFile('book_file')) ? 'y' : 'n',
 			]);
 			$last_insert_order_id = $order->id;
@@ -168,7 +168,7 @@ class CustomerController extends Controller
 			$order_sample->age_year = $request->age_year;
 			$order_sample->division = $request->division ?? null;
 			$order_sample->work_life_year = $request->work_life_year ?? null;
-			$order_sample->sample_date = $this->convertJsDateToMySQL(date: $request->sample_date, separator: '/');
+			$order_sample->sample_date = $request->sample_date;
 			$order_sample->note = $request->note;
 			$saved = $order_sample->save();
 			$last_insert_id = $order_sample->id;
@@ -216,7 +216,7 @@ class CustomerController extends Controller
 			$order_sample->age_year = $request->edit_age_year;
 			$order_sample->division = $request->edit_division;
 			$order_sample->work_life_year = $request->edit_work_life_year;
-			$order_sample->sample_date = $this->convertJsDateToMySQL(date: $request->edit_sample_date, separator: '/');
+			$order_sample->sample_date = $request->edit_sample_date;
 			$order_sample->note = $request->edit_note;
 			$saved = $order_sample->save();
 			if ($saved == true) {

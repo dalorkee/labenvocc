@@ -25,7 +25,7 @@ class OrderSample extends Model
 		'sample_date',
 		'note'
 	];
-	protected $appends = ['sample_date_in_js'];
+	// protected $appends = ['sample_date_in_js'];
 
 	public function order() {
 		return $this->belongTo(related: Order::class)->withDefault();
@@ -44,7 +44,7 @@ class OrderSample extends Model
 		});
 	}
 
-	public function getSampleDateInJsAttribute() {
+/* 	public function getSampleDateInJsAttribute() {
 		if (strlen($this->sample_date) > 0) {
 			$exp = explode("-", $this->sample_date);
 			$str = $exp[2]."/".$exp[1]."/".$exp[0];
@@ -52,12 +52,12 @@ class OrderSample extends Model
 			$str = "";
 		}
 		return $str;
-	}
+	} */
 
-    protected function sampleDate(): Attribute {
+	protected function sampleDate(): Attribute {
 		return new Attribute(
-			get: fn ($value) => $this->convertMySQLDateTimeToJs(date: $value),
-			set: fn ($value) => $this->convertJsDateTimeToMySQL(date: $value),
+			get: fn ($value) => $this->convertMySQLDateToJs(date: $value),
+			set: fn ($value) => $this->convertJsDateToMySQL(date: $value),
 		);
 	}
 

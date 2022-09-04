@@ -420,7 +420,7 @@ $(document).ready(function() {
 							$('#edit_age_year').val(data.age_year);
 							$('#edit_division').val(data.division);
 							$('#edit_work_life_year').val(data.work_life_year);
-							$('#edit_sample_date').val(data.sample_date_in_js);
+							$('#edit_sample_date').val(data.sample_date);
 							$('#edit_note').val(data.note);
 							$('#edit_sample_date').datepicker({
 								format: 'dd/mm/yyyy',

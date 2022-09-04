@@ -51,7 +51,7 @@
 							</a>
 						</li>
 						<li>
-							<a href="{{ route('sampleupload.env') }}" title="Environment" data-filter-tags="environment"> <!-- รอแก้ route-->
+							<a href="{{ route('sampleupload.env') }}" title="Environment" data-filter-tags="environment">
 								<span class="nav-link-text" data-i18n="nav.environment">ตัวอย่างสิ่งแวดล้อม</span>
 							</a>
 						</li>
@@ -96,12 +96,12 @@
 						<span class="nav-link-text" data-i18n="nav.pages_example_received">งานรับตัวอย่าง</span>
 					</a>
 					<ul>
-						<li class="{{ (Request::is('*sample/receive'))  ? 'active open' : '' }}">
+						<li class="{{ (Request::is('*sample/receive*'))  ? 'active open' : '' }}">
 							<a href="#" title="รายการคำขอ" data-filter-tags="specimen">
 								<span class="nav-link-text">รายการคำขอ</span>
 							</a>
 							<ul>
-								<li class="{{ (Request::is('*sample/receive'))  ? 'active' : '' }}">
+								<li class="{{ (Request::is('*sample/receive*'))  ? 'active' : '' }}">
 									<a href="{{ route('sample.receive.index') }}" title="รายการคำขอ" data-filter-tags="specimen">
 										<span class="nav-link-text">ใบคำขอ</span>
 									</a>

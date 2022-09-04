@@ -3,6 +3,7 @@
 <link rel="apple-touch-icon" href="{{ URL::asset('assets/img/favicon/apple-touch-icon.png') }}" sizes="180x180">
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/fonts.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/app.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ URL::asset('fonts/fontawesome/font-awesome.css') }}">
 @role('customer')
 	<link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/css/vendors.bundle.css') }}" media="screen, print">
 	<link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/css/app.bundle.css') }}" media="screen, print">

@@ -78,7 +78,7 @@ $(document).ready(function() {
 			{data: 'order_no', name: 'order_no'},
 			{data: 'customer_agency_name', name: 'customer_agency_name'},
 			{data: 'order_confirmed', name: 'order_confirmed'},
-			{data: 'customer_agency_code', name: 'customer_agency_code'},
+			{data: 'user_id', name: 'user_id'},
 			{data: 'total', name: 'total'},
 			{data: 'action', name: 'action', className: 'text-center'},
 		]

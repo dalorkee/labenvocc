@@ -92,14 +92,14 @@
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
 								<label class="form-label" for="book_date">ลงวันที่</label>
 								<div class="input-group">
-									<input type="text" name="book_date" value="{{ $order[0]->book_date_js ?? '' }}" placeholder="เลือกวันที่" class="form-control @error('book_date_js') is-invalid @enderror input-date" id="datepicker_book_date" readonly >
+									<input type="text" name="book_date" value="{{ $order[0]->book_date ?? '' }}" placeholder="เลือกวันที่" class="form-control @error('book_date') is-invalid @enderror input-date" id="datepicker_book_date" readonly >
 									<div class="input-group-append">
 										<span class="input-group-text fs-xl">
 											<i class="fal fa-calendar-alt"></i>
 										</span>
 									</div>
 								</div>
-								@error('book_date_js')
+								@error('book_date')
 									<div class="invalid-feedback" role="alert">{{ $message }}</div>
 								@enderror
 							</div>

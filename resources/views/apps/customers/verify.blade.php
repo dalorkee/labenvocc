@@ -93,7 +93,7 @@ table.dataTable thead th {background-color: #056676;color: white}
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
 								<label class="form-label" for="book_date">ลงวันที่</label>
 								<div class="input-group">
-								<input type="text" name="book_date" value="{{ $data['order'][0]->book_date_js ?? '' }}" placeholder="เลือกวันที่" class="form-control" readonly>
+								<input type="text" name="book_date" value="{{ $data['order'][0]->book_date ?? '' }}" placeholder="เลือกวันที่" class="form-control" readonly>
 								<div class="input-group-append">
 									<span class="input-group-text fs-xl">
 										<i class="fal fa-calendar-alt"></i>
@@ -102,9 +102,9 @@ table.dataTable thead th {background-color: #056676;color: white}
 							</div>
 						</div>
 						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
-							<label class="form-label" for="attach_file">แนบไฟล์หนังสือนำส่ง</label>
+							<label class="form-label" for="attach_file">ไฟล์หนังสือนำส่ง</label>
 							<div class="input-group">
-								<input type="text" name="book_file" value="{{ $data['order'][0]['uploads'][0]->file_name ?? '' }}" class="form-control" readonly>
+								<input type="text" name="book_file" value="{{ $data['order'][0]['uploads'][0]->file_name ?? 'ไม่มีไฟล์แนบ' }}" class="form-control" readonly>
 								<div class="input-group-append">
 									<span class="input-group-text fs-xl">
 										<i class="fal fa-file-pdf"></i>

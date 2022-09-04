@@ -6,9 +6,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\{Auth,Log};
 use App\Models\Order,User;
 use Yajra\DataTables\Facades\DataTables;
+use App\Traits\{DateTimeTrait,CommonTrait};
 
 class SampleReceiveController extends Controller
 {
+	use DateTimeTrait, CommonTrait;
 
 	#[Route('sample.receive.index', methods: ['RESOURCE'])]
 	protected function index(): object {
@@ -23,12 +25,14 @@ class SampleReceiveController extends Controller
 				->addColumn('total', function($order) {
 					return $order->order_samples_count.'/'.$order->parameters_count;
 				})
+				->editColumn('order_confirmed', function($val) {
+					return $this->setJsDateTimeToJsDate($val->order_confirmed);
+				})
 				->addColumn('action', function ($order) {
 					// return '<button class="context-nav bg-purple-600 hover:bg-purple-500 text-white py-1 px-3 rounded" data-order_id="'.$order->id.'">จัดการ <i class="fal fa-angle-down"></i></button>';
 					return '
 						<a href="'.route('sample.receive.step01', ['order_id' => $order->id]).'" class="btn btn-sm btn-success">รับ</a>
-						<a href="#edit-'.$order->id.'" class="btn btn-sm btn-warning">แก้ไข</a>
-					';
+						<a href="#edit-'.$order->id.'" class="btn btn-sm btn-warning">แก้ไข</a>';
 				})
 				->make(true);
 		} catch (\Exception $e) {
@@ -39,36 +43,7 @@ class SampleReceiveController extends Controller
 	#[Route('sample.receive.step01', methods: ['GET'])]
 	protected function step01(Request $request): object {
 		$order_id = $request->order_id;
-		return view(view: 'apps.staff.receive.step01', data: compact('order_id'));
+        $type_of_work = $this->typeOfWork();
+		return view(view: 'apps.staff.receive.step01', data: compact('order_id', 'type_of_work'));
 	}
-
-	public function store(Request $request) {
-		//
-	}
-
-	public function show($id)
-	{
-		//
-	}
-
-
-	public function edit($id)
-	{
-		//
-	}
-
-
-	public function update(Request $request, $id)
-	{
-		//
-	}
-
-
-	public function destroy($id)
-	{
-		//
-	}
-
-
-
 }
