@@ -12,13 +12,7 @@ use Yajra\DataTables\Services\DataTable;
 class OfficeDataTable extends DataTable
 {
 	use CommonTrait;
-	// private function officeFilter(array $academy_arr) {
-	// 	$str = "";
-	// 	foreach ($academy_arr as $key => $value) {
-	// 		$str .= "WHEN academy = \"".$key."\" THEN \"".$value['name_academy']."\" ";
-	// 	}
-	// 	return $str;
-	// }
+
 	public function dataTable($query): object {
 		$positions = $this->getPosition();
         $position_levels = $this->getPositionLevel();
@@ -26,19 +20,19 @@ class OfficeDataTable extends DataTable
 		return datatables()
 			->eloquent($query)
 			->addColumn('first_name', function($query) {
-				return $query->userStaff->first_name;
+				return $query->userStaff->first_name ?? '';
 			})
 			->addColumn('last_name', function($query) {
-				return $query->userStaff->last_name;
+				return $query->userStaff->last_name ?? '';
 			})
-			->addColumn('position', function($position) use ($positions) {
-				return $positions[$position->userStaff->position] ?? null;
+			->addColumn('position', function($query) use ($positions) {
+				return (!empty($query->userStaff->position)) ? $positions[$query->userStaff->position] : '';
 			})
 			->addColumn('position_level', function($query) use ($position_levels) {
-				return $position_levels[$query->userStaff->position_level] ?? null;
+				return (!empty($query->userStaff->position_level)) ? $position_levels[$query->userStaff->position_level] : '';
 			})
 			->addColumn('duty', function($query) use ($duties) {
-				return $duties[$query->userStaff->duty] ?? null;
+				return (!empty($query->userStaff->duty)) ? $duties[$query->userStaff->duty] : '';
 			})
 			->editColumn('user_status',function($userstaffchk){
 				if($userstaffchk->user_status == 'สมัครใหม่'){
@@ -50,13 +44,17 @@ class OfficeDataTable extends DataTable
 				elseif($userstaffchk->user_status == 'ไม่อนุญาต'){
 					return '<span class="badge badge-danger">ไม่อนุญาต</span>';
 				}
+                else{
+                    return '<span></span>';
+                }
 			})
 			->addColumn('action', '<button type="button" class="userstaff-manage-nav btn btn-sm btn-info" data-id="{{$id}}">จัดการ<i class="fal fa-angle-down"></i> </button>')
 			->rawColumns(['user_status','action']);
 	}
 
 	public function query(User $user) {
-		return $user->whereUser_type('staff')->with('userStaff')->orderBy('id', 'ASC');
+		$user_staff = $user->whereUser_type('staff')->with('userStaff')->orderBy('id', 'ASC');
+        return $user_staff;
 	}
 
 	public function html(): object {

@@ -95,7 +95,7 @@ class OfficeController extends Controller
         }
         $us_pw = $user_find->save();
         if($us_pw == true){
-            $user_staff_find = $user_find->userStaff;        
+            $user_staff_find = $user_find->userStaff;
             $user_staff_find->first_name = $request->first_name;
             $user_staff_find->last_name = $request->last_name;
             $user_staff_find->position = $request->position;
@@ -111,7 +111,7 @@ class OfficeController extends Controller
                         'role_id'=>'3',
                         'model_type'=>'App\Models\User',
                         'model_id'=>$request->user_id,
-                    ]);    
+                    ]);
                 }
                 elseif($request->user_status !== 'อนุญาต' AND $user_find->user_status === 'อนุญาต'){
                     $user_find->approved = 'n';
@@ -122,7 +122,7 @@ class OfficeController extends Controller
                     return redirect()->route('office.index')->with('success', 'updated successfully');
                 }
                 elseif($request->user_status !== 'อนุญาต' AND $user_find->user_status !== 'อนุญาต'){
-                    $user_find->user_status = $request->user_status;                
+                    $user_find->user_status = $request->user_status;
                 }
                 else{
                     return redirect()->route('office.edit',$request->user_id)->with('error', 'permissions unsuccessfully');
@@ -141,7 +141,7 @@ class OfficeController extends Controller
         }
         else{
             return redirect()->route('office.edit',$request->user_id)->with('error', 'unsuccessfully');
-        }        
+        }
     }
 
     /**
@@ -151,7 +151,7 @@ class OfficeController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy(Request $request,User $users){
-        $d_now = date('Y-m-d H:i:s');        
+        $d_now = date('Y-m-d H:i:s');
         $user_find = $users->find($request->id);
         $user_find->approved = 'n';
         $user_find->user_status = 'ไม่อนุญาต';
@@ -162,9 +162,9 @@ class OfficeController extends Controller
             $user_staff_find->deleted_at = $d_now;
             $ustuf_del = $user_staff_find->save();
             if($ustuf_del==true){
-                $del = DB::table('model_has_roles')->where('model_id', '=', $request->id)->delete();  
+                $del = DB::table('model_has_roles')->where('model_id', '=', $request->id)->delete();
                 if($del==true){
-                    return redirect()->route('office.index')->with('success', 'delete successfully');         
+                    return redirect()->route('office.index')->with('success', 'delete successfully');
                 }
                 else{
                     return redirect()->route('office.index')->with('error', 'unsuccessfully');
@@ -172,13 +172,13 @@ class OfficeController extends Controller
             }
             else{
                 return redirect()->route('office.index')->with('error', 'unsuccessfully');
-            }             
-        } 
+            }
+        }
         else{
             return redirect()->route('office.index')->with('error', 'unsuccessfully');
         }
     }
-    public function allow(Request $request,User $users){       
+    public function allow(Request $request,User $users){
         $user_find = $users->find($request->id);
         $user_find->approved = 'y';
         $user_find->user_status = 'อนุญาต';
@@ -190,22 +190,22 @@ class OfficeController extends Controller
                 'model_id'=>$request->id,
             ]);
             return redirect()->route('office.index')->with('success', 'allow successfully');
-        } 
+        }
         else{
             return redirect()->route('office.index')->with('error', 'unsuccessfully');
-        }       
+        }
     }
-    public function deny(Request $request,User $users){        
+    public function deny(Request $request,User $users){
         $user_find = $users->find($request->id);
         $user_find->approved = 'n';
         $user_find->user_status = 'ไม่อนุญาต';
         $u_deny = $user_find->save();
         if($u_deny==true){
-            DB::table('model_has_roles')->where('model_id', '=', $request->id)->delete(); 
-            return redirect()->route('office.index')->with('success', 'deny successfully');          
-        } 
+            DB::table('model_has_roles')->where('model_id', '=', $request->id)->delete();
+            return redirect()->route('office.index')->with('success', 'deny successfully');
+        }
         else{
             return redirect()->route('office.index')->with('error', 'unsuccessfully');
-        }       
+        }
     }
 }

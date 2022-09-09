@@ -12,13 +12,6 @@ use Illuminate\Support\Facades\DB;
 
 class UsersDataTable extends DataTable
 {
-	// private function officeFilter(array $academy_arr) {
-	// 	$str = "";
-	// 	foreach ($academy_arr as $key => $value) {
-	// 		$str .= "WHEN academy = \"".$key."\" THEN \"".$value['name_academy']."\" ";
-	// 	}
-	// 	return $str;
-	// }
 	public function dataTable($query): object {
 		return datatables()
 			->eloquent($query)
@@ -53,8 +46,8 @@ class UsersDataTable extends DataTable
 	}
 
 	public function query(User $user) {
-		$userCus = $user->whereUser_type('customer')->with('userCustomer')->orderBy('id', 'ASC');
-		return $userCus;
+		$user_cus = $user->whereUser_type('customer')->with('userCustomer')->orderBy('id', 'ASC');
+		return $user_cus;
 	}
 
 
