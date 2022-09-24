@@ -2,10 +2,10 @@
 <html lang="th">
 <head>
 <meta charset="utf-8">
-<title>{{ config('app.name', 'talek-team') }}</title>
 <meta name="description" content="Introduction">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no, minimal-ui">
+<title>{{ config('app.name', 'talek-team') }}</title>
 <link rel="apple-touch-icon" sizes="50x50" href="{{ URL::asset('images/small-moph-logo.png') }}">
 <link rel="icon" type="image/png" sizes="32x32" href="{{ URL::asset('images/small-moph-logo-32x32.png') }}">
 <link rel="icon" type="image/png" sizes="16x16" href="{{ URL::asset('images/small-moph-logo-16x16.png') }}">

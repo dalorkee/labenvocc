@@ -10,7 +10,7 @@ use App\Models\OrderSample;
 
 class CustSampleDataTable extends DataTable
 {
-	public function dataTable($query) {
+	public function dataTable($query): DataTableAbstract {
 		try {
 			switch (auth()->user()->userCustomer->customer_type) {
 				case 'personal':
@@ -60,18 +60,18 @@ class CustSampleDataTable extends DataTable
 						->rawColumns(['firstname', 'lastname', 'parameter', 'origin_threat_name', 'place_name']);
 					break;
 				default:
-						return redirect()->route('logout');
+					return redirect()->route('logout');
 				}
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
 		}
 	}
 
-	public function query(Request $request, OrderSample $order_sample) {
+	public function query(Request $request, OrderSample $order_sample): Builder {
 		return $order_sample::with('parameters')->select('*')->whereOrder_id($request->order_id)->orderBy('id', 'ASC');
 	}
 
-	public function html() {
+	public function html(): Builder {
 		try {
 			return $this->builder()
 				->setTableId("order-table")
@@ -107,7 +107,7 @@ class CustSampleDataTable extends DataTable
 		}
 	}
 
-	protected function getColumns() {
+	protected function getColumns(): array {
 		try {
 			switch (auth()->user()->userCustomer->customer_type) {
 				case 'personal':
@@ -136,7 +136,7 @@ class CustSampleDataTable extends DataTable
 		}
 	}
 
-	protected function filename() {
+	protected function filename(): string {
 		return 'order_detail' . date('YmdHis');
 	}
 }

@@ -30,7 +30,6 @@ Route::get('/catcat', function() {
 	Artisan::call('cache:clear');
 	return "Cache is cleared";
 });
-//Route::get('/login', [HomeController::class, 'index'])->name('login')->middleware('throttle:60,1');
 Route::get('/logout', [HomeController::class, 'logout'])->name('logout');
 Route::resources([
 	'home' => HomeController::class,
@@ -41,43 +40,45 @@ Route::resources([
 	'permissions' => PermissionController::class,
 ]);
 Route::name('register.')->group(function() {
-	Route::prefix('register/personal')->group(function() {
-		Route::get('/step/2', [RegisterPersonalController::class, 'createPersonalStep2Get'])->name('personal.step2.get');
-		Route::post('step/2', [RegisterPersonalController::class, 'createPersonalStep2Post'])->name('personal.step2.post');
-		Route::get('/step/3', [RegisterPersonalController::class, 'createPersonalStep3Get'])->name('personal.step3.get');
-		Route::post('step/3', [RegisterPersonalController::class, 'createPersonalStep3Post'])->name('personal.step3.post');
-		Route::get('/step/4', [RegisterPersonalController::class, 'createPersonalStep4Get'])->name('personal.step4.get');
-		Route::post('step/4', [RegisterPersonalController::class, 'createPersonalStep4Post'])->name('personal.step4.post');
-		Route::get('/step/5', [RegisterPersonalController::class, 'createPersonalStep5Get'])->name('personal.step5.get');
-		Route::post('step/5', [RegisterPersonalController::class, 'createPersonalStep5Post'])->name('personal.step5.post');
+	Route::prefix('register/personal')->controller(RegisterPersonalController::class)->group(function() {
+		Route::get('/step/2', 'createPersonalStep2Get')->name('personal.step2.get');
+		Route::post('step/2', 'createPersonalStep2Post')->name('personal.step2.post');
+		Route::get('/step/3', 'createPersonalStep3Get')->name('personal.step3.get');
+		Route::post('step/3', 'createPersonalStep3Post')->name('personal.step3.post');
+		Route::get('/step/4', 'createPersonalStep4Get')->name('personal.step4.get');
+		Route::post('step/4', 'createPersonalStep4Post')->name('personal.step4.post');
+		Route::get('/step/5', 'createPersonalStep5Get')->name('personal.step5.get');
+		Route::post('step/5', 'createPersonalStep5Post')->name('personal.step5.post');
 	});
-	Route::prefix('register/private')->group(function() {
-		Route::get('/step/2', [RegisterPrivateAgencyController::class, 'createPrivateAgencyStep2Get'])->name('private.step2.get');
-		Route::post('step/2', [RegisterPrivateAgencyController::class, 'createPrivateAgencyStep2Post'])->name('private.step2.post');
-		Route::get('/step/3', [RegisterPrivateAgencyController::class, 'createPrivateAgencyStep3Get'])->name('private.step3.get');
-		Route::post('step/3', [RegisterPrivateAgencyController::class, 'createPrivateAgencyStep3Post'])->name('private.step3.post');
-		Route::get('/step/4', [RegisterPrivateAgencyController::class, 'createPrivateAgencyStep4Get'])->name('private.step4.get');
-		Route::post('step/4', [RegisterPrivateAgencyController::class, 'createPrivateAgencyStep4Post'])->name('private.step4.post');
-		Route::get('/step/5', [RegisterPrivateAgencyController::class, 'createPrivateAgencyStep5Get'])->name('private.step5.get');
-		Route::post('step/5', [RegisterPrivateAgencyController::class, 'createPrivateAgencyStep5Post'])->name('private.step5.post');
+	Route::prefix('register/private')->controller(RegisterPrivateAgencyController::class)->group(function() {
+		Route::get('/step/2', 'createPrivateAgencyStep2Get')->name('private.step2.get');
+		Route::post('step/2', 'createPrivateAgencyStep2Post')->name('private.step2.post');
+		Route::get('/step/3', 'createPrivateAgencyStep3Get')->name('private.step3.get');
+		Route::post('step/3', 'createPrivateAgencyStep3Post')->name('private.step3.post');
+		Route::get('/step/4', 'createPrivateAgencyStep4Get')->name('private.step4.get');
+		Route::post('step/4', 'createPrivateAgencyStep4Post')->name('private.step4.post');
+		Route::get('/step/5', 'createPrivateAgencyStep5Get')->name('private.step5.get');
+		Route::post('step/5', 'createPrivateAgencyStep5Post')->name('private.step5.post');
 	});
-	Route::prefix('register/gov')->group(function() {
-		Route::get('/step/2', [RegisterGovernmentController::class, 'createGovernmentStep2Get'])->name('gov.step2.get');
-		Route::post('step/2', [RegisterGovernmentController::class, 'createGovernmentStep2Post'])->name('gov.step2.post');
-		Route::get('/step/3', [RegisterGovernmentController::class, 'createGovernmentStep3Get'])->name('gov.step3.get');
-		Route::post('step/3', [RegisterGovernmentController::class, 'createGovernmentStep3Post'])->name('gov.step3.post');
-		Route::get('/step/4', [RegisterGovernmentController::class, 'createGovernmentStep4Get'])->name('gov.step4.get');
-		Route::post('step/4', [RegisterGovernmentController::class, 'createGovernmentStep4Post'])->name('gov.step4.post');
-		Route::get('/step/5', [RegisterGovernmentController::class, 'createGovernmentStep5Get'])->name('gov.step5.get');
-		Route::post('step/5', [RegisterGovernmentController::class, 'createGovernmentStep5Post'])->name('gov.step5.post');
+	Route::prefix('register/gov')->controller(RegisterGovernmentController::class)->group(function() {
+		Route::get('/step/2', 'createGovernmentStep2Get')->name('gov.step2.get');
+		Route::post('step/2', 'createGovernmentStep2Post')->name('gov.step2.post');
+		Route::get('/step/3', 'createGovernmentStep3Get')->name('gov.step3.get');
+		Route::post('step/3', 'createGovernmentStep3Post')->name('gov.step3.post');
+		Route::get('/step/4', 'createGovernmentStep4Get')->name('gov.step4.get');
+		Route::post('step/4', 'createGovernmentStep4Post')->name('gov.step4.post');
+		Route::get('/step/5', 'createGovernmentStep5Get')->name('gov.step5.get');
+		Route::post('step/5', 'createGovernmentStep5Post')->name('gov.step5.post');
 	});
-	Route::post('province/district', [RegisterController::class, 'renderDistrictToHtmlSelect'])->name('district');
-	Route::post('province/district/subdistrict', [RegisterController::class, 'renderSubDistrictToHtmlSelect'])->name('subDistrict');
-	Route::post('province/subdistrict/postcode', [RegisterController::class, 'getPostCodeBySubDistrict'])->name('postcode');
-	Route::post('gov/dept', [RegisterController::class, 'renderGovernmentDeptToHtmlSelect'])->name('department');
-	Route::post('gov/deps/v2', [RegisterController::class, 'renderGovernmentDeptToHtmlSelectV2'])->name('department.v2');
-	Route::post('search/hospital', [RegisterController::class, 'searchHospitalByName'])->name('hospital');
-	Route::post('refresh-captcha', [RegisterController::class, 'refreshCaptcha'])->name('refresh-captcha');
+	Route::controller(RegisterController::class)->group(function() {
+		Route::post('province/district', 'renderDistrictToHtmlSelect')->name('district');
+		Route::post('province/district/subdistrict', 'renderSubDistrictToHtmlSelect')->name('subDistrict');
+		Route::post('province/subdistrict/postcode', 'getPostCodeBySubDistrict')->name('postcode');
+		Route::post('gov/dept', 'renderGovernmentDeptToHtmlSelect')->name('department');
+		Route::post('gov/deps/v2', 'renderGovernmentDeptToHtmlSelectV2')->name('department.v2');
+		Route::post('search/hospital', 'searchHospitalByName')->name('hospital');
+		Route::post('refresh-captcha', 'refreshCaptcha')->name('refresh-captcha');
+	});
 });
 Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 	Route::resources([
@@ -88,52 +89,50 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 		'advertise' => AdvertiseController::class,
 		'sampleupload' => SampleUploadController::class,
 	]);
-	Route::prefix('sample')->name('sample.')->group(function() {
-		Route::resource('receive', SampleReceiveController::class);
-		Route::get('/receive/order/{order_id}/step01', [SampleReceiveController::class, 'step01'])->name('receive.step01');
-	});
-	Route::get('/dashboard', function() {
-		return view('dashboard');
-	})->name('dashboard');
-	Route::name('boundary.')->group(function() {
-		Route::get('province/district', [BoundaryController::class, 'districtToHtmlSelect'])->name('fetch.district');
-		Route::get('province/district/sub/district', [BoundaryController::class, 'subDistrictToHtmlSelect'])->name('fetch.sub.district');
-		Route::get('province/district/sub/district/postcode', [BoundaryController::class, 'postCodeBySubDistrict'])->name('fetch.postcode');
+	Route::get('/dashboard', function() { return view('dashboard'); })->name('dashboard');
+	Route::name('boundary.')->controller(BoundaryController::class)->group(function() {
+		Route::get('province/district', 'districtToHtmlSelect')->name('fetch.district');
+		Route::get('province/district/sub/district', 'subDistrictToHtmlSelect')->name('fetch.sub.district');
+		Route::get('province/district/sub/district/postcode', 'postCodeBySubDistrict')->name('fetch.postcode');
 	});
 	Route::name('hospital.')->group(function() {
 		Route::get('hospital/type', [HospitalController::class, 'hospTypeToHtmlSelect'])->name('fetch.type');
 	});
 	Route::name('customer.')->group(function() {
-		Route::prefix('customer/info')->group(function() {
-			Route::get('/create/order/{order_id}', [CustomerController::class, 'createInfo'])->name('info.create');
-			Route::post('store/order', [CustomerController::class, 'storeInfo'])->name('info.store');
+		Route::prefix('customer/info')->controller(CustomerController::class)->group(function() {
+			Route::get('/create/order/{order_id}', 'createInfo')->name('info.create');
+			Route::post('store/order', 'storeInfo')->name('info.store');
 		});
-		Route::prefix('customer/parameter')->group(function() {
-			Route::get('/create/order/{order_id}', [CustomerController::class, 'createParameter'])->name('parameter.create');
-			Route::post('personal/store', [CustomerController::class, 'storeParameterPersonal'])->name('parameter.personal.store');
-			Route::get('/personal/edit/{order_sample_id}', [CustomerController::class, 'editParameterPersonal'])->name('parameter.personal.edit');
-			Route::post('personal/update', [CustomerController::class, 'updateParameterPersonal'])->name('parameter.personal.update');
-			Route::get('/personal/id/{id}/order/{order_id}/delete', [CustomerController::class, 'DestroyParameterPersonal'])->name('parameter.personal.destroy');
-			Route::get('/sample/{order_sample_id}/type/{threat_type_id}/list', [CustomerController::class, 'listParameterData'])->name('parameter.data.list');
-			Route::post('store', [CustomerController::class, 'storeParameterData'])->name('parameter.data.store');
-			Route::get('/{id}/sample/{order_sample_id}/order/{order_id}/delete', [CustomerController::class, 'DestroyParameterData'])->name('parameter.data.destroy');
+		Route::prefix('customer/parameter')->controller(CustomerController::class)->group(function() {
+			Route::get('/create/order/{order_id}', 'createParameter')->name('parameter.create');
+			Route::post('personal/store', 'storeParameterPersonal')->name('parameter.personal.store');
+			Route::get('/personal/edit/{order_sample_id}', 'editParameterPersonal')->name('parameter.personal.edit');
+			Route::post('personal/update', 'updateParameterPersonal')->name('parameter.personal.update');
+			Route::get('/personal/id/{id}/order/{order_id}/delete', 'DestroyParameterPersonal')->name('parameter.personal.destroy');
+			Route::get('/sample/{order_sample_id}/type/{threat_type_id}/list', 'listParameterData')->name('parameter.data.list');
+			Route::post('store', 'storeParameterData')->name('parameter.data.store');
+			Route::get('/{id}/sample/{order_sample_id}/order/{order_id}/delete', 'DestroyParameterData')->name('parameter.data.destroy');
 		});
-		Route::prefix('customer/sample')->group(function() {
-			Route::get('/create/order/{order_id}', [CustomerController::class, 'createSample'])->name('sample.create');
-			Route::post('store/order/{order_id}', [CustomerController::class, 'storeSample'])->name('sample.store');
+		Route::prefix('customer/sample')->controller(CustomerController::class)->group(function() {
+			Route::get('/create/order/{order_id}', 'createSample')->name('sample.create');
+			Route::post('store/order/{order_id}', 'storeSample')->name('sample.store');
 		});
-		Route::prefix('customer/verify')->group(function() {
-			Route::get('/create/order/{order_id}', [CustomerController::class, 'createVerify'])->name('verify.create');
-			Route::post('/store/order', [CustomerController::class, 'storeVerify'])->name('verify.store');
+		Route::prefix('customer/verify')->controller(CustomerController::class)->group(function() {
+			Route::get('/create/order/{order_id}', 'createVerify')->name('verify.create');
+			Route::post('store/order', 'storeVerify')->name('verify.store');
 		});
 	});
-	Route::prefix('staff')->name('staff.')->group(function() {
-		Route::get('/home', [StaffController::class, 'index'])->name('index');
-		Route::get('/profile', [StaffController::class, 'profile'])->name('profile');
-		Route::get('/inbox', [StaffController::class, 'inbox'])->name('inbox');
-		Route::get('/inbox/list', [StaffController::class, 'getInbox'])->name('get.inbox');
-		Route::get('/calendar', [StaffController::class, 'calendar'])->name('calendar');
+	Route::name('staff.')->prefix('staff')->controller(StaffController::class)->group(function() {
+		Route::get('/home', 'index')->name('index');
+		Route::get('/profile', 'profile')->name('profile');
+		Route::get('/inbox', 'inbox')->name('inbox');
+		Route::get('/inbox/list', 'getInbox')->name('get.inbox');
 
+		Route::get('/calendar', 'calendar')->name('calendar');
+	});
+	Route::name('sample.')->prefix('sample')->group(function() {
+		Route::resource('receives', SampleReceiveController::class);
+		Route::get('/receive/order/{order_id}/step01', [SampleReceiveController::class, 'step01'])->name('receives.step01');
 	});
 	Route::get('/admin/home', [AdminController::class, 'index'])->name('admin.index');
 	Route::get('/users/id/{id}/edit',[UsersController::class,'edit'])->name('users.edit');

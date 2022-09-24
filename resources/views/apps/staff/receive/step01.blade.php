@@ -1,15 +1,13 @@
 @extends('layouts.index')
-@section('token')
-<meta name="csrf-token" content="{{ csrf_token() }}">
-@endsection
+@section('token')<meta name="csrf-token" content="{{ csrf_token() }}">@endsection
 @section('style')
 <link type="text/css" href="{{ URL::asset('vendor/bootstrap-datepicker/dist/css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet">
 <link type="text/css" href="{{ URL::asset('css/pj-step.css') }}" rel="stylesheet" >
 @endsection
 @section('content')
 <ol class="breadcrumb page-breadcrumb text-sm font-prompt">
-	<li class="breadcrumb-item"><i class="fal fa-home mr-1"></i> <a href="{{ route('sample.receive.index') }}">งานรับตัวอย่าง</a></li>
-	<li class="breadcrumb-item">รับตัวอย่าง</li>
+	<li class="breadcrumb-item"><i class="fal fa-home mr-1"></i> <a href="{{ route('sample.receives.index') }}">งานรับตัวอย่าง</a></li>
+	<li class="breadcrumb-item">ใบคำขอ</li>
 </ol>
 <div class="row text-sm font-prompt">
 	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -30,8 +28,8 @@
 					<input type="hidden" name="order_type_name" value="ตัวอย่างชีวภาพ">
 					<div class="panel-content">
 						<ul class="steps">
-							<li class="undone"><a href="{{ route('sample.receive.create') }}"><span class="d-none d-sm-inline">รายการคำขอ</span></a></li>
-							<li class="active"><p><span class="d-none d-sm-inline">รับตัวอย่าง</span></p></li>
+							<li class="active"><a href="{{ route('sample.receives.create') }}"><span class="d-none d-sm-inline">รายการคำขอ</span></a></li>
+							<li class="undone"><p><span class="d-none d-sm-inline">รับตัวอย่าง</span></p></li>
 							<li class="undone"><p><span class="d-none d-sm-inline">การตรวจวิเคราะห์</span></&p></li>
 							<li class="undone"><p><span class="d-none d-sm-inline">รายงานผล</span></p></li>
 						</ul>
@@ -54,15 +52,15 @@
 							</div>
 							<div class="form-group col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6 mb-3">
 								<label class="form-label" for="type_of_work">ประเภทงาน <span class="text-red-600">*</span></label>
-                                <select name="type_of_work" class="form-control @error('type_of_work') is-invalid @enderror">
-                                    <option value="">-- โปรดเลือก --</option>
-                                    @foreach ($type_of_work as $key => $val)
-                                        <option value="{{ $key }}" {{ (old('type_of_work') == $key) ? 'selected' : '' }}>{{ $val }}</option>
-                                    @endforeach
-                                </select>
-                                @error('type_of_work')
-                                    <div class="invalid-feedback" role="alert">{{ $message }}</div>
-                                @enderror
+								<select name="type_of_work" class="form-control @error('type_of_work') is-invalid @enderror">
+									<option value="">-- โปรดเลือก --</option>
+									@foreach ($type_of_work as $key => $val)
+										<option value="{{ $key }}" {{ (old('type_of_work') == $key) ? 'selected' : '' }}>{{ $val }}</option>
+									@endforeach
+								</select>
+								@error('type_of_work')
+									<div class="invalid-feedback" role="alert">{{ $message }}</div>
+								@enderror
 							</div>
 							<div class="form-group col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6 mb-3">
 								<label class="form-label" for="group_of_work">กลุ่มงาน <span class="text-red-600">*</span></label>
