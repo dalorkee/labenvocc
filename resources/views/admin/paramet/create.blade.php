@@ -1,6 +1,9 @@
 @extends('layouts.index')
 @section('style')
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('vendor/selectpicker/css/bootstrap-select.min.css') }}">
+<style type="text/css">
+.bootstrap-select {width: 100%; margin: 0; padding: 0; color: red}
+</style>
 @endsection
 @section('content')
 <ol class="breadcrumb page-breadcrumb">
@@ -23,23 +26,27 @@
 	<div class="frame-wrap">
 		<form action="{{ route('advertise.store') }}" method="POST">
 		@csrf
-			<div class="form-row">
+			<div class="row">
 				<div class="col-md-6 mb-3">
-					<label class="form-label" for="parameter_name">ชื่อพารามิเตอร์</label>
-					<select class="custom-select" name="parameter_name" required>
-						<option value="">---เลือก---</option>
-                        @foreach ($parameters as $paramet)
-						    <option style="margin: 0" value="{{$paramet->id}}">{{$paramet->parameter_name}}</option>
-                        @endforeach
-					</select>
+                    <div class="form-group">
+                        <label for="parameter_name">ชื่อพารามิเตอร์</label>
+                        <select name="parameter_name" class="form-control" required>
+                            <option value="">---เลือก---</option>
+                            @foreach ($parameters as $paramet)
+                                <option style="" value="{{$paramet->id}}">{{$paramet->parameter_name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
 				</div>
 				<div class="col-md-6 mb-3">
-					<label class="form-label" for="sample_character_name">ประเภทตัวอย่าง</label>
-                    <select class="custom-select" name="sample_character_name" required>
-						<option value="">---เลือก---</option>
-						<option value="1">A</option>
-						<option value="2">B</option>
-					</select>
+                    <div class="form-group">
+					    <label for="sample_character_name">ประเภทตัวอย่าง</label>
+                        <select name="sample_character_name" class="form-control" required>
+                            <option value="">---เลือก---</option>
+                            <option value="1">A</option>
+                            <option value="2">B</option>
+                        </select>
+                    </div>
 				</div>
 			</div>
 			<div class="form-row">
@@ -181,4 +188,13 @@
 @endsection
 @section('script')
 <script type="text/javascript" src="{{ URL::asset('vendor/selectpicker/js/bootstrap-select.min.js') }}"></script>
+<script type="text/javascript" src="{{ URL::asset('vendor/popper/umd/popper.min.js') }}"></script>
+<script type="text/javascript" src="{{ URL::asset('vendor/jquery/jquery-3.2.1.slim.min.js') }}"></script>
+<script>
+$(function () {
+    $('select').selectpicker({
+        size: 4
+    });
+});
+</script>
 @endsection
