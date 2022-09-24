@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Parameter;
+use App\Models\{Parameter,OriginThreat};
 use Illuminate\Http\Request;
 use App\DataTables\ParameterAdminDataTable;
 use Illuminate\Support\Facades\{DB,Auth,Log};
@@ -40,7 +40,8 @@ class ParametController extends Controller
      */
     public function create()
     {
-        return view('admin.paramet.create');
+        $parameters = Parameter::all();
+        return view('admin.paramet.create',compact('parameters'));
     }
 
     /**

@@ -1,10 +1,6 @@
 @extends('layouts.index')
 @section('style')
-<link rel="stylesheet" type="text/css" href="{{ URL::asset('vendor/jquery-smartwizard/css/smart_wizard_arrows.min.css') }}">
-<link rel="stylesheet" type="text/css" href="{{ URL::asset('vendor/DataTables/DataTables-1.10.22/css/jquery.dataTables.min.css') }}">
-<link rel="stylesheet" type="text/css" href="{{ URL::asset('vendor/DataTables/Buttons-1.6.5/css/buttons.jqueryui.min.css') }}">
-<link rel='stylesheet' type="text/css" href="{{ URL::asset('vendor/DataTables/Responsive-2.2.6/css/responsive.dataTables.min.css') }}">
-<link rel="stylesheet" type="text/css" href="{{ URL::asset('vendor/jquery-contextmenu/css/jquery.contextMenu.min.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ URL::asset('vendor/selectpicker/css/bootstrap-select.min.css') }}">
 @endsection
 @section('content')
 <ol class="breadcrumb page-breadcrumb">
@@ -32,8 +28,9 @@
 					<label class="form-label" for="parameter_name">ชื่อพารามิเตอร์</label>
 					<select class="custom-select" name="parameter_name" required>
 						<option value="">---เลือก---</option>
-						<option value="1">A</option>
-						<option value="2">B</option>
+                        @foreach ($parameters as $paramet)
+						    <option style="margin: 0" value="{{$paramet->id}}">{{$paramet->parameter_name}}</option>
+                        @endforeach
 					</select>
 				</div>
 				<div class="col-md-6 mb-3">
@@ -183,9 +180,5 @@
 </div>
 @endsection
 @section('script')
-<script type="text/javascript" src="{{ URL::asset('vendor/DataTables/DataTables-1.10.22/js/jquery.dataTables.min.js') }}"></script>
-<script type="text/javascript" src="{{ URL::asset('vendor/DataTables/Buttons-1.6.5/js/dataTables.buttons.min.js') }}"></script>
-<script type="text/javascript" src="{{ URL::asset('vendor/DataTables/Responsive-2.2.6/js/dataTables.responsive.min.js') }}"></script>
-<script type="text/javascript" src="{{ URL::asset('vendor/jquery-contextmenu/js/jquery.contextMenu.min.js') }}"></script>
-<script type="text/javascript" src="{{ URL::asset('js/buttons.server-side.js') }}"></script>
+<script type="text/javascript" src="{{ URL::asset('vendor/selectpicker/js/bootstrap-select.min.js') }}"></script>
 @endsection
