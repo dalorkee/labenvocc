@@ -6,11 +6,24 @@ use App\Http\Controllers\Controller;
 use App\Models\Admin\Advertise;
 use Illuminate\Http\Request;
 use App\DataTables\AdvertiseDataTable;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\{Auth,Log,DB};
 use App\Traits\CommonTrait;
 
 class AdvertiseController extends Controller
 {
+    private object $user;
+
+	public function __construct() {
+		$this->middleware('auth');
+		$this->middleware(['role:root|admin']);
+		$this->middleware('is_order_confirmed');
+		$this->middleware(function($request, $next) {
+			$this->user = Auth::user();
+			$user_role_arr = $this->user->roles->pluck('name')->all();
+			$this->user_role = $user_role_arr[0];
+			return $next($request);
+		});
+	}
     use CommonTrait;
     /**
      * Display a listing of the resource.
@@ -39,7 +52,7 @@ class AdvertiseController extends Controller
      */
     public function store(Request $request, Advertise $advertise){
         $this->validate($request,[
-            'advertise_type'=>'required',            
+            'advertise_type'=>'required',
             'advertise_title'=>'required',
             'advertise_detail'=>'required',
         ]);
@@ -72,7 +85,7 @@ class AdvertiseController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit(Request $request, Advertise $advertise){
-        $advertise = $advertise->find($request->id); 
+        $advertise = $advertise->find($request->id);
         return view('admin.advertise.edit',compact('advertise'));
     }
 
@@ -111,7 +124,7 @@ class AdvertiseController extends Controller
         }
     }
     public function detail(Request $request, Advertise $advertise){
-        $advertise = $advertise->find($request->id); 
+        $advertise = $advertise->find($request->id);
         return view('user.detail',compact('advertise'));
     }
     public function listall(Request $request, Advertise $advertise){

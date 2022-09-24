@@ -145,6 +145,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 	Route::get('/office/id/{id}/deny',[OfficeController::class,'deny'])->name('office.deny');
 	Route::get('/advertise/id/{id}/edit',[AdvertiseController::class,'edit'])->name('advertise.edit');
 	Route::get('/advertise/id/{id}/destroy',[AdvertiseController::class,'destroy'])->name('advertise.destroy');
+    Route::get('/parameter/id/{id}/edit',[ParametController::class,'edit'])->name('paramet.edit');
+	Route::get('/parameter/id/{id}/allow',[ParametController::class,'allow'])->name('paramet.allow');
+	Route::get('/parameter/id/{id}/deny',[ParametController::class,'deny'])->name('paramet.deny');
 
 	Route::get('sample/env', [SampleUploadController::class, 'env'])->name('sampleupload.env');
 	Route::post('sample/bio/create', [SampleUploadController::class, 'biocreate'])->name('sampleupload.biocreate');

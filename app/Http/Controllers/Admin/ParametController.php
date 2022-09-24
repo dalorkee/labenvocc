@@ -5,19 +5,32 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Parameter;
 use Illuminate\Http\Request;
-use App\DataTables\ParametDataTable;
-use Illuminate\Support\Facades\DB;
+use App\DataTables\ParameterAdminDataTable;
+use Illuminate\Support\Facades\{DB,Auth,Log};
 
 class ParametController extends Controller
 {
+    private object $user;
+
+	public function __construct() {
+		$this->middleware('auth');
+		$this->middleware(['role:root|admin']);
+		$this->middleware('is_order_confirmed');
+		$this->middleware(function($request, $next) {
+			$this->user = Auth::user();
+			$user_role_arr = $this->user->roles->pluck('name')->all();
+			$this->user_role = $user_role_arr[0];
+			return $next($request);
+		});
+	}
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(ParameterAdminDataTable $dataTable)
     {
-        return view('admin.paramet.index');
+        return $dataTable->render('admin.paramet.index');
     }
 
     /**
@@ -27,7 +40,7 @@ class ParametController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.paramet.create');
     }
 
     /**
@@ -60,7 +73,7 @@ class ParametController extends Controller
      */
     public function edit(Parameter $Parameter)
     {
-        //
+        return view('admin.paramet.edit');
     }
 
     /**
