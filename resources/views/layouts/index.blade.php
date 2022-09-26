@@ -2,6 +2,7 @@
 <html lang="th">
 <head>
 <meta charset="utf-8">
+@yield('token')
 <meta name="description" content="Introduction">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no, minimal-ui">
@@ -10,12 +11,9 @@
 <link rel="icon" type="image/png" sizes="32x32" href="{{ URL::asset('images/small-moph-logo-32x32.png') }}">
 <link rel="icon" type="image/png" sizes="16x16" href="{{ URL::asset('images/small-moph-logo-16x16.png') }}">
 <link rel="shortcut icon" href="{{ URL::asset('images/favicon.ico') }}">
-@yield('token')
 @include('layouts.style')
+<style type="text/css">.swal2-popup {font-size: 1rem !important; font-family: "Prompt", Georgia, serif;}</style>
 @yield('style')
-<style type="text/css">
-.swal2-popup {font-size: 1rem !important; font-family: "Prompt", Georgia, serif;}
-</style>
 </head>
 <body class="mod-bg-1 ">
 <div class="page-wrapper">
@@ -44,7 +42,7 @@
 @include('components.page-settings')
 @include('layouts.script')
 @yield('script')
-<script>
+<script type="text/javascript">
 $(document).ready(function() {
 	let options = {
 		"closeButton": true,
