@@ -1,7 +1,5 @@
 @extends('layouts.index')
-@section('token')
-<meta name="csrf-token" content="{{ csrf_token() }}">
-@endsection
+@section('token')<meta name="csrf-token" content="{{ csrf_token() }}">@endsection
 @section('content')
 <ol class="breadcrumb page-breadcrumb text-sm font-prompt">
 	<li class="breadcrumb-item"><i class="fal fa-home mr-1"></i> <a href="{{ route('staff.index') }}">หน้าหลัก</a></li>
