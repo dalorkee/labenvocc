@@ -30,13 +30,13 @@
 							<p>{{ Session::get('error') }}</p>
 						</div>
 					@endif
-					<form action="{{ route('advertise.store') }}" method="POST">
+					<form action="{{ route('paramet.store') }}" method="POST">
 						@csrf
 						<div class="row">
 							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-3">
 								<div class="form-group">
-									<label for="parameter_name">ชื่อพารามิเตอร์</label>
-									<select name="parameter_name" class="select2 form-control" required>
+									<label for="parameter_id">ชื่อพารามิเตอร์</label>
+									<select name="parameter_id" class="select2 form-control" id="parameter_id" required>
 										<option value="">--- เลือก ---</option>
 										@foreach ($parameters as $paramet)
 											<option value="{{$paramet->id}}">{{$paramet->parameter_name}}</option>
@@ -46,153 +46,173 @@
 							</div>
 							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-3">
 								<div class="form-group">
-									<label for="sample_character_name">ประเภทตัวอย่าง</label>
-									<select name="sample_character_name" class="select2 form-control" required>
+									<label for="sample_character_id">ประเภทตัวอย่าง</label>
+									<select name="sample_character_id" class="select2 form-control" id="sample_character_id" required>
 										<option value="">--- เลือก ---</option>
-										<option value="1">A</option>
-										<option value="2">B</option>
+										@foreach ($sample_characters as $sample_char)
+											<option value="{{$sample_char->id}}">{{$sample_char->sample_character_name}}</option>
+										@endforeach
 									</select>
 								</div>
 							</div>
 							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-3">
-								<label for="sample_type_name">ประเภทใบคำขอ</label>
-								<select name="sample_type_name" class="select2 form-control" required>
+								<label for="sample_type_id">ประเภทใบคำขอ</label>
+								<select name="sample_type_id" class="select2 form-control" id="sample_type_id" required>
 									<option value="">--- เลือก ---</option>
-									<option value="1">A</option>
-									<option value="2">B</option>
+									<option value="1">ชีวภาพ</option>
+									<option value="2">สิ่งแวดล้อม</option>
 								</select>
 							</div>
 							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-3">
-								<label for="threat_type_name">ประเภทมลพิษ</label>
-								<select name="threat_type_name" class="select2 form-control" required>
+								<label for="threat_type_id">ประเภทมลพิษ</label>
+								<select name="threat_type_id" class="select2 form-control" id="threat_type_id" required>
 									<option value="">--- เลือก ---</option>
-									<option value="1">A</option>
-									<option value="2">B</option>
+									@foreach ($threat_types as $threat_type)
+											<option value="{{$threat_type->id}}">{{$threat_type->threat_type_name}}</option>
+									@endforeach
 								</select>
 							</div>
 							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-3">
 								<div class="form-group">
-									<label for="unit_name">หน่วย(env)</label>
-									<select name="unit_name" class="select2 form-control" required>
+									<label for="unit_id">หน่วย(env)</label>
+									<select name="unit_id" class="select2 form-control" id="unit_id" required>
 										<option value="">--- เลือก ---</option>
-										<option value="1">A</option>
-										<option value="2">B</option>
+										@foreach ($units as $unit)
+											<option value="{{$unit->id}}">{{$unit->unit_name}}</option>
+										@endforeach
 									</select>
 								</div>
 							</div>
 							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-3">
 								<div class="form-group">
-									<label for="unit_customer_name">หน่วย(customer)</label>
-									<select name="unit_customer_name" class="select2 form-control" required>
+									<label for="unit_customer_id">หน่วย(customer)</label>
+									<select name="unit_customer_id" class="select2 form-control" id="unit_customer_id" required>
 										<option value="">--- เลือก ---</option>
-										<option value="1">A</option>
-										<option value="2">B</option>
+										@foreach ($unit_customers as $unit_customer)
+											<option value="{{$unit_customer->id}}">{{$unit_customer->unit_customer_name}}</option>
+										@endforeach
 									</select>
 								</div>
 							</div>
 							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-3">
 								<div class="form-group">
-									<label for="unit_choice1_name">หน่วยทางเลือก1</label>
-									<select name="unit_choice1_name" class="select2 form-control" required>
+									<label for="unit_choice1_id">หน่วยทางเลือก1</label>
+									<select name="unit_choice1_id" class="select2 form-control" id="unit_choice1_id">
 										<option value="">--- เลือก ---</option>
-										<option value="1">A</option>
-										<option value="2">B</option>
+										<option value="1">%SiO2</option>
+										<option value="2">g/l</option>
+										<option value="3">mg/dl</option>
+										<option value="4">mg/kg</option>
+										<option value="5">mg/l</option>
+										<option value="6">mg/m3</option>
+										<option value="7">ppm</option>
+										<option value="8">μg/l</option>
 									</select>
 								</div>
 							</div>
 							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-3">
 								<div class="form-group">
-									<label for="unit_choice2_name">หน่วยทางเลือก2</label>
-									<select name="unit_choice2_name" class="select2 form-control" required>
+									<label for="unit_choice2_id">หน่วยทางเลือก2</label>
+									<select name="unit_choice2_id" class="select2 form-control" id="unit_choice2_id">
 										<option value="">--- เลือก ---</option>
-										<option value="1">A</option>
-										<option value="2">B</option>
+										<option value="1">ppm</option>										
 									</select>
 								</div>
 							</div>
+						</div>
+						<div class="row">
 							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-3">
 								<div class="form-group">
 									<label for="price">ราคา</label>
-									<input type="number" class="form-control" id="price" name="price" min="1" required>
+									<input type="number" class="form-control" id="price" name="price" min="1" max="9999" required>
 								</div>
 							</div>
+						</div>
+						<div class="row">
 							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-3">
 								<div class="form-group">
-									<label for="main_analys">ผู้วิเคราะห์หลัก</label>
-									<select name="main_analys" class="select2 form-control" required>
+									<label for="main_analys_id">ผู้วิเคราะห์หลัก</label>
+									<select name="main_analys_id" class="select2 form-control" id="main_analys_id" required>
 										<option value="">--- เลือก ---</option>
-										<option value="1">A</option>
-										<option value="2">B</option>
+										@foreach ($user_stuffs as $user_stuff)
+											<option value="{{$user_stuff->user_id}}">{{$user_stuff->first_name}} {{ $user_stuff->last_name }}</option>
+										@endforeach
 									</select>
 								</div>
 							</div>
 							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-3">
 								<div class="form-group">
-									<label for="sub_analys">ผู้วิเคราะห์รอง</label>
-									<select name="sub_analys" class="select2 form-control" required>
+									<label for="sub_analys_id">ผู้วิเคราะห์รอง</label>
+									<select name="sub_analys_id" class="select2 form-control" id="sub_analys_id">
 										<option value="">--- เลือก ---</option>
-										<option value="1">A</option>
-										<option value="2">B</option>
+										@foreach ($user_stuffs as $user_stuff)
+											<option value="{{$user_stuff->user_id}}">{{$user_stuff->first_name}} {{ $user_stuff->last_name }}</option>
+										@endforeach
 									</select>
 								</div>
 							</div>
 							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-3">
 								<div class="form-group">
-                                    <label for="main_control">ผู้ควบคุมหลัก</label>
-                                    <select name="main_control" class="select2 form-control" required>
+                                    <label for="main_control_id">ผู้ควบคุมหลัก</label>
+                                    <select name="main_control_id" class="select2 form-control" id="main_control_id" required>
                                         <option value="">--- เลือก ---</option>
-                                        <option value="1">A</option>
-                                        <option value="2">B</option>
+                                        @foreach ($user_stuffs as $user_stuff)
+											<option value="{{$user_stuff->user_id}}">{{$user_stuff->first_name}} {{ $user_stuff->last_name }}</option>
+										@endforeach
                                     </select>
 							    </div>
                             </div>
 							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-3">
 								<div class="form-group">
-									<label for="sub_control">ผู้ควบคุมรอง</label>
-									<select name="sub_control" class="select2 form-control" required>
+									<label for="sub_control_id">ผู้ควบคุมรอง</label>
+									<select name="sub_control_id" class="select2 form-control" id="sub_control_id">
 										<option value="">--- เลือก ---</option>
-										<option value="1">A</option>
-										<option value="2">B</option>
+										@foreach ($user_stuffs as $user_stuff)
+											<option value="{{$user_stuff->user_id}}">{{$user_stuff->first_name}} {{ $user_stuff->last_name }}</option>
+										@endforeach
 									</select>
 								</div>
 							</div>
 							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-3">
 								<div class="form-group">
-									<label for="technic_name">เทคนิคการตรวจ</label>
-									<select name="technic_name" class="select2 form-control" required>
+									<label for="technic_id">เทคนิคการตรวจ</label>
+									<select name="technic_id" class="select2 form-control" id="technic_id">
 										<option value="">--- เลือก ---</option>
-										<option value="1">A</option>
-										<option value="2">B</option>
+										@foreach ($technicals as $technical)
+											<option value="{{$technical->id}}">{{$technical->technic_name}}</option>
+										@endforeach
 									</select>
 								</div>
 							</div>
 							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-3">
 								<div class="form-group">
-									<label for="method_name">วิธีวิเคราะห์</label>
-									<select name="method_name" class="select2 form-control" required>
+									<label for="method_id">วิธีวิเคราะห์</label>
+									<select name="method_id" class="select2 form-control" id="method_id">
 										<option value="">--- เลือก ---</option>
-										<option value="1">A</option>
-										<option value="2">B</option>
+										@foreach ($method_analys as $method_analysis)
+											<option value="{{$method_analysis->id}}">{{$method_analysis->method_name}}</option>
+										@endforeach
 									</select>
 								</div>
 							</div>
 							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-3">
 								<div class="form-group">
-									<label for="machine_name">เครื่องวิเคราะห์</label>
-									<select name="machine_name" class="select2 form-control" required>
+									<label for="machine_id">เครื่องวิเคราะห์</label>
+									<select name="machine_id" class="select2 form-control" id="machine_id">
 										<option value="">--- เลือก ---</option>
-										<option value="1">A</option>
-										<option value="2">B</option>
+										@foreach ($machines as $machine)
+											<option value="{{$machine->id}}">{{$machine->machine_name}}</option>
+										@endforeach
 									</select>
 								</div>
 							</div>
 							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-3">
 								<div class="form-group">
-									<label for="office">หน่วยงาน</label>
-									<select name="office" class="select2 form-control" required>
+									<label for="office_id">หน่วยงาน</label>
+									<select name="office_id" class="select2 form-control" id="office_id" required>
 										<option value="">--- เลือก ---</option>
-										<option value="1">A</option>
-										<option value="2">B</option>
+										<option value="130">ศูนย์อ้างอิงทางห้องปฏิบัติการและพิษวิทยา</option>
+										<option value="131">ห้องปฏิบัติการ ศูนย์พัฒนาวิชาการอาชีวอนามัยและสิ่งแวดล้อม จังหวัดระยอง</option>
 									</select>
 								</div>
 							</div>
@@ -217,7 +237,9 @@
 $(document).ready(function() {
 	$.ajaxSetup({headers:{'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')}});
 	$(function() {
-		$('.select2').select2();
+		$('.select2').select2({
+
+		});
 	});
 });
 </script>

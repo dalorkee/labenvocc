@@ -3,7 +3,17 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\{Parameter,OriginThreat,RefParameter};
+use App\Models\{
+    Parameter,
+    RefParameter,
+    SampleCharecter,
+    RefThreatType,RefUnit,
+    RefUnitCustomer,
+    UserStaff,
+    RefTechnical,
+    RefMethodAnalys,
+    RefMachine
+};
 use Illuminate\Http\Request;
 use App\DataTables\ParameterAdminDataTable;
 use Illuminate\Support\Facades\{DB,Auth,Log};
@@ -41,7 +51,27 @@ class ParametController extends Controller
     public function create()
     {
         $parameters = RefParameter::all();
-        return view('admin.paramet.create',compact('parameters'));
+        $sample_characters = SampleCharecter::all();
+        $threat_types = RefThreatType::all();
+        $units = RefUnit::all();
+        $unit_customers = RefUnitCustomer::all();
+        $user_stuffs = UserStaff::all();
+        $technicals = RefTechnical::all();
+        $method_analys = RefMethodAnalys::all();
+        $machines = RefMachine::all();
+        return view('admin.paramet.create',
+            compact(
+                'parameters',
+                'sample_characters',
+                'threat_types',
+                'units',
+                'unit_customers',
+                'user_stuffs',
+                'technicals',
+                'method_analys',
+                'machines'
+            )
+        );
     }
 
     /**
@@ -51,8 +81,9 @@ class ParametController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-        //
+    {   
+        $parameter_name = RefParameter::where('id',$request->parameter_id)->get();        
+        dd($request);
     }
 
     /**
