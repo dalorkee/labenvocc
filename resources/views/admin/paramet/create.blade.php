@@ -99,14 +99,9 @@
 									<label for="unit_choice1_id">หน่วยทางเลือก1</label>
 									<select name="unit_choice1_id" class="select2 form-control" id="unit_choice1_id">
 										<option value="">--- เลือก ---</option>
-										<option value="1">%SiO2</option>
-										<option value="2">g/l</option>
-										<option value="3">mg/dl</option>
-										<option value="4">mg/kg</option>
-										<option value="5">mg/l</option>
-										<option value="6">mg/m3</option>
-										<option value="7">ppm</option>
-										<option value="8">μg/l</option>
+										@foreach ($unit_choice1 as $unit_choice_1)
+											<option value="{{$unit_choice_1->id}}">{{$unit_choice_1->unit_choice1_name}}</option>
+										@endforeach
 									</select>
 								</div>
 							</div>
@@ -115,7 +110,7 @@
 									<label for="unit_choice2_id">หน่วยทางเลือก2</label>
 									<select name="unit_choice2_id" class="select2 form-control" id="unit_choice2_id">
 										<option value="">--- เลือก ---</option>
-										<option value="1">ppm</option>										
+										<option value="1">ppm</option>
 									</select>
 								</div>
 							</div>
