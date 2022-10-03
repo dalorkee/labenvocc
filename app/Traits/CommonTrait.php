@@ -1,7 +1,7 @@
 <?php
 namespace App\Traits;
 
-use App\Models\{Position,PositionLevel,Duty,SampleCharecter, OriginThreat};
+use App\Models\{Position,PositionLevel,Duty,SampleCharacter, OriginThreat};
 
 trait CommonTrait {
 	public function titleName(): array {
@@ -87,10 +87,10 @@ trait CommonTrait {
 		});
 		return $result;
 	}
-	public function getSampleCharecter(): array {
+	public function getSampleCharacter(): array {
 		$result = [];
-		SampleCharecter::select('id', 'sample_charecter_name')->whereSample_charecter_status(1)->get()->each(function($value, $key) use (&$result) {
-			$result[$value->id] = $value->sample_charecter_name;
+		SampleCharacter::select('id', 'sample_character_name')->whereSample_character_status(1)->get()->each(function($value, $key) use (&$result) {
+			$result[$value->id] = $value->sample_character_name;
 		});
 		return $result;
 	}

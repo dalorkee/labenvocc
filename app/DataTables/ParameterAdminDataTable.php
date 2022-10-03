@@ -41,7 +41,7 @@ class ParameterAdminDataTable extends DataTable
 			Column::make('sample_character_name')->title('ประเภทตัวอย่าง'),
 			Column::make('sample_type_name')->title('ประเภทใบคำขอ'),
 			Column::make('threat_type_name')->title('ประเภทมลพิษ'),
-			Column::make('office')->title('หน่วยงาน'),
+			Column::make('office_name')->title('หน่วยงาน'),
             Column::make('action')->title('จัดการ'),
 		];
 	}

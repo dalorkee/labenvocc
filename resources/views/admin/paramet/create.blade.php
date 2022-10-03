@@ -118,8 +118,13 @@
 						<div class="row">
 							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-3">
 								<div class="form-group">
-									<label for="price">ราคา</label>
-									<input type="number" class="form-control" id="price" name="price" min="1" max="9999" required>
+									<label for="price_id">ราคา</label>
+									<select name="price_id" class="select2 form-control" id="price_id" required>
+										<option value="">--- เลือก ---</option>
+										@foreach ($prices as $price)
+											<option value="{{$price->id}}">{{$price->price_name}}</option>
+										@endforeach
+									</select>
 								</div>
 							</div>
 						</div>

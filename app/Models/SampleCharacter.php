@@ -4,8 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class SampleCharecter extends Model
+class SampleCharacter extends Model
 {
-	protected $table = 'ref_sample_charecter';
+	protected $table = 'ref_sample_character';
 	protected $primaryKey = 'id';
 }

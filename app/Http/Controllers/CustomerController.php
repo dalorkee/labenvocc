@@ -272,8 +272,8 @@ class CustomerController extends Controller
 						'parameter_id' => $paramet->id
 					],[
 						'parameter_name' => $paramet->parameter_name,
-						'sample_charecter_id'=> $paramet->sample_charecter_id,
-						'sample_charecter_name' => $paramet->sample_charecter_name,
+						'sample_character_id'=> $paramet->sample_character_id,
+						'sample_character_name' => $paramet->sample_character_name,
 						'sample_type_id' => $paramet->sample_type_id,
 						'sample_type_name' => $paramet->sample_type_name,
 						'threat_type_id' => $paramet->threat_type_id,
@@ -519,7 +519,7 @@ class CustomerController extends Controller
 			OrderSample::select('id')->whereOrder_id($request->order_id)->get()->each(function($value, $key) use (&$sample_list) {
 				$sample_list[$key] = $value->id;
 			});
-			$sample_charecter = $this->getSampleCharecter();
+			$sample_character = $this->getSampleCharacter();
 			$type_of_work = $this->typeOfWork();
 			$provinces = $this->getMinProvince();
 			$order = Order::whereId($request->order_id)->with(relations: ['orderSamples', 'uploads'])->get();
@@ -527,7 +527,7 @@ class CustomerController extends Controller
 				'order_id' => $request->order_id,
 				'order' => $order,
 				'sample_list' => $sample_list,
-				'sample_charecter' => $sample_charecter,
+				'sample_character' => $sample_character,
 				'type_of_work' => $type_of_work,
 				'provinces' => $provinces
 			];

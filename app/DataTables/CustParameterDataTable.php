@@ -33,7 +33,7 @@ class CustParameterDataTable extends DataTable
 								return "
 								<div style=\"width: 500px\">
 									<span class=\"badge badge-warning\">".$parameter->parameter_name."</span>
-									<span class=\"badge badge-info\">".$parameter->sample_charecter_name."</span>
+									<span class=\"badge badge-info\">".$parameter->sample_character_name."</span>
 									<span class=\"badge badge-success\">".$parameter->unit_customer_name."</span>
 									<a href=\"".route('customer.parameter.data.destroy', ['id'=>$parameter->id, 'order_sample_id'=>$parameter->order_sample_id, 'order_id'=>$parameter->order_id])."\" data-toggle=\"tooltip\" data-placement=\"auto\" title=\"ลบพารามิเตอร์ ".$parameter->parameter_name."\">
 										<i class=\"fal fa-times-circle text-danger\"></i>
@@ -65,7 +65,7 @@ class CustParameterDataTable extends DataTable
 								return "
 								<div>
 									<span class=\"badge badge-warning\">".$parameter->parameter_name."</span>
-									<span class=\"badge badge-danger\">".$parameter->sample_charecter_name."</span>
+									<span class=\"badge badge-danger\">".$parameter->sample_character_name."</span>
 									<span class=\"badge badge-info\">".$parameter->unit_customer_name."</span>
 									<a href=\"".route('customer.parameter.data.destroy', ['id'=>$parameter->id, 'order_sample_id'=>$parameter->order_sample_id, 'order_id'=>$parameter->order_id])."\" data-toggle=\"tooltip\" data-placement=\"auto\" title=\"ลบพารามิเตอร์ ".$parameter->parameter_name."\">
 										<i class=\"fal fa-times-circle\"></i>

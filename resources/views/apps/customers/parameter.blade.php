@@ -458,7 +458,7 @@ $(document).ready(function() {
 								// {data: 'DT_RowIndex', name: 'DT_RowIndex'},
 								{data: 'id', name: 'id', width: '5%'},
 								{data: 'parameter_name', name: 'parameter_name'},
-								{data: 'sample_charecter_name', name: 'sample_charecter_name'},
+								{data: 'sample_character_name', name: 'sample_character_name'},
 								{data: 'office_name', name: 'office_name'},
 								{data: 'price_name', name: 'price_name'},
 								//{data: 'select_paramet', name: 'select_paramet', searchable: false, orderable: false},
@@ -537,7 +537,7 @@ $(document).ready(function() {
 				columns: [
 					{data: 'id', name: 'id'},
 					{data: 'parameter_name', name: 'parameter_name'},
-					{data: 'sample_charecter_name', name: 'sample_charecter_name'},
+					{data: 'sample_character_name', name: 'sample_character_name'},
 					{data: 'office_name', name: 'office_name'},
 					{data: 'price_name', name: 'price_name'},
 				],
