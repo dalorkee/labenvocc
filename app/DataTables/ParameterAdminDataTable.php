@@ -17,7 +17,7 @@ class ParameterAdminDataTable extends DataTable
 
 	public function query(Parameter $parameter) {
 		$parameters = $parameter->orderBy('id', 'ASC');
-        return $parameters;
+		return $parameters;
 	}
 
 	public function html(): object {
@@ -27,11 +27,11 @@ class ParameterAdminDataTable extends DataTable
 					->minifiedAjax()
 					->dom('Bfrtip')
 					->orderBy(1)
-                    ->buttons(
+					->buttons(
 						Button::make('create')
 						->text('<button class="btn btn-success"><i class="fal fa-plus"></i> เพิ่มพารามิเตอร์</button>')
 						->action("window.location = '".route('paramet.create')."';")
-                    );
+					);
 	}
 
 	protected function getColumns() {
@@ -42,7 +42,7 @@ class ParameterAdminDataTable extends DataTable
 			Column::make('sample_type_name')->title('ประเภทใบคำขอ'),
 			Column::make('threat_type_name')->title('ประเภทมลพิษ'),
 			Column::make('office_name')->title('หน่วยงาน'),
-            Column::make('action')->title('จัดการ'),
+			Column::make('action')->title('จัดการ'),
 		];
 	}
 
