@@ -12,11 +12,20 @@ class ParameterAdminDataTable extends DataTable
 	public function dataTable($query): object {
 		return datatables()
 			->eloquent($query)
-			->addColumn('action', '<button type="button" class="parameter-manage-nav btn btn-sm btn-info" data-id="{{$id}}">จัดการ<i class="fal fa-angle-down"></i> </button>');
+			->editColumn('deleted_at',function($delchk){
+				if($delchk->deleted_at != null){
+					return '<span class="badge badge-warning">ปิด</span>';
+				}
+				else{
+					return '<span class="badge badge-success text-white">เปิด</span>';
+				}
+			})
+			->addColumn('action', '<button type="button" class="parameter-manage-nav btn btn-sm btn-info" data-id="{{$id}}">จัดการ<i class="fal fa-angle-down"></i> </button>')
+			->rawColumns(['deleted_at','action']);
 	}
 
 	public function query(Parameter $parameter) {
-		$parameters = $parameter->orderBy('id', 'ASC');
+		$parameters = $parameter->withTrashed()->orderBy('id', 'ASC');
         return $parameters;
 	}
 
@@ -42,7 +51,8 @@ class ParameterAdminDataTable extends DataTable
 			Column::make('sample_type_name')->title('ประเภทใบคำขอ'),
 			Column::make('threat_type_name')->title('ประเภทมลพิษ'),
 			Column::make('office_name')->title('หน่วยงาน'),
-            Column::make('action')->title('จัดการ'),
+            Column::make('deleted_at')->title('สถานะ'),
+			Column::make('action')->title('จัดการ'),
 		];
 	}
 
