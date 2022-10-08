@@ -30,13 +30,20 @@
 		@method('PUT')
 			<div class="form-row">
 				<div class="col-md-6 mb-3">
-					<label class="form-label" for="adv_id">Id</label>
-					<input type="text" class="form-control" id="adv_id" name="adv_id" value="" readonly>
+					<label class="form-label" for="parameter_id">Id</label>
+					<input type="text" class="form-control" id="parameter_id" name="parameter_id" value="{{ $parameters->id }}" readonly>
 				</div>
 				<div class="col-md-6 mb-3">
-					<label class="form-label" for="advertise_date">วันที่บันทึก</label>
-					<input type="text" class="form-control" id="advertise_date" name="advertise_date" value="" readonly>
+					<label class="form-label" for="parameter_name">ชื่อพารามิเตอร์</label>
+					<input type="text" class="form-control" id="parameter_name" name="parameter_name" value="" readonly>
 				</div>
+				<label for="parameter_id">ชื่อพารามิเตอร์</label>
+				<select name="parameter_id" class="select2 form-control" id="parameter_id" required>
+					<option value="">--- เลือก ---</option>
+					@foreach ($parameters as $paramet)
+						<option value="{{$paramet->id}}">{{$paramet->parameter_name}}</option>
+					@endforeach
+				</select>
 			</div>
 			<div class="form-row">
 				<div class="col-md-6 mb-3">

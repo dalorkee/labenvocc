@@ -167,9 +167,10 @@ class ParametController extends Controller
      * @param  \App\Models\Admin\Paramet  $paramet
      * @return \Illuminate\Http\Response
      */
-    public function edit(Parameter $Parameter)
+    public function edit(Request $request)
     {
-        return view('admin.paramet.edit');
+        // $parameters = Parameter::find($request->id);
+        // return view('admin.paramet.edit', compact('parameters'));
     }
 
     /**
@@ -179,7 +180,7 @@ class ParametController extends Controller
      * @param  \App\Models\Admin\Paramet  $paramet
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Parameter $Parameter)
+    public function update(Request $request, Parameter $parameter)
     {
         //
     }
@@ -193,5 +194,28 @@ class ParametController extends Controller
     public function destroy(Parameter $Parameter)
     {
         //
+    }
+
+    public function allow(Request $request)
+    {
+        //$parameters = Parameter::find($request->id)->update(['deleted_at'=> null]);
+        $parameters = Parameter::withTrashed()->find($request->id)->restore();
+        if($parameters == true){
+            return redirect()->route('paramet.index')->with('success', 'allow successfully');
+        }
+        else{
+            return redirect()->route('paramet.index')->with('error', 'unsuccessfully');
+        }
+    }
+
+    public function deny(Request $request)
+    {
+        $parameters = Parameter::find($request->id)->delete();
+        if($parameters == true){
+            return redirect()->route('paramet.index')->with('success', 'deny successfully');
+        }
+        else{
+            return redirect()->route('paramet.index')->with('error', 'unsuccessfully');
+        }
     }
 }
