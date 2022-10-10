@@ -569,7 +569,7 @@ class CustomerController extends Controller
 
 	#[Setup]
 	private function setOrderNo(string $prefix, int $order_id): string {
-		$tmp = sprintf("%08d", $order_id);
+		$tmp = sprintf("%04d", $order_id);
 		return $prefix.$tmp;
 	}
 

@@ -87,7 +87,7 @@ $(document).ready(function() {
 		]
 	});
 
-	$.contextMenu({
+/* 	$.contextMenu({
 		selector: '.context-nav',
 		trigger: 'left',
 		delay: 500,
@@ -107,7 +107,7 @@ $(document).ready(function() {
 			'sep3': '---------',
 			'quit': {name: 'ปิด', icon: 'fal fa-times'}
 		}
-	});
+	}); */
 });
 </script>
 @endsection
