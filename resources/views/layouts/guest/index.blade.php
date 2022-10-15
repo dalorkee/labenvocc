@@ -2,15 +2,16 @@
 <html lang="th">
 <head>
 <meta charset="utf-8">
-<title>{{ env('APP_NAME') }}</title>
+@yield('meta-token')
 <meta name="description" content="Login">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no, minimal-ui">
+<title>{{ env('APP_NAME') }}</title>
 <link rel="apple-touch-icon" sizes="50x50" href="{{ URL::asset('images/small-moph-logo.png') }}">
 <link rel="icon" type="image/png" sizes="32x32" href="{{ URL::asset('images/small-moph-logo-32x32.png') }}">
 <link rel="icon" type="image/png" sizes="16x16" href="{{ URL::asset('images/small-moph-logo-16x16.png') }}">
 <link rel="shortcut icon" href="{{ URL::asset('images/favicon.ico') }}">
-@yield('meta-token')
+<style type="text/css">.swal2-popup {font-size: 1rem !important; font-family: "Prompt"}</style>
 @include('layouts.guest.style')
 @yield('style')
 <style type="text/css">

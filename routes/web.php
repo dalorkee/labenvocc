@@ -89,7 +89,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 		'advertise' => AdvertiseController::class,
 		'sampleupload' => SampleUploadController::class,
 	]);
-	Route::get('/dashboard', function() { return view('dashboard'); })->name('dashboard');
+	Route::get('/dashboard', fn() => view('dashboard'))->name('dashboard');
 	Route::name('boundary.')->controller(BoundaryController::class)->group(function() {
 		Route::get('province/district', 'districtToHtmlSelect')->name('fetch.district');
 		Route::get('province/district/sub/district', 'subDistrictToHtmlSelect')->name('fetch.sub.district');
@@ -127,7 +127,6 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 		Route::get('/profile', 'profile')->name('profile');
 		Route::get('/inbox', 'inbox')->name('inbox');
 		Route::get('/inbox/list', 'getInbox')->name('get.inbox');
-
 		Route::get('/calendar', 'calendar')->name('calendar');
 	});
 	Route::name('sample.')->prefix('sample')->group(function() {

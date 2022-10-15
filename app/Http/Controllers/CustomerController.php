@@ -46,7 +46,7 @@ class CustomerController extends Controller
 			return view(view: 'apps.customers.info', data: ['type_of_work' => $type_of_work, 'order' => $order, 'titleName' => $titleName]);
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
-			return redirect()->route(route: 'logout');
+			return redirect()->back()->with(key: 'error', value: $e->getMessage());
 		}
 	}
 
@@ -556,7 +556,7 @@ class CustomerController extends Controller
 				$order = Order::find($request->order_id);
 				$order->order_no = $this->setOrderNo(prefix: $order_no_prefix, order_id: $request->order_id);
 				$order->order_no_ref = $this->setOrderNoRef(prefix: $order_no_prefix);
-				$order->order_confirmed = date('Y-m-d H:i:s');
+				$order->order_confirmed = date('d/m/Y H:i:s');
 				$saved = $order->save();
 				return redirect()->route(route: 'customer.index')->with(key: 'success', value: 'บันทึกข้อมูลสำเร็จแล้ว');
 			} else {

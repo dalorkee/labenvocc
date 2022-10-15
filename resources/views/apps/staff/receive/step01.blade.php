@@ -2,6 +2,7 @@
 @section('token')<meta name="csrf-token" content="{{ csrf_token() }}">@endsection
 @section('style')
 <link type="text/css" href="{{ URL::asset('vendor/bootstrap-datepicker/dist/css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet">
+<link type="text/css" href="{{ URL::asset('vendor/bootstrap-table/dist/bootstrap-table.min.css') }}" rel="stylesheet" >
 <link type="text/css" href="{{ URL::asset('css/pj-step.css') }}" rel="stylesheet" >
 @endsection
 @section('content')
@@ -23,25 +24,25 @@
 			<div class="panel-container show">
 				<form name="sample_detail" action="#" method="POST" enctype="multipart/form-data">
 					<input type="hidden" name="_token" value="{{ csrf_token() }}">
-					<input type="hidden" name="order_id" value="{{ $orders['id'] }}">
+					<input type="hidden" name="order_id" value="{{ $order['id'] }}">
 					<input type="hidden" name="order_type" value="1">
 					<input type="hidden" name="order_type_name" value="ตัวอย่างชีวภาพ">
 					<div class="panel-content">
 						<ul class="steps">
-							<li class="active"><a href="{{ route('sample.receives.create') }}"><span class="d-none d-sm-inline">รายการคำขอ</span></a></li>
-							<li class="undone"><p><span class="d-none d-sm-inline">รับตัวอย่าง</span></p></li>
+							<li class="undone"><a href="{{ route('sample.receives.create') }}"><span class="d-none d-sm-inline">รายการคำขอ</span></a></li>
+							<li class="active"><p><span class="d-none d-sm-inline">รับตัวอย่าง</span></p></li>
 							<li class="undone"><p><span class="d-none d-sm-inline">การตรวจวิเคราะห์</span></&p></li>
 							<li class="undone"><p><span class="d-none d-sm-inline">รายงานผล</span></p></li>
 						</ul>
 						<div class="row">
 							<div class="form-group col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6 mb-3">
 								<label class="form-label" for="lab_no">Lab No. <span class="text-red-600">*</span></label>
-								<input type="text" name="lab_no" value="{{ $orders['order_no'] ?? old('lab_no') }}" class="form-control" maxlength="60">
+								<input type="text" name="lab_no" value="{{ $order['order_no'] ?? old('lab_no') }}" class="form-control" maxlength="60">
 							</div>
 							<div class="form-group col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6 mb-3">
 								<label class="form-label" for="report_due_date">กำหนดส่งรายงาน</label>
 								<div class="input-group date date_data">
-									<input type="text" name="report_due_date" value="{{ old('report_due_date') }}" class="form-control @error('report_due_date') is-invalid @enderror input-date" id="report_due_date" placeholder="เลือกวันที่" readonly >
+									<input type="text" name="report_due_date" value="{{ $order['report_due_date'] ?? old('report_due_date') }}" class="form-control @error('report_due_date') is-invalid @enderror input-date" id="report_due_date" placeholder="เลือกวันที่" readonly >
 									<div class="input-group-append">
 										<span class="input-group-text fs-xl"><i class="fal fa-calendar-alt"></i></span>
 									</div>
@@ -55,7 +56,7 @@
 								<select name="type_of_work" class="form-control @error('type_of_work') is-invalid @enderror">
 									<option value="">-- โปรดเลือก --</option>
 									@foreach ($type_of_work as $key => $val)
-										<option value="{{ $key }}" {{ (old('type_of_work') == $key) ? 'selected' : '' }}>{{ $val }}</option>
+										<option value="{{ $key }}" {{ ($order['type_of_work'] == $key || old('type_of_work') == $key) ? 'selected' : '' }}>{{ $val }}</option>
 									@endforeach
 								</select>
 								@error('type_of_work')
@@ -63,9 +64,79 @@
 								@enderror
 							</div>
 							<div class="form-group col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6 mb-3">
+								<label class="form-label" for="type_of_work_other">ประเภทงานอื่นๆ ระบุ</label>
+								<input type="text" name="type_of_work_other" value="{{ $order['type_of_work_other'] ?? old('type_of_work_other') }}" id="type_of_work_other" class="form-control @error('type_of_work_other') is-invalid @enderror" {{ ((!empty($order['type_of_work']) && $order['type_of_work'] == 5) || old('type_of_work_other') == 5) ? '' : 'disabled' }}>
+								@error('type_of_work_other')
+									<div class="invalid-feedback" role="alert">{{ $message }}</div>
+								@enderror
+							</div>
+							{{-- <div class="form-group col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6 mb-3">
 								<label class="form-label" for="group_of_work">กลุ่มงาน <span class="text-red-600">*</span></label>
 								<input type="text" name="group_of_work" value="{{ old('group_of_work') }}" class="form-control" maxlength="60">
+							</div> --}}
+							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
+								<label class="form-label" for="book_no">เลขที่หนังสือนำส่ง</label>
+								<input type="text" name="book_no" value="{{ $order['book_no'] ?? old('book_no') }}" class="form-control @error('book_no') is-invalid @enderror">
+								@error('book_no')
+									<div class="invalid-feedback" role="alert">{{ $message }}</div>
+								@enderror
 							</div>
+							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
+								<label class="form-label" for="book_date">ลงวันที่</label>
+								<div class="input-group">
+									<input type="text" name="book_date" value="{{ $order['book_date'] ?? old('book_date') }}" placeholder="เลือกวันที่" class="form-control @error('book_date') is-invalid @enderror input-date" id="datepicker_book_date" readonly >
+									<div class="input-group-append">
+										<span class="input-group-text fs-xl">
+											<i class="fal fa-calendar-alt"></i>
+										</span>
+									</div>
+								</div>
+								@error('book_date')
+									<div class="invalid-feedback" role="alert">{{ $message }}</div>
+								@enderror
+							</div>
+							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
+								<label class="form-label" for="example_type">ชนิดตัวอย่าง</label>
+								<input type="text" name="example_type" value="{{ $order['example_type'] ?? old('example_type') }}" class="form-control @error('example_type') is-invalid @enderror">
+								@error('example_type')
+									<div class="invalid-feedback" role="alert">{{ $message }}</div>
+								@enderror
+							</div>
+							<div class="form-group col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6 mb-3">
+								<label class="form-label" for="group_of_work">กลุ่มงาน <span class="text-red-600">*</span></label>
+								<select name="group_of_work" class="form-control @error('group_of_work') is-invalid @enderror">
+									<option value="">-- โปรดเลือก --</option>
+									@foreach ($type_of_work as $key => $val)
+										<option value="{{ $key }}" {{ ($order['type_of_work'] == $key || old('type_of_work') == $key) ? 'selected' : '' }}>{{ $val }}</option>
+									@endforeach
+								</select>
+								@error('group_of_work')
+									<div class="invalid-feedback" role="alert">{{ $message }}</div>
+								@enderror
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
+								<div class="tw-relative">
+									{{-- <caption class="d-none"><i class="fa fa-clone"></i> การตรวจสอบตัวอย่าง</caption> --}}
+									<table class="table-striped" id="table-1" data-toggle="table" data-show-columns="true">
+										<thead>
+											<tr class="bg-primary text-white">
+												<th>ลำดับ</th>
+												<th>รหัส ตย.</th>
+												<th>พารามิเตอร์</th>
+												<th>ชนิด</th>
+												<th>จำนวนพารามิเตอร์</th>
+												<th>เลือก</th>
+												<th>หมายเหตุ</th>
+											</tr>
+										</thead>
+										<tbody>
+										</tbody>
+									</table>
+								</div>
+							</div>
+
 						</div>
 					</div>
 					<div class="panel-content border-faded border-left-0 border-right-0 border-bottom-0 d-flex flex-row align-items-center">
@@ -85,6 +156,8 @@
 @push('scripts')
 <script type="text/javascript" src="{{ URL::asset('vendor/moment/moment.min.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('vendor/bootstrap-datepicker/dist/js/bootstrap-datetimepicker.min.js') }}"></script>
+<script type="text/javascript" src="{{ URL::asset('vendor/bootstrap-table/dist/bootstrap-table.min.js') }}"></script>
+<script type="text/javascript" src="{{ URL::asset('vendor/bootstrap-table/dist/locale/bootstrap-table-th-TH.min.js') }}"></script>
 <script type="text/javascript">
 $(document).ready(function() {
 	$.ajaxSetup({headers:{'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')}});

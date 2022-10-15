@@ -10,7 +10,7 @@ use App\Models\OrderSample;
 
 class CustSampleDataTable extends DataTable
 {
-	public function dataTable($query): DataTableAbstract {
+	public function dataTable($query) {
 		try {
 			switch (auth()->user()->userCustomer->customer_type) {
 				case 'personal':
@@ -67,11 +67,11 @@ class CustSampleDataTable extends DataTable
 		}
 	}
 
-	public function query(Request $request, OrderSample $order_sample): Builder {
+	public function query(Request $request, OrderSample $order_sample) {
 		return $order_sample::with('parameters')->select('*')->whereOrder_id($request->order_id)->orderBy('id', 'ASC');
 	}
 
-	public function html(): Builder {
+	public function html() {
 		try {
 			return $this->builder()
 				->setTableId("order-table")

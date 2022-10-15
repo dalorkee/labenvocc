@@ -89,7 +89,7 @@ trait CommonTrait {
 	}
 	public function getSampleCharacter(): array {
 		$result = [];
-		SampleCharacter::select('id', 'sample_character_name')->whereSample_character_status(1)->get()->each(function($value, $key) use (&$result) {
+		SampleCharacter::select('id', 'sample_character_name')->get()->each(function($value, $key) use (&$result) {
 			$result[$value->id] = $value->sample_character_name;
 		});
 		return $result;

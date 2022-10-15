@@ -25,7 +25,8 @@ class CustomersDataTable extends DataTable
 			return datatables()
 				->eloquent($query)
 				->editColumn('order_confirmed', function($order) {
-					return Carbon::parse($order->order_confirmed)->format('d/m/Y');
+					// return Carbon::parse($order->order_confirmed)->format('d/m/Y');
+					return $order->order_confirmed;
 				})
 				->addColumn('lab', function ($order) {
 					return $order->parameters->map(function($parameter) {
