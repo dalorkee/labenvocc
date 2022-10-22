@@ -5,6 +5,7 @@
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('vendor/DataTables/Buttons-1.6.5/css/buttons.jqueryui.min.css') }}">
 <link rel='stylesheet' type="text/css" href="{{ URL::asset('vendor/DataTables/Responsive-2.2.6/css/responsive.dataTables.min.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('vendor/jquery-contextmenu/css/jquery.contextMenu.min.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ URL::asset('vendor/select2/dist/css/select2.min.css') }}">
 @endsection
 @section('content')
 <ol class="breadcrumb page-breadcrumb">
@@ -107,8 +108,8 @@
 			<div class="form-row">
                 <div class="col-md-6 mb-3">
 					<label class="form-label" for="duty">หน้าที่</label>
-					<select class="custom-select duty-multi" name="duty[]" id="duty" multiple=multiple>
-						<option value=" {{ $userStuff[0]->duty??null }} ">{{ $duties[$userStuff[0]->duty]??null }}</option>
+					<select class="custom-select" name="duty[]" id="duty" multiple=multiple>
+                        {{-- <option value=" {{ $userStuff[0]->duty??null }} ">{{ $duties[$userStuff[0]->duty]??null }}</option> --}}
 						<option value="">---เลือก---</option>
 						@foreach ($duties as $key=>$val)
 							<option value="{{ $key }}">{{ $val }}</option>
@@ -131,6 +132,8 @@
 <script type="text/javascript" src="{{ URL::asset('vendor/DataTables/Responsive-2.2.6/js/dataTables.responsive.min.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('vendor/jquery-contextmenu/js/jquery.contextMenu.min.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/buttons.server-side.js') }}"></script>
+<script type="text/javascript" src="{{ URL::asset('vendor/select2/dist/js/select2.min.js') }}"></script>
+
 <script>
     $(document).ready(function() {
         $('#change_password').change(function(){
@@ -155,7 +158,9 @@
 		        }
 	        });
         });
-        $('#duty').select2();
+        let vduty = "{{ $userStuff[0]->duty }}";
+        $('#duty').select2().val(vduty);
+        $('#duty').trigger('change');
     });
 </script>
 @endsection

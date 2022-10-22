@@ -78,8 +78,6 @@ class OfficeController extends Controller
         ->where('users.user_type','staff')
         ->where('users_staff_detail.user_id',$request->id)
         ->get();
-        // $aa = Auth::user();
-        // dd($aa);
         return view('admin.office.edit',['userStuff'=>$userStuff,'positions'=>$positions,'position_levels'=>$position_levels,'duties'=>$duties]);
     }
 
