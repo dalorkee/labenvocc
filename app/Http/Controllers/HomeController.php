@@ -25,7 +25,6 @@ class HomeController extends Controller
 			return redirect()->route(route: 'logout')->with(key: 'error', value: 'โปรดตรวจสอบสิทธิ์ผู้ใช้');
 		}
 	}
-
 	public static function userRole(): string {
 		$user_roles= Auth::user()->roles->pluck('name')->all();
 		if (count($user_roles) > 0) {
@@ -34,9 +33,11 @@ class HomeController extends Controller
 			return redirect(to: 'logout');
 		}
 	}
-
 	public function logout() {
 		Auth::logout();
 		return redirect(to: 'login');
+	}
+	protected function privacy(): object {
+		return view(view: 'apps.privacy');
 	}
 }

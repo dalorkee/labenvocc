@@ -25,12 +25,15 @@ use App\Http\Controllers\Admin\{
 	PermissionController
 };
 Route::impersonate();
-Route::get('/', [HomeController::class, 'index']);
 Route::get('/catcat', function() {
 	Artisan::call('cache:clear');
-	return "Cache is cleared";
+	return redirect()->back()->with(key: 'success', value: 'ลบ Cache ทั้งหมดแล้ว');
 });
-Route::get('/logout', [HomeController::class, 'logout'])->name('logout');
+Route::controller(HomeController::class)->group(function() {
+	Route::get('/', 'index');
+	Route::get('/logout', 'logout')->name('logout');
+	Route::get('/privacy/policy', 'privacy');
+});
 Route::resources([
 	'home' => HomeController::class,
 	'register' => RegisterController::class,
@@ -144,7 +147,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 	Route::get('/office/id/{id}/deny',[OfficeController::class,'deny'])->name('office.deny');
 	Route::get('/advertise/id/{id}/edit',[AdvertiseController::class,'edit'])->name('advertise.edit');
 	Route::get('/advertise/id/{id}/destroy',[AdvertiseController::class,'destroy'])->name('advertise.destroy');
-    Route::get('/parameter/id/{id}/edit',[ParametController::class,'edit'])->name('paramet.edit');
+	Route::get('/parameter/id/{id}/edit',[ParametController::class,'edit'])->name('paramet.edit');
 	Route::get('/parameter/id/{id}/allow',[ParametController::class,'allow'])->name('paramet.allow');
 	Route::get('/parameter/id/{id}/deny',[ParametController::class,'deny'])->name('paramet.deny');
 

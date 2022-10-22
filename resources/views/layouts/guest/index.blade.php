@@ -6,15 +6,18 @@
 <meta name="description" content="Login">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no, minimal-ui">
-<title>{{ env('APP_NAME') }}</title>
+<title>{{ config('app.name', 'talek-team') }}</title>
+<link rel="icon" type="image/png" href="{{ URL::asset('assets/img/favicon/favicon-32x32.png') }}" sizes="32x32">
+<link rel="mask-icon" href="{{ URL::asset('assets/img/favicon/safari-pinned-tab.svg') }}" color="#5bbad5">
+<link rel="apple-touch-icon" href="{{ URL::asset('assets/img/favicon/apple-touch-icon.png') }}" sizes="180x180">
 <link rel="apple-touch-icon" sizes="50x50" href="{{ URL::asset('images/small-moph-logo.png') }}">
 <link rel="icon" type="image/png" sizes="32x32" href="{{ URL::asset('images/small-moph-logo-32x32.png') }}">
 <link rel="icon" type="image/png" sizes="16x16" href="{{ URL::asset('images/small-moph-logo-16x16.png') }}">
 <link rel="shortcut icon" href="{{ URL::asset('images/favicon.ico') }}">
-<style type="text/css">.swal2-popup {font-size: 1rem !important; font-family: "Prompt"}</style>
 @include('layouts.guest.style')
 @yield('style')
 <style type="text/css">
+.swal2-popup {font-size: 1rem !important; font-family: "Prompt"}
 .hoverable	{
 	color: #CAF7E3;
 	font-weight: 400;
@@ -123,7 +126,7 @@ $(document).ready(function() {
 		toastr.success("{{ Session::get('success') }}", "Success", options);
 		Swal.fire({
 			type: "success",
-			title: "<span class='text-success'>บันทึกข้อมูลสำเร็จแล้ว</span>",
+			title: "Success",
 			text: "{{ Session::get('success') }}",
 			confirmButtonText: "ตกลง",
 			footer: "LAB ENV-OCC DDC",

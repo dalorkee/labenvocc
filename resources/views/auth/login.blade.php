@@ -1,7 +1,7 @@
 @extends('layouts.guest.index')
 @section('style')
 <link rel="stylesheet" href="{{ URL::asset('css/register_staff.css') }}">
-<style>
+<style type="text/css">
 .input-group-text {background-color: #F3F3F3 !important;}
 .toggle-password {color: #1AB3A3;}
 </style>
