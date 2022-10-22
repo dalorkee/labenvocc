@@ -1,6 +1,5 @@
 <?php
 namespace App\Http\Controllers;
-
 use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
@@ -37,6 +36,7 @@ class HomeController extends Controller
 		Auth::logout();
 		return redirect(to: 'login');
 	}
+
 	protected function privacy(): object {
 		return view(view: 'apps.privacy');
 	}
