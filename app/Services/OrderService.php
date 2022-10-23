@@ -22,6 +22,7 @@ class OrderService
 			throw new InvalidOrderException(message: 'ไม่พบข้อมูล Orders');
 		}
 		return $orders;
-
 	}
+
+    // public static function getOrderWithParameter()
 }

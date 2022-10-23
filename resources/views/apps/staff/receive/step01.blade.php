@@ -131,7 +131,31 @@
 												<th>หมายเหตุ</th>
 											</tr>
 										</thead>
+										<tfoot></tfoot>
 										<tbody>
+										@foreach ($order_example as $key => $val)
+											<tr>
+												<td>{{ $loop->iteration}}</td>
+												<td>{{ $val['id'] }}</td>
+												<td>
+													@forelse ($order_parameter as $k => $v)
+														<ul>
+															<li>{{ $v['parameter_name'] }}</li>
+														</ul>
+													@empty
+														{{ '-' }}
+													@endforelse
+												</td>
+												<td>
+													<input type="text" name="exam_type[]" />
+												</td>
+												<td>{{ count($order_parameter) }}</td>
+												<td>
+													<input type="checkbox" name="a[]" />
+												</td>
+												<td>หมายเหตุ</td>
+											</tr>
+										@endforeach
 										</tbody>
 									</table>
 								</div>

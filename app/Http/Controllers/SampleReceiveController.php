@@ -13,12 +13,18 @@ class SampleReceiveController extends Controller
 {
 	use DateTimeTrait, CommonTrait;
 
-	#[Route('sample.receives.index', methods: ['RESOURCE'])]
+	/**
+	* Show the index page
+	* @Resource('sample.receives.index')
+	*/
 	protected function index(): object {
 		return view(view: 'apps.staff.receive.index');
 	}
 
-	#[Route('sample.receives.create', methods: ['RESOURCE'])]
+	/**
+	* Create Order page
+	* @Resource('sample.receives.create')
+	*/
 	protected function create(): object {
 		try {
 			$orders = OrderService::getOrderwithCount(relations: ['orderSamples', 'parameters']);
@@ -39,12 +45,17 @@ class SampleReceiveController extends Controller
 		}
 	}
 
-	#[Route('sample.receives.step01', methods: ['GET'])]
+	/**
+	* Create Sample Step 01
+	* @Get('sample.receives.step01')
+	*/
 	protected function step01(Request $request) {
 		try {
 			$order = OrderService::get(id: $request->order_id);
+            $order_example = $order->orderSamples->toArray();
+			$order_parameter = $order->parameters->toArray();
 			$type_of_work = $this->typeOfWork();
-			return view(view: 'apps.staff.receive.step01', data: compact('order', 'type_of_work'));
+			return view(view: 'apps.staff.receive.step01', data: compact('order', 'order_example', 'order_parameter', 'type_of_work'));
 		} catch (OrderNotFoundException $e) {
 			report($e->getMessage());
 			return redirect()->back()->with(key: 'error', value: $e->getMessage());
