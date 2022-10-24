@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\{Hash,DB,Auth,Log};
 use App\DataTables\OfficeDataTable;
 use App\Traits\CommonTrait;
+use Spatie\Permission\Models\{Role,Permission};
 
 class OfficeController extends Controller
 {
@@ -71,6 +72,12 @@ class OfficeController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit(Request $request){
+        $permissions = Permission::select('id', 'name_office_duty')->get()->toArray();
+        $mhp = DB::table('model_has_permissions')
+            ->select('permission_id')
+            ->where('model_id', '=', $request->id)
+            ->get();
+        $sub_duties = $mhp->implode('permission_id', ',');
         $positions = $this->getPosition();
         $position_levels = $this->getPositionLevel();
         $duties = $this->getStaffDuty();
@@ -78,7 +85,14 @@ class OfficeController extends Controller
         ->where('users.user_type','staff')
         ->where('users_staff_detail.user_id',$request->id)
         ->get();
-        return view('admin.office.edit',['userStuff'=>$userStuff,'positions'=>$positions,'position_levels'=>$position_levels,'duties'=>$duties]);
+        return view('admin.office.edit',[
+            'userStuff'=>$userStuff,
+            'positions'=>$positions,
+            'position_levels'=>$position_levels,
+            'duties'=>$duties,
+            'permissions'=>$permissions,
+            'sub_duties'=>$sub_duties
+        ]);
     }
 
     /**

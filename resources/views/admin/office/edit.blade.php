@@ -107,11 +107,11 @@
             </div>
 			<div class="form-row">
                 <div class="col-md-6 mb-3">
-					<label class="form-label" for="duty">หน้าที่</label>
-					<select class="custom-select" name="duty[]" id="duty" multiple=multiple>
-                        {{-- <option value=" {{ $userStuff[0]->duty??null }} ">{{ $duties[$userStuff[0]->duty]??null }}</option> --}}
+					<label class="form-label" for="duty">หน้าที่หลัก</label>
+					<select class="custom-select" name="duty" id="duty">
+                        <option value=" {{ $userStuff[0]->duty??null }} ">{{ $duties[$userStuff[0]->duty]??null }}</option>
 						<option value="">---เลือก---</option>
-						@foreach ($duties as $key=>$val)
+                        @foreach ($duties as $key=>$val)
 							<option value="{{ $key }}">{{ $val }}</option>
 						@endforeach
 					</select>
@@ -121,6 +121,17 @@
 					<input type="text" class="form-control" id="mobile" name="mobile" value="{{ $userStuff[0]->mobile }}">
 				</div>
 			</div>
+            <div class="form-row">
+                <div class="col-md-6 mb-3">
+					<label class="form-label" for="sub_duty">หน้าที่ปฏิบัติงาน</label>
+					<select class="custom-select" name="sub_duty[]" id="sub_duty" multiple="multiple">
+						<option value="">---เลือก---</option>
+                        @foreach ($permissions as $key=>$val)
+							<option value="{{ $val['id'] }}">{{ $val['name_office_duty'] }}</option>
+						@endforeach
+					</select>
+				</div>
+            </div>
 			<button type="submit" class="btn btn-primary">Submit</button>
 		</form>
 	</div>
@@ -158,9 +169,11 @@
 		        }
 	        });
         });
-        let vduty = "{{ $userStuff[0]->duty }}";
-        $('#duty').select2().val(vduty);
-        $('#duty').trigger('change');
+        let aa = "{{ $sub_duties }}";
+        let vduty = aa.split(',');
+
+        $('#sub_duty').select2().val(vduty);
+        $('#sub_duty').trigger('change');
     });
 </script>
 @endsection
