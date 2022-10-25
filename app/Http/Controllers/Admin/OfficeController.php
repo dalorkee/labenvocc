@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\{Hash,DB,Auth,Log};
 use App\DataTables\OfficeDataTable;
 use App\Traits\CommonTrait;
+use Spatie\Permission\Contracts\Permission as ContractsPermission;
 use Spatie\Permission\Models\{Role,Permission};
 
 class OfficeController extends Controller
@@ -138,13 +139,25 @@ class OfficeController extends Controller
                         'model_type'=>'App\Models\User',
                         'model_id'=>$request->user_id,
                     ]);
+                    $duty_arr = [];
+                    foreach($request->sub_duty as $key=>$sub_duties){
+                        $make_arr_sql = [
+                            'permission_id'=>$sub_duties,
+                            'model_type'=>'App\Models\User',
+                            'model_id'=>$request->user_id
+                        ];
+                        array_push($duty_arr, $make_arr_sql);
+                    }
+                    $mhp_save = DB::table('model_has_permissions')->insert($duty_arr);
                 }
                 elseif($request->user_status !== 'อนุญาต' AND $user_find->user_status === 'อนุญาต'){
                     $user_find->approved = 'n';
                     $user_find->user_status = $request->user_status;
-                    DB::table('model_has_roles')->where('model_id',$request->user_id)->delete();
+                    DB::table('model_has_roles')->where('model_id', $request->user_id)->delete();
+                    DB::table('model_has_permission')->where('model_id', $request->user_id)->delete();
                 }
                 elseif($request->user_status === 'อนุญาต' AND $user_find->user_status === 'อนุญาต'){
+                    //find model_has_permission model_id if exist to add insert next
                     return redirect()->route('office.index')->with('success', 'updated successfully');
                 }
                 elseif($request->user_status !== 'อนุญาต' AND $user_find->user_status !== 'อนุญาต'){

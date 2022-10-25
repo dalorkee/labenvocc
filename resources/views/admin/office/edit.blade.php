@@ -125,7 +125,6 @@
                 <div class="col-md-6 mb-3">
 					<label class="form-label" for="sub_duty">หน้าที่ปฏิบัติงาน</label>
 					<select class="custom-select" name="sub_duty[]" id="sub_duty" multiple="multiple">
-						<option value="">---เลือก---</option>
                         @foreach ($permissions as $key=>$val)
 							<option value="{{ $val['id'] }}">{{ $val['name_office_duty'] }}</option>
 						@endforeach
@@ -172,7 +171,10 @@
         let aa = "{{ $sub_duties }}";
         let vduty = aa.split(',');
 
-        $('#sub_duty').select2().val(vduty);
+        $('#sub_duty').select2({
+            placeholder: "เลือก",
+            allowClear: true
+        }).val(vduty);
         $('#sub_duty').trigger('change');
     });
 </script>
