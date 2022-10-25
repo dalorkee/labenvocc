@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\DataTables\ReceivedExampleDataTable;
 use Illuminate\Http\Request;
 use App\Services\OrderService;
 use App\Traits\{DateTimeTrait,CommonTrait};
-use App\Exceptions\OrderNotFoundException;
-use App\Exceptions\InvalidOrderException;
+use App\Exceptions\{OrderNotFoundException,InvalidOrderException};
+// use App\DataTables\ReceivedExampleDataTable;
 use Yajra\DataTables\Facades\DataTables;
+
 
 class SampleReceiveController extends Controller
 {
@@ -49,13 +51,14 @@ class SampleReceiveController extends Controller
 	* Create Sample Step 01
 	* @Get('sample.receives.step01')
 	*/
-	protected function step01(Request $request) {
+	protected function step01(Request $request, ReceivedExampleDataTable $dataTable) {
 		try {
 			$order = OrderService::get(id: $request->order_id);
-            $order_example = $order->orderSamples->toArray();
+			$order_example = $order->orderSamples->toArray();
 			$order_parameter = $order->parameters->toArray();
 			$type_of_work = $this->typeOfWork();
-			return view(view: 'apps.staff.receive.step01', data: compact('order', 'order_example', 'order_parameter', 'type_of_work'));
+			return $dataTable->render('apps.staff.receive.step01', compact('order', 'order_example', 'order_parameter', 'type_of_work'));
+			// return view(view: 'apps.staff.receive.step01', data: compact('order', 'order_example', 'order_parameter', 'type_of_work'));
 		} catch (OrderNotFoundException $e) {
 			report($e->getMessage());
 			return redirect()->back()->with(key: 'error', value: $e->getMessage());
@@ -63,4 +66,9 @@ class SampleReceiveController extends Controller
 			return view(view: 'errors.show', data: ['error' => $e->getMessage()]);
 		}
 	}
+
+    protected function step01Store(Request $request) {
+        dd($request->form_data);
+    }
+
 }

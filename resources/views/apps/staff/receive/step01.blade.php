@@ -1,9 +1,19 @@
 @extends('layouts.index')
 @section('token')<meta name="csrf-token" content="{{ csrf_token() }}">@endsection
 @section('style')
+<link type="text/css" rel="stylesheet" href="{{ URL::asset('assets/css/datagrid/datatables/datatables.bundle.css') }}">
 <link type="text/css" href="{{ URL::asset('vendor/bootstrap-datepicker/dist/css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet">
-<link type="text/css" href="{{ URL::asset('vendor/bootstrap-table/dist/bootstrap-table.min.css') }}" rel="stylesheet" >
-<link type="text/css" href="{{ URL::asset('css/pj-step.css') }}" rel="stylesheet" >
+<link type="text/css" rel="stylesheet" href="{{ URL::asset('vendor/jquery-datatables-checkboxes/dataTables.checkboxes.css') }}">
+<link type="text/css" href="{{ URL::asset('css/pj-step.css') }}" rel="stylesheet">
+<style type="text/css">
+#example_table thead {background-color:#2D8AC9;color: white;}
+table.dataTable.dt-checkboxes-select tbody tr,
+table.dataTable thead .dt-checkboxes-select-all {cursor: pointer;}
+table.dataTable thead .dt-checkboxes-select-all {text-align: center;}
+div.dataTables_wrapper span.select-info,
+div.dataTables_wrapper span.select-item {margin-left: 0.5em;}
+@media screen and (max-width: 640px) {div.dataTables_wrapper span.select-info,div.dataTables_wrapper span.select-item {margin-left: 0;display: block;}}
+</style>
 @endsection
 @section('content')
 <ol class="breadcrumb page-breadcrumb text-sm font-prompt">
@@ -22,7 +32,7 @@
 				</div>
 			</div>
 			<div class="panel-container show">
-				<form name="sample_detail" action="#" method="POST" enctype="multipart/form-data">
+				<form name="sample_detail" id="sample_detail" action="{{ route("sample.receives.step01.store") }}" method="POST" enctype="multipart/form-data">
 					<input type="hidden" name="_token" value="{{ csrf_token() }}">
 					<input type="hidden" name="order_id" value="{{ $order['id'] }}">
 					<input type="hidden" name="order_type" value="1">
@@ -118,17 +128,22 @@
 						<div class="row">
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
 								<div class="tw-relative">
+									<div class="row">
+										<div class="col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
+											{{ $dataTable->table() }}
+										</div>
+									</div>
 									{{-- <caption class="d-none"><i class="fa fa-clone"></i> การตรวจสอบตัวอย่าง</caption> --}}
-									<table class="table-striped" id="table-1" data-toggle="table" data-show-columns="true">
+									{{-- <table class="table-striped" id="table-1" data-toggle="table" data-show-columns="true">
 										<thead>
 											<tr class="bg-primary text-white">
 												<th>ลำดับ</th>
 												<th>รหัส ตย.</th>
-												<th>พารามิเตอร์</th>
-												<th>ชนิด</th>
-												<th>จำนวนพารามิเตอร์</th>
+												<th>ชนิด ตย.</th>
+												<th>รายการทดสอบ</th>
+												<th>จำนวนรายการทดสอบ</th>
 												<th>เลือก</th>
-												<th>หมายเหตุ</th>
+												<th>สถานะ</th>
 											</tr>
 										</thead>
 										<tfoot></tfoot>
@@ -138,6 +153,9 @@
 												<td>{{ $loop->iteration}}</td>
 												<td>{{ $val['id'] }}</td>
 												<td>
+													<input type="text" name="exam_type[]" />
+												</td>
+												<td>
 													@forelse ($order_parameter as $k => $v)
 														<ul>
 															<li>{{ $v['parameter_name'] }}</li>
@@ -146,18 +164,15 @@
 														{{ '-' }}
 													@endforelse
 												</td>
-												<td>
-													<input type="text" name="exam_type[]" />
-												</td>
 												<td>{{ count($order_parameter) }}</td>
 												<td>
 													<input type="checkbox" name="a[]" />
 												</td>
-												<td>หมายเหตุ</td>
+												<td>รับ</td>
 											</tr>
 										@endforeach
 										</tbody>
-									</table>
+									</table> --}}
 								</div>
 							</div>
 
@@ -166,7 +181,7 @@
 					<div class="panel-content border-faded border-left-0 border-right-0 border-bottom-0 d-flex flex-row align-items-center">
 						<div class="form-row">
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
-								<button type="submit" class="btn btn-warning ml-auto"><i class="fal fa-pencil"></i> แก้ไขข้อมูล</button>
+								<button type="submit" class="btn btn-warning ml-auto"><i class="fal fa-pencil"></i> บันทึกข้อมูล</button>
 								<a href="" class="btn btn-info ml-auto">ถัดไป <i class="fal fa-arrow-alt-right"></i></a>
 							</div>
 						</div>
@@ -179,9 +194,11 @@
 @endsection
 @push('scripts')
 <script type="text/javascript" src="{{ URL::asset('vendor/moment/moment.min.js') }}"></script>
+<script type="text/javascript" src="{{ URL::asset('assets/js/datagrid/datatables/datatables.bundle.js') }}"></script>
+<script type="text/javascript" src="{{ URL::asset('js/buttons.server-side.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('vendor/bootstrap-datepicker/dist/js/bootstrap-datetimepicker.min.js') }}"></script>
-<script type="text/javascript" src="{{ URL::asset('vendor/bootstrap-table/dist/bootstrap-table.min.js') }}"></script>
-<script type="text/javascript" src="{{ URL::asset('vendor/bootstrap-table/dist/locale/bootstrap-table-th-TH.min.js') }}"></script>
+<script type="text/javascript" src="{{ URL::asset('vendor/jquery-datatables-checkboxes/dataTables.checkboxes.min.js') }}"></script>
+{{ $dataTable->scripts() }}
 <script type="text/javascript">
 $(document).ready(function() {
 	$.ajaxSetup({headers:{'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')}});
@@ -193,6 +210,42 @@ $(document).ready(function() {
 		format: "DD/MM/YYYY",
 		ignoreReadonly: true,
 	});
+
+	$('#sample_detail').on('submit', function(e) {
+		e.preventDefault();
+		var action = $(this).attr("action");
+		var method = $(this).attr("method");
+		let form = this;
+		let table = $('#example_table').DataTable();
+		let rows_selected = table.column(0).checkboxes.selected();
+		$.each(rows_selected, function(index, rowId) {
+			$(form).append($('<input>').attr('type', 'hidden').attr('name', 'table_select_id_arr[]').val(rowId));
+		});
+		var form_data = new FormData($(this)[0]);
+		console.log(form_data);
+		// $.ajax({
+		// 	url: action,
+		// 	type: method,
+		// 	data: form_data,
+		// 	dataType: 'html',
+		// 	success: function(response) {
+		// 		console.log(response);
+		// 	},
+		// 	error: function(response) {
+		// 		alert(response);
+		// 	}
+		// })
+	});
+
+	$('#select_all').click(function() {
+		// if (this.checked) {
+			alert('ok');
+			// $('.ok').prop('checked', true);
+		// } else {
+		//     alert ('nok');
+		//     // $('.ok').prop('checked', false);
+		// }
+	})
 });
 </script>
 @endpush

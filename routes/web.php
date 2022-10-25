@@ -135,6 +135,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 	Route::name('sample.')->prefix('sample')->group(function() {
 		Route::resource('receives', SampleReceiveController::class);
 		Route::get('/receive/order/{order_id}/step01', [SampleReceiveController::class, 'step01'])->name('receives.step01');
+		Route::post('/receive/order/store', [SampleReceiveController::class, 'step01Store'])->name('receives.step01.store');
 	});
 	Route::get('/admin/home', [AdminController::class, 'index'])->name('admin.index');
 	Route::get('/users/id/{id}/edit',[UsersController::class,'edit'])->name('users.edit');
