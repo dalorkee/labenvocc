@@ -38,7 +38,7 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 							<li class="undone"><p><span class="d-none d-sm-inline">การตรวจวิเคราะห์</span></&p></li>
 							<li class="undone"><p><span class="d-none d-sm-inline">รายงานผล</span></p></li>
 						</ul>
-						<div class="row">
+						{{-- <div class="row">
 							<div class="form-group col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6 mb-3">
 								<label class="form-label" for="lab_no">Lab No. <span class="text-red-600">*</span></label>
 								<input type="text" name="lab_no" value="{{ $order['order_no'] ?? old('lab_no') }}" class="form-control" maxlength="60">
@@ -118,6 +118,58 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 									<div class="invalid-feedback" role="alert">{{ $message }}</div>
 								@enderror
 							</div>
+						</div> --}}
+						<div class="row">
+							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
+								<div class="tw-relative">
+									<div class="row">
+										<div class="col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
+											{{-- {{ $dataTable->table() }} --}}
+											<caption class="d-none"><i class="fa fa-clone"></i> การตรวจสอบตัวอย่าง</caption>
+											<table class="table-striped" id="table-1" data-toggle="table" data-show-columns="true">
+												<thead>
+													<tr class="bg-primary text-white">
+														<th>ลำดับ</th>
+														<th>รหัส ตย.</th>
+														<th>ชนิด ตย.</th>
+														<th>รายการทดสอบ</th>
+														<th>จำนวนรายการทดสอบ</th>
+														<th>เลือก</th>
+														<th>สถานะ</th>
+													</tr>
+												</thead>
+												<tfoot></tfoot>
+												<tbody>
+												@foreach ($order_example as $key => $val)
+													<tr>
+														<td>{{ $loop->iteration}}</td>
+														<td>{{ $val['id'] }}</td>
+														<td>
+															<input type="text" name="exam_type[]" />
+														</td>
+														<td>
+															@forelse ($order_parameter as $k => $v)
+																<ul>
+																	<li>{{ $v['parameter_name'] }}</li>
+																</ul>
+															@empty
+																{{ '-' }}
+															@endforelse
+														</td>
+														<td>{{ count($order_parameter) }}</td>
+														<td>
+															<input type="checkbox" name="a[]" />
+														</td>
+														<td>รับ</td>
+													</tr>
+												@endforeach
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+
 						</div>
 					</div>
 					<div class="panel-content border-faded border-left-0 border-right-0 border-bottom-0 d-flex flex-row align-items-center">
@@ -140,6 +192,7 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 <script type="text/javascript" src="{{ URL::asset('vendor/bootstrap-table/dist/locale/bootstrap-table-th-TH.min.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('vendor/bootstrap-datepicker/dist/js/bootstrap-datetimepicker.min.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/buttons.server-side.js') }}"></script>
+{{ $dataTable->scripts() }}
 <script type="text/javascript">
 $(document).ready(function() {
 	$.ajaxSetup({headers:{'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')}});

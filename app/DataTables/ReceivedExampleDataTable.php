@@ -43,7 +43,7 @@ class ReceivedExampleDataTable extends DataTable
 				// })
 				->addColumn('selected', function($orderSample) {
 
-					return '<input type="checkbox" name="a" /> <label><span class="ok" id="chkbox'.$orderSample->id.'">สมบูรณ์</label>';
+					return '<input type="checkbox" name="a[] class="pjx" /> <label><span class="ok" id="chkbox'.$orderSample->id.'">สมบูรณ์</label>';
 				})
 				->addColumn('action', function($orderSample) {
 					return "<button class=\"context-nav bg-purple-400 hover:bg-purple-500 text-white py-1 px-3 rounded\" id=\"context-menu\" data-order_id=\"".$orderSample->order_id."\" data-id=\"".$orderSample->id."\">จัดการ <i class=\"fal fa-angle-down\"></i></button>";
@@ -70,9 +70,13 @@ class ReceivedExampleDataTable extends DataTable
 				->parameters([
 					'language' => ['url' => url('/vendor/DataTables/i18n/thai.json')],
 					'columnDefs' => [
-						['targets' => 0, 'checkboxes' => ['selectRow' => true]]
+						// [
+						// 	'targets' => 0,
+						// 	'checkboxes' => ['selectRow' => true],
+						// 	'width' => '8%'
+						// ]
 					],
-					'select' => ['style' => 'multi'],
+					// 'select' => ['style' => 'multi'],
 				]);
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
@@ -82,16 +86,11 @@ class ReceivedExampleDataTable extends DataTable
 	protected function getColumns() {
 		try {
 			return [
-				// Column::make('checkbox'),
 				Column::make('id')->title('รหัส'),
 				Column::make('firstname')->title('ชนิดตัวอย่าง'),
 				Column::make('parameter')->title('รายการทดสอบ'),
 				Column::make('parameter_quantity')->title('จำนวนรายการทดสอบ'),
-				Column::make('selected')->title('เลือกทั้งหมด <input type="checkbox" id="select_all" />'),
-				// Column::make('sample_date')->title('วันที่เก็บ ตย.'),
-				// Column::make('parameter')->title('พารามิเตอร์'),
-				// Column::make('total_price')->title('ราคา'),
-				// Column::make('note')->title('หมายเหตุ'),
+				Column::make('selected')->title("เลือกทั้งหมด <input type='checkbox'>")->className('pja'),
 				Column::computed('action')->addClass('text-center')->title('#')
 			];
 		} catch (\Exception $e) {

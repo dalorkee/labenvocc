@@ -57,8 +57,8 @@ class SampleReceiveController extends Controller
 			$order_example = $order->orderSamples->toArray();
 			$order_parameter = $order->parameters->toArray();
 			$type_of_work = $this->typeOfWork();
-			return $dataTable->render('apps.staff.receive.step01', compact('order', 'order_example', 'order_parameter', 'type_of_work'));
-			// return view(view: 'apps.staff.receive.step01', data: compact('order', 'order_example', 'order_parameter', 'type_of_work'));
+			// return $dataTable->render('apps.staff.receive.step01', compact('order', 'order_example', 'order_parameter', 'type_of_work'));
+			return view(view: 'apps.staff.receive.step01', data: compact('order', 'order_example', 'order_parameter', 'type_of_work'));
 		} catch (OrderNotFoundException $e) {
 			report($e->getMessage());
 			return redirect()->back()->with(key: 'error', value: $e->getMessage());
