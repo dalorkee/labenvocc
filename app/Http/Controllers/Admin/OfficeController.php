@@ -137,7 +137,7 @@ class OfficeController extends Controller
                     DB::table('model_has_roles')->insert([
                         'role_id'=>'3',
                         'model_type'=>'App\Models\User',
-                        'model_id'=>$request->user_id,
+                        'model_id'=>$request->user_id
                     ]);
                     $duty_arr = [];
                     foreach($request->sub_duty as $key=>$sub_duties){
@@ -148,23 +148,35 @@ class OfficeController extends Controller
                         ];
                         array_push($duty_arr, $make_arr_sql);
                     }
-                    $mhp_save = DB::table('model_has_permissions')->insert($duty_arr);
+                    DB::table('model_has_permissions')->insert($duty_arr);
                 }
                 elseif($request->user_status !== 'อนุญาต' AND $user_find->user_status === 'อนุญาต'){
                     $user_find->approved = 'n';
                     $user_find->user_status = $request->user_status;
                     DB::table('model_has_roles')->where('model_id', $request->user_id)->delete();
-                    DB::table('model_has_permission')->where('model_id', $request->user_id)->delete();
+                    DB::table('model_has_permissions')->where('model_id', $request->user_id)->delete();
                 }
                 elseif($request->user_status === 'อนุญาต' AND $user_find->user_status === 'อนุญาต'){
                     //find model_has_permission model_id if exist to add insert next
+                    DB::table('model_has_permissions')->where('model_id', $request->user_id)->delete();
+                    $duty_arr = [];
+                    foreach($request->sub_duty as $key=>$sub_duties){
+                        $make_arr_sql = [
+                            'permission_id'=>$sub_duties,
+                            'model_type'=>'App\Models\User',
+                            'model_id'=>$request->user_id
+                        ];
+                        array_push($duty_arr, $make_arr_sql);
+                    }
+                    DB::table('model_has_permissions')->insert($duty_arr);
                     return redirect()->route('office.index')->with('success', 'updated successfully');
                 }
                 elseif($request->user_status !== 'อนุญาต' AND $user_find->user_status !== 'อนุญาต'){
-                    $user_find->user_status = $request->user_status;
+                    DB::table('model_has_permissions')->where('model_id', $request->user_id)->delete();
+                    return redirect()->route('office.index')->with('success', 'updated successfully');
                 }
                 else{
-                    return redirect()->route('office.edit',$request->user_id)->with('error', 'permissions unsuccessfully');
+                    return redirect()->route('office.edit',$request->user_id)->with('error', 'update permission unsuccessfully');
                 }
                 $us_ps = $user_find->save();
                 if($us_ps==true){
@@ -201,6 +213,7 @@ class OfficeController extends Controller
             $user_staff_find->deleted_at = $d_now;
             $ustuf_del = $user_staff_find->save();
             if($ustuf_del==true){
+                DB::table('model_has_permissions')->where('model_id', $request->id)->delete();
                 $del = DB::table('model_has_roles')->where('model_id', '=', $request->id)->delete();
                 if($del==true){
                     return redirect()->route('office.index')->with('success', 'delete successfully');
@@ -241,6 +254,7 @@ class OfficeController extends Controller
         $u_deny = $user_find->save();
         if($u_deny==true){
             DB::table('model_has_roles')->where('model_id', '=', $request->id)->delete();
+            DB::table('model_has_permissions')->where('model_id', $request->id)->delete();
             return redirect()->route('office.index')->with('success', 'deny successfully');
         }
         else{
