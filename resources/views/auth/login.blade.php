@@ -82,7 +82,7 @@
 											<div class="flex-1">
 												<span class="h5 color-success-600">{{ $public_relate->advertise_title }}</span>
 											</div>
-											<a href="{{ route('advertise.detail',$public_relate->id) }}" class="btn btn-outline-success btn-sm btn-w-m">รายละเอียด</a>
+											<a href="{{ route('user.advertise.detail',['id'=>$public_relate->id]) }}" class="btn btn-outline-success btn-sm btn-w-m">รายละเอียด</a>
 										</div>
 									</div>
 								@endforeach
@@ -101,9 +101,23 @@
 							<div class="custom-scroll" style="height: 80px">
 								<section>
 									@foreach($advertise[1] AS $std_quality)
-									<div class="fs-xl fw-500 color-success-600">
-										<span class="h5 color-success-600">{{ $std_quality->advertise_detail }}</span>
+                                    <div class="alert border-faded bg-transparent text-secondary fade show" role="alert">
+										<div class="d-flex align-items-center">
+											<div class="alert-icon">
+												<span class="icon-stack icon-stack-md">
+													<i class="base-7 icon-stack-3x color-success-600"></i>
+													<i class="fal fa-info icon-stack-1x text-white"></i>
+												</span>
+											</div>
+											<div class="flex-1">
+												<span class="h5 color-success-600">{{ $std_quality->advertise_detail }}</span>
+											</div>
+											<a href="{{ route('user.advertise.detail',['id'=>$std_quality->id]) }}" class="btn btn-outline-success btn-sm btn-w-m">รายละเอียด</a>
+										</div>
 									</div>
+									{{-- <div class="fs-xl fw-500 color-success-600">
+										<span class="h5 color-success-600">{{ $std_quality->advertise_detail }}</span>
+									</div> --}}
 								@endforeach
 								</section>
 							</div>

@@ -123,18 +123,19 @@ class AdvertiseController extends Controller
             return redirect()->route('advertise.index')->with('success', 'Deleted successfully');
         }
     }
-    public function detail(Request $request, Advertise $advertise){
-        $advertise = $advertise->find($request->id);
-        return view('user.detail',compact('advertise'));
-    }
-    public function listall(Request $request, Advertise $advertise){
-        if($request->listall == "public"){
-            $adv_type = "ประชาสัมพันธ์";
-        }
-        else{
-            $adv_type = "มาตราฐานคุณภาพ";
-        }
-        $advertise = $advertise->where('advertise_type',$adv_type)->get();
-        return view('user.advlist',compact('advertise'));
-    }
+    // public function detail(Request $request, Advertise $advertise){
+    //     $advertise = $advertise->find($request->id);
+
+    //     return view('user.detail',compact('advertise'));
+    // }
+    // public function listall(Request $request, Advertise $advertise){
+    //     if($request->listall == "public"){
+    //         $adv_type = "ประชาสัมพันธ์";
+    //     }
+    //     else{
+    //         $adv_type = "มาตราฐานคุณภาพ";
+    //     }
+    //     $advertise = $advertise->where('advertise_type',$adv_type)->get();
+    //     return view('user.advlist',compact('advertise'));
+    // }
 }

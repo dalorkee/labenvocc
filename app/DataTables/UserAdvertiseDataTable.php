@@ -24,12 +24,14 @@ class UserAdvertiseDataTable extends DataTable
 			->editColumn('advertise_date',function($format_date){
 				return date('Y-F-d',strtotime($format_date->advertise_date));
 			})
-			->addColumn('action', '<button type="button" class="advertise-manage-nav btn btn-sm btn-info" data-id="{{$id}}">view</button>')
+			->addColumn("action", function($data) {
+                return "<a href=\"".route('user.advertise.detail', ['id' => $data->id])."\"  class=\"advertise-manage-nav btn btn-sm btn-info text-white\">view</a>";
+            })
 			->rawColumns(['advertise_type','action']);
 	}
 
-	public function query(Advertise $advertise) {	
-		return $advertise->where('advertise_type',$this->adv_type)->orderBy('id', 'DESC');		
+	public function query(Advertise $advertise) {
+		return $advertise->where('advertise_type',$this->adv_type)->orderBy('id', 'DESC');
 	}
 
 	public function html(): object {
@@ -37,7 +39,7 @@ class UserAdvertiseDataTable extends DataTable
 					->setTableId('advertise-table')
 					->columns($this->getColumns())
 					->minifiedAjax()
-					->orderBy(1);					
+					->orderBy(1);
 	}
 
 	protected function getColumns() {

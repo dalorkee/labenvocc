@@ -83,7 +83,15 @@ class UserAdvertiseController extends Controller
     }
     public function detail(Request $request, Advertise $advertise){
         $advertise = $advertise->find($request->id);
-        return view('user.detail',compact('advertise'));
+        switch($advertise->advertise_type){
+            case 'ประชาสัมพันธ์' :
+                $adv_type = 'public';
+            break;
+            case 'มาตราฐานคุณภาพ' :
+                $adv_type = 'stdquality';
+            break;
+        }
+        return view('user.detail',compact('advertise','adv_type'));
     }
     public function listall(Request $request, UserAdvertiseDataTable $dataTable){
         if($request->listall == "public"){
@@ -92,8 +100,7 @@ class UserAdvertiseController extends Controller
         else{
             $adv_type = "มาตราฐานคุณภาพ";
         }
-        // $advertise = $advertise->where('advertise_type',$adv_type)->get();
         return $dataTable->with('adv_type',$adv_type)->render('user.advlist',compact('adv_type'));
-        // view('user.advlist',compact('advertise'));
+
     }
 }

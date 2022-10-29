@@ -159,5 +159,5 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 	Route::post('sample/bio/create', [SampleUploadController::class, 'biocreate'])->name('sampleupload.biocreate');
 	Route::post('sample/bio/import', [SampleUploadController::class, 'bioimport'])->name('sampleupload.bioimport');
 });
-Route::get('/advertise/id/{id}/detail',[AdvertiseController::class,'detail'])->name('advertise.detail');
+Route::get('/user/advertise/id/{id}/detail',[UserAdvertiseController::class,'detail'])->name('user.advertise.detail');
 Route::get('/user/advertise/listall/{listall}',[UserAdvertiseController::class,'listall'])->name('user.advertise.listall');
