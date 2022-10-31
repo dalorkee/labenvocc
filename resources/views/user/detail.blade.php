@@ -8,7 +8,7 @@
 @endsection
 @section('content')
 <div class="subheader">
-	<h1 class="subheader-title"><small>รายละเอียดข่าวประชาสัมพันธ์</small></h1>
+	<h1 class="subheader-title"><small>รายละเอียดข่าว{{ $advertise['advertise_type']}}</small></h1>
 </div>
 @if (Session::get('success'))
 	<div class="alert alert-success">
@@ -20,26 +20,26 @@
 	</div>
 @endif
 <div class="fs-lg fw-300 p-5 bg-white border-faded rounded mb-g">
-	<div class="frame-wrap">        
+	<div class="frame-wrap">
 		<div class="form-row">
 			<div class="col-md-6 mb3">
 				<label class="form-label text-info" for="advertise_date">ประกาศวันที่</label>
 				<span class="badge badge-secondary">{{ date('Y-F-d',strtotime($advertise['advertise_date'])); }}</span>
-			</div>	
+			</div>
         </div>
 		<div class="form-row">
 			<div class="col-md-6 mb3">
 				<label class="form-label text-info" for="advertise_date">หัวข้อข่าว</label>
 				<span class="badge badge-primary">{{ $advertise['advertise_title'] }}</span>
-			</div>	
+			</div>
         </div>
         <div class="form-row">
 			<div class="col-md-12 mb-6">
 				<label class="form-label text-info" for="advertise_detail">รายละเอียด</label>
-				<textarea class="form-control" id="advertise_detail" name="advertise_detail" readonly>{{ $advertise['advertise_detail'] }}</textarea>					
-			</div>				
+				<textarea class="form-control" id="advertise_detail" name="advertise_detail" readonly>{{ $advertise['advertise_detail'] }}</textarea>
+			</div>
 		</div>
-		<a class="btn btn-primary" href="{{ route('login') }}">กลับ</a>		
+		<a class="btn btn-primary" href="{{ route('user.advertise.listall',['listall'=>$adv_type]) }}">กลับ</a>
 	</div>
 </div>
 @endsection

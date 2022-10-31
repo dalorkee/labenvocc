@@ -15,8 +15,8 @@
 		{{ $dataTable->table() }}
 	</div>
 </div>
-<div class="frame-wrap">		
-	<a class="btn btn-primary" href="{{ route('login') }}">กลับ</a>		
+<div class="frame-wrap">
+	<a class="btn btn-primary" href="{{ route('login') }}">กลับ</a>
 </div>
 @endsection
 @section('script')
