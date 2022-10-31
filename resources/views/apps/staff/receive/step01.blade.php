@@ -11,7 +11,7 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 @endsection
 @section('content')
 <ol class="breadcrumb page-breadcrumb text-sm font-prompt">
-	<li class="breadcrumb-item"><i class="fal fa-home mr-1"></i> <a href="{{ route('sample.receives.index') }}">งานรับตัวอย่าง</a></li>
+	<li class="breadcrumb-item"><i class="fal fa-home mr-1"></i> <a href="{{ route('sample.received.index') }}">งานรับตัวอย่าง</a></li>
 	<li class="breadcrumb-item">ใบคำขอ</li>
 </ol>
 <div class="row text-sm font-prompt">
@@ -26,14 +26,14 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 				</div>
 			</div>
 			<div class="panel-container show">
-				<form name="sample_detail" id="sample_detail" action="{{ route("sample.receives.step01.store") }}" method="POST" enctype="multipart/form-data">
+				<form name="sample_detail" id="sample_detail" action="#" method="POST" enctype="multipart/form-data">
 					<input type="hidden" name="_token" value="{{ csrf_token() }}">
 					<input type="hidden" name="order_id" value="{{ $order['id'] }}">
 					<input type="hidden" name="order_type" value="1">
 					<input type="hidden" name="order_type_name" value="ตัวอย่างชีวภาพ">
 					<div class="panel-content">
 						<ul class="steps">
-							<li class="undone"><a href="{{ route('sample.receives.create') }}"><span class="d-none d-sm-inline">รายการคำขอ</span></a></li>
+							<li class="undone"><a href="{{ route('sample.received.create') }}"><span class="d-none d-sm-inline">รายการคำขอ</span></a></li>
 							<li class="active"><p><span class="d-none d-sm-inline">รับตัวอย่าง</span></p></li>
 							<li class="undone"><p><span class="d-none d-sm-inline">การตรวจวิเคราะห์</span></&p></li>
 							<li class="undone"><p><span class="d-none d-sm-inline">รายงานผล</span></p></li>
@@ -124,7 +124,7 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 						<div class="form-row">
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
 								<button type="submit" class="btn btn-warning ml-auto"><i class="fal fa-pencil"></i> บันทึกข้อมูล</button>
-								<a href="" class="btn btn-info ml-auto">ถัดไป <i class="fal fa-arrow-alt-right"></i></a>
+								<a href="{{ route('sample.received.step02', ['order_id' => $order['id']]) }}" class="btn btn-info ml-auto">ถัดไป <i class="fal fa-arrow-alt-right"></i></a>
 							</div>
 						</div>
 					</div>

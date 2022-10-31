@@ -39,53 +39,8 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 							<li class="undone"><p><span class="d-none d-sm-inline">รายงานผล</span></p></li>
 						</ul>
 						<div class="row">
-							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
-								<div class="tw-relative">
-									<div class="row">
-										<div class="col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
-											<caption class="d-none"><i class="fa fa-clone"></i> การตรวจสอบตัวอย่าง</caption>
-											<table class="table-striped" id="table-1" data-toggle="table" data-show-columns="true">
-												<thead>
-													<tr class="bg-primary text-white">
-														<th>ลำดับ</th>
-														<th>รหัส ตย.</th>
-														<th>ชนิด ตย.</th>
-														<th>รายการทดสอบ</th>
-														<th>จำนวนรายการทดสอบ</th>
-														<th>เลือก</th>
-														<th>สถานะ</th>
-													</tr>
-												</thead>
-												<tfoot></tfoot>
-												<tbody>
-												@foreach ($order_example as $key => $val)
-													<tr>
-														<td>{{ $loop->iteration}}</td>
-														<td>{{ $val['id'] }}</td>
-														<td>
-															<input type="text" name="exam_type[]" />
-														</td>
-														<td>
-															@forelse ($order_parameter as $k => $v)
-																<ul>
-																	<li>{{ $v['parameter_name'] }}</li>
-																</ul>
-															@empty
-																{{ '-' }}
-															@endforelse
-														</td>
-														<td>{{ count($order_parameter) }}</td>
-														<td>
-															<input type="checkbox" name="a[]" /> <label>สมบูรณ์</label>
-														</td>
-														<td>รับ</td>
-													</tr>
-												@endforeach
-												</tbody>
-											</table>
-										</div>
-									</div>
-								</div>
+							<div class="col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
+
 							</div>
 
 						</div>
@@ -93,8 +48,8 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 					<div class="panel-content border-faded border-left-0 border-right-0 border-bottom-0 d-flex flex-row align-items-center">
 						<div class="form-row">
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
-                                <a href="{{ route('sample.received.step01', ['order_id' => $order['id']]) }}" class="btn btn-info ml-auto">ก่อนหน้า <i class="fal fa-arrow-alt-right"></i></a>
-								<a href="{{ route('sample.received.step03', ['order_id' => $order['id']]) }}" class="btn btn-info ml-auto">ถัดไป <i class="fal fa-arrow-alt-right"></i></a>
+                                <a href="{{ route('sample.received.step02', ['order_id' => $order['id']]) }}" class="btn btn-info ml-auto">ก่อนหน้า <i class="fal fa-arrow-alt-right"></i></a>
+								<button type="submit" class="btn btn-warning ml-auto"><i class="fal fa-pencil"></i> บันทึกข้อมูล</button>
 							</div>
 						</div>
 					</div>

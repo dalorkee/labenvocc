@@ -17,7 +17,7 @@ class SampleReceiveController extends Controller
 
 	/**
 	* Show the index page
-	* @Resource('sample.receives.index')
+	* @Resource('sample.received.index')
 	*/
 	protected function index(): object {
 		return view(view: 'apps.staff.receive.index');
@@ -25,7 +25,7 @@ class SampleReceiveController extends Controller
 
 	/**
 	* Create Order page
-	* @Resource('sample.receives.create')
+	* @Resource('sample.received.create')
 	*/
 	protected function create(): object {
 		try {
@@ -35,7 +35,7 @@ class SampleReceiveController extends Controller
 				->editColumn('order_confirmed', fn($order) => $this->setJsDateTimeToJsDate($order->order_confirmed))
 				->addColumn('action', function ($order) {
 					return "
-						<a href=\"".route('sample.receives.step01', ['order_id' => $order->id])."\" class=\"btn btn-sm btn-success\">รับ</a>\n
+						<a href=\"".route('sample.received.step01', ['order_id' => $order->id])."\" class=\"btn btn-sm btn-success\">รับ</a>\n
 						<a href=\"#edit-".$order->id."\" class=\"btn btn-sm btn-warning\">แก้ไข</a>\n";
 				})
 				->make(true);
@@ -49,16 +49,16 @@ class SampleReceiveController extends Controller
 
 	/**
 	* Create Sample Step 01
-	* @Get('sample.receives.step01')
+	* @Get('sample.received.step01')
 	*/
-	protected function step01(Request $request, ReceivedExampleDataTable $dataTable) {
+	protected function step01(Request $request) {
 		try {
 			$order = OrderService::get(id: $request->order_id);
-			$order_example = $order->orderSamples->toArray();
-			$order_parameter = $order->parameters->toArray();
+			// $order_example = $order->orderSamples->toArray();
+			// $order_parameter = $order->parameters->toArray();
 			$type_of_work = $this->typeOfWork();
 			// return $dataTable->render('apps.staff.receive.step01', compact('order', 'order_example', 'order_parameter', 'type_of_work'));
-			return view(view: 'apps.staff.receive.step01', data: compact('order', 'order_example', 'order_parameter', 'type_of_work'));
+			return view(view: 'apps.staff.receive.step01', data: compact('order', 'type_of_work'));
 		} catch (OrderNotFoundException $e) {
 			report($e->getMessage());
 			return redirect()->back()->with(key: 'error', value: $e->getMessage());
@@ -67,8 +67,28 @@ class SampleReceiveController extends Controller
 		}
 	}
 
-    protected function step01Store(Request $request) {
-        dd($request->form_data);
-    }
+	protected function step02(Request $request) {
+		try {
+			$order = OrderService::get(id: $request->order_id);
+			$order_example = $order->orderSamples->toArray();
+			$order_parameter = $order->parameters->toArray();
+			// $type_of_work = $this->typeOfWork();
+			return view(view: 'apps.staff.receive.step02', data: compact('order', 'order_example', 'order_parameter'));
+		} catch (OrderNotFoundException $e) {
+			report($e->getMessage());
+			return redirect()->back()->with(key: 'error', value: $e->getMessage());
+		} catch (\Exception $e) {
+			return view(view: 'errors.show', data: ['error' => $e->getMessage()]);
+		}
+	}
+
+	protected function step03(Request $request) {
+		$order = OrderService::get(id: $request->order_id);
+		return view(view: 'apps.staff.receive.step03', data: compact('order'));
+	}
+
+    protected function store(Request $request) {
+		dd($request);
+	}
 
 }
