@@ -14,7 +14,7 @@
 <div class="row text-sm font-prompt" style="background-color: #EBF6FD">
 	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
 		<ul class="steps">
-			<li class="active"><a href="{{ route('sample.receives.create') }}"><span class="d-none d-sm-inline">รายการคำขอ</span></a></li>
+			<li class="active"><a href="{{ route('sample.received.create') }}"><span class="d-none d-sm-inline">รายการคำขอ</span></a></li>
 			<li class="undone"><p><span class="d-none d-sm-inline">รับตัวอย่าง</span></p></li>
 			<li class="undone"><p><span class="d-none d-sm-inline">การตรวจวิเคราะห์</span></&p></li>
 			<li class="undone"><p><span class="d-none d-sm-inline">รายงานผล</span></p></li>
@@ -75,7 +75,7 @@ $(document).ready(function() {
 		lengthMenu: [6, 12, 24],
 		lengthChange: false,
 		language: {'url': '/vendor/DataTables/i18n/thai.json'},
-		ajax: "{{ route('sample.receives.create') }}",
+		ajax: "{{ route('sample.received.create') }}",
 		columns: [
 			{data: 'id', name: 'id', width: "5%"},
 			{data: 'order_no', name: 'order_no'},
