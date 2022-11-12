@@ -13,7 +13,8 @@ use App\Http\Controllers\{
 	SampleReceiveController,
 	UserAdvertiseController,
 	SampleUploadController,
-	HospitalController
+	HospitalController,
+	PrintBundleController,
 };
 use App\Http\Controllers\Admin\{
 	AdminController,
@@ -161,3 +162,6 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 });
 Route::get('/user/advertise/id/{id}/detail',[UserAdvertiseController::class,'detail'])->name('user.advertise.detail');
 Route::get('/user/advertise/listall/{listall}',[UserAdvertiseController::class,'listall'])->name('user.advertise.listall');
+Route::controller(PrintBundleController::class)->group(function() {
+	Route::get('/print/sample_receipt', 'index');
+});
