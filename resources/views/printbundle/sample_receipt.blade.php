@@ -38,11 +38,17 @@
 		padding: 10px;
   		text-align: left;
 		font-size:14px;
-		font-weight: 400;
+		font-weight: 800;
 	}
-	span {
+	.font-center {
+		text-align: center;
 		font-size:14px;
-		font-weight: 50;
+		font-weight: 800;
+		text-decoration: underline;
+	}
+	.thin-font {
+		font-size:14px;
+		font-weight: 100;
 	}
 	.space {
 		padding: 2px;
@@ -120,17 +126,51 @@
 		<table class="main-table">
 			<tr>
 				<td>Lab NO.:</td>
-				<td>กำหนดส่งรายงานผลการทดสอบ <span>test</span></td>
+				<td>กำหนดส่งรายงานผลการทดสอบ</td>
 			</tr>
-		</table>
-		<div class="space"></div>
-		<table class="main-table">
 			<tr>
-				<td>ประเภทตัวอย่าง :</td>
-				<td><div class="chk_box">&nbsp;&nbsp;&nbsp;</div> บริการ </td>
-				<td><div class="chk_box">&nbsp;&nbsp;&nbsp;</div> วิจัย </td> 
-				<td><div class="chk_box">&nbsp;&nbsp;&nbsp;</div> เฝ้าระวัง SSRT/สอบสวนโรค </td>
-				<td><div class="chk_box">&nbsp;&nbsp;&nbsp;</div> อื่นๆ </td>
+				<td colspan="2">ประเภทตัวอย่าง :
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div class="chk_box">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div> บริการ 
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div class="chk_box">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div> วิจัย 
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div class="chk_box">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div> เฝ้าระวัง SSRT/สอบสวนโรค 
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div class="chk_box">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div> อื่นๆ 
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<div class="chk_box">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div> สิ่งแวดล้อม: 
+					<span class="thin-font">
+						จำนวน&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						ตัวอย่าง&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						พารามิเตอร์
+					</span>
+				</td>
+				<td>
+					<div class="chk_box">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div> ชีวภาพ: 
+					<span class="thin-font">
+						จำนวน&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						ตัวอย่าง&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						พารามิเตอร์
+					</span>
+				</td>
+			</tr>
+			<tr>
+				<td><div class="font-center">ชนิดตัวอย่าง</div></td>
+				<td><div class="font-center">ชนิดตัวอย่าง</div></td>
+			</tr>
+			<tr>
+				<td>
+					<div class="chk_box">&nbsp;&nbsp;&nbsp;&nbsp;</div> 
+					<span class="thin-font">ตลับอากาศ จำนวน:</span>
+					<br><br>
+					<span class="thin-font">Parameter:</span>
+				</td>
+				<td>
+					<div class="chk_box">&nbsp;&nbsp;&nbsp;&nbsp;</div> 
+					<span class="thin-font">เลือด จำนวน:</span>
+					<br><br>
+					<span class="thin-font">Parameter/จำนวน:</span>
+				</td>
 			</tr>
 		</table>
 </body>
