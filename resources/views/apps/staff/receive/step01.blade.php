@@ -41,12 +41,12 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 						<div class="row">
 							<div class="form-group col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6 mb-3">
 								<label class="form-label" for="lab_no">Lab No. <span class="text-red-600">*</span></label>
-								<input type="text" name="lab_no" value="{{ $order['order_no'] ?? old('lab_no') }}" class="form-control" maxlength="60">
+								<input type="text" name="lab_no" value="{{ old('lab_no') }}" class="form-control" maxlength="60">
 							</div>
 							<div class="form-group col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6 mb-3">
 								<label class="form-label" for="report_due_date">กำหนดส่งรายงาน</label>
 								<div class="input-group date date_data">
-									<input type="text" name="report_due_date" value="{{ $order['report_due_date'] ?? old('report_due_date') }}" class="form-control @error('report_due_date') is-invalid @enderror input-date" id="report_due_date" placeholder="เลือกวันที่" readonly >
+									<input type="text" name="report_due_date" value="{{ old('report_due_date') }}" class="form-control @error('report_due_date') is-invalid @enderror input-date" id="report_due_date" placeholder="เลือกวันที่" readonly >
 									<div class="input-group-append">
 										<span class="input-group-text fs-xl"><i class="fal fa-calendar-alt"></i></span>
 									</div>
@@ -99,26 +99,35 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 									<div class="invalid-feedback" role="alert">{{ $message }}</div>
 								@enderror
 							</div>
-							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
-								<label class="form-label" for="example_type">ชนิดตัวอย่าง</label>
-								<input type="text" name="example_type" value="{{ $order['example_type'] ?? old('example_type') }}" class="form-control @error('example_type') is-invalid @enderror">
-								@error('example_type')
-									<div class="invalid-feedback" role="alert">{{ $message }}</div>
-								@enderror
-							</div>
-							<div class="form-group col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6 mb-3">
-								<label class="form-label" for="group_of_work">กลุ่มงาน <span class="text-red-600">*</span></label>
-								<select name="group_of_work" class="form-control @error('group_of_work') is-invalid @enderror">
-									<option value="">-- โปรดเลือก --</option>
-									@foreach ($type_of_work as $key => $val)
-										<option value="{{ $key }}" {{ ($order['type_of_work'] == $key || old('type_of_work') == $key) ? 'selected' : '' }}>{{ $val }}</option>
-									@endforeach
-								</select>
-								@error('group_of_work')
-									<div class="invalid-feedback" role="alert">{{ $message }}</div>
-								@enderror
+							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-4">
+								<label class="form-label" for="work_group">กลุ่มงาน</label>
+								<input type="text" name="work_group" value="{{ $work_group }}" class="form-control" readonly />
 							</div>
 						</div>
+						<div class="row">
+							<div class="table-responsive col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mt-4 mb-3">
+								<table class="table table-striped">
+									<thead class="bg-primary-100">
+										<tr>
+											<th>ชนิดตัวอย่าง</th>
+											<th>จำนวนตัวอย่าง</th>
+											<th>จำนวนรายการทดสอบ</th>
+										</tr>
+									</thead>
+									<tfoot></tfoot>
+									<tbody>
+										@foreach ($paramet_groupby_sample_character_name as $key => $val)
+											<tr>
+												<td>{{ $key }}</td>
+												<td>{{ $val['sample'] }}</td>
+												<td>{{ $val['paramet'] }}</td>
+											</tr>
+										@endforeach
+									</tbody>
+								</table>
+							</div>
+						</div>
+
 					</div>
 					<div class="panel-content border-faded border-left-0 border-right-0 border-bottom-0 d-flex flex-row align-items-center">
 						<div class="form-row">
