@@ -87,6 +87,7 @@ class SampleReceiveController extends Controller
 			$order = OrderService::get(id: $request->order_id);
 			$order_example = $order->orderSamples->toArray();
 			$order_parameter = $order->parameters->toArray();
+			// dd($order_parameter);
 			// $type_of_work = $this->typeOfWork();
 			return view(view: 'apps.staff.receive.step02', data: compact('order', 'order_example', 'order_parameter'));
 		} catch (OrderNotFoundException $e) {

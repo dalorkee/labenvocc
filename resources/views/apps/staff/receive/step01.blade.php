@@ -132,8 +132,8 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 					<div class="panel-content border-faded border-left-0 border-right-0 border-bottom-0 d-flex flex-row align-items-center">
 						<div class="form-row">
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
-								<button type="submit" class="btn btn-warning ml-auto"><i class="fal fa-pencil"></i> บันทึกข้อมูล</button>
-								<a href="{{ route('sample.received.step02', ['order_id' => $order['id']]) }}" class="btn btn-info ml-auto">ถัดไป <i class="fal fa-arrow-alt-right"></i></a>
+                                <a href="#" class="btn btn-success ml-auto"><i class="fal fa-arrow-alt-left"></i> ก่อนหน้า</a>
+                                <a href="{{ route('sample.received.step02', ['order_id' => $order['id']]) }}" class="btn btn-success ml-auto">ถัดไป <i class="fal fa-arrow-alt-right"></i></a>
 							</div>
 						</div>
 					</div>
