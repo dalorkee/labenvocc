@@ -24,5 +24,12 @@ class OrderService
 		return $orders;
 	}
 
-    // public static function getOrderWithParameter()
+	public static function getOrderWithRelations(int $id) {
+		// $str = '"' . implode ('", "', $relations) . '"';
+		$orders = Order::whereId($id)->with('orderSamples', 'parameters')->get();
+		if (!$orders) {
+			throw new InvalidOrderException(message: 'ไม่พบข้อมูล Orders');
+		}
+		return $orders;
+	}
 }

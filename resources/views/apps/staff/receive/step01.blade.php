@@ -116,11 +116,11 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 									</thead>
 									<tfoot></tfoot>
 									<tbody>
-										@foreach ($paramet_groupby_sample_character_name as $key => $val)
+										@foreach ($sample_character_name as $key => $val)
 											<tr>
 												<td>{{ $key }}</td>
-												<td>{{ $val['sample'] }}</td>
-												<td>{{ $val['paramet'] }}</td>
+												<td>{{ $val['sample_amount'] }}</td>
+												<td>{{ $val['paramet_amount'] }}</td>
 											</tr>
 										@endforeach
 									</tbody>
