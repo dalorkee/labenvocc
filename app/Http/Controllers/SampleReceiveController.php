@@ -55,6 +55,12 @@ class SampleReceiveController extends Controller
 	*/
 	protected function step01(Request $request) {
 		$validate_order_receive_data = $request->validate([
+            'order_id',
+            'lab_no',
+            'report_due_date',
+            'type_of_work',
+            'type_of_work_other',
+            'work_group',
 			// 'agency_ministry' => 'required|max:30',
 		]);
 		try {
