@@ -28,7 +28,7 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 			<div class="panel-container show">
 				<form name="sample_detail" id="sample_detail" action="#" method="POST" enctype="multipart/form-data">
 					<input type="hidden" name="_token" value="{{ csrf_token() }}">
-					<input type="hidden" name="order_id" value="{{ $order['id'] }}">
+					<input type="hidden" name="order_id" value="{{ $order_id }}">
 					<input type="hidden" name="order_type" value="1">
 					<input type="hidden" name="order_type_name" value="ตัวอย่างชีวภาพ">
 					<div class="panel-content">
@@ -43,8 +43,8 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 								<div class="tw-relative">
 									<div class="row">
 										<div class="col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
-											<caption class="d-none"><i class="fa fa-clone"></i> การตรวจสอบตัวอย่าง</caption>
-											<table class="table-striped" id="table-1" data-toggle="table" data-show-columns="true">
+                                            <table class="table-striped" id="table-1" data-toggle="table" data-show-columns="true">
+                                                <caption class="d-none"><i class="fa fa-clone"></i> การตรวจสอบตัวอย่าง</caption>
 												<thead>
 													<tr class="bg-primary text-white">
 														<th>ลำดับ</th>
@@ -58,27 +58,34 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 												</thead>
 												<tfoot></tfoot>
 												<tbody>
-												@foreach ($order_example as $key => $val)
+												@foreach ($result as $val)
 													<tr>
 														<td>{{ $loop->iteration}}</td>
-														<td>{{ $val['id'] }}</td>
+														<td>{{ $val['sample_id'] }}</td>
 														<td>
-															<input type="text" name="exam_type[]" />
-														</td>
-														<td>
-															@forelse ($order_parameter as $k => $v)
+															@foreach ($val['parameter_type'] as $key => $value)
 																<ul>
-																	<li>{{ $v['parameter_name'] }}</li>
+																	<li>{{ $value }}</li>
 																</ul>
-															@empty
-																{{ '-' }}
-															@endforelse
+															@endforeach
 														</td>
-														<td>{{ count($order_parameter) }}</td>
 														<td>
-															<input type="checkbox" name="a[]" /> <label>สมบูรณ์</label>
+															@forelse ($val['parameter_name'] as $key => $value)
+																<ul>
+																	<li>{{ $value }}</li>
+																</ul>
+															@endforeach
 														</td>
-														<td>รับ</td>
+														<td>{{ $val['sample_count'] }}</td>
+														<td>
+															<input type="checkbox" name="{{ 'checkbox'.$val['sample_id'] }}" /> <label>สมบูรณ์</label>
+														</td>
+														<td>
+															<select name="example_accept" class="form-control select2">
+																<option value="y">รับ</option>
+																<option value="n">ปฏิเสธ</option>
+															</select>
+														</td>
 													</tr>
 												@endforeach
 												</tbody>
@@ -93,8 +100,8 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 					<div class="panel-content border-faded border-left-0 border-right-0 border-bottom-0 d-flex flex-row align-items-center">
 						<div class="form-row">
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
-                                <a href="{{ route('sample.received.step01', ['order_id' => $order['id']]) }}" class="btn btn-info ml-auto">ก่อนหน้า <i class="fal fa-arrow-alt-right"></i></a>
-								<a href="{{ route('sample.received.step03', ['order_id' => $order['id']]) }}" class="btn btn-info ml-auto">ถัดไป <i class="fal fa-arrow-alt-right"></i></a>
+								<a href="{{ route('sample.received.step01', ['order_id' => $order_id]) }}" class="btn btn-success ml-auto"><i class="fal fa-arrow-alt-left"></i> ก่อนหน้า</a>
+								<a href="{{ route('sample.received.step03', ['order_id' => $order_id]) }}" class="btn btn-success ml-auto">ถัดไป <i class="fal fa-arrow-alt-right"></i></a>
 							</div>
 						</div>
 					</div>
