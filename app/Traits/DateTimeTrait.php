@@ -44,13 +44,18 @@ trait DateTimeTrait {
 			return null;
 		}
 	}
-    public function checkValidMysqlDateTime($mysql_date_time): bool {
+	public function checkValidMysqlDateTime($mysql_date_time): bool {
 		$pattern = "/^([0-9]{2,4})-([0-1][0-9])-([0-3][0-9])(?:( [0-2][0-9]):([0-5][0-9]):([0-5][0-9]))?(.[0-9]{1,6})?$/";
 		if (preg_match($pattern, $mysql_date_time)) {
 			return true;
 		} else {
 			return false;
 		}
+	}
+
+	public function getDateFromCreatedAt($datetime = '0000-00-00 00:00:00'): string {
+		$date_exp = explode(" ", $datetime);
+		return $date_exp[0];
 	}
 }
 
