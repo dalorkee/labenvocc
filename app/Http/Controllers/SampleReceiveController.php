@@ -8,7 +8,7 @@ use Illuminate\Support\Arr;
 use App\Services\OrderService;
 use App\Traits\{DateTimeTrait,CommonTrait};
 use App\Exceptions\{OrderNotFoundException,InvalidOrderException};
-use App\Models\OrderSample;
+use App\Models\{OrderSample,OrderReceived};
 // use App\DataTables\ReceivedExampleDataTable;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -31,7 +31,7 @@ class SampleReceiveController extends Controller
 	*/
 	protected function create(): object {
 		try {
-			$orders = OrderService::getOrderwithCount(relations: ['orderSamples', 'parameters']);
+			$orders = OrderService::getOrderwithCount(relations: ['orderSamples', 'parameters'], year: '2022');
 			return Datatables::of($orders)
 				->addColumn('total', fn ($order) => $order->order_samples_count.'/'.$order->parameters_count)
 				->editColumn('order_confirmed', fn($order) => $this->setJsDateTimeToJsDate($order->order_confirmed))
@@ -54,7 +54,21 @@ class SampleReceiveController extends Controller
 	* @Get('sample.received.step01')
 	*/
 	protected function step01(Request $request) {
+		$validate_order_receive_data = $request->validate([
+			// 'agency_ministry' => 'required|max:30',
+		]);
 		try {
+
+			if (empty($request->session()->get('order_receive_data'))) {
+				$order_receive_data = new OrderReceived();
+				$order_receive_data->fill($validate_order_receive_data);
+				$request->session()->put('order_receive_data', $order_receive_data);
+			} else {
+				$order_receive_data = $request->session()->get('order_receive_data');
+				$order_receive_data->fill($validate_order_receive_data);
+				$request->session()->put('order_receive_data', $order_receive_data);
+			}
+
 			$order = OrderService::get(id: $request->order_id);
 			$sample_character_name = [];
 			$work_group = [];
@@ -72,9 +86,12 @@ class SampleReceiveController extends Controller
 					$sample_character_name[$key] = ['sample_amount' => count($tmp_order_sample), 'paramet_amount' => $item->count()];
 					array_push($work_group, $tmp_work_group);
 			});
+
 			$work_group = collect(array_unique(Arr::collapse($work_group)))->implode(',');
 			$type_of_work = $this->typeOfWork();
+
 			return view(view: 'apps.staff.receive.step01', data: compact('order', 'type_of_work', 'sample_character_name', 'work_group'));
+
 		} catch (OrderNotFoundException $e) {
 			report($e->getMessage());
 			return redirect()->back()->with(key: 'error', value: $e->getMessage());
@@ -82,6 +99,7 @@ class SampleReceiveController extends Controller
 			return view(view: 'errors.show', data: ['error' => $e->getMessage()]);
 		}
 	}
+
 
 	protected function step02(Request $request) {
 		try {

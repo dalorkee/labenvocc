@@ -137,6 +137,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 		Route::resource('received', SampleReceiveController::class);
 		Route::controller(SampleReceiveController::class)->group(function() {
 			Route::get('/received/order/{order_id}/step01', 'step01')->name('received.step01');
+			Route::post('/received/order/{order_id}/step01', 'step01')->name('received.post.step01');
 			Route::get('/received/order/{order_id}/step02', 'step02')->name('received.step02');
 			Route::get('/received/order/{order_id}/step03', 'step03')->name('received.step03');
 		});

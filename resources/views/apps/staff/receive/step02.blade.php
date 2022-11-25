@@ -43,8 +43,8 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 								<div class="tw-relative">
 									<div class="row">
 										<div class="col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
-                                            <table class="table-striped" id="table-1" data-toggle="table" data-show-columns="true">
-                                                <caption class="d-none"><i class="fa fa-clone"></i> การตรวจสอบตัวอย่าง</caption>
+											<table class="table-striped" id="table-1" data-toggle="table" data-show-columns="true">
+												<caption class="d-none"><i class="fa fa-clone"></i> การตรวจสอบตัวอย่าง</caption>
 												<thead>
 													<tr class="bg-primary text-white">
 														<th>ลำดับ</th>
