@@ -26,9 +26,9 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 				</div>
 			</div>
 			<div class="panel-container show">
-				<form name="sample_detail" id="sample_detail" action="#" method="POST" enctype="multipart/form-data">
+				<form name="sample_detail" action="{{ route('sample.received.step02') }}" method="POST" enctype="multipart/form-data">
 					<input type="hidden" name="_token" value="{{ csrf_token() }}">
-					<input type="hidden" name="order_id" value="{{ $order['id'] }}">
+					<input type="hidden" name="order_id" value="{{ $order['id'] ?? old('id') }}">
 					<input type="hidden" name="order_type" value="1">
 					<input type="hidden" name="order_type_name" value="ตัวอย่างชีวภาพ">
 					<div class="panel-content">
@@ -41,12 +41,12 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 						<div class="row">
 							<div class="form-group col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6 mb-3">
 								<label class="form-label" for="lab_no">Lab No. <span class="text-red-600">*</span></label>
-								<input type="text" name="lab_no" value="{{ old('lab_no') }}" class="form-control" maxlength="60">
+								<input type="text" name="lab_no" value="{{ $order['lab_no'] ?? old('lab_no') }}" class="form-control" maxlength="60">
 							</div>
 							<div class="form-group col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6 mb-3">
 								<label class="form-label" for="report_due_date">กำหนดส่งรายงาน</label>
 								<div class="input-group date date_data">
-									<input type="text" name="report_due_date" value="{{ old('report_due_date') }}" class="form-control @error('report_due_date') is-invalid @enderror input-date" id="report_due_date" placeholder="เลือกวันที่" readonly >
+									<input type="text" name="report_due_date" value="{{ $order['report_due_date'] ?? old('report_due_date') }}" class="form-control @error('report_due_date') is-invalid @enderror input-date" id="report_due_date" placeholder="เลือกวันที่" readonly >
 									<div class="input-group-append">
 										<span class="input-group-text fs-xl"><i class="fal fa-calendar-alt"></i></span>
 									</div>
@@ -118,9 +118,9 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 									<tbody>
 										@foreach ($sample_character_name as $key => $val)
 											<tr>
-												<td>{{ $key }}</td>
-												<td>{{ $val['sample_amount'] }}</td>
-												<td>{{ $val['paramet_amount'] }}</td>
+												<td><input type="text" value="{{ $key }}" class="form-control" readonly></td>
+												<td><input type="text" value="{{ $val['sample_amount'] }}" class="form-control" readonly></td>
+												<td><input type="text" value="{{ $val['paramet_amount'] }}" class="form-control" readonly></td>
 											</tr>
 										@endforeach
 									</tbody>
@@ -132,8 +132,9 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 					<div class="panel-content border-faded border-left-0 border-right-0 border-bottom-0 d-flex flex-row align-items-center">
 						<div class="form-row">
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
-                                <a href="#" class="btn btn-success ml-auto"><i class="fal fa-arrow-alt-left"></i> ก่อนหน้า</a>
-                                <a href="{{ route('sample.received.step02', ['order_id' => $order['id']]) }}" class="btn btn-success ml-auto">ถัดไป <i class="fal fa-arrow-alt-right"></i></a>
+                                <a href="{{ route('sample.received.index') }}" class="btn btn-success ml-auto"><i class="fal fa-arrow-alt-left"></i> ก่อนหน้า</a>
+                                <button type="submit" class="btn btn-success ml-auto">ถัดไป <i class="fal fa-arrow-alt-right"></i></button>
+                                {{-- <a href="{{ route('sample.received.step02', ['order_id' => $order['id']]) }}" class="btn btn-success ml-auto">ถัดไป <i class="fal fa-arrow-alt-right"></i></a> --}}
 							</div>
 						</div>
 					</div>
