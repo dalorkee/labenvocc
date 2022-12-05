@@ -54,27 +54,7 @@ class SampleReceiveController extends Controller
 	* @Get('sample.received.step01')
 	*/
 	protected function step01(Request $request) {
-		$validate_order_receive_data = $request->validate([
-            'order_id',
-            'lab_no',
-            'report_due_date',
-            'type_of_work',
-            'type_of_work_other',
-            'work_group',
-			// 'agency_ministry' => 'required|max:30',
-		]);
 		try {
-
-			if (empty($request->session()->get('order_receive_data'))) {
-				$order_receive_data = new OrderReceived();
-				$order_receive_data->fill($validate_order_receive_data);
-				$request->session()->put('order_receive_data', $order_receive_data);
-			} else {
-				$order_receive_data = $request->session()->get('order_receive_data');
-				$order_receive_data->fill($validate_order_receive_data);
-				$request->session()->put('order_receive_data', $order_receive_data);
-			}
-
 			$order = OrderService::get(id: $request->order_id);
 			$sample_character_name = [];
 			$work_group = [];
@@ -92,12 +72,9 @@ class SampleReceiveController extends Controller
 					$sample_character_name[$key] = ['sample_amount' => count($tmp_order_sample), 'paramet_amount' => $item->count()];
 					array_push($work_group, $tmp_work_group);
 			});
-
 			$work_group = collect(array_unique(Arr::collapse($work_group)))->implode(',');
 			$type_of_work = $this->typeOfWork();
-
 			return view(view: 'apps.staff.receive.step01', data: compact('order', 'type_of_work', 'sample_character_name', 'work_group'));
-
 		} catch (OrderNotFoundException $e) {
 			report($e->getMessage());
 			return redirect()->back()->with(key: 'error', value: $e->getMessage());
@@ -106,13 +83,23 @@ class SampleReceiveController extends Controller
 		}
 	}
 
-
 	protected function step02(Request $request) {
-		try {
+				// $validate_order_receive_data = $request->validate([
+		// 	'order_id' => 'required',
+		// 	'lab_no' => 'nullable',
+		// 	'report_due_date' => 'nullable',
+		// ]);
+        try {
 			$order_id = $request->order_id;
+
+			$order = OrderService::get(id: $request->order_id);
+            $order->lab_no = $request->lab_no;
+            $order->report_due_date = $request->report_due_date;
+            $order->save();
+
 			$result = [];
 
-			$order_sample = OrderSample::whereOrder_id($order_id)->with('parameters')->get();
+			$order_sample = OrderSample::whereOrder_id($request->order_id)->with('parameters')->get();
 
 			$order_sample->each(function($item, $key) use (&$result) {
 

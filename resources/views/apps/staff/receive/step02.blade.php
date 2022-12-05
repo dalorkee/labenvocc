@@ -58,36 +58,36 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 												</thead>
 												<tfoot></tfoot>
 												<tbody>
-												@foreach ($result as $val)
-													<tr>
-														<td>{{ $loop->iteration}}</td>
-														<td>{{ $val['sample_id'] }}</td>
-														<td>
-															@foreach ($val['parameter_type'] as $key => $value)
-																<ul>
-																	<li>{{ $value }}</li>
-																</ul>
-															@endforeach
-														</td>
-														<td>
-															@forelse ($val['parameter_name'] as $key => $value)
-																<ul>
-																	<li>{{ $value }}</li>
-																</ul>
-															@endforeach
-														</td>
-														<td>{{ $val['sample_count'] }}</td>
-														<td>
-															<input type="checkbox" name="{{ 'checkbox'.$val['sample_id'] }}" /> <label>สมบูรณ์</label>
-														</td>
-														<td>
-															<select name="example_accept" class="form-control select2">
-																<option value="y">รับ</option>
-																<option value="n">ปฏิเสธ</option>
-															</select>
-														</td>
-													</tr>
-												@endforeach
+													@foreach ($result as $val)
+														<tr>
+															<td>{{ $loop->iteration}}</td>
+															<td>{{ $val['sample_id'] }}</td>
+															<td>
+																@foreach ($val['parameter_type'] as $key => $value)
+																	<ul>
+																		<li>{{ $value }}</li>
+																	</ul>
+																@endforeach
+															</td>
+															<td>
+																@forelse ($val['parameter_name'] as $key => $value)
+																	<ul>
+																		<li>{{ $value }}</li>
+																	</ul>
+																@endforeach
+															</td>
+															<td>{{ $val['sample_count'] }}</td>
+															<td>
+																<input type="checkbox" name="{{ 'checkbox'.$val['sample_id'] }}" /> <label>สมบูรณ์</label>
+															</td>
+															<td>
+																<select name="example_accept" class="form-control select2">
+																	<option value="y">รับ</option>
+																	<option value="n">ปฏิเสธ</option>
+																</select>
+															</td>
+														</tr>
+													@endforeach
 												</tbody>
 											</table>
 										</div>
