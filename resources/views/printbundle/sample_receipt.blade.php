@@ -46,17 +46,17 @@
         border-style: solid;
 		border-width: 1px;
         font: 8pt "Tahoma";
-        padding: 2px;
+        padding: 4px;
 	}
     td {
 		border-style: solid;
 		border-width: 1px;
-		padding: 2px;
+		padding: 6px;
   		text-align: left;
         font: 8pt "Tahoma";
 	}
     .space {
-		padding: 1px;
+		padding: 2px;
 	}
     .chk_box {
 		display:inline;
@@ -64,6 +64,21 @@
 		height:10px;
 		overflow:hidden;
 		border:1px solid #000;
+	}
+    .font-center {
+		text-align: center;
+		font: 8pt "Tahoma";
+		font-weight: 400;
+		text-decoration: underline;
+	}
+	.font-underline {
+		font: 8pt "Tahoma";
+		font-weight: 400;
+		text-decoration: underline;
+	}
+    .thin-font {
+		font: 8pt "Tahoma";
+		font-weight: 100;
 	}
     @page {
         size: A4;
@@ -271,22 +286,27 @@
 		        </tr>
 		        <tr>
 			        <td colspan="2">กลุ่มงาน :
-			            &nbsp;&nbsp;<div class="chk_box">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div><span class="thin-font"> โลหะหนัก</span>
-			            &nbsp;&nbsp;<div class="chk_box">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div><span class="thin-font"> สารอินทรีย์ระเหย</span>
-			            &nbsp;&nbsp;<div class="chk_box">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div><span class="thin-font"> กรดด่างและไอออน</span>
-			            &nbsp;&nbsp;<div class="chk_box">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div><span class="thin-font"> จุลินทรีย์และเส้นใย</span>
-			            &nbsp;&nbsp;<div class="chk_box">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div><span class="thin-font"> สารกำจัดศัตรูพืช</span>
+			            &nbsp;&nbsp;<div class="chk_box">&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                        <span class="thin-font"> โลหะหนัก</span>
+			            &nbsp;&nbsp;<div class="chk_box">&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                        <span class="thin-font"> สารอินทรีย์ระเหย</span>
+			            &nbsp;&nbsp;<div class="chk_box">&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                        <span class="thin-font"> กรดด่างและไอออน</span>
+			            &nbsp;&nbsp;<div class="chk_box">&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                        <span class="thin-font"> จุลินทรีย์และเส้นใย</span>
+			            &nbsp;&nbsp;<div class="chk_box">&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                        <span class="thin-font"> สารกำจัดศัตรูพืช</span>
 			        </td>
 		        </tr>
 		        <tr>
 			        <td colspan="2">
 				        <span class="font-underline">เรื่องแจ้งเพิ่มเติม (ถ้ามี)</span>
-				        &nbsp;&nbsp;<div class="chk_box">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div><span class="thin-font"> ยินยอม</span>
-				        &nbsp;&nbsp;<div class="chk_box">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div><span class="thin-font"> ไม่ยินยอม</span>
+				        &nbsp;&nbsp;<div class="chk_box">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                        <span class="thin-font"> ยินยอม</span>
+				        &nbsp;&nbsp;<div class="chk_box">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                        <span class="thin-font"> ไม่ยินยอม</span>
 				        <br><br>
 				        <span class="thin-font">ชื่อผู้ติดต่อกรณีเกิดปัญหา</span>
-				        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -316,9 +336,12 @@
 				        <span class="thin-font">โทร</span>
 				        <br><br>
 				        <span class="thin-font">วิธีนำส่ง :</span>
-				        &nbsp;&nbsp;<div class="chk_box">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div><span class="thin-font"> นำส่งเอง</span>
-				        &nbsp;&nbsp;<div class="chk_box">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div><span class="thin-font"> ไปรษณีย์</span>
-				        &nbsp;&nbsp;<div class="chk_box">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div><span class="thin-font"> อื่นๆ</span>
+				        &nbsp;&nbsp;<div class="chk_box">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                        <span class="thin-font"> นำส่งเอง</span>
+				        &nbsp;&nbsp;<div class="chk_box">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                        <span class="thin-font"> ไปรษณีย์</span>
+				        &nbsp;&nbsp;<div class="chk_box">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                        <span class="thin-font"> อื่นๆ</span>
 				        <br><br>
 				        <span class="thin-font">หนังสือนำส่งเลขที่ :</span>
 				        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -339,18 +362,24 @@
 				        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				        <span class="thin-font">วันที่ :</span>
 				        <br><br>
-				        <span class="thin-font">(
-				        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				        )</span>
+				        <span class="thin-font">
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            (
+				                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				            )
+                        </span>
 			        </td>
 		        </tr>
 		        <tr>
 			        <td colspan="2">
 				        <span class="font-underline">การจัดส่งรายงานผลการทดสอบ</span>
-				        &nbsp;&nbsp;<div class="chk_box">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div><span class="thin-font"> รับด้วยตนเอง</span>
-				        &nbsp;&nbsp;<div class="chk_box">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div><span class="thin-font"> ไปรษณีย์</span>
+				        &nbsp;&nbsp;<div class="chk_box">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                        <span class="thin-font"> รับด้วยตนเอง</span>
+				        &nbsp;&nbsp;<div class="chk_box">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                        <span class="thin-font"> ไปรษณีย์</span>
 				        <br><br>
 				        <span class="thin-font">1. ชื่อผู้รับ</span>
         				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -360,7 +389,7 @@
 				        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				        <span class="thin-font">โทร</span>
 				        <br><br>
 				        <span class="thin-font">2. ที่อยู่</span>
@@ -369,7 +398,8 @@
 		        <tr>
 			        <td colspan="2">
 				        <span class="font-underline">ข้อมูลเพิ่มเติมในใบรายงานการทดสอบ</span>
-				        &nbsp;&nbsp;<div class="chk_box">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div><span class="thin-font"> ค่าความไม่แน่นอนของการวัด(เฉพาะของข่ายที่ได้รับการรับรอง)</span>
+				        &nbsp;&nbsp;<div class="chk_box">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                        <span class="thin-font"> ค่าความไม่แน่นอนของการวัด (เฉพาะของข่ายที่ได้รับการรับรอง)</span>
 			        </td>
 		        </tr>
 		        <tr>
@@ -377,7 +407,8 @@
 				        <span class="font-underline">ผลการตรวจสอบสภาพตัวอย่าง</span>
 				        <br><br>
 				        <span class="thin-font">สภาพตัวอย่าง</span>
-				        &nbsp;&nbsp;<div class="chk_box">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div><span class="thin-font"> สมบูรณ์ :</span>
+				        &nbsp;&nbsp;<div class="chk_box">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                        <span class="thin-font"> สมบูรณ์ :</span>
 				        &nbsp;&nbsp;
 				        <span class="thin-font">จำนวน</span>
 				        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -388,8 +419,9 @@
 				        <span class="thin-font">พารามิเตอร์</span>
 				        <br><br>
 				        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				        <div class="chk_box">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div><span class="thin-font"> ไม่สมบูรณ์ :</span>
+				        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				        <div class="chk_box">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                        <span class="thin-font"> ไม่สมบูรณ์ :</span>
 				        <span class="thin-font">จำนวน</span>
 				        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -401,13 +433,36 @@
 				        <span class="thin-font">เนื่องจาก</span>
 				        <br><br>
 				        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				        <span class="thin-font">ผู้รับตัวอย่าง</span>
+				        <span class="thin-font">ผู้รับตัวอย่าง :</span>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <span class="thin-font">วันที่ :</span>
 				        <br><br>
 				        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				        <span class="thin-font">ผู้ทบทวนคำขอ</span>
+				        <span class="thin-font">ผู้ทบทวนคำขอ :</span>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <span class="thin-font">วันที่ :</span>
 				    </td>
 		        </tr>
+                <tr>
+                    <td colspan="2">
+                        <span class="font-underline">ติดต่องานบริหารทั่วไป</span> คุณประสงค์ และ คุณทิพาพร โทรศัพท์ 02-968-7633 โทรสาร 02-968-7631 E-mail: toxiclab@outlook.com
+                    </td>
+                </tr>
 	        </table>
+            <span class="thin-font">
+                หมายเหตุ: 1.ลูกค้า จะทราบผลการตรวจวิเคราะห์ ด้วยอัตราไม่เกิน 15 วันทำการ ต่อ 50 ตัวอย่าง
+                <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;
+                2.ศูนย์อ้างอิงฯ จะเก็บรักษาตัวอย่างไว้หลังจากทดสอบเสร็จสิ้นแล้ว 45 วัน ยกเว้นตัวอย่างอากาศ
+            </span>
+            <br><br>
+            <div style="float: right; padding-rignt: 10px;">
+                FM-701-01 Rev.00
+            </div>
         </div>
     </div>
 
