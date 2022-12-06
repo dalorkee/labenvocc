@@ -26,11 +26,13 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 				</div>
 			</div>
 			<div class="panel-container show">
-				<form name="sample_detail" action="{{ route('sample.received.step02') }}" method="POST" enctype="multipart/form-data">
+				<form name="received_step01_frm" action="{{ route('sample.received.step01.post') }}" method="POST" enctype="multipart/form-data">
 					<input type="hidden" name="_token" value="{{ csrf_token() }}">
-					<input type="hidden" name="order_id" value="{{ $order['id'] ?? old('id') }}">
-					<input type="hidden" name="order_type" value="1">
-					<input type="hidden" name="order_type_name" value="ตัวอย่างชีวภาพ">
+					<input type="hidden" name="id" value="{{ $order['id'] ?? old('id') }}">
+					<input type="hidden" name="order_no" value="{{ $order['order_no'] ?? old('order_no') }}">
+					<input type="hidden" name="order_no_ref" value="{{ $order['order_no'] ?? old('order_no_ref') }}">
+					<input type="hidden" name="order_type" value="{{ $order['order_type'] ?? old('order_type') }}">
+					<input type="hidden" name="order_type_name" value="{{ $order['order_type_name'] ?? old('order_type_name') }}">
 					<div class="panel-content">
 						<ul class="steps">
 							<li class="undone"><a href="{{ route('sample.received.create') }}"><span class="d-none d-sm-inline">รายการคำขอ</span></a></li>

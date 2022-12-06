@@ -26,7 +26,7 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 				</div>
 			</div>
 			<div class="panel-container show">
-				<form name="sample_detail" id="sample_detail" action="#" method="POST" enctype="multipart/form-data">
+				<form name="received_step03_frm" action="#" method="POST" enctype="multipart/form-data">
 					<input type="hidden" name="_token" value="{{ csrf_token() }}">
 					<input type="hidden" name="order_id" value="{{ $order['id'] }}">
 					<input type="hidden" name="order_type" value="1">

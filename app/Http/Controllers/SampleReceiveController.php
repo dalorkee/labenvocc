@@ -83,45 +83,49 @@ class SampleReceiveController extends Controller
 		}
 	}
 
+	protected function step01Post(Request $request) {
+		$validated = $request->validate([
+			'id' => 'required',
+			"order_no" => "required",
+			"order_no_ref" => "nullable",
+			"order_type" => "nullable",
+			"order_type_name" => "nullable",
+			'lab_no' => 'nullable',
+			'report_due_date' => 'nullable',
+		]);
+		if (empty($request->session()->get('order'))) {
+			$order = OrderService::create();
+			$order->fill($validated);
+			$request->session()->put('order', $order);
+		} else {
+			$order = $request->session()->get('order');
+			$order->fill($validated);
+			$request->session()->put('order', $order);
+		}
+		return redirect()->route('sample.received.step02', ['order_id' => $order['id']]);
+	}
+
 	protected function step02(Request $request) {
-				// $validate_order_receive_data = $request->validate([
-		// 	'order_id' => 'required',
-		// 	'lab_no' => 'nullable',
-		// 	'report_due_date' => 'nullable',
-		// ]);
-        try {
-			$order_id = $request->order_id;
-
-			$order = OrderService::get(id: $request->order_id);
-            $order->lab_no = $request->lab_no;
-            $order->report_due_date = $request->report_due_date;
-            $order->save();
-
+		try {
+			$order = $request->session()->get(key: 'order');
 			$result = [];
-
-			$order_sample = OrderSample::whereOrder_id($request->order_id)->with('parameters')->get();
-
+			$order_sample = OrderSample::whereOrder_id($order['id'])->with('parameters')->get();
 			$order_sample->each(function($item, $key) use (&$result) {
-
 				$tmp['sample_id'] = $item->id;
 				$tmp['sample_count'] = $item->parameters->count();
 				$tmp_paramet_type = [];
 				$tmp_paramet_name = [];
-
 				foreach ($item->parameters as $key => $value) {
 					array_push($tmp_paramet_type, $value->sample_character_name);
 					array_push($tmp_paramet_name, $value->parameter_name);
 				}
-
 				$tmp_paramet_type = array_unique($tmp_paramet_type);
 				$tmp['parameter_type'] = $tmp_paramet_type;
 				$tmp_paramet_name = array_unique($tmp_paramet_name);
 				$tmp['parameter_name'] = $tmp_paramet_name;
-
 				array_push($result, $tmp);
 			});
-			// dd($result);
-			return view(view: 'apps.staff.receive.step02', data: compact('order_id', 'result'));
+			return view(view: 'apps.staff.receive.step02', data: compact('order', 'result'));
 		} catch (OrderNotFoundException $e) {
 			report($e->getMessage());
 			return redirect()->back()->with(key: 'error', value: $e->getMessage());
@@ -130,13 +134,16 @@ class SampleReceiveController extends Controller
 		}
 	}
 
-	protected function step03(Request $request) {
-		$order = OrderService::get(id: $request->order_id);
-		return view(view: 'apps.staff.receive.step03', data: compact('order'));
+	protected function step02Post(Request $request) {
+		dd($request);
+		return redirect()->route('sample.received.step03', ['order_id' => $request->id]);
 	}
 
-	protected function store(Request $request) {
-		dd($request);
+
+	protected function step03(Request $request) {
+		dd($request->order_id);
+		$order = OrderService::get(id: $request->order_id);
+		return view(view: 'apps.staff.receive.step03', data: compact('order'));
 	}
 
 }
