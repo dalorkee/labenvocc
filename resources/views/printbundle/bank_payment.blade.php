@@ -33,7 +33,6 @@
         outline: 2cm #FFEAEA solid;
     }
     br {
-        display: block;
         margin: 2px 0;
     }
     .head-payment {
@@ -61,34 +60,34 @@
 		font: 10pt "Tahoma";
 		padding-top: 10px;
 	}
+	.sub_msg_main {
+		text-align: left;
+		font: 10pt "Tahoma";
+		padding-top: 10px;
+		padding-left: 20px;
+	}
 	.sub_p {
 		font: 9pt "Tahoma";
+		padding-left: 40px;
 	}
-    .main-table {
-		width:100%;
-		border-collapse: collapse;
-		table-layout: fixed;
-        border-style: solid;
-		border-width: 1px;
-        font: 8pt "Tahoma";
-        padding: 4px;
-	}
-    td {
-		border-style: solid;
-		border-width: 1px;
-		padding: 6px;
-  		text-align: left;
-        font: 8pt "Tahoma";
-	}
+    
     .space {
 		padding: 2px;
 	}
-    .chk_box {
-		display:inline;
-		width:10px;
-		height:10px;
-		overflow:hidden;
-		border:1px solid #000;
+	div.square {
+		height: 45px;
+		width: 40px;
+		background-color: #fff;
+		border: 1px #000 solid;
+		display: inline-block;
+		margin-right:5px;
+	}
+	div.square:first-child {
+		margin-left: 50px;
+	}
+	.text_mid {
+		margin-top: 20px;
+		margin-bottom: 20px;
 	}
     .font-center {
 		text-align: center;
@@ -130,20 +129,27 @@
 
 <body>
     <div class="page">
-        <div class="subpage">
-            <div class="head-payment">
-                ใบแจ้งการชำระเงินผ่านทางธนาคาร
-            </div>
-			<hr class="hr_line">
-			<div class="msg_right">(สำหรับลูกจ้าง)</div> 
-			<div class="msg_center">
-				<p>กองโรคจากการประกอบอาชีพและสิ่งแวดล้อม</p>
-				<p>ศูนย์อ้างอิงทางห้องปฏิบัติการและพิษวิทยา</p>
-				<p>(COMPANY CODE = 92134)</p>
-			</div>
-			<div class="msg_main">
-				<p>ชื่อ/ หน่วยงาน</p>
-				<p class="sub_p">(ใบเสร็จรับเงินจะออกตามชื่อข้างบน กรุณาแก้ไขถ้าไม่ถูกต้อง และรับชำระเฉพาะเงินสด/ แคชเชียร์เช็ค)</p>
+        <div class="head-payment">
+            ใบแจ้งการชำระเงินผ่านทางธนาคาร
+        </div>
+		<hr class="hr_line">
+		<div class="msg_right">(สำหรับลูกจ้าง)</div> 
+		<div class="msg_center">
+			<p>กองโรคจากการประกอบอาชีพและสิ่งแวดล้อม</p>
+			<p>ศูนย์อ้างอิงทางห้องปฏิบัติการและพิษวิทยา</p>
+			<p>(COMPANY CODE = 92134)</p>
+		</div>
+		<div class="msg_main">
+			<p class="sub_msg_main">ชื่อ/ หน่วยงาน</p>
+			<p class="sub_p">(ใบเสร็จรับเงินจะออกตามชื่อข้างบน กรุณาแก้ไขถ้าไม่ถูกต้อง และรับชำระเฉพาะเงินสด/ แคชเชียร์เช็ค)</p>
+		</div>
+		<div class="msg_main">
+			<span class="text_mid">Reference No.1: รหัสลูกค้า</span>
+			<div style="display:inline-block;"> 
+				<div class="square"></div>
+				<div class="square"></div>
+				<div class="square"></div>
+				<div class="square"></div>
 			</div>
 		</div>
 	</div>
