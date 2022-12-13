@@ -13,7 +13,8 @@ use App\Http\Controllers\{
 	SampleReceiveController,
 	UserAdvertiseController,
 	SampleUploadController,
-	HospitalController
+	HospitalController,
+	PrintBundleController,
 };
 use App\Http\Controllers\Admin\{
 	AdminController,
@@ -136,8 +137,12 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 		Route::resource('received', SampleReceiveController::class);
 		Route::controller(SampleReceiveController::class)->group(function() {
 			Route::get('/received/order/{order_id}/step01', 'step01')->name('received.step01');
+			Route::post('/received/order/step01', 'step01Post')->name('received.step01.post');
+
 			Route::get('/received/order/{order_id}/step02', 'step02')->name('received.step02');
-			Route::get('/received/order/{order_id}/step03', 'step03')->name('received.step03');
+			Route::post('/received/order/step02', 'step02Post')->name('received.step02.post');
+
+			Route::get('/received/order/step03/{order_id}/step03', 'step03')->name('received.step03');
 		});
 	});
 	Route::get('/admin/home', [AdminController::class, 'index'])->name('admin.index');
@@ -161,3 +166,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 });
 Route::get('/user/advertise/id/{id}/detail',[UserAdvertiseController::class,'detail'])->name('user.advertise.detail');
 Route::get('/user/advertise/listall/{listall}',[UserAdvertiseController::class,'listall'])->name('user.advertise.listall');
+Route::controller(PrintBundleController::class)->group(function() {
+	Route::get('/print/sample_receipt', 'receipt');
+	Route::get('/print/bank_payment', 'payment');
+});

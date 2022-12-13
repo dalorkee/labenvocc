@@ -47,16 +47,6 @@ class Order extends Model
 		return $this->hasMany(related: FileUpload::class);
 	}
 
-	// public function getBookDateJsAttribute(): string {
-	// 	if (!is_null($this->book_date) && !empty($this->book_date)) {
-	// 		$exp = explode("-", $this->book_date);
-	// 		$str = $exp[2]."/".$exp[1]."/".$exp[0];
-	// 	} else {
-	// 		$str = "";
-	// 	}
-	// 	return $str;
-	// }
-
 	protected function bookDate(): Attribute {
 		return new Attribute(
 			get: fn ($value) => $this->convertMySQLDateToJs(date: $value),
@@ -70,6 +60,23 @@ class Order extends Model
 			set: fn ($value) => $this->convertJsDateTimeToMySQL(date: $value),
 		);
 	}
+
+    protected function reportDueDate(): Attribute {
+		return new Attribute(
+			get: fn ($value) => $this->convertMySQLDateToJs(date: $value),
+			set: fn ($value) => $this->convertJsDateToMySQL(date: $value),
+		);
+	}
+
+    // public function getBookDateJsAttribute(): string {
+	// 	if (!is_null($this->book_date) && !empty($this->book_date)) {
+	// 		$exp = explode("-", $this->book_date);
+	// 		$str = $exp[2]."/".$exp[1]."/".$exp[0];
+	// 	} else {
+	// 		$str = "";
+	// 	}
+	// 	return $str;
+	// }
 
 
 }

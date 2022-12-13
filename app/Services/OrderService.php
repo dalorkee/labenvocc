@@ -16,13 +16,28 @@ class OrderService
 		return $order;
 	}
 
-	public static function getOrderWithCount(array $relations = []) {
-		$orders = Order::withCount(relations: $relations);
-		if (!$orders) {
-			throw new InvalidOrderException(message: 'ไม่พบข้อมูล Orders');
+	public static function getOrderWithCount(array $relations = [], $year='0000') {
+		$order = Order::withCount(relations: $relations)->whereYear('created_at', $year);
+		if (!$order) {
+			throw new InvalidOrderException(message: 'ไม่พบข้อมูล Order');
 		}
-		return $orders;
+		return $order;
 	}
 
-    // public static function getOrderWithParameter()
+	public static function getOrderWithRelations(int $id) {
+		// $str = '"' . implode ('", "', $relations) . '"';
+		$order = Order::whereId($id)->with('orderSamples', 'parameters')->get();
+		if (!$order) {
+			throw new InvalidOrderException(message: 'ไม่พบข้อมูล Order');
+		}
+		return $order;
+	}
+
+	public static function create() {
+		$order = new Order();
+		if (!$order) {
+			throw new InvalidOrderException(message: 'สร้าง Order Model ไม่ได้');
+		}
+		return $order;
+	}
 }

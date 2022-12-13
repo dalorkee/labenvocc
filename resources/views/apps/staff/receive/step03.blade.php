@@ -26,7 +26,7 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 				</div>
 			</div>
 			<div class="panel-container show">
-				<form name="sample_detail" id="sample_detail" action="#" method="POST" enctype="multipart/form-data">
+				<form name="received_step03_frm" action="#" method="POST" enctype="multipart/form-data">
 					<input type="hidden" name="_token" value="{{ csrf_token() }}">
 					<input type="hidden" name="order_id" value="{{ $order['id'] }}">
 					<input type="hidden" name="order_type" value="1">
@@ -40,6 +40,11 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 						</ul>
 						<div class="row">
 							<div class="col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
+								<p>สรุปจำนวนตัวอย่าง</p>
+								<ul>
+									<li>สมบูรณ์: จำนวน 4 ตัวอย่าง 9 รายการทดสอบ</li>
+									<li>ไม่สมบูรณ์: จำนวน 2 ตัวอย่าง 3 รายการทดสอบ</li>
+								</ul>
 
 							</div>
 
@@ -48,7 +53,7 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 					<div class="panel-content border-faded border-left-0 border-right-0 border-bottom-0 d-flex flex-row align-items-center">
 						<div class="form-row">
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
-                                <a href="{{ route('sample.received.step02', ['order_id' => $order['id']]) }}" class="btn btn-info ml-auto">ก่อนหน้า <i class="fal fa-arrow-alt-left"></i></a>
+								<a href="{{ route('sample.received.step02.get', ['order_id' => $order['id']]) }}" class="btn btn-success ml-auto"> <i class="fal fa-arrow-alt-left"></i> ก่อนหน้า</a>
 								<button type="submit" class="btn btn-warning ml-auto"><i class="fal fa-pencil"></i> บันทึกข้อมูล</button>
 							</div>
 						</div>

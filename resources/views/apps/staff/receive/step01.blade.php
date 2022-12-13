@@ -26,11 +26,13 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 				</div>
 			</div>
 			<div class="panel-container show">
-				<form name="sample_detail" id="sample_detail" action="#" method="POST" enctype="multipart/form-data">
+				<form name="received_step01_frm" action="{{ route('sample.received.step01.post') }}" method="POST" enctype="multipart/form-data">
 					<input type="hidden" name="_token" value="{{ csrf_token() }}">
-					<input type="hidden" name="order_id" value="{{ $order['id'] }}">
-					<input type="hidden" name="order_type" value="1">
-					<input type="hidden" name="order_type_name" value="ตัวอย่างชีวภาพ">
+					<input type="hidden" name="id" value="{{ $order['id'] ?? old('id') }}">
+					<input type="hidden" name="order_no" value="{{ $order['order_no'] ?? old('order_no') }}">
+					<input type="hidden" name="order_no_ref" value="{{ $order['order_no'] ?? old('order_no_ref') }}">
+					<input type="hidden" name="order_type" value="{{ $order['order_type'] ?? old('order_type') }}">
+					<input type="hidden" name="order_type_name" value="{{ $order['order_type_name'] ?? old('order_type_name') }}">
 					<div class="panel-content">
 						<ul class="steps">
 							<li class="undone"><a href="{{ route('sample.received.create') }}"><span class="d-none d-sm-inline">รายการคำขอ</span></a></li>
@@ -41,7 +43,7 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 						<div class="row">
 							<div class="form-group col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6 mb-3">
 								<label class="form-label" for="lab_no">Lab No. <span class="text-red-600">*</span></label>
-								<input type="text" name="lab_no" value="{{ $order['order_no'] ?? old('lab_no') }}" class="form-control" maxlength="60">
+								<input type="text" name="lab_no" value="{{ $order['lab_no'] ?? old('lab_no') }}" class="form-control" maxlength="60">
 							</div>
 							<div class="form-group col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6 mb-3">
 								<label class="form-label" for="report_due_date">กำหนดส่งรายงาน</label>
@@ -99,32 +101,42 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 									<div class="invalid-feedback" role="alert">{{ $message }}</div>
 								@enderror
 							</div>
-							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
-								<label class="form-label" for="example_type">ชนิดตัวอย่าง</label>
-								<input type="text" name="example_type" value="{{ $order['example_type'] ?? old('example_type') }}" class="form-control @error('example_type') is-invalid @enderror">
-								@error('example_type')
-									<div class="invalid-feedback" role="alert">{{ $message }}</div>
-								@enderror
-							</div>
-							<div class="form-group col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6 mb-3">
-								<label class="form-label" for="group_of_work">กลุ่มงาน <span class="text-red-600">*</span></label>
-								<select name="group_of_work" class="form-control @error('group_of_work') is-invalid @enderror">
-									<option value="">-- โปรดเลือก --</option>
-									@foreach ($type_of_work as $key => $val)
-										<option value="{{ $key }}" {{ ($order['type_of_work'] == $key || old('type_of_work') == $key) ? 'selected' : '' }}>{{ $val }}</option>
-									@endforeach
-								</select>
-								@error('group_of_work')
-									<div class="invalid-feedback" role="alert">{{ $message }}</div>
-								@enderror
+							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-4">
+								<label class="form-label" for="work_group">กลุ่มงาน</label>
+								<input type="text" name="work_group" value="{{ $work_group }}" class="form-control" readonly />
 							</div>
 						</div>
+						<div class="row">
+							<div class="table-responsive col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mt-4 mb-3">
+								<table class="table table-striped">
+									<thead class="bg-primary-100">
+										<tr>
+											<th>ชนิดตัวอย่าง</th>
+											<th>จำนวนตัวอย่าง</th>
+											<th>จำนวนรายการทดสอบ</th>
+										</tr>
+									</thead>
+									<tfoot></tfoot>
+									<tbody>
+										@foreach ($sample_character_name as $key => $val)
+											<tr>
+												<td><input type="text" value="{{ $key }}" class="form-control" readonly></td>
+												<td><input type="text" value="{{ $val['sample_amount'] }}" class="form-control" readonly></td>
+												<td><input type="text" value="{{ $val['paramet_amount'] }}" class="form-control" readonly></td>
+											</tr>
+										@endforeach
+									</tbody>
+								</table>
+							</div>
+						</div>
+
 					</div>
 					<div class="panel-content border-faded border-left-0 border-right-0 border-bottom-0 d-flex flex-row align-items-center">
 						<div class="form-row">
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
-								<button type="submit" class="btn btn-warning ml-auto"><i class="fal fa-pencil"></i> บันทึกข้อมูล</button>
-								<a href="{{ route('sample.received.step02', ['order_id' => $order['id']]) }}" class="btn btn-info ml-auto">ถัดไป <i class="fal fa-arrow-alt-right"></i></a>
+                                <a href="{{ route('sample.received.index') }}" class="btn btn-success ml-auto"><i class="fal fa-arrow-alt-left"></i> ก่อนหน้า</a>
+                                <button type="submit" class="btn btn-success ml-auto">ถัดไป <i class="fal fa-arrow-alt-right"></i></button>
+                                {{-- <a href="{{ route('sample.received.step02', ['order_id' => $order['id']]) }}" class="btn btn-success ml-auto">ถัดไป <i class="fal fa-arrow-alt-right"></i></a> --}}
 							</div>
 						</div>
 					</div>

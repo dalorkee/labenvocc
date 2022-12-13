@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\DataTables\ReceivedExampleDataTable;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use App\Services\OrderService;
 use App\Traits\{DateTimeTrait,CommonTrait};
 use App\Exceptions\{OrderNotFoundException,InvalidOrderException};
+use App\Models\{OrderSample,OrderReceived};
 // use App\DataTables\ReceivedExampleDataTable;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -29,7 +31,7 @@ class SampleReceiveController extends Controller
 	*/
 	protected function create(): object {
 		try {
-			$orders = OrderService::getOrderwithCount(relations: ['orderSamples', 'parameters']);
+			$orders = OrderService::getOrderwithCount(relations: ['orderSamples', 'parameters'], year: '2022');
 			return Datatables::of($orders)
 				->addColumn('total', fn ($order) => $order->order_samples_count.'/'.$order->parameters_count)
 				->editColumn('order_confirmed', fn($order) => $this->setJsDateTimeToJsDate($order->order_confirmed))
@@ -54,26 +56,76 @@ class SampleReceiveController extends Controller
 	protected function step01(Request $request) {
 		try {
 			$order = OrderService::get(id: $request->order_id);
-			// $order_example = $order->orderSamples->toArray();
-			// $order_parameter = $order->parameters->toArray();
+			$sample_character_name = [];
+			$work_group = [];
+			$order_parameter = $order->parameters
+				->groupBy('sample_character_name')
+				->map(function($item, $key) use (&$sample_character_name, &$work_group) {
+					$tmp_order_sample = [];
+					$tmp_work_group = [];
+					$item->each(function($i, $k) use (&$tmp_order_sample, &$tmp_work_group) {
+						array_push($tmp_order_sample, $i['order_sample_id']);
+						array_push($tmp_work_group, $i['threat_type_name']);
+					});
+					$tmp_order_sample = array_unique($tmp_order_sample);
+					$tmp_work_group = array_unique($tmp_work_group);
+					$sample_character_name[$key] = ['sample_amount' => count($tmp_order_sample), 'paramet_amount' => $item->count()];
+					array_push($work_group, $tmp_work_group);
+			});
+			$work_group = collect(array_unique(Arr::collapse($work_group)))->implode(',');
 			$type_of_work = $this->typeOfWork();
-			// return $dataTable->render('apps.staff.receive.step01', compact('order', 'order_example', 'order_parameter', 'type_of_work'));
-			return view(view: 'apps.staff.receive.step01', data: compact('order', 'type_of_work'));
+			return view(view: 'apps.staff.receive.step01', data: compact('order', 'type_of_work', 'sample_character_name', 'work_group'));
 		} catch (OrderNotFoundException $e) {
 			report($e->getMessage());
 			return redirect()->back()->with(key: 'error', value: $e->getMessage());
 		} catch (\Exception $e) {
 			return view(view: 'errors.show', data: ['error' => $e->getMessage()]);
 		}
+	}
+
+	protected function step01Post(Request $request) {
+		$validated = $request->validate([
+			'id' => 'required',
+			"order_no" => "required",
+			"order_no_ref" => "nullable",
+			"order_type" => "nullable",
+			"order_type_name" => "nullable",
+			'lab_no' => 'nullable',
+			'report_due_date' => 'nullable',
+		]);
+		if (empty($request->session()->get('order'))) {
+			$order = OrderService::create();
+			$order->fill($validated);
+			$request->session()->put('order', $order);
+		} else {
+			$order = $request->session()->get('order');
+			$order->fill($validated);
+			$request->session()->put('order', $order);
+		}
+		return redirect()->route('sample.received.step02', ['order_id' => $order['id']]);
 	}
 
 	protected function step02(Request $request) {
 		try {
-			$order = OrderService::get(id: $request->order_id);
-			$order_example = $order->orderSamples->toArray();
-			$order_parameter = $order->parameters->toArray();
-			// $type_of_work = $this->typeOfWork();
-			return view(view: 'apps.staff.receive.step02', data: compact('order', 'order_example', 'order_parameter'));
+			$order = $request->session()->get(key: 'order');
+			$result = [];
+			$order_sample = OrderSample::whereOrder_id($order['id'])->with('parameters')->get();
+			$order_sample->each(function($item, $key) use (&$result) {
+				$tmp['sample_id'] = $item->id;
+				$tmp['sample_count'] = $item->parameters->count();
+				$tmp_paramet_type = [];
+				$tmp_paramet_name = [];
+				foreach ($item->parameters as $key => $value) {
+					array_push($tmp_paramet_type, $value->sample_character_name);
+					array_push($tmp_paramet_name, $value->parameter_name);
+				}
+				$tmp_paramet_type = array_unique($tmp_paramet_type);
+				$tmp['parameter_type'] = $tmp_paramet_type;
+				$tmp_paramet_name = array_unique($tmp_paramet_name);
+				$tmp['parameter_name'] = $tmp_paramet_name;
+				array_push($result, $tmp);
+			});
+			return view(view: 'apps.staff.receive.step02', data: compact('order', 'result'));
 		} catch (OrderNotFoundException $e) {
 			report($e->getMessage());
 			return redirect()->back()->with(key: 'error', value: $e->getMessage());
@@ -82,14 +134,17 @@ class SampleReceiveController extends Controller
 		}
 	}
 
+	protected function step02Post(Request $request) {
+		dd($request);
+		return redirect()->route('sample.received.step03', ['order_id' => $request->id]);
+	}
+
+
 	protected function step03(Request $request) {
+		dd($request->order_id);
 		$order = OrderService::get(id: $request->order_id);
         dd($order);
 		return view(view: 'apps.staff.receive.step03', data: compact('order'));
-	}
-
-    protected function store(Request $request) {
-		dd($request);
 	}
 
 }
