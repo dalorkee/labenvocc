@@ -84,6 +84,7 @@ class SampleReceiveController extends Controller
 
 	protected function step03(Request $request) {
 		$order = OrderService::get(id: $request->order_id);
+        dd($order);
 		return view(view: 'apps.staff.receive.step03', data: compact('order'));
 	}
 

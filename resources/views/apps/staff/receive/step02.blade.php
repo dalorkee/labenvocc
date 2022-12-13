@@ -62,9 +62,7 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 													<tr>
 														<td>{{ $loop->iteration}}</td>
 														<td>{{ $val['id'] }}</td>
-														<td>
-															<input type="text" name="exam_type[]" />
-														</td>
+														<td><input type="text" name="exam_type[]" /></td>
 														<td>
 															@forelse ($order_parameter as $k => $v)
 																<ul>
@@ -78,7 +76,12 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 														<td>
 															<input type="checkbox" name="a[]" /> <label>สมบูรณ์</label>
 														</td>
-														<td>รับ</td>
+														<td>
+                                                            <select name="example_receive" class="form-control select2">
+                                                                <option value="receive">รับ</option>
+                                                                <option value="reject">ปฎิเสธ</option>
+                                                            </select>
+                                                        </td>
 													</tr>
 												@endforeach
 												</tbody>
@@ -93,7 +96,7 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 					<div class="panel-content border-faded border-left-0 border-right-0 border-bottom-0 d-flex flex-row align-items-center">
 						<div class="form-row">
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
-                                <a href="{{ route('sample.received.step01', ['order_id' => $order['id']]) }}" class="btn btn-info ml-auto">ก่อนหน้า <i class="fal fa-arrow-alt-right"></i></a>
+                                <a href="{{ route('sample.received.step01', ['order_id' => $order['id']]) }}" class="btn btn-primary ml-auto"><i class="fal fa-arrow-alt-left"></i> ก่อนหน้า</a>
 								<a href="{{ route('sample.received.step03', ['order_id' => $order['id']]) }}" class="btn btn-info ml-auto">ถัดไป <i class="fal fa-arrow-alt-right"></i></a>
 							</div>
 						</div>
