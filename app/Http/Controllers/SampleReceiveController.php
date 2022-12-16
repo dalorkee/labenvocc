@@ -135,10 +135,23 @@ class SampleReceiveController extends Controller
 	}
 
 	protected function step02Post(Request $request) {
-		dd($request);
+		// dump($request->all());
+		foreach ($request->sample_id as $key => $value) {
+			$data[$value]['select'] = $request->select_sample[$key];
+			if (in_array($value, $request->chk_sample)) {
+				$data[$value]['check'] = 'complete';
+			} else {
+				$data[$value]['check'] = null;
+			}
+
+			foreach ($data as $key => $value) {
+
+			}
+
+		}
+		dd($data);
 		return redirect()->route('sample.received.step03', ['order_id' => $request->id]);
 	}
-
 
 	protected function step03(Request $request) {
 		dd($request->order_id);

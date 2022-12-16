@@ -28,7 +28,7 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 			<div class="panel-container show">
 				<form name="received_step02_frm" action="{{ route('sample.received.step02.post') }}" method="POST" enctype="multipart/form-data">
 					<input type="hidden" name="_token" value="{{ csrf_token() }}">
-					<input type="hidden" name="id" value="{{ $order['id'] ?? old('id') }}">
+					<input type="hidden" name="order_id" value="{{ $order['id'] ?? old('id') }}">
 					<input type="hidden" name="order_no" value="{{ $order['order_no'] ?? old('order_no') }}">
 					<input type="hidden" name="order_no_ref" value="{{ $order['order_no'] ?? old('order_no_ref') }}">
 					<input type="hidden" name="order_type" value="{{ $order['order_type'] ?? old('order_type') }}">
@@ -63,7 +63,10 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 													@foreach ($result as $val)
 														<tr>
 															<td>{{ $loop->iteration}}</td>
-															<td>{{ $val['sample_id'] }}</td>
+															<td>
+																<span>{{ $val['sample_id'] }}</span>
+																<input type="hidden" name="sample_id[]" value="{{ $val['sample_id'] }}">
+															</td>
 															<td>
 																@foreach ($val['parameter_type'] as $key => $value)
 																	<ul>
@@ -80,10 +83,12 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 															</td>
 															<td>{{ $val['sample_count'] }}</td>
 															<td>
-																<input type="checkbox" name="{{ 'chk_sample_'.$val['sample_id'] }}" /> <label>สมบูรณ์</label>
+																<input type="checkbox" name="chk_sample[]" value="{{ $val['sample_id'] }}">
+																<label>สมบูรณ์</label>
 															</td>
 															<td>
-																<select name="{{ 'sel_sample_'.$val['sample_id'] }}" class="form-control select2">
+																<select name="select_sample[]" class="form-control select2">
+																	<option value="">-- โปรดเลือก --</option>
 																	<option value="y">รับ</option>
 																	<option value="n">ปฏิเสธ</option>
 																</select>
