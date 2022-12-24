@@ -4,98 +4,105 @@
     <meta charset="utf-8">
 	<title>Sample Receipt Form</title>
 	<style type="text/css">
-      body {
-        width: 100%;
-        height: 100%;
-        margin: 0;
-        padding: 0;
-        background-color: #fafafa;
-        font: 10pt "Tahoma";
-    }
-    * {
-        box-sizing: border-box;
-        -moz-box-sizing: border-box;
-    }
-    .page {
-        width: 210mm;
-        min-height: 297mm;
-        padding: 20mm;
-        margin: 10mm auto;
-        border: 1px #D3D3D3 solid;
-        border-radius: 5px;
-        background: white;
-        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-    }
-    br {
-        display: block;
-        margin: 2px 0;
-    }
-    .head-office {
-		text-align: center;
-	}
-    .main-table {
-		width:100%;
-		border-collapse: collapse;
-		table-layout: fixed;
-        border-style: solid;
-		border-width: 1px;
-        font: 8pt "Tahoma";
-        padding: 4px;
-	}
-    td {
-		border-style: solid;
-		border-width: 1px;
-		padding: 6px;
-  		text-align: left;
-        font: 8pt "Tahoma";
-	}
-    .space {
-		padding-top: 1px;
-		padding-bottom: 1px;
-	}
-    .chk_box {
-		display:inline;
-		width:10px;
-		height:10px;
-		overflow:hidden;
-		border:1px solid #000;
-	}
-    .font-center {
-		text-align: center;
-		font: 8pt "Tahoma";
-		font-weight: 400;
-		text-decoration: underline;
-	}
-	.font-underline {
-		font: 8pt "Tahoma";
-		font-weight: 400;
-		text-decoration: underline;
-	}
-    .thin-font {
-		font: 8pt "Tahoma";
-		font-weight: 100;
-	}
-    @page {
-        size: A4;
-        margin: 0;
-    }
-    @media print {
-        html, body {
-            width: 210mm;
-            height: 297mm;
-        }
-        .page {
-            margin: 0;
-            border: initial;
-            border-radius: initial;
-            width: initial;
-            min-height: initial;
-            box-shadow: initial;
-            background: initial;
-            page-break-after: always;
-			padding-right: 1px;
-        }
-    }
+		body {
+			width: 100%;
+			height: 100%;
+			margin: 0;
+			padding: 0;
+			background-color: #fafafa;
+			font: 10pt "Tahoma";
+    	}
+		* {
+			box-sizing: border-box;
+			-moz-box-sizing: border-box;
+		}
+		/*.page {
+			width: 210mm;
+			min-height: 297mm;
+			padding: 20mm;
+			margin: 10mm auto;
+			border: 1px #D3D3D3 solid;
+			border-radius: 5px;
+			background: white;
+			box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+		}*/
+		br {
+			display: block;
+			margin: 2px 0;
+		}
+		.head-office {
+			text-align: center;
+		}
+		.main-table {
+			width:100%;
+			border-collapse: collapse;
+			table-layout: fixed;
+			border-style: solid;
+			border-width: 1px;
+			font: 8pt "Tahoma";
+			padding: 4px;
+		}
+		td {
+			border-style: solid;
+			border-width: 1px;
+			padding: 6px;
+			text-align: left;
+			font: 8pt "Tahoma";
+		}
+		.space {
+			padding-top: 1px;
+			padding-bottom: 1px;
+		}
+		.chk_box {
+			display:inline;
+			width:10px;
+			height:10px;
+			overflow:hidden;
+			border:1px solid #000;
+		}
+		.font-center {
+			text-align: center;
+			font: 8pt "Tahoma";
+			font-weight: 400;
+			text-decoration: underline;
+		}
+		.font-underline {
+			font: 8pt "Tahoma";
+			font-weight: 400;
+			text-decoration: underline;
+		}
+		.thin-font {
+			font: 8pt "Tahoma";
+			font-weight: 100;
+		}
+		/*@page {
+			size: A4;
+			margin: 0;
+		}
+		@media print {
+			html, body {
+				width: 210mm;
+				height: 297mm;
+			}
+			.page {
+				margin: 0;
+				border: initial;
+				border-radius: initial;
+				width: initial;
+				min-height: initial;
+				box-shadow: initial;
+				background: initial;
+				page-break-after: always;
+				padding-right: 1px;
+			}
+		}*/
+		@media print {
+			@page {
+				size: auto;
+				margin: 0mm;
+			}
+		}
+
 	</style>
 </head>
 

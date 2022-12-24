@@ -169,4 +169,5 @@ Route::get('/user/advertise/listall/{listall}',[UserAdvertiseController::class,'
 Route::controller(PrintBundleController::class)->group(function() {
 	Route::get('/print/sample_receipt', 'receipt');
 	Route::get('/print/bank_payment', 'payment');
+	Route::get('/print/sample_env_report', 'evnreport');
 });
