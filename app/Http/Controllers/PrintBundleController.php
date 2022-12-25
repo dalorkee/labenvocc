@@ -17,7 +17,7 @@ class PrintBundleController extends Controller
     public function payment(){
         return view('printbundle.bank_payment');
     }
-    public function evnreport(){
+    public function envreport(){
         return view('printbundle.sample_env_report');
     }
 }
