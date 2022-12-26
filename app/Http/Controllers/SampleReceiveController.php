@@ -135,7 +135,6 @@ class SampleReceiveController extends Controller
 	}
 
 	protected function step02Post(Request $request) {
-		// dump($request->all());
 		foreach ($request->sample_id as $key => $value) {
 			$data[$value]['select'] = $request->select_sample[$key];
 			if (in_array($value, $request->chk_sample)) {
@@ -143,20 +142,42 @@ class SampleReceiveController extends Controller
 			} else {
 				$data[$value]['check'] = null;
 			}
-
-			foreach ($data as $key => $value) {
-
-			}
-
+			$data[$value]['sample_count'] = $request->sample_count;
 		}
-		dd($data);
-		return redirect()->route('sample.received.step03', ['order_id' => $request->id]);
+
+		/* save to db here */
+
+        if ($request->session()->has(key: 'sample_sumary')) {
+			$request->session()->forget(keys: 'sample_sumary');
+        }
+		$sample_sumary = [
+			'sample_completed' => 0,
+			'sample_completed_amount' => 0,
+			'sample_not_completed' => 0,
+			'sample_not_completed_amount' => 0
+		];
+
+		foreach ($data as $key => $value) {
+			if ($value['select'] == 'y' && $value['check'] == 'complete') {
+				$sample_sumary['sample_completed'] += 1;
+				$sample_sumary['sample_completed_amount'] += (int)$value['sample_count'];
+			} else {
+				$sample_sumary['sample_not_completed'] += 1;
+				$sample_sumary['sample_not_completed_amount'] += (int)$value['sample_count'];
+			}
+		}
+		// dd($sample_sumary);
+		$request->session()->put(key: 'sample_sumary', value: $sample_sumary);
+
+		return redirect()->route('sample.received.step03', ['order_id' => $request->order_id]);
 	}
 
 	protected function step03(Request $request) {
+		$sample_sumary = $request->session()->get(key: 'sample_sumary');
+        dd($sample_sumary);
 		dd($request->order_id);
 		$order = OrderService::get(id: $request->order_id);
-        dd($order);
+		dd($order);
 		return view(view: 'apps.staff.receive.step03', data: compact('order'));
 	}
 

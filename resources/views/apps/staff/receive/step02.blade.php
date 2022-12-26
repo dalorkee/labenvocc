@@ -37,7 +37,7 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 						<ul class="steps">
 							<li class="undone"><a href="{{ route('sample.received.create') }}"><span class="d-none d-sm-inline">รายการคำขอ</span></a></li>
 							<li class="active"><p><span class="d-none d-sm-inline">รับตัวอย่าง</span></p></li>
-							<li class="undone"><p><span class="d-none d-sm-inline">การตรวจวิเคราะห์</span></&p></li>
+							<li class="undone"><p><span class="d-none d-sm-inline">การตรวจวิเคราะห์</span></p></li>
 							<li class="undone"><p><span class="d-none d-sm-inline">รายงานผล</span></p></li>
 						</ul>
 						<div class="row">
@@ -81,7 +81,11 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 																	</ul>
 																@endforeach
 															</td>
-															<td>{{ $val['sample_count'] }}</td>
+															<td>
+																<span>{{ $val['sample_count'] }}</span>
+																<input type="hidden" name="sample_count" value="{{ $val['sample_count'] }}">
+
+															</td>
 															<td>
 																<input type="checkbox" name="chk_sample[]" value="{{ $val['sample_id'] }}">
 																<label>สมบูรณ์</label>
