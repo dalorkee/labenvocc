@@ -65,7 +65,7 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 															<td>{{ $loop->iteration}}</td>
 															<td>
 																<span>{{ $val['sample_id'] }}</span>
-																<input type="hidden" name="sample_id[]" value="{{ $val['sample_id'] }}">
+																<input type="hidden" name="sid_{{ $val['sample_id'] }}" value="{{ $val['sample_id'] }}">
 															</td>
 															<td>
 																@foreach ($val['parameter_type'] as $key => $value)
@@ -87,11 +87,11 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 
 															</td>
 															<td>
-																<input type="checkbox" name="chk_sample[]" value="{{ $val['sample_id'] }}">
+																<input type="checkbox" name="chkid_{{ $val['sample_id'] }}" value="{{ $val['sample_id'] }}">
 																<label>สมบูรณ์</label>
 															</td>
 															<td>
-																<select name="select_sample[]" class="form-control select2">
+																<select name="slid_{{ $val['sample_id'] }}" class="form-control select2">
 																	<option value="">-- โปรดเลือก --</option>
 																	<option value="y">รับ</option>
 																	<option value="n">ปฏิเสธ</option>

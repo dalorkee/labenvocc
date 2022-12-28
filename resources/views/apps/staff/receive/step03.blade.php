@@ -28,7 +28,7 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 			<div class="panel-container show">
 				<form name="received_step03_frm" action="#" method="POST" enctype="multipart/form-data">
 					<input type="hidden" name="_token" value="{{ csrf_token() }}">
-					<input type="hidden" name="order_id" value="{{ $order['id'] }}">
+					<input type="hidden" name="order_id" value="{{ $order_id }}">
 					<input type="hidden" name="order_type" value="1">
 					<input type="hidden" name="order_type_name" value="ตัวอย่างชีวภาพ">
 					<div class="panel-content">
@@ -39,21 +39,49 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 							<li class="undone"><p><span class="d-none d-sm-inline">รายงานผล</span></p></li>
 						</ul>
 						<div class="row">
-							<div class="col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
-								<p>สรุปจำนวนตัวอย่าง</p>
-								<ul>
-									<li>สมบูรณ์: จำนวน 4 ตัวอย่าง 9 รายการทดสอบ</li>
-									<li>ไม่สมบูรณ์: จำนวน 2 ตัวอย่าง 3 รายการทดสอบ</li>
-								</ul>
-
+							<div class="col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-4">
+								<div class="panel-tag">
+									<h4>สรุปจำนวนตัวอย่าง</h4>
+									<div class="pt-4 pl-4">
+										<div class="subheader">
+											<h4 style="width:160px;" class="text-primary">สมบูรณ์</h4>
+											<div class="subheader-block d-lg-flex align-items-center">
+												<div class="d-inline-flex flex-column justify-content-center mr-3">
+													<span class="fw-300 fs-xs d-block opacity-50"><small>ตัวอย่าง</small></span>
+													<span class="fw-500 fs-xl d-block color-primary-500">{{ number_format($sample_sumary['sample_completed']) }}</span>
+												</div>
+											</div>
+											<div class="subheader-block d-lg-flex align-items-center border-faded border-right-0 border-top-0 border-bottom-0 ml-3 pl-3">
+												<div class="d-inline-flex flex-column justify-content-center mr-3">
+													<span class="fw-300 fs-xs d-block opacity-50"><small>รายการทดสอบ</small></span>
+													<span class="fw-500 fs-xl d-block color-primary-500">{{ number_format($sample_sumary['sample_completed_amount']) }}</span>
+												</div>
+											</div>
+										</div>
+										<div class="subheader">
+											<h4 style="width: 160px;" class="text-danger">ไม่สมบูรณ์</h4>
+											<div class="subheader-block d-lg-flex align-items-center">
+												<div class="d-inline-flex flex-column justify-content-center mr-3">
+													<span class="fw-300 fs-xs d-block opacity-50"><small>ตัวอย่าง</small></span>
+													<span class="fw-500 fs-xl d-block color-danger-500">{{ number_format($sample_sumary['sample_not_completed']) }}</span>
+												</div>
+											</div>
+											<div class="subheader-block d-lg-flex align-items-center border-faded border-right-0 border-top-0 border-bottom-0 ml-3 pl-3">
+												<div class="d-inline-flex flex-column justify-content-center mr-3">
+													<span class="fw-300 fs-xs d-block opacity-50"><small>รายการทดสอบ</small></span>
+													<span class="fw-500 fs-xl d-block color-danger-500">{{ number_format($sample_sumary['sample_not_completed_amount']) }}</span>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
 							</div>
-
 						</div>
 					</div>
 					<div class="panel-content border-faded border-left-0 border-right-0 border-bottom-0 d-flex flex-row align-items-center">
 						<div class="form-row">
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
-								<a href="{{ route('sample.received.step02.get', ['order_id' => $order['id']]) }}" class="btn btn-success ml-auto"> <i class="fal fa-arrow-alt-left"></i> ก่อนหน้า</a>
+								<a href="{{ route('sample.received.step02', ['order_id' => $order_id]) }}" class="btn btn-success ml-auto"> <i class="fal fa-arrow-alt-left"></i> ก่อนหน้า</a>
 								<button type="submit" class="btn btn-warning ml-auto"><i class="fal fa-pencil"></i> บันทึกข้อมูล</button>
 							</div>
 						</div>
