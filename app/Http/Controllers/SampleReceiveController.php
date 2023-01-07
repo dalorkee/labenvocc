@@ -135,36 +135,36 @@ class SampleReceiveController extends Controller
 	}
 
 	protected function step02Post(Request $request) {
-		foreach ($request->sample_id as $key => $value) {
-			$data[$value]['select'] = $request->select_sample[$key];
-			if (in_array($value, $request->chk_sample)) {
-				$data[$value]['check'] = 'complete';
-			} else {
-				$data[$value]['check'] = null;
+		$data = $request->toArray();
+		if (count($data['sample_id']) > 0) {
+			foreach ($data['sample_id'] as $value) {
+				$sample[$value]['id'] = $value;
+				$sample[$value]['check'] = (array_key_exists('sample_chk_'.$value, $data)) ? 'y' : 'n';
+				$sample[$value]['select'] = $data['sample_select_'.$value];
 			}
-			$data[$value]['sample_count'] = $request->sample_count;
 		}
+		dd($sample);
 		if ($request->session()->has(key: 'sample_sumary')) {
 			$request->session()->forget(keys: 'sample_sumary');
 		}
-		$sample_sumary = [
-			'sample_completed' => 0,
-			'sample_completed_amount' => 0,
-			'sample_not_completed' => 0,
-			'sample_not_completed_amount' => 0
-		];
-		foreach ($data as $key => $value) {
-			if ($value['select'] == 'y' && $value['check'] == 'complete') {
-				$sample_sumary['sample_completed'] += 1;
-				$sample_sumary['sample_completed_amount'] += (int)$value['sample_count'];
-			} else {
-				$sample_sumary['sample_not_completed'] += 1;
-				$sample_sumary['sample_not_completed_amount'] += (int)$value['sample_count'];
-			}
-		}
-		$request->session()->put(key: 'sample_result', value: $data);
-		$request->session()->put(key: 'sample_sumary', value: $sample_sumary);
-		return redirect()->route('sample.received.step03', ['order_id' => $request->order_id]);
+		// $sample_sumary = [
+		// 	'sample_completed' => 0,
+		// 	'sample_completed_amount' => 0,
+		// 	'sample_not_completed' => 0,
+		// 	'sample_not_completed_amount' => 0
+		// ];
+		// foreach ($data as $key => $value) {
+		// 	if ($value['select'] == 'y' && $value['check'] == 'complete') {
+		// 		$sample_sumary['sample_completed'] += 1;
+		// 		$sample_sumary['sample_completed_amount'] += (int)$value['sample_count'];
+		// 	} else {
+		// 		$sample_sumary['sample_not_completed'] += 1;
+		// 		$sample_sumary['sample_not_completed_amount'] += (int)$value['sample_count'];
+		// 	}
+		// }
+		// $request->session()->put(key: 'sample_result', value: $data);
+		// $request->session()->put(key: 'sample_sumary', value: $sample_sumary);
+		// return redirect()->route('sample.received.step03', ['order_id' => $request->order_id]);
 	}
 
 	protected function step03(Request $request) {

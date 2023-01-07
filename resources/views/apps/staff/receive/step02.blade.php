@@ -33,6 +33,7 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 					<input type="hidden" name="order_no_ref" value="{{ $order['order_no'] ?? old('order_no_ref') }}">
 					<input type="hidden" name="order_type" value="{{ $order['order_type'] ?? old('order_type') }}">
 					<input type="hidden" name="order_type_name" value="{{ $order['order_type_name'] ?? old('order_type_name') }}">
+					<input type="hidden" name="result_count" value="{{ $result_count ?? 0 }}">
 					<div class="panel-content">
 						<ul class="steps">
 							<li class="undone"><a href="{{ route('sample.received.create') }}"><span class="d-none d-sm-inline">รายการคำขอ</span></a></li>
@@ -65,7 +66,8 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 															<td>{{ $loop->iteration}}</td>
 															<td>
 																<span>{{ $val['sample_id'] }}</span>
-																<input type="hidden" name="sid_{{ $val['sample_id'] }}" value="{{ $val['sample_id'] }}">
+																<input type="hidden" name="sample_id[]" value="{{ $val['sample_id'] }}">
+																<input type="hidden" name="sample_id_{{ $val['sample_id'] }}" value="{{ $val['sample_id'] }}">
 															</td>
 															<td>
 																@foreach ($val['parameter_type'] as $key => $value)
@@ -83,16 +85,16 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 															</td>
 															<td>
 																<span>{{ $val['sample_count'] }}</span>
-																<input type="hidden" name="sample_count" value="{{ $val['sample_count'] }}">
+																<input type="hidden" name="sample_count_{{ $val['sample_id'] }}" value="{{ $val['sample_count'] }}">
 
 															</td>
 															<td>
-																<input type="checkbox" name="chkid_{{ $val['sample_id'] }}" value="{{ $val['sample_id'] }}">
+																<input type="checkbox" name="sample_chk_{{ $val['sample_id'] }}" value="{{ $val['sample_id'] }}">
 																<label>สมบูรณ์</label>
 															</td>
 															<td>
-																<select name="slid_{{ $val['sample_id'] }}" class="form-control select2">
-																	<option value="">-- โปรดเลือก --</option>
+																<select name="sample_select_{{ $val['sample_id'] }}" class="form-control select2">
+																	<option value="0">-- โปรดเลือก --</option>
 																	<option value="y">รับ</option>
 																	<option value="n">ปฏิเสธ</option>
 																</select>
