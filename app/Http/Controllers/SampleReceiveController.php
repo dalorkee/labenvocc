@@ -136,45 +136,56 @@ class SampleReceiveController extends Controller
 
 	protected function step02Post(Request $request) {
 		$data = $request->toArray();
+        dd($data);
 		if (count($data['sample_id']) > 0) {
 			foreach ($data['sample_id'] as $value) {
 				$sample[$value]['id'] = $value;
-				$sample[$value]['check'] = (array_key_exists('sample_chk_'.$value, $data)) ? 'y' : 'n';
+				$sample[$value]['sample_count'] = $data['sample_count_'.$value];
+				$sample[$value]['check'] = (array_key_exists('sample_chk_'.$value, $data)) ? 'complete' : 'reject';
 				$sample[$value]['select'] = $data['sample_select_'.$value];
 			}
 		}
-		dd($sample);
+
 		if ($request->session()->has(key: 'sample_sumary')) {
 			$request->session()->forget(keys: 'sample_sumary');
 		}
-		// $sample_sumary = [
-		// 	'sample_completed' => 0,
-		// 	'sample_completed_amount' => 0,
-		// 	'sample_not_completed' => 0,
-		// 	'sample_not_completed_amount' => 0
-		// ];
-		// foreach ($data as $key => $value) {
-		// 	if ($value['select'] == 'y' && $value['check'] == 'complete') {
-		// 		$sample_sumary['sample_completed'] += 1;
-		// 		$sample_sumary['sample_completed_amount'] += (int)$value['sample_count'];
-		// 	} else {
-		// 		$sample_sumary['sample_not_completed'] += 1;
-		// 		$sample_sumary['sample_not_completed_amount'] += (int)$value['sample_count'];
-		// 	}
-		// }
-		// $request->session()->put(key: 'sample_result', value: $data);
-		// $request->session()->put(key: 'sample_sumary', value: $sample_sumary);
-		// return redirect()->route('sample.received.step03', ['order_id' => $request->order_id]);
+
+		$sample_sumary = [
+			'sample_completed' => 0,
+			'sample_completed_amount' => 0,
+			'sample_not_completed' => 0,
+			'sample_not_completed_amount' => 0
+		];
+
+		foreach ($sample as $key => $value) {
+			if ($value['select'] == 'y' && $value['check'] == 'y') {
+				$sample_sumary['sample_completed'] += 1;
+				$sample_sumary['sample_completed_amount'] += (int)$value['sample_count'];
+			} else {
+				$sample_sumary['sample_not_completed'] += 1;
+				$sample_sumary['sample_not_completed_amount'] += (int)$value['sample_count'];
+			}
+		}
+		$request->session()->put(key: 'sample_result', value: $sample);
+		$request->session()->put(key: 'sample_sumary', value: $sample_sumary);
+
+		return redirect()->route(route: 'sample.received.step03', parameters: ['order_id' => $request->order_id]);
 	}
 
 	protected function step03(Request $request) {
 		$order_id = $request->order_id;
-		/* get sample id here for mapping na ja */
 		$sample_sumary = $request->session()->get(key: 'sample_sumary');
-		$sample_result = $request->session()->get(key: 'sample_result');
-		dd($sample_result);
-		//$order = OrderService::get(id: $request->order_id);
+		// $sample_result = $request->session()->get(key: 'sample_result');
 		return view(view: 'apps.staff.receive.step03', data: compact('order_id', 'sample_sumary'));
 	}
+
+	protected function step03Post(Request $request) {
+		$order_id = $request->order_id;
+		$sample_result = $request->session()->get(key: 'sample_result');
+
+        dd($sample_result);
+
+
+    }
 
 }

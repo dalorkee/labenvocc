@@ -3,7 +3,10 @@
 @section('style')
 <link type="text/css" rel="stylesheet" href="{{ URL::asset('vendor/bootstrap-table/dist/bootstrap-table.min.css') }}">
 <link type="text/css" rel="stylesheet" href="{{ URL::asset('vendor/jquery-datatables-checkboxes/dataTables.checkboxes.css') }}">
-<link type="text/css" rel="stylesheet" href="{{ URL::asset('vendor/bootstrap-datepicker/dist/css/bootstrap-datetimepicker.min.css') }}">
+<link type="text/css" rel="stylesheet" href="{{ URL::asset('assets/css/formplugins/select2/select2.bundle.css') }}">
+
+
+{{-- <link type="text/css" rel="stylesheet" href="{{ URL::asset('vendor/bootstrap-datepicker/dist/css/bootstrap-datetimepicker.min.css') }}"> --}}
 <link type="text/css" rel="stylesheet" href="{{ URL::asset('css/pj-step.css') }}">
 <style type="text/css">
 table#example_table thead {background-color:#2D8AC9;color: white;}
@@ -28,7 +31,7 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 			<div class="panel-container show">
 				<form name="received_step02_frm" action="{{ route('sample.received.step02.post') }}" method="POST" enctype="multipart/form-data">
 					<input type="hidden" name="_token" value="{{ csrf_token() }}">
-					<input type="hidden" name="order_id" value="{{ $order['id'] ?? old('id') }}">
+					<input type="hidden" name="order_id" value="{{ $order['id'] ?? old('order_id') }}">
 					<input type="hidden" name="order_no" value="{{ $order['order_no'] ?? old('order_no') }}">
 					<input type="hidden" name="order_no_ref" value="{{ $order['order_no'] ?? old('order_no_ref') }}">
 					<input type="hidden" name="order_type" value="{{ $order['order_type'] ?? old('order_type') }}">
@@ -89,11 +92,22 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 
 															</td>
 															<td>
-																<input type="checkbox" name="sample_chk_{{ $val['sample_id'] }}" value="{{ $val['sample_id'] }}">
-																<label>สมบูรณ์</label>
+																{{-- <input type="checkbox" name="sample_chk_{{ $val['sample_id'] }}" value="{{ $val['sample_id'] }}">
+																<label>สมบูรณ์</label> --}}
+
+																<div class="">
+																		<div class="custom-control custom-radio">
+																			<input type="radio" name="sample_chk_{{ $val['sample_id'] }}" value="complete" class="custom-control-input" id="sample_chk_{{ $val['sample_id'] }}_y">
+																			<label class="custom-control-label" for="sample_chk_{{ $val['sample_id'] }}_y">สมบูรณ์</label>
+																		</div>
+																		<div class="custom-control custom-radio mt-2">
+																			<input type="radio" name="sample_chk_{{ $val['sample_id'] }}" value="reject" class="custom-control-input" id="sample_chk_{{ $val['sample_id'] }}_n">
+																			<label class="custom-control-label" for="sample_chk_{{ $val['sample_id'] }}_n">ไม่สมบูรณ์</label>
+																		</div>
+																</div>
 															</td>
 															<td>
-																<select name="sample_select_{{ $val['sample_id'] }}" class="form-control select2">
+																<select name="sample_select_{{ $val['sample_id'] }}" class="form-control select2 w-100">
 																	<option value="0">-- โปรดเลือก --</option>
 																	<option value="y">รับ</option>
 																	<option value="n">ปฏิเสธ</option>
@@ -128,19 +142,21 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 <script type="text/javascript" src="{{ URL::asset('vendor/moment/moment.min.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('vendor/bootstrap-table/dist/bootstrap-table.min.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('vendor/bootstrap-table/dist/locale/bootstrap-table-th-TH.min.js') }}"></script>
-<script type="text/javascript" src="{{ URL::asset('vendor/bootstrap-datepicker/dist/js/bootstrap-datetimepicker.min.js') }}"></script>
+<script type="text/javascript" src="{{ URL::asset('assets/js/formplugins/select2/select2.bundle.js') }}"></script>
+{{-- <script type="text/javascript" src="{{ URL::asset('vendor/bootstrap-datepicker/dist/js/bootstrap-datetimepicker.min.js') }}"></script> --}}
 <script type="text/javascript" src="{{ URL::asset('js/buttons.server-side.js') }}"></script>
 <script type="text/javascript">
 $(document).ready(function() {
 	$.ajaxSetup({headers:{'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')}});
-	 $('.date_data').datetimepicker({
-		allowInputToggle: true,
-		showClose: true,
-		showClear: true,
-		showTodayButton: true,
-		format: "DD/MM/YYYY",
-		ignoreReadonly: true,
-	});
+    $('.select2').select2();
+	//  $('.date_data').datetimepicker({
+	// 	allowInputToggle: true,
+	// 	showClose: true,
+	// 	showClear: true,
+	// 	showTodayButton: true,
+	// 	format: "DD/MM/YYYY",
+	// 	ignoreReadonly: true,
+	// });
 });
 </script>
 @endpush

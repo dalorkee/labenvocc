@@ -143,6 +143,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 			Route::post('/received/order/step02', 'step02Post')->name('received.step02.post');
 
 			Route::get('/received/order/{order_id}/step03', 'step03')->name('received.step03');
+			Route::post('/received/order/step03', 'step03Post')->name('received.step03.post');
 		});
 	});
 	Route::get('/admin/home', [AdminController::class, 'index'])->name('admin.index');

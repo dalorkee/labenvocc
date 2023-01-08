@@ -26,9 +26,9 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 				</div>
 			</div>
 			<div class="panel-container show">
-				<form name="received_step03_frm" action="#" method="POST" enctype="multipart/form-data">
+				<form name="received_step03_frm" action="{{ route('sample.received.step03.post') }}" method="POST" enctype="multipart/form-data">
 					<input type="hidden" name="_token" value="{{ csrf_token() }}">
-					<input type="hidden" name="order_id" value="{{ $order_id }}">
+					<input type="hidden" name="order_id" value="{{ $order_id ?? old('order_id') }}">
 					<input type="hidden" name="order_type" value="1">
 					<input type="hidden" name="order_type_name" value="ตัวอย่างชีวภาพ">
 					<div class="panel-content">
