@@ -112,7 +112,7 @@ $(document).ready(function() {
 			title: "Success",
 			html: "{{ Session::get('success') }}",
 			confirmButtonText: "ตกลง",
-			footer: "LAB ENV-OCC DDC",
+			footer: "Lab Env-Occ",
 			allowOutsideClick: false
 		});
 		@php
@@ -126,7 +126,7 @@ $(document).ready(function() {
 			title: "Warning",
 			text: "{{ Session::get('warning') }}",
 			confirmButtonText: "ตกลง",
-			footer: "LAB ENV-OCC DDC",
+			footer: "Lab Env-Occ",
 			allowOutsideClick: false
 		});
 		@php
@@ -134,13 +134,13 @@ $(document).ready(function() {
 		@endphp
 	@endif
 	@if (Session::has('error'))
-		toastr.error("{{ Session::get('error') }}", "LabEnvOcc", options);
+		toastr.error("{{ Session::get('error') }}", "Lab Env-Occ", options);
 		Swal.fire({
 			type: "error",
 			title: "Error",
 			text: "{{ Session::get('error') }}",
 			confirmButtonText: "ตกลง",
-			footer: "LAB ENV-OCC DDC",
+			footer: "Lab Env-Occ",
 			allowOutsideClick: false
 		});
 		@php
@@ -148,13 +148,13 @@ $(document).ready(function() {
 		@endphp
 	@endif
 	@if (Session::has('action_notic'))
-		toastr.info("{{ Session::get('action_notic') }}", "LabEnvOcc", options2);
+		toastr.info("{{ Session::get('action_notic') }}", "Lab Env-Occ", options2);
 		@php
 			Session::forget("action_notic");
 		@endphp
 	@endif
 	@if (Session::has('destroy'))
-		toastr.error("{{ Session::get('destroy') }}", "LabEnvOcc", options3);
+		toastr.error("{{ Session::get('destroy') }}", "Lab Env-Occ", options3);
 		@php
 			Session::forget("destroy");
 		@endphp

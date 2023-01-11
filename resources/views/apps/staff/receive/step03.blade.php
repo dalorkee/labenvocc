@@ -1,9 +1,6 @@
 @extends('layouts.index')
 @section('token')<meta name="csrf-token" content="{{ csrf_token() }}">@endsection
 @section('style')
-<link type="text/css" rel="stylesheet" href="{{ URL::asset('vendor/bootstrap-table/dist/bootstrap-table.min.css') }}">
-<link type="text/css" rel="stylesheet" href="{{ URL::asset('vendor/jquery-datatables-checkboxes/dataTables.checkboxes.css') }}">
-<link type="text/css" rel="stylesheet" href="{{ URL::asset('vendor/bootstrap-datepicker/dist/css/bootstrap-datetimepicker.min.css') }}">
 <link type="text/css" rel="stylesheet" href="{{ URL::asset('css/pj-step.css') }}">
 <style type="text/css">
 table#example_table thead {background-color:#2D8AC9;color: white;}
@@ -26,7 +23,7 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 				</div>
 			</div>
 			<div class="panel-container show">
-				<form name="received_step03_frm" action="{{ route('sample.received.step03.post') }}" method="POST" enctype="multipart/form-data">
+				<form name="received_step03_frm" id="received_step03_frm" action="{{ route('sample.received.step03.post') }}" method="POST" enctype="multipart/form-data">
 					<input type="hidden" name="_token" value="{{ csrf_token() }}">
 					<input type="hidden" name="order_id" value="{{ $order_id ?? old('order_id') }}">
 					<input type="hidden" name="order_type" value="1">
@@ -82,7 +79,8 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 						<div class="form-row">
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
 								<a href="{{ route('sample.received.step02', ['order_id' => $order_id]) }}" class="btn btn-success ml-auto"> <i class="fal fa-arrow-alt-left"></i> ก่อนหน้า</a>
-								<button type="submit" class="btn btn-warning ml-auto"><i class="fal fa-pencil"></i> บันทึกข้อมูล</button>
+								{{-- <button type="submit" class="btn btn-warning ml-auto"><i class="fal fa-pencil"></i> บันทึกข้อมูล</button> --}}
+								<button type="button" class="btn btn-warning ml-auto" id="btn_submit"><i class="fal fa-pencil"></i> บันทึกข้อมูล</button>
 							</div>
 						</div>
 					</div>
@@ -93,22 +91,32 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 </div>
 @endsection
 @push('scripts')
-<script type="text/javascript" src="{{ URL::asset('vendor/moment/moment.min.js') }}"></script>
-<script type="text/javascript" src="{{ URL::asset('vendor/bootstrap-table/dist/bootstrap-table.min.js') }}"></script>
-<script type="text/javascript" src="{{ URL::asset('vendor/bootstrap-table/dist/locale/bootstrap-table-th-TH.min.js') }}"></script>
-<script type="text/javascript" src="{{ URL::asset('vendor/bootstrap-datepicker/dist/js/bootstrap-datetimepicker.min.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/buttons.server-side.js') }}"></script>
 <script type="text/javascript">
 $(document).ready(function() {
 	$.ajaxSetup({headers:{'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')}});
-	 $('.date_data').datetimepicker({
-		allowInputToggle: true,
-		showClose: true,
-		showClear: true,
-		showTodayButton: true,
-		format: "DD/MM/YYYY",
-		ignoreReadonly: true,
-	});
+    $('#btn_submit').click(function(e) {
+		 e.preventDefault();
+		let $form = $('form#received_step03_frm');
+	 	Swal.fire({
+	 		type: "warning",
+	 		title: "<span class='text-danger'>ยืนยันบันทึกข้อมูล</span>",
+	 		html: "<span class='text-primary'>โปรดตรวจสอบข้อมูลให้ถูกต้องเสมอ </span> <p class='text-danger'>ต้องการการบันทึกข้อมูลใช่หรือไม่ ?</p>" ,
+	 		showCancelButton: true,
+	 		cancelButtonColor: '#dd3333',
+	 		cancelButtonText: "ยกเลิก",
+			confirmButtonColor: '#3085d6',
+	 		confirmButtonText: "ตกลง",
+	 		footer: "Lab Env-Occ",
+	 		allowOutsideClick: false
+	 	}).then((result) => {
+ 	 		if (result.value == true) {
+				 $form.submit();
+	 		} else {
+	 			return false;
+	 		}
+	 	});
+	 });
 });
 </script>
 @endpush

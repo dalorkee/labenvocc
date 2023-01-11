@@ -6,9 +6,9 @@ use Exception;
 use Illuminate\Support\Facades\Log;
 
 
-class OrderNotFoundException extends Exception
+class OrderSampleNotFoundException extends Exception
 {
 	public function report() {
-		//
+		Log::debug('Order sample not found');
 	}
 }

@@ -49,7 +49,8 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 								<div class="tw-relative">
 									<div class="row">
 										<div class="col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
-											<table class="table-striped" id="table-1" data-toggle="table" data-show-columns="true">
+											{{-- <table class="table-striped" id="table-1" data-toggle="table" data-show-columns="true"> --}}
+											<table class="table table-striped">
 												<caption class="d-none"><i class="fa fa-clone"></i> การตรวจสอบตัวอย่าง</caption>
 												<thead>
 													<tr class="bg-primary text-white">
@@ -80,7 +81,7 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 																@endforeach
 															</td>
 															<td>
-																@forelse ($val['parameter_name'] as $key => $value)
+																@foreach ($val['parameter_name'] as $key => $value)
 																	<ul>
 																		<li>{{ $value }}</li>
 																	</ul>
@@ -92,25 +93,26 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 
 															</td>
 															<td>
-																{{-- <input type="checkbox" name="sample_chk_{{ $val['sample_id'] }}" value="{{ $val['sample_id'] }}">
-																<label>สมบูรณ์</label> --}}
-
-																<div class="">
-																		<div class="custom-control custom-radio">
-																			<input type="radio" name="sample_chk_{{ $val['sample_id'] }}" value="complete" class="custom-control-input" id="sample_chk_{{ $val['sample_id'] }}_y">
+																<div class="frame-wrap">
+																		<div class="custom-control custom-switch">
+																			<input type="radio" name="sample_verified_status_{{ $val['sample_id'] }}" value="complete"
+																			{{ (!is_null($session_sample_result) && $session_sample_result[$val['sample_id']]['sample_verified_status_'.$val['sample_id']] == 'complete') ? 'checked' : '' }}
+																			class="custom-control-input" id="sample_chk_{{ $val['sample_id'] }}_y">
 																			<label class="custom-control-label" for="sample_chk_{{ $val['sample_id'] }}_y">สมบูรณ์</label>
 																		</div>
-																		<div class="custom-control custom-radio mt-2">
-																			<input type="radio" name="sample_chk_{{ $val['sample_id'] }}" value="reject" class="custom-control-input" id="sample_chk_{{ $val['sample_id'] }}_n">
+																		<div class="custom-control custom-switch mt-2">
+																			<input type="radio" name="sample_verified_status_{{ $val['sample_id'] }}" value="reject"
+																			{{ (!is_null($session_sample_result) && $session_sample_result[$val['sample_id']]['sample_verified_status_'.$val['sample_id']] == 'reject') ? 'checked' : '' }}
+																			class="custom-control-input" id="sample_chk_{{ $val['sample_id'] }}_n">
 																			<label class="custom-control-label" for="sample_chk_{{ $val['sample_id'] }}_n">ไม่สมบูรณ์</label>
 																		</div>
 																</div>
 															</td>
 															<td>
-																<select name="sample_select_{{ $val['sample_id'] }}" class="form-control select2 w-100">
-																	<option value="0">-- โปรดเลือก --</option>
-																	<option value="y">รับ</option>
-																	<option value="n">ปฏิเสธ</option>
+																<select name="sample_received_status_{{ $val['sample_id'] }}" class="form-control w-100">
+																	<option value="">-- โปรดเลือก --</option>
+																	<option value="y" {{ (!is_null($session_sample_result) && $session_sample_result[$val['sample_id']]['sample_received_status_'.$val['sample_id']] == 'y') ? 'selected' : '' }}>รับ</option>
+																	<option value="n" {{ (!is_null($session_sample_result) && $session_sample_result[$val['sample_id']]['sample_received_status_'.$val['sample_id']] == 'n') ? 'selected' : '' }}>ปฏิเสธ</option>
 																</select>
 															</td>
 														</tr>
@@ -148,7 +150,7 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 <script type="text/javascript">
 $(document).ready(function() {
 	$.ajaxSetup({headers:{'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')}});
-    $('.select2').select2();
+	$('.select2').select2();
 	//  $('.date_data').datetimepicker({
 	// 	allowInputToggle: true,
 	// 	showClose: true,

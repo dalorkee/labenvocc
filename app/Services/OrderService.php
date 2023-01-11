@@ -2,8 +2,9 @@
 
 namespace App\Services;
 
-use App\Models\Order;
+use App\Models\{Order, OrderSample};
 use App\Exceptions\OrderNotFoundException;
+use App\Exceptions\OrderSampleNotFoundException;
 use App\Exceptions\InvalidOrderException;
 
 class OrderService
@@ -25,7 +26,6 @@ class OrderService
 	}
 
 	public static function getOrderWithRelations(int $id) {
-		// $str = '"' . implode ('", "', $relations) . '"';
 		$order = Order::whereId($id)->with('orderSamples', 'parameters')->get();
 		if (!$order) {
 			throw new InvalidOrderException(message: 'ไม่พบข้อมูล Order');
@@ -39,5 +39,13 @@ class OrderService
 			throw new InvalidOrderException(message: 'สร้าง Order Model ไม่ได้');
 		}
 		return $order;
+	}
+
+	public static function findOrderSample(int $id) {
+		$orderSample = OrderSample::find($id);
+		if (!$orderSample) {
+			throw new OrderSampleNotFoundException(message: 'ไม่พบข้อมูล Order sample: ' . $id);
+		}
+		return $orderSample;
 	}
 }

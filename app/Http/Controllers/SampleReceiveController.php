@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\DataTables\ReceivedExampleDataTable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\{DB,Log};
 use App\Services\OrderService;
 use App\Traits\{DateTimeTrait,CommonTrait};
 use App\Exceptions\{OrderNotFoundException,InvalidOrderException};
@@ -29,8 +30,14 @@ class SampleReceiveController extends Controller
 	* Create Order page
 	* @Resource('sample.received.create')
 	*/
-	protected function create(): object {
+	protected function create(Request $request): object {
 		try {
+			/* clear all step session  */
+			$request->session()->forget(keys: 'order');
+			$request->session()->forget(keys: 'sample_result');
+			$request->session()->forget(keys: 'sample_sumary');
+
+			/* begin query */
 			$orders = OrderService::getOrderwithCount(relations: ['orderSamples', 'parameters'], year: '2022');
 			return Datatables::of($orders)
 				->addColumn('total', fn ($order) => $order->order_samples_count.'/'.$order->parameters_count)
@@ -107,12 +114,16 @@ class SampleReceiveController extends Controller
 
 	protected function step02(Request $request) {
 		try {
+			$session_sample_result = ($request->session()->has(key: 'sample_result')) ? $request->session()->get(key: 'sample_result') : null;
+
 			$order = $request->session()->get(key: 'order');
 			$result = [];
 			$order_sample = OrderSample::whereOrder_id($order['id'])->with('parameters')->get();
 			$order_sample->each(function($item, $key) use (&$result) {
 				$tmp['sample_id'] = $item->id;
 				$tmp['sample_count'] = $item->parameters->count();
+				$tmp['sample_verified_status_'.$item->id] = $item->sample_verified_status;
+				$tmp['sample_received_status_'.$item->id] = $item->sample_received_status;
 				$tmp_paramet_type = [];
 				$tmp_paramet_name = [];
 				foreach ($item->parameters as $key => $value) {
@@ -125,7 +136,8 @@ class SampleReceiveController extends Controller
 				$tmp['parameter_name'] = $tmp_paramet_name;
 				array_push($result, $tmp);
 			});
-			return view(view: 'apps.staff.receive.step02', data: compact('order', 'result'));
+
+			return view(view: 'apps.staff.receive.step02', data: compact('order', 'result', 'session_sample_result'));
 		} catch (OrderNotFoundException $e) {
 			report($e->getMessage());
 			return redirect()->back()->with(key: 'error', value: $e->getMessage());
@@ -136,29 +148,31 @@ class SampleReceiveController extends Controller
 
 	protected function step02Post(Request $request) {
 		$data = $request->toArray();
-        dd($data);
 		if (count($data['sample_id']) > 0) {
 			foreach ($data['sample_id'] as $value) {
 				$sample[$value]['id'] = $value;
 				$sample[$value]['sample_count'] = $data['sample_count_'.$value];
-				$sample[$value]['check'] = (array_key_exists('sample_chk_'.$value, $data)) ? 'complete' : 'reject';
-				$sample[$value]['select'] = $data['sample_select_'.$value];
+				$sample[$value]['sample_verified_status_'.$value] = $data['sample_verified_status_'.$value];
+				$sample[$value]['sample_received_status_'.$value] = $data['sample_received_status_'.$value];
 			}
 		}
+
+		if ($request->session()->has(key: 'sample_result')) {
+			$request->session()->forget(keys: 'sample_result');
+		}
+		$request->session()->put(key: 'sample_result', value: $sample);
 
 		if ($request->session()->has(key: 'sample_sumary')) {
 			$request->session()->forget(keys: 'sample_sumary');
 		}
-
 		$sample_sumary = [
 			'sample_completed' => 0,
 			'sample_completed_amount' => 0,
 			'sample_not_completed' => 0,
 			'sample_not_completed_amount' => 0
 		];
-
 		foreach ($sample as $key => $value) {
-			if ($value['select'] == 'y' && $value['check'] == 'y') {
+			if ($value['sample_verified_status_'.$value['id']] == 'complete' && $value['sample_received_status_'.$value['id']] == 'y') {
 				$sample_sumary['sample_completed'] += 1;
 				$sample_sumary['sample_completed_amount'] += (int)$value['sample_count'];
 			} else {
@@ -166,9 +180,7 @@ class SampleReceiveController extends Controller
 				$sample_sumary['sample_not_completed_amount'] += (int)$value['sample_count'];
 			}
 		}
-		$request->session()->put(key: 'sample_result', value: $sample);
 		$request->session()->put(key: 'sample_sumary', value: $sample_sumary);
-
 		return redirect()->route(route: 'sample.received.step03', parameters: ['order_id' => $request->order_id]);
 	}
 
@@ -180,12 +192,24 @@ class SampleReceiveController extends Controller
 	}
 
 	protected function step03Post(Request $request) {
-		$order_id = $request->order_id;
-		$sample_result = $request->session()->get(key: 'sample_result');
+		try {
+			$sample_result = $request->session()->get(key: 'sample_result');
+			DB::transaction(function() use ($sample_result) {
+				foreach ($sample_result as $key => $value) {
+					$order_sample = OrderService::findOrderSample($value['id']);
+					$order_sample->sample_verified_status = $value['sample_verified_status_'.$value['id']];
+					$order_sample->sample_received_status = $value['sample_received_status_'.$value['id']];
+					$order_sample->save();
+				}
+			});
+			$order = OrderService::get($request->order_id);
+			$order->order_status = 'progress';
+			$order->save();
+			return redirect()->route('sample.received.index')->with(key: 'success', value: 'บันทึกข้อมูลสำเร็จแล้ว !!');
+		} catch (\Exception $e) {
+			Log::error($e->getMessage());
+		}
 
-        dd($sample_result);
-
-
-    }
+	}
 
 }
