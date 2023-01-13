@@ -30,8 +30,11 @@ class Order extends Model
 		'book_upload',
 		'detail',
 		'order_confirmed',
+		'order_received',
 		'order_payment',
-		'order_received'
+		'order_status',
+		'lab_no',
+		'report_due_date',
 	];
 	//protected $appends = ['book_date_js'];
 
@@ -61,14 +64,14 @@ class Order extends Model
 		);
 	}
 
-    protected function reportDueDate(): Attribute {
+	protected function reportDueDate(): Attribute {
 		return new Attribute(
 			get: fn ($value) => $this->convertMySQLDateToJs(date: $value),
 			set: fn ($value) => $this->convertJsDateToMySQL(date: $value),
 		);
 	}
 
-    // public function getBookDateJsAttribute(): string {
+	// public function getBookDateJsAttribute(): string {
 	// 	if (!is_null($this->book_date) && !empty($this->book_date)) {
 	// 		$exp = explode("-", $this->book_date);
 	// 		$str = $exp[2]."/".$exp[1]."/".$exp[0];

@@ -97,19 +97,19 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 																		<div class="custom-control custom-switch">
 																			<input type="radio" name="sample_verified_status_{{ $val['sample_id'] }}" value="complete"
 																			{{ (!is_null($session_sample_result) && $session_sample_result[$val['sample_id']]['sample_verified_status_'.$val['sample_id']] == 'complete') ? 'checked' : '' }}
-																			class="custom-control-input" id="sample_chk_{{ $val['sample_id'] }}_y">
+																			class="custom-control-input @error('sample_verified_status_'.$val['sample_id']) is-invalid @enderror" id="sample_chk_{{ $val['sample_id'] }}_y">
 																			<label class="custom-control-label" for="sample_chk_{{ $val['sample_id'] }}_y">สมบูรณ์</label>
 																		</div>
 																		<div class="custom-control custom-switch mt-2">
 																			<input type="radio" name="sample_verified_status_{{ $val['sample_id'] }}" value="reject"
 																			{{ (!is_null($session_sample_result) && $session_sample_result[$val['sample_id']]['sample_verified_status_'.$val['sample_id']] == 'reject') ? 'checked' : '' }}
-																			class="custom-control-input" id="sample_chk_{{ $val['sample_id'] }}_n">
+																			class="custom-control-input @error('sample_verified_status_'.$val['sample_id']) is-invalid @enderror" id="sample_chk_{{ $val['sample_id'] }}_n">
 																			<label class="custom-control-label" for="sample_chk_{{ $val['sample_id'] }}_n">ไม่สมบูรณ์</label>
 																		</div>
 																</div>
 															</td>
 															<td>
-																<select name="sample_received_status_{{ $val['sample_id'] }}" class="form-control w-100">
+																<select name="sample_received_status_{{ $val['sample_id'] }}" class="form-control w-100 @error('sample_received_status_'.$val['sample_id']) is-invalid @enderror">
 																	<option value="">-- โปรดเลือก --</option>
 																	<option value="y" {{ (!is_null($session_sample_result) && $session_sample_result[$val['sample_id']]['sample_received_status_'.$val['sample_id']] == 'y') ? 'selected' : '' }}>รับ</option>
 																	<option value="n" {{ (!is_null($session_sample_result) && $session_sample_result[$val['sample_id']]['sample_received_status_'.$val['sample_id']] == 'n') ? 'selected' : '' }}>ปฏิเสธ</option>

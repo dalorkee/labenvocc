@@ -94,12 +94,23 @@ class SampleReceiveController extends Controller
 		$validated = $request->validate([
 			'id' => 'required',
 			"order_no" => "required",
-			"order_no_ref" => "nullable",
-			"order_type" => "nullable",
-			"order_type_name" => "nullable",
-			'lab_no' => 'nullable',
-			'report_due_date' => 'nullable',
+			"order_no_ref" => "required",
+			"order_type" => "required",
+			"order_type_name" => "required",
+			// 'lab_no' => 'required|unique:orders,lab_no|max:60',
+			'report_due_date' => 'required',
+			'type_of_work' => 'required',
+			'type_of_work_other' => 'nullable|max:90',
+			'book_no' => 'required|max:60',
+			'book_date' => 'required',
+			'work_group' => 'required',
+		],[
+			'lab_no.required' => 'โปรดกรอกรหัสแลป',
+			// 'lab_no.unique' => 'รหัสแลปนี้มีอยู่แล้ว',
+			'report_due_date.required' => 'โปรดเลือกวันที่กำหนดส่งรายงาน',
+			'book_no.required' => 'โปรดกรอกเลขที่หนังสือนำส่ง',
 		]);
+
 		if (empty($request->session()->get(key: 'order'))) {
 			$order = OrderService::create();
 			$order->fill(attributes: $validated);
@@ -147,13 +158,19 @@ class SampleReceiveController extends Controller
 	}
 
 	protected function step02Post(Request $request) {
+		foreach ($request->sample_id as $val) {
+			$req['sample_verified_status_'.$val] = 'required';
+			$req['sample_received_status_'.$val] = 'required';
+		}
+		$validated = $request->validate($req);
+
 		$data = $request->toArray();
 		if (count($data['sample_id']) > 0) {
 			foreach ($data['sample_id'] as $value) {
 				$sample[$value]['id'] = $value;
 				$sample[$value]['sample_count'] = $data['sample_count_'.$value];
-				$sample[$value]['sample_verified_status_'.$value] = $data['sample_verified_status_'.$value];
-				$sample[$value]['sample_received_status_'.$value] = $data['sample_received_status_'.$value];
+				$sample[$value]['sample_verified_status_'.$value] = $data['sample_verified_status_'.$value] ?? null;
+				$sample[$value]['sample_received_status_'.$value] = $data['sample_received_status_'.$value] ?? null;
 			}
 		}
 
@@ -194,22 +211,26 @@ class SampleReceiveController extends Controller
 	protected function step03Post(Request $request) {
 		try {
 			$sample_result = $request->session()->get(key: 'sample_result');
-			DB::transaction(function() use ($sample_result) {
+			$order_arr = $request->session()->get(key: 'order')->toArray();
+			$order = OrderService::get($request->order_id);
+			$order->fill(attributes: $order_arr);
+			DB::transaction(function() use ($sample_result, $order) {
 				foreach ($sample_result as $key => $value) {
 					$order_sample = OrderService::findOrderSample($value['id']);
 					$order_sample->sample_verified_status = $value['sample_verified_status_'.$value['id']];
 					$order_sample->sample_received_status = $value['sample_received_status_'.$value['id']];
 					$order_sample->save();
 				}
+				$order->fill(attributes: ['order_status' => 'progress']);
+				$order->save();
 			});
-			$order = OrderService::get($request->order_id);
-			$order->order_status = 'progress';
-			$order->save();
 			return redirect()->route('sample.received.index')->with(key: 'success', value: 'บันทึกข้อมูลสำเร็จแล้ว !!');
+		} catch (OrderNotFoundException $e) {
+			report($e->getMessage());
+			return redirect()->back()->with(key: 'error', value: $e->getMessage());
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
+			return redirect()->route('sample.received.index')->with(key: 'error', value: $e->getMessage());
 		}
-
 	}
-
 }

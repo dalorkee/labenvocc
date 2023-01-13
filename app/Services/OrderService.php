@@ -18,7 +18,7 @@ class OrderService
 	}
 
 	public static function getOrderWithCount(array $relations = [], $year='0000') {
-		$order = Order::withCount(relations: $relations)->whereYear('created_at', $year);
+		$order = Order::withCount(relations: $relations)->whereYear('created_at', $year)->whereIn();
 		if (!$order) {
 			throw new InvalidOrderException(message: 'ไม่พบข้อมูล Order');
 		}
