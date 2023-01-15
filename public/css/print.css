@@ -1,0 +1,21 @@
+/* @font-face {
+	font-family: "Prompt";
+	src: url("{{ asset('fonts/prompt/fw100_latin.woff2') }}") format('woff2');
+	unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+	font-style: normal;
+	font-weight: 100;
+  } */
+@font-face {
+	font-family: "THsarabunNew";
+	src: url("{{ asset('fonts/THsarabunNew.ttf') }}") format('truetype');
+    unicode-range: U+0E00–U+0E7F;
+	font-weight: normal;
+	font-style: normal;
+}
+@font-face {
+	font-family: "DejaVuSansMono";
+	src: url("{{ asset('fonts/DejaVuSansMono.ttf') }}") format('truetype');
+    unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+	font-weight: normal;
+	font-style: normal;
+}

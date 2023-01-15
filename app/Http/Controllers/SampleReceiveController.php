@@ -10,8 +10,8 @@ use App\Services\OrderService;
 use App\Traits\{DateTimeTrait,CommonTrait};
 use App\Exceptions\{OrderNotFoundException,InvalidOrderException};
 use App\Models\{OrderSample,OrderReceived};
-// use App\DataTables\ReceivedExampleDataTable;
 use Yajra\DataTables\Facades\DataTables;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 
 class SampleReceiveController extends Controller
@@ -97,7 +97,7 @@ class SampleReceiveController extends Controller
 			"order_no_ref" => "required",
 			"order_type" => "required",
 			"order_type_name" => "required",
-			// 'lab_no' => 'required|unique:orders,lab_no|max:60',
+			'lab_no' => 'required|max:60',
 			'report_due_date' => 'required',
 			'type_of_work' => 'required',
 			'type_of_work_other' => 'nullable|max:90',
@@ -106,7 +106,6 @@ class SampleReceiveController extends Controller
 			'work_group' => 'required',
 		],[
 			'lab_no.required' => 'โปรดกรอกรหัสแลป',
-			// 'lab_no.unique' => 'รหัสแลปนี้มีอยู่แล้ว',
 			'report_due_date.required' => 'โปรดเลือกวันที่กำหนดส่งรายงาน',
 			'book_no.required' => 'โปรดกรอกเลขที่หนังสือนำส่ง',
 		]);
@@ -210,9 +209,10 @@ class SampleReceiveController extends Controller
 
 	protected function step03Post(Request $request) {
 		try {
+			$order_id = $request->order_id;
 			$sample_result = $request->session()->get(key: 'sample_result');
 			$order_arr = $request->session()->get(key: 'order')->toArray();
-			$order = OrderService::get($request->order_id);
+			$order = OrderService::get($order_id);
 			$order->fill(attributes: $order_arr);
 			DB::transaction(function() use ($sample_result, $order) {
 				foreach ($sample_result as $key => $value) {
@@ -224,7 +224,8 @@ class SampleReceiveController extends Controller
 				$order->fill(attributes: ['order_status' => 'progress']);
 				$order->save();
 			});
-			return redirect()->route('sample.received.index')->with(key: 'success', value: 'บันทึกข้อมูลสำเร็จแล้ว !!');
+			// return redirect()->route('sample.received.index')->with(key: 'success', value: 'บันทึกข้อมูลสำเร็จแล้ว !!');
+			return view('apps.staff.receive.step04', compact('order_id', 'order_arr'));
 		} catch (OrderNotFoundException $e) {
 			report($e->getMessage());
 			return redirect()->back()->with(key: 'error', value: $e->getMessage());
@@ -233,4 +234,15 @@ class SampleReceiveController extends Controller
 			return redirect()->route('sample.received.index')->with(key: 'error', value: $e->getMessage());
 		}
 	}
+
+	protected function print(Request $request) {
+        $order = OrderService::get($request->order_id)->toArray();
+		$print = Pdf::loadView('print.sample-receipt', $order);
+		return $print->download('patsri.pdf');
+	}
+
+
+    protected function printf(Request $request) {
+        return view('print.sample-receipt');
+    }
 }
