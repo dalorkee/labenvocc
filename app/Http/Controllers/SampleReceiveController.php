@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\{DB,Log};
 use App\Services\OrderService;
 use App\Traits\{DateTimeTrait,CommonTrait};
 use App\Exceptions\{OrderNotFoundException,InvalidOrderException};
-use App\Models\{OrderSample,OrderReceived};
+use App\Models\{Order,OrderSample,OrderReceived};
 use Yajra\DataTables\Facades\DataTables;
 use Barryvdh\DomPDF\Facade\Pdf;
 
@@ -236,13 +236,36 @@ class SampleReceiveController extends Controller
 	}
 
 	protected function print(Request $request) {
-        $order = OrderService::get($request->order_id)->toArray();
+		$order = OrderService::get($request->order_id)->toArray();
 		$print = Pdf::loadView('print.sample-receipt', $order);
 		return $print->download('patsri.pdf');
 	}
 
 
-    protected function printf(Request $request) {
-        return view('print.sample-receipt');
-    }
+	protected function printf(Request $request) {
+		//$order = Order::withCount(['orderSamples', 'parameters'])->whereId($request->order_id)->get()->toArray();
+		$order = Order::with(['orderSamples', 'parameters'])->whereId($request->order_id)->get();
+        // dd($order[0]->orderSamples);
+		//$order_sample = OrderSample::select('*')->whereOrder_id($request->order_id)->get()->toArray();
+
+		// dd($order[0]->parameters);
+		$parameters_count_deep = $order[0]->parameters->countBy(function($x) {
+			return $x->sample_character_id;
+		});
+		$parameters_count_deep->all();
+
+		$data = collect([
+            'order_id' => $request->order_id,
+			'lab_no' => $order[0]->lab_no,
+			'report_due_date' => $order[0]->report_due_date,
+			'type_of_work' => $order[0]->type_of_work,
+			'order_type' => $order[0]->order_type,
+			'order_samples_count' => $order[0]->orderSamples->count(),
+			'parameters_count' => $order[0]->parameters->count(),
+			'parameters_count_deep' => $parameters_count_deep
+
+		]);
+        dd($data);
+		return view('print.sample-receipt', compact('order'));
+	}
 }

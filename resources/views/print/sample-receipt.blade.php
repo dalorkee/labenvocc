@@ -36,11 +36,15 @@
 				<tr>
 					<td>
 						<div class="chk-box"><span class="chk-mark">{{ (!empty($order_type) && $order_type == 2) ? '✔' : '' }}</span></div>
-						สิ่งแวดล้อม: จำนวน <span class="border-bottom">10</span> ตัวอย่าง <span class="border-bottom">30</span> พารามิเตอร์
+						สิ่งแวดล้อม: จำนวน&nbsp;
+						<span class="border-bottom">{{ (!empty($order_type) && $order_type == 2) ? $order_samples_count : $order[0]['order_samples_count'] }}</span> ตัวอย่าง&nbsp;
+						<span class="border-bottom">{{ (!empty($order_type) && $order_type == 2) ? $parameters_count : $order[0]['parameters_count'] }}</span> พารามิเตอร์
 					</td>
 					<td>
 						<div class="chk-box"><span class="chk-mark">{{ (!empty($order_type) && $order_type == 1) ? '✔' : '' }}</span></div>
-						ชีวภาพ: จำนวน  <span class="border-bottom">20</span> ตัวอย่าง  <span class="border-bottom">60</span> พารามิเตอร์
+						ชีวภาพ: จำนวน&nbsp;
+						<span class="border-bottom">{{ (!empty($order_type) && $order_type == 1) ? $order_samples_count : $order[0]['order_samples_count'] }}</span> ตัวอย่าง&nbsp;
+						<span class="border-bottom">{{ (!empty($order_type) && $order_type == 1) ? $parameters_count : $order[0]['parameters_count'] }}</span> พารามิเตอร์
 					</td>
 				</tr>
 				<tr>
@@ -50,7 +54,7 @@
 				<tr>
 					<td>
 						<div class="chk-box"><span class="chk-mark">{{ (!empty($order_type) && $order_type == 1) ? '✔' : '' }}</span></div>
-						<div class="d-inline-block m-0 p-0">ตลับอากาศ จำนวน: 10</div>
+						<div class="d-inline-block m-0 p-0">ตลับอากาศ จำนวน: {{ $data->parameters_count_deep[2] }}</div>
 						<div class="mt-n10 p-0">Parameter: 50</div>
 					</td>
 					<td>
@@ -118,7 +122,7 @@
 							<div class="d-inline-block w-50">ชื่อผู้ติดต่อกรณีเกิดปัญหา นายกำปุ่น ยกยอ</div>
 							<div class="d-inline-block w-30">โทร. 09-9855-1222</div>
 						</div>
-                        <div class="w-100 mt-n10 pb-4">เรื่องแจ้ง โปรดกรอกข้อตกลงการใช้สารเคมีอันตรายด่วน</div>
+						<div class="w-100 mt-n10 pb-4">เรื่องแจ้ง โปรดกรอกข้อตกลงการใช้สารเคมีอันตรายด่วน</div>
 					</td>
 				</tr>
 				<tr>
