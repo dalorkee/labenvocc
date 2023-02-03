@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\{DB,Log};
 use App\Services\OrderService;
-use App\Traits\{DateTimeTrait,CommonTrait};
+use App\Traits\{DateTimeTrait,CommonTrait,DbBoundaryTrait};
 use App\Exceptions\{OrderNotFoundException,InvalidOrderException};
 use App\Models\{Order,OrderSample,OrderReceived};
 use Yajra\DataTables\Facades\DataTables;
@@ -16,7 +16,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class SampleReceiveController extends Controller
 {
-	use DateTimeTrait, CommonTrait;
+	use DateTimeTrait, CommonTrait, DbBoundaryTrait;
 
 	/**
 	* Show the index page
@@ -243,29 +243,47 @@ class SampleReceiveController extends Controller
 
 
 	protected function printf(Request $request) {
+		$user_prov = $this->provinceNameByProvId(auth()->user()->userCustomer->province) ?? '';
+		$user_dist = $this->districtNameByDistId(auth()->user()->userCustomer->district) ?? '';
+		$user_sub_dist = $this->subDistrictNameBySubDistId(auth()->user()->userCustomer->sub_district) ?? '';
+		// dd(auth()->user()->userCustomer->address);
 		//$order = Order::withCount(['orderSamples', 'parameters'])->whereId($request->order_id)->get()->toArray();
 		$order = Order::with(['orderSamples', 'parameters'])->whereId($request->order_id)->get();
-        // dd($order[0]->orderSamples);
+		//dd($order);
+		// dd($order[0]->orderSamples);
 		//$order_sample = OrderSample::select('*')->whereOrder_id($request->order_id)->get()->toArray();
 
 		// dd($order[0]->parameters);
-		$parameters_count_deep = $order[0]->parameters->countBy(function($x) {
-			return $x->sample_character_id;
-		});
+		$parameters_count_deep = $order[0]->parameters->countBy(fn($q) => $q->sample_character_id);
 		$parameters_count_deep->all();
 
+		// dd($parameters_count_deep);
+
 		$data = collect([
-            'order_id' => $request->order_id,
+			'order_id' => $request->order_id,
 			'lab_no' => $order[0]->lab_no,
 			'report_due_date' => $order[0]->report_due_date,
 			'type_of_work' => $order[0]->type_of_work,
 			'order_type' => $order[0]->order_type,
 			'order_samples_count' => $order[0]->orderSamples->count(),
 			'parameters_count' => $order[0]->parameters->count(),
-			'parameters_count_deep' => $parameters_count_deep
+			'parameters_count_deep' => $parameters_count_deep->toArray(),
+			'origin_threat_id' => $order[0]->orderSamples[0]->origin_threat_id,
+			'customer_agency_name' => $order[0]->customer_agency_name,
+			'customer_address' => auth()->user()->userCustomer->address.' ต.'.$user_sub_dist.' อ.'.$user_dist.' จ.'.$user_prov.' '.auth()->user()->userCustomer->postcode,
+			'customer_mobile' => auth()->user()->userCustomer->mobile,
+			'deliver_method' => $order[0]->deliver_method,
+			'book_no' => $order[0]->book_no,
+			'book_date' => $order[0]->book_date,
+			'first_name' => auth()->user()->userCustomer->first_name,
+			'last_name' => auth()->user()->userCustomer->last_name,
+			'mobile' => auth()->user()->userCustomer->mobile,
+			'order_created_at' => substr($this->convertMySQLDateTimeToJs($order[0]->created_at), 0, 10),
+			'contact_addr_opt' => auth()->user()->userCustomer->contact_addr_opt,
 
 		]);
-        dd($data);
-		return view('print.sample-receipt', compact('order'));
+		// dd($data);
+
+		return view('print.sample-receipt', compact('data'));
 	}
 }

@@ -35,8 +35,11 @@ class Order extends Model
 		'order_status',
 		'lab_no',
 		'report_due_date',
+		'deliver_method',
+		'deliver_book_no',
+		'deliver_book_date',
+		'report_result_receive_method',
 	];
-	//protected $appends = ['book_date_js'];
 
 	public function orderSamples() {
 		return $this->hasMany(related: OrderSample::class);
