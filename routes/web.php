@@ -15,6 +15,7 @@ use App\Http\Controllers\{
 	SampleUploadController,
 	HospitalController,
 	PrintBundleController,
+    FetchDataController,
 };
 use App\Http\Controllers\Admin\{
 	AdminController,
@@ -92,6 +93,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 		'users' => UsersController::class,
 		'advertise' => AdvertiseController::class,
 		'sampleupload' => SampleUploadController::class,
+        'fetchdata' => FetchDataController::class,
 	]);
 	Route::get('/dashboard', fn() => view('dashboard'))->name('dashboard');
 	Route::name('boundary.')->controller(BoundaryController::class)->group(function() {

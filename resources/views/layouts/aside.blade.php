@@ -114,6 +114,12 @@
 						<span class="nav-link-text">งานทำลายตัวอย่าง</span>
 					</a>
 				</li>
+                <li>
+					<a href="{{ route('fetchdata.index') }}" title="ดึงข้อมูล" data-filter-tags="fetchdata">
+						<i class="fal fa-database"></i>
+						<span class="nav-link-text">ดึงข้อมูล</span>
+					</a>
+				</li>
 				@break
 			@case('root')
 			@case('admin')
