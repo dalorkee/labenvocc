@@ -236,28 +236,17 @@ class SampleReceiveController extends Controller
 	}
 
 	protected function print(Request $request) {
-		$order = OrderService::get($request->order_id)->toArray();
-		$print = Pdf::loadView('print.sample-receipt', $order);
-		return $print->download('patsri.pdf');
-	}
 
+		$order = Order::with(['orderSamples', 'parameters'])->whereId($request->order_id)->get();
 
-	protected function printf(Request $request) {
 		$user_prov = $this->provinceNameByProvId(auth()->user()->userCustomer->province) ?? '';
 		$user_dist = $this->districtNameByDistId(auth()->user()->userCustomer->district) ?? '';
 		$user_sub_dist = $this->subDistrictNameBySubDistId(auth()->user()->userCustomer->sub_district) ?? '';
-		// dd(auth()->user()->userCustomer->address);
-		//$order = Order::withCount(['orderSamples', 'parameters'])->whereId($request->order_id)->get()->toArray();
-		$order = Order::with(['orderSamples', 'parameters'])->whereId($request->order_id)->get();
-		//dd($order);
-		// dd($order[0]->orderSamples);
-		//$order_sample = OrderSample::select('*')->whereOrder_id($request->order_id)->get()->toArray();
-
-		// dd($order[0]->parameters);
+		$contact_user_prov = $this->provinceNameByProvId(auth()->user()->userCustomer->contact_province) ?? '';
+		$contact_user_dist = $this->districtNameByDistId(auth()->user()->userCustomer->contact_district) ?? '';
+		$contact_user_sub_dist = $this->subDistrictNameBySubDistId(auth()->user()->userCustomer->contact_sub_district) ?? '';
 		$parameters_count_deep = $order[0]->parameters->countBy(fn($q) => $q->sample_character_id);
 		$parameters_count_deep->all();
-
-		// dd($parameters_count_deep);
 
 		$data = collect([
 			'order_id' => $request->order_id,
@@ -278,12 +267,99 @@ class SampleReceiveController extends Controller
 			'first_name' => auth()->user()->userCustomer->first_name,
 			'last_name' => auth()->user()->userCustomer->last_name,
 			'mobile' => auth()->user()->userCustomer->mobile,
+			'contact_first_name' => auth()->user()->userCustomer->first_name,
+			'contact_last_name' => auth()->user()->userCustomer->last_name,
+			'contact_mobile' => auth()->user()->userCustomer->mobile,
+			'contact_address'=> auth()->user()->userCustomer->address.' ต.'.$contact_user_sub_dist.' อ.'.$contact_user_dist.' จ.'.$contact_user_prov.' '.auth()->user()->userCustomer->contact_postcode,
 			'order_created_at' => substr($this->convertMySQLDateTimeToJs($order[0]->created_at), 0, 10),
 			'contact_addr_opt' => auth()->user()->userCustomer->contact_addr_opt,
-
+			'report_result_receive_method' => $order[0]->report_result_receive_method,
+			'sample_sumary' => $request->session()->get(key: 'sample_sumary'),
+			'sample_verify_desc' => $order[0]->sample_verify_desc,
+			'received_order_name' => $order[0]->received_order_name,
+			'received_order_date' => $order[0]->received_order_date,
+			'review_order_name' => $order[0]->review_order_name,
+			'review_order_date' => $order[0]->review_order_date,
 		]);
-		// dd($data);
+		switch($data['contact_addr_opt']) {
+			case "1":
+				$data->put('report_result_receive_first_name', $data['first_name']);
+				$data->put('report_result_receive_last_name', $data['last_name']);
+				$data->put('report_result_receive_mobile', $data['mobile']);
+				$data->put('report_result_receive_addr', $data['customer_address']);
+				break;
+			case "2":
+				$data->put('report_result_receive_first_name', $data['contact_first_name']);
+				$data->put('report_result_receive_last_name', $data['contact_last_name']);
+				$data->put('report_result_receive_mobile', $data['contact_mobile']);
+				$data->put('report_result_receive_addr', $data['contact_address']);
+				break;
+		}
+        $data = $data->all();
+		$print = Pdf::loadView('print.sample-receipt', $data);
+		return $print->download('patsri.pdf');
+	}
 
+
+	protected function printf(Request $request) {
+		$order = Order::with(['orderSamples', 'parameters'])->whereId($request->order_id)->get();
+
+		$user_prov = $this->provinceNameByProvId(auth()->user()->userCustomer->province) ?? '';
+		$user_dist = $this->districtNameByDistId(auth()->user()->userCustomer->district) ?? '';
+		$user_sub_dist = $this->subDistrictNameBySubDistId(auth()->user()->userCustomer->sub_district) ?? '';
+		$contact_user_prov = $this->provinceNameByProvId(auth()->user()->userCustomer->contact_province) ?? '';
+		$contact_user_dist = $this->districtNameByDistId(auth()->user()->userCustomer->contact_district) ?? '';
+		$contact_user_sub_dist = $this->subDistrictNameBySubDistId(auth()->user()->userCustomer->contact_sub_district) ?? '';
+		$parameters_count_deep = $order[0]->parameters->countBy(fn($q) => $q->sample_character_id);
+		$parameters_count_deep->all();
+
+		$data = collect([
+			'order_id' => $request->order_id,
+			'lab_no' => $order[0]->lab_no,
+			'report_due_date' => $order[0]->report_due_date,
+			'type_of_work' => $order[0]->type_of_work,
+			'order_type' => $order[0]->order_type,
+			'order_samples_count' => $order[0]->orderSamples->count(),
+			'parameters_count' => $order[0]->parameters->count(),
+			'parameters_count_deep' => $parameters_count_deep->toArray(),
+			'origin_threat_id' => $order[0]->orderSamples[0]->origin_threat_id,
+			'customer_agency_name' => $order[0]->customer_agency_name,
+			'customer_address' => auth()->user()->userCustomer->address.' ต.'.$user_sub_dist.' อ.'.$user_dist.' จ.'.$user_prov.' '.auth()->user()->userCustomer->postcode,
+			'customer_mobile' => auth()->user()->userCustomer->mobile,
+			'deliver_method' => $order[0]->deliver_method,
+			'book_no' => $order[0]->book_no,
+			'book_date' => $order[0]->book_date,
+			'first_name' => auth()->user()->userCustomer->first_name,
+			'last_name' => auth()->user()->userCustomer->last_name,
+			'mobile' => auth()->user()->userCustomer->mobile,
+			'contact_first_name' => auth()->user()->userCustomer->first_name,
+			'contact_last_name' => auth()->user()->userCustomer->last_name,
+			'contact_mobile' => auth()->user()->userCustomer->mobile,
+			'contact_address'=> auth()->user()->userCustomer->address.' ต.'.$contact_user_sub_dist.' อ.'.$contact_user_dist.' จ.'.$contact_user_prov.' '.auth()->user()->userCustomer->contact_postcode,
+			'order_created_at' => substr($this->convertMySQLDateTimeToJs($order[0]->created_at), 0, 10),
+			'contact_addr_opt' => auth()->user()->userCustomer->contact_addr_opt,
+			'report_result_receive_method' => $order[0]->report_result_receive_method,
+			'sample_sumary' => $request->session()->get(key: 'sample_sumary'),
+			'sample_verify_desc' => $order[0]->sample_verify_desc,
+			'received_order_name' => $order[0]->received_order_name,
+			'received_order_date' => $order[0]->received_order_date,
+			'review_order_name' => $order[0]->review_order_name,
+			'review_order_date' => $order[0]->review_order_date,
+		]);
+		switch($data['contact_addr_opt']) {
+			case "1":
+				$data->put('report_result_receive_first_name', $data['first_name']);
+				$data->put('report_result_receive_last_name', $data['last_name']);
+				$data->put('report_result_receive_mobile', $data['mobile']);
+				$data->put('report_result_receive_addr', $data['customer_address']);
+				break;
+			case "2":
+				$data->put('report_result_receive_first_name', $data['contact_first_name']);
+				$data->put('report_result_receive_last_name', $data['contact_last_name']);
+				$data->put('report_result_receive_mobile', $data['contact_mobile']);
+				$data->put('report_result_receive_addr', $data['contact_address']);
+				break;
+		}
 		return view('print.sample-receipt', compact('data'));
 	}
 }
