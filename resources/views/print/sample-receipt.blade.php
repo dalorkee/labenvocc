@@ -172,14 +172,18 @@
 				<tr>
 					<td colspan="2">
 						<span class="d-inline-block underline mr-40">ผลการตรวจสอบสภาพตัวอย่าง</span>
-						<div class="w-100 pt-4">
-							<div class="d-inline-block mr-40">สภาพตัวอย่าง</div>
-							<div class="d-inline-block mr-40 mt-8">
+						<div class="w-100 pt-4" style="height: 96px; position: relative;">
+							<div style="position: absolute; top: 12px; left: 2px">สภาพตัวอย่าง</div>
+							<div style="position: absolute; top: 20px; left: 120px;">
 								<div class="chk-box"><span class="chk-mark">{{ ($sample_sumary['sample_completed'] > 0) ? '✔' : '' }} </span></div><span style="display: inline-block; margin-right: 22px; width: 120px;">&nbsp;สมบูรณ์:</span>
+							</div>
+							<div style="position: absolute; top: 16px; left: 220px;">
 								<span>จำนวน {{ $sample_sumary['sample_completed'] }} ตัวอย่าง {{ $sample_sumary['sample_completed_amount'] }} พารามิเตอร์</span>
 							</div>
-							<div style="padding: 0 0 4px 100px;">
+							<div style="position: absolute; top: 44px; left: 120px;">
 								<div class="chk-box"><span class="chk-mark">{{ ($sample_sumary['sample_not_completed'] > 0) ? '✔' : '' }} </span></div><span style="display: inline-block; margin-right: 22px; width: 120px;">&nbsp;ไม่สมบูรณ์:</span>
+							</div>
+							<div style="position: absolute; top: 42px; left: 220px;">
 								<span>จำนวน {{ $sample_sumary['sample_not_completed'] }} ตัวอย่าง {{ $sample_sumary['sample_not_completed_amount'] }} พารามิเตอร์ (ปฎิเสธการรับตัวอย่าง)</span>
 							</div>
 						</div>
