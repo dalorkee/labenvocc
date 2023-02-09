@@ -38,7 +38,8 @@ class SampleReceiveController extends Controller
 			$request->session()->forget(keys: 'sample_sumary');
 
 			/* begin query */
-			$orders = OrderService::getOrderwithCount(relations: ['orderSamples', 'parameters'], year: '2022');
+			$order_year = (date('Y')-1);
+			$orders = OrderService::getOrderwithCount(relations: ['orderSamples', 'parameters'], order_year: $order_year, order_status: 'pending');
 			return Datatables::of($orders)
 				->addColumn('total', fn ($order) => $order->order_samples_count.'/'.$order->parameters_count)
 				->editColumn('order_confirmed', fn($order) => $this->setJsDateTimeToJsDate($order->order_confirmed))
@@ -295,7 +296,7 @@ class SampleReceiveController extends Controller
 				$data->put('report_result_receive_addr', $data['contact_address']);
 				break;
 		}
-        $data = $data->all();
+		$data = $data->all();
 		$print = Pdf::loadView('print.sample-receipt', $data);
 		return $print->download('patsri.pdf');
 	}

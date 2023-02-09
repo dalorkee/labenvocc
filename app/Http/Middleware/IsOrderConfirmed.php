@@ -23,7 +23,7 @@ class IsOrderConfirmed
 	}
 
 	private function isOrderConfirmed($order_id): bool {
-		$order = Order::select('id')->whereId($order_id)->whereNotNull('order_confirmed')->count();
+		$order = Order::select('id')->whereId($order_id)->whereNotNull('order_confirmed_date')->count();
 		if ($order > 0) {
 			return true;
 		} else {
