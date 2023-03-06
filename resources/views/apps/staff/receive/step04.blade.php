@@ -78,7 +78,7 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 						<div class="form-row">
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
 								<a href="{{ route('sample.received.print', ['order_id' => $order_id]) }}" class="btn btn-info ml-auto"> <i class="fal fa-print"></i> พิมพ์</a>
-								<button type="button" class="btn btn-warning ml-auto" id="btn_submit"><i class="fal fa-home"></i> กลับหน้าแรก</button>
+								<a href="{{ route('sample.received.index') }}" type="button" class="btn btn-warning ml-auto"><i class="fal fa-home"></i> กลับหน้าแรก</a>
 							</div>
 						</div>
 					</div>
@@ -93,28 +93,28 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 <script type="text/javascript">
 $(document).ready(function() {
 	$.ajaxSetup({headers:{'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')}});
-	$('#btn_submit').click(function(e) {
-		 e.preventDefault();
-		let $form = $('form#received_step03_frm');
-	 	Swal.fire({
-	 		type: "warning",
-	 		title: "<span class='text-danger'>ยืนยันบันทึกข้อมูล</span>",
-	 		html: "<span class='text-primary'>โปรดตรวจสอบข้อมูลให้ถูกต้องเสมอ </span> <p class='text-danger'>ต้องการการบันทึกข้อมูลใช่หรือไม่ ?</p>" ,
-	 		showCancelButton: true,
-	 		cancelButtonColor: '#dd3333',
-	 		cancelButtonText: "ยกเลิก",
-			confirmButtonColor: '#3085d6',
-	 		confirmButtonText: "ตกลง",
-	 		footer: "Lab Env-Occ",
-	 		allowOutsideClick: false
-	 	}).then((result) => {
- 	 		if (result.value == true) {
-				 $form.submit();
-	 		} else {
-	 			return false;
-	 		}
-	 	});
-	 });
+	// $('#btn_submit').click(function(e) {
+	// 	 e.preventDefault();
+	// 	let $form = $('form#received_step03_frm');
+	//  	Swal.fire({
+	//  		type: "warning",
+	//  		title: "<span class='text-danger'>ยืนยันบันทึกข้อมูล</span>",
+	//  		html: "<span class='text-primary'>โปรดตรวจสอบข้อมูลให้ถูกต้องเสมอ </span> <p class='text-danger'>ต้องการการบันทึกข้อมูลใช่หรือไม่ ?</p>" ,
+	//  		showCancelButton: true,
+	//  		cancelButtonColor: '#dd3333',
+	//  		cancelButtonText: "ยกเลิก",
+	// 		confirmButtonColor: '#3085d6',
+	//  		confirmButtonText: "ตกลง",
+	//  		footer: "Lab Env-Occ",
+	//  		allowOutsideClick: false
+	//  	}).then((result) => {
+ 	//  		if (result.value == true) {
+	// 			 $form.submit();
+	//  		} else {
+	//  			return false;
+	//  		}
+	//  	});
+	//  });
 });
 </script>
 @endpush

@@ -567,13 +567,13 @@ class CustomerController extends Controller
 		}
 	}
 
-	#[Setup]
+	/* Setup for prefix zero */
 	private function setOrderNo(string $prefix, int $order_id): string {
 		$tmp = sprintf("%04d", $order_id);
 		return $prefix.$tmp;
 	}
 
-	#[Setup]
+	/* Setup Reference order number */
 	private function setOrderNoRef(string $prefix): string {
 		$char = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 		$length = 8;

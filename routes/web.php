@@ -15,7 +15,7 @@ use App\Http\Controllers\{
 	SampleUploadController,
 	HospitalController,
 	PrintBundleController,
-    FetchDataController,
+	FetchDataController,
 };
 use App\Http\Controllers\Admin\{
 	AdminController,
@@ -93,7 +93,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 		'users' => UsersController::class,
 		'advertise' => AdvertiseController::class,
 		'sampleupload' => SampleUploadController::class,
-        'fetchdata' => FetchDataController::class,
+		'fetchdata' => FetchDataController::class,
 	]);
 	Route::get('/dashboard', fn() => view('dashboard'))->name('dashboard');
 	Route::name('boundary.')->controller(BoundaryController::class)->group(function() {
@@ -150,6 +150,10 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 
 			Route::get('/received/order/{order_id}/print', 'print')->name('received.print');
 			Route::get('/received/order/{order_id}/printf', 'printf')->name('received.printf');
+
+			Route::get('/received/order/lab/no/search', 'searchOrderSampleByLabNo')->name('search.by.lab.no');
+			Route::get('/received/order/test/no/create', 'createTestNo')->name('received.test.no.create');
+			Route::post('/received/order/test/no/set', 'setTestNo')->name('received.test.no.set');
 
 
 		});

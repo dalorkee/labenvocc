@@ -41,6 +41,7 @@ class Order extends Model
 		'report_due_date',
 		'report_result_receive_method',
 		'sample_verify_desc',
+		'receipt_status',
 	];
 
 	public function orderSamples() {

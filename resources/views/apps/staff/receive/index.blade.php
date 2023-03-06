@@ -80,7 +80,7 @@ $(document).ready(function() {
 			{data: 'id', name: 'id', width: "5%"},
 			{data: 'order_no', name: 'order_no'},
 			{data: 'customer_agency_name', name: 'customer_agency_name'},
-			{data: 'order_confirmed', name: 'order_confirmed'},
+			{data: 'order_confirmed_date', name: 'order_confirmed_date'},
 			{data: 'user_id', name: 'user_id'},
 			{data: 'total', name: 'total'},
 			{data: 'action', name: 'action', className: 'text-center'},

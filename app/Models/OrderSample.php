@@ -45,6 +45,7 @@ class OrderSample extends Model
 		'has_parameter',
 		'sample_verified_status',
 		'sample_received_status',
+        'sample_test_no',
 	];
 	// protected $appends = ['sample_date_in_js'];
 

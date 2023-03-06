@@ -43,6 +43,10 @@ return [
 			'driver' => 'local',
 			'root' => public_path(). '/qrcode',
 		],
+        'receipt' => [
+			'driver' => 'local',
+			'root' => public_path(). '/receipt',
+		],
 		'export' => [
 			'driver' => 'local',
 			'root' => public_path(). '/exports',

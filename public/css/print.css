@@ -14,6 +14,7 @@
 	font-style: normal;
 }
 * {box-sizing:border-box;-moz-box-sizing:border-box;font-family:"THsarabunNew",sans-serif}
+h1,h2,h3,h4,h5,h6 {font-family:"THsarabunNew",sans-serif}
  body{width:100%;height:100%;margin:0;padding:0;background-color:#fff;font-family: "THsarabunNew", sans-serif; font-size:.90em}
  table {
 	width: 100%;
@@ -85,6 +86,8 @@ table tr td {
 .m-4 {margin: 4px}
 .mt-4 {margin-top: 4px}
 .mt-8 {margin-top: 8px}
+.mt-20 {margin-top: 20px}
+.mt-40 {margin-top: 40px}
 .mt-n4 {margin: -4px 0 0 0}
 .mt-n6 {margin: -6px 0 0 0}
 .mt-n10 {margin: -10px 0 0 0}
@@ -115,8 +118,17 @@ table tr td {
 }
 .h-20 {height: 20px}
 .lh-20 {line-height: 20px}
-.table-vertical-middle {
-	vertical-align: middle;
-}
+.table-vertical-middle {vertical-align: middle;}
 
+.page1:after, .page2:after {
+	content: "";
+	display: block;
+	clear: both
+}
+.page2 {margin-top: 100px}
+.page2-header,.customer-id, .customer-lab-no, .customer-sign, .bank-form {position: relative}
+.page2-header span {position: absolute; top: 24px; right: 0; display:inline-block}
+.page2-header p {margin: 0; padding: 0; height: 1.1em; line-height: 1.1em}
+.customer-id, .customer-lab-no {width: 100%; height: 50px;}
+.customer-condition {width: 100%; margin: 20px 0 0 0; padding: 2px}
 

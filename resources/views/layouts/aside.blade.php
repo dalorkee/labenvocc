@@ -90,11 +90,23 @@
 						<span class="nav-link-text">หน้าหลัก</span>
 					</a>
 				</li>
-                <li class="{{ (Request::is('*sample/receive*'))  ? 'active' : '' }}">
-					<a href="{{ route('sample.received.index') }}" title="งานรับตัวอย่าง" data-filter-tags="example">
+				<li class="{{ (Request::is('*sample/received*'))  ? 'active open' : '' }}">
+					<a href="#" title="งานรับตัวอย่าง" data-filter-tags="receive">
 						<i class="fal fa-cube"></i>
-                        <span class="nav-link-text">งานรับตัวอย่าง</span>
+						<span class="nav-link-text">งานรับตัวอย่าง</span>
 					</a>
+					<ul>
+						<li class="{{ (Request::is('*sample/received'))  ? 'active' : '' }}">
+							<a href="{{ route('sample.received.index') }}" title="รับตัวอย่าง" data-filter-tags="sample_receive">
+								<span class="nav-link-text" data-i18n="nav.plugins_plugins_faq">รับตัวอย่าง</span>
+							</a>
+						</li>
+                        <li class="{{ (Request::is('*sample/received/order/test/no/*'))  ? 'active' : '' }}">
+							<a href="{{ Route('sample.received.test.no.create') }}" title="กำหนดหมายเลขทดสอบ" data-filter-tags="sample_receive">
+								<span class="nav-link-text" data-i18n="nav.plugins_plugins_faq">กำหนดหมายเลขทดสอบ</span>
+							</a>
+						</li>
+					</ul>
 				</li>
 				<li>
 					<a href="#" title="งานตรวจวิเคราะห์" data-filter-tags="verify">
@@ -114,7 +126,7 @@
 						<span class="nav-link-text">งานทำลายตัวอย่าง</span>
 					</a>
 				</li>
-                <li>
+				<li>
 					<a href="{{ route('fetchdata.index') }}" title="ดึงข้อมูล" data-filter-tags="fetchdata">
 						<i class="fal fa-database"></i>
 						<span class="nav-link-text">ดึงข้อมูล</span>

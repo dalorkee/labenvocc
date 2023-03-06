@@ -1,10 +1,10 @@
 @extends('layouts.print.index')
 @section('token')<meta name="csrf-token" content="{{ csrf_token() }}">@endsection
 @section('style')
-<link rel="stylesheet" type="text/css" href="{{ URL::asset('css/print.css') }}" media="screen, print">
+<link rel="stylesheet" type="text/css" href="{{ URL::asset('css/print.css?v=1.0') }}" media="screen, print">
 @endsection
 @section('content')
-	<div class="page">
+	<div class="page1">
 		<form name="printFrm">
 			<table>
 				<caption>ศูนย์อ้างอิงทางห้องปฏิบัติการและพิษวิทยา กองโรคจากการประกอบอาชีพและสิ่งแวดล้อม</caption>
@@ -208,7 +208,92 @@
 				<div class="d-inline-block"><span class="d-inline-block" style="width: 60px">หมายเหตุ:</span> 1. ลูกค้า จะทราบผลการตรวจวิเคราะห์ ด้วยอัตราไม่เกิน 15 วันทำการ ต่อ 50 ตัวอย่าง</div>
 				<div class="d-inline-block mt-n4"><span class="d-inline-block" style="width: 60px">&nbsp;</span> 2. ศูนย์อ้างอิงฯ จะเก็บรักษาตัวอย่างไว้หลังจากทดสอบเสร็จสิ้นแล้ว 45 วัน ยกเว้นตัวอย่างอากาศ</div>
 			</div>
-			<div style="float: right; padding-rignt: 10px;">FM-701-01 Rev.00</div>
+			<div class="page1-foot-name" style="float: right; padding-rignt: 10px;">FM-701-01 Rev.00</div>
+
+			<div class="page2">
+				<div class="w-100 page2-header">
+					<div style="text-align:center;font-size:1.10em;border-bottom:1px solid #bbb">ใบแจ้งการชำระเงินผ่านทางธนาคาร</div>
+					<span>(สำหรับลูกค้า)</span>
+					<div class="mt-8 w-100 text-center">
+						<p>กองโรคจากการประกอบอาชีพและสิ่งแวดล้อม</p>
+						<p>ศูนย์อ้างอิงทางห้องปฏิบัติการและพิษวิทยา</p>
+						<p>(COMPANY CODE = 92134)</p>
+					</div>
+				</div>
+				<div class="w-100 page2-customer-data mt-40">
+					<div class="customer-name">
+						<p class="m-0 p-0" style="height: 1em; line-height: 1em">ชื่อ/หน่วยงาน</p>
+						<p class="m-0 p-0" style="height: 1em; line-height: 1em">(ใบเสร็จรับเงินจะออกตามชื่อข้างบน กรุณาแก้ไขถ้าไม่ถูกต้อง และรับชำระเฉพาะเงินสด/แคชเชียร์เช็ค)</p>
+					</div>
+					<div class="customer-id mt-8">
+						<div style="position:absolute; top:5px; left:4px">Reference No.1: รหัสลูกค้า</div>
+						<div style="position:absolute; top:14px; left:150px; width:20px; height:18px; line-height: 10px; margin:0; padding:0; text-align: center; border:1px solid black;">{{ $user_id_arr[0] }}</div>
+						<div style="position:absolute; top:14px; left:174px; width:20px; height:18px; line-height: 10px; margin:0; padding:0; text-align: center; border:1px solid black;">{{ $user_id_arr[1] }}</div>
+						<div style="position:absolute; top:14px; left:198px; width:20px; height:18px; line-height: 10px; margin:0; padding:0; text-align: center; border:1px solid black;">{{ $user_id_arr[2] }}</div>
+						<div style="position:absolute; top:14px; left:222px; width:20px; height:18px; line-height: 10px; margin:0; padding:0; text-align: center; border:1px solid black;">{{ $user_id_arr[3] }}</div>
+						<div style="position:absolute; top:30px; left: 150px">(รหัสลูกค้า 4 หลัก)</div>
+					</div>
+					<div class="customer-lab-no mt-8">
+						<div style="position:absolute; top:5px; left:4px">Reference No.2: Lab No.</div>
+						<div style="position:absolute; top:14px; left:150px; width:20px; height:18px; line-height: 10px; margin:0; padding:0; text-align: center; border:1px solid black;">{{ $lab_no_arr[0] }}</div>
+						<div style="position:absolute; top:14px; left:174px; width:20px; height:18px; line-height: 10px; margin:0; padding:0; text-align: center; border:1px solid black;">{{ $lab_no_arr[1] }}</div>
+						<div style="position:absolute; top:14px; left:198px; width:20px; height:18px; line-height: 10px; margin:0; padding:0; text-align: center; border:1px solid black;">{{ $lab_no_arr[2] }}</div>
+						<div style="position:absolute; top:14px; left:222px; width:20px; height:18px; line-height: 10px; margin:0; padding:0; text-align: center; border:1px solid black;">{{ $lab_no_arr[3] }}</div>
+						<div style="position:absolute; top:14px; left:246px; width:20px; height:18px; line-height: 10px; margin:0; padding:0; text-align: center; border:1px solid black;">{{ $lab_no_arr[4] }}</div>
+						<div style="position:absolute; top:14px; left:270px; width:20px; height:18px; line-height: 10px; margin:0; padding:0; text-align: center; border:1px solid black;">{{ $lab_no_arr[5] }}</div>
+						<div style="position:absolute; top:14px; left:294px; width:20px; height:18px; line-height: 10px; margin:0; padding:0; text-align: center; border:1px solid black;">{{ $lab_no_arr[6] }}</div>
+						<div style="position:absolute; top:30px; left: 150px">(ลำดับที่ของการรับตัวอย่าง 5 หลัก/ปีงบประมาณ 2 หลัก)</div>
+					</div>
+					<div class="customer-condition">
+						<div><span style="border-bottom:1px solid #bbb;">ข้อปฏิบัติและเงื่อนไขในการชำระเงินค่าบริการฯ</span></div>
+						<p style="margin:0; padding:0 20px;">1. ตรวจสอบข้อมูลในใบแจ้งการชำระเงินให้ถูกต้อง และนำไปติดต่อชำระเงินที่ธนาคารกรุงไทย จำกัด (มหาชน) ได้ทุกสาขาทั่วประเทศทางช่องทางเคาน์เตอร์ (รับชำระเฉพาะเงินสด/ แคชเชียร์เช็ค)</p>
+						<p style="margin:0; padding:0 20px;">2. ผู้ชำระเป็นผู้รับผิดชอบค่าธรรมเนียมในการโอนในอัตรา 25 บาทต่อรายการ สำหรับวงเงินไม่เกิน 50,000 บาท ถ้าเกินวงเงินที่กำหนดทางธนาคารจะคิดส่วนเกินในอัตราร้อยละ 0.1 แต่ไม่เกิน 1,000 บาท</p>
+						<p style="margin:0; padding:0 20px;">3. ผู้ชำระจะต้องนำใบเสร็จรับเงินสำหรับราชการ (แถบสีส้ม รหัส ENG 004721) ชำระเงินที่ธนาคาร ซึ่งสามารถใช้แทนใบเสร็จรับเงินจาก ศูนย์อ้างอิงทางห้องปฏิบัติการฯ กองโรคจากการประกอบอาชีพฯ ได้ (หนังสืออนุมัติกรมบัญชีกลาง ที่ กค 00427/22268 ลงวันที่ 14 ตุลาคม 2558)</p>
+						<p style="margin:0; padding:0 20px;">4. กรณีมีเหตุขัดข้องไม่สามารถโอนเงินได้ ติดต่อสอบถามได้ที่ สำนักงานใหญ่ ธ.กรุงไทย หมายเลข 02-208-8528, 02-208-7495 ในเวลาทำการ หรือ ศูนย์อ้างอิงทางห้องปฏิบัติการและพิษวิทยา หมายเลข 02-968-7633</p>
+					</div>
+					<div class="customer-sign" style="height:140px; padding:0 0 10px 0; border-bottom:1px dashed #000">
+						<div style="position:absolute; top:10px; left:300px">
+							<p>รวม จำนวนเงินที่ชำระ {{ number_format($parameters_total_price, 2) }}  บาท</p>
+							<p>ลงชื่อ..................................................................................ผู้ชำระเงิน</p>
+							<p>ผู้รับเงิน..............................................................................เจ้าหน้าที่ธนาคาร</p>
+						</div>
+					</div>
+					<div class="bank-form">
+						<span style="position:absolute; top:4px; right:0">(สำหรับธนาคาร)</span>
+						<div style="position:absolute; top:20px; left:0; width: 100%; height:120px">
+							<p style="margin:0; padding:0;">แบบฟอร์มการชำระเงินผ่านธนาคารกรุงไทย</p>
+							<p style="margin:0; padding:0">Company Code: 92134 (พนักงานธนาคาร ประทับตราธนาคาร และออกใบเสร็จรับเงิน (END 004721) ตามที่แนบให้กับผู้ชำระเงิน)</p>
+							<p style="margin:0; padding:0">ชื่อ/หน่วยงาน .....................................................................................................................</p>
+							<p style="margin:0; padding:0">เบอร์โทรติดต่อ (สำหรับลูกค้า).............................................................................................</p>
+						</div>
+						<div style="position:absolute; top:150px; left:0; width: 100%; height:200px; border: 1px solid #000">
+							<div style="position: relative; width: 100%; height: 38px; border-bottom: 1px solid #bbb">
+								<div style="position:absolute; top:5px; left:4px">Reference No.1: รหัสลูกค้า</div>
+								<div style="position:absolute; top:12px; left:150px; width:20px; height:18px; line-height: 10px; margin:0; padding:0; text-align: center; border:1px solid black;">{{ $user_id_arr[0] }}</div>
+								<div style="position:absolute; top:12px; left:174px; width:20px; height:18px; line-height: 10px; margin:0; padding:0; text-align: center; border:1px solid black;">{{ $user_id_arr[1] }}</div>
+								<div style="position:absolute; top:12px; left:198px; width:20px; height:18px; line-height: 10px; margin:0; padding:0; text-align: center; border:1px solid black;">{{ $user_id_arr[2] }}</div>
+								<div style="position:absolute; top:12px; left:222px; width:20px; height:18px; line-height: 10px; margin:0; padding:0; text-align: center; border:1px solid black;">{{ $user_id_arr[3] }}</div>
+							</div>
+							<div style="position: relative; width: 100%; height: 38px; border-bottom: 1px solid #bbb">
+								<div style="position:absolute; top:5px; left:4px">Reference No.2: Lab No.</div>
+								<div style="position:absolute; top:12px; left:150px; width:20px; height:18px; line-height: 10px; margin:0; padding:0; text-align: center; border:1px solid black;">{{ $lab_no_arr[0] }}</div>
+								<div style="position:absolute; top:12px; left:174px; width:20px; height:18px; line-height: 10px; margin:0; padding:0; text-align: center; border:1px solid black;">{{ $lab_no_arr[1] }}</div>
+								<div style="position:absolute; top:12px; left:198px; width:20px; height:18px; line-height: 10px; margin:0; padding:0; text-align: center; border:1px solid black;">{{ $lab_no_arr[2] }}</div>
+								<div style="position:absolute; top:12px; left:222px; width:20px; height:18px; line-height: 10px; margin:0; padding:0; text-align: center; border:1px solid black;">{{ $lab_no_arr[3] }}</div>
+								<div style="position:absolute; top:12px; left:246px; width:20px; height:18px; line-height: 10px; margin:0; padding:0; text-align: center; border:1px solid black;">{{ $lab_no_arr[4] }}</div>
+								<div style="position:absolute; top:12px; left:270px; width:20px; height:18px; line-height: 10px; margin:0; padding:0; text-align: center; border:1px solid black;">{{ $lab_no_arr[5] }}</div>
+								<div style="position:absolute; top:12px; left:294px; width:20px; height:18px; line-height: 10px; margin:0; padding:0; text-align: center; border:1px solid black;">{{ $lab_no_arr[6] }}</div>
+							</div>
+							<div style="position:relative; width: 100%; height:120px">
+								<p style="position:absolute; top:0px; left:4px; width:100%;">จำนวนเงิน (บาท)<span style="padding-left: 10px">...........................................................................................................................</span></p>
+								<p style="position:absolute; top:30px; left:4px; width:100%;">จำนวนเงิน (ตัวอักษร)<span style="padding-left: 10px">....................................................................................................................</span></p>
+								<span style="position:absolute; top:80px; left:4px; width:40%; display:inline-block">ลงชื่อ..............................................................................................................ผู้ชำระเงิน</span>
+								<span style="position:absolute; top:80px; left:336px; width:40% display:inline-block">ผู้รับเงิน............................................................................................................เจ้าหน้าที่ธนาคาร</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 		</form>
 	</div>
 @endsection
