@@ -2,7 +2,9 @@
 @section('token')<meta name="csrf-token" content="{{ csrf_token() }}">@endsection
 @section('style')
 <link type="text/css" rel="stylesheet" href="{{ URL::asset('css/pj-step.css') }}">
-<style type="text/css">table#example_table thead {background-color:#2D8AC9;color:white;}</style>
+<style type="text/css">
+table#example_table thead {background-color:#2D8AC9;color: white;}
+</style>
 @endsection
 @section('content')
 <ol class="breadcrumb page-breadcrumb text-sm font-prompt">
@@ -21,7 +23,7 @@
 				</div>
 			</div>
 			<div class="panel-container show">
-				<form name="setTestNofrm" action="{{ route('sample.received.test.no.set') }}" method="POST" enctype="multipart/form-data">
+				<form name="setTestNofrm" action="{{ route('sample.received.test.no.barcode') }}" method="POST" enctype="multipart/form-data">
 					<input type="hidden" name="_token" value="{{ csrf_token() }}">
 					{{-- <input type="hidden" name="order_id" value="{{ $order_id ?? old('order_id') }}">
 					<input type="hidden" name="order_type" value="1">
@@ -48,14 +50,58 @@
 							</div>
 						</div>
 						<div class="row">
-							<div class="col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-4" id="order_sample_table"></div>
+							<div class="col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-4" id="abcdefg">
+								<div class="table-responsive">
+									<table class="table table-striped" style="width: 100%">
+										<thead>
+											<tr class="bg-primary text-white">
+												<th>ลำดับ</th>
+												<th>รหัส ตย.</th>
+												<th>ชนิด ตย.</th>
+												<th>รายการทดสอบ</th>
+												<th>จำนวนรายการทดสอบ</th>
+												<th>หมายเลขทดสอบ</th>
+											</tr>
+										</thead>
+										<tfoot></tfoot>
+										<tbody>
+											@if (count($result) > 0)
+												@foreach ($result as $key => $value)
+													<tr>
+														<td>{{ $loop->iteration}}</td>
+														<td>
+															{{ $value['sample_id'] }}
+															<input type="hidden" name="sample_id[]" value="{{ $value['sample_id'] }}" />
+														</td>
+														<td>
+															@foreach ($value['parameter_type'] as $key1 => $value1)
+															<ul>
+																<li>{{ $value1 }}</li>
+															</ul>
+															@endforeach
+															<td>
+																@foreach ($value['parameter_name'] as $key2 => $value2)
+																	<ul>
+																		<li>{{ $value2 }}</li>
+																	</ul>
+																@endforeach
+															</td>
+															<td>{{ $value['sample_count'] }}</td>
+														<td><input type="text" name="sample_no[]" value="{{ $value['sample_test_no'] }}" class="form-control" readonly /></td>
+													</tr>
+												@endforeach
+											@endif
+										</tbody>
+									</table>
+								</div>
+							</div>
 						</div>
 					</div>
 
 					<div class="panel-content border-faded border-left-0 border-right-0 border-bottom-0 d-flex flex-row align-items-center">
 						<div class="form-row">
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
-								<button type="submit" class="btn btn-info ml-auto" id="set_test_no_btn" disabled> <i class="fal fa-save"></i> กำหนดหมายเลขทดสอบ</button>
+								<button type="submit"" class="btn btn-info ml-auto"> <i class="fal fa-save"></i> พิมพ์บาโค้ด</button>
 								<a href="{{ route('sample.received.index') }}" type="button" class="btn btn-warning ml-auto"><i class="fal fa-home"></i> กลับไปหน้าแรก</a>
 							</div>
 						</div>
@@ -70,27 +116,6 @@
 <script type="text/javascript">
 $(document).ready(function() {
 	$.ajaxSetup({headers:{'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')}});
-	$('#set_test_no_search_btn').click(function() {
-		let lab_no = $('#set_test_no_search').val();
-		if (lab_no) {
-			$('#set_test_no_btn').prop('disabled', false);
-			$.ajax({
-				type: "GET",
-				url: "{{ route('sample.search.by.lab.no') }}",
-				data: {lab_no: lab_no},
-				dataType: "html",
-				success: function(response) {
-					$('#order_sample_table').html(response);
-				},
-				error: function(jqXhr, textStatus, errorMessage) {
-					alert('Error code: ' + jqXhr.status + errorMessage);
-				}
-			});
-		} else {
-			$('#set_test_no_btn').prop('disabled', true);
-		}
-	});
-
 });
 </script>
 @endpush

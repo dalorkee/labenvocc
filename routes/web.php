@@ -155,7 +155,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 			Route::get('/received/order/test/no/create', 'createTestNo')->name('received.test.no.create');
 			Route::post('/received/order/test/no/set', 'setTestNo')->name('received.test.no.set');
 
-
+			Route::post('/received/order/test/no/barcode', 'printTestNoBarcode')->name('received.test.no.barcode');
 		});
 	});
 	Route::get('/admin/home', [AdminController::class, 'index'])->name('admin.index');

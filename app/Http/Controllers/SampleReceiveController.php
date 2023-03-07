@@ -126,7 +126,6 @@ class SampleReceiveController extends Controller
 	protected function step02(Request $request) {
 		try {
 			$session_sample_result = ($request->session()->has(key: 'sample_result')) ? $request->session()->get(key: 'sample_result') : null;
-
 			$order = $request->session()->get(key: 'order');
 			$result = [];
 			$order_sample = OrderSample::whereOrder_id($order['id'])->with('parameters')->get();
@@ -339,33 +338,41 @@ class SampleReceiveController extends Controller
 		}
 	}
 
-	protected function searchOrderSampleByLabNo(Request $request) {
-		if (!empty($request->lab_no)) {
-			$order = Order::select('id')->whereLab_no($request->lab_no)->get();
-			$result = [];
-			if (count($order) > 0) {
-				$order_sample = OrderSample::whereOrder_id($order[0]->id)->with('parameters')->whereSample_received_status('y')->get();
-				$order_sample->each(function($item, $key) use (&$result) {
-					$tmp['sample_id'] = $item->id;
-					$tmp['sample_count'] = $item->parameters->count();
-					$tmp['sample_verified_status_'.$item->id] = $item->sample_verified_status;
-					$tmp['sample_received_status_'.$item->id] = $item->sample_received_status;
-					$tmp['sample_test_no'] = $item->sample_test_no;
-					$tmp_paramet_type = [];
-					$tmp_paramet_name = [];
-					foreach ($item->parameters as $key => $value) {
-						array_push($tmp_paramet_type, $value->sample_character_name);
-						array_push($tmp_paramet_name, $value->parameter_name);
-					}
-					$tmp_paramet_type = array_unique($tmp_paramet_type);
-					$tmp['parameter_type'] = $tmp_paramet_type;
-					$tmp_paramet_name = array_unique($tmp_paramet_name);
-					$tmp['parameter_name'] = $tmp_paramet_name;
-					array_push($result, $tmp);
-				});
+	protected function createTestNo(): object {
+		return view(view: 'apps.staff.receive.test-no');
+	}
+
+	protected function searchOrderSampleByLabNo(Request $request): string {
+		try {
+			if (!empty($request->lab_no)) {
+				$order = Order::select('id')->whereLab_no($request->lab_no)->get();
+				$result = [];
+				if (count($order) > 0) {
+					$order_sample = OrderSample::whereOrder_id($order[0]->id)->with('parameters')->whereSample_received_status('y')->get();
+					$order_sample->each(function($item, $key) use (&$result) {
+						$tmp['sample_id'] = $item->id;
+						$tmp['sample_count'] = $item->parameters->count();
+						$tmp['sample_verified_status_'.$item->id] = $item->sample_verified_status;
+						$tmp['sample_received_status_'.$item->id] = $item->sample_received_status;
+						$tmp['sample_test_no'] = $item->sample_test_no;
+						$tmp_paramet_type = [];
+						$tmp_paramet_name = [];
+						foreach ($item->parameters as $key => $value) {
+							array_push($tmp_paramet_type, $value->sample_character_name);
+							array_push($tmp_paramet_name, $value->parameter_name);
+						}
+						$tmp_paramet_type = array_unique($tmp_paramet_type);
+						$tmp['parameter_type'] = $tmp_paramet_type;
+						$tmp_paramet_name = array_unique($tmp_paramet_name);
+						$tmp['parameter_name'] = $tmp_paramet_name;
+						array_push($result, $tmp);
+					});
+				}
+				$htm_component = $this->orderSampleComponent($result);
+				return $htm_component;
 			}
-			$htm_component = $this->orderSampleComponent($result);
-			return $htm_component;
+		} catch (\Exception $e) {
+			Log::error($e->getMessage());
 		}
 	}
 
@@ -427,22 +434,60 @@ class SampleReceiveController extends Controller
 		return $htm;
 	}
 
-	protected function createTestNo(Request $request) {
-		return view(view: 'apps.staff.receive.test-no');
-	}
-
 	protected function setTestNo(Request $request) {
 		$data = $request->all();
-		if (count($data['sample_id']) > 0) {
+		if (!empty($data['sample_id']) && count($data['sample_id']) > 0) {
 			foreach ($data['sample_id'] as $key => $value) {
 				$order_sample = OrderSample::find($value);
 				$order_sample->sample_test_no = $data['sample_no'][$key];
 				$order_sample->save();
 			}
-            return redirect()->back()->with('success', 'บันทึกหมายเลขทดสอบแล้ว');
+			// return redirect()->back()->with('success', 'บันทึกหมายเลขทดสอบแล้ว');
+			return $this->createTestNoBarcode(lab_no: $lab_no = $data['set_test_no_search']);
+		} else {
+			return redirect()->back()->with('error', 'โปรดตรวจสอบรายการข้อมูล');
 		}
-
 	}
+
+	protected function createTestNoBarcode($lab_no = null) {
+		try {
+			if (!empty($lab_no)) {
+				$order = Order::select('id')->whereLab_no($lab_no)->get();
+				$result = [];
+				if (count($order) > 0) {
+					$order_sample = OrderSample::whereOrder_id($order[0]->id)->with('parameters')->whereSample_received_status('y')->get();
+					$order_sample->each(function($item, $key) use (&$result) {
+						$tmp['sample_id'] = $item->id;
+						$tmp['sample_count'] = $item->parameters->count();
+						$tmp['sample_verified_status_'.$item->id] = $item->sample_verified_status;
+						$tmp['sample_received_status_'.$item->id] = $item->sample_received_status;
+						$tmp['sample_test_no'] = $item->sample_test_no;
+						$tmp_paramet_type = [];
+						$tmp_paramet_name = [];
+						foreach ($item->parameters as $key => $value) {
+							array_push($tmp_paramet_type, $value->sample_character_name);
+							array_push($tmp_paramet_name, $value->parameter_name);
+						}
+						$tmp_paramet_type = array_unique($tmp_paramet_type);
+						$tmp['parameter_type'] = $tmp_paramet_type;
+						$tmp_paramet_name = array_unique($tmp_paramet_name);
+						$tmp['parameter_name'] = $tmp_paramet_name;
+						array_push($result, $tmp);
+					});
+				}
+				return view(view: 'apps.staff.receive.test-no-barcode', data: ['result' => $result]);
+			}
+		} catch (\Exception $e) {
+			Log::error($e->getMessage());
+		}
+	}
+
+    protected function printTestNoBarcode() {
+        $data = ['pj ja'];
+        $pdf = Pdf::loadView('print.test-no-barcode', $data);
+        return $pdf->download('sample_test_no.pdf');
+        // return view(view: 'print.test-no-barcode');
+    }
 
 	private function downloadFile($dir, $file_name): mixed {
 		try {
