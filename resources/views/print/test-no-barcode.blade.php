@@ -5,12 +5,13 @@
 @endsection
 @section('content')
 	<div class="page1">
-        <div class="mb-3">{!! DNS2D::getBarcodeHTML('4445645656', 'QRCODE') !!}</div>
-        <div class="mb-3">{!! DNS1D::getBarcodeHTML('4445645656', 'PHARMA') !!}</div>
-        <div class="mb-3">{!! DNS1D::getBarcodeHTML('4445645656', 'PHARMA2T') !!}</div>
-        <div class="mb-3">{!! DNS1D::getBarcodeHTML('4445645656', 'CODABAR') !!}</div>
-        <div class="mb-3">{!! DNS1D::getBarcodeHTML('4445645656', 'KIX') !!}</div>
-        <div class="mb-3">{!! DNS1D::getBarcodeHTML('4445645656', 'RMS4CC') !!}</div>
-        <div class="mb-3">{!! DNS1D::getBarcodeHTML('4445645656', 'UPCA') !!}</div>
+		@foreach ($sample_no as $key => $value)
+		<div style="margin: 0 0 4px 0; padding: 0;">
+			{{-- <p class="name">{{$product->name}}</p>
+			<p class="price">Price: {{$product->sale_price}}</p> --}}
+			{!! DNS1D::getBarcodeHTML($value, "C128",1.4,22) !!}
+			<p style="width:80px; margin:-10px 0 0 0; padding:0; text-align:center">{{ $value }}</p>
+		</div>
+		@endforeach
 	</div>
 @endsection

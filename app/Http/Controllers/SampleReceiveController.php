@@ -482,12 +482,20 @@ class SampleReceiveController extends Controller
 		}
 	}
 
-    protected function printTestNoBarcode() {
-        $data = ['pj ja'];
-        $pdf = Pdf::loadView('print.test-no-barcode', $data);
-        return $pdf->download('sample_test_no.pdf');
-        // return view(view: 'print.test-no-barcode');
-    }
+	protected function printTestNoBarcode(Request $request) {
+		try {
+			$req = $request->all();
+			if (count($req) > 0 && count($req['sample_no']) > 0) {
+				//$file_name = 'sample_test_no_barcode_'.$req['sample_id'].'.pdf';
+				$data = ['sample_no' => $req['sample_no']];
+				$pdf = Pdf::loadView('print.test-no-barcode', $data);
+				return $pdf->download('barcode.pdf');
+				// return view(view: 'print.test-no-barcode');
+			}
+		} catch (\Exception $e) {
+			Log::error($e->getMessage());
+		}
+	}
 
 	private function downloadFile($dir, $file_name): mixed {
 		try {

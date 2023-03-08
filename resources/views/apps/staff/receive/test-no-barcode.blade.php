@@ -74,19 +74,19 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 															<input type="hidden" name="sample_id[]" value="{{ $value['sample_id'] }}" />
 														</td>
 														<td>
-															@foreach ($value['parameter_type'] as $key1 => $value1)
+														@foreach ($value['parameter_type'] as $key1 => $value1)
 															<ul>
 																<li>{{ $value1 }}</li>
 															</ul>
-															@endforeach
-															<td>
-																@foreach ($value['parameter_name'] as $key2 => $value2)
-																	<ul>
-																		<li>{{ $value2 }}</li>
-																	</ul>
-																@endforeach
-															</td>
-															<td>{{ $value['sample_count'] }}</td>
+														@endforeach
+														<td>
+														@foreach ($value['parameter_name'] as $key2 => $value2)
+															<ul>
+																<li>{{ $value2 }}</li>
+															</ul>
+														@endforeach
+														</td>
+														<td>{{ $value['sample_count'] }}</td>
 														<td><input type="text" name="sample_no[]" value="{{ $value['sample_test_no'] }}" class="form-control" readonly /></td>
 													</tr>
 												@endforeach
