@@ -101,13 +101,13 @@
 								<span class="nav-link-text" data-i18n="nav.plugins_plugins_faq">รับตัวอย่าง</span>
 							</a>
 						</li>
-                        <li class="{{ (Request::is('*sample/received/order/test/no/*'))  ? 'active' : '' }}">
+						<li class="{{ (Request::is('*sample/received/order/test/no/*'))  ? 'active' : '' }}">
 							<a href="{{ Route('sample.received.test.no.create') }}" title="กำหนดหมายเลขทดสอบ" data-filter-tags="sample_receive">
 								<span class="nav-link-text" data-i18n="nav.plugins_plugins_faq">กำหนดหมายเลขทดสอบ</span>
 							</a>
 						</li>
-                        <li class="{{ (Request::is('*sample/received/order/requisition/*'))  ? 'active' : '' }}">
-							<a href="{{ Route('sample.received.test.no.create') }}" title="เบิกตัวอย่าง" data-filter-tags="sample_receive">
+						<li class="{{ (Request::is('*sample/received/order/requisition/*'))  ? 'active' : '' }}">
+							<a href="{{ Route('sample.received.requisition.create') }}" title="เบิกตัวอย่าง" data-filter-tags="sample_receive">
 								<span class="nav-link-text" data-i18n="nav.plugins_plugins_faq">เบิกตัวอย่าง</span>
 							</a>
 						</li>

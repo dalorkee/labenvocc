@@ -496,6 +496,103 @@ class SampleReceiveController extends Controller
 		}
 	}
 
+	protected function createSampleRequisition(Request $request) {
+		return view(view: 'apps.staff.receive.sample-requisition');
+	}
+
+	protected function createSampleRequisitionAjax(Request $request) {
+		try {
+			if (!empty($request->lab_no)) {
+				$result = [];
+				$order = Order::select('id')->whereLab_no($request->lab_no)->get();
+				if (count($order) > 0) {
+					$order_sample = OrderSample::whereOrder_id($order[0]->id)->with('parameters')->whereSample_received_status('y')->get();
+					$order_sample->each(function($item, $key) use (&$result) {
+						$tmp['sample_id'] = $item->id;
+						$tmp['sample_count'] = $item->parameters->count();
+						$tmp['sample_verified_status_'.$item->id] = $item->sample_verified_status;
+						$tmp['sample_received_status_'.$item->id] = $item->sample_received_status;
+						$tmp['sample_test_no'] = $item->sample_test_no;
+						$tmp_paramet_type = [];
+						$tmp_paramet_name = [];
+						foreach ($item->parameters as $key => $value) {
+							array_push($tmp_paramet_type, $value->sample_character_name);
+							array_push($tmp_paramet_name, $value->parameter_name);
+						}
+						$tmp_paramet_type = array_unique($tmp_paramet_type);
+						$tmp['parameter_type'] = $tmp_paramet_type;
+						$tmp_paramet_name = array_unique($tmp_paramet_name);
+						$tmp['parameter_name'] = $tmp_paramet_name;
+						array_push($result, $tmp);
+					});
+				}
+
+
+				$htm = "
+				<div class=\"table-responsive\">
+					<table class=\"table table-striped\" style=\"width: 100%\">
+						<thead>
+							<tr class=\"bg-primary text-white\">
+								<th>ลำดับ</th>
+								<th>รหัส ตย.</th>
+								<th>ชนิด ตย.</th>
+								<th>รายการทดสอบ</th>
+								<th>จำนวนรายการทดสอบ</th>
+								<th>หมายเลขทดสอบ</th>
+							</tr>
+						</thead>
+						<tfoot></tfoot>
+						<tbody>";
+						if (count($result) > 0) {
+							$i = 1;
+							foreach ($result as $key => $value) {
+								$htm .= "<tr>";
+									$htm .= "<td>".$i."</td>";
+									$htm .= "<td>";
+										$htm .= "<span>".$value['sample_id']."</span>";
+										$htm .= "<input type=\"hidden\" name=\"sample_id[]\" value=\"".$value['sample_id']."\" />";
+									$htm .=" </td>";
+									$htm .= "<td>";
+										foreach ($value['parameter_type'] as $key1 => $value1) {
+											$htm .= "<ul>";
+											$htm .= "<li>".$value1."</li>";
+											$htm .= "</ul>";
+										}
+									$htm .= "</td>";
+									$htm .= "<td>";
+										foreach ($value['parameter_name'] as $key2 => $value2) {
+											$htm .= "<ul>";
+											$htm .= "<li>".$value2."</li>";
+											$htm .= "</ul>";
+										}
+									$htm .= "</td>";
+									$htm .= "<td>".$value['sample_count']."</td>";
+									$htm .= "<td><input type=\"text\" name=\"sample_no[]\" value=\"".$value['sample_test_no']."\" class=\"form-control\" /></td>";
+								$htm .= "</tr>";
+								$i++;
+							}
+						} else {
+							$htm .= "<tr>";
+								$htm .= "<td colspan=\"6\">";
+									$htm .= "<div class=\"alert alert-danger\" role=\"alert\"><strong>ไม่พบข้อมูล</strong></div>";
+								$htm .= "</td>";
+							$htm .= "</tr>";
+						}
+						$htm .= "
+						</tbody>
+					</table>
+				</div>";
+				return $htm;
+
+
+			} else {
+				return "<p>ไม่พบข้อมูล</p>";
+			}
+		} catch (\Exception $e) {
+			Log::error($e->getMessage());
+		}
+	}
+
 	private function downloadFile($dir, $file_name): mixed {
 		try {
 			if (!Storage::disk('receipt')->missing($file_name)) {

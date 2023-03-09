@@ -138,24 +138,20 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 	Route::name('sample.')->prefix('sample')->group(function() {
 		Route::resource('received', SampleReceiveController::class);
 		Route::controller(SampleReceiveController::class)->group(function() {
-
 			Route::get('/received/order/{order_id}/step01', 'step01')->name('received.step01');
 			Route::post('/received/order/step01', 'step01Post')->name('received.step01.post');
-
 			Route::get('/received/order/{order_id}/step02', 'step02')->name('received.step02');
 			Route::post('/received/order/step02', 'step02Post')->name('received.step02.post');
-
 			Route::get('/received/order/{order_id}/step03', 'step03')->name('received.step03');
 			Route::post('/received/order/step03', 'step03Post')->name('received.step03.post');
-
 			Route::get('/received/order/{order_id}/print', 'print')->name('received.print');
 			Route::get('/received/order/{order_id}/printf', 'printf')->name('received.printf');
-
 			Route::get('/received/order/lab/no/search', 'searchOrderSampleByLabNo')->name('search.by.lab.no');
 			Route::get('/received/order/test/no/create', 'createTestNo')->name('received.test.no.create');
 			Route::post('/received/order/test/no/set', 'setTestNo')->name('received.test.no.set');
-
 			Route::post('/received/order/test/no/barcode', 'printTestNoBarcode')->name('received.test.no.barcode');
+			Route::get('/received/order/requisition/create', 'createSampleRequisition')->name('received.requisition.create');
+			Route::get('/received/order/requisition/create/ajax', 'createSampleRequisitionAjax')->name('received.requisition.create.ajax');
 		});
 	});
 	Route::get('/admin/home', [AdminController::class, 'index'])->name('admin.index');
