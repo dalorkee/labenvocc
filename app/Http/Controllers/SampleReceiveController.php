@@ -486,11 +486,10 @@ class SampleReceiveController extends Controller
 		try {
 			$req = $request->all();
 			if (count($req) > 0 && count($req['sample_no']) > 0) {
-				//$file_name = 'sample_test_no_barcode_'.$req['sample_id'].'.pdf';
+				$file_name = 'sample_test_no_barcode_'.time().'.pdf';
 				$data = ['sample_no' => $req['sample_no']];
 				$pdf = Pdf::loadView('print.test-no-barcode', $data);
-				return $pdf->download('barcode.pdf');
-				// return view(view: 'print.test-no-barcode');
+				return $pdf->download($file_name);
 			}
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());

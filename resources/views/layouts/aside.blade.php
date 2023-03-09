@@ -106,6 +106,11 @@
 								<span class="nav-link-text" data-i18n="nav.plugins_plugins_faq">กำหนดหมายเลขทดสอบ</span>
 							</a>
 						</li>
+                        <li class="{{ (Request::is('*sample/received/order/requisition/*'))  ? 'active' : '' }}">
+							<a href="{{ Route('sample.received.test.no.create') }}" title="เบิกตัวอย่าง" data-filter-tags="sample_receive">
+								<span class="nav-link-text" data-i18n="nav.plugins_plugins_faq">เบิกตัวอย่าง</span>
+							</a>
+						</li>
 					</ul>
 				</li>
 				<li>
