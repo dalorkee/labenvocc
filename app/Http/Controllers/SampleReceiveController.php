@@ -526,7 +526,7 @@ class SampleReceiveController extends Controller
 						array_push($result, $tmp);
 					});
 				}
-
+                dd($result);
 
 				$htm = "
 				<div class=\"table-responsive\">
@@ -583,8 +583,6 @@ class SampleReceiveController extends Controller
 					</table>
 				</div>";
 				return $htm;
-
-
 			} else {
 				return "<p>ไม่พบข้อมูล</p>";
 			}
