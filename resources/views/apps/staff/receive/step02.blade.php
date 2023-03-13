@@ -156,16 +156,16 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 						<input type="text" name="sample_note_string" class="form-control" />
 					</div>
 				</div>
-                <div class="form-row">
-                    <div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
-                        <div class="input-group">
-                            <div class="custom-file">
-                                <input type="file" class="custom-file-input" id="sample_note_file" aria-describedby="inputGroupFileAddon01">
-                                <label class="custom-file-label" for="inputGroupFile01">เลือกไฟล์</label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+				<div class="form-row">
+					<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
+						<div class="input-group">
+							<div class="custom-file">
+								<input type="file" class="custom-file-input" id="sample_note_file" aria-describedby="inputGroupFileAddon01">
+								<label class="custom-file-label" for="inputGroupFile01">เลือกไฟล์</label>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">ปิด</button>
@@ -189,7 +189,7 @@ $(document).ready(function() {
 	$('.sample_note').on('click', function() {
 		$('#sample_note_modal').modal('show');
 	})
-    $('#sample_note_file').on('change',function() {
+	$('#sample_note_file').on('change',function() {
 		let fileName = $(this).val();
 		$(this).next('.custom-file-label').html(fileName);
 	})

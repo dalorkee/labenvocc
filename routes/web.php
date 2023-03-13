@@ -150,8 +150,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 			Route::get('/received/order/test/no/create', 'createTestNo')->name('received.test.no.create');
 			Route::post('/received/order/test/no/set', 'setTestNo')->name('received.test.no.set');
 			Route::post('/received/order/test/no/barcode', 'printTestNoBarcode')->name('received.test.no.barcode');
-			Route::get('/received/order/requisition/create', 'createSampleRequisition')->name('received.requisition.create');
-			Route::get('/received/order/requisition/create/ajax', 'createSampleRequisitionAjax')->name('received.requisition.create.ajax');
+
+			Route::get('/analyze/order/requisition/create', 'createSampleAnalyzeRequisition')->name('analyze.requisition.create');
+			Route::get('/analyze/order/requisition/create/ajax', 'createSampleAnalyzeRequisitionAjax')->name('analyze.requisition.create.ajax');
 		});
 	});
 	Route::get('/admin/home', [AdminController::class, 'index'])->name('admin.index');

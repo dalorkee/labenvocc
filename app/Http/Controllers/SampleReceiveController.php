@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\{Response,DB,Storage,Log};
 use App\Services\OrderService;
 use App\Traits\{DateTimeTrait,CommonTrait,DbBoundaryTrait};
 use App\Exceptions\{OrderNotFoundException,InvalidOrderException};
-use App\Models\{Order,OrderSample,OrderSampleParameter,FileUpload};
+use App\Models\{Order,OrderSample,OrderSampleParameter,FileUpload,Parameter};
 use Yajra\DataTables\Facades\DataTables;
 use Barryvdh\DomPDF\Facade\Pdf;
 
@@ -496,37 +496,50 @@ class SampleReceiveController extends Controller
 		}
 	}
 
-	protected function createSampleRequisition(Request $request) {
-		return view(view: 'apps.staff.receive.sample-requisition');
+	protected function createSampleAnalyzeRequisition(Request $request) {
+		$parameters = Parameter::select('main_analys_user_id', 'main_analys')->groupBy('main_analys_user_id')->orderBy('main_analys')->get()->toArray();
+		foreach ($parameters as $key => $value) {
+			if (!is_null($value['main_analys_user_id'])) {
+				$analyze_user[$value['main_analys_user_id']] = $value['main_analys'];
+			}
+		};
+		return view(view: 'apps.staff.receive.analyze-requisition', data: compact('analyze_user'));
 	}
 
-	protected function createSampleRequisitionAjax(Request $request) {
+	protected function createSampleAnalyzeRequisitionAjax(Request $request) {
 		try {
 			if (!empty($request->lab_no)) {
-				$result = [];
 				$order = Order::select('id')->whereLab_no($request->lab_no)->get();
+				$result = [];
 				if (count($order) > 0) {
+					// if (!empty($request->analyze_user)) {
+					// 	$order_sample = OrderSample::whereOrder_id($order[0]->id)
+					// 		->with('parameters', function($query) use ($request) {
+					// 			$query->where('main_analys_user_id', '=', $request->analyze_user);
+					// 	})->whereSample_received_status('y')->get();
+					// } else {
+					// 	$order_sample = OrderSample::whereOrder_id($order[0]->id)->with('parameters')->whereSample_received_status('y')->get();
+					// }
 					$order_sample = OrderSample::whereOrder_id($order[0]->id)->with('parameters')->whereSample_received_status('y')->get();
-					$order_sample->each(function($item, $key) use (&$result) {
+
+					$order_sample->each(function($item, $key) use (&$result, $request) {
 						$tmp['sample_id'] = $item->id;
-						$tmp['sample_count'] = $item->parameters->count();
-						$tmp['sample_verified_status_'.$item->id] = $item->sample_verified_status;
-						$tmp['sample_received_status_'.$item->id] = $item->sample_received_status;
-						$tmp['sample_test_no'] = $item->sample_test_no;
-						$tmp_paramet_type = [];
+
+						$tmp_paramet_analyze_user = [];
 						$tmp_paramet_name = [];
+
 						foreach ($item->parameters as $key => $value) {
-							array_push($tmp_paramet_type, $value->sample_character_name);
+							array_push($tmp_paramet_analyze_user, $value->main_analys_name);
 							array_push($tmp_paramet_name, $value->parameter_name);
 						}
-						$tmp_paramet_type = array_unique($tmp_paramet_type);
-						$tmp['parameter_type'] = $tmp_paramet_type;
-						$tmp_paramet_name = array_unique($tmp_paramet_name);
-						$tmp['parameter_name'] = $tmp_paramet_name;
+
+						$tmp['paramet_analyze_user'] = $tmp_paramet_analyze_user;
+						$tmp['paramet_name'] = $tmp_paramet_name;
+
 						array_push($result, $tmp);
 					});
 				}
-                dd($result);
+				dd($result);
 
 				$htm = "
 				<div class=\"table-responsive\">
@@ -534,11 +547,10 @@ class SampleReceiveController extends Controller
 						<thead>
 							<tr class=\"bg-primary text-white\">
 								<th>ลำดับ</th>
-								<th>รหัส ตย.</th>
-								<th>ชนิด ตย.</th>
+								<th>Lab No</th>
 								<th>รายการทดสอบ</th>
-								<th>จำนวนรายการทดสอบ</th>
-								<th>หมายเลขทดสอบ</th>
+								<th>ผู้วิเคราะห์</th>
+								<th>#</th>
 							</tr>
 						</thead>
 						<tfoot></tfoot>
@@ -549,25 +561,24 @@ class SampleReceiveController extends Controller
 								$htm .= "<tr>";
 									$htm .= "<td>".$i."</td>";
 									$htm .= "<td>";
-										$htm .= "<span>".$value['sample_id']."</span>";
+										$htm .= "<span>".$request->lab_no."</span>";
 										$htm .= "<input type=\"hidden\" name=\"sample_id[]\" value=\"".$value['sample_id']."\" />";
 									$htm .=" </td>";
+
 									$htm .= "<td>";
-										foreach ($value['parameter_type'] as $key1 => $value1) {
+										foreach ($value['paramet_name'] as $key1=> $value1) {
 											$htm .= "<ul>";
 											$htm .= "<li>".$value1."</li>";
 											$htm .= "</ul>";
 										}
 									$htm .= "</td>";
 									$htm .= "<td>";
-										foreach ($value['parameter_name'] as $key2 => $value2) {
+										foreach ($value['paramet_analyze_user'] as $key2 => $value2) {
 											$htm .= "<ul>";
 											$htm .= "<li>".$value2."</li>";
 											$htm .= "</ul>";
 										}
 									$htm .= "</td>";
-									$htm .= "<td>".$value['sample_count']."</td>";
-									$htm .= "<td><input type=\"text\" name=\"sample_no[]\" value=\"".$value['sample_test_no']."\" class=\"form-control\" /></td>";
 								$htm .= "</tr>";
 								$i++;
 							}
@@ -584,7 +595,7 @@ class SampleReceiveController extends Controller
 				</div>";
 				return $htm;
 			} else {
-				return "<p>ไม่พบข้อมูล</p>";
+				return "<div class=\"alert alert-danger mt-4\" role=\"alert\"><strong>โปรดกรอกข้อมูลให้ถูกต้อง</strong></div>";
 			}
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
