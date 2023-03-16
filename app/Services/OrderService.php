@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Models\{Order, OrderSample};
+use App\Models\{Order,OrderSample,OrderSampleParameter};
 use App\Exceptions\OrderNotFoundException;
 use App\Exceptions\OrderSampleNotFoundException;
 use App\Exceptions\InvalidOrderException;

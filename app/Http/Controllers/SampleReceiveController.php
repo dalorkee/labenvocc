@@ -509,38 +509,34 @@ class SampleReceiveController extends Controller
 	protected function createSampleAnalyzeRequisitionAjax(Request $request) {
 		try {
 			if (!empty($request->lab_no)) {
-				$order = Order::select('id')->whereLab_no($request->lab_no)->get();
-				$result = [];
+				$order = Order::select('id')->whereLab_no(trim($request->lab_no))->get();
 				if (count($order) > 0) {
-					// if (!empty($request->analyze_user)) {
-					// 	$order_sample = OrderSample::whereOrder_id($order[0]->id)
-					// 		->with('parameters', function($query) use ($request) {
-					// 			$query->where('main_analys_user_id', '=', $request->analyze_user);
-					// 	})->whereSample_received_status('y')->get();
-					// } else {
-					// 	$order_sample = OrderSample::whereOrder_id($order[0]->id)->with('parameters')->whereSample_received_status('y')->get();
-					// }
-					$order_sample = OrderSample::whereOrder_id($order[0]->id)->with('parameters')->whereSample_received_status('y')->get();
-
+					$order_sample = OrderSample::whereOrder_id($order[0]->id)->with('parameters', function($query) {
+						$query->whereIn('status', ['pending', 'requisition']);
+					})->whereSample_received_status('y')->get();
+					$result = [];
 					$order_sample->each(function($item, $key) use (&$result, $request) {
-						$tmp['sample_id'] = $item->id;
-
-						$tmp_paramet_analyze_user = [];
-						$tmp_paramet_name = [];
-
-						foreach ($item->parameters as $key => $value) {
-							array_push($tmp_paramet_analyze_user, $value->main_analys_name);
-							array_push($tmp_paramet_name, $value->parameter_name);
-						}
-
-						$tmp['paramet_analyze_user'] = $tmp_paramet_analyze_user;
-						$tmp['paramet_name'] = $tmp_paramet_name;
-
-						array_push($result, $tmp);
+						$analyze_user = trim($request->analyze_user);
+						foreach ($item->parameters as $k => $v) {
+							if (!empty($analyze_user) && $analyze_user != $v['main_analys_user_id']) {
+									continue;
+								} else {
+								$tmp['lab_no'] = $request->lab_no;
+								$tmp['order_id'] = $v['order_id'];
+								$tmp['order_sample_id'] = $v['order_sample_id'];
+								$tmp['order_sample_parameter_id'] = $v['id'];
+								$tmp['paramet_id'] = $v['parameter_id'];
+								$tmp['paramet_name'] = $v['parameter_name'];
+								$tmp['sample_character_id'] = $v['sample_character_id'];
+								$tmp['sample_character_name'] = $v['sample_character_name'];
+								$tmp['main_analys_user_id'] = $v['main_analys_user_id'];
+								$tmp['main_analys_name'] = $v['main_analys_name'];
+								$tmp['status'] = $v['status'];
+							}
+							array_push($result, $tmp);
+						};
 					});
 				}
-				dd($result);
-
 				$htm = "
 				<div class=\"table-responsive\">
 					<table class=\"table table-striped\" style=\"width: 100%\">
@@ -558,28 +554,26 @@ class SampleReceiveController extends Controller
 						if (count($result) > 0) {
 							$i = 1;
 							foreach ($result as $key => $value) {
-								$htm .= "<tr>";
-									$htm .= "<td>".$i."</td>";
-									$htm .= "<td>";
-										$htm .= "<span>".$request->lab_no."</span>";
-										$htm .= "<input type=\"hidden\" name=\"sample_id[]\" value=\"".$value['sample_id']."\" />";
-									$htm .=" </td>";
+								if (count($value) > 1) {
+									$htm .= "<tr>";
+										$htm .= "<td>".$i."</td>";
+										$htm .= "<td>";
+											$htm .= "<input type=\"hidden\" name=\"order_id\" value=\"".$value['order_id']."\" />";
+											$htm .= "<input type=\"hidden\" name=\"order_sample_id\" value=\"".$value['order_sample_id']."\" />";
+											$htm .= "<input type=\"hidden\" name=\"order_sample_parameter_id\" value=\"".$value['order_sample_parameter_id']."\" />";
+											$htm .= "<span>".$value['lab_no']."</span>";
+										$htm .=" </td>";
 
-									$htm .= "<td>";
-										foreach ($value['paramet_name'] as $key1=> $value1) {
-											$htm .= "<ul>";
-											$htm .= "<li>".$value1."</li>";
-											$htm .= "</ul>";
-										}
-									$htm .= "</td>";
-									$htm .= "<td>";
-										foreach ($value['paramet_analyze_user'] as $key2 => $value2) {
-											$htm .= "<ul>";
-											$htm .= "<li>".$value2."</li>";
-											$htm .= "</ul>";
-										}
-									$htm .= "</td>";
-								$htm .= "</tr>";
+										$htm .= "<td>".$value['paramet_name']."</td>";
+										$htm .= "<td>".$value['main_analys_name']."</td>";
+										match ($value['status']) {
+											'requisition' => $htm .= "<td><a href=\"#\" class=\"btn btn-success btn-sm\"><i class=\"fal fa-check\"></a></td>",
+											'pending' => $htm .= "<td><a href=\"".route('sample.analyze.requisition', ['lid'=>$value['lab_no'], 'aid'=>$value['main_analys_user_id'], 'id'=>$value['order_sample_parameter_id']])."\" class=\"btn btn-warning btn-sm\">เบิก</td>"
+										};
+									$htm .= "</tr>";
+								} else {
+									continue;
+								}
 								$i++;
 							}
 						} else {
@@ -598,7 +592,24 @@ class SampleReceiveController extends Controller
 				return "<div class=\"alert alert-danger mt-4\" role=\"alert\"><strong>โปรดกรอกข้อมูลให้ถูกต้อง</strong></div>";
 			}
 		} catch (\Exception $e) {
-			Log::error($e->getMessage());
+			dd($e->getMessage());
+			// Log::error($e->getMessage());
+		}
+	}
+
+	protected function sampleAnalyzeRequisition(Request $request) {
+		try {
+			if (!empty($request->id)) {
+				$order_sample_paramet = OrderSampleParameter::findOrFail($request->id);
+				$order_sample_paramet->status = 'requisition';
+				$order_sample_paramet->save();
+				return redirect()->route('sample.analyze.requisition.create.ajax')->with('success', 'บันทึกการเบิกตัวอย่างแล้ว');
+			} else {
+				return redirect()->back()->with('error', 'ไม่สามารถเบิกตัวอย่างนี้ได้');
+			}
+		} catch (\Exception $e) {
+			dd($e->getMessage());
+			// Log::error($e->getMessage());
 		}
 	}
 

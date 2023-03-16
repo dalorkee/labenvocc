@@ -153,6 +153,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 
 			Route::get('/analyze/order/requisition/create', 'createSampleAnalyzeRequisition')->name('analyze.requisition.create');
 			Route::get('/analyze/order/requisition/create/ajax', 'createSampleAnalyzeRequisitionAjax')->name('analyze.requisition.create.ajax');
+			Route::get('/analyze/order/requisition/lab/{lid}/analyze/{aid}/paramet/{id}', 'sampleAnalyzeRequisition')->name('analyze.requisition');
+
 		});
 	});
 	Route::get('/admin/home', [AdminController::class, 'index'])->name('admin.index');

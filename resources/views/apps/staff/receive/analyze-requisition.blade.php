@@ -67,8 +67,8 @@ legend {
 									</div>
 								</div>
 								<div class="col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-2">
-									<button type="button" class="btn btn-primary btn-md" id="analyze_search_btn">ค้นหา</button>
-									<button type="submit" class="btn btn-primary btn-md" id="analyze_search_btn">ค้นหาx</button>
+									<button type="button" class="btn btn-info btn-md" id="analyze_search_btn">ค้นหา</button>
+									<button type="submit" class="btn btn-secondary btn-md" id="analyze_search_btn">ค้นหาx</button>
 								</div>
 							</div>
 						</fieldset>
@@ -86,8 +86,8 @@ legend {
 				<div class="panel-content border-faded border-left-0 border-right-0 border-bottom-0 d-flex flex-row align-items-center">
 					<div class="form-row">
 						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
-							<a href="" class="btn btn-info ml-auto" id="print_testing_btn" disabled> <i class="fal fa-save"></i> พิมพ์บันทึกการทดสอบ</a>
-							<a href="{{ route('sample.received.index') }}" type="button" class="btn btn-warning ml-auto"><i class="fal fa-home"></i> กลับไปหน้าแรก</a>
+							<a href="" class="btn btn-primary ml-auto" id="print_testing_btn" disabled> <i class="fal fa-save"></i> พิมพ์บันทึกการทดสอบ</a>
+							<a href="{{ route('sample.received.index') }}" type="button" class="btn btn-primary ml-auto"><i class="fal fa-home"></i> กลับไปหน้าแรก</a>
 						</div>
 					</div>
 				</div>

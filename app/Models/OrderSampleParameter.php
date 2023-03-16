@@ -42,7 +42,8 @@ class OrderSampleParameter extends Model
 		'machine_id',
 		'machine_name',
 		'office_id',
-		'office_name'
+		'office_name',
+		'status'
 	];
 
 	public function orderSample() {
