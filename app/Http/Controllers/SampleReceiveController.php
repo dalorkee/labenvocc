@@ -497,6 +497,7 @@ class SampleReceiveController extends Controller
 	}
 
 	protected function createSampleAnalyzeRequisition(Request $request) {
+        /* get analyze user for select option */
 		$parameters = Parameter::select('main_analys_user_id', 'main_analys')->groupBy('main_analys_user_id')->orderBy('main_analys')->get()->toArray();
 		foreach ($parameters as $key => $value) {
 			if (!is_null($value['main_analys_user_id'])) {
@@ -568,7 +569,7 @@ class SampleReceiveController extends Controller
 										$htm .= "<td>".$value['main_analys_name']."</td>";
 										match ($value['status']) {
 											'requisition' => $htm .= "<td><a href=\"#\" class=\"btn btn-success btn-sm\"><i class=\"fal fa-check\"></a></td>",
-											'pending' => $htm .= "<td><a href=\"".route('sample.analyze.requisition', ['lid'=>$value['lab_no'], 'aid'=>$value['main_analys_user_id'], 'id'=>$value['order_sample_parameter_id']])."\" class=\"btn btn-warning btn-sm\">เบิก</td>"
+											'pending' => $htm .= "<td><a href=\"".route('sample.analyze.requisition', ['lab_no'=>$value['lab_no'], 'analyze_user'=>$value['main_analys_user_id'], 'id'=>$value['order_sample_parameter_id']])."\" class=\"btn btn-warning btn-sm\">เบิก</td>"
 										};
 									$htm .= "</tr>";
 								} else {
@@ -603,7 +604,7 @@ class SampleReceiveController extends Controller
 				$order_sample_paramet = OrderSampleParameter::findOrFail($request->id);
 				$order_sample_paramet->status = 'requisition';
 				$order_sample_paramet->save();
-				return redirect()->route('sample.analyze.requisition.create.ajax')->with('success', 'บันทึกการเบิกตัวอย่างแล้ว');
+				return redirect()->back()->with('success', 'บันทึกการเบิกตัวอย่างแล้ว');
 			} else {
 				return redirect()->back()->with('error', 'ไม่สามารถเบิกตัวอย่างนี้ได้');
 			}
