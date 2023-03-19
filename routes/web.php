@@ -137,23 +137,24 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 	});
 	Route::name('sample.')->prefix('sample')->group(function() {
 		Route::resource('received', SampleReceiveController::class);
-		Route::controller(SampleReceiveController::class)->group(function() {
-			Route::get('/received/order/{order_id}/step01', 'step01')->name('received.step01');
-			Route::post('/received/order/step01', 'step01Post')->name('received.step01.post');
-			Route::get('/received/order/{order_id}/step02', 'step02')->name('received.step02');
-			Route::post('/received/order/step02', 'step02Post')->name('received.step02.post');
-			Route::get('/received/order/{order_id}/step03', 'step03')->name('received.step03');
-			Route::post('/received/order/step03', 'step03Post')->name('received.step03.post');
-			Route::get('/received/order/{order_id}/print', 'print')->name('received.print');
-			Route::get('/received/order/{order_id}/printf', 'printf')->name('received.printf');
-			Route::get('/received/order/lab/no/search', 'searchOrderSampleByLabNo')->name('search.by.lab.no');
-			Route::get('/received/order/test/no/create', 'createTestNo')->name('received.test.no.create');
-			Route::post('/received/order/test/no/set', 'setTestNo')->name('received.test.no.set');
-			Route::post('/received/order/test/no/barcode', 'printTestNoBarcode')->name('received.test.no.barcode');
+		Route::controller(SampleReceiveController::class)->prefix('received/order')->group(function() {
+			Route::get('/{order_id}/step01', 'step01')->name('received.step01');
+			Route::post('/step01', 'step01Post')->name('received.step01.post');
+			Route::get('/{order_id}/step02', 'step02')->name('received.step02');
+			Route::post('/step02', 'step02Post')->name('received.step02.post');
+			Route::get('/{order_id}/step03', 'step03')->name('received.step03');
+			Route::post('/step03', 'step03Post')->name('received.step03.post');
+			Route::get('/{order_id}/print', 'print')->name('received.print');
+			Route::get('/{order_id}/printf', 'printf')->name('received.printf');
+			Route::get('/lab/no/search', 'searchOrderSampleByLabNo')->name('search.by.lab.no');
+			Route::get('/test/no/create', 'createTestNo')->name('received.test.no.create');
+			Route::post('/test/no/set', 'setTestNo')->name('received.test.no.set');
+			Route::post('/test/no/barcode', 'printTestNoBarcode')->name('received.test.no.barcode');
 
-			Route::get('/analyze/order/requisition/create', 'createSampleAnalyzeRequisition')->name('analyze.requisition.create');
-			Route::get('/analyze/order/requisition/create/ajax', 'createSampleAnalyzeRequisitionAjax')->name('analyze.requisition.create.ajax');
-			Route::get('/analyze/order/requisition/lab_no/{lab_no}/analyze_user/{analyze_user}/paramet/{id}', 'sampleAnalyzeRequisition')->name('analyze.requisition');
+			Route::get('/requisition/create', 'createSampleAnalyzeRequisition')->name('received.requisition.create');
+			Route::get('/requisition/create/ajax', 'createSampleAnalyzeRequisitionAjax')->name('received.requisition.create.ajax');
+			Route::get('/requisition/update/ajax', 'updateSampleRequisition')->name('received.requisition.update.ajax');
+			Route::get('/requisition/print/ajax', 'printSampleRequisition')->name('received.requisition.print.ajax');
 
 		});
 	});

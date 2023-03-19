@@ -37,15 +37,15 @@ legend {
 				<div class="panel-content">
 					<ul class="steps">
 						<li class="undone"><a href="{{ route('sample.received.create') }}"><span class="d-none d-sm-inline">รายการคำขอ</span></a></li>
-						<li class="undone"><p><span class="d-none d-sm-inline">รับตัวอย่าง</span></p></li>
-						<li class="active"><p><span class="d-none d-sm-inline">การตรวจวิเคราะห์</span></&p></li>
+						<li class="active"><p><span class="d-none d-sm-inline">รับตัวอย่าง</span></p></li>
+						<li class="undone"><p><span class="d-none d-sm-inline">การตรวจวิเคราะห์</span></p></li>
 						<li class="undone"><p><span class="d-none d-sm-inline">รายงานผล</span></p></li>
 					</ul>
 					<h4>เบิกตัวอย่าง</h4>
-					<form name="analyze_form" action="{{ route('sample.analyze.requisition.create.ajax') }}" method="GET" enctype="multipart/form-data">
+					<form name="requisition_form" action="#" method="GET">
+						<input type="hidden" name="_token" value="{{ csrf_token() }}" />
 						<fieldset>
 							<legend>ค้นหา</legend>
-							<input type="hidden" name="_token" value="{{ csrf_token() }}" />
 							<div class="row">
 								<div class="col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-2">
 									<div class="form-group">
@@ -67,8 +67,7 @@ legend {
 									</div>
 								</div>
 								<div class="col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-2">
-									<button type="button" class="btn btn-info btn-md" id="analyze_search_btn">ค้นหา</button>
-									<button type="submit" class="btn btn-secondary btn-md" id="analyze_search_btn">ค้นหาx</button>
+									<button type="button" class="btn btn-info btn-md" id="search_btn">ค้นหา</button>
 								</div>
 							</div>
 						</fieldset>
@@ -77,7 +76,7 @@ legend {
 						<div class="col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mt-4">
 							<div id="loader" class="text-center hidden">
 								<span class="spinner-grow spinner-grow-sm text-danger" role="status" aria-hidden="true"></span>
-								<span class="text-danger" style="line-height:16px;">Loading...</span>
+								<span class="text-danger" style="line-height:16px;">กำลังโหลด...</span>
 							</div>
 							<div id="order_sample_table"></div>
 						</div>
@@ -86,7 +85,7 @@ legend {
 				<div class="panel-content border-faded border-left-0 border-right-0 border-bottom-0 d-flex flex-row align-items-center">
 					<div class="form-row">
 						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
-							<a href="" class="btn btn-primary ml-auto" id="print_testing_btn" disabled> <i class="fal fa-save"></i> พิมพ์บันทึกการทดสอบ</a>
+							<button id="print_btn" class="btn btn-primary ml-auto" id="print_testing_btn"> <i class="fal fa-print"></i> พิมพ์บันทึกการทดสอบ</button>
 							<a href="{{ route('sample.received.index') }}" type="button" class="btn btn-primary ml-auto"><i class="fal fa-home"></i> กลับไปหน้าแรก</a>
 						</div>
 					</div>
@@ -100,29 +99,47 @@ legend {
 <script type="text/javascript">
 $(document).ready(function() {
 	$.ajaxSetup({headers:{'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')}});
-	$('#analyze_search_btn').click(function() {
+	$('#search_btn').click(function() {
 		$('#order_sample_table').html('');
 		let lab_no = $('#lab_no').val();
 		let analyze_user = $('#analyze_user').val();
 		$.ajax({
 			type: "GET",
-			url: "{{ route('sample.analyze.requisition.create.ajax') }}",
+			url: "{{ route('sample.received.requisition.create.ajax') }}",
 			data: {lab_no: lab_no, analyze_user: analyze_user},
 			dataType: "html",
 			beforeSend: function() {
 				$('#loader').removeClass('hidden')
 			},
-			success: function(response) {
-				$('#order_sample_table').html(response);
+			success: function(res) {
+				$('#order_sample_table').html(res);
 			},
 			complete: function() {
 				$('#loader').addClass('hidden')
 			},
-			error: function(jqXhr, textStatus, errorMessage) {
-				alert('Error code: ' + jqXhr.status + errorMessage);
+			error: function(xhr, status, error) {
+				alert('Error code: ' + xhr.status + error);
 			}
 		});
 	});
+	$('#print_btn').click(function() {
+		let lab_no = $('#lab_no').val();
+		let analyze_user = $('#analyze_user').val();
+		$.ajax({
+			type: "GET",
+			url: "{{ route('sample.received.requisition.print.ajax') }}",
+			data: {lab_no: lab_no, analyze_user: analyze_user},
+			dataType: "json",
+			success: function(res) {
+				console.log(res);
+			},
+			error: function(xhr, status, error) {
+				alert('Error code: ' + xhr.status + error);
+			}
+		});
+
+	});
+
 });
 </script>
 @endpush
