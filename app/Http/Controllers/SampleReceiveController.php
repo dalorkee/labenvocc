@@ -564,11 +564,11 @@ class SampleReceiveController extends Controller
 										match ($value['status']) {
 											'requisition' => $htm .= "
 												<td>
-													<a href=\"#\" class=\"btn btn-success btn-sm\" style=\"width:86px;\" disabled><i class=\"fal fa-check\"></i> เบิกแล้ว</a>
+													<button type=\"button\" class=\"btn btn-success btn-sm\" style=\"width:86px;\" disabled><i class=\"fal fa-check\"></i> เบิกแล้ว</button>
 												</td>",
 											'pending' => $htm .= "
 												<td>
-													<button class='btn btn-primary btn-sm requisition-btn' style=\"width:86px;\" onClick='updateRequisitionStatus(\"".$value['lab_no']."\", \"".$value['main_analys_user_id']."\", \"".$value['order_sample_parameter_id']."\")'>เบิก</button>
+													<button type=\"button\" class=\"btn btn-primary btn-sm requisition-btn\" style=\"width:86px;\" onClick='updateRequisitionStatus(\"".$value['lab_no']."\", \"".$value['main_analys_user_id']."\", \"".$value['order_sample_parameter_id']."\")'>เบิก</button>
 												</td>"
 										};
 									$htm .= "</tr>";
@@ -590,38 +590,39 @@ class SampleReceiveController extends Controller
 				</div>
 				<script type='text/javascript'>
 					function updateRequisitionStatus(lab_no, analyze_user, order_sample_parameter_id) {
-                        console.log(order_sample_parameter_id);
+						$('#order_sample_table').html('');
 						$.ajax({
-							type: 'GET',
+							type: 'POST',
+							async: false,
 							url: '".route('sample.received.requisition.update.ajax')."',
 							data: {lab_no: lab_no, analyze_user: analyze_user, order_sample_parameter_id: order_sample_parameter_id},
 							dataType: 'JSON',
+							beforeSend: function() {
+								$('#loader').removeClass('hidden')
+							},
 							success: function(res) {
 								if (res.success == true) {
 									let get_lab_no = $('#lab_no').val();
 									let get_analyze_user = $('#analyze_user').val();
-									$('#order_sample_table').html('');
 									$.ajax({
-										type: 'GET',
+										type: 'POST',
+										async: false,
 										url: '".route('sample.received.requisition.create.ajax')."',
 										data: {lab_no: get_lab_no, analyze_user: get_analyze_user},
 										dataType: 'html',
-										beforeSend: function() {
-											$('#loader').removeClass('hidden')
-										},
 										success: function(response) {
 											$('#order_sample_table').html(response);
-										},
-										complete: function() {
-											$('#loader').addClass('hidden')
 										},
 										error: function(jqXhr, textStatus, errorMessage) {
 											console.log('Show the table error code: ' + jqXhr.status + ' ' + jqXhr.responseText);
 										}
 									});
 								} else {
-                                    console.log(res);
-                                }
+									console.log(res);
+								}
+							},
+							complete: function() {
+								$('#loader').addClass('hidden')
 							},
 							error: function(xhr, status, error) {
 								console.log('Update error code: ' + xhr.status + ' ' + xhr.responseText);
@@ -656,7 +657,7 @@ class SampleReceiveController extends Controller
 					return response()->json(['success' => false, 'message' => 'Update unsuccessfull']);
 				}
 			} else {
-                return response()->json(['success' => false, 'message' => 'Empty ther order_sample_parameter_id']);
+				return response()->json(['success' => false, 'message' => 'Empty ther order_sample_parameter_id']);
 			}
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
@@ -664,37 +665,37 @@ class SampleReceiveController extends Controller
 	}
 
 	protected function printSampleRequisition(Request $request) {
-		if (!empty($request->lab_no)) {
-			$order = Order::select('id')->whereLab_no(trim($request->lab_no))->get();
-			if (count($order) > 0) {
-				$order_sample = OrderSample::whereOrder_id($order[0]->id)->with('parameters', function($query) {
-					$query->whereIn('status', ['requisition', 'print']);
-				})->whereSample_received_status('y')->get();
-				$result = [];
-				$order_sample->each(function($item, $key) use (&$result, $request) {
-					$analyze_user = trim($request->analyze_user);
-					foreach ($item->parameters as $k => $v) {
-						if (!empty($analyze_user) && $analyze_user != $v['main_analys_user_id']) {
-								continue;
-							} else {
-							$tmp['lab_no'] = $request->lab_no;
-							$tmp['order_id'] = $v['order_id'];
-							$tmp['order_sample_id'] = $v['order_sample_id'];
-							$tmp['order_sample_parameter_id'] = $v['id'];
-							$tmp['paramet_id'] = $v['parameter_id'];
-							$tmp['paramet_name'] = $v['parameter_name'];
-							$tmp['sample_character_id'] = $v['sample_character_id'];
-							$tmp['sample_character_name'] = $v['sample_character_name'];
-							$tmp['main_analys_user_id'] = $v['main_analys_user_id'];
-							$tmp['main_analys_name'] = $v['main_analys_name'];
-							$tmp['status'] = $v['status'];
-						}
-						array_push($result, $tmp);
-					};
-				});
-			}
-		}
-        return view('print.sample-requisition');
+		// if (!empty($request->lab_no)) {
+		// 	$order = Order::select('id')->whereLab_no(trim($request->lab_no))->get();
+		// 	if (count($order) > 0) {
+		// 		$order_sample = OrderSample::whereOrder_id($order[0]->id)->with('parameters', function($query) {
+		// 			$query->whereIn('status', ['requisition', 'print']);
+		// 		})->whereSample_received_status('y')->get();
+		// 		$result = [];
+		// 		$order_sample->each(function($item, $key) use (&$result, $request) {
+		// 			$analyze_user = trim($request->analyze_user);
+		// 			foreach ($item->parameters as $k => $v) {
+		// 				if (!empty($analyze_user) && $analyze_user != $v['main_analys_user_id']) {
+		// 						continue;
+		// 					} else {
+		// 					$tmp['lab_no'] = $request->lab_no;
+		// 					$tmp['order_id'] = $v['order_id'];
+		// 					$tmp['order_sample_id'] = $v['order_sample_id'];
+		// 					$tmp['order_sample_parameter_id'] = $v['id'];
+		// 					$tmp['paramet_id'] = $v['parameter_id'];
+		// 					$tmp['paramet_name'] = $v['parameter_name'];
+		// 					$tmp['sample_character_id'] = $v['sample_character_id'];
+		// 					$tmp['sample_character_name'] = $v['sample_character_name'];
+		// 					$tmp['main_analys_user_id'] = $v['main_analys_user_id'];
+		// 					$tmp['main_analys_name'] = $v['main_analys_name'];
+		// 					$tmp['status'] = $v['status'];
+		// 				}
+		// 				array_push($result, $tmp);
+		// 			};
+		// 		});
+		// 	}
+		// }
+		return view('print.sample-requisition');
 
 		// return response()->json([
 		// 	'succss' => true,

@@ -34,62 +34,64 @@ legend {
 				</div>
 			</div>
 			<div class="panel-container show">
-				<div class="panel-content">
-					<ul class="steps">
-						<li class="undone"><a href="{{ route('sample.received.create') }}"><span class="d-none d-sm-inline">รายการคำขอ</span></a></li>
-						<li class="active"><p><span class="d-none d-sm-inline">รับตัวอย่าง</span></p></li>
-						<li class="undone"><p><span class="d-none d-sm-inline">การตรวจวิเคราะห์</span></p></li>
-						<li class="undone"><p><span class="d-none d-sm-inline">รายงานผล</span></p></li>
-					</ul>
-					<h4>เบิกตัวอย่าง</h4>
-					<form name="requisition_form" action="#" method="GET">
-						<input type="hidden" name="_token" value="{{ csrf_token() }}" />
-						<fieldset>
-							<legend>ค้นหา</legend>
-							<div class="row">
-								<div class="col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-2">
-									<div class="form-group">
-										<label class="form-label" for="lab_no">Lab No.</label>
-										<div class="input-group flex-nowrap">
-											<input type="text" name="lab_no" class="form-control" id="lab_no" placeholder="Lab No." />
+				<form name="requisition_form" action="{{ route('sample.received.requisition.print') }}" method="POST">
+					<input type="hidden" name="_token" value="{{ csrf_token() }}" />
+					<div class="panel-content">
+						<ul class="steps">
+							<li class="undone"><a href="{{ route('sample.received.create') }}"><span class="d-none d-sm-inline">รายการคำขอ</span></a></li>
+							<li class="active"><p><span class="d-none d-sm-inline">รับตัวอย่าง</span></p></li>
+							<li class="undone"><p><span class="d-none d-sm-inline">การตรวจวิเคราะห์</span></p></li>
+							<li class="undone"><p><span class="d-none d-sm-inline">รายงานผล</span></p></li>
+						</ul>
+						<h4>เบิกตัวอย่าง</h4>
+						{{-- <form name="requisition_form" action="#" method="GET"> --}}
+							<fieldset>
+								<legend>ค้นหา</legend>
+								<div class="row">
+									<div class="col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-2">
+										<div class="form-group">
+											<label class="form-label" for="lab_no">Lab No.</label>
+											<div class="input-group flex-nowrap">
+												<input type="text" name="lab_no" class="form-control" id="lab_no" placeholder="Lab No." />
+											</div>
 										</div>
 									</div>
-								</div>
-								<div class="col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-4">
-									<div class="form-group">
-										<label class="form-label" for="analyze_user">ผู้วิเคราะห์</label>
-										<select name="analyze_user" id="analyze_user" class="form-control" id="analyze_user">
-											<option value="0">-- โปรดเลือก --</option>
-											@foreach ($analyze_user as $key => $value)
-												<option value="{{ $key }}">{{ $value }}</option>
-											@endforeach
-										</select>
+									<div class="col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-4">
+										<div class="form-group">
+											<label class="form-label" for="analyze_user">ผู้วิเคราะห์</label>
+											<select name="analyze_user" id="analyze_user" class="form-control" id="analyze_user">
+												<option value="0">-- โปรดเลือก --</option>
+												@foreach ($analyze_user as $key => $value)
+													<option value="{{ $key }}">{{ $value }}</option>
+												@endforeach
+											</select>
+										</div>
+									</div>
+									<div class="col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-2">
+										<button type="button" class="btn btn-info btn-md" id="search_btn">ค้นหา</button>
 									</div>
 								</div>
-								<div class="col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-2">
-									<button type="button" class="btn btn-info btn-md" id="search_btn">ค้นหา</button>
+							</fieldset>
+						{{-- </form> --}}
+						<div class="row">
+							<div class="col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mt-4">
+								<div id="loader" class="text-center hidden">
+									<span class="spinner-grow spinner-grow-sm text-danger" role="status" aria-hidden="true"></span>
+									<span class="text-danger" style="line-height:16px;">กำลังโหลด...</span>
 								</div>
+								<div id="order_sample_table"></div>
 							</div>
-						</fieldset>
-					</form>
-					<div class="row">
-						<div class="col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mt-4">
-							<div id="loader" class="text-center hidden">
-								<span class="spinner-grow spinner-grow-sm text-danger" role="status" aria-hidden="true"></span>
-								<span class="text-danger" style="line-height:16px;">กำลังโหลด...</span>
-							</div>
-							<div id="order_sample_table"></div>
 						</div>
 					</div>
-				</div>
-				<div class="panel-content border-faded border-left-0 border-right-0 border-bottom-0 d-flex flex-row align-items-center">
-					<div class="form-row">
-						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
-							<button id="print_btn" class="btn btn-primary ml-auto" id="print_testing_btn"> <i class="fal fa-print"></i> พิมพ์บันทึกการทดสอบ</button>
-							<a href="{{ route('sample.received.index') }}" type="button" class="btn btn-primary ml-auto"><i class="fal fa-home"></i> กลับไปหน้าแรก</a>
+					<div class="panel-content border-faded border-left-0 border-right-0 border-bottom-0 d-flex flex-row align-items-center">
+						<div class="form-row">
+							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
+								<button type="submit" class="btn btn-primary ml-auto"> <i class="fal fa-print"></i> พิมพ์บันทึกการทดสอบ</button>
+								<a href="{{ route('sample.received.index') }}" class="btn btn-primary ml-auto"><i class="fal fa-home"></i> กลับไปหน้าแรก</a>
+							</div>
 						</div>
 					</div>
-				</div>
+				</form>
 			</div>
 		</div>
 	</div>
@@ -104,7 +106,7 @@ $(document).ready(function() {
 		let lab_no = $('#lab_no').val();
 		let analyze_user = $('#analyze_user').val();
 		$.ajax({
-			type: "GET",
+			type: "POST",
 			url: "{{ route('sample.received.requisition.create.ajax') }}",
 			data: {lab_no: lab_no, analyze_user: analyze_user},
 			dataType: "html",
@@ -118,27 +120,27 @@ $(document).ready(function() {
 				$('#loader').addClass('hidden')
 			},
 			error: function(xhr, status, error) {
-				alert('Error code: ' + xhr.status + error);
+				console.log('Error code: ' + xhr.status + ':' + xhr.responseText);
 			}
 		});
 	});
-	$('#print_btn').click(function() {
-		let lab_no = $('#lab_no').val();
-		let analyze_user = $('#analyze_user').val();
-		$.ajax({
-			type: "GET",
-			url: "{{ route('sample.received.requisition.print.ajax') }}",
-			data: {lab_no: lab_no, analyze_user: analyze_user},
-			dataType: "json",
-			success: function(res) {
-				console.log(res);
-			},
-			error: function(xhr, status, error) {
-				alert('Error code: ' + xhr.status + error);
-			}
-		});
+	// $('#print_btn').click(function() {
+	// 	let lab_no = $('#lab_no').val();
+	// 	let analyze_user = $('#analyze_user').val();
+	// 	$.ajax({
+	// 		type: "POST",
+	// 		url: "{{ route('sample.received.requisition.print') }}",
+	// 		data: {lab_no: lab_no, analyze_user: analyze_user},
+	// 		dataType: "json",
+	// 		success: function(res) {
+	// 			console.log(res);
+	// 		},
+	// 		error: function(xhr, status, error) {
+	// 			console.log('Error code: ' + xhr.status + ':' + xhr.responseText);
+	// 		}
+	// 	});
 
-	});
+	// });
 
 });
 </script>

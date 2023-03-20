@@ -152,9 +152,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 			Route::post('/test/no/barcode', 'printTestNoBarcode')->name('received.test.no.barcode');
 
 			Route::get('/requisition/create', 'createSampleAnalyzeRequisition')->name('received.requisition.create');
-			Route::get('/requisition/create/ajax', 'createSampleAnalyzeRequisitionAjax')->name('received.requisition.create.ajax');
-			Route::get('/requisition/update/ajax', 'updateSampleRequisition')->name('received.requisition.update.ajax');
-			Route::get('/requisition/print/ajax', 'printSampleRequisition')->name('received.requisition.print.ajax');
+			Route::post('/requisition/create/ajax', 'createSampleAnalyzeRequisitionAjax')->name('received.requisition.create.ajax');
+			Route::post('/requisition/update/ajax', 'updateSampleRequisition')->name('received.requisition.update.ajax');
+			Route::post('/requisition/print', 'printSampleRequisition')->name('received.requisition.print');
 
 		});
 	});

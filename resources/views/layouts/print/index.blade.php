@@ -8,6 +8,6 @@
 </head>
 <body class="mod-bg-1 ">
 	@yield('content')
-</div>
+    @yield('script')
 </body>
 </html>
