@@ -665,37 +665,38 @@ class SampleReceiveController extends Controller
 	}
 
 	protected function printSampleRequisition(Request $request) {
-		// if (!empty($request->lab_no)) {
-		// 	$order = Order::select('id')->whereLab_no(trim($request->lab_no))->get();
-		// 	if (count($order) > 0) {
-		// 		$order_sample = OrderSample::whereOrder_id($order[0]->id)->with('parameters', function($query) {
-		// 			$query->whereIn('status', ['requisition', 'print']);
-		// 		})->whereSample_received_status('y')->get();
-		// 		$result = [];
-		// 		$order_sample->each(function($item, $key) use (&$result, $request) {
-		// 			$analyze_user = trim($request->analyze_user);
-		// 			foreach ($item->parameters as $k => $v) {
-		// 				if (!empty($analyze_user) && $analyze_user != $v['main_analys_user_id']) {
-		// 						continue;
-		// 					} else {
-		// 					$tmp['lab_no'] = $request->lab_no;
-		// 					$tmp['order_id'] = $v['order_id'];
-		// 					$tmp['order_sample_id'] = $v['order_sample_id'];
-		// 					$tmp['order_sample_parameter_id'] = $v['id'];
-		// 					$tmp['paramet_id'] = $v['parameter_id'];
-		// 					$tmp['paramet_name'] = $v['parameter_name'];
-		// 					$tmp['sample_character_id'] = $v['sample_character_id'];
-		// 					$tmp['sample_character_name'] = $v['sample_character_name'];
-		// 					$tmp['main_analys_user_id'] = $v['main_analys_user_id'];
-		// 					$tmp['main_analys_name'] = $v['main_analys_name'];
-		// 					$tmp['status'] = $v['status'];
-		// 				}
-		// 				array_push($result, $tmp);
-		// 			};
-		// 		});
-		// 	}
-		// }
-		return view('print.sample-requisition');
+		if (!empty($request->lab_no)) {
+			$order = Order::select('id')->whereLab_no(trim($request->lab_no))->get();
+			if (count($order) > 0) {
+				$order_sample = OrderSample::whereOrder_id($order[0]->id)->with('parameters', function($query) {
+					$query->whereIn('status', ['requisition', 'print']);
+				})->whereSample_received_status('y')->get();
+				$result = [];
+				$order_sample->each(function($item, $key) use (&$result, $request) {
+					$analyze_user = trim($request->analyze_user);
+					foreach ($item->parameters as $k => $v) {
+						if (!empty($analyze_user) && $analyze_user != $v['main_analys_user_id']) {
+								continue;
+							} else {
+							$tmp['lab_no'] = $request->lab_no;
+							$tmp['order_id'] = $v['order_id'];
+							$tmp['order_sample_id'] = $v['order_sample_id'];
+							$tmp['order_sample_parameter_id'] = $v['id'];
+							$tmp['paramet_id'] = $v['parameter_id'];
+							$tmp['paramet_name'] = $v['parameter_name'];
+							$tmp['sample_character_id'] = $v['sample_character_id'];
+							$tmp['sample_character_name'] = $v['sample_character_name'];
+							$tmp['main_analys_user_id'] = $v['main_analys_user_id'];
+							$tmp['main_analys_name'] = $v['main_analys_name'];
+							$tmp['status'] = $v['status'];
+						}
+						array_push($result, $tmp);
+					};
+				});
+			}
+		}
+        dd($result);
+		return view('print.sample-requisition', compact('result'));
 
 		// return response()->json([
 		// 	'succss' => true,

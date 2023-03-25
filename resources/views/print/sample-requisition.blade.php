@@ -35,13 +35,7 @@ h1,h2,h3,h4,h5,h6 {font-family:"THsarabunNew",sans-serif}
 .table-wrapper {width:98%; margin:0 auto; padding:10px}
 table {border-collapse:collapse; font-size:16px; font-family:"THsarabunNew"}
 table tr th, table tr td {height:30px; font-size:16px; border:1px solid #bbb}
-.footer {
-	position: relative;
-	width: 100%;
-	height: 60px;
-    margin: 0;
-    padding: 0;
-}
+.footer {position:relative; width:100%; height:60px; margin:0; padding:0}
 .tester-name {position: absolute; top: 6px; left: 20px; height: 20px; line-height: 20px}
 .test-date{position: absolute; top: 6px; left: 220px;  height: 20px; line-height: 20px}
 .supervisor-name{position: absolute; top: 6px; left: 420px;  height: 20px; line-height: 20px}
@@ -85,7 +79,7 @@ table tr th, table tr td {height:30px; font-size:16px; border:1px solid #bbb}
 			<p>ศูนย์อ้างอิงทางห้องปฏิบัติการและพิษวิทยา</p>
 		</div>
 		<div class="heading-detail">
-			<p class="lab-no">Lab No : 1234</p>
+			<p class="lab-no">Lab No : {{ $result[0]['lab_no'] }}</p>
 			<p class="sample-date">วันที่รับตัวอย่าง : 20/03/2566</p>
 			<p class="work-type">ประเภทงาน : [✔] บริการ [✔] วิจัย [✔] เฝ้าระวัง [✔] SRRT/สอบสวนโรค [✔] อื่นๆ</p>
 			<p class="sample-amount">จำนวนตัวอย่าง : 20</p>
