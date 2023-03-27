@@ -40,26 +40,18 @@ table tr th, table tr td {height:30px; font-size:16px; border:1px solid #bbb}
 .test-date{position: absolute; top: 6px; left: 220px;  height: 20px; line-height: 20px}
 .supervisor-name{position: absolute; top: 6px; left: 420px;  height: 20px; line-height: 20px}
 .verify-date{position: absolute; top: 6px; left: 620px;  height: 20px; line-height: 20px}
+.text-center {text-align: center}
 #printBtn, #homeBtn {
   background: #5E5DF0;
   border-radius: 10px;
-  box-shadow: #5E5DF0 0 10px 20px -10px;
   box-sizing: border-box;
   color: #FFFFFF;
   cursor: pointer;
-  font-family:"Tahoma",sans-serif;;
-  font-size: 16px;
-  font-weight: 700;
-  line-height: 24px;
-  opacity: 1;
-  outline: 0 solid transparent;
-  padding: 8px 18px;
-  user-select: none;
-  -webkit-user-select: none;
-  touch-action: manipulation;
-  width: fit-content;
-  word-break: break-word;
+  font-family:"THsarabunNew",sans-serif;;
+  font-size: 1.275em;
+  padding: 8px 10px;
   border: 0;
+  text-decoration: none;
 }
 @page {size:A4 landscape; margin:0}
 @media print {
@@ -79,45 +71,81 @@ table tr th, table tr td {height:30px; font-size:16px; border:1px solid #bbb}
 			<p>ศูนย์อ้างอิงทางห้องปฏิบัติการและพิษวิทยา</p>
 		</div>
 		<div class="heading-detail">
-			<p class="lab-no">Lab No : {{ $result[0]['lab_no'] }}</p>
-			<p class="sample-date">วันที่รับตัวอย่าง : 20/03/2566</p>
-			<p class="work-type">ประเภทงาน : [✔] บริการ [✔] วิจัย [✔] เฝ้าระวัง [✔] SRRT/สอบสวนโรค [✔] อื่นๆ</p>
-			<p class="sample-amount">จำนวนตัวอย่าง : 20</p>
-			<p class="sample-report-date">กำหนดส่งรายงานผลลูกค้า : 20/04/2566</p>
+			<p class="lab-no">Lab No : {{ $result['order']['lab_no'] }}</p>
+			<p class="sample-date">วันที่รับตัวอย่าง : {{ $result['order']['received_order_date'] }}</p>
+			@switch($result['order']['type_of_work'])
+				@case(1)
+					<p class="work-type">ประเภทงาน : [✔] บริการ [ ] วิจัย [ ] เฝ้าระวัง [ ] SRRT/สอบสวนโรค [ ] อื่นๆ</p>
+					@break
+				@case(2)
+					<p class="work-type">ประเภทงาน : [ ] บริการ [✔] วิจัย [ ] เฝ้าระวัง [ ] SRRT/สอบสวนโรค [ ] อื่นๆ</p>
+					@break
+				@case(3)
+					<p class="work-type">ประเภทงาน : [ ] บริการ [ ] วิจัย [✔] เฝ้าระวัง [ ] SRRT/สอบสวนโรค [ ] อื่นๆ</p>
+					@break
+				@case(4)
+					<p class="work-type">ประเภทงาน : [ ] บริการ [ ] วิจัย [ ] เฝ้าระวัง [✔] SRRT/สอบสวนโรค [ ] อื่นๆ</p>
+					@break
+				@case(5)
+					<p class="work-type">ประเภทงาน : [ ] บริการ [ ] วิจัย [ ] เฝ้าระวัง [ ] SRRT/สอบสวนโรค [✔] อื่นๆ</p>
+					@break
+				@default
+					<p class="work-type">ประเภทงาน : [ ] บริการ [ ] วิจัย [ ] เฝ้าระวัง [ ] SRRT/สอบสวนโรค [ ] อื่นๆ</p>
+				@endswitch
+			<p class="sample-amount">จำนวนตัวอย่าง : {{ $result['order']['paramet_amount'] }}</p>
+			<p class="sample-report-date">กำหนดส่งรายงานผลลูกค้า : {{ $result['order']['received_order_date'] }}</p>
 		</div>
 		<div class="table-wrapper">
 			<table>
-				<tr>
-					<th>ลำดับที่</th>
-					<th>หมายเลขทดสอบ</th>
-					<th>รหัสตัวอย่าง (ลูกค้า)</th>
-					<th>วิธีเก็บตัวอย่าง</th>
-					<th>ชนิดตัวอย่าง</th>
-					<th>ลักษณะตัวอย่าง</th>
-					<th>จุดที่เก็บ</th>
-					<th>น้ำหนักตัวอย่าง (กรัม)</th>
-					<th>ปริมาตรอากาศ (ลิตร)</th>
-					<th>พารามิเตอร์ที่ทดสอบ</th>
-					<th colspan="3">ผลการทดสอบ (หน่วย)</th>
-				</tr>
-				@for ($i = 1; $i <= 10; $i++)
+				<thead>
 					<tr>
-					@for ($j = 1; $j <= 13; $j++)
-						<td>{{ $j }}</td>
-					@endfor
+						<th>ลำดับที่</th>
+						<th>หมายเลขทดสอบ</th>
+						<th>รหัสตัวอย่าง (ลูกค้า)</th>
+						<th>วิธีเก็บตัวอย่าง</th>
+						<th>ชนิดตัวอย่าง</th>
+						<th>ลักษณะตัวอย่าง</th>
+						<th>จุดที่เก็บ</th>
+						<th>น้ำหนักตัวอย่าง (กรัม)</th>
+						<th>ปริมาตรอากาศ (ลิตร)</th>
+						<th>พารามิเตอร์ที่ทดสอบ</th>
+						<th colspan="3">ผลการทดสอบ (หน่วย)</th>
 					</tr>
-				@endfor
+				</thead>
+				<tfoot></tfoot>
+				<tbody>
+					@forelse ($result['paramet'] as $key => $value)
+						<tr>
+							<td class="text-center">{{ $loop->iteration }}</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td>{{ $result['paramet'][0]['paramet_name'] }}</td>
+							<td colspan="3"></td>
+
+						</tr>
+					@empty
+						<tr>
+							<td colspan="13">ไม่พบข้อมูล</td>
+						</tr>
+					@endforelse
+				</tbody>
 			</table>
 		</div>
 		<div class="footer">
-			<p class="tester-name">ผู้ทดสอบ: นายมะกูดี สัมกะลัมปี</p>
+			<p class="tester-name">ผู้ทดสอบ: นางสาวนราวดี คำภา</p>
 			<p class="test-date">วันที่ทดสอบเสร็จ 20/04/2566</p>
-			<p class="supervisor-name">ผู้ควบคุม พันเอก กำพล สนใจดี</p>
+			<p class="supervisor-name">ผู้ควบคุม นายสมชาย เมาะดี</p>
 			<p class="verify-date">วันที่ตรวจสอบ 20/04/2566</p>
 		</div>
 		<div style="width: 100%; margin: 0 auto; text-align: center">
 			<button type="button" id="printBtn" onClick="window.print();">พิมพ์หน้านี้</button>
-			<button type="button" id="homeBtn" onClick="window.print();">กลับไปหน้าแรก</button>
+			<a href="{{ route('staff.index') }}" type="button" id="homeBtn">กลับไปหน้าแรก</a>
 		</div>
 	</div>
 

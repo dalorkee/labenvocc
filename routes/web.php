@@ -151,10 +151,10 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 			Route::post('/test/no/set', 'setTestNo')->name('received.test.no.set');
 			Route::post('/test/no/barcode', 'printTestNoBarcode')->name('received.test.no.barcode');
 
-			Route::get('/requisition/create', 'createSampleAnalyzeRequisition')->name('received.requisition.create');
-			Route::post('/requisition/create/ajax', 'createSampleAnalyzeRequisitionAjax')->name('received.requisition.create.ajax');
-			Route::post('/requisition/update/ajax', 'updateSampleRequisition')->name('received.requisition.update.ajax');
-			Route::post('/requisition/print', 'printSampleRequisition')->name('received.requisition.print');
+			Route::get('/requisition/create', 'createRequisition')->name('received.requisition.create');
+			Route::post('/requisition/create/ajax', 'createRequisitionAjax')->name('received.requisition.create.ajax');
+			Route::post('/requisition/update', 'updateRequisition')->name('received.requisition.update');
+			Route::post('/requisition/print', 'printRequisition')->name('received.requisition.print');
 
 		});
 	});

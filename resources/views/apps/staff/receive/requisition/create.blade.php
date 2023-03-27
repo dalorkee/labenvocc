@@ -111,37 +111,61 @@ $(document).ready(function() {
 			data: {lab_no: lab_no, analyze_user: analyze_user},
 			dataType: "html",
 			beforeSend: function() {
-				$('#loader').removeClass('hidden')
+				$('#loader').removeClass('hidden');
 			},
 			success: function(res) {
 				$('#order_sample_table').html(res);
 			},
 			complete: function() {
-				$('#loader').addClass('hidden')
+				$('#loader').addClass('hidden');
 			},
 			error: function(xhr, status, error) {
 				console.log('Error code: ' + xhr.status + ':' + xhr.responseText);
 			}
 		});
 	});
-	// $('#print_btn').click(function() {
-	// 	let lab_no = $('#lab_no').val();
-	// 	let analyze_user = $('#analyze_user').val();
-	// 	$.ajax({
-	// 		type: "POST",
-	// 		url: "{{ route('sample.received.requisition.print') }}",
-	// 		data: {lab_no: lab_no, analyze_user: analyze_user},
-	// 		dataType: "json",
-	// 		success: function(res) {
-	// 			console.log(res);
-	// 		},
-	// 		error: function(xhr, status, error) {
-	// 			console.log('Error code: ' + xhr.status + ':' + xhr.responseText);
-	// 		}
-	// 	});
-
-	// });
-
 });
+</script>
+<script type='text/javascript'>
+function updateRequisitionStatus(lab_no, analyze_user, order_sample_parameter_id) {
+	$('#order_sample_table').html('');
+	$.ajax({
+		type: 'POST',
+		async: true,
+		url: "{{ route('sample.received.requisition.update') }}",
+		data: {lab_no: lab_no, analyze_user: analyze_user, order_sample_parameter_id: order_sample_parameter_id},
+		dataType: 'JSON',
+		beforeSend: function() {
+			$('#loader').removeClass('hidden');
+		},
+		success: function(res) {
+			if (res.success === true) {
+				let get_lab_no = $('#lab_no').val();
+				let get_analyze_user = $('#analyze_user').val();
+				$.ajax({
+					type: 'POST',
+					async: true,
+					url: " {{ route('sample.received.requisition.create.ajax') }}",
+					data: {lab_no: get_lab_no, analyze_user: get_analyze_user},
+					dataType: 'html',
+					success: function(response) {
+						$('#order_sample_table').html(response);
+					},
+					error: function(jqXhr, textStatus, errorMessage) {
+						console.log('Show the table error code: ' + jqXhr.status + ' ' + jqXhr.responseText);
+					}
+				});
+			} else {
+				console.log(res);
+			}
+		},
+		complete: function() {
+			$('#loader').addClass('hidden');
+		},
+		error: function(xhr, status, error) {
+			console.log('Update error code: ' + xhr.status + ' ' + xhr.responseText);
+		}
+	});
+}
 </script>
 @endpush

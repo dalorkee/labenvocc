@@ -112,7 +112,8 @@ class SampleReceiveController extends Controller
 		]);
 
 		if (empty($request->session()->get(key: 'order'))) {
-			$order = OrderService::create();
+			// $order = OrderService::create();
+			$order = new Order();
 			$order->fill(attributes: $validated);
 			$request->session()->put(key: 'order', value: $order);
 		} else {
@@ -209,19 +210,20 @@ class SampleReceiveController extends Controller
 
 	protected function step03Post(Request $request) {
 		try {
+			$now_date = date('Y-m-d');
 			$order_id = $request->order_id;
 			$sample_result = $request->session()->get(key: 'sample_result');
 			$order_arr = $request->session()->get(key: 'order')->toArray();
 			$order = OrderService::get($order_id);
 			$order->fill(attributes: $order_arr);
-			DB::transaction(function() use ($sample_result, $order) {
+			DB::transaction(function() use ($sample_result, $order, $now_date) {
 				foreach ($sample_result as $key => $value) {
 					$order_sample = OrderService::findOrderSample($value['id']);
 					$order_sample->sample_verified_status = $value['sample_verified_status_'.$value['id']];
 					$order_sample->sample_received_status = $value['sample_received_status_'.$value['id']];
 					$order_sample->save();
 				}
-				$order->fill(attributes: ['order_status' => 'progress']);
+				$order->fill(attributes: ['order_status' => 'progress', 'received_order_date' => $now_date]);
 				$order->save();
 			});
 			// return redirect()->route('sample.received.index')->with(key: 'success', value: 'บันทึกข้อมูลสำเร็จแล้ว !!');
@@ -496,7 +498,7 @@ class SampleReceiveController extends Controller
 		}
 	}
 
-	protected function createSampleAnalyzeRequisition(Request $request) {
+	protected function createRequisition(Request $request) {
 		/* get analyze user for select option */
 		$parameters = Parameter::select('main_analys_user_id', 'main_analys')->groupBy('main_analys_user_id')->orderBy('main_analys')->get()->toArray();
 		foreach ($parameters as $key => $value) {
@@ -504,10 +506,10 @@ class SampleReceiveController extends Controller
 				$analyze_user[$value['main_analys_user_id']] = $value['main_analys'];
 			}
 		};
-		return view(view: 'apps.staff.receive.requisition', data: compact('analyze_user'));
+		return view(view: 'apps.staff.receive.requisition.create', data: compact('analyze_user'));
 	}
 
-	protected function createSampleAnalyzeRequisitionAjax(Request $request) {
+	protected function createRequisitionAjax(Request $request) {
 		try {
 			if (!empty($request->lab_no)) {
 				$order = Order::select('id')->whereLab_no(trim($request->lab_no))->get();
@@ -587,60 +589,18 @@ class SampleReceiveController extends Controller
 						$htm .= "
 						</tbody>
 					</table>
-				</div>
-				<script type='text/javascript'>
-					function updateRequisitionStatus(lab_no, analyze_user, order_sample_parameter_id) {
-						$('#order_sample_table').html('');
-						$.ajax({
-							type: 'POST',
-							async: false,
-							url: '".route('sample.received.requisition.update.ajax')."',
-							data: {lab_no: lab_no, analyze_user: analyze_user, order_sample_parameter_id: order_sample_parameter_id},
-							dataType: 'JSON',
-							beforeSend: function() {
-								$('#loader').removeClass('hidden')
-							},
-							success: function(res) {
-								if (res.success == true) {
-									let get_lab_no = $('#lab_no').val();
-									let get_analyze_user = $('#analyze_user').val();
-									$.ajax({
-										type: 'POST',
-										async: false,
-										url: '".route('sample.received.requisition.create.ajax')."',
-										data: {lab_no: get_lab_no, analyze_user: get_analyze_user},
-										dataType: 'html',
-										success: function(response) {
-											$('#order_sample_table').html(response);
-										},
-										error: function(jqXhr, textStatus, errorMessage) {
-											console.log('Show the table error code: ' + jqXhr.status + ' ' + jqXhr.responseText);
-										}
-									});
-								} else {
-									console.log(res);
-								}
-							},
-							complete: function() {
-								$('#loader').addClass('hidden')
-							},
-							error: function(xhr, status, error) {
-								console.log('Update error code: ' + xhr.status + ' ' + xhr.responseText);
-							}
-						});
-					}
-				</script>";
+				</div>";
+
 				return $htm;
 			} else {
 				return "<div class=\"alert alert-danger mt-4\" role=\"alert\"><strong>โปรดกรอกข้อมูลให้ถูกต้อง</strong></div>";
 			}
 		} catch (\Exception $e) {
-			dd($e->getMessage());
-			// Log::error($e->getMessage());
+			Log::error($e->getMessage());
 		}
 	}
 
-	protected function updateSampleRequisition(Request $request) {
+	protected function updateRequisition(Request $request) {
 		try {
 			if (!empty($request->order_sample_parameter_id)) {
 				$order_sample_paramet = OrderSampleParameter::findOrFail($request->order_sample_parameter_id);
@@ -664,21 +624,29 @@ class SampleReceiveController extends Controller
 		}
 	}
 
-	protected function printSampleRequisition(Request $request) {
+	protected function printRequisition(Request $request) {
 		if (!empty($request->lab_no)) {
-			$order = Order::select('id')->whereLab_no(trim($request->lab_no))->get();
+			$order = Order::select('id', 'type_of_work', 'received_order_date', 'lab_no', 'report_due_date')->whereLab_no(trim($request->lab_no))->get();
 			if (count($order) > 0) {
 				$order_sample = OrderSample::whereOrder_id($order[0]->id)->with('parameters', function($query) {
 					$query->whereIn('status', ['requisition', 'print']);
 				})->whereSample_received_status('y')->get();
-				$result = [];
+				$result = [
+					'order' => [
+						'order_id' => $order[0]->id,
+						'type_of_work' => $order[0]->type_of_work,
+						'report_due_date' => $order[0]->report_due_date,
+						'lab_no' => $order[0]->lab_no,
+						'received_order_date' => $order[0]->received_order_date,
+					],
+					'paramet' => []
+				];
 				$order_sample->each(function($item, $key) use (&$result, $request) {
 					$analyze_user = trim($request->analyze_user);
 					foreach ($item->parameters as $k => $v) {
 						if (!empty($analyze_user) && $analyze_user != $v['main_analys_user_id']) {
-								continue;
-							} else {
-							$tmp['lab_no'] = $request->lab_no;
+							continue;
+						} else {
 							$tmp['order_id'] = $v['order_id'];
 							$tmp['order_sample_id'] = $v['order_sample_id'];
 							$tmp['order_sample_parameter_id'] = $v['id'];
@@ -690,13 +658,14 @@ class SampleReceiveController extends Controller
 							$tmp['main_analys_name'] = $v['main_analys_name'];
 							$tmp['status'] = $v['status'];
 						}
-						array_push($result, $tmp);
+						array_push($result['paramet'], $tmp);
 					};
 				});
+				$result['order']['paramet_amount'] = count($result['paramet']);
 			}
 		}
-        dd($result);
-		return view('print.sample-requisition', compact('result'));
+		//  dd($result);
+		return view('apps.staff.receive.requisition.print', compact('result'));
 
 		// return response()->json([
 		// 	'succss' => true,
