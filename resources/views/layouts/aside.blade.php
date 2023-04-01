@@ -111,6 +111,11 @@
 								<span class="nav-link-text" data-i18n="nav.plugins_plugins_faq">เบิกตัวอย่าง</span>
 							</a>
 						</li>
+                        <li class="{{ (Request::is('*sample/received/order/report/*'))  ? 'active' : '' }}">
+							<a href="{{ Route('sample.received.report.create') }}" title="ออกรายงาน" data-filter-tags="sample_receive">
+								<span class="nav-link-text" data-i18n="nav.plugins_plugins_faq">ออกรายงาน</span>
+							</a>
+						</li>
 					</ul>
 				</li>
 				<li class="{{ (Request::is('*sample/analyze*'))  ? 'active open' : '' }}">

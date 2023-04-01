@@ -627,10 +627,12 @@ class SampleReceiveController extends Controller
 	protected function printRequisition(Request $request) {
 		if (!empty($request->lab_no)) {
 			$order = Order::select('id', 'type_of_work', 'received_order_date', 'lab_no', 'report_due_date')->whereLab_no(trim($request->lab_no))->get();
+
 			if (count($order) > 0) {
 				$order_sample = OrderSample::whereOrder_id($order[0]->id)->with('parameters', function($query) {
 					$query->whereIn('status', ['requisition', 'print']);
 				})->whereSample_received_status('y')->get();
+
 				$result = [
 					'order' => [
 						'order_id' => $order[0]->id,
@@ -639,12 +641,14 @@ class SampleReceiveController extends Controller
 						'lab_no' => $order[0]->lab_no,
 						'received_order_date' => $order[0]->received_order_date,
 					],
-					'paramet' => []
+					'order_sample_paramet' => [],
+					'order_main_analys_name' => [],
+					'order_main_control_analys_name' => []
 				];
+
 				$order_sample->each(function($item, $key) use (&$result, $request) {
-					$analyze_user = trim($request->analyze_user);
 					foreach ($item->parameters as $k => $v) {
-						if (!empty($analyze_user) && $analyze_user != $v['main_analys_user_id']) {
+						if (!empty($request->analyze_user) && $v['main_analys_user_id'] != $request->analyze_user) {
 							continue;
 						} else {
 							$tmp['order_id'] = $v['order_id'];
@@ -657,22 +661,143 @@ class SampleReceiveController extends Controller
 							$tmp['main_analys_user_id'] = $v['main_analys_user_id'];
 							$tmp['main_analys_name'] = $v['main_analys_name'];
 							$tmp['status'] = $v['status'];
+							$tmp['sample_test_no'] = $item->sample_test_no;
+							if (!empty($v['main_analys_user_id'])) {
+								$result['order_main_analys_name'][$v['main_analys_user_id']] = $v['main_analys_name'];
+							}
+							if (!empty($v['main_control_user_id'])) {
+								$result['order_main_control_analys_name'][$v['main_control_user_id']] = $v['main_control'];
+							}
+							array_push($result['order_sample_paramet'], $tmp);
 						}
-						array_push($result['paramet'], $tmp);
 					};
 				});
-				$result['order']['paramet_amount'] = count($result['paramet']);
+				$result['order']['paramet_amount'] = count($result['order_sample_paramet']);
 			}
 		}
-		//  dd($result);
 		return view('apps.staff.receive.requisition.print', compact('result'));
+	}
 
-		// return response()->json([
-		// 	'succss' => true,
-		// 	'lab_no' => $request->lab_no,
-		// 	'analyze_user' => $request->analyze_user,
-		// 	'result' => $result
-		// ]);
+	protected function createReport(): object {
+		return view(view: 'apps.staff.receive.report.create');
+	}
+
+	protected function createReportAjax(Request $request) {
+		try {
+			if (!empty($request->lab_no)) {
+				$order = Order::select('id', 'lab_no', 'order_status', 'report_due_date')->whereLab_no(trim($request->lab_no))->get();
+				if (count($order) > 0) {
+					$order_sample = OrderSample::whereOrder_id($order[0]->id)->with('parameters', function($query) {
+						$query->whereIn('status', ['pending', 'requisition', 'print']);
+					})->whereSample_received_status('y')->get();
+					$result = [
+						'order' => []
+					];
+					$order_sample->each(function($item, $key) use (&$result, $request, $order) {
+						foreach ($item->parameters as $k => $v) {
+							if (array_key_exists($v['main_analys_user_id'], $result['order'])) {
+								continue;
+							} else {
+								$tmp['lab_no'] = $request->lab_no;
+								$tmp['report_due_date'] = $order[0]->report_due_date;
+								$tmp['order_status'] = $order[0]->order_status;
+								$tmp['order_id'] = $v['order_id'];
+								$tmp['order_sample_id'] = $v['order_sample_id'];
+								$tmp['order_sample_parameter_id'] = $v['id'];
+								$tmp['main_analys_user_id'] = $v['main_analys_user_id'];
+								$tmp['main_analys_name'] = $v['main_analys_name'];
+								$tmp['status'] = $v['status'];
+								$result['order'][$v['main_analys_user_id']] = $tmp;
+							}
+						}
+					});
+				}
+				$htm = "
+				<div class=\"table-responsive\">
+					<table class=\"table table-striped\" style=\"width: 100%\">
+						<thead>
+							<tr class=\"bg-primary text-white\">
+								<th class=\"text-center\">ลำดับ</th>
+								<th>Lab No</th>
+								<th>ผู้วิเคราะห์</th>
+								<th>กำหนดส่งงาน</th>
+								<th>สถานะ</th>
+								<th style=\"width:20%;text-align:center\"></th>
+							</tr>
+						</thead>
+						<tfoot></tfoot>
+						<tbody>";
+						if (count($result) > 0) {
+							$i = 1;
+							foreach ($result['order'] as $key => $value) {
+								if (count($value) > 1) {
+									$htm .= "<tr>";
+										$htm .= "<td class=\"text-center\">".$i."</td>";
+										$htm .= "<td>".$value['lab_no']."</td>";
+										$htm .= "<td>".$value['main_analys_name']."</td>";
+										$htm .= "<td>".$value['report_due_date']."</td>";
+										match ($value['order_status']) {
+											"pending" => $htm .= "
+												<td>
+													<div class=\"progress\">
+														<div class=\"progress-bar bg-danger\" role=\"progressbar\" style=\"width: 25%;\" aria-valuenow=\"25\" aria-valuemin=\"0\" aria-valuemax=\"100\">25%</div>
+													</div>
+												</td>
+												<td class=\"text-center\">
+												<button type=\"button\" class=\"btn btn-secondary btn-sm\" style=\"width:86px;\" disabled>พิมพ์</button>
+												<button type=\"button\" class=\"btn btn-secondary btn-sm\" style=\"width:86px;\" disabled>ส่งผล</button>
+											</td>",
+											"progress" => $htm .= "
+												<td>
+													<div class=\"progress progress-md\">
+														<div class=\"progress-bar bg-danger\" role=\"progressbar\" style=\"width: 50%;\" aria-valuenow=\"50\" aria-valuemin=\"0\" aria-valuemax=\"100\">50%</div>
+													</div>
+												</td>
+												<td class=\"text-center\">
+													<button type=\"button\" class=\"btn btn-secondary btn-sm\" style=\"width:86px;\" disabled>พิมพ์</button>
+													<button type=\"button\" class=\"btn btn-secondary btn-sm\" style=\"width:86px;\" disabled>ส่งผล</button>
+												</td>",
+											"completed" => $htm .= "
+												<td>
+													<div class=\"progress progress-md\">
+														<div class=\"progress-bar bg-success\" role=\"progressbar\" style=\"width: 100%;\" aria-valuenow=\"100\" aria-valuemin=\"0\" aria-valuemax=\"100\">100%</div>
+													</div>
+												</td>
+												<td class=\"text-center\">
+													<a href=\"".route('sample.received.report.print', ['lab_no' => $value['lab_no']])."\" type=\"button\" class=\"btn btn-success btn-sm\" style=\"width:86px;\">พิมพ์</a>
+													<button type=\"button\" class=\"btn btn-success btn-sm\" style=\"width:86px;\">ส่งผล</button>
+											</td>"
+										};
+
+									$htm .= "</tr>";
+								} else {
+									continue;
+								}
+								$i++;
+							}
+						} else {
+							$htm .= "<tr>";
+								$htm .= "<td colspan=\"6\">";
+									$htm .= "<div class=\"alert alert-danger\" role=\"alert\"><strong>ไม่พบข้อมูล</strong></div>";
+								$htm .= "</td>";
+							$htm .= "</tr>";
+						}
+						$htm .= "
+						</tbody>
+					</table>
+				</div>";
+				return $htm;
+			} else {
+				return "<div class=\"alert alert-danger mt-4\" role=\"alert\"><strong>โปรดกรอกข้อมูลให้ถูกต้อง</strong></div>";
+			}
+		} catch (\Exception $e) {
+			Log::error($e->getMessage());
+		}
+	}
+
+	protected function printReport(Request $request) {
+
+		return view(view: 'apps.staff.receive.report.print');
 	}
 
 	private function downloadFile($dir, $file_name): mixed {
@@ -684,7 +809,7 @@ class SampleReceiveController extends Controller
 				return false;
 			}
 		} catch (\Exception $e) {
-			dd($e->getMessage());
+			Log::error($e->getMessage());
 		}
 	}
 }

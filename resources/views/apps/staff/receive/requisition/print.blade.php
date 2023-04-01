@@ -36,10 +36,11 @@ h1,h2,h3,h4,h5,h6 {font-family:"THsarabunNew",sans-serif}
 table {border-collapse:collapse; font-size:16px; font-family:"THsarabunNew"}
 table tr th, table tr td {height:30px; font-size:16px; border:1px solid #bbb}
 .footer {position:relative; width:100%; height:60px; margin:0; padding:0}
-.tester-name {position: absolute; top: 6px; left: 20px; height: 20px; line-height: 20px}
-.test-date{position: absolute; top: 6px; left: 220px;  height: 20px; line-height: 20px}
-.supervisor-name{position: absolute; top: 6px; left: 420px;  height: 20px; line-height: 20px}
-.verify-date{position: absolute; top: 6px; left: 620px;  height: 20px; line-height: 20px}
+.tester-name {position: absolute; top: 0; left: 20px; height: 20px; line-height: 20px}
+.test-date{position: absolute; top: 0; left: 380px;  height: 20px; line-height: 20px}
+.supervisor-name{position: absolute; top: 0; left: 600px;  height: 20px; line-height: 20px}
+.verify-date{position: absolute; top: 0; left: 860px;  height: 20px; line-height: 20px}
+.form-name{position: absolute; top: 24px; right: 24px;  height: 20px; line-height: 20px}
 .text-center {text-align: center}
 #printBtn, #homeBtn {
   background: #5E5DF0;
@@ -96,10 +97,10 @@ table tr th, table tr td {height:30px; font-size:16px; border:1px solid #bbb}
 			<p class="sample-report-date">กำหนดส่งรายงานผลลูกค้า : {{ $result['order']['received_order_date'] }}</p>
 		</div>
 		<div class="table-wrapper">
-			<table>
+			<table cellpadding="0" cellspacing="0" width="100%">
 				<thead>
 					<tr>
-						<th>ลำดับที่</th>
+						<th style="width: 4%">ลำดับที่</th>
 						<th>หมายเลขทดสอบ</th>
 						<th>รหัสตัวอย่าง (ลูกค้า)</th>
 						<th>วิธีเก็บตัวอย่าง</th>
@@ -108,25 +109,27 @@ table tr th, table tr td {height:30px; font-size:16px; border:1px solid #bbb}
 						<th>จุดที่เก็บ</th>
 						<th>น้ำหนักตัวอย่าง (กรัม)</th>
 						<th>ปริมาตรอากาศ (ลิตร)</th>
-						<th>พารามิเตอร์ที่ทดสอบ</th>
+						<th style="width: 20%">พารามิเตอร์ที่ทดสอบ</th>
 						<th colspan="3">ผลการทดสอบ (หน่วย)</th>
 					</tr>
 				</thead>
 				<tfoot></tfoot>
 				<tbody>
-					@forelse ($result['paramet'] as $key => $value)
+					@forelse ($result['order_sample_paramet'] as $key => $value)
 						<tr>
 							<td class="text-center">{{ $loop->iteration }}</td>
+							<td class="text-center">{{ $value['sample_test_no'] }}</td>
+							<td class="text-center">{{ $value['order_sample_parameter_id'] }}</td>
+							<td>&nbsp;</td>
+							<td class="text-center">{{ $value['sample_character_name'] }}</td>
+							<td>&nbsp;</td>
+							<td>&nbsp;</td>
+							<td>&nbsp;</td>
+							<td>&nbsp;</td>
+							<td>{{ $value['paramet_name'] }}</td>
 							<td></td>
 							<td></td>
 							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td>{{ $result['paramet'][0]['paramet_name'] }}</td>
-							<td colspan="3"></td>
 
 						</tr>
 					@empty
@@ -138,12 +141,21 @@ table tr th, table tr td {height:30px; font-size:16px; border:1px solid #bbb}
 			</table>
 		</div>
 		<div class="footer">
-			<p class="tester-name">ผู้ทดสอบ: นางสาวนราวดี คำภา</p>
-			<p class="test-date">วันที่ทดสอบเสร็จ 20/04/2566</p>
-			<p class="supervisor-name">ผู้ควบคุม นายสมชาย เมาะดี</p>
-			<p class="verify-date">วันที่ตรวจสอบ 20/04/2566</p>
+			<p class="tester-name">ผู้ทดสอบ:
+                @foreach ($result['order_main_analys_name'] as $key => $val)
+                    <span>{{ $val }}</span>
+                @endforeach
+            </p>
+			<p class="test-date">วันที่ทดสอบเสร็จ: </p>
+			<p class="supervisor-name">ผู้ควบคุม:
+                @foreach ($result['order_main_control_analys_name'] as $key => $val)
+                    {{ $val }}
+                @endforeach
+            </p>
+			<p class="verify-date">วันที่ตรวจสอบ: </p>
+            <p class="form-name">FM-704-04 Rev.00</p>
 		</div>
-		<div style="width: 100%; margin: 0 auto; text-align: center">
+		<div style="width: 100%; margin: 20px auto 0 auto; text-align: center">
 			<button type="button" id="printBtn" onClick="window.print();">พิมพ์หน้านี้</button>
 			<a href="{{ route('staff.index') }}" type="button" id="homeBtn">กลับไปหน้าแรก</a>
 		</div>

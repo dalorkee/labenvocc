@@ -145,7 +145,6 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 			Route::get('/{order_id}/step03', 'step03')->name('received.step03');
 			Route::post('/step03', 'step03Post')->name('received.step03.post');
 			Route::get('/{order_id}/print', 'print')->name('received.print');
-			Route::get('/{order_id}/printf', 'printf')->name('received.printf');
 			Route::get('/lab/no/search', 'searchOrderSampleByLabNo')->name('search.by.lab.no');
 			Route::get('/test/no/create', 'createTestNo')->name('received.test.no.create');
 			Route::post('/test/no/set', 'setTestNo')->name('received.test.no.set');
@@ -155,6 +154,10 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 			Route::post('/requisition/create/ajax', 'createRequisitionAjax')->name('received.requisition.create.ajax');
 			Route::post('/requisition/update', 'updateRequisition')->name('received.requisition.update');
 			Route::post('/requisition/print', 'printRequisition')->name('received.requisition.print');
+
+			Route::get('/report/create', 'createReport')->name('received.report.create');
+			Route::post('/report/create/ajax', 'createReportAjax')->name('received.report.create.ajax');
+			Route::get('/report/print/lab/{lab_no}', 'printReport')->name('received.report.print');
 
 		});
 	});
