@@ -141,22 +141,22 @@ table tr th, table tr td {height:30px; font-size:16px; border:1px solid #585858}
 		</div>
 		<div class="heading-detail">
 			<div class="row border-top border-right border-left">
-				<div class="w-30 float-left border-right">&nbsp;Lab No.: A</div>
-				<div class="w-700 float-left">&nbsp;หน่วยงานที่ส่งตัวอย่าง: B</div>
+				<div class="w-30 float-left border-right">&nbsp;Lab No.: {{ $result['order']['lab_no'] }}</div>
+				<div class="w-700 float-left">&nbsp;หน่วยงานที่ส่งตัวอย่าง: {{ $result['customer']['agency_name'] }}</div>
 			</div>
 			<div class="row border-top border-right border-left">
-				<div class="w-30 float-left border-right">&nbsp;ประเภทโรงงาน: A</div>
-				<div class="w-700 float-left">&nbsp;ที่อยู่: B</div>
+				<div class="w-30 float-left border-right">&nbsp;ประเภทโรงงาน:</div>
+				<div class="w-700 float-left">&nbsp;ที่อยู่: {{ $result['customer']['address']." ".$result['customer']['sub_district']." ".$result['customer']['district']." ".$result['customer']['province'] }}</div>
 			</div>
 			<div class="row border-top border-right border-left">
-				<div class="w-30 float-left border-right">&nbsp;วันที่รับตัวอย่าง: A</div>
-				<div class="w-30 float-left border-right">&nbsp;วันที่ทดสอบเสร็จ: A</div>
-				<div class="w-40 float-left">&nbsp;วันที่รายงานผล: B</div>
+				<div class="w-30 float-left border-right">&nbsp;วันที่รับตัวอย่าง: {{ $result['order_sample']['sample_receive_date'] }}</div>
+				<div class="w-30 float-left border-right">&nbsp;วันที่ทดสอบเสร็จ: {{ $result['order_sample']['analys_complete_date'] }}</div>
+				<div class="w-40 float-left">&nbsp;วันที่รายงานผล: {{ $result['order_sample']['report_result_date'] }}</div>
 			</div>
 			<div class="row border-top border-right border-left">
-				<div class="w-30 float-left border-right">&nbsp;ชนิดตัวอย่าง: A</div>
-				<div class="w-30 float-left border-right">&nbsp;ชนิดสารพิษ: A</div>
-				<div class="w-40 float-left">&nbsp;วิธีทดสอบ: B</div>
+				<div class="w-30 float-left border-right">&nbsp;ชนิดตัวอย่าง: @foreach ($result['order_sample_paramet_unique']['sample_character_name'] as $val) {{ $val." " }} @endforeach</div>
+				<div class="w-30 float-left border-right">&nbsp;ชนิดสารพิษ:</div>
+				<div class="w-40 float-left">&nbsp;วิธีทดสอบ: @foreach ($result['order_sample_paramet_unique']['technical_name'] as $val) {{ $val." " }} @endforeach</div>
 			</div>
 			<div class="row border-top border-right border-left">
 				<div class="w-100 text-center">ห้องปฏิบัติการได้รับการรับรองตามมาตรฐาน ISO/IEC 17025:2005 ในขอบข่ายที่แสดงเครื่องหมาย *</div>
@@ -187,28 +187,20 @@ table tr th, table tr td {height:30px; font-size:16px; border:1px solid #585858}
 					</thead>
 					<tfoot></tfoot>
 					<tbody>
-						<tr>
-							<td>1</td>
-							<td>2</td>
-							<td>3</td>
-							<td>4</td>
-							<td>5</td>
-							<td>6</td>
-							<td>7</td>
-							<td>8</td>
-							<td>9</td>
-						</tr>
-						<tr>
-							<td>1</td>
-							<td>2</td>
-							<td>3</td>
-							<td>4</td>
-							<td>5</td>
-							<td>6</td>
-							<td>7</td>
-							<td>8</td>
-							<td>9</td>
-						</tr>
+                        @foreach ($result['order_sample_paramet'] as $key => $val)
+                            <tr>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>2</td>
+                                <td>{{ $val['order_no'] }}</td>
+                                <td>4</td>
+                                <td>5</td>
+                                <td>6</td>
+                                <td>7</td>
+                                <td>8</td>
+                                <td>9</td>
+                            </tr>
+                        @endforeach
+
 					</tbody>
 				</table>
 			</div>

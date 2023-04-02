@@ -45,9 +45,11 @@ class OrderSample extends Model
 		'has_parameter',
 		'sample_verified_status',
 		'sample_received_status',
-        'sample_test_no',
+		'sample_test_no',
+		'sample_receive_date',
+		'analys_complete_date',
+		'report_result_date',
 	];
-	// protected $appends = ['sample_date_in_js'];
 
 	public function order() {
 		return $this->belongTo(related: Order::class)->withDefault();
@@ -66,17 +68,28 @@ class OrderSample extends Model
 		});
 	}
 
-/* 	public function getSampleDateInJsAttribute() {
-		if (strlen($this->sample_date) > 0) {
-			$exp = explode("-", $this->sample_date);
-			$str = $exp[2]."/".$exp[1]."/".$exp[0];
-		} else {
-			$str = "";
-		}
-		return $str;
-	} */
-
 	protected function sampleDate(): Attribute {
+		return new Attribute(
+			get: fn ($value) => $this->convertMySQLDateToJs(date: $value),
+			set: fn ($value) => $this->convertJsDateToMySQL(date: $value),
+		);
+	}
+
+    protected function sampleReceiveDate(): Attribute {
+		return new Attribute(
+			get: fn ($value) => $this->convertMySQLDateToJs(date: $value),
+			set: fn ($value) => $this->convertJsDateToMySQL(date: $value),
+		);
+	}
+
+	protected function analysCompleteDate(): Attribute {
+		return new Attribute(
+			get: fn ($value) => $this->convertMySQLDateToJs(date: $value),
+			set: fn ($value) => $this->convertJsDateToMySQL(date: $value),
+		);
+	}
+
+	protected function reportResultDate(): Attribute {
 		return new Attribute(
 			get: fn ($value) => $this->convertMySQLDateToJs(date: $value),
 			set: fn ($value) => $this->convertJsDateToMySQL(date: $value),

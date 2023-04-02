@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\{Response,DB,Storage,Log};
 use App\Services\OrderService;
 use App\Traits\{DateTimeTrait,CommonTrait,DbBoundaryTrait};
 use App\Exceptions\{OrderNotFoundException,InvalidOrderException};
-use App\Models\{Order,OrderSample,OrderSampleParameter,FileUpload,Parameter};
+use App\Models\{User, Order,OrderSample,OrderSampleParameter,FileUpload,Parameter};
 use Yajra\DataTables\Facades\DataTables;
 use Barryvdh\DomPDF\Facade\Pdf;
 
@@ -675,7 +675,7 @@ class SampleReceiveController extends Controller
 				$result['order']['paramet_amount'] = count($result['order_sample_paramet']);
 			}
 		}
-		return view('apps.staff.receive.requisition.print', compact('result'));
+		return view(view: 'apps.staff.receive.requisition.print', data: compact('result'));
 	}
 
 	protected function createReport(): object {
@@ -764,7 +764,7 @@ class SampleReceiveController extends Controller
 													</div>
 												</td>
 												<td class=\"text-center\">
-													<a href=\"".route('sample.received.report.print', ['lab_no' => $value['lab_no']])."\" type=\"button\" class=\"btn btn-success btn-sm\" style=\"width:86px;\">พิมพ์</a>
+													<a href=\"".route('sample.received.report.print', ['lab_no' => $value['lab_no'], 'analys_user' => $value['main_analys_user_id']])."\" type=\"button\" class=\"btn btn-success btn-sm\" style=\"width:86px;\">พิมพ์</a>
 													<button type=\"button\" class=\"btn btn-success btn-sm\" style=\"width:86px;\">ส่งผล</button>
 											</td>"
 										};
@@ -796,8 +796,90 @@ class SampleReceiveController extends Controller
 	}
 
 	protected function printReport(Request $request) {
+		try {
+			if (!empty($request->lab_no)) {
+				$order = Order::select('id', 'order_no', 'user_id', 'customer_agency_name', 'type_of_work', 'received_order_date', 'lab_no', 'report_due_date')->whereLab_no(trim($request->lab_no))->get();
 
-		return view(view: 'apps.staff.receive.report.print');
+				if (count($order) > 0) {
+					$user = User::select('id', 'user_type')->with('userCustomer')->whereId($order[0]->user_id)->get();
+
+					$order_sample = OrderSample::whereOrder_id($order[0]->id)->with('parameters', function($query) {
+						$query->whereIn('status', ['requisition', 'print']);
+					})->whereSample_received_status('y')->get();
+
+					$result = [
+						'customer' => [
+							'user_id' => $user[0]->userCustomer->user_id,
+							'user_type' => $user[0]->user_type,
+							'agency_code' => $user[0]->userCustomer->agency_code,
+							'agency_name' => $user[0]->userCustomer->agency_name,
+							'address' => $user[0]->userCustomer->address,
+							'sub_district' => $user[0]->userCustomer->sub_district,
+							'district' => $user[0]->userCustomer->district,
+							'province' => $user[0]->userCustomer->province,
+							'postcode' => $user[0]->userCustomer->postcode
+						],
+						'order' => [
+							'order_id' => $order[0]->id,
+							'order_no' => $order[0]->order_no,
+							'lab_no' => $order[0]->lab_no,
+						],
+						'order_sample' => [
+							'sample_receive_date' => $order_sample[0]->sample_receive_date,
+							'analys_complete_date' => $order_sample[0]->analys_complete_date,
+							'report_result_date' => $order_sample[0]->report_result_date,
+						],
+						'order_sample_paramet' => [],
+						'order_sample_paramet_unique' => [
+							'sample_character_name' => [],
+							'technical_name' => []
+						],
+					];
+
+					// dd($result);
+
+					$order_sample->each(function($item, $key) use (&$result, $request) {
+						foreach ($item->parameters as $k => $v) {
+							if (!empty($request->analys_user) && $v['main_analys_user_id'] != $request->analys_user) {
+								continue;
+							} else {
+								$tmp['order_id'] = $v['order_id'];
+								$tmp['order_sample_id'] = $v['order_sample_id'];
+								$tmp['order_sample_parameter_id'] = $v['id'];
+								$tmp['order_no'] = $result['order']['order_no'];
+								$tmp['paramet_id'] = $v['parameter_id'];
+								$tmp['paramet_name'] = $v['parameter_name'];
+								$tmp['sample_character_id'] = $v['sample_character_id'];
+								$tmp['sample_character_name'] = $v['sample_character_name'];
+								$tmp['main_analys_user_id'] = $v['main_analys_user_id'];
+								$tmp['main_analys_name'] = $v['main_analys_name'];
+								$tmp['control_analys_name'] = $v['control_analys_name'];
+								$tmp['technical_name'] = $v['technical_name'];
+								$tmp['status'] = $v['status'];
+								$tmp['sample_test_no'] = $item->sample_test_no;
+								array_push($result['order_sample_paramet'], $tmp);
+							}
+						};
+					});
+
+					foreach ($result['order_sample_paramet'] as $key => $val) {
+						if (!in_array(trim($val['sample_character_name']), $result['order_sample_paramet_unique']['sample_character_name'], false)) {
+							array_push($result['order_sample_paramet_unique']['sample_character_name'], $val['sample_character_name']);
+						}
+						if (!in_array(trim($val['technical_name']), $result['order_sample_paramet_unique']['technical_name'], false)) {
+							array_push($result['order_sample_paramet_unique']['technical_name'], $val['technical_name']);
+						}
+					}
+
+				}
+			}
+
+			// dd($result);
+			return view(view: 'apps.staff.receive.report.print', data: compact('result'));
+
+		} catch (\Exception $e) {
+			Log::error($e->getMessage());
+		}
 	}
 
 	private function downloadFile($dir, $file_name): mixed {

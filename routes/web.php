@@ -157,7 +157,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 
 			Route::get('/report/create', 'createReport')->name('received.report.create');
 			Route::post('/report/create/ajax', 'createReportAjax')->name('received.report.create.ajax');
-			Route::get('/report/print/lab/{lab_no}', 'printReport')->name('received.report.print');
+			Route::get('/report/print/lab/{lab_no}/analys_user/{analys_user}', 'printReport')->name('received.report.print');
 
 		});
 	});
