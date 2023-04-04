@@ -13,7 +13,6 @@ class OrderSampleParameter extends Model
 	protected $primaryKey = 'id';
 
 	protected $fillable = [
-		'id',
 		'order_id',
 		'order_sample_id',
 		'parameter_id',

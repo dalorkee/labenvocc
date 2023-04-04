@@ -1,7 +1,7 @@
 <?php
 namespace App\Traits;
 
-use App\Models\{Position,PositionLevel,Duty,SampleCharacter, OriginThreat};
+use App\Models\{Position,PositionLevel,Duty,SampleCharacter,OriginThreat};
 
 trait CommonTrait {
 	public function titleName(): array {
@@ -71,6 +71,10 @@ trait CommonTrait {
 		Position::select('id', 'name')->get()->each(function($value, $key) use (&$result) {
 			$result[$value->id] = $value->name;
 		});
+		return $result;
+	}
+	public function getPositionById($id=0):array {
+		$result = Position::select('id', 'name')->whereId($id)->get()->toArray();
 		return $result;
 	}
 	public function getPositionLevel(): array {

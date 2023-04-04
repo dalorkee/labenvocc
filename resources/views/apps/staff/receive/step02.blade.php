@@ -126,13 +126,9 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 							</div>
 						</div>
 					</div>
-					<div class="panel-content border-faded border-left-0 border-right-0 border-bottom-0 d-flex flex-row align-items-center">
-						<div class="form-row">
-							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
-								<a href="{{ route('sample.received.step01', ['order_id' => $order['id']]) }}" class="btn btn-success ml-auto"><i class="fal fa-arrow-alt-left"></i> ก่อนหน้า</a>
-								<button type="submit" class="btn btn-success ml-auto">ถัดไป <i class="fal fa-arrow-alt-right"></i></button>
-							</div>
-						</div>
+					<div class="panel-content border-faded border-left-0 border-right-0 border-bottom-0">
+						<a href="{{ route('sample.received.step01', ['order_id' => $order['id']]) }}" class="btn btn-primary" style="width:110px"><i class="fal fa-arrow-alt-left"></i> ก่อนหน้า</a>
+						<button type="submit" class="btn btn-primary" style="width:110px">ถัดไป <i class="fal fa-arrow-alt-right"></i></button>
 					</div>
 				</form>
 			</div>

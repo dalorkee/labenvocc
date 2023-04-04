@@ -260,7 +260,7 @@ class CustomerController extends Controller
 	}
 
 	#[Route('customer.parameter.data.store', method: ['POST'])]
-	protected function storeParameterData(Request $request): object {
+	protected function storeParameterData(Request $request) {
 		try {
 			$paramet_arr = $request->paramet_id_arr;
 			$i = 0;
@@ -272,30 +272,30 @@ class CustomerController extends Controller
 						'parameter_id' => $paramet->id
 					],[
 						'parameter_name' => $paramet->parameter_name,
-						'sample_character_id'=> $paramet->sample_character_id,
+						'sample_character_id'=> (int)$paramet->sample_character_type_id,
 						'sample_character_name' => $paramet->sample_character_name,
-						'sample_type_id' => $paramet->sample_type_id,
+						'sample_type_id' => (int)$paramet->sample_type_id,
 						'sample_type_name' => $paramet->sample_type_name,
-						'threat_type_id' => $paramet->threat_type_id,
+						'threat_type_id' => (int)$paramet->threat_type_id,
 						'threat_type_name' => $paramet->threat_type_name,
-						'unit_id' => $paramet->unit_id,
+						'unit_id' => (int)$paramet->unit_id,
 						'unit_name' => $paramet->unit_name,
 						'unit_customer_name' => $paramet->unit_customer_name,
-						'price_id' => $paramet->price_id,
-						'price_name' => $paramet->price_name,
-						'main_analys_user_id' => $paramet->main_analys_user_id,
-						'main_analys_name' => $paramet->main_analys_name,
-						'sub_analys_user_id' => $paramet->sub_analys_user_id,
-						'sub_analys_name' => $paramet->sub_analys_name,
-						'control_analys_user_id' => $paramet->control_analys_user_id,
-						'control_analys_name' => $paramet->control_analys_name,
-						'technical_id' => $paramet->technical_id,
-						'technical_name' => $paramet->technical_name,
-						'method_analys_id' => $paramet->method_analys_id,
-						'method_analys_name' => $paramet->method_analys_name,
-						'machine_id' => $paramet->machine_id,
+						'price_id' => (int)$paramet->price_id,
+						'price_name' => (double)$paramet->price_name,
+						'main_analys_user_id' => (int)$paramet->main_analys_user_id,
+						'main_analys_name' => $paramet->main_analys,
+						'sub_analys_user_id' => (int)$paramet->sub_analys_user_id,
+						'sub_analys_name' => $paramet->sub_analys,
+						'control_analys_user_id' => (int)$paramet->main_control_user_id,
+						'control_analys_name' => $paramet->main_control,
+						'technical_id' => (int)$paramet->technic_id,
+						'technical_name' => $paramet->technic_name,
+						'method_analys_id' => (int)$paramet->method_analys_id,
+						'method_analys_name' => $paramet->method_name,
+						'machine_id' => (int)$paramet->machine_id,
 						'machine_name' => $paramet->machine_name,
-						'office_id' => $paramet->office_id,
+						'office_id' => (int)$paramet->office_id,
 						'office_name' => $paramet->office_name
 					]);
 				$i++;
@@ -538,7 +538,7 @@ class CustomerController extends Controller
 	}
 
 	#[Route('customer.verify.store', methods: ['POST'])]
-	protected function storeVerify(Request $request): object {
+	protected function storeVerify(Request $request) {
 		$request->validate([
 			'order_id' => 'bail|required',
 			'confirm_chk' => 'required',
@@ -556,7 +556,7 @@ class CustomerController extends Controller
 				$order = Order::find($request->order_id);
 				$order->order_no = $this->setOrderNo(prefix: $order_no_prefix, order_id: $request->order_id);
 				$order->order_no_ref = $this->setOrderNoRef(prefix: $order_no_prefix);
-				$order->order_confirmed = date('d/m/Y H:i:s');
+				$order->order_confirmed_date = date('d/m/Y H:i:s');
 				$saved = $order->save();
 				return redirect()->route(route: 'customer.index')->with(key: 'success', value: 'บันทึกข้อมูลสำเร็จแล้ว');
 			} else {
@@ -564,6 +564,7 @@ class CustomerController extends Controller
 			}
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
+			return redirect()->back()->with(key: 'error', value: 'บันทึกข้อมูลไม่สำเร็จ โปรดลองใหม่');
 		}
 	}
 

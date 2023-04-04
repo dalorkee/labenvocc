@@ -9,7 +9,7 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 @section('content')
 <ol class="breadcrumb page-breadcrumb text-sm font-prompt">
 	<li class="breadcrumb-item"><i class="fal fa-home mr-1"></i> <a href="{{ route('sample.received.index') }}">งานรับตัวอย่าง</a></li>
-	<li class="breadcrumb-item">กำหนดหมายเลขทดสอบ</li>
+	<li class="breadcrumb-item">พิมพ์บาร์โค้ด</li>
 </ol>
 <div class="row text-sm font-prompt">
 	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -37,16 +37,16 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 						</ul>
 						<div class="row">
 							<div class="col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-4">
-								<h5>กำหนดหมายเลขทดสอบ</h5>
-								<div class="form-group mt-4">
+								<h5>พิมพ์บาร์โค้ด</h5>
+								{{-- <div class="form-group mt-4">
 									<label for="lbl">ค้นหา Lab No.</label>
 									<div class="input-group">
-										<input type="text" name="set_test_no_search" class="form-control" id="set_test_no_search" placeholder="ค้นหา Lab No.">
+										<input type="text" name="lab_no" class="form-control" placeholder="ค้นหา Lab No." />
 										<div class="input-group-append">
-											<button type="button" class="btn btn-info" id="set_test_no_search_btn"><i class="fal fa-search"></i></button>
+											<button type="button" class="btn btn-info" id="find_test_no_btn"><i class="fal fa-search"></i></button>
 										</div>
 									</div>
-								</div>
+								</div> --}}
 							</div>
 						</div>
 						<div class="row">
@@ -98,13 +98,9 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 						</div>
 					</div>
 
-					<div class="panel-content border-faded border-left-0 border-right-0 border-bottom-0 d-flex flex-row align-items-center">
-						<div class="form-row">
-							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
-								<button type="submit"" class="btn btn-info ml-auto"> <i class="fal fa-save"></i> พิมพ์บาโค้ด</button>
-								<a href="{{ route('sample.received.index') }}" type="button" class="btn btn-warning ml-auto"><i class="fal fa-home"></i> กลับไปหน้าแรก</a>
-							</div>
-						</div>
+					<div class="panel-content border-faded border-left-0 border-right-0 border-bottom-0">
+						<button type="submit" class="btn btn-warning"> <i class="fal fa-print"></i> พิมพ์บาร์โค้ด</button>
+						<a href="{{ route('sample.received.index') }}" type="button" class="btn btn-primary"><i class="fal fa-home"></i> กลับไปหน้าแรก</a>
 					</div>
 				</form>
 			</div>

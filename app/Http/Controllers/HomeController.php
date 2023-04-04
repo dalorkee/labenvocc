@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
-	public function index(): object {
+	public function index(): mixed {
 		if (Auth::check() == 'true' && Auth::user()->user_status == 'อนุญาต' && Auth::user()->approved == 'y') {
 			switch ($this->userRole()) {
 				case 'root':
@@ -18,10 +18,10 @@ class HomeController extends Controller
 					return redirect()->route(route: 'staff.index');
 					break;
 				default:
-					return redirect()->route(route: 'logout')->with(key: 'error', value: 'ไม่พบข้อมูลผู้ใช้');
+					return $this->logoutWithError(error: 'ไม่พบข้อมูล Role ผู้ใช้');
 			}
 		} else {
-			return redirect()->route(route: 'logout')->with(key: 'error', value: 'โปรดตรวจสอบสิทธิ์ผู้ใช้');
+			return $this->logout();
 		}
 	}
 	public static function userRole(): string {
@@ -32,7 +32,12 @@ class HomeController extends Controller
 			return redirect(to: 'logout');
 		}
 	}
-	public function logout() {
+	public function logoutWithError($error=null) {
+		Auth::logout();
+		return redirect(to: 'login')->with(key: 'error', value: $error);
+	}
+
+    public function logout() {
 		Auth::logout();
 		return redirect(to: 'login');
 	}

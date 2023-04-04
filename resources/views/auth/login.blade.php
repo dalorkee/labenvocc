@@ -101,7 +101,7 @@
 							<div class="custom-scroll" style="height: 80px">
 								<section>
 									@foreach($advertise[1] AS $std_quality)
-                                    <div class="alert border-faded bg-transparent text-secondary fade show" role="alert">
+									<div class="alert border-faded bg-transparent text-secondary fade show" role="alert">
 										<div class="d-flex align-items-center">
 											<div class="alert-icon">
 												<span class="icon-stack icon-stack-md">

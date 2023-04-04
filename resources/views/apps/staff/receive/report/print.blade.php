@@ -187,19 +187,19 @@ table tr th, table tr td {height:30px; font-size:16px; border:1px solid #585858}
 					</thead>
 					<tfoot></tfoot>
 					<tbody>
-                        @foreach ($result['order_sample_paramet'] as $key => $val)
-                            <tr>
-                                <td>{{ $loop->iteration }}</td>
-                                <td>2</td>
-                                <td>{{ $val['order_no'] }}</td>
-                                <td>4</td>
-                                <td>5</td>
-                                <td>6</td>
-                                <td>7</td>
-                                <td>8</td>
-                                <td>9</td>
-                            </tr>
-                        @endforeach
+						@foreach ($result['order_sample_paramet'] as $key => $val)
+							<tr>
+								<td>{{ $loop->iteration }}</td>
+								<td>{{ $val['sample_test_no'] }}</td>
+								<td>{{ $val['order_no'] }}</td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+						@endforeach
 
 					</tbody>
 				</table>
@@ -210,7 +210,7 @@ table tr th, table tr td {height:30px; font-size:16px; border:1px solid #585858}
 				<p class="footer-note"><span class="text-bold">&nbsp;หมายเหตุ:</span> ปริมาณต่ำสุดที่ตรวจวิเคราะห์ได้เท่ากับ 0.800 &#181;g&#47;sample, &lt;0.0001 mg&#47;m<sup>3</sup>, &lt;0.001 ppm</p>
 				<div class="footer-tester">
 					<p>..................................................ผู้ทดสอบ</p>
-					<p>นางสาวผการัตน์ รักษ์ย่อง</p>
+					<p>{{ $result['order_sample_paramet'][0]['main_analys_name'] }}</p>
 					<p>ตำแหน่ง นักวิทยาศาสตร์การแพทย์ปฏิบัติการ</p>
 				</div>
 				<div class="footer-controller">

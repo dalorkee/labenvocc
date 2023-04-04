@@ -83,13 +83,9 @@ legend {
 							</div>
 						</div>
 					</div>
-					<div class="panel-content border-faded border-left-0 border-right-0 border-bottom-0 d-flex flex-row align-items-center">
-						<div class="form-row">
-							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
-								<button type="submit" class="btn btn-primary ml-auto"> <i class="fal fa-print"></i> พิมพ์บันทึกการทดสอบ</button>
-								<a href="{{ route('sample.received.index') }}" class="btn btn-primary ml-auto"><i class="fal fa-home"></i> กลับไปหน้าแรก</a>
-							</div>
-						</div>
+					<div class="panel-content border-faded border-left-0 border-right-0 border-bottom-0">
+						<button type="submit" class="btn btn-warning"> <i class="fal fa-print"></i> พิมพ์บันทึกการทดสอบ</button>
+						<a href="{{ route('sample.received.index') }}" class="btn btn-primary"><i class="fal fa-home"></i> กลับไปหน้าแรก</a>
 					</div>
 				</form>
 			</div>

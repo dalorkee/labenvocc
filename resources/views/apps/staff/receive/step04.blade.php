@@ -74,13 +74,9 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 							</table>
 						</div>
 					</div>
-					<div class="panel-content border-faded border-left-0 border-right-0 border-bottom-0 d-flex flex-row align-items-center">
-						<div class="form-row">
-							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
-								<a href="{{ route('sample.received.print', ['order_id' => $order_id]) }}" class="btn btn-info ml-auto"> <i class="fal fa-print"></i> พิมพ์</a>
-								<a href="{{ route('sample.received.index') }}" type="button" class="btn btn-warning ml-auto"><i class="fal fa-home"></i> กลับหน้าแรก</a>
-							</div>
-						</div>
+					<div class="panel-content border-faded border-left-0 border-right-0 border-bottom-0">
+						<a href="{{ route('sample.received.print', ['order_id' => $order_id]) }}" class="btn btn-warning" style="width:144px"> <i class="fal fa-print"></i> พิมพ์</a>
+						<a href="{{ route('sample.received.index') }}" type="button" class="btn btn-primary" style="width:144px;"><i class="fal fa-home"></i> กลับไปหน้าแรก</a>
 					</div>
 				</form>
 			</div>

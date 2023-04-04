@@ -6,7 +6,8 @@
 <link type="text/css" rel="stylesheet" href="{{ URL::asset('vendor/bootstrap-datepicker/dist/css/bootstrap-datetimepicker.min.css') }}">
 <link type="text/css" rel="stylesheet" href="{{ URL::asset('css/pj-step.css') }}">
 <style type="text/css">
-table#example_table thead {background-color:#2D8AC9;color: white;}
+table#example_table thead {background-color:#2D8AC9;color: white}
+.input-date {background: none !important}
 </style>
 @endsection
 @section('content')
@@ -43,10 +44,10 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 						<div class="row">
 							<div class="form-group col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6 mb-3">
 								<label class="form-label" for="lab_no">Lab No. <span class="text-red-600">*</span></label>
-								<input type="text" name="lab_no" value="{{ $order['lab_no'] ?? old('lab_no') }}" class="form-control" maxlength="60">
+								<input type="text" name="lab_no" value="{{ $order['lab_no'] ?? old('lab_no') }}" class="form-control @error('lab_no') is-invalid @enderror" maxlength="60">
 							</div>
 							<div class="form-group col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6 mb-3">
-								<label class="form-label" for="report_due_date">กำหนดส่งรายงาน</label>
+								<label class="form-label" for="report_due_date">กำหนดส่งรายงาน <span class="text-red-600">*</span></label>
 								<div class="input-group date date_data">
 									<input type="text" name="report_due_date" value="{{ $order['report_due_date'] ?? old('report_due_date') }}" class="form-control @error('report_due_date') is-invalid @enderror input-date" id="report_due_date" placeholder="เลือกวันที่" readonly >
 									<div class="input-group-append">
@@ -129,16 +130,10 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 								</table>
 							</div>
 						</div>
-
 					</div>
-					<div class="panel-content border-faded border-left-0 border-right-0 border-bottom-0 d-flex flex-row align-items-center">
-						<div class="form-row">
-							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
-                                <a href="{{ route('sample.received.index') }}" class="btn btn-success ml-auto"><i class="fal fa-arrow-alt-left"></i> ก่อนหน้า</a>
-                                <button type="submit" class="btn btn-success ml-auto">ถัดไป <i class="fal fa-arrow-alt-right"></i></button>
-                                {{-- <a href="{{ route('sample.received.step02', ['order_id' => $order['id']]) }}" class="btn btn-success ml-auto">ถัดไป <i class="fal fa-arrow-alt-right"></i></a> --}}
-							</div>
-						</div>
+					<div class="panel-content border-faded border-left-0 border-right-0 border-bottom-0">
+						<a href="{{ route('sample.received.index') }}" class="btn btn-primary" style="width:110px"><i class="fal fa-arrow-alt-left"></i> ก่อนหน้า</a>
+						<button type="submit" class="btn btn-primary" style="width:110px">ถัดไป <i class="fal fa-arrow-alt-right"></i></button>
 					</div>
 				</form>
 			</div>

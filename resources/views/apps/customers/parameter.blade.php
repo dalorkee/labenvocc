@@ -506,7 +506,7 @@ $(document).ready(function() {
 			}
 		},
 		items: {
-			"editt": {name: "แก้ไขข้อมูล", icon: "fal fa-edit"},
+			"editt": {name: "แก้ไขตัวอย่าง", icon: "fal fa-edit"},
 			/*"edit": {name: "แก้ไขข้อมูล", icon: "fal fa-edit"},*/
 			"sep1": "---------",
 			"parameter": {name: "เพิ่มพารามิเตอร์", icon: "fal fa-tachometer"},

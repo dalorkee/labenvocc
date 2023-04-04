@@ -6,11 +6,11 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\{Hash,Log};
 use App\Models\{User,UserCustomer};
-use App\Traits\{CommonTrait,JsonBoundaryTrait};
+use App\Traits\{CommonTrait,DbBoundaryTrait,JsonBoundaryTrait};
 
 class RegisterPrivateAgencyController extends Controller
 {
-	use CommonTrait, JsonBoundaryTrait;
+	use CommonTrait, DbBoundaryTrait, JsonBoundaryTrait;
 
 	protected function createPrivateAgencyStep2Get(Request $request): object {
 		$userData = $request->session()->get('userData');
@@ -137,7 +137,7 @@ class RegisterPrivateAgencyController extends Controller
 				'approved' => 'n'
 			]);
 			$userLoginData->password = Hash::make($userLoginData->password);
-			$userLoginData->password = Hash::make($userLoginData->password_confirmation);
+			$userLoginData->password_confirmation = Hash::make($userLoginData->password_confirmation);
 			$userLoginDataSaved = $userLoginData->save();
 
 			$userData = $request->session()->get('userData');

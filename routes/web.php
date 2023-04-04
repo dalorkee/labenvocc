@@ -78,7 +78,7 @@ Route::name('register.')->group(function() {
 	Route::controller(RegisterController::class)->group(function() {
 		Route::post('province/district', 'renderDistrictToHtmlSelect')->name('district');
 		Route::post('province/district/subdistrict', 'renderSubDistrictToHtmlSelect')->name('subDistrict');
-		Route::post('province/subdistrict/postcode', 'getPostCodeBySubDistrict')->name('postcode');
+		Route::post('province/subdistrict/postcode', 'postCodeBySubDistrict')->name('postcode');
 		Route::post('gov/dept', 'renderGovernmentDeptToHtmlSelect')->name('department');
 		Route::post('gov/deps/v2', 'renderGovernmentDeptToHtmlSelectV2')->name('department.v2');
 		Route::post('search/hospital', 'searchHospitalByName')->name('hospital');
@@ -143,12 +143,14 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 			Route::get('/{order_id}/step02', 'step02')->name('received.step02');
 			Route::post('/step02', 'step02Post')->name('received.step02.post');
 			Route::get('/{order_id}/step03', 'step03')->name('received.step03');
-			Route::post('/step03', 'step03Post')->name('received.step03.post');
+			Route::post('/step04', 'step03Post')->name('received.step03.post');
 			Route::get('/{order_id}/print', 'print')->name('received.print');
-			Route::get('/lab/no/search', 'searchOrderSampleByLabNo')->name('search.by.lab.no');
-			Route::get('/test/no/create', 'createTestNo')->name('received.test.no.create');
-			Route::post('/test/no/set', 'setTestNo')->name('received.test.no.set');
-			Route::post('/test/no/barcode', 'printTestNoBarcode')->name('received.test.no.barcode');
+			Route::get('/lab/number/search', 'searchOrderSampleByLabNo')->name('search.by.lab.no');
+			Route::get('/test/number/create', 'createTestNo')->name('received.test.no.create');
+			Route::post('/test/number/set', 'setTestNo')->name('received.test.no.set');
+			Route::post('/test/number/barcode', 'printTestNoBarcode')->name('received.test.no.barcode');
+			Route::get('/lab/number/search/print/barcode', 'searchOrderSampleForPrintBarcode')->name('search.for.print.barcode');
+
 
 			Route::get('/requisition/create', 'createRequisition')->name('received.requisition.create');
 			Route::post('/requisition/create/ajax', 'createRequisitionAjax')->name('received.requisition.create.ajax');

@@ -96,12 +96,12 @@
 						<span class="nav-link-text">งานรับตัวอย่าง</span>
 					</a>
 					<ul>
-						<li class="{{ (Request::is('*sample/received'))  ? 'active' : '' }}">
+						<li class="{{ (Request::is('*sample/received') || Request::is('*sample/received/*/step*'))  ? 'active' : '' }}">
 							<a href="{{ route('sample.received.index') }}" title="รับตัวอย่าง" data-filter-tags="sample_receive">
 								<span class="nav-link-text" data-i18n="nav.plugins_plugins_faq">รับตัวอย่าง</span>
 							</a>
 						</li>
-						<li class="{{ (Request::is('*sample/received/order/test/no/*'))  ? 'active' : '' }}">
+						<li class="{{ (Request::is('*sample/received/order/test/number/*'))  ? 'active' : '' }}">
 							<a href="{{ Route('sample.received.test.no.create') }}" title="กำหนดหมายเลขทดสอบ" data-filter-tags="sample_receive">
 								<span class="nav-link-text" data-i18n="nav.plugins_plugins_faq">กำหนดหมายเลขทดสอบ</span>
 							</a>
@@ -111,7 +111,7 @@
 								<span class="nav-link-text" data-i18n="nav.plugins_plugins_faq">เบิกตัวอย่าง</span>
 							</a>
 						</li>
-                        <li class="{{ (Request::is('*sample/received/order/report/*'))  ? 'active' : '' }}">
+						<li class="{{ (Request::is('*sample/received/order/report/*'))  ? 'active' : '' }}">
 							<a href="{{ Route('sample.received.report.create') }}" title="ออกรายงาน" data-filter-tags="sample_receive">
 								<span class="nav-link-text" data-i18n="nav.plugins_plugins_faq">ออกรายงาน</span>
 							</a>

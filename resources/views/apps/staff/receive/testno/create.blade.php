@@ -51,14 +51,9 @@
 							<div class="col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-4" id="order_sample_table"></div>
 						</div>
 					</div>
-
-					<div class="panel-content border-faded border-left-0 border-right-0 border-bottom-0 d-flex flex-row align-items-center">
-						<div class="form-row">
-							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
-								<button type="submit" class="btn btn-info ml-auto" id="set_test_no_btn" disabled> <i class="fal fa-save"></i> กำหนดหมายเลขทดสอบ</button>
-								<a href="{{ route('sample.received.index') }}" type="button" class="btn btn-warning ml-auto"><i class="fal fa-home"></i> กลับไปหน้าแรก</a>
-							</div>
-						</div>
+					<div class="panel-content border-faded border-left-0 border-right-0 border-bottom-0">
+						<button type="submit" class="btn btn-warning" id="set_test_no_btn" disabled> <i class="fal fa-save"></i> กำหนดหมายเลขทดสอบ</button>&nbsp;
+						<a href="{{ route('sample.received.index') }}" type="button" class="btn btn-primary"><i class="fal fa-home"></i> กลับไปหน้าแรก</a>
 					</div>
 				</form>
 			</div>
@@ -90,7 +85,6 @@ $(document).ready(function() {
 			$('#set_test_no_btn').prop('disabled', true);
 		}
 	});
-
 });
 </script>
 @endpush

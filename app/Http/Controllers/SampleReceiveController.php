@@ -9,10 +9,9 @@ use Illuminate\Support\Facades\{Response,DB,Storage,Log};
 use App\Services\OrderService;
 use App\Traits\{DateTimeTrait,CommonTrait,DbBoundaryTrait};
 use App\Exceptions\{OrderNotFoundException,InvalidOrderException};
-use App\Models\{User, Order,OrderSample,OrderSampleParameter,FileUpload,Parameter};
+use App\Models\{User,Order,OrderSample,OrderSampleParameter,FileUpload,Parameter};
 use Yajra\DataTables\Facades\DataTables;
 use Barryvdh\DomPDF\Facade\Pdf;
-
 
 class SampleReceiveController extends Controller
 {
@@ -38,17 +37,20 @@ class SampleReceiveController extends Controller
 			$request->session()->forget(keys: 'sample_sumary');
 
 			/* begin query */
-			$order_year = (date('Y')-1);
+			$order_year = (date('Y'));
 			$orders = OrderService::getOrderwithCount(relations: ['orderSamples', 'parameters'], order_year: $order_year, order_status: ['pending', 'progress', 'completed']);
 			return Datatables::of($orders)
 				->addColumn('total', fn ($order) => $order->order_samples_count.'/'.$order->parameters_count)
 				->editColumn('order_confirmed_date', fn($order) => $this->setJsDateTimeToJsDate($order->order_confirmed_date))
 				->addColumn('action', function ($order) {
-					return "
-						<a href=\"".route('sample.received.step01', ['order_id' => $order->id])."\" class=\"btn btn-sm btn-success\">รับ</a>\n
-						<a href=\"#edit-".$order->id."\" class=\"btn btn-sm btn-warning\">แก้ไข</a>\n";
-				})
-				->make(true);
+					if (!empty($order->order_confirmed_date)) {
+						return "
+							<a href=\"".route('sample.received.step01', ['order_id' => $order->id])."\" class=\"btn btn-sm btn-success\" style=\"width:60px\">รับ</a>\n
+							<a href=\"#edit-".$order->id."\" class=\"btn btn-sm btn-warning\" style=\"width:60px\">แก้ไข</a>\n";
+					} else {
+						return "<button class=\"btn btn-sm btn-secondary\" style=\"width:120px\" disable>ไม่สมบูรณ์</button>";
+					}
+				})->make(true);
 		} catch (InvalidOrderException $e) {
 			report($e->getMessage());
 			return redirect()->back()->with(key: 'error', value: $e->getMessage());
@@ -210,20 +212,22 @@ class SampleReceiveController extends Controller
 
 	protected function step03Post(Request $request) {
 		try {
+			$user_staff = User::find(auth()->user()->id)->userStaff;
+			$user_staff_full_name = $user_staff->first_name." ".$user_staff->last_name;
 			$now_date = date('Y-m-d');
 			$order_id = $request->order_id;
 			$sample_result = $request->session()->get(key: 'sample_result');
 			$order_arr = $request->session()->get(key: 'order')->toArray();
 			$order = OrderService::get($order_id);
 			$order->fill(attributes: $order_arr);
-			DB::transaction(function() use ($sample_result, $order, $now_date) {
+			DB::transaction(function() use ($sample_result, $order, $now_date, $user_staff_full_name) {
 				foreach ($sample_result as $key => $value) {
 					$order_sample = OrderService::findOrderSample($value['id']);
 					$order_sample->sample_verified_status = $value['sample_verified_status_'.$value['id']];
 					$order_sample->sample_received_status = $value['sample_received_status_'.$value['id']];
 					$order_sample->save();
 				}
-				$order->fill(attributes: ['order_status' => 'progress', 'received_order_date' => $now_date]);
+				$order->fill(attributes: ['order_status' => 'progress', 'received_order_name' => $user_staff_full_name, 'received_order_date' => $now_date]);
 				$order->save();
 			});
 			// return redirect()->route('sample.received.index')->with(key: 'success', value: 'บันทึกข้อมูลสำเร็จแล้ว !!');
@@ -341,7 +345,7 @@ class SampleReceiveController extends Controller
 	}
 
 	protected function createTestNo(): object {
-		return view(view: 'apps.staff.receive.test-no');
+		return view(view: 'apps.staff.receive.testno.create');
 	}
 
 	protected function searchOrderSampleByLabNo(Request $request): string {
@@ -445,7 +449,7 @@ class SampleReceiveController extends Controller
 				$order_sample->save();
 			}
 			// return redirect()->back()->with('success', 'บันทึกหมายเลขทดสอบแล้ว');
-			return $this->createTestNoBarcode(lab_no: $lab_no = $data['set_test_no_search']);
+			return $this->createTestNoBarcode(lab_no: $lab_no = $data['set_test_no_search'])->with('success', 'บันทึกหมายเลขทดสอบแล้ว');
 		} else {
 			return redirect()->back()->with('error', 'โปรดตรวจสอบรายการข้อมูล');
 		}
@@ -477,7 +481,7 @@ class SampleReceiveController extends Controller
 						array_push($result, $tmp);
 					});
 				}
-				return view(view: 'apps.staff.receive.test-no-barcode', data: ['result' => $result]);
+				return view(view: 'apps.staff.receive.testno.barcode', data: ['result' => $result]);
 			}
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
@@ -802,6 +806,9 @@ class SampleReceiveController extends Controller
 
 				if (count($order) > 0) {
 					$user = User::select('id', 'user_type')->with('userCustomer')->whereId($order[0]->user_id)->get();
+					$staff = User::select('id', 'user_type')->with('userStaff')->whereId(auth()->user()->id)->get();
+					dump($user);
+					dd($staff);
 
 					$order_sample = OrderSample::whereOrder_id($order[0]->id)->with('parameters', function($query) {
 						$query->whereIn('status', ['requisition', 'print']);
@@ -825,6 +832,7 @@ class SampleReceiveController extends Controller
 							'lab_no' => $order[0]->lab_no,
 						],
 						'order_sample' => [
+							'sample_test_no' => $order_sample[0]->sample_test_no,
 							'sample_receive_date' => $order_sample[0]->sample_receive_date,
 							'analys_complete_date' => $order_sample[0]->analys_complete_date,
 							'report_result_date' => $order_sample[0]->report_result_date,
@@ -847,12 +855,14 @@ class SampleReceiveController extends Controller
 								$tmp['order_sample_id'] = $v['order_sample_id'];
 								$tmp['order_sample_parameter_id'] = $v['id'];
 								$tmp['order_no'] = $result['order']['order_no'];
+								$tmp['sample_test_no'] = $result['order_sample']['sample_test_no'];
 								$tmp['paramet_id'] = $v['parameter_id'];
 								$tmp['paramet_name'] = $v['parameter_name'];
 								$tmp['sample_character_id'] = $v['sample_character_id'];
 								$tmp['sample_character_name'] = $v['sample_character_name'];
 								$tmp['main_analys_user_id'] = $v['main_analys_user_id'];
 								$tmp['main_analys_name'] = $v['main_analys_name'];
+								$tmp['main_analys_position'] = $this->getPositionById($v['main_analys_user_id']);
 								$tmp['control_analys_name'] = $v['control_analys_name'];
 								$tmp['technical_name'] = $v['technical_name'];
 								$tmp['status'] = $v['status'];

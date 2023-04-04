@@ -24,9 +24,9 @@ class CustomersDataTable extends DataTable
 			//$type_of_work_arr = $this->typeOfWork();
 			return datatables()
 				->eloquent($query)
-				->editColumn('order_confirmed', function($order) {
+				->editColumn('order_confirmed_date', function($order) {
 					// return Carbon::parse($order->order_confirmed)->format('d/m/Y');
-					return $order->order_confirmed;
+					return $order->order_confirmed_date;
 				})
 				->addColumn('lab', function ($order) {
 					return $order->parameters->map(function($parameter) {
@@ -41,7 +41,7 @@ class CustomersDataTable extends DataTable
 					$htm = "<form>";
 					$htm .= "<div class=\"custom-control custom-checkbox\">";
 					$htm .= "<input type=\"checkbox\" class=\"custom-control-input\"";
-					(!is_null($order->order_confirmed)) ? $htm .= " checked" : $htm .= "";
+					(!is_null($order->order_confirmed_date)) ? $htm .= " checked" : $htm .= "";
 					$htm .=" disabled>";
 					$htm .= "<label class=\"custom-control-label\" for=\"receive\">ส่งคำขอ</label>";
 					$htm .= "</div>";
@@ -161,7 +161,7 @@ class CustomersDataTable extends DataTable
 			return [
 				//Column::make('id')->title('รหัส'),
 				Column::make('order_no')->title('เลขที่คำขอ'),
-				Column::make('order_confirmed')->title('วันที่สร้าง'),
+				Column::make('order_confirmed_date')->title('วันที่สร้าง'),
 				Column::make('lab')->title('ตัวอย่าง/ส่งที่'),
 				Column::make('status')->title('สถานะ'),
 				Column::make('detail')->title('รายละเอียด'),
