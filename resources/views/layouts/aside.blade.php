@@ -116,6 +116,11 @@
 								<span class="nav-link-text" data-i18n="nav.plugins_plugins_faq">ออกรายงาน</span>
 							</a>
 						</li>
+						<li class="{{ (Request::is('*sample/received/order/return/*'))  ? 'active' : '' }}">
+							<a href="{{ Route('sample.received.return.create') }}" title="คืนผลลูกค้า" data-filter-tags="sample_receive">
+								<span class="nav-link-text" data-i18n="nav.plugins_plugins_faq">คืนผลลูกค้า</span>
+							</a>
+						</li>
 					</ul>
 				</li>
 				<li class="{{ (Request::is('*sample/analyze*'))  ? 'active open' : '' }}">
@@ -123,6 +128,28 @@
 						<i class="fal fa-flask"></i>
 						<span class="nav-link-text">งานตรวจวิเคราะห์</span>
 					</a>
+					<ul>
+						<li class="{{ (Request::is('*sample/analyze/create'))  ? 'active' : '' }}">
+							<a href="{{ route('sample.analyze.create') }}" title="งานวิเคราะห์" data-filter-tags="sample_analyze">
+								<span class="nav-link-text" data-i18n="nav.plugins_plugins_faq">งานวิเคราะห์</span>
+							</a>
+						</li>
+                        <li class="{{ (Request::is('*sample/analyze/result'))  ? 'active' : '' }}">
+							<a href="{{ route('sample.analyze.create') }}" title="ผลการทดสอบ" data-filter-tags="sample_analyze">
+								<span class="nav-link-text" data-i18n="nav.plugins_plugins_faq">ผลการทดสอบ</span>
+							</a>
+						</li>
+                        <li class="{{ (Request::is('*sample/analyze/report'))  ? 'active' : '' }}">
+							<a href="{{ route('sample.analyze.create') }}" title="ใบรายงานผล" data-filter-tags="sample_analyze">
+								<span class="nav-link-text" data-i18n="nav.plugins_plugins_faq">ใบรายงานผล</span>
+							</a>
+						</li>
+                        <li class="{{ (Request::is('*sample/analyze/history'))  ? 'active' : '' }}">
+							<a href="{{ route('sample.analyze.create') }}" title="ประวัติการวิเคราะห์" data-filter-tags="sample_analyze">
+								<span class="nav-link-text" data-i18n="nav.plugins_plugins_faq">ประวัติการวิเคราะห์</span>
+							</a>
+						</li>
+					</ul>
 				</li>
 				<li>
 					<a href="#" title="รายงานผล" data-filter-tags="report">

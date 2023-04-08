@@ -34,16 +34,16 @@
 				</tr>
 				<tr>
 					<td>
-						<div class="chk-box"><span class="chk-mark">{{ ($order_type == 2) ? '✔' : '' }}</span></div>
+						<div class="chk-box"><span class="chk-mark">{{ ($order_type == "2") ? '✔' : '' }}</span></div>
 						สิ่งแวดล้อม: จำนวน&nbsp;
-						<span class="border-bottom">{{ ($order_type == 2) ? $order_samples_count : '' }}</span> ตัวอย่าง&nbsp;
-						<span class="border-bottom">{{ ($order_type == 2) ? $parameters_count : '' }}</span> พารามิเตอร์
+						<span class="border-bottom">{{ ($order_type == "2") ? $order_samples_count : '' }}</span> ตัวอย่าง&nbsp;
+						<span class="border-bottom">{{ ($order_type == "2") ? $parameters_count : '' }}</span> พารามิเตอร์
 					</td>
 					<td>
-						<div class="chk-box"><span class="chk-mark">{{ ($order_type == 1) ? '✔' : '' }}</span></div>
+						<div class="chk-box"><span class="chk-mark">{{ ($order_type == "1") ? '✔' : '' }}</span></div>
 						ชีวภาพ: จำนวน&nbsp;
-						<span class="border-bottom">{{ ($order_type == 1) ? $order_samples_count : '' }}</span> ตัวอย่าง&nbsp;
-						<span class="border-bottom">{{ ($order_type == 1) ? $parameters_count : '' }}</span> พารามิเตอร์
+						<span class="border-bottom">{{ ($order_type == "1") ? $order_samples_count : '' }}</span> ตัวอย่าง&nbsp;
+						<span class="border-bottom">{{ ($order_type == "1") ? $parameters_count : '' }}</span> พารามิเตอร์
 					</td>
 				</tr>
 				<tr>
@@ -133,16 +133,16 @@
 							<div class="d-inline-block">โทร. {{ $customer_mobile }}</div>
 						</div>
 						<div class="w-100 mt-n6 p-0">วิธีนำส่ง:
-							<div class="chk-box"><span class="chk-mark">{{ ($deliver_method == 'self') ? '✔' : '' }}</span></div><span style="margin-right: 22px"> นำส่งเอง</span>
-							<div class="chk-box"><span class="chk-mark">{{ ($deliver_method == 'post') ? '✔' : '' }}</span></div><span style="margin-right: 22px"> ไปรษณีย์</span>
-							<div class="chk-box"><span class="chk-mark">{{ ($deliver_method == 'other') ? '✔' : '' }}</span></div><span style="margin-right: 22px">  อื่นๆ</span>
+							<div class="chk-box"><span class="chk-mark">{{ (!is_null($deliver_method) && $deliver_method == 'self') ? '✔' : '' }}</span></div><span style="margin-right: 22px"> นำส่งเอง</span>
+							<div class="chk-box"><span class="chk-mark">{{ (!is_null($deliver_method) && $deliver_method == 'post') ? '✔' : '' }}</span></div><span style="margin-right: 22px"> ไปรษณีย์</span>
+							<div class="chk-box"><span class="chk-mark">{{ (!is_null($deliver_method) && $deliver_method == 'other') ? '✔' : '' }}</span></div><span style="margin-right: 22px">  อื่นๆ</span>
 						</div>
 						<div class="w-100">
 							<div class="d-inline-block w-30">หนังสือนำส่งเลขที่: {{ $book_no }}</div>
 							<div class="d-inline-block w-30">ลงวันที่: {{ $book_date }}</div>
 						</div>
 						<div class="w-100 mt-n4">
-							<div class="d-inline-block w-30">ผู้นำส่งตัวอย่าง: {{ $first_name }} {{ $last_name }}</div>
+							<div class="d-inline-block w-30">ผู้นำส่งตัวอย่าง: {{ $first_name." ".$last_name }}</div>
 							<div class="d-inline-block w-20">โทร: {{ $mobile }}</div>
 							<div class="d-inline-block w-30">วันที่: {{ $order_created_at }}</div>
 							<div class="d-inline-block w-60 mt-n4" style="margin-left: 62px;">&#40;............................................................&#41;</div>
@@ -152,8 +152,8 @@
 				<tr>
 					<td colspan="2">
 						<span class="d-inline-block underline mr-40">การจัดส่งรายงานผลการทดสอบ</span>
-						<div class="chk-box"><span class="chk-mark">{{ ($report_result_receive_method == 'self') ? '✔' : '' }} </span></div><span style="margin-right: 22px"> รับด้วยตนเอง</span>
-						<div class="chk-box"><span class="chk-mark">{{ ($report_result_receive_method == 'post') ? '✔' : '' }} </span></div><span style="margin-right: 22px"> ไปรษณีย์</span>
+						<div class="chk-box"><span class="chk-mark">{{ (!is_null($report_result_receive_method) && $report_result_receive_method == 'self') ? '✔' : '' }} </span></div><span style="margin-right: 22px"> รับด้วยตนเอง</span>
+						<div class="chk-box"><span class="chk-mark">{{ (!is_null($report_result_receive_method) && $report_result_receive_method == 'post') ? '✔' : '' }} </span></div><span style="margin-right: 22px"> ไปรษณีย์</span>
 						<div class="w-100">
 							<div class="d-inline-block w-50 m-0 p-0">1. ชื่อผู้รับ {{ $report_result_receive_first_name." ".$report_result_receive_last_name }}</div>
 							<div class="d-inline-block w-30 m-0 p-0">โทร. {{ $report_result_receive_mobile }}</div>
@@ -253,7 +253,7 @@
 					</div>
 					<div class="customer-sign" style="height:140px; padding:0 0 10px 0; border-bottom:1px dashed #000">
 						<div style="position:absolute; top:10px; left:300px">
-							<p>รวม จำนวนเงินที่ชำระ {{ number_format($parameters_total_price, 2) }}  บาท</p>
+							<p>รวม จำนวนเงินที่ชำระ {{ number_format($parameters_total_price, 2) }} บาท</p>
 							<p>ลงชื่อ..................................................................................ผู้ชำระเงิน</p>
 							<p>ผู้รับเงิน..............................................................................เจ้าหน้าที่ธนาคาร</p>
 						</div>

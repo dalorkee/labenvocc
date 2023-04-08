@@ -11,6 +11,7 @@ use App\Http\Controllers\{
 	CustomerController,
 	StaffController,
 	SampleReceiveController,
+	SampleAnalyzeController,
 	UserAdvertiseController,
 	SampleUploadController,
 	HospitalController,
@@ -150,17 +151,18 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 			Route::post('/test/number/set', 'setTestNo')->name('received.test.no.set');
 			Route::post('/test/number/barcode', 'printTestNoBarcode')->name('received.test.no.barcode');
 			Route::get('/lab/number/search/print/barcode', 'searchOrderSampleForPrintBarcode')->name('search.for.print.barcode');
-
-
 			Route::get('/requisition/create', 'createRequisition')->name('received.requisition.create');
 			Route::post('/requisition/create/ajax', 'createRequisitionAjax')->name('received.requisition.create.ajax');
 			Route::post('/requisition/update', 'updateRequisition')->name('received.requisition.update');
 			Route::post('/requisition/print', 'printRequisition')->name('received.requisition.print');
-
 			Route::get('/report/create', 'createReport')->name('received.report.create');
 			Route::post('/report/create/ajax', 'createReportAjax')->name('received.report.create.ajax');
 			Route::get('/report/print/lab/{lab_no}/analys_user/{analys_user}', 'printReport')->name('received.report.print');
-
+			Route::get('/return/create', 'createReturn')->name('received.return.create');
+			Route::post('/return/create/ajax', 'createReturnAjax')->name('received.return.create.ajax');
+		});
+        Route::resource('analyze', SampleAnalyzeController::class);
+		Route::controller(SampleAnalyzeController::class)->prefix('analyze')->group(function() {
 		});
 	});
 	Route::get('/admin/home', [AdminController::class, 'index'])->name('admin.index');

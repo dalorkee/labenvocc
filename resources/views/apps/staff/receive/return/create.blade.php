@@ -20,7 +20,7 @@ legend {
 @section('content')
 <ol class="breadcrumb page-breadcrumb text-sm font-prompt">
 	<li class="breadcrumb-item"><i class="fal fa-home mr-1"></i> <a href="{{ route('sample.received.index') }}">งานรับตัวอย่าง</a></li>
-	<li class="breadcrumb-item">เบิกตัวอย่าง</li>
+	<li class="breadcrumb-item">คืนผลลูกค้า</li>
 </ol>
 <div class="row text-sm font-prompt">
 	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -43,36 +43,23 @@ legend {
 							<li class="undone"><p><span class="d-none d-sm-inline">การตรวจวิเคราะห์</span></p></li>
 							<li class="undone"><p><span class="d-none d-sm-inline">รายงานผล</span></p></li>
 						</ul>
-						<h4>เบิกตัวอย่าง</h4>
-						{{-- <form name="requisition_form" action="#" method="GET"> --}}
-							<fieldset>
-								<legend>ค้นหา</legend>
-								<div class="row">
-									<div class="col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-2">
-										<div class="form-group">
-											<label class="form-label" for="lab_no">Lab No.</label>
-											<div class="input-group flex-nowrap">
-												<input type="text" name="lab_no" class="form-control" id="lab_no" placeholder="Lab No." />
+						<h4>คืนผลลูกค้า</h4>
+						<fieldset>
+							<legend>ค้นหา</legend>
+							<div class="row">
+								<div class="col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-2">
+									<div class="form-group">
+										<label class="form-label" for="lab_no">Lab No.</label>
+										<div class="input-group flex-nowrap">
+											<input type="text" name="lab_no" class="form-control" id="lab_no" placeholder="Lab No." />
+											<div class="input-group-append">
+												<button type="button" class="btn btn-info" id="search_btn"><i class="fal fa-search"></i></button>
 											</div>
 										</div>
 									</div>
-									<div class="col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-4">
-										<div class="form-group">
-											<label class="form-label" for="analyze_user">ผู้วิเคราะห์</label>
-											<select name="analyze_user" id="analyze_user" class="form-control" id="analyze_user">
-												<option value="">-- โปรดเลือก --</option>
-												@foreach ($analyze_user as $key => $value)
-													<option value="{{ $key }}">{{ $value }}</option>
-												@endforeach
-											</select>
-										</div>
-									</div>
-									<div class="col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-2">
-										<button type="button" class="btn btn-info btn-md" id="search_btn">ค้นหา</button>
-									</div>
 								</div>
-							</fieldset>
-						{{-- </form> --}}
+							</div>
+						</fieldset>
 						<div class="row">
 							<div class="col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mt-4">
 								<div id="loader" class="text-center hidden">
@@ -84,7 +71,6 @@ legend {
 						</div>
 					</div>
 					<div class="panel-content border-faded border-left-0 border-right-0 border-bottom-0">
-						<button type="submit" class="btn btn-warning"> <i class="fal fa-print"></i> พิมพ์บันทึกการทดสอบ</button>
 						<a href="{{ route('sample.received.index') }}" class="btn btn-primary"><i class="fal fa-home"></i> กลับไปหน้าแรก</a>
 					</div>
 				</form>
@@ -100,11 +86,10 @@ $(document).ready(function() {
 	$('#search_btn').click(function() {
 		$('#order_sample_table').html('');
 		let lab_no = $('#lab_no').val();
-		let analyze_user = $('#analyze_user').val();
 		$.ajax({
 			type: "POST",
-			url: "{{ route('sample.received.requisition.create.ajax') }}",
-			data: {lab_no: lab_no, analyze_user: analyze_user},
+			url: "{{ route('sample.received.return.create.ajax') }}",
+			data: {lab_no: lab_no},
 			dataType: "html",
 			beforeSend: function() {
 				$('#loader').removeClass('hidden');
@@ -123,45 +108,8 @@ $(document).ready(function() {
 });
 </script>
 <script type='text/javascript'>
-function updateRequisitionStatus(lab_no, analyze_user, order_sample_parameter_id) {
-	$('#order_sample_table').html('');
-	$.ajax({
-		type: 'POST',
-		async: true,
-		url: "{{ route('sample.received.requisition.update') }}",
-		data: {lab_no: lab_no, analyze_user: analyze_user, order_sample_parameter_id: order_sample_parameter_id},
-		dataType: 'JSON',
-		beforeSend: function() {
-			$('#loader').removeClass('hidden');
-		},
-		success: function(res) {
-			if (res.success === true) {
-				let get_lab_no = $('#lab_no').val();
-				let get_analyze_user = $('#analyze_user').val();
-				$.ajax({
-					type: 'POST',
-					async: true,
-					url: " {{ route('sample.received.requisition.create.ajax') }}",
-					data: {lab_no: get_lab_no, analyze_user: get_analyze_user},
-					dataType: 'html',
-					success: function(response) {
-						$('#order_sample_table').html(response);
-					},
-					error: function(jqXhr, textStatus, errorMessage) {
-						console.log('Show the table error code: ' + jqXhr.status + ' ' + jqXhr.responseText);
-					}
-				});
-			} else {
-				console.log(res);
-			}
-		},
-		complete: function() {
-			$('#loader').addClass('hidden');
-		},
-		error: function(xhr, status, error) {
-			console.log('Update error code: ' + xhr.status + ' ' + xhr.responseText);
-		}
-	});
-}
-</script>
+	function printReport(lab_no) {
+
+	}
+	</script>
 @endpush

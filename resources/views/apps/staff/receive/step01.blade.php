@@ -44,7 +44,7 @@ table#example_table thead {background-color:#2D8AC9;color: white}
 						<div class="row">
 							<div class="form-group col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6 mb-3">
 								<label class="form-label" for="lab_no">Lab No. <span class="text-red-600">*</span></label>
-								<input type="text" name="lab_no" value="{{ $order['lab_no'] ?? old('lab_no') }}" class="form-control @error('lab_no') is-invalid @enderror" maxlength="60">
+								<input type="text" name="lab_no" value="{{ $order['lab_no'] ?? old('lab_no') }}" class="form-control @error('lab_no') is-invalid @enderror" maxlength="60" readonly>
 							</div>
 							<div class="form-group col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6 mb-3">
 								<label class="form-label" for="report_due_date">กำหนดส่งรายงาน <span class="text-red-600">*</span></label>

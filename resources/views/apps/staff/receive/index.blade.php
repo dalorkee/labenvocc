@@ -8,8 +8,7 @@
 @section('content')
 <ol class="breadcrumb page-breadcrumb text-sm font-prompt">
 	<li class="breadcrumb-item"><i class="fal fa-home mr-1"></i> งานรับตัวอย่าง</li>
-	{{-- <li class="breadcrumb-item">รายการคำขอ</li>
-	<li class="breadcrumb-item"><a href="{{ route('sample.receive.index') }}">ใบคำขอ</a></li> --}}
+	<li class="breadcrumb-item"><a href="#">ใบคำขอ</a></li>
 </ol>
 <div class="row text-sm font-prompt" style="background-color: #EBF6FD">
 	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">

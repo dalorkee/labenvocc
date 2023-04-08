@@ -109,8 +109,8 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 																</div>
 															</td>
 															<td>
-																<select name="sample_received_status_{{ $val['sample_id'] }}" class="form-control w-100 @error('sample_received_status_'.$val['sample_id']) is-invalid @enderror">
-																	<option value="">-- โปรดเลือก --</option>
+																<select name="sample_received_status_{{ $val['sample_id'] }}" class="form-control w-100 @error('sample_received_status_'.$val['sample_id']) is-invalid @enderror" style="min-width: 100px;">
+																	<option value="">- เลือก -</option>
 																	<option value="y" {{ (!is_null($session_sample_result) && $session_sample_result[$val['sample_id']]['sample_received_status_'.$val['sample_id']] == 'y') ? 'selected' : '' }}>รับ</option>
 																	<option value="n" {{ (!is_null($session_sample_result) && $session_sample_result[$val['sample_id']]['sample_received_status_'.$val['sample_id']] == 'n') ? 'selected' : '' }}>ปฏิเสธ</option>
 																</select>
