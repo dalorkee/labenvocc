@@ -44,11 +44,17 @@ class SampleReceiveController extends Controller
 				->editColumn('order_confirmed_date', fn($order) => $this->setJsDateTimeToJsDate($order->order_confirmed_date))
 				->addColumn('action', function ($order) {
 					if (!empty($order->order_confirmed_date)) {
-						return "
-							<a href=\"".route('sample.received.step01', ['order_id' => $order->id])."\" class=\"btn btn-sm btn-success\" style=\"width:60px\">รับ</a>\n
-							<a href=\"#edit-".$order->id."\" class=\"btn btn-sm btn-warning\" style=\"width:60px\">แก้ไข</a>\n";
+						if ($order->order_status != 'pending') {
+							return "
+							<a href=\"#\" class=\"btn btn-sm btn-secondary\" style=\"width:70px\" disable>รับแล้ว</a>\n
+							<a href=\"#\" class=\"btn btn-sm btn-secondary\" style=\"width:70px\" disabled>แก้ไข</a>\n";
+						} else {
+							return "
+								<a href=\"".route('sample.received.step01', ['order_id' => $order->id])."\" class=\"btn btn-sm btn-success\" style=\"width:70px\">รับ</a>\n
+								<a href=\"#edit-".$order->id."\" class=\"btn btn-sm btn-warning\" style=\"width:70px\">แก้ไข</a>\n";
+						}
 					} else {
-						return "<button class=\"btn btn-sm btn-secondary\" style=\"width:120px\" disable>ไม่สมบูรณ์</button>";
+						return "<button class=\"btn btn-sm btn-secondary\" style=\"width:140px\" disable>ไม่สมบูรณ์</button>";
 					}
 				})->make(true);
 		} catch (InvalidOrderException $e) {
