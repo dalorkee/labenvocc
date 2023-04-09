@@ -46,7 +46,7 @@ class SampleReceiveController extends Controller
 					if (!empty($order->order_confirmed_date)) {
 						if ($order->order_status != 'pending') {
 							return "
-							<a href=\"#\" class=\"btn btn-sm btn-secondary\" style=\"width:70px\" disable>รับแล้ว</a>\n
+							<a href=\"#\" class=\"btn btn-sm btn-secondary\" style=\"width:70px\" disable>รับ</a>\n
 							<a href=\"#\" class=\"btn btn-sm btn-secondary\" style=\"width:70px\" disabled>แก้ไข</a>\n";
 						} else {
 							return "
@@ -54,7 +54,7 @@ class SampleReceiveController extends Controller
 								<a href=\"#edit-".$order->id."\" class=\"btn btn-sm btn-warning\" style=\"width:70px\">แก้ไข</a>\n";
 						}
 					} else {
-						return "<button class=\"btn btn-sm btn-secondary\" style=\"width:140px\" disable>ไม่สมบูรณ์</button>";
+						return "<button class=\"btn btn-sm btn-warning\" style=\"width:140px\" disable>ไม่สมบูรณ์</button>";
 					}
 				})->make(true);
 		} catch (InvalidOrderException $e) {
@@ -447,7 +447,7 @@ class SampleReceiveController extends Controller
 									}
 								$htm .= "</td>";
 								$htm .= "<td>".$value['sample_count']."</td>";
-								$htm .= "<td><input type=\"text\" name=\"sample_no[]\" value=\"".$value['sample_test_no']."\" class=\"form-control\" /></td>";
+								$htm .= "<td><input type=\"text\" name=\"sample_no[]\" value=\"".$value['sample_test_no']."\" class=\"form-control\" readonly /></td>";
 							$htm .= "</tr>";
 							$i++;
 						}
@@ -465,22 +465,36 @@ class SampleReceiveController extends Controller
 		return $htm;
 	}
 
+	private function generateTestNo(): string {
+		do {
+			$test_no = mt_rand(1000000000, 9999999999);
+		} while (OrderSample::whereSample_test_no($test_no)->exists());
+		return $test_no;
+	}
+
 	protected function setTestNo(Request $request) {
-		$data = $request->all();
-		if (!empty($data['sample_id']) && count($data['sample_id']) > 0) {
-			foreach ($data['sample_id'] as $key => $value) {
-				$order_sample = OrderSample::find($value);
-				$order_sample->sample_test_no = $data['sample_no'][$key];
-				$order_sample->save();
+		try {
+			$data = $request->all();
+			if (!empty($data['sample_id']) && count($data['sample_id']) > 0) {
+				foreach ($data['sample_id'] as $key => $value) {
+					$order_sample = OrderSample::find($value);
+					// $order_sample->sample_test_no = $data['sample_no'][$key];
+					if (empty($order_sample->sample_test_no)) {
+						$order_sample->sample_test_no = $this->generateTestNo();
+						$order_sample->save();
+					}
+				}
+				return $this->createTestNoBarcode(lab_no: $data['set_test_no_search'], message: 'บันทึกหมายเลขทดสอบแล้ว');
+			} else {
+				return redirect()->back()->with('error', 'โปรดตรวจสอบรายการข้อมูล');
 			}
-			// return redirect()->back()->with('success', 'บันทึกหมายเลขทดสอบแล้ว');
-			return $this->createTestNoBarcode(lab_no: $lab_no = $data['set_test_no_search'])->with('success', 'บันทึกหมายเลขทดสอบแล้ว');
-		} else {
-			return redirect()->back()->with('error', 'โปรดตรวจสอบรายการข้อมูล');
+		} catch (\Exception $e) {
+			Log::error($e->getMessage());
+			return redirect()->back()->with('error', $e->getMessage());
 		}
 	}
 
-	protected function createTestNoBarcode($lab_no = null) {
+	protected function createTestNoBarcode($lab_no=null, $message=null) {
 		try {
 			if (!empty($lab_no)) {
 				$order = Order::select('id')->whereLab_no($lab_no)->get();
@@ -510,6 +524,7 @@ class SampleReceiveController extends Controller
 			}
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
+			return redirect()->back()->with('error', $e->getMessage());
 		}
 	}
 
@@ -524,6 +539,7 @@ class SampleReceiveController extends Controller
 			}
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
+			return redirect()->back()->with('error', $e->getMessage());
 		}
 	}
 
@@ -533,6 +549,8 @@ class SampleReceiveController extends Controller
 		foreach ($parameters as $key => $value) {
 			if (!is_null($value['main_analys_user_id'])) {
 				$analyze_user[$value['main_analys_user_id']] = $value['main_analys'];
+			} else {
+				continue;
 			}
 		};
 		return view(view: 'apps.staff.receive.requisition.create', data: compact('analyze_user'));
@@ -543,9 +561,14 @@ class SampleReceiveController extends Controller
 			if (!empty($request->lab_no)) {
 				$order = Order::select('id')->whereLab_no(trim($request->lab_no))->get();
 				if (count($order) > 0) {
-					$order_sample = OrderSample::whereOrder_id($order[0]->id)->with('parameters', function($query) {
-						$query->whereIn('status', ['pending', 'requisition', 'print']);
-					})->whereSample_received_status('y')->get();
+					$order_sample = OrderSample::whereOrder_id($order[0]->id)
+						->with('parameters', function($query) {
+							$query->whereIn('status', ['pending', 'reserved', 'requisition', 'analyze', 'completed']);
+						})
+						->whereSample_verified_status('complete')
+						->whereSample_received_status('y')
+						->whereNotNull('sample_test_no')
+						->get();
 					$result = [];
 					$order_sample->each(function($item, $key) use (&$result, $request) {
 						$analyze_user = trim($request->analyze_user);
@@ -578,7 +601,7 @@ class SampleReceiveController extends Controller
 								<th>Lab No</th>
 								<th>รายการทดสอบ</th>
 								<th>ผู้วิเคราะห์</th>
-								<th>กดเลือก</th>
+								<th>เลือก</th>
 							</tr>
 						</thead>
 						<tfoot></tfoot>
@@ -593,14 +616,26 @@ class SampleReceiveController extends Controller
 										$htm .= "<td>".$value['paramet_name']."</td>";
 										$htm .= "<td>".$value['main_analys_name']."</td>";
 										match ($value['status']) {
-											'requisition' => $htm .= "
-												<td>
-													<button type=\"button\" class=\"btn btn-success btn-sm\" style=\"width:86px;\" disabled><i class=\"fal fa-check\"></i> เบิกแล้ว</button>
-												</td>",
 											'pending' => $htm .= "
 												<td>
-													<button type=\"button\" class=\"btn btn-primary btn-sm requisition-btn\" style=\"width:86px;\" onClick='updateRequisitionStatus(\"".$value['lab_no']."\", \"".$value['main_analys_user_id']."\", \"".$value['order_sample_parameter_id']."\")'>เบิก</button>
-												</td>"
+													<button type=\"button\" class=\"btn btn-info btn-sm\" style=\"width:100px;\" disabled>รอจอง</button>
+												</td>",
+											'reserved' => $htm .= "
+												<td>
+													<button type=\"button\" class=\"btn btn-success btn-sm requisition-btn\" style=\"width:100px;\" onClick='updateRequisitionStatus(\"".$value['lab_no']."\", \"".$value['main_analys_user_id']."\", \"".$value['order_sample_parameter_id']."\")'>เบิก</button>
+												</td>",
+											'requisition' => $htm .= "
+												<td>
+													<button type=\"button\" class=\"btn btn-warning btn-sm\" style=\"width:100px;\" disabled><i class=\"fal fa-check\"></i> เบิกแล้ว</button>
+												</td>",
+											'analyze' => $htm .= "
+												<td>
+													<button type=\"button\" class=\"btn btn-warning btn-sm\" style=\"width:100px;\" disabled><i class=\"fal fa-check\"></i> วิเคราะห์</button>
+												</td>",
+                                            'completed' => $htm .= "
+												<td>
+													<button type=\"button\" class=\"btn btn-primary btn-sm\" style=\"width:100px;\" disabled><i class=\"fal fa-check\"></i> เสร็จสิ้น</button>
+												</td>",
 										};
 									$htm .= "</tr>";
 								} else {
@@ -626,6 +661,7 @@ class SampleReceiveController extends Controller
 			}
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
+			return redirect()->back()->with('error', $e->getMessage());
 		}
 	}
 

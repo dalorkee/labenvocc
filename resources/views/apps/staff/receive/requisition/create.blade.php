@@ -85,7 +85,7 @@ legend {
 					</div>
 					<div class="panel-content border-faded border-left-0 border-right-0 border-bottom-0">
 						<button type="submit" class="btn btn-warning"> <i class="fal fa-print"></i> พิมพ์บันทึกการทดสอบ</button>
-						<a href="{{ route('sample.received.index') }}" class="btn btn-primary"><i class="fal fa-home"></i> กลับไปหน้าแรก</a>
+						<a href="{{ route('sample.received.requisition.create') }}" class="btn btn-primary"><i class="fal fa-home"></i> กลับไปหน้าแรก</a>
 					</div>
 				</form>
 			</div>

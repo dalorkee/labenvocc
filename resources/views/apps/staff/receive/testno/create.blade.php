@@ -52,8 +52,8 @@
 						</div>
 					</div>
 					<div class="panel-content border-faded border-left-0 border-right-0 border-bottom-0">
-						<button type="submit" class="btn btn-warning" id="set_test_no_btn" disabled> <i class="fal fa-save"></i> กำหนดหมายเลขทดสอบ</button>&nbsp;
-						<a href="{{ route('sample.received.index') }}" type="button" class="btn btn-primary"><i class="fal fa-home"></i> กลับไปหน้าแรก</a>
+						<button type="submit" class="btn btn-info" id="set_test_no_btn" disabled> <i class="fal fa-save"></i> กำหนดหมายเลขทดสอบ</button>&nbsp;
+						<a href="{{ route('sample.received.test.no.create') }}" type="button" class="btn btn-primary"><i class="fal fa-home"></i> กลับไปหน้าแรก</a>
 					</div>
 				</form>
 			</div>

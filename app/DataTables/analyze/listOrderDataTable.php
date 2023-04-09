@@ -51,11 +51,11 @@ class listOrderDataTable extends DataTable
 	}
 
 	public function query(Order $order, OrderSample $orderSample, OrderSampleParameter $paramet) {
-		$order_sample_arr = [];
-		$paramet->select('order_sample_id')->whereMain_analys_user_id($this->user_id)->get()->each(function($item, $key) use (&$order_sample_arr) {
-			array_push($order_sample_arr, $item->order_sample_id);
+		$order_sample_id_arr = [];
+		$paramet->select('order_sample_id')->whereMain_analys_user_id($this->user_id)->get()->each(function($item, $key) use (&$order_sample_id_arr) {
+			array_push($order_sample_id_arr, $item->order_sample_id);
 		});
-		$samples = $orderSample->select('order_id')->whereIn('id', $order_sample_arr)->whereSample_verified_status('complete')->whereSample_received_status('y')->get();
+		$samples = $orderSample->select('order_id')->whereIn('id', $order_sample_id_arr)->whereSample_verified_status('complete')->whereSample_received_status('y')->get();
 		$order_id =  (!empty($samples[0]['order_id'])) ? $samples[0]['order_id'] : 0;
 		return $order::whereId($order_id)->whereIn('order_status', ['pending', 'preparing', 'completed'])->orderBy('id', 'ASC');
 	}

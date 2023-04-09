@@ -157,7 +157,7 @@ table tr th, table tr td {height:30px; font-size:16px; border:1px solid #bbb}
 		</div>
 		<div style="width: 100%; margin: 20px auto 0 auto; text-align: center">
 			<button type="button" id="printBtn" onClick="window.print();">พิมพ์หน้านี้</button>
-			<a href="{{ route('staff.index') }}" type="button" id="homeBtn">กลับไปหน้าแรก</a>
+			<a href="{{ route('sample.received.requisition.create') }}" type="button" id="homeBtn">กลับไปหน้าแรก</a>
 		</div>
 	</div>
 

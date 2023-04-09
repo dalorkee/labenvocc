@@ -75,7 +75,7 @@ class OrderSample extends Model
 		);
 	}
 
-    protected function sampleReceiveDate(): Attribute {
+	protected function sampleReceiveDate(): Attribute {
 		return new Attribute(
 			get: fn ($value) => $this->convertMySQLDateToJs(date: $value),
 			set: fn ($value) => $this->convertJsDateToMySQL(date: $value),
