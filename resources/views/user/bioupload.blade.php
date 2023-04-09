@@ -105,6 +105,17 @@
 						</div>
 						<div class="form-row">
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
+								<label class="form-label" for="sample_date">วันที่เก็บตัวอย่าง</label>
+								<div class="input-group">
+									<input type="text" name="sample_date" placeholder="เลือกวันที่" class="form-control" id="sample_date">
+									<div class="input-group-append">
+										<span class="input-group-text fs-xl">
+											<i class="fal fa-calendar-alt"></i>
+										</span>
+									</div>
+								</div>
+							</div>
+							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
 								<label class="form-label text-primary" for="uploadbio">อัพโหลดไฟล์ Excel</label>
 								<div class="input-group">
 									<div class="custom-file">
@@ -132,14 +143,16 @@
 </div>
 @endsection
 @section('script')
-<script type="text/javascript" src="{{ URL::asset('vendor/DataTables/DataTables-1.10.22/js/jquery.dataTables.min.js') }}"></script>
-<script type="text/javascript" src="{{ URL::asset('vendor/DataTables/Buttons-1.6.5/js/dataTables.buttons.min.js') }}"></script>
-<script type="text/javascript" src="{{ URL::asset('vendor/DataTables/Responsive-2.2.6/js/dataTables.responsive.min.js') }}"></script>
-<script type="text/javascript" src="{{ URL::asset('vendor/jquery-contextmenu/js/jquery.contextMenu.min.js') }}"></script>
-<script type="text/javascript" src="{{ URL::asset('js/buttons.server-side.js') }}"></script>
 <script type="text/javascript">$(document).ready(function(){$.ajaxSetup({headers:{'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')}});});</script>
+<script type="text/javascript" src="{{ URL::asset('assets/js/formplugins/bootstrap-datepicker/bootstrap-datepicker.js') }}"></script>
 <script>
 	$(document).ready(function() {
+		$('#sample_date').datepicker({
+			format: 'dd/mm/yyyy',
+			todayHighlight: true,
+			orientation: "bottom left",
+			autoclose: true,
+		});
         $('input[name="type_of_work"]').on('change', function() {
 			$('input[name="' + this.name + '"]').not(this).prop('checked', false);
 			let chk = this.value;

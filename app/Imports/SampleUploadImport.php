@@ -18,9 +18,11 @@ class SampleUploadImport implements ToModel, WithHeadingRow
 
     */
     protected $orderId;
-    public function __construct($orderId)
+    protected $sampleDate;
+    public function __construct($orderId, $sampleDate)
     {
         $this->orderId = $orderId;
+        $this->sampleDate = $sampleDate;
     }
 
     public function model(array $row)
@@ -33,6 +35,7 @@ class SampleUploadImport implements ToModel, WithHeadingRow
             'age_year' => $row['age_year'],
             'division' => $row['division'],
             'work_life_year' => $row['work_life_year'],
+            'sample_date' => $this->sampleDate,
             'note' => $row['note']
         ]);
     }

@@ -67,7 +67,8 @@ class SampleUploadController extends Controller
         $result = $requestForm->save();
         if($result){
             $lastId = $requestForm->id;
-            Excel::import(new SampleUploadImport($lastId),$request->file('uploadbio'));
+            $sample_date = $request->sample_date;
+            Excel::import(new SampleUploadImport($lastId, $sample_date),$request->file('uploadbio'));
             // return redirect('import-excel-csv')->with('status', 'The file has been imported in laravel 8');
             return redirect('/customer')->with('success','upload OK');
         }
