@@ -41,7 +41,7 @@ class listOrderDataTable extends DataTable
 				})
 				->addColumn('action', function($order) {
 					return "
-					<a href=\"{{ route('sample.analyze.reserve', ['paramet_id' => $order->paramet->id]) }}\" class=\"btn btn-success btn-sm\" id=\"reserved\">เบิกตัวอย่าง</a>
+					<a href=\"".route('sample.analyze.select', ['lab_no' => $order->lab_no])."\" class=\"btn btn-success btn-sm\" id=\"reserved\">เลือก</a>
 					<button class=\"btn btn-primary btn-sm\" id=\"result\" data-order=\"".$order->id."\">ผลการทดสอบ</button>";
 				})
 				->rawColumns(['progress', 'action']);
