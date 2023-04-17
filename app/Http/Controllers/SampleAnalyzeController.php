@@ -29,4 +29,8 @@ class SampleAnalyzeController extends Controller
 		return $dataTable->with('user_id', $this->user->id)->render(view: 'apps.staff.analyze.create');
 	}
 
+    protected function sampleReserve(Request $request) {
+        dd($request->paramet_id);
+    }
+
 }
