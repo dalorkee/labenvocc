@@ -163,7 +163,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 		});
         Route::resource('analyze', SampleAnalyzeController::class);
 		Route::controller(SampleAnalyzeController::class)->prefix('analyze')->group(function() {
-            Route::get('/select/lab/no/{lab_no}', 'selectSampleByLabNo')->name('analyze.select');
+            Route::get('/select/lab/no/{lab_no}/order/{id}/user/{user_id}', 'selectSample')->name('analyze.select');
+            Route::get('/reserve/paramet/id/{paramet_id}', 'sampleReserve')->name('analyze.reserve');
 		});
 	});
 	Route::get('/admin/home', [AdminController::class, 'index'])->name('admin.index');
