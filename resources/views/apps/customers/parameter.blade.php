@@ -1,7 +1,5 @@
 @extends('layouts.index')
-@section('token')
-<meta name="csrf-token" content="{{ csrf_token() }}">
-@endsection
+@section('token')<meta name="csrf-token" content="{{ csrf_token() }}">@endsection
 @section('style')
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/pj-step.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/css/datagrid/datatables/datatables.bundle.css') }}">

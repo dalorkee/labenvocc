@@ -3,9 +3,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\{Auth, Log};
-use App\DataTables\analyze\listOrderDataTable;
-use App\Models\{Order,OrderSample};
-// use Yajra\DataTables\Facades\DataTables;
+use App\DataTables\analyze\{listOrderDataTable};
+use App\Models\{OrderSample};
+use Yajra\DataTables\Facades\DataTables;
 
 class SampleAnalyzeController extends Controller
 {
@@ -28,24 +28,48 @@ class SampleAnalyzeController extends Controller
 		return $dataTable->with('user_id', $this->user->id)->render(view: 'apps.staff.analyze.create');
 	}
 
-	protected function selectSample(Request $request) {
-		$req_data = [
+	protected function sampleSelect(Request $request) {
+		$data = [
 			'lab_no' => $request->lab_no,
 			'order_id' => $request->order_id,
 			'user_id' => $request->user_id,
 		];
-		$data = [];
-		$result = OrderSample::with(['parameters' => function($query) use ($request) {
-			$query->where('main_analys_user_id', '=', $request->user_id);
-		}])->whereOrder_id($request->id)->get();
+		return view(view: 'apps.staff.analyze.sample-select', data: compact('data'));
+	}
+	protected function sampleSelectDt(Request $request) {
+		try {
+			if ($request->ajax()) {
+				$data = [];
+				$result = OrderSample::with(['parameters' => function($query) use ($request) {
+					$query->where('main_analys_user_id', '=', $request->user_id);
+				}])->whereOrder_id($request->id)->get();
 
-		$result->each(function($item, $key) use (&$data) {
-			if (count($item->parameters) > 0) {
-				array_push($data, $item);
+				// $result->each(function($item, $key) use (&$data) {
+				// 	if (count($item->parameters) > 0) {
+				// 		array_push($data, $item);
+				// 	}
+				// });
+				return Datatables::of($result)
+					->addIndexColumn()
+                    ->addColumn('info', function() {
+                        return "<a href=\"javascript:void(0);\" class=\"btn btn-info btn-sm btn-icon rounded-circle\"><i class=\"fal fa-info\"></i></a>";
+                    })
+                    ->addColumn('paramet', function($sample) {
+                        $htm = "<ul>\n";
+                        foreach ($sample->parameters as $key => $value) {
+                            $htm .= "<li>".$value['parameter_name']."</li>\n";
+                        }
+                    $htm .= "</ul>\n";
+                    return $htm;
+                    })
+			        ->rawColumns(['info', 'paramet', 'action'])
+					->make(true);
+			} else {
+				dd('ไม่พบข้อมูล Ajax');
 			}
-		});
-        // dd($data);
-		return view(view: 'apps.staff.analyze.select', data: compact('req_data', 'data'));
+		} catch (\Exception $e) {
+			dd($e->getMessage());
+		}
 	}
 
 	protected function sampleReserve(Request $request) {
