@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class BioUploadRequest extends FormRequest
+class EnvUploadRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +24,7 @@ class BioUploadRequest extends FormRequest
     public function rules()
     {
         return [
-            'uploadbio' => 'required|mimes:xlsx,xls',
+            'uploadenv' => 'required|mimes:xlsx,xls',
             'type_of_work' => 'required'
         ];
     }
@@ -32,7 +32,7 @@ class BioUploadRequest extends FormRequest
     public function messages()
     {
         return [
-            'uploadbio.required' => 'โปรดเลือกไฟล์ Excel',
+            'uploadenv.required' => 'โปรดเลือกไฟล์ Excel',
             'type_of_work.required' => 'ประเภทงานห้ามมีค่าว่าง'
         ];
     }
