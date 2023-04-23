@@ -129,7 +129,7 @@
 						<span class="nav-link-text">งานตรวจวิเคราะห์</span>
 					</a>
 					<ul>
-						<li class="{{ (Request::is('*sample/analyze/create'))  ? 'active' : '' }}">
+						<li class="{{ (Request::is('*sample/analyze/create') || Request::is('*sample/analyze/select/*'))  ? 'active' : '' }}">
 							<a href="{{ route('sample.analyze.create') }}" title="งานวิเคราะห์" data-filter-tags="sample_analyze">
 								<span class="nav-link-text" data-i18n="nav.plugins_plugins_faq">งานวิเคราะห์</span>
 							</a>

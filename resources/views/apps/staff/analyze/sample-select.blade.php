@@ -14,7 +14,7 @@
 	.buttons-create {float:left;margin-left:12px;}
 	.buttons-create:after {content:'';clear:both;}
 	.dt-btn {margin:0;padding:0;}
-	#order-table thead {background-color:#297FB0;color: white;}
+	table#sample thead {background-color:#297FB0;color: white;}
 	.row-completed {width:180px;padding-right:14px;position:absolute;top:82px;right:10px;text-align:right;}
 	table.dataTable.dt-checkboxes-select tbody tr,
 	table.dataTable thead .dt-checkboxes-select-all {cursor: pointer;}
@@ -26,8 +26,9 @@
 @endsection
 @section('content')
 <ol class="breadcrumb page-breadcrumb text-sm font-prompt">
-	<li class="breadcrumb-item"><i class="fal fa-home mr-1"></i> <a href="{{ route('sample.received.index') }}">งานรับตัวอย่าง</a></li>
-	<li class="breadcrumb-item">ใบคำขอ</li>
+	<li class="breadcrumb-item"><i class="fal fa-home mr-1"></i> <a href="{{ route('sample.received.index') }}">งานตรวจวิเคราะห์</a></li>
+	<li class="breadcrumb-item"><a href="#">รายการตัวอย่าง</a></li>
+	<li class="breadcrumb-item">Lab 0000166</li>
 </ol>
 <div class="row text-sm font-prompt">
 	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -53,6 +54,7 @@
 						<div class="row">
 							<div class="table-responsive col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mt-4 mb-3">
 								<table class="table table-striped" id="sample">
+									<caption>Lab No. 0000166 </caption>
 									<thead class="bg-primary-100">
 										<tr>
 											<th>ลำดับ</th>
@@ -63,30 +65,7 @@
 										</tr>
 									</thead>
 									<tfoot></tfoot>
-									<tbody>
-									{{-- @foreach ($data as $key => $value)
-										<tr>
-											<td>{{ $loop->iteration }}</td>
-											<td>{{ $value['sample_test_no'] }}</td>
-											<td><a href="javascript:void(0);" class="btn btn-info btn-sm btn-icon rounded-circle"><i class="fal fa-info"></i></a></td>
-											<td>
-												<ul>
-													@forelse ($value['parameters'] as $k => $v)
-														<li>{{ $v['parameter_name'] }}</li>
-													@empty
-														<li>-</li>
-													@endforelse
-												</ul>
-											</td>
-											<td>
-												<div class="custom-control custom-checkbox">
-													<input type="checkbox" name="paramet_{{ $v['parameter_id'] }}" class="custom-control-input" id="id_{{ $v['parameter_id'] }}">
-													<label class="custom-control-label" for="id_{{ $v['parameter_id'] }}">เลือก</label>
-												</div>
-										</tr>
-									@endforeach --}}
-
-									</tbody>
+									<tbody></tbody>
 								</table>
 							</div>
 						</div>
@@ -120,14 +99,14 @@ $(document).ready(function() {
 		language: {'url': '/vendor/DataTables/i18n/thai.json'},
 		ajax: "{{ route('sample.analyze.select.dt', ['id'=>'1', 'user_id'=>'25']) }}",
 		columns: [
-			{data: 'DT_RowIndex', name: 'DT_RowIndex'},
-			{data: 'info', name: 'info'},
-			{data: 'sample_test_no', name: 'sample_test_no'},
+			{data: 'DT_RowIndex', name: 'DT_RowIndex', width: '6%', className: 'text-center'},
+			{data: 'info', name: 'info',  width: '10%', className: 'text-center'},
+			{data: 'sample_test_no', name: 'sample_test_no', width: '18%'},
 			{data: 'paramet', name: 'paramet'},
-			{data: 'id', name: 'id', width: '5%'},
+			{data: 'id', name: 'id', width: '6%', className: 'text-center'},
 		],
 		columnDefs: [{
-            orderable: false,
+			orderable: false,
 			targets: 4,
 			checkboxes: {'selectRow': true}
 		}],
@@ -136,12 +115,58 @@ $(document).ready(function() {
 	});
 
 	$('#sample_reserve').click(function() {
-        var rows = table.rows('.selected').data();
-        $.each(rows, function(index, rowId) {
-            let data = rows.data();
-            console.log(data);
-        });
+		var paramets = [];
+		var rows_selected = table.rows({selected: true}).data();
+		Object.values(rows_selected).forEach(val => {
+			var x = val.parameters;
+			for (i in x) { paramets.push(x[i].id) }
+		});
+		$.ajax({
+			method: "GET",
+			url: "{{ route('sample.analyze.reserve') }}",
+			dataType: "json",
+			data: {paramets: paramets},
+			success: function(response) {
+				if (response.status == true) {
+					var swalWithBootstrapButtons = Swal.mixin({
+						customClass:{confirmButton: "btn btn-success"},
+						buttonsStyling: false
+					});
+					swalWithBootstrapButtons.fire({
+						type: "success",
+						title: "บันทึกข้อมูลสำเร็จ",
+						text: response.msg,
+						confirmButtonText: "ตกลง",
+						allowOutsideClick: false,
+						footer: "<a>Lab-EnvOcc</a>"
+					}).then((result) => {
+						if (result.value) {
+							window.location.href = "{{ route('sample.analyze.create') }}";
+						}
+					});
+				} else {
+					var swalWithBootstrapButtons = Swal.mixin({
+						customClass:{confirmButton: "btn btn-danger"},
+						buttonsStyling: false
+					});
+					swalWithBootstrapButtons.fire({
+						type: "error",
+						title: "บางอย่างผิดพลาด !",
+						text: response.msg,
+						confirmButtonText: "ตกลง",
+						allowOutsideClick: false,
+						footer: "<a>Lab-EnvOcc</a>"
+					});
+				};
+			},
+			error: function(jqXhr, textStatus, errorMessage) {
+				alert('Error code: ' + jqXhr.status + errorMessage);
+			}
+		});
+	});
 
+    $('#get_info').click(function() {
+        alert('get');
     });
 });
 </script>
