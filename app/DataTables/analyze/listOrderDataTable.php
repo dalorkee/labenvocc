@@ -41,8 +41,8 @@ class listOrderDataTable extends DataTable
 				})
 				->addColumn('action', function($order) {
 					return "
-					<button class=\"btn btn-secondary btn-sm\" id=\"requisition\" data-order=\"".$order->id."\">เบิกตัวอย่าง</button>
-					<button class=\"btn btn-secondary btn-sm\" id=\"result\" data-order=\"".$order->id."\">ผลการทดสอบ</button>";
+					<a href=\"".route('sample.analyze.select', ['lab_no' => $order->lab_no, 'id' => $order->id, 'user_id' => $this->user_id])."\" class=\"btn btn-success btn-sm\" id=\"reserved\">เลือก</a>
+					<button class=\"btn btn-primary btn-sm\" id=\"result\" data-order=\"".$order->id."\">ผลการทดสอบ</button>";
 				})
 				->rawColumns(['progress', 'action']);
 		} catch (\Exception $e) {
@@ -57,7 +57,7 @@ class listOrderDataTable extends DataTable
 		});
 		$samples = $orderSample->select('order_id')->whereIn('id', $order_sample_id_arr)->whereSample_verified_status('complete')->whereSample_received_status('y')->get();
 		$order_id =  (!empty($samples[0]['order_id'])) ? $samples[0]['order_id'] : 0;
-		return $order::whereId($order_id)->whereIn('order_status', ['pending', 'preparing', 'completed'])->orderBy('id', 'ASC');
+		return $order::whereId($order_id)->whereIn('order_status', ['pending', 'preparing', 'completed'])->with('parameters')->orderBy('id', 'ASC');
 	}
 
 	public function html() {
@@ -85,7 +85,7 @@ class listOrderDataTable extends DataTable
 				Column::make('received_order_date')->title('รับตัวอย่าง'),
 				Column::make('report_due_date')->title('กำหนดส่งงาน'),
 				Column::make('order_status')->title('สถานะ'),
-				Column::computed('action')->title('#')->width('16%')
+				Column::computed('action')->title('#')->width('24%')->addClass('text-center')
 			];
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());

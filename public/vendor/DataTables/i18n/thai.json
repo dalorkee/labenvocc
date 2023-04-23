@@ -8,7 +8,7 @@
     "sLengthMenu":     "แสดง _MENU_ แถว",
     "sLoadingRecords": "กำลังโหลดข้อมูล...",
     "sProcessing":     "กำลังดำเนินการ...",
-    "sSearch":         "ค้นหา: ",
+    "sSearch":         "ค้นหา:",
     "sZeroRecords":    "ไม่พบข้อมูล",
     "oPaginate": {
         "sFirst":    "หน้าแรก",

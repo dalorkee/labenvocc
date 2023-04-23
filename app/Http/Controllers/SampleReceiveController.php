@@ -563,7 +563,7 @@ class SampleReceiveController extends Controller
 				if (count($order) > 0) {
 					$order_sample = OrderSample::whereOrder_id($order[0]->id)
 						->with('parameters', function($query) {
-							$query->whereIn('status', ['pending', 'reserved', 'requisition', 'analyze', 'completed']);
+							$query->whereIn('status', ['pending', 'reserved', 'requisition', 'analyzing', 'completed']);
 						})
 						->whereSample_verified_status('complete')
 						->whereSample_received_status('y')
@@ -628,11 +628,11 @@ class SampleReceiveController extends Controller
 												<td>
 													<button type=\"button\" class=\"btn btn-warning btn-sm\" style=\"width:100px;\" disabled><i class=\"fal fa-check\"></i> เบิกแล้ว</button>
 												</td>",
-											'analyze' => $htm .= "
+											'analyzing' => $htm .= "
 												<td>
 													<button type=\"button\" class=\"btn btn-warning btn-sm\" style=\"width:100px;\" disabled><i class=\"fal fa-check\"></i> วิเคราะห์</button>
 												</td>",
-                                            'completed' => $htm .= "
+											'completed' => $htm .= "
 												<td>
 													<button type=\"button\" class=\"btn btn-primary btn-sm\" style=\"width:100px;\" disabled><i class=\"fal fa-check\"></i> เสร็จสิ้น</button>
 												</td>",
@@ -695,7 +695,7 @@ class SampleReceiveController extends Controller
 
 			if (count($order) > 0) {
 				$order_sample = OrderSample::whereOrder_id($order[0]->id)->with('parameters', function($query) {
-					$query->whereIn('status', ['requisition', 'print']);
+					$query->whereIn('status', ['requisition']);
 				})->whereSample_received_status('y')->get();
 
 				$result = [
@@ -753,7 +753,7 @@ class SampleReceiveController extends Controller
 				$order = Order::select('id', 'lab_no', 'order_status', 'report_due_date')->whereLab_no(trim($request->lab_no))->get();
 				if (count($order) > 0) {
 					$order_sample = OrderSample::whereOrder_id($order[0]->id)->with('parameters', function($query) {
-						$query->whereIn('status', ['pending', 'requisition', 'print']);
+						$query->whereIn('status', ['pending', 'requisition']);
 					})->whereSample_received_status('y')->get();
 					$result = [
 						'order' => []
