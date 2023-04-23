@@ -6,7 +6,7 @@ use App\Models\OrderSample;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class SampleUploadImport implements ToModel, WithHeadingRow
+class SampleEnvImport implements ToModel, WithHeadingRow
 {
     /**
 

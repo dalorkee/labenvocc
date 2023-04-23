@@ -184,7 +184,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 	Route::get('/parameter/id/{id}/deny',[ParametController::class,'deny'])->name('paramet.deny');
 
 	Route::get('sample/env', [SampleUploadController::class, 'env'])->name('sampleupload.env');
-	Route::post('sample/bio/create', [SampleUploadController::class, 'biocreate'])->name('sampleupload.biocreate');
+	Route::post('sample/env/import', [SampleUploadController::class, 'envimport'])->name('sampleupload.envimport');
+	// Route::post('sample/bio/create', [SampleUploadController::class, 'biocreate'])->name('sampleupload.biocreate');
 	Route::post('sample/bio/import', [SampleUploadController::class, 'bioimport'])->name('sampleupload.bioimport');
 });
 Route::get('/user/advertise/id/{id}/detail',[UserAdvertiseController::class,'detail'])->name('user.advertise.detail');
