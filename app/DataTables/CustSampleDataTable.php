@@ -24,9 +24,10 @@ class CustSampleDataTable extends DataTable
 						->editColumn('lastname', function($order_sample) {
 							return "<div style=\"width: 180px\">".$order_sample->lastname."</div>";
 						})
-						->editColumn('sample_date', function($order_sample) {
-							return Carbon::parse($order_sample->sample_date)->format('d/m/Y');
-						})
+						// ->editColumn('sample_date', function($order_sample) {
+							// return Carbon::parse($order_sample->sample_date)->format('d/m/Y');
+                        //     return $order_sample->sample_date;
+						// })
 						->addColumn('parameter', function ($order_sample) {
 							return $order_sample->parameters->map(function($parameter) {
 								return "

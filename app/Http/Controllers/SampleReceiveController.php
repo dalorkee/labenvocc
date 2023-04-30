@@ -334,7 +334,6 @@ class SampleReceiveController extends Controller
 				}
 				$data = $data->all();
 
-
 				/* put file to storage */
 				$pdf = Pdf::loadView('print.sample-receipt', $data);
 				$content = $pdf->download()->getOriginalContent();
@@ -624,17 +623,13 @@ class SampleReceiveController extends Controller
 												<td>
 													<button type=\"button\" class=\"btn btn-success btn-sm requisition-btn\" style=\"width:100px;\" onClick='updateRequisitionStatus(\"".$value['lab_no']."\", \"".$value['main_analys_user_id']."\", \"".$value['order_sample_parameter_id']."\")'>เบิก</button>
 												</td>",
-											'requisition' => $htm .= "
-												<td>
-													<button type=\"button\" class=\"btn btn-warning btn-sm\" style=\"width:100px;\" disabled><i class=\"fal fa-check\"></i> เบิกแล้ว</button>
-												</td>",
 											'analyzing' => $htm .= "
 												<td>
-													<button type=\"button\" class=\"btn btn-warning btn-sm\" style=\"width:100px;\" disabled><i class=\"fal fa-check\"></i> วิเคราะห์</button>
+													<button type=\"button\" class=\"btn btn-warning btn-sm\" style=\"width:100px;\" disabled>วิเคราะห์</button>
 												</td>",
 											'completed' => $htm .= "
 												<td>
-													<button type=\"button\" class=\"btn btn-primary btn-sm\" style=\"width:100px;\" disabled><i class=\"fal fa-check\"></i> เสร็จสิ้น</button>
+													<button type=\"button\" class=\"btn btn-primary btn-sm\" style=\"width:100px;\" disabled>เสร็จสิ้น</button>
 												</td>",
 										};
 									$htm .= "</tr>";
@@ -669,7 +664,7 @@ class SampleReceiveController extends Controller
 		try {
 			if (!empty($request->order_sample_parameter_id)) {
 				$order_sample_paramet = OrderSampleParameter::findOrFail($request->order_sample_parameter_id);
-				$order_sample_paramet->status = 'requisition';
+				$order_sample_paramet->status = 'analyzing';
 				$saved = $order_sample_paramet->save();
 				if ($saved) {
 					return response()->json([
@@ -679,10 +674,10 @@ class SampleReceiveController extends Controller
 						'order_sample_parameter_id' => $request->order_sample_parameter_id
 					]);
 				} else {
-					return response()->json(['success' => false, 'message' => 'Update unsuccessfull']);
+					return response()->json(['success' => false, 'message' => 'เบิกตัวอย่างไม่ได้']);
 				}
 			} else {
-				return response()->json(['success' => false, 'message' => 'Empty ther order_sample_parameter_id']);
+				return response()->json(['success' => false, 'message' => 'ไม่พบรหัส Parameter ที่เลือก']);
 			}
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
