@@ -166,6 +166,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 			Route::get('/select/lab/no/{lab_no}/order/{id}/user/{user_id}', 'sampleSelect')->name('analyze.select');
 			Route::get('/select/order/{id}/user{user_id}', 'sampleSelectDt')->name('analyze.select.dt');
 			Route::get('/reserve/paramet/reserve', 'sampleReserve')->name('analyze.reserve');
+			Route::get('/result/lab/no/{lab_no}/order/{id}/user/{user_id}', 'labResult')->name('analyze.lab.result');
 		});
 	});
 	Route::get('/admin/home', [AdminController::class, 'index'])->name('admin.index');

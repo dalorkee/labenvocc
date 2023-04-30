@@ -101,4 +101,8 @@ class SampleAnalyzeController extends Controller
 		}
 	}
 
+	protected function labResult(Request $request) {
+		return view(view: 'apps.staff.analyze.lab-result');
+	}
+
 }

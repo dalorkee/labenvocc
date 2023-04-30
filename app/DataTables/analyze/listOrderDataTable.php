@@ -41,8 +41,8 @@ class listOrderDataTable extends DataTable
 				})
 				->addColumn('action', function($order) {
 					return "
-					<a href=\"".route('sample.analyze.select', ['lab_no' => $order->lab_no, 'id' => $order->id, 'user_id' => $this->user_id])."\" class=\"btn btn-success btn-sm\" id=\"reserved\">เลือก</a>
-					<button class=\"btn btn-primary btn-sm\" id=\"result\" data-order=\"".$order->id."\">ผลการทดสอบ</button>";
+					<a href=\"".route('sample.analyze.select', ['lab_no' => $order->lab_no, 'id' => $order->id, 'user_id' => $this->user_id])."\" class=\"btn btn-success btn-sm\" id=\"reserved\">เบิกตัวอย่าง</a>
+					<a href=\"".route('sample.analyze.lab.result', ['lab_no' => $order->lab_no, 'id' => $order->id, 'user_id' => $this->user_id])."\" class=\"btn btn-primary btn-sm\">ผลการทดสอบ</a>";
 				})
 				->rawColumns(['progress', 'action']);
 		} catch (\Exception $e) {

@@ -129,16 +129,16 @@
 						<span class="nav-link-text">งานตรวจวิเคราะห์</span>
 					</a>
 					<ul>
-						<li class="{{ (Request::is('*sample/analyze/create') || Request::is('*sample/analyze/select/*'))  ? 'active' : '' }}">
+						<li class="{{ (Request::is('*sample/analyze/create') || Request::is('*sample/analyze/select/*') || Request::is('*sample/analyze/result/*'))  ? 'active' : '' }}">
 							<a href="{{ route('sample.analyze.create') }}" title="งานวิเคราะห์" data-filter-tags="sample_analyze">
 								<span class="nav-link-text" data-i18n="nav.plugins_plugins_faq">งานวิเคราะห์</span>
 							</a>
 						</li>
-                        <li class="{{ (Request::is('*sample/analyze/result'))  ? 'active' : '' }}">
+                        {{-- <li class="{{ (Request::is('*sample/analyze/result'))  ? 'active' : '' }}">
 							<a href="{{ route('sample.analyze.create') }}" title="ผลการทดสอบ" data-filter-tags="sample_analyze">
 								<span class="nav-link-text" data-i18n="nav.plugins_plugins_faq">ผลการทดสอบ</span>
 							</a>
-						</li>
+						</li> --}}
                         <li class="{{ (Request::is('*sample/analyze/report'))  ? 'active' : '' }}">
 							<a href="{{ route('sample.analyze.create') }}" title="ใบรายงานผล" data-filter-tags="sample_analyze">
 								<span class="nav-link-text" data-i18n="nav.plugins_plugins_faq">ใบรายงานผล</span>
