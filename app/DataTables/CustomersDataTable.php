@@ -25,6 +25,7 @@ class CustomersDataTable extends DataTable
 			return datatables()
 				->eloquent($query)
 				->editColumn('order_confirmed_date', function($order) {
+					// return (!empty($order->order_confirmed)) ? Carbon::createFromFormat('d/m/Y', $order->order_confirmed_date)->format('d/m/Y') : null;
 					// return Carbon::parse($order->order_confirmed)->format('d/m/Y');
 					return $order->order_confirmed_date;
 				})

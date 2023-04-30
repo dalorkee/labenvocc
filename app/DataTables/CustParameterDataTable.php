@@ -25,10 +25,10 @@ class CustParameterDataTable extends DataTable
 						->editColumn('lastname', function($orderSample) {
 							return "<div style=\"width: 180px\">".$orderSample->lastname."</div>";
 						})
-						->editColumn('sample_date', function($orderSample) {
+						// ->editColumn('sample_date', function($orderSample) {
 							// return Carbon::parse($orderSample->sample_date)->format('d/m/Y');
-							return (!empty($orderSample->sample_date)) ? Carbon::createFromFormat('d/m/Y', $orderSample->sample_date)->format('d/m/Y') : null;
-						})
+						// 	return (!empty($orderSample->sample_date)) ? Carbon::createFromFormat('d/m/Y', $orderSample->sample_date)->format('d/m/Y') : null;
+						// })
 						->addColumn('parameter', function ($orderSample) {
 							return $orderSample->parameters->map(function($parameter) {
 								return "

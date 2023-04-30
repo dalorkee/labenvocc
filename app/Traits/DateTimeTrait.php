@@ -7,7 +7,7 @@ trait DateTimeTrait {
 		if (preg_match("/^(0[1-9]|[1-2][0-9]|3[0-1])\/(0[1-9]|1[0-2])\/[0-9]{4}$/", $date) || !is_null($date)) {
 			// $ep = explode("/", $date);
 			// return $ep[2]."-".$ep[1]."-".$ep[0];
-			return Carbon::createFromFormat('d/m/Y', $date)->format('Y/m/d');
+			return Carbon::createFromFormat('d/m/Y', $date)->format('Y-m-d');
 		} else {
 			return null;
 		}
