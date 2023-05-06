@@ -29,12 +29,11 @@ class SampleEnvImport implements ToModel, WithHeadingRow
     {
         return new OrderSample([
             'order_id' => $this->orderId,
-            'title_name' => $row['title_name'],
-            'firstname' => $row['firstname'],
-            'lastname' => $row['lastname'],
-            'age_year' => $row['age_year'],
-            'division' => $row['division'],
-            'work_life_year' => $row['work_life_year'],
+            'sample_collection_method' => $row['sample_collection_method'],
+            'kind_of_sample' => $row['kind_of_sample'],
+            'collection_point' => $row['collection_point'],
+            'weight_sample' => $row['weight_sample'],
+            'air_volume' => $row['air_volume'],
             'sample_date' => $this->sampleDate,
             'note' => $row['note']
         ]);

@@ -86,7 +86,6 @@ class SampleUploadController extends Controller
 
     public function envimport(EnvUploadRequest $request){
         $auth = $this->user->load(['userCustomer']);
-        dd($request);
         switch($request->type_of_work){
             case('1');
                 $type_of_work_name = 'บริการ';
