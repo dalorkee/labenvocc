@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\{Auth, Log};
 use App\DataTables\analyze\{listOrderDataTable};
-use App\Models\{OrderSample,OrderSampleParameter};
+use App\Models\{OrderSample,OrderSampleParameter,RefMachine};
 use Yajra\DataTables\Facades\DataTables;
 
 class SampleAnalyzeController extends Controller
@@ -36,6 +36,7 @@ class SampleAnalyzeController extends Controller
 		];
 		return view(view: 'apps.staff.analyze.sample-select', data: compact('data'));
 	}
+
 	protected function sampleSelectDt(Request $request) {
 		try {
 			if ($request->ajax()) {
@@ -101,8 +102,104 @@ class SampleAnalyzeController extends Controller
 		}
 	}
 
-	protected function labResult(Request $request) {
-		return view(view: 'apps.staff.analyze.lab-result');
+	protected function labResultCreate(Request $request) {
+		try {
+			$lab_no = $request->lab_no;
+			$result = OrderSample::select('id', 'order_id', 'has_parameter', 'sample_test_no', 'air_volume')
+				->with(['parameters' => function($query) use ($request) {
+					$query->select(
+						'id', 'order_id', 'order_sample_id',
+						'parameter_id', 'parameter_name', 'main_analys_user_id',
+						'machine_id', 'lab_result_blank', 'lab_result_amount',
+						'lab_dilution', 'lab_result', 'status'
+					)->where('main_analys_user_id', $request->user_id);
+			}])->whereOrder_id($request->id)->get();
+			$data = [];
+			$result->each(function($item, $key) use (&$data) {
+				if (count($item->parameters) > 0) {
+					array_push($data, $item->toArray());
+				}
+			});
+			// dd($data);
+			$machine = (count($data) > 0) ? RefMachine::select('id', 'machine_name')->get()->toArray() : [];
+			return view(view: 'apps.staff.analyze.lab-result', data: compact('lab_no', 'data', 'machine'));
+		} catch (\Exception $e) {
+			Log::error($e->getMessage());
+			return redirect()->back()->with('error', $e->getMessage());
+		}
 	}
 
+	protected function labResultSave(Request $request) {
+		try {
+			$req = $request->toArray();
+			$data = array();
+			$machine = RefMachine::select('id', 'machine_name')->get()->keyBy('id')->toArray();
+
+			/* Prepare data */
+			for ($i=0; $i<count($req['ref_order_id']); $i++) {
+				$tmp['order_id'] = $req['ref_order_id'][$i];
+				$tmp['order_sample_id'] = $req['ref_order_sample_id'][$i];
+				$tmp['sample_test_no'] = $req['sample_test_no'][$i];
+				$tmp['order_sample_parameter_id'] = $req['order_sample_parameter_id'][$i];
+				$tmp['parameter_id'] = $req['parameter_id'][$i];
+				$tmp['parameter_name'] = preg_replace("/\r|\n/", "", $req['parameter_name'][$i]);
+				$tmp['machine_id'] = $req['machine_id'][$i];
+				$tmp['machine_name'] = $machine[$req['machine_id'][$i]]['machine_name'];
+				$tmp['lab_result_blank'] = $req['lab_result_blank'][$i];
+				$tmp['lab_result_amount'] = $req['lab_result_amount'][$i];
+				$tmp['air_volume'] = $req['air_volume'][$i];
+				$tmp['lab_dilution'] = $req['lab_dilution'][$i];
+				$tmp['lab_result'] = $req['lab_result'][$i];
+				array_push($data, $tmp);
+			}
+			/* Save to db */
+			foreach ($data as $key => $value) {
+				$order_sample_parameter = OrderSampleParameter::find($value['order_sample_parameter_id']);
+				$order_sample_parameter->machine_id = $value['machine_id'];
+				$order_sample_parameter->machine_name = $value['machine_name'];
+				$order_sample_parameter->lab_result_blank = $value['lab_result_blank'];
+				$order_sample_parameter->lab_result_amount = $value['lab_result_amount'];
+				$order_sample_parameter->lab_dilution = $value['lab_dilution'];
+				$order_sample_parameter->lab_result = $value['lab_result'];
+				$saved = $order_sample_parameter->save();
+			};
+			return redirect()->back()->with('success', 'บันทึกข้อมูลสำเร็จแล้ว');
+		} catch (\Exception $e) {
+			Log::error($e->getMessage());
+			return redirect()->back()->with('error', $e->getMessage());
+		}
+	}
+
+	protected function labResultUploadFileModal(Request $request) {
+		return "
+		<div class=\"modal fade\" id=\"default-example-modal-lg-center\" tabindex=\"-1\" role=\"dialog\" aria-hidden=\"true\">
+			<div class=\"modal-dialog modal-lg modal-dialog-centered\" role=\"document\">
+				<div class=\"modal-content\">
+					<div class=\"modal-header\">
+						<h5 class=\"modal-title\">อับโหลดไฟล์</h5>
+						<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">
+							<span aria-hidden=\"true\"><i class=\"fal fa-times\"></i></span>
+						</button>
+					</div>
+					<div class=\"modal-body\">
+						<div class=\"form-row\">
+							<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12\">
+								<label class=\"form-label\" for=\"lab_result_file\">เลือกไฟล์</label>
+								<div class=\"input-group\">
+									<div class=\"custom-file\">
+										<input type=\"file\" name=\"result_file\" class=\"custom-file-input @error('result_file') is-invalid @enderror\" id=\"result_file\" aria-describedby=\"result_file\">
+										<label class=\"custom-file-label\" for=\"result_file\">".$request->result_file ?? 'ยังไม่มีไฟล์'."</label>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class=\"modal-footer\">
+						<button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">ปิด</button>
+						<button type=\"button\" class=\"btn btn-primary\">บันทึก</button>
+					</div>
+				</div>
+			</div>
+		</div>";
+	}
 }

@@ -90,7 +90,7 @@
 						<span class="nav-link-text">หน้าหลัก</span>
 					</a>
 				</li>
-				<li class="{{ (Request::is('*sample/received*'))  ? 'active open' : '' }}">
+				<li class="{{ (Request::is('*sample/received*')) ? 'active open' : '' }}">
 					<a href="#" title="งานรับตัวอย่าง" data-filter-tags="receive">
 						<i class="fal fa-cube"></i>
 						<span class="nav-link-text">งานรับตัวอย่าง</span>
