@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\{Auth, Log};
 use App\DataTables\analyze\{listOrderDataTable};
-use App\Models\{OrderSample,OrderSampleParameter,RefMachine};
+use App\Models\{OrderSample,OrderSampleParameter,RefMachine,FileUpload};
 use Yajra\DataTables\Facades\DataTables;
 
 class SampleAnalyzeController extends Controller
@@ -172,23 +172,24 @@ class SampleAnalyzeController extends Controller
 
 	protected function labResultUploadFileModal(Request $request) {
 		return "
-		<div class=\"modal fade\" id=\"default-example-modal-lg-center\" tabindex=\"-1\" role=\"dialog\" aria-hidden=\"true\">
-			<div class=\"modal-dialog modal-lg modal-dialog-centered\" role=\"document\">
+		<div class=\"modal fade font-prompt\" id=\"default-example-modal-lg-center\" data-keyboard=\"false\" data-backdrop=\"static\" tabindex=\"-1\" role=\"dialog\" aria-hidden=\"true\">
+			<form class=\"modal-dialog modal-lg modal-dialog-centered\" action=\"".route('sample.analyze.lab.result.upload.file')."\" method=\"POST\" enctype=\"multipart/form-data\" role=\"document\">
 				<div class=\"modal-content\">
 					<div class=\"modal-header\">
-						<h5 class=\"modal-title\">อับโหลดไฟล์</h5>
+						<h5 class=\"modal-title\">อับโหลดไฟล์ ".$request->paramet_id."</h5>
 						<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">
 							<span aria-hidden=\"true\"><i class=\"fal fa-times\"></i></span>
 						</button>
 					</div>
 					<div class=\"modal-body\">
-						<div class=\"form-row\">
+						<div class=\"form-row pb-4\">
 							<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12\">
 								<label class=\"form-label\" for=\"lab_result_file\">เลือกไฟล์</label>
 								<div class=\"input-group\">
 									<div class=\"custom-file\">
-										<input type=\"file\" name=\"result_file\" class=\"custom-file-input @error('result_file') is-invalid @enderror\" id=\"result_file\" aria-describedby=\"result_file\">
-										<label class=\"custom-file-label\" for=\"result_file\">".$request->result_file ?? 'ยังไม่มีไฟล์'."</label>
+										<input type=\"hidden\" name=\"_token\" value=\"".csrf_token()."\">
+										<input type=\"file\" name=\"lab_result_file\" class=\"custom-file-input @error('lab_result_file') is-invalid @enderror\" id=\"lab_result_file\" aria-describedby=\"lab_result_file\">
+										<label class=\"custom-file-label\" for=\"lab_result_file\">ยังไม่มีไฟล์</label>
 									</div>
 								</div>
 							</div>
@@ -196,10 +197,51 @@ class SampleAnalyzeController extends Controller
 					</div>
 					<div class=\"modal-footer\">
 						<button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">ปิด</button>
-						<button type=\"button\" class=\"btn btn-primary\">บันทึก</button>
+						<button type=\"submit\" class=\"btn btn-primary\">อับโหลด</button>
 					</div>
 				</div>
-			</div>
-		</div>";
+			</form>
+		</div>
+		<script type=\"text/javascript\">
+		$(document).ready(function() {
+			$('#lab_result_file').on('change',function() {
+				alert('jet');
+				let fileName = $(this).val();
+				$(this).next('.custom-file-label').html(fileName);
+			});
+		});
+	</script>
+	";
+	}
+
+	protected function labResultUploadFile(Request $request) {
+		if ($request->hasFile('lab_result_file')) {
+			$file = $request->file('lab_result_file');
+			dd($file);
+			$file_mime = $file->getMimeType();
+			$file_size_byte = $file->getSize();
+			$file_size = ($file_size_byte/1024);
+			$file_name = $file->getClientOriginalName();
+			$file_extension = $file->extension();
+			$new_name = $this->renameFile(prefix: 'lab_rs', free_txt: $this->user->userCustomer->user->id, file_extension: $file_extension);
+			$uploaded = Storage::disk('uploads')->put($new_name, File::get($file));
+			if ($uploaded) {
+				$file_upload = new FileUpload;
+				$file_upload->ref_user_id = $this->user->id;
+				$file_upload->order_id = $last_insert_order_id;
+				$file_upload->old_file_name = $file_name;
+				$file_upload->file_name = $new_name;
+				$file_upload->file_mime = $file_mime;
+				$file_upload->file_path = '/uploads';
+				$file_upload->file_size = $file_size;
+				$file_upload->note = 'ไฟล์ผลแลป';
+				$file_upload->save();
+				$order_sample_parameter = OrderSampleParameter::find();
+				Log::notice($this->user->userCustomer->first_name.' อับโหลดไฟล์ผลแลป '.$new_name);
+			} else {
+				Log::warning($this->user->userCustomer->first_name.' อับโหลดไฟล์ผลแลปไม่สำเร็จ');
+			}
+		}
+
 	}
 }

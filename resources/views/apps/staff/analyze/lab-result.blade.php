@@ -82,7 +82,7 @@
 														<td><input type="text" name="lab_result[]" value="{{ $v['lab_result'] }}" class="form-control" style="width: 100px;"></td>
 														<td style="width: 200px; text-center;">
 															{{-- <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#default-example-modal-lg-center">ADD</button>&nbsp; --}}
-															<button type="button" class="btn btn-sm btn-success" id="upload_lab_result_file">ADD</button>&nbsp;
+															<button type="button" class="btn btn-sm btn-success add-lab-result-file" data-pid="{{ $v['id'] }}">ADD</button>&nbsp;
 															<a href="#" class="btn btn-sm btn-primary">Comment</a>
 														</td>
 													</tr>
@@ -103,21 +103,41 @@
 		</div>
 	</div>
 </div>
+<div class="loader"><img src="{{ URL::asset('assets/img/loading.gif') }}"></div>
+<div id="add_file_modal_wrapper"></div>
 @endsection
 @push('scripts')
 <script type="text/javascript" src="{{ URL::asset('assets/js/notifications/sweetalert2/sweetalert2.bundle.js') }}"></script>
 <script type="text/javascript">
 $(document).ready(function() {
 	$.ajaxSetup({headers:{'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')}});
-	$('#result_file').on('change',function() {
+/* 	$('#lab_result_file').on('change',function() {
+        alert('jet');
 		let fileName = $(this).val();
 		$(this).next('.custom-file-label').html(fileName);
-	})
-    $('#upload_lab_result_file').on.click(function() {
-        $('#myModal').on('shown.bs.modal', function () {
-        $('#myInput').trigger('focus')
-})
-    });
+	}) */
+	$('.add-lab-result-file').on('click', function() {
+		let paramet_id = $(this).data('pid');
+		$.ajax({
+			method: "POST",
+			url: "{{ route('sample.analyze.lab.result.upload.create') }}",
+			dataType: "html",
+			data: {paramet_id: paramet_id},
+			beforeSend: function() {
+				$(".loader").show();
+			},
+			success: function(response) {
+				$('#add_file_modal_wrapper').html(response);
+				$('#default-example-modal-lg-center').modal('show');
+			},
+			complete: function(){
+	 			$('.loader').hide();
+  			},
+			error: function(jqXhr, textStatus, errorMessage) {
+				alert('Error: ' + jqXhr.status + errorMessage);
+			}
+		});
+	});
 });
 </script>
 @endpush

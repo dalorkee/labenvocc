@@ -168,7 +168,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 			Route::get('/reserve/paramet/reserve', 'sampleReserve')->name('analyze.reserve');
 			Route::get('/result/lab/no/{lab_no}/order/{id}/user/{user_id}/create', 'labResultCreate')->name('analyze.lab.result.create');
 			Route::post('result/lab/result/save', 'labResultSave')->name('analyze.lab.result.save');
-			Route::post('result/lab/result/upload/file', 'labResultUploadFileModal')->name('analyze.lab.result.upload.file');
+			Route::post('result/lab/result/upload/create', 'labResultUploadFileModal')->name('analyze.lab.result.upload.create');
+			Route::post('result/lab/result/upload/file', 'labResultUploadFile')->name('analyze.lab.result.upload.file');
 		});
 	});
 	Route::get('/admin/home', [AdminController::class, 'index'])->name('admin.index');
