@@ -59,6 +59,10 @@ return [
 			'driver' => 'local',
 			'root' => public_path(). '/downloads',
 		],
+        'labs' => [
+			'driver' => 'local',
+			'root' => public_path(). '/labs',
+		],
 		'json' => [
 			'driver' => 'local',
 			'root' => public_path(). '/json',

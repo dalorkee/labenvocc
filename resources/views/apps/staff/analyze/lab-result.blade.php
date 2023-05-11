@@ -83,7 +83,7 @@
 														<td style="width: 200px; text-center;">
 															{{-- <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#default-example-modal-lg-center">ADD</button>&nbsp; --}}
 															<button type="button" class="btn btn-sm btn-success add-lab-result-file" data-pid="{{ $v['id'] }}">ADD</button>&nbsp;
-															<a href="#" class="btn btn-sm btn-primary">Comment</a>
+															<button type="button" class="btn btn-sm btn-primary comment-lab-result-file" data-pid="{{ $v['id'] }}">Comment</button>
 														</td>
 													</tr>
 												@endforeach
@@ -95,7 +95,7 @@
 						</div>
 					</div>
 					<div class="panel-content border-faded border-left-0 border-right-0 border-bottom-0">
-						<a href="{{ route('sample.received.index') }}" class="btn btn-success"><i class="fal fa-file"></i> Add File</a>
+						<button type="button" id="btn_upload_chart" class="btn btn-success" data-lab_no="{{ $lab_no }}"><i class="fal fa-file"></i> Add File</button>
 						<button type="submit" class="btn btn-danger"><i class="fal fa-save"></i> บันทึก</button>
 					</div>
 				</form>
@@ -105,17 +105,14 @@
 </div>
 <div class="loader"><img src="{{ URL::asset('assets/img/loading.gif') }}"></div>
 <div id="add_file_modal_wrapper"></div>
+<div id="comment_modal_wrapper"></div>
+<div id="upload_chart_modal_wrapper"></div>
 @endsection
 @push('scripts')
 <script type="text/javascript" src="{{ URL::asset('assets/js/notifications/sweetalert2/sweetalert2.bundle.js') }}"></script>
 <script type="text/javascript">
 $(document).ready(function() {
 	$.ajaxSetup({headers:{'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')}});
-/* 	$('#lab_result_file').on('change',function() {
-        alert('jet');
-		let fileName = $(this).val();
-		$(this).next('.custom-file-label').html(fileName);
-	}) */
 	$('.add-lab-result-file').on('click', function() {
 		let paramet_id = $(this).data('pid');
 		$.ajax({
@@ -129,6 +126,50 @@ $(document).ready(function() {
 			success: function(response) {
 				$('#add_file_modal_wrapper').html(response);
 				$('#default-example-modal-lg-center').modal('show');
+			},
+			complete: function(){
+	 			$('.loader').hide();
+  			},
+			error: function(jqXhr, textStatus, errorMessage) {
+				alert('Error: ' + jqXhr.status + errorMessage);
+			}
+		});
+	});
+	$('.comment-lab-result-file').on('click', function() {
+		let paramet_id = $(this).data('pid');
+		$.ajax({
+			method: "POST",
+			url: "{{ route('sample.analyze.lab.result.comment.create') }}",
+			dataType: "html",
+			data: {paramet_id: paramet_id},
+			beforeSend: function() {
+				$(".loader").show();
+			},
+			success: function(response) {
+				$('#comment_modal_wrapper').html(response);
+				$('#comment-modal-lg-center').modal('show');
+			},
+			complete: function(){
+	 			$('.loader').hide();
+  			},
+			error: function(jqXhr, textStatus, errorMessage) {
+				alert('Error: ' + jqXhr.status + errorMessage);
+			}
+		});
+	});
+    $('#btn_upload_chart').on('click', function() {
+		let lab_no = $(this).data('lab_no');
+		$.ajax({
+			method: "POST",
+			url: "{{ route('sample.analyze.lab.result.upload.chart.create') }}",
+			dataType: "html",
+			data: {lab_no: lab_no},
+			beforeSend: function() {
+				$(".loader").show();
+			},
+			success: function(response) {
+				$('#upload_chart_modal_wrapper').html(response);
+				$('#chart-modal-lg-center').modal('show');
 			},
 			complete: function(){
 	 			$('.loader').hide();

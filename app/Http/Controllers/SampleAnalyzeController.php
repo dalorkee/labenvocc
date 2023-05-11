@@ -2,13 +2,16 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\{Auth, Log};
+use Illuminate\Support\Facades\{Auth,Storage,File,Log};
 use App\DataTables\analyze\{listOrderDataTable};
 use App\Models\{OrderSample,OrderSampleParameter,RefMachine,FileUpload};
 use Yajra\DataTables\Facades\DataTables;
+use App\Traits\FileTrait;
 
 class SampleAnalyzeController extends Controller
 {
+	use FileTrait;
+
 	private object $user;
 	private string $user_role;
 
@@ -175,8 +178,8 @@ class SampleAnalyzeController extends Controller
 		<div class=\"modal fade font-prompt\" id=\"default-example-modal-lg-center\" data-keyboard=\"false\" data-backdrop=\"static\" tabindex=\"-1\" role=\"dialog\" aria-hidden=\"true\">
 			<form class=\"modal-dialog modal-lg modal-dialog-centered\" action=\"".route('sample.analyze.lab.result.upload.file')."\" method=\"POST\" enctype=\"multipart/form-data\" role=\"document\">
 				<div class=\"modal-content\">
-					<div class=\"modal-header\">
-						<h5 class=\"modal-title\">อับโหลดไฟล์ ".$request->paramet_id."</h5>
+					<div class=\"modal-header bg-info text-white\">
+						<h5 class=\"modal-title\">อับโหลดไฟล์ รหัส: ".$request->paramet_id."</h5>
 						<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">
 							<span aria-hidden=\"true\"><i class=\"fal fa-times\"></i></span>
 						</button>
@@ -188,6 +191,7 @@ class SampleAnalyzeController extends Controller
 								<div class=\"input-group\">
 									<div class=\"custom-file\">
 										<input type=\"hidden\" name=\"_token\" value=\"".csrf_token()."\">
+										<input type=\"hidden\" name=\"paramet_id\" value=\"".$request->paramet_id."\">
 										<input type=\"file\" name=\"lab_result_file\" class=\"custom-file-input @error('lab_result_file') is-invalid @enderror\" id=\"lab_result_file\" aria-describedby=\"lab_result_file\">
 										<label class=\"custom-file-label\" for=\"lab_result_file\">ยังไม่มีไฟล์</label>
 									</div>
@@ -197,51 +201,155 @@ class SampleAnalyzeController extends Controller
 					</div>
 					<div class=\"modal-footer\">
 						<button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">ปิด</button>
-						<button type=\"submit\" class=\"btn btn-primary\">อับโหลด</button>
+						<button type=\"submit\" class=\"btn btn-info\">อับโหลด</button>
 					</div>
 				</div>
 			</form>
 		</div>
 		<script type=\"text/javascript\">
-		$(document).ready(function() {
-			$('#lab_result_file').on('change',function() {
-				alert('jet');
-				let fileName = $(this).val();
-				$(this).next('.custom-file-label').html(fileName);
+			$(document).ready(function() {
+				$('#lab_result_file').on('change',function() {
+					let fileName = $(this).val();
+					$(this).next('.custom-file-label').html(fileName);
+				});
 			});
-		});
-	</script>
-	";
+		</script>";
 	}
 
 	protected function labResultUploadFile(Request $request) {
-		if ($request->hasFile('lab_result_file')) {
-			$file = $request->file('lab_result_file');
-			dd($file);
-			$file_mime = $file->getMimeType();
-			$file_size_byte = $file->getSize();
-			$file_size = ($file_size_byte/1024);
-			$file_name = $file->getClientOriginalName();
-			$file_extension = $file->extension();
-			$new_name = $this->renameFile(prefix: 'lab_rs', free_txt: $this->user->userCustomer->user->id, file_extension: $file_extension);
-			$uploaded = Storage::disk('uploads')->put($new_name, File::get($file));
-			if ($uploaded) {
-				$file_upload = new FileUpload;
-				$file_upload->ref_user_id = $this->user->id;
-				$file_upload->order_id = $last_insert_order_id;
-				$file_upload->old_file_name = $file_name;
-				$file_upload->file_name = $new_name;
-				$file_upload->file_mime = $file_mime;
-				$file_upload->file_path = '/uploads';
-				$file_upload->file_size = $file_size;
-				$file_upload->note = 'ไฟล์ผลแลป';
-				$file_upload->save();
-				$order_sample_parameter = OrderSampleParameter::find();
-				Log::notice($this->user->userCustomer->first_name.' อับโหลดไฟล์ผลแลป '.$new_name);
-			} else {
-				Log::warning($this->user->userCustomer->first_name.' อับโหลดไฟล์ผลแลปไม่สำเร็จ');
+		try {
+			if ($request->hasFile('lab_result_file')) {
+				$file = $request->file('lab_result_file');
+				$file_mime = $file->getMimeType();
+				$file_size_byte = $file->getSize();
+				$file_size = ($file_size_byte/1024);
+				$file_name = $file->getClientOriginalName();
+				$file_extension = $file->extension();
+				$new_name = $this->renameFile(prefix: 'lab_rs', free_txt: $this->user->id, file_extension: $file_extension);
+				$uploaded = Storage::disk('labs')->put($new_name, File::get($file));
+				if ($uploaded) {
+					$file_upload = new FileUpload;
+					$file_upload->ref_user_id = $this->user->id;
+					$file_upload->order_id = $request->order_id;
+					$file_upload->old_file_name = $file_name;
+					$file_upload->file_name = $new_name;
+					$file_upload->file_mime = $file_mime;
+					$file_upload->file_path = '/labs';
+					$file_upload->file_size = $file_size;
+					$file_upload->note = 'ไฟล์ผลแลป';
+					$file_upload->save();
+					$file_upload_last_id = $file_upload->id;
+					$order_sample_parameter = OrderSampleParameter::find($request->paramet_id);
+					$order_sample_parameter->lab_result_files = $file_upload_last_id;
+					$order_sample_parameter->save();
+					Log::notice($this->user->userStaff->first_name.' อับโหลดไฟล์ผลแลป '.$new_name);
+					return redirect()->back()->with('success', 'อับโหลดไฟล์ผลแลป '.$new_name.' สำเร็จ');
+				} else {
+					Log::warning($this->user->userStaff->first_name.' อับโหลดไฟล์ผลแลปสำเร็จ');
+					return redirect()->back()->with('error', 'อับโหลดไฟล์ผลแลป '.$new_name.' ผิดพลาด');
+				}
 			}
+		} catch (\Exception $e) {
+			Log::error($e->getMessage());
+			return redirect()->back()->with('error', $e->getMessage());
 		}
-
 	}
+
+	protected function labResultCommentModal(Request $request) {
+        $data = OrderSampleParameter::select('id', 'lab_result_comment')->whereId($request->paramet_id)->get()->toArray();
+		return "
+		<div class=\"modal fade font-prompt\" id=\"comment-modal-lg-center\" data-keyboard=\"false\" data-backdrop=\"static\" tabindex=\"-1\" role=\"dialog\" aria-hidden=\"true\">
+			<form class=\"modal-dialog modal-lg modal-dialog-centered\" action=\"".route('sample.analyze.lab.result.comment')."\" method=\"POST\" enctype=\"multipart/form-data\" role=\"document\">
+				<div class=\"modal-content\">
+					<div class=\"modal-header bg-success text-white\">
+						<h5 class=\"modal-title\">Parameter id: ".$request->paramet_id."</h5>
+						<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">
+							<span aria-hidden=\"true\"><i class=\"fal fa-times\"></i></span>
+						</button>
+					</div>
+					<div class=\"modal-body\">
+						<div class=\"form-row pb-4\">
+							<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12\">
+								<label class=\"form-label\" for=\"lab_result_file\" style=\"padding-buttom: 6px;\">Comment</label>
+								<div class=\"input-group\">
+									<div class=\"custom-file\">
+										<input type=\"hidden\" name=\"_token\" value=\"".csrf_token()."\">
+										<input type=\"hidden\" name=\"paramet_id\" value=\"".$request->paramet_id."\">
+										<textarea cols=\"6\" name=\"lab_result_comment\" class=\"form-control\">".$data[0]['lab_result_comment']."</textarea>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class=\"modal-footer\">
+						<button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">ปิด</button>
+						<button type=\"submit\" class=\"btn btn-success\">บันทึก</button>
+					</div>
+				</div>
+			</form>
+		</div>";
+	}
+
+	protected function labResultComment(Request $request) {
+		try {
+			if (!empty($request->lab_result_comment)) {
+				$order_sample_parameter = OrderSampleParameter::find($request->paramet_id);
+				$order_sample_parameter->lab_result_comment = $request->lab_result_comment;
+				$order_sample_parameter->save();
+			}
+			return redirect()->back()->with('success', 'บันทึก Comment สำเร็จแล้ว');
+		} catch (\Exception $e) {
+			Log::error($e->getMessage());
+			return redirect()->back()->with('error', $e->getMessage());
+		}
+	}
+
+    protected function labResultUploadChartModal(Request $request) {
+        // $data = OrderSampleParameter::select('id', 'lab_result_comment')->whereId($request->paramet_id)->get()->toArray();
+		return "
+		<div class=\"modal fade font-prompt\" id=\"chart-modal-lg-center\" data-keyboard=\"false\" data-backdrop=\"static\" tabindex=\"-1\" role=\"dialog\" aria-hidden=\"true\">
+			<form class=\"modal-dialog modal-lg modal-dialog-centered\" action=\"".route('sample.analyze.lab.result.upload.chart')."\" method=\"POST\" enctype=\"multipart/form-data\" role=\"document\">
+				<div class=\"modal-content\">
+					<div class=\"modal-header bg-danger text-white\">
+						<h5 class=\"modal-title\">อับโหลดไฟล์ รหัส: ".$request->lab_no."</h5>
+						<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">
+							<span aria-hidden=\"true\"><i class=\"fal fa-times\"></i></span>
+						</button>
+					</div>
+					<div class=\"modal-body\">
+						<div class=\"form-row pb-4\">
+							<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12\">
+								<label class=\"form-label\" for=\"lab_result_file\">เลือกไฟล์</label>
+								<div class=\"input-group\">
+									<div class=\"custom-file\">
+										<input type=\"hidden\" name=\"_token\" value=\"".csrf_token()."\">
+										<input type=\"hidden\" name=\"paramet_id\" value=\"".$request->lab_no."\">
+										<input type=\"file\" name=\"lab_result_chart\" class=\"custom-file-input @error('lab_result_chart') is-invalid @enderror\" id=\"lab_result_chart\" aria-describedby=\"lab_result_chart\">
+										<label class=\"custom-file-label\" for=\"lab_result_chart\">ยังไม่มีไฟล์</label>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class=\"modal-footer\">
+						<button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">ปิด</button>
+						<button type=\"submit\" class=\"btn btn-danger\">อับโหลด</button>
+					</div>
+				</div>
+			</form>
+		</div>
+		<script type=\"text/javascript\">
+			$(document).ready(function() {
+				$('#lab_result_chart').on('change',function() {
+					let fileName = $(this).val();
+					$(this).next('.custom-file-label').html(fileName);
+				});
+			});
+		</script>";
+	}
+
+    protected function labResultUploadChart(Request $request) {
+        dd($request->toArray());
+
+    }
 }
