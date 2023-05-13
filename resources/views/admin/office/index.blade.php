@@ -40,7 +40,7 @@
                     case 'edit':                       
                         let userStaffEditUrl = '{{ route("office.edit", ":id") }}';
                         userStaffEditUrl = userStaffEditUrl.replace(':id', userStaffId);                        
-                        window.open(userStaffEditUrl, '_self');
+                        window.open(userStaffEditUrl, '_blank');
                     break;
                     case 'allow':                       
                         let userStaffAllowUrl = '{{ route("office.allow", ":id") }}';

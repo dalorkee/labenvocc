@@ -108,6 +108,7 @@ class OfficeController extends Controller
             'user_id'=>'required',
             'user_status'=>'required',
         ]);
+        // dd($request);
         $user_find = $users->find($request->user_id);
         if($request->change_password == 'pw_chk' && $request->password != ''){
             $request->password = Hash::make($request->password);
@@ -158,17 +159,19 @@ class OfficeController extends Controller
                 }
                 elseif($request->user_status === 'อนุญาต' AND $user_find->user_status === 'อนุญาต'){
                     //find model_has_permission model_id if exist to add insert next
-                    DB::table('model_has_permissions')->where('model_id', $request->user_id)->delete();
-                    $duty_arr = [];
-                    foreach($request->sub_duty as $key=>$sub_duties){
-                        $make_arr_sql = [
-                            'permission_id'=>$sub_duties,
-                            'model_type'=>'App\Models\User',
-                            'model_id'=>$request->user_id
-                        ];
-                        array_push($duty_arr, $make_arr_sql);
+                    DB::table('model_has_permissions')->where('model_id', $request->user_id)->delete();                    
+                    if(!empty($request->sub_duty)){
+                        $duty_arr = [];
+                        foreach($request->sub_duty as $key=>$sub_duties){
+                            $make_arr_sql = [
+                                'permission_id'=>$sub_duties,
+                                'model_type'=>'App\Models\User',
+                                'model_id'=>$request->user_id
+                            ];
+                            array_push($duty_arr, $make_arr_sql);
+                        }
+                        DB::table('model_has_permissions')->insert($duty_arr);
                     }
-                    DB::table('model_has_permissions')->insert($duty_arr);
                     return redirect()->route('office.index')->with('success', 'updated successfully');
                 }
                 elseif($request->user_status !== 'อนุญาต' AND $user_find->user_status !== 'อนุญาต'){
