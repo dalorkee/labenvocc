@@ -23,34 +23,32 @@
 					</div>
 					<div class="panel-container">
 						<div class="panel-content">
-                            <form name="received_step01_frm" action="{{ route('sample.received.step01.post') }}" method="POST" enctype="multipart/form-data">
+                            <form name="fetch_date" action="{{ route('sample.received.step01.post') }}" method="POST" enctype="multipart/form-data">
                                 <div class="panel-content">
                                     <div class="form-row">
                                         <div class="col-4">
                                             <label class="form-label" for="sample_type">ระบุประเภทตัวอย่าง</label>
                                             <select class="custom-select" id="sample_type">
-                                                <option value="0">เลือก</option>
+                                                <option value="0">เลือกทั้งหมด</option>
                                                 <option value="1">ชีวภาพ</option>
-                                                <option value="2">สิ่งแวดล้อม</option>
-                                                <option value="3">เลือกทั้งหมด</option>
+                                                <option value="2">สิ่งแวดล้อม</option>                                                
                                             </select>
                                         </div>
                                         <div class="col-4">
                                             <label class="form-label" for="sample_character">ชนิดตัวอย่าง</label>
                                             <select class="custom-select" id="sample_character">
-                                                <option value="0">เลือก</option>
+                                                <option value="0">เลือกทั้งหมด</option>
                                             </select>
                                         </div>
                                         <div class="col-4">
                                             <label class="form-label" for="type_of_work">ประเภทงาน</label>
                                             <select class="custom-select" id="type_of_work">
-                                                <option value="0">เลือก</option>
+                                                <option value="0">เลือกทั้งหมด</option>
                                                 <option value="1">บริการ</option>
                                                 <option value="2">วิจัย</option>
                                                 <option value="3">เฝ้าระวัง</option>
                                                 <option value="4">สอบสวน</option>
                                                 <option value="5">อื่นๆ</option>
-                                                <option value="6">เลือกทั้งหมด</option>
                                             </select>                                            
                                         </div>
                                     </div>
@@ -59,7 +57,7 @@
                                         <div class="col-3 orgt">
                                             <label class="form-label" for="original_threat">ประเภทแหล่งมลพิษ</label>
                                             <select class="custom-select" id="original_threat" disabled>
-                                                <option value="0">เลือก</option>
+                                                <option value="0">เลือกทั้งหมด</option>
                                                 <option value="1">ขยะ</option>
                                                 <option value="2">มลพิษอากาศ</option>
                                                 <option value="3">โลหะหนัก</option>
@@ -67,67 +65,56 @@
                                                 <option value="5">โรงไฟฟ้า</option>
                                                 <option value="6">กิจการในชุมชน</option>
                                                 <option value="7">อื่นๆ</option>
-                                                <option value="8">เลือกทั้งหมด</option>
                                             </select>                                            
                                         </div>
                                         <div class="col-3 fact">
                                             <label class="form-label" for="factory_type">ประเภทสถานประกอบการ</label>
                                             <select class="custom-select" id="factory_type" disabled>
-                                                <option value="0">เลือก</option>
+                                                <option value="0">เลือกทั้งหมด</option>
                                                 <option value="1">โรงโม่</option>
                                                 <option value="2">ประกอบชิ้นส่วน</option>
                                                 <option value="3">ปิโตรเคมี</option>
                                                 <option value="4">อื่นๆ</option>
-                                                <option value="5">เลือกทั้งหมด</option>
-                                            </select>                                            
-                                        </div>
-                                        <div class="col-3 prm">
-                                            <label class="form-label" for="parameter">พารามิเตอร์</label>
-                                            <select class="custom-select" id="parameter">
-                                                <option value="0">เลือก</option>
-                                                <option value="1">ขยะ</option>
-                                                <option value="2">มลพิษอากาศ</option>
-                                                <option value="3">โลหะหนัก</option>
-                                                <option value="4">เหมืองแร่</option>
-                                                <option value="5">โรงไฟฟ้า</option>
-                                                <option value="6">กิจการในชุมชน</option>
-                                                <option value="7">อื่นๆ</option>
-                                                <option value="8">เลือกทั้งหมด</option>
                                             </select>                                            
                                         </div>
                                         <div class="col-3 prmg">
                                             <label class="form-label" for="parameter_group">กลุ่มพารามิเตอร์</label>
-                                            <select class="custom-select" id="parameter_group" disabled>
-                                                <option value="0">เลือก</option>
-                                                <option value="1">ขยะ</option>
-                                                <option value="2">มลพิษอากาศ</option>
-                                                <option value="3">โลหะหนัก</option>
-                                                <option value="4">เหมืองแร่</option>
-                                                <option value="5">โรงไฟฟ้า</option>
-                                                <option value="6">กิจการในชุมชน</option>
-                                                <option value="7">อื่นๆ</option>
-                                                <option value="8">เลือกทั้งหมด</option>
+                                            <select class="custom-select" id="parameter_group">
+                                                <option value="0">เลือกทั้งหมด</option>
+                                                <option value="1">กลุ่มกรด ด่าง/โลหะอัลคาไลน์</option>
+                                                <option value="2">กลุ่มจุลชีววิยา</option>
+                                                <option value="3">กลุ่มฝุ่นซิลิก้า</option>
+                                                <option value="4">กลุ่มสารอินทรีย์ระเหย</option>
+                                                <option value="5">กลุ่มแร่ใยหิน</option>
+                                                <option value="6">กลุ่มโลหะหนัก</option>
+                                                <option value="7">กลุ่มอื่นๆ</option>
                                             </select>                                            
                                         </div>
+                                        <div class="col-3 prm">
+                                            <label class="form-label" for="parameter">พารามิเตอร์</label>
+                                            <select class="custom-select" id="parameter" disabled>
+                                                <option value="0">เลือกทั้งหมด</option>
+                                            </select>                                            
+                                        </div>                                        
                                     </div>
                                     <hr>
                                     <div class="form-row">
                                         <div class="col-4">
                                             <label class="form-label" for="province">จังหวัด</label>
                                             <select class="custom-select" id="province">
-                                                <option value="0">เลือก</option>
+                                                <option value="0">เลือกทั้งหมด</option>
                                             </select>
                                         </div>
                                         <div class="col-4">
                                             <label class="form-label" for="district">อำเภอ</label>
                                             <select class="custom-select" id="district">
-                                                <option value="0">เลือก</option>
+                                                <option value="0">เลือกทั้งหมด</option>
                                             </select>
                                         </div>
                                         <div class="col-4">
                                             <label class="form-label" for="sub_district">ตำบล</label>
                                             <select class="custom-select" id="sub_district">
-                                                <option value="0">เลือก</option>
+                                                <option value="0">เลือกทั้งหมด</option>
                                             </select>                                            
                                         </div>
                                     </div>
@@ -176,14 +163,15 @@
     var runDatePicker = function(){
         $('#datepicker').datepicker({
             todayHighlight: true,
-            templates: controls
+            templates: controls,
+            dateFormat: "dd/mm/yy",
         });
     }
     $(document).ready(function(){
         runDatePicker();
         $('.orgt').hide();
         $('.fact').hide();
-        $('.prmg').hide();
+        $('.prm').hide();
         $('#sample_type').on("click", function(){
             var st = this.value;
             if(st == '1'){
@@ -210,30 +198,30 @@
                 $('#original_threat').prop('disabled', true);
                 $('#factory_type').prop('disabled', true);
             }
-            if(st != ''){
+            if(st != ''){                
                 $.ajax({
 				method: "POST",
-				url: "{{ route('register.department.v2') }}",
+				url: "{{ route('fetchdata.sampletype') }}",
 				dataType: "html",
 				data: {id:st},
 				success: function(response) {
-					$("#sample_location_place_department").html(response);
+					$("#sample_character").html(response);
 				},
 				error: function(jqXhr, textStatus, errorMessage) {
-					alert('GovDept error: ' + jqXhr.status + errorMessage);
+					alert('Sample Type error: ' + jqXhr.status + errorMessage);
 				}
 			});
             }
         });
-        $('#parameter').on("click", function(){
+        $('#parameter_group').on("click", function(){
             var prmt = this.value;
             if(prmt != '0'){
-                $('.prmg').show();
-                $('#parameter_group').prop('disabled', false);
+                $('.prm').show();
+                $('#parameter').prop('disabled', false);
             }
             else{
-                $('.prmg').hide();
-                $('#parameter_group').prop('disabled', true);
+                $('.prm').hide();
+                $('#parameter').prop('disabled', true);
             }
         });
     });
