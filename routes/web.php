@@ -173,8 +173,10 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 				Route::post('result/upload/file', 'labResultUploadFile')->name('analyze.lab.result.upload.file');
 				Route::post('result/comment/create', 'labResultCommentModal')->name('analyze.lab.result.comment.create');
 				Route::post('result/comment', 'labResultComment')->name('analyze.lab.result.comment');
-				Route::post('result/upload/chart/create', 'labResultUploadChartModal')->name('analyze.lab.result.upload.chart.create');
-				Route::post('result/upload/chart', 'labResultUploadChart')->name('analyze.lab.result.upload.chart');
+				Route::post('result/upload/chart/create', 'analyzeResultUploadFileModal')->name('analyze.result.upload.file.create');
+				Route::post('result/upload/chart', 'analyzeResultUploadFile')->name('analyze.result.upload.file');
+				Route::post('result/view/crete', 'analyzeResultViewModal')->name('analyze.result.view.create');
+				Route::post('result/view', 'analyzeResultView')->name('analyze.result.view');
 			});
 		});
 	});

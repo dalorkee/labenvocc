@@ -4,13 +4,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\{Auth,Storage,File,Log};
 use App\DataTables\analyze\{listOrderDataTable};
-use App\Models\{OrderSample,OrderSampleParameter,RefMachine,FileUpload};
+use App\Models\{Order,OrderSample,OrderSampleParameter,RefMachine,FileUpload};
 use Yajra\DataTables\Facades\DataTables;
-use App\Traits\FileTrait;
+use App\Traits\{FileTrait,StringTrait};
 
 class SampleAnalyzeController extends Controller
 {
-	use FileTrait;
+	use FileTrait, StringTrait;
 
 	private object $user;
 	private string $user_role;
@@ -117,6 +117,8 @@ class SampleAnalyzeController extends Controller
 						'lab_dilution', 'lab_result', 'status'
 					)->where('main_analys_user_id', $request->user_id);
 			}])->whereOrder_id($request->id)->get();
+			$order_id = $result[0]->order_id;
+            $main_analys_user_id = $request->user_id;
 			$data = [];
 			$result->each(function($item, $key) use (&$data) {
 				if (count($item->parameters) > 0) {
@@ -125,7 +127,7 @@ class SampleAnalyzeController extends Controller
 			});
 			// dd($data);
 			$machine = (count($data) > 0) ? RefMachine::select('id', 'machine_name')->get()->toArray() : [];
-			return view(view: 'apps.staff.analyze.lab-result', data: compact('lab_no', 'data', 'machine'));
+			return view(view: 'apps.staff.analyze.lab-result', data: compact('order_id', 'lab_no', 'data', 'machine', 'main_analys_user_id'));
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
 			return redirect()->back()->with('error', $e->getMessage());
@@ -179,7 +181,7 @@ class SampleAnalyzeController extends Controller
 			<form class=\"modal-dialog modal-lg modal-dialog-centered\" action=\"".route('sample.analyze.lab.result.upload.file')."\" method=\"POST\" enctype=\"multipart/form-data\" role=\"document\">
 				<div class=\"modal-content\">
 					<div class=\"modal-header bg-info text-white\">
-						<h5 class=\"modal-title\">อับโหลดไฟล์ รหัส: ".$request->paramet_id."</h5>
+						<h5 class=\"modal-title\">อับโหลดไฟล์ รหัส: ".$request->xparamet_id."</h5>
 						<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">
 							<span aria-hidden=\"true\"><i class=\"fal fa-times\"></i></span>
 						</button>
@@ -191,7 +193,8 @@ class SampleAnalyzeController extends Controller
 								<div class=\"input-group\">
 									<div class=\"custom-file\">
 										<input type=\"hidden\" name=\"_token\" value=\"".csrf_token()."\">
-										<input type=\"hidden\" name=\"paramet_id\" value=\"".$request->paramet_id."\">
+										<input type=\"hidden\" name=\"xorder_id\" value=\"".$request->xorder_id."\">
+										<input type=\"hidden\" name=\"xparamet_id\" value=\"".$request->xparamet_id."\">
 										<input type=\"file\" name=\"lab_result_file\" class=\"custom-file-input @error('lab_result_file') is-invalid @enderror\" id=\"lab_result_file\" aria-describedby=\"lab_result_file\">
 										<label class=\"custom-file-label\" for=\"lab_result_file\">ยังไม่มีไฟล์</label>
 									</div>
@@ -230,7 +233,7 @@ class SampleAnalyzeController extends Controller
 				if ($uploaded) {
 					$file_upload = new FileUpload;
 					$file_upload->ref_user_id = $this->user->id;
-					$file_upload->order_id = $request->order_id;
+					$file_upload->order_id = $request->xorder_id;
 					$file_upload->old_file_name = $file_name;
 					$file_upload->file_name = $new_name;
 					$file_upload->file_mime = $file_mime;
@@ -239,13 +242,13 @@ class SampleAnalyzeController extends Controller
 					$file_upload->note = 'ไฟล์ผลแลป';
 					$file_upload->save();
 					$file_upload_last_id = $file_upload->id;
-					$order_sample_parameter = OrderSampleParameter::find($request->paramet_id);
+					$order_sample_parameter = OrderSampleParameter::find($request->xparamet_id);
 					$order_sample_parameter->lab_result_files = $file_upload_last_id;
 					$order_sample_parameter->save();
 					Log::notice($this->user->userStaff->first_name.' อับโหลดไฟล์ผลแลป '.$new_name);
 					return redirect()->back()->with('success', 'อับโหลดไฟล์ผลแลป '.$new_name.' สำเร็จ');
 				} else {
-					Log::warning($this->user->userStaff->first_name.' อับโหลดไฟล์ผลแลปสำเร็จ');
+					Log::warning($this->user->userStaff->first_name.' อับโหลดไฟล์ผลแลปไม่สำเร็จ');
 					return redirect()->back()->with('error', 'อับโหลดไฟล์ผลแลป '.$new_name.' ผิดพลาด');
 				}
 			}
@@ -256,13 +259,13 @@ class SampleAnalyzeController extends Controller
 	}
 
 	protected function labResultCommentModal(Request $request) {
-        $data = OrderSampleParameter::select('id', 'lab_result_comment')->whereId($request->paramet_id)->get()->toArray();
+		$data = OrderSampleParameter::select('id', 'lab_result_comment')->whereId($request->yparamet_id)->get()->toArray();
 		return "
 		<div class=\"modal fade font-prompt\" id=\"comment-modal-lg-center\" data-keyboard=\"false\" data-backdrop=\"static\" tabindex=\"-1\" role=\"dialog\" aria-hidden=\"true\">
 			<form class=\"modal-dialog modal-lg modal-dialog-centered\" action=\"".route('sample.analyze.lab.result.comment')."\" method=\"POST\" enctype=\"multipart/form-data\" role=\"document\">
 				<div class=\"modal-content\">
-					<div class=\"modal-header bg-success text-white\">
-						<h5 class=\"modal-title\">Parameter id: ".$request->paramet_id."</h5>
+					<div class=\"modal-header bg-primary text-white\">
+						<h5 class=\"modal-title\">Parameter id: ".$request->yparamet_id."</h5>
 						<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">
 							<span aria-hidden=\"true\"><i class=\"fal fa-times\"></i></span>
 						</button>
@@ -270,20 +273,16 @@ class SampleAnalyzeController extends Controller
 					<div class=\"modal-body\">
 						<div class=\"form-row pb-4\">
 							<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12\">
-								<label class=\"form-label\" for=\"lab_result_file\" style=\"padding-buttom: 6px;\">Comment</label>
-								<div class=\"input-group\">
-									<div class=\"custom-file\">
-										<input type=\"hidden\" name=\"_token\" value=\"".csrf_token()."\">
-										<input type=\"hidden\" name=\"paramet_id\" value=\"".$request->paramet_id."\">
-										<textarea cols=\"6\" name=\"lab_result_comment\" class=\"form-control\">".$data[0]['lab_result_comment']."</textarea>
-									</div>
-								</div>
+								<label class=\"form-label\" for=\"lab_result_file\">Comment</label>
+								<input type=\"hidden\" name=\"_token\" value=\"".csrf_token()."\">
+								<input type=\"hidden\" name=\"yparamet_id\" value=\"".$request->yparamet_id."\">
+								<textarea cols=\"6\" name=\"lab_result_comment\" class=\"form-control\">".$data[0]['lab_result_comment']."</textarea>
 							</div>
 						</div>
 					</div>
 					<div class=\"modal-footer\">
 						<button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">ปิด</button>
-						<button type=\"submit\" class=\"btn btn-success\">บันทึก</button>
+						<button type=\"submit\" class=\"btn btn-primary\">บันทึก</button>
 					</div>
 				</div>
 			</form>
@@ -293,7 +292,7 @@ class SampleAnalyzeController extends Controller
 	protected function labResultComment(Request $request) {
 		try {
 			if (!empty($request->lab_result_comment)) {
-				$order_sample_parameter = OrderSampleParameter::find($request->paramet_id);
+				$order_sample_parameter = OrderSampleParameter::find($request->yparamet_id);
 				$order_sample_parameter->lab_result_comment = $request->lab_result_comment;
 				$order_sample_parameter->save();
 			}
@@ -304,14 +303,14 @@ class SampleAnalyzeController extends Controller
 		}
 	}
 
-    protected function labResultUploadChartModal(Request $request) {
-        // $data = OrderSampleParameter::select('id', 'lab_result_comment')->whereId($request->paramet_id)->get()->toArray();
+	protected function analyzeResultUploadFileModal(Request $request) {
+		// $data = OrderSampleParameter::select('id', 'lab_result_comment')->whereId($request->paramet_id)->get()->toArray();
 		return "
 		<div class=\"modal fade font-prompt\" id=\"chart-modal-lg-center\" data-keyboard=\"false\" data-backdrop=\"static\" tabindex=\"-1\" role=\"dialog\" aria-hidden=\"true\">
-			<form class=\"modal-dialog modal-lg modal-dialog-centered\" action=\"".route('sample.analyze.lab.result.upload.chart')."\" method=\"POST\" enctype=\"multipart/form-data\" role=\"document\">
+			<form class=\"modal-dialog modal-lg modal-dialog-centered\" action=\"".route('sample.analyze.result.upload.file')."\" method=\"POST\" enctype=\"multipart/form-data\" role=\"document\">
 				<div class=\"modal-content\">
 					<div class=\"modal-header bg-danger text-white\">
-						<h5 class=\"modal-title\">อับโหลดไฟล์ รหัส: ".$request->lab_no."</h5>
+						<h5 class=\"modal-title\">อับโหลดไฟล์ Lab No: ".$request->zlab_no."</h5>
 						<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">
 							<span aria-hidden=\"true\"><i class=\"fal fa-times\"></i></span>
 						</button>
@@ -323,9 +322,10 @@ class SampleAnalyzeController extends Controller
 								<div class=\"input-group\">
 									<div class=\"custom-file\">
 										<input type=\"hidden\" name=\"_token\" value=\"".csrf_token()."\">
-										<input type=\"hidden\" name=\"paramet_id\" value=\"".$request->lab_no."\">
-										<input type=\"file\" name=\"lab_result_chart\" class=\"custom-file-input @error('lab_result_chart') is-invalid @enderror\" id=\"lab_result_chart\" aria-describedby=\"lab_result_chart\">
-										<label class=\"custom-file-label\" for=\"lab_result_chart\">ยังไม่มีไฟล์</label>
+										<input type=\"hidden\" name=\"zlab_no\" value=\"".$request->zlab_no."\">
+										<input type=\"hidden\" name=\"zorder_id\" value=\"".$request->zorder_id."\">
+										<input type=\"file\" name=\"analyze_result_file\" class=\"custom-file-input @error('lab_result_chart_file') is-invalid @enderror\" id=\"lab_result_chart_file\" aria-describedby=\"lab_result_chart_file\">
+										<label class=\"custom-file-label\" for=\"lab_result_chart_file\">ยังไม่มีไฟล์</label>
 									</div>
 								</div>
 							</div>
@@ -340,7 +340,7 @@ class SampleAnalyzeController extends Controller
 		</div>
 		<script type=\"text/javascript\">
 			$(document).ready(function() {
-				$('#lab_result_chart').on('change',function() {
+				$('#lab_result_chart_file').on('change', function() {
 					let fileName = $(this).val();
 					$(this).next('.custom-file-label').html(fileName);
 				});
@@ -348,8 +348,150 @@ class SampleAnalyzeController extends Controller
 		</script>";
 	}
 
-    protected function labResultUploadChart(Request $request) {
-        dd($request->toArray());
+	protected function analyzeResultUploadFile(Request $request) {
+		try {
+			if ($request->hasFile('analyze_result_file')) {
+				$file = $request->file('analyze_result_file');
+				$file_mime = $file->getMimeType();
+				$file_size_byte = $file->getSize();
+				$file_size = ($file_size_byte/1024);
+				$file_name = $file->getClientOriginalName();
+				$file_extension = $file->extension();
+				$new_name = $this->renameFile(prefix: 'lab_rsc', free_txt: $this->user->id, file_extension: $file_extension);
+				$uploaded = Storage::disk('labs')->put($new_name, File::get($file));
+				if ($uploaded) {
+					$file_upload = new FileUpload;
+					$file_upload->ref_user_id = $this->user->id;
+					$file_upload->order_id = $request->zorder_id;
+					$file_upload->old_file_name = $file_name;
+					$file_upload->file_name = $new_name;
+					$file_upload->file_mime = $file_mime;
+					$file_upload->file_path = '/labs';
+					$file_upload->file_size = $file_size;
+					$file_upload->note = 'ไฟล์ผลแลป';
+					$file_upload->save();
+					$file_upload_last_id = $file_upload->id;
 
-    }
+					$order = Order::select('id', 'lab_no', 'analyze_result_files')->whereLab_no($request->zlab_no)->get()->toArray();
+					$result_files = $order[0]['analyze_result_files'];
+					if (empty($result_files) || is_null($result_files)) {
+						$result_files = $file_upload_last_id;
+					} else {
+						$result_files = $this->stringToArray(sep: ",", str: $result_files);
+						array_push($result_files, $file_upload_last_id);
+						$result_files = $this->ArrayToString(sep: ',', str: $result_files);
+					}
+					Order::whereId($request->zorder_id)->update(['analyze_result_files' => $result_files]);
+					Log::notice($this->user->userStaff->first_name.' อับโหลดไฟล์ผลแลป/chart '.$new_name);
+					return redirect()->back()->with('success', 'อับโหลดไฟล์ผลแลป '.$new_name.' สำเร็จ');
+				} else {
+					Log::warning($this->user->userStaff->first_name.' อับโหลดไฟล์ผลแลป/chart ไม่สำเร็จ');
+					return redirect()->back()->with('error', 'อับโหลดไฟล์ผลแลป '.$new_name.' ผิดพลาด');
+				}
+			}
+		} catch (\Exception $e) {
+			Log::error($e->getMessage());
+			return redirect()->back()->with('error', $e->getMessage());
+		}
+	}
+
+	protected function analyzeResultViewModal(Request $request) {
+		$lab_no = $request->view_lab_no;
+		$result = OrderSample::select('id', 'order_id', 'has_parameter', 'sample_test_no', 'air_volume')
+			->with(['parameters' => function($query) use ($request) {
+				$query->select(
+					'id', 'order_id', 'order_sample_id',
+					'parameter_id', 'parameter_name', 'main_analys_user_id',
+					'machine_id', 'lab_result_blank', 'lab_result_amount',
+					'lab_dilution', 'lab_result', 'status'
+				)->where('main_analys_user_id', $request->analyze_user);
+			}])->whereOrder_id($request->view_order_id)->get();
+        dd($result);
+		return "
+		<div class=\"modal fade modal-fullscreen font-prompt\" id=\"view-modal-lg-center\" data-keyboard=\"false\" data-backdrop=\"static\" tabindex=\"-1\" role=\"dialog\" aria-hidden=\"true\">
+			<form class=\"modal-dialog modal-dialog-centered\" action=\"".route('sample.analyze.result.upload.file')."\" method=\"POST\" enctype=\"multipart/form-data\" role=\"document\">
+				<div class=\"modal-content\">
+					<div class=\"modal-header bg-info text-white\">
+						<h5 class=\"modal-title\">บันทึกการทวนสอบผลการวิเคราะห์ Lab No: ".$request->view_lab_no."</h5>
+						<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">
+							<span aria-hidden=\"true\"><i class=\"fal fa-times\"></i></span>
+						</button>
+					</div>
+					<div class=\"modal-body\">
+					<div class=\"row\">
+						<div class=\"col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3\">
+							<div class=\"table-responsive\">
+								<table id=\"result_table\" class=\"table table-bordered responsive\" style=\"cursor:pointer;width:100%\">
+									<thead class=\"m-0\" style=\"width:100%\">
+										<tr>
+											<th rowspan=\"2\" style=\"vertical-align:middle;text-align:center;\">ลำดับ</th>
+											<th rowspan=\"2\" style=\"vertical-align:middle;text-align:center;\">หมายเลขทดสอบ</th>
+											<th rowspan=\"2\" style=\"vertical-align:middle;text-align:center;\">พารามิเตอร์</th>
+											<th rowspan=\"2\" style=\"vertical-align:middle;text-align:center;\">Blank</th>
+											<th rowspan=\"2\" style=\"vertical-align:middle;text-align:center;\">Amount</th>
+											<th rowspan=\"2\" style=\"vertical-align:middle;text-align:center;\">ปริมาตรอากาศ (l.)</th>
+											<th rowspan=\"2\" style=\"vertical-align:middle;text-align:center;\">น้ำหนักดิน(g.)</th>
+											<th colspan=\"3\">ผลการทดสอบ</th>
+										</tr>
+										<tr>
+											<th>&#956;g/sample</th>
+											<th>mg/m3</th>
+											<th>ppm</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>a</td>
+											<td>b</td>
+											<td>c</td>
+											<td>d</td>
+											<td>e</td>
+											<td>f</td>
+											<td>g</td>
+											<td>h</td>
+											<td>h</td>
+											<td>j</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+					<div class=\"modal-footer\">
+						<button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">ปิด</button>
+						<button type=\"submit\" class=\"btn btn-info\">ตกลง</button>
+					</div>
+				</div>
+			</form>
+		</div>";
+	}
+
+	protected function analyzeResultView(Request $request) {
+		try {
+			$lab_no = $request->vlab_no;
+			dd($lab_no);
+			// $result = OrderSample::select('id', 'order_id', 'has_parameter', 'sample_test_no', 'air_volume')
+			// 	->with(['parameters' => function($query) use ($request) {
+			// 		$query->select(
+			// 			'id', 'order_id', 'order_sample_id',
+			// 			'parameter_id', 'parameter_name', 'main_analys_user_id',
+			// 			'machine_id', 'lab_result_blank', 'lab_result_amount',
+			// 			'lab_dilution', 'lab_result', 'status'
+			// 		)->where('main_analys_user_id', $request->user_id);
+			// }])->whereOrder_id($request->id)->get();
+			// $order_id = $result[0]->order_id;
+			// $data = [];
+			// $result->each(function($item, $key) use (&$data) {
+			// 	if (count($item->parameters) > 0) {
+			// 		array_push($data, $item->toArray());
+			// 	}
+			// });
+			// dd($data);
+			// $machine = (count($data) > 0) ? RefMachine::select('id', 'machine_name')->get()->toArray() : [];
+			// return view(view: 'apps.staff.analyze.lab-result', data: compact('order_id', 'lab_no', 'data', 'machine'));
+		} catch (\Exception $e) {
+			Log::error($e->getMessage());
+			return redirect()->back()->with('error', $e->getMessage());
+		}
+	}
 }
