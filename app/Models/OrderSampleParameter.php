@@ -47,6 +47,9 @@ class OrderSampleParameter extends Model
 		'lab_result_amount',
 		'lab_dilution',
 		'lab_result',
+		'lab_result_files',
+		'lab_result_comment',
+		'lab_result_chart_files'
 	];
 
 	public function orderSample() {

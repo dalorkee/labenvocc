@@ -17,6 +17,5 @@ trait FileTrait {
 		shuffle($numbers);
 		return array_slice($numbers, 0, $quantity);
 	}
-
 }
 ?>

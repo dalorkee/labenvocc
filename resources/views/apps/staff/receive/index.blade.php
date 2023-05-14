@@ -35,7 +35,7 @@
 			<div class="panel-container show">
 				<div class="panel-content">
 					<div class="table-responsive">
-						<table id="receive_table" class="table table-bordered responsive style="cursor:pointer;width:100%">
+						<table id="receive_table" class="table table-bordered responsive" style="cursor:pointer;width:100%">
 							<thead class="bg-blue-600 text-white m-0" style="width:100%">
 								<tr>
 									<th>รหัส</th>

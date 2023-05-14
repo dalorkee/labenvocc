@@ -3,7 +3,9 @@
 @section('style')
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/pj-step.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/css/notifications/sweetalert2/sweetalert2.bundle.css') }}" media="screen, print">
-<style type="text/css">table#example_table thead {background-color:#2D8AC9;color:white;}</style>
+<style type="text/css">
+    table#example_table thead {background-color:#2D8AC9;color:white}
+</style>
 @endsection
 @section('content')
 <ol class="breadcrumb page-breadcrumb text-sm font-prompt">
@@ -82,8 +84,8 @@
 														<td><input type="text" name="lab_result[]" value="{{ $v['lab_result'] }}" class="form-control" style="width: 100px;"></td>
 														<td style="width: 200px; text-center;">
 															{{-- <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#default-example-modal-lg-center">ADD</button>&nbsp; --}}
-															<button type="button" class="btn btn-sm btn-success add-lab-result-file" data-pid="{{ $v['id'] }}">ADD</button>&nbsp;
-															<button type="button" class="btn btn-sm btn-primary comment-lab-result-file" data-pid="{{ $v['id'] }}">Comment</button>
+															<button type="button" class="btn btn-sm btn-success add-lab-result-file" data-xpid="{{ $v['id'] }}" data-xorder_id="{{ $order_id }}">ADD</button>&nbsp;
+															<button type="button" class="btn btn-sm btn-primary comment-lab-result-file" data-ypid="{{ $v['id'] }}">Comment</button>
 														</td>
 													</tr>
 												@endforeach
@@ -95,18 +97,30 @@
 						</div>
 					</div>
 					<div class="panel-content border-faded border-left-0 border-right-0 border-bottom-0">
-						<button type="button" id="btn_upload_chart" class="btn btn-success" data-lab_no="{{ $lab_no }}"><i class="fal fa-file"></i> Add File</button>
-						<button type="submit" class="btn btn-danger"><i class="fal fa-save"></i> บันทึก</button>
+						<div class="relative" style="height: 50px;">
+							<div class="absolute top-0 left-0">
+								<button type="button" id="btn_upload_chart" class="btn btn-success" data-zlno="{{ $lab_no }}" data-zoid="{{ $order_id }}"><i class="fal fa-file"></i> Add File</button>
+								<button type="submit" class="btn btn-primary"><i class="fal fa-save"></i> Save</button>
+							</div>
+							<div class="absolute top-0 right-0">
+								<button type="button" class="btn btn-info" id="btn_view_modal" data-view_lno="{{ $lab_no }}" data-view_oid="{{ $order_id }}" data-view_analyze_user={{ $main_analys_user_id }}"><i class="fal fa-eye"></i> View</button>
+							</div>
+						</div>
 					</div>
 				</form>
 			</div>
 		</div>
 	</div>
 </div>
-<div class="loader"><img src="{{ URL::asset('assets/img/loading.gif') }}"></div>
+<div class="loader text-center">
+	<div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+		<span class="sr-only">Loading...</span>
+	</div>
+</div>
 <div id="add_file_modal_wrapper"></div>
 <div id="comment_modal_wrapper"></div>
 <div id="upload_chart_modal_wrapper"></div>
+<div id="view_modal_wrapper"></div>
 @endsection
 @push('scripts')
 <script type="text/javascript" src="{{ URL::asset('assets/js/notifications/sweetalert2/sweetalert2.bundle.js') }}"></script>
@@ -114,69 +128,72 @@
 $(document).ready(function() {
 	$.ajaxSetup({headers:{'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')}});
 	$('.add-lab-result-file').on('click', function() {
-		let paramet_id = $(this).data('pid');
+		let xoid = $(this).data('xorder_id');
+		let xpid = $(this).data('xpid');;
 		$.ajax({
 			method: "POST",
 			url: "{{ route('sample.analyze.lab.result.upload.create') }}",
 			dataType: "html",
-			data: {paramet_id: paramet_id},
-			beforeSend: function() {
-				$(".loader").show();
-			},
+			data: {xorder_id: xoid, xparamet_id: xpid},
+			beforeSend: function() {$(".loader").show()},
 			success: function(response) {
 				$('#add_file_modal_wrapper').html(response);
 				$('#default-example-modal-lg-center').modal('show');
 			},
-			complete: function(){
-	 			$('.loader').hide();
-  			},
-			error: function(jqXhr, textStatus, errorMessage) {
-				alert('Error: ' + jqXhr.status + errorMessage);
-			}
+			complete: function() {$('.loader').hide()},
+			error: function(jqXhr, textStatus, errorMessage) {alert('Error: ' + jqXhr.status + errorMessage)}
 		});
 	});
 	$('.comment-lab-result-file').on('click', function() {
-		let paramet_id = $(this).data('pid');
+		let ypid = $(this).data('ypid');
 		$.ajax({
 			method: "POST",
 			url: "{{ route('sample.analyze.lab.result.comment.create') }}",
 			dataType: "html",
-			data: {paramet_id: paramet_id},
-			beforeSend: function() {
-				$(".loader").show();
-			},
+			data: {yparamet_id: ypid},
+			beforeSend: function() {$(".loader").show()},
 			success: function(response) {
 				$('#comment_modal_wrapper').html(response);
 				$('#comment-modal-lg-center').modal('show');
 			},
-			complete: function(){
-	 			$('.loader').hide();
-  			},
-			error: function(jqXhr, textStatus, errorMessage) {
-				alert('Error: ' + jqXhr.status + errorMessage);
-			}
+			complete: function() {$('.loader').hide()},
+			error: function(jqXhr, textStatus, errorMessage) {alert('Error: ' + jqXhr.status + errorMessage)}
 		});
 	});
-    $('#btn_upload_chart').on('click', function() {
-		let lab_no = $(this).data('lab_no');
+	$('#btn_upload_chart').on('click', function() {
+		let zlno = $(this).data('zlno');
+		let zoid = $(this).data('zoid');
 		$.ajax({
 			method: "POST",
-			url: "{{ route('sample.analyze.lab.result.upload.chart.create') }}",
+			url: "{{ route('sample.analyze.result.upload.file.create') }}",
 			dataType: "html",
-			data: {lab_no: lab_no},
-			beforeSend: function() {
-				$(".loader").show();
-			},
+			data: {zlab_no: zlno, zorder_id: zoid},
+			beforeSend: function() {$(".loader").show()},
 			success: function(response) {
 				$('#upload_chart_modal_wrapper').html(response);
 				$('#chart-modal-lg-center').modal('show');
 			},
-			complete: function(){
-	 			$('.loader').hide();
-  			},
-			error: function(jqXhr, textStatus, errorMessage) {
-				alert('Error: ' + jqXhr.status + errorMessage);
-			}
+			complete: function() {$('.loader').hide()},
+			error: function(jqXhr, textStatus, errorMessage) {alert('Error: ' + jqXhr.status + errorMessage)}
+		});
+	});
+	$('#btn_view_modal').on('click', function() {
+		let view_lno = $(this).data('view_lno');
+		let view_oid = $(this).data('view_oid');
+		let view_analyze_user = $(this).data('view_analyze_user');
+
+		$.ajax({
+			method: "POST",
+			url: "{{ route('sample.analyze.result.view.create') }}",
+			dataType: "html",
+			data: {view_lab_no: view_lno, view_order_id: view_oid, view_analyze_user: view_analyze_user},
+			beforeSend: function() {$(".loader").show()},
+			success: function(response) {
+				$('#view_modal_wrapper').html(response);
+				$('#view-modal-lg-center').modal('show');
+			},
+			complete: function() {$('.loader').hide()},
+			error: function(jqXhr, textStatus, errorMessage) {alert('Error: ' + jqXhr.status + errorMessage)}
 		});
 	});
 });
