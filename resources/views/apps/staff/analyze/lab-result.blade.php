@@ -103,7 +103,7 @@
 								<button type="submit" class="btn btn-primary"><i class="fal fa-save"></i> Save</button>
 							</div>
 							<div class="absolute top-0 right-0">
-								<button type="button" class="btn btn-info" id="btn_view_modal" data-view_lno="{{ $lab_no }}" data-view_oid="{{ $order_id }}" data-view_analyze_user={{ $main_analys_user_id }}"><i class="fal fa-eye"></i> View</button>
+								<button type="button" class="btn btn-info" id="btn_view_modal" data-view_lno="{{ $lab_no }}" data-view_oid="{{ $order_id }}" data-view_analyze_user="{{ $main_analys_user_id }}"><i class="fal fa-eye"></i> View</button>
 							</div>
 						</div>
 					</div>
@@ -181,7 +181,6 @@ $(document).ready(function() {
 		let view_lno = $(this).data('view_lno');
 		let view_oid = $(this).data('view_oid');
 		let view_analyze_user = $(this).data('view_analyze_user');
-
 		$.ajax({
 			method: "POST",
 			url: "{{ route('sample.analyze.result.view.create') }}",

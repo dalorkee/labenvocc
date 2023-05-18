@@ -118,7 +118,7 @@ class SampleAnalyzeController extends Controller
 					)->where('main_analys_user_id', $request->user_id);
 			}])->whereOrder_id($request->id)->get();
 			$order_id = $result[0]->order_id;
-            $main_analys_user_id = $request->user_id;
+			$main_analys_user_id = $request->user_id;
 			$data = [];
 			$result->each(function($item, $key) use (&$data) {
 				if (count($item->parameters) > 0) {
@@ -166,7 +166,17 @@ class SampleAnalyzeController extends Controller
 				$order_sample_parameter->lab_result_amount = $value['lab_result_amount'];
 				$order_sample_parameter->lab_dilution = $value['lab_dilution'];
 				$order_sample_parameter->lab_result = $value['lab_result'];
-				$saved = $order_sample_parameter->save();
+
+				/* คำนวณ lab */
+				switch ($value['sample_character_type_id']) {
+					case "2": // ประเภทดิน = (หน่วยจากเครื่องมือ x 1000) / น้ำหนักดิน (กรัม)
+						$order_sample_parameter->lab_result_ug_sample = ($value['lab_result'] > 0) ? ($value['lab_result']*100)/2000 : null;
+						break;
+					case "6": // ประเภทปัสสาวะ= หน่วยจากเครื่องมือ / 1000
+						$order_sample_parameter->lab_result_ug_sample = ($value['lab_result'] > 0) ? ($value['lab_result']/100) : null;
+						break;
+				}
+				$order_sample_parameter->save();
 			};
 			return redirect()->back()->with('success', 'บันทึกข้อมูลสำเร็จแล้ว');
 		} catch (\Exception $e) {
@@ -399,15 +409,15 @@ class SampleAnalyzeController extends Controller
 		$lab_no = $request->view_lab_no;
 		$result = OrderSample::select('id', 'order_id', 'has_parameter', 'sample_test_no', 'air_volume')
 			->with(['parameters' => function($query) use ($request) {
-				$query->select(
-					'id', 'order_id', 'order_sample_id',
-					'parameter_id', 'parameter_name', 'main_analys_user_id',
-					'machine_id', 'lab_result_blank', 'lab_result_amount',
-					'lab_dilution', 'lab_result', 'status'
-				)->where('main_analys_user_id', $request->analyze_user);
+				$query->select('*')->where('main_analys_user_id', $request->view_analyze_user);
 			}])->whereOrder_id($request->view_order_id)->get();
-        dd($result);
-		return "
+			$data = [];
+			$result->each(function($item, $key) use (&$data) {
+				if (count($item->parameters) > 0) {
+					array_push($data, $item->toArray());
+				}
+			});
+		$htm = "
 		<div class=\"modal fade modal-fullscreen font-prompt\" id=\"view-modal-lg-center\" data-keyboard=\"false\" data-backdrop=\"static\" tabindex=\"-1\" role=\"dialog\" aria-hidden=\"true\">
 			<form class=\"modal-dialog modal-dialog-centered\" action=\"".route('sample.analyze.result.upload.file')."\" method=\"POST\" enctype=\"multipart/form-data\" role=\"document\">
 				<div class=\"modal-content\">
@@ -439,31 +449,38 @@ class SampleAnalyzeController extends Controller
 											<th>ppm</th>
 										</tr>
 									</thead>
-									<tbody>
-										<tr>
-											<td>a</td>
-											<td>b</td>
-											<td>c</td>
-											<td>d</td>
-											<td>e</td>
-											<td>f</td>
-											<td>g</td>
-											<td>h</td>
-											<td>h</td>
-											<td>j</td>
-										</tr>
-									</tbody>
+									<tbody>";
+									foreach ($data as $key => $value) {
+										$i = 1;
+										foreach ($value['parameters'] as $k => $v) {
+											$htm .= "
+											<tr>
+												<td>".$i."</td>
+												<td>".$value['sample_test_no']."</td>
+												<td>".preg_replace("/\r|\n/", "", $v['parameter_name'])."</td>
+												<td>".$v['lab_result_blank']."</td>
+												<td>".$v['lab_result_amount']."</td>
+												<td>".$value['air_volume']."</td>
+												<td>100</td>
+												<td>".$v['lab_result_ug_sample']."</td>
+												<td>".$v['lab_result_mg_m3']."</td>
+												<td>".$v['lab_result_ppm']."</td>
+											</tr>";
+											$i++;
+										}
+									}
+									$htm .= "</tbody>
 								</table>
 							</div>
 						</div>
 					</div>
 					<div class=\"modal-footer\">
-						<button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">ปิด</button>
-						<button type=\"submit\" class=\"btn btn-info\">ตกลง</button>
+						<button type=\"button\" class=\"btn btn-info\" data-dismiss=\"modal\" style=\"width: 120px\">Close</button>
 					</div>
 				</div>
 			</form>
 		</div>";
+		return $htm;
 	}
 
 	protected function analyzeResultView(Request $request) {
