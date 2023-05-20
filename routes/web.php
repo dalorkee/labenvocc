@@ -200,7 +200,10 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 	// Route::post('sample/bio/create', [SampleUploadController::class, 'biocreate'])->name('sampleupload.biocreate');
 	Route::post('sample/bio/import', [SampleUploadController::class, 'bioimport'])->name('sampleupload.bioimport');
 	Route::post('fetchdata/sampletype', [FetchDataController::class, 'sampletype'])->name('fetchdata.sampletype');
-
+	Route::post('fetchdata/parameter', [FetchDataController::class, 'parameter'])->name('fetchdata.parameter');
+	Route::post('fetchdata/district', [FetchDataController::class, 'district'])->name('fetchdata.district');
+	Route::post('fetchdata/subdistrict', [FetchDataController::class, 'subdistrict'])->name('fetchdata.subdistrict');
+	
 });
 Route::get('/user/advertise/id/{id}/detail',[UserAdvertiseController::class,'detail'])->name('user.advertise.detail');
 Route::get('/user/advertise/listall/{listall}',[UserAdvertiseController::class,'listall'])->name('user.advertise.listall');

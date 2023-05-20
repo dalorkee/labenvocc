@@ -103,6 +103,9 @@
                                             <label class="form-label" for="province">จังหวัด</label>
                                             <select class="custom-select" id="province">
                                                 <option value="0">เลือกทั้งหมด</option>
+                                            @foreach ($provinces as $province)
+                                                <option value="{{ $province->province_id }}">{{ $province->province_name }}</option>
+                                            @endforeach
                                             </select>
                                         </div>
                                         <div class="col-4">
@@ -156,19 +159,21 @@
     });
 </script>
 <script type="text/javascript">
-    var controls = {
-        leftArrow: '<i class="fal fa-angle-left" style="font-size: 1.25rem"></i>',
-        rightArrow: '<i class="fal fa-angle-right" style="font-size: 1.25rem"></i>'
-    }
-    var runDatePicker = function(){
+
+    $(document).ready(function(){
+        var controls = {
+            leftArrow: '<i class="fal fa-angle-left" style="font-size: 1.25rem"></i>',
+            rightArrow: '<i class="fal fa-angle-right" style="font-size: 1.25rem"></i>'
+        }
         $('#datepicker').datepicker({
+            autoClose: true,
             todayHighlight: true,
             templates: controls,
-            dateFormat: "dd/mm/yy",
+            format: "dd/mm/yyyy",
+            startDate: new Date(new Date().setDate(new Date().getDate() - 1825)),
+            endDate: new Date(new Date().setDate(new Date().getDate() + 0))
+
         });
-    }
-    $(document).ready(function(){
-        runDatePicker();
         $('.orgt').hide();
         $('.fact').hide();
         $('.prm').hide();
@@ -200,28 +205,76 @@
             }
             if(st != ''){                
                 $.ajax({
-				method: "POST",
-				url: "{{ route('fetchdata.sampletype') }}",
-				dataType: "html",
-				data: {id:st},
-				success: function(response) {
-					$("#sample_character").html(response);
-				},
-				error: function(jqXhr, textStatus, errorMessage) {
-					alert('Sample Type error: ' + jqXhr.status + errorMessage);
-				}
-			});
+                    method: "POST",
+                    url: "{{ route('fetchdata.sampletype') }}",
+                    dataType: "html",
+                    data: {id:st},
+                    success: function(response) {
+                        $("#sample_character").html(response);
+                    },
+                    error: function(jqXhr, textStatus, errorMessage) {
+                        alert('Sample Type error: ' + jqXhr.status + errorMessage);
+                    }
+			    });
             }
         });
         $('#parameter_group').on("click", function(){
             var prmt = this.value;
-            if(prmt != '0'){
+            if(prmt >= '0'){
                 $('.prm').show();
                 $('#parameter').prop('disabled', false);
             }
             else{
                 $('.prm').hide();
                 $('#parameter').prop('disabled', true);
+            }
+            if(prmt != ''){
+                $.ajax({
+                    method: "POST",
+                    url: "{{ route('fetchdata.parameter') }}",
+                    dataType: "html",
+                    data: {id:prmt},
+                    success: function(response) {
+                        $("#parameter").html(response);
+                    },
+                    error: function(jqXhr, textStatus, errorMessage) {
+                        alert('Group Parameter error: ' + jqXhr.status + errorMessage);
+                    }
+			    });
+            }
+        });
+        $('#province').on("click", function(){
+            var province = this.value;
+            if(province != ''){
+                $.ajax({
+                    method: "POST",
+                    url: "{{ route('fetchdata.district') }}",
+                    dataType: "html",
+                    data: {id:province},
+                    success: function(response) {
+                        $("#district").html(response);
+                    },
+                    error: function(jqXhr, textStatus, errorMessage) {
+                        alert('District data error: ' + jqXhr.status + errorMessage);
+                    }
+			    });
+            }
+        });
+        $('#district').on("click", function(){
+            var district = this.value;
+            if(district != ''){
+                $.ajax({
+                    method: "POST",
+                    url: "{{ route('fetchdata.subdistrict') }}",
+                    dataType: "html",
+                    data: {id:district},
+                    success: function(response) {
+                        $("#sub_district").html(response);
+                    },
+                    error: function(jqXhr, textStatus, errorMessage) {
+                        alert('Sub District data error: ' + jqXhr.status + errorMessage);
+                    }
+			    });
             }
         });
     });
