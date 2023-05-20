@@ -157,9 +157,183 @@ class SampleAnalyzeController extends Controller
 				$tmp['lab_result'] = $req['lab_result'][$i];
 				array_push($data, $tmp);
 			}
+
 			/* Save to db */
 			foreach ($data as $key => $value) {
 				$order_sample_parameter = OrderSampleParameter::find($value['order_sample_parameter_id']);
+				switch($order_sample_parameter->threat_type_id) {
+					case 1: // กรด ด่าง/โลหะอัลคาไลน์
+						switch ($order_sample_parameter->sample_character_id) {
+							case 1: // สารละลาย
+								$tmp = 1;
+								break;
+							case 2: // ดิน
+								$tmp = 2;
+								break;
+							case 3: // น้ำ
+								$tmp = 4;
+								break;
+							case 5: // อากาศ
+								$tmp = 5;
+								break;
+							default:
+								redirect()->back()->with('error', 'ไม่พบข้อมูลการคำนวณ กรด,ด่าง/โลหะอัลคาไลน์');
+						}
+						break;
+					case 2: // จุลชีววิทยา
+						switch ($order_sample_parameter->sample_character_id) {
+							case 5: // อากาศ
+								$tmp = 5;
+								break;
+							default:
+								redirect()->back()->with('error', 'ไม่พบข้อมูลการคำนวณ จุลชีววิทยา');
+						}
+						break;
+					case 3: // ฝุ่นซิลิก้า
+						switch ($order_sample_parameter->sample_character_id) {
+							case 5: // อากาศ
+								$tmp = 5;
+								break;
+							default:
+								redirect()->back()->with('error', 'ไม่พบข้อมูลการคำนวณ จุลชีววิทยา');
+						}
+						break;
+					case 4: // สารอินทรีย์ระเหย
+						switch ($order_sample_parameter->sample_character_id) {
+							case 1: // สารละลาย
+								// มีอีกตัวคือ %VOC ใช้ %W/V
+								$mg_l = $order_sample_parameter->lab_result_amount;
+								break;
+							case 2: // ดิน
+								$ug_sample = ($order_sample_parameter->lab_result_amount*1000)/100;
+								$mg_kg = ($order_sample_parameter->lab_result_amount*1000)/120;
+								break;
+							case 3: // น้ำ
+                                $mg_l = $order_sample_parameter->lab_result_amount;
+								break;
+							case 4: // น้ำมัน
+								$tmp = 4;
+								break;
+							case 5: // อากาศ
+								$tmp = 5;
+								break;
+							case 6: // ปัสสาวะ
+								$tmp = 6;
+								break;
+							case 6: // Wipes
+								$tmp = 7;
+								break;
+							case 8: // เลือด
+								$tmp = 8;
+								break;
+							case 9: // นำเหลือง
+								$tmp = 9;
+								break;
+							default:
+								redirect()->back()->with('error', 'ไม่พบข้อมูลการคำนวณ สารอินทรีย์ระเหย');
+						}
+						break;
+					case 5: // แร่ใยหิน
+						switch ($order_sample_parameter->sample_character_id) {
+							case 1: // สารละลาย
+								$tmp = 1;
+								break;
+							case 1: // ดิน
+								$tmp = 2;
+								break;
+							case 3: // น้ำ
+								$tmp = 4;
+								break;
+							case 4: // น้ำมัน
+								$tmp = 4;
+								break;
+							case 5: // อากาศ
+								$tmp = 5;
+								break;
+							case 6: // ปัสสาวะ
+								$tmp = 6;
+								break;
+							case 6: // Wipes
+								$tmp = 7;
+								break;
+							case 8: // เลือด
+								$tmp = 8;
+								break;
+							case 9: // นำเหลือง
+								$tmp = 9;
+								break;
+							default:
+								redirect()->back()->with('error', 'ไม่พบข้อมูลการคำนวณ แร่ใยหิน');
+						}
+						break;
+					case 6: // โลหะหนัก
+						switch ($order_sample_parameter->sample_character_id) {
+							case 1: // สารละลาย
+								$tmp = 1;
+								break;
+							case 1: // ดิน
+								$tmp = 2;
+								break;
+							case 3: // น้ำ
+								$tmp = 4;
+								break;
+							case 4: // น้ำมัน
+								$tmp = 4;
+								break;
+							case 5: // อากาศ
+								$tmp = 5;
+								break;
+							case 6: // ปัสสาวะ
+								$tmp = 6;
+								break;
+							case 6: // Wipes
+								$tmp = 7;
+								break;
+							case 8: // เลือด
+								$tmp = 8;
+								break;
+							case 9: // นำเหลือง
+								$tmp = 9;
+								break;
+							default:
+								redirect()->back()->with('error', 'ไม่พบข้อมูลการคำนวณ โลหะหนัก');
+						}
+						break;
+					case 7: // อื่นๆ
+						switch ($order_sample_parameter->sample_character_id) {
+							case 1: // สารละลาย
+								$tmp = 1;
+								break;
+							case 1: // ดิน
+								$tmp = 2;
+								break;
+							case 3: // น้ำ
+								$tmp = 4;
+								break;
+							case 4: // น้ำมัน
+								$tmp = 4;
+								break;
+							case 5: // อากาศ
+								$tmp = 5;
+								break;
+							case 6: // ปัสสาวะ
+								$tmp = 6;
+								break;
+							case 6: // Wipes
+								$tmp = 7;
+								break;
+							case 8: // เลือด
+								$tmp = 8;
+								break;
+							case 9: // นำเหลือง
+								$tmp = 9;
+								break;
+							default:
+								redirect()->back()->with('error', 'ไม่พบข้อมูลการคำนวณ อื่นๆ');
+						}
+						break;
+				}
+
 				$order_sample_parameter->machine_id = $value['machine_id'];
 				$order_sample_parameter->machine_name = $value['machine_name'];
 				$order_sample_parameter->lab_result_blank = $value['lab_result_blank'];
@@ -167,15 +341,22 @@ class SampleAnalyzeController extends Controller
 				$order_sample_parameter->lab_dilution = $value['lab_dilution'];
 				$order_sample_parameter->lab_result = $value['lab_result'];
 
-				/* คำนวณ lab */
-				switch ($value['sample_character_type_id']) {
-					case "2": // ประเภทดิน = (หน่วยจากเครื่องมือ x 1000) / น้ำหนักดิน (กรัม)
-						$order_sample_parameter->lab_result_ug_sample = ($value['lab_result'] > 0) ? ($value['lab_result']*100)/2000 : null;
-						break;
-					case "6": // ประเภทปัสสาวะ= หน่วยจากเครื่องมือ / 1000
-						$order_sample_parameter->lab_result_ug_sample = ($value['lab_result'] > 0) ? ($value['lab_result']/100) : null;
-						break;
-				}
+				$order_sample_parameter->lab_result_ug_sample = $ug_sample ?? null;
+				$order_sample_parameter->lab_result_mg_sample = $mg_sample ?? null;
+				$order_sample_parameter->lab_result_mg_m3 = $mg_m3 ?? null;
+				$order_sample_parameter->lab_result_ppm = $ppm ?? null;
+				$order_sample_parameter->lab_result_ug_g_creatinine = $ug_g_creatinine ?? null;
+				$order_sample_parameter->lab_result_mg_g_creatinine = $mg_g_creatinine ?? null;
+				$order_sample_parameter->lab_result_percent_w_v = $percent_w_v ?? null;
+				$order_sample_parameter->lab_result_percent_w_w = $percent_w_w ?? null;
+				$order_sample_parameter->lab_result_mg_l = $mg_l ?? null;
+				$order_sample_parameter->lab_result_ug_l = $ug_l ?? null;
+				$order_sample_parameter->lab_result_mg_kg = $mg_kg ?? null;
+				$order_sample_parameter->lab_result_ug_dl = $ug_dl ?? null;
+				$order_sample_parameter->lab_result_fiber_cc = $fiber_cc ?? null;
+				$order_sample_parameter->lab_result_dfu_m3 = $dfu_m3 ?? null;
+				$order_sample_parameter->lab_result_percent_sio2 = $percent_sio2 ?? null;
+
 				$order_sample_parameter->save();
 			};
 			return redirect()->back()->with('success', 'บันทึกข้อมูลสำเร็จแล้ว');
@@ -431,8 +612,8 @@ class SampleAnalyzeController extends Controller
 					<div class=\"row\">
 						<div class=\"col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3\">
 							<div class=\"table-responsive\">
-								<table id=\"result_table\" class=\"table table-bordered responsive\" style=\"cursor:pointer;width:100%\">
-									<thead class=\"m-0\" style=\"width:100%\">
+								<table id=\"result_table\" class=\"table table-bordered table-striped responsive\">
+									<thead class=\"m-0\" style=\"background: #b0d7f1; color: #1b6394\">
 										<tr>
 											<th rowspan=\"2\" style=\"vertical-align:middle;text-align:center;\">ลำดับ</th>
 											<th rowspan=\"2\" style=\"vertical-align:middle;text-align:center;\">หมายเลขทดสอบ</th>
@@ -441,12 +622,24 @@ class SampleAnalyzeController extends Controller
 											<th rowspan=\"2\" style=\"vertical-align:middle;text-align:center;\">Amount</th>
 											<th rowspan=\"2\" style=\"vertical-align:middle;text-align:center;\">ปริมาตรอากาศ (l.)</th>
 											<th rowspan=\"2\" style=\"vertical-align:middle;text-align:center;\">น้ำหนักดิน(g.)</th>
-											<th colspan=\"3\">ผลการทดสอบ</th>
+											<th colspan=\"15\" style=\"vertical-align:middle;text-align:center;\">ผลการทดสอบ</th>
 										</tr>
 										<tr>
-											<th>&#956;g/sample</th>
-											<th>mg/m3</th>
-											<th>ppm</th>
+											<th style=\"vertical-align:middle;text-align:center;\">&#956;g/sample</th>
+											<th style=\"vertical-align:middle;text-align:center;\">mg/sample</th>
+											<th style=\"vertical-align:middle;text-align:center;\">mg/m<sup>3</sup></th>
+											<th style=\"vertical-align:middle;text-align:center;\">ppm</th>
+											<th style=\"vertical-align:middle;text-align:center;\">&#956;g/ creatinine</th>
+											<th style=\"vertical-align:middle;text-align:center;\">mg/ creatinine</th>
+											<th style=\"vertical-align:middle;text-align:center;\">% w/v</th>
+											<th style=\"vertical-align:middle;text-align:center;\">% w/w</th>
+											<th style=\"vertical-align:middle;text-align:center;\">mg/l</th>
+											<th style=\"vertical-align:middle;text-align:center;\">&#956;g/l</th>
+											<th style=\"vertical-align:middle;text-align:center;\">mg/kg</th>
+											<th style=\"vertical-align:middle;text-align:center;\">&#956;g/dl</th>
+											<th style=\"vertical-align:middle;text-align:center;\">fiber/cc</th>
+											<th style=\"vertical-align:middle;text-align:center;\">cfu/m<sup>3</sup></th>
+											<th style=\"vertical-align:middle;text-align:center;\">% SiO<sub>2</sub></th>
 										</tr>
 									</thead>
 									<tbody>";
@@ -455,16 +648,28 @@ class SampleAnalyzeController extends Controller
 										foreach ($value['parameters'] as $k => $v) {
 											$htm .= "
 											<tr>
-												<td>".$i."</td>
-												<td>".$value['sample_test_no']."</td>
-												<td>".preg_replace("/\r|\n/", "", $v['parameter_name'])."</td>
-												<td>".$v['lab_result_blank']."</td>
-												<td>".$v['lab_result_amount']."</td>
-												<td>".$value['air_volume']."</td>
-												<td>100</td>
-												<td>".$v['lab_result_ug_sample']."</td>
-												<td>".$v['lab_result_mg_m3']."</td>
-												<td>".$v['lab_result_ppm']."</td>
+												<td><div style=\"width:40px\">".$i."</div></td>
+												<td><div style=\"width:120px\">".$value['sample_test_no']."</td>
+												<td><div style=\"width:300px\">".preg_replace("/\r|\n/", "", $v['parameter_name'])."</div></td>
+												<td><div style=\"width:100px\">".$v['lab_result_blank']."</div></td>
+												<td><div style=\"width:100px\">".$v['lab_result_amount']."</div></td>
+												<td><div style=\"width:130px\">".$value['air_volume']."</div></td>
+												<td><div style=\"width:130px\">100</div></td>
+												<td><div style=\"width:100px\">".$v['lab_result_ug_sample']."</div></td>
+												<td><div style=\"width:100px\">".$v['lab_result_mg_sample']."</div></td>
+												<td><div style=\"width:100px\">".$v['lab_result_mg_m3']."</div></td>
+												<td><div style=\"width:100px\">".$v['lab_result_ppm']."</div></td>
+												<td><div style=\"width:130px\">".$v['lab_result_ug_g_creatinine']."</div></td>
+												<td><div style=\"width:130px\">".$v['lab_result_mg_g_creatinine']."</div></td>
+												<td><div style=\"width:100px\">".$v['lab_result_percent_w_v']."</div></td>
+												<td><div style=\"width:100px\">".$v['lab_result_percent_w_w']."</div></td>
+												<td><div style=\"width:100px\">".$v['lab_result_mg_l']."</div></td>
+												<td><div style=\"width:100px\">".$v['lab_result_ug_l']."</div></td>
+												<td><div style=\"width:100px\">".$v['lab_result_mg_kg']."</div></td>
+												<td><div style=\"width:100px\">".$v['lab_result_ug_dl']."</div></td>
+												<td><div style=\"width:100px\">".$v['lab_result_fiber_cc']."</div></td>
+												<td><div style=\"width:100px\">".$v['lab_result_dfu_m3']."</div></td>
+												<td><div style=\"width:100px\">".$v['lab_result_percent_sio2']."</div></td>
 											</tr>";
 											$i++;
 										}
