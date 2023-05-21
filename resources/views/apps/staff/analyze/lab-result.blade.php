@@ -4,7 +4,7 @@
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/pj-step.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/css/notifications/sweetalert2/sweetalert2.bundle.css') }}" media="screen, print">
 <style type="text/css">
-    table#example_table thead {background-color:#2D8AC9;color:white}
+	table#example_table thead {background-color:#2D8AC9;color:white}
 </style>
 @endsection
 @section('content')
@@ -46,6 +46,7 @@
 												<th>Blank</th>
 												<th>Amount</th>
 												<th>ปริมาตรอากาศ</th>
+												<th>น้ำหนักดิน</th>
 												<th>Dilution</th>
 												<th>Result</th>
 												<th>#</th>
@@ -79,6 +80,7 @@
 														</td>
 														<td><input type="text" name="lab_result_blank[]" value="{{ $v['lab_result_blank'] }}" class="form-control" style="width: 100px;"></td>
 														<td><input type="text" name="lab_result_amount[]" value="{{ $v['lab_result_amount'] }} " class="form-control" style="width: 100px;"></td>
+														<td><input type="text" name="weight_sample[]" value="{{ $val['weight_sample'] }}" class="form-control"style="width: 100px;" readonly></td>
 														<td><input type="text" name="air_volume[]" value="{{ $val['air_volume'] }}" class="form-control" style="width: 100px;" readonly></td>
 														<td><input type="text" name="lab_dilution[]" value="{{ $v['lab_dilution'] }}" class="form-control" style="width: 100px;"></td>
 														<td><input type="text" name="lab_result[]" value="{{ $v['lab_result'] }}" class="form-control" style="width: 100px;"></td>

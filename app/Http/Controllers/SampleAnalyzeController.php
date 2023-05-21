@@ -108,13 +108,21 @@ class SampleAnalyzeController extends Controller
 	protected function labResultCreate(Request $request) {
 		try {
 			$lab_no = $request->lab_no;
-			$result = OrderSample::select('id', 'order_id', 'has_parameter', 'sample_test_no', 'air_volume')
+			$result = OrderSample::select('id', 'order_id', 'has_parameter', 'sample_test_no', 'weight_sample', 'air_volume')
 				->with(['parameters' => function($query) use ($request) {
 					$query->select(
-						'id', 'order_id', 'order_sample_id',
-						'parameter_id', 'parameter_name', 'main_analys_user_id',
-						'machine_id', 'lab_result_blank', 'lab_result_amount',
-						'lab_dilution', 'lab_result', 'status'
+						'id',
+						'order_id',
+						'order_sample_id',
+						'parameter_id',
+						'parameter_name',
+						'main_analys_user_id',
+						'machine_id',
+						'lab_result_blank',
+						'lab_result_amount',
+						'lab_dilution',
+						'lab_result',
+						'status'
 					)->where('main_analys_user_id', $request->user_id);
 			}])->whereOrder_id($request->id)->get();
 			$order_id = $result[0]->order_id;
@@ -137,7 +145,7 @@ class SampleAnalyzeController extends Controller
 	protected function labResultSave(Request $request) {
 		try {
 			$req = $request->toArray();
-			$data = array();
+			$data = [];
 			$machine = RefMachine::select('id', 'machine_name')->get()->keyBy('id')->toArray();
 
 			/* Prepare data */
@@ -152,6 +160,7 @@ class SampleAnalyzeController extends Controller
 				$tmp['machine_name'] = $machine[$req['machine_id'][$i]]['machine_name'];
 				$tmp['lab_result_blank'] = $req['lab_result_blank'][$i];
 				$tmp['lab_result_amount'] = $req['lab_result_amount'][$i];
+				$tmp['weight_sample'] = $req['weight_sample'][$i];
 				$tmp['air_volume'] = $req['air_volume'][$i];
 				$tmp['lab_dilution'] = $req['lab_dilution'][$i];
 				$tmp['lab_result'] = $req['lab_result'][$i];
@@ -202,25 +211,29 @@ class SampleAnalyzeController extends Controller
 						switch ($order_sample_parameter->sample_character_id) {
 							case 1: // สารละลาย
 								// มีอีกตัวคือ %VOC ใช้ %W/V
-								$mg_l = $order_sample_parameter->lab_result_amount;
+								$mg_l = $value['lab_result_amount'];
+								$ug_l = ($value['lab_result_amount']*1000);
 								break;
 							case 2: // ดิน
-								$ug_sample = ($order_sample_parameter->lab_result_amount*1000)/100;
-								$mg_kg = ($order_sample_parameter->lab_result_amount*1000)/120;
+								$ug_sample = ($value['weight_sample'] > 0) ? ($order_sample_parameter->lab_result_amount*1000)/$value['weight_sample'] : 0.00;
+								$mg_kg = ($value['weight_sample'] > 0) ? ($order_sample_parameter->lab_result_amount*1000)/$value['weight_sample'] : 0.00;
 								break;
 							case 3: // น้ำ
-                                $mg_l = $order_sample_parameter->lab_result_amount;
+								$mg_l = $value['lab_result_amount'];
 								break;
 							case 4: // น้ำมัน
-								$tmp = 4;
+								$mg_l = $value['lab_result_amount'];
+								$ug_l = ($value['lab_result_amount']*1000);
 								break;
 							case 5: // อากาศ
-								$tmp = 5;
+								$mg_l = $value['lab_result_amount'];
+								$ug_tube = $value['lab_result_amount'];
+
 								break;
 							case 6: // ปัสสาวะ
 								$tmp = 6;
 								break;
-							case 6: // Wipes
+							case 7: // Wipes
 								$tmp = 7;
 								break;
 							case 8: // เลือด
@@ -238,11 +251,11 @@ class SampleAnalyzeController extends Controller
 							case 1: // สารละลาย
 								$tmp = 1;
 								break;
-							case 1: // ดิน
+							case 2: // ดิน
 								$tmp = 2;
 								break;
 							case 3: // น้ำ
-								$tmp = 4;
+								$tmp = 3;
 								break;
 							case 4: // น้ำมัน
 								$tmp = 4;
@@ -253,7 +266,7 @@ class SampleAnalyzeController extends Controller
 							case 6: // ปัสสาวะ
 								$tmp = 6;
 								break;
-							case 6: // Wipes
+							case 7: // Wipes
 								$tmp = 7;
 								break;
 							case 8: // เลือด
@@ -271,11 +284,11 @@ class SampleAnalyzeController extends Controller
 							case 1: // สารละลาย
 								$tmp = 1;
 								break;
-							case 1: // ดิน
+							case 2: // ดิน
 								$tmp = 2;
 								break;
 							case 3: // น้ำ
-								$tmp = 4;
+								$tmp = 3;
 								break;
 							case 4: // น้ำมัน
 								$tmp = 4;
@@ -286,7 +299,7 @@ class SampleAnalyzeController extends Controller
 							case 6: // ปัสสาวะ
 								$tmp = 6;
 								break;
-							case 6: // Wipes
+							case 7: // Wipes
 								$tmp = 7;
 								break;
 							case 8: // เลือด
@@ -304,11 +317,11 @@ class SampleAnalyzeController extends Controller
 							case 1: // สารละลาย
 								$tmp = 1;
 								break;
-							case 1: // ดิน
+							case 2: // ดิน
 								$tmp = 2;
 								break;
 							case 3: // น้ำ
-								$tmp = 4;
+								$tmp = 3;
 								break;
 							case 4: // น้ำมัน
 								$tmp = 4;
@@ -319,7 +332,7 @@ class SampleAnalyzeController extends Controller
 							case 6: // ปัสสาวะ
 								$tmp = 6;
 								break;
-							case 6: // Wipes
+							case 7: // Wipes
 								$tmp = 7;
 								break;
 							case 8: // เลือด
@@ -333,7 +346,6 @@ class SampleAnalyzeController extends Controller
 						}
 						break;
 				}
-
 				$order_sample_parameter->machine_id = $value['machine_id'];
 				$order_sample_parameter->machine_name = $value['machine_name'];
 				$order_sample_parameter->lab_result_blank = $value['lab_result_blank'];
@@ -356,7 +368,7 @@ class SampleAnalyzeController extends Controller
 				$order_sample_parameter->lab_result_fiber_cc = $fiber_cc ?? null;
 				$order_sample_parameter->lab_result_dfu_m3 = $dfu_m3 ?? null;
 				$order_sample_parameter->lab_result_percent_sio2 = $percent_sio2 ?? null;
-
+				$order_sample_parameter->lab_result_ug_tube = $ug_tube ?? null;
 				$order_sample_parameter->save();
 			};
 			return redirect()->back()->with('success', 'บันทึกข้อมูลสำเร็จแล้ว');
@@ -588,7 +600,7 @@ class SampleAnalyzeController extends Controller
 
 	protected function analyzeResultViewModal(Request $request) {
 		$lab_no = $request->view_lab_no;
-		$result = OrderSample::select('id', 'order_id', 'has_parameter', 'sample_test_no', 'air_volume')
+		$result = OrderSample::select('id', 'order_id', 'has_parameter', 'sample_test_no', 'weight_sample', 'air_volume')
 			->with(['parameters' => function($query) use ($request) {
 				$query->select('*')->where('main_analys_user_id', $request->view_analyze_user);
 			}])->whereOrder_id($request->view_order_id)->get();
@@ -598,6 +610,60 @@ class SampleAnalyzeController extends Controller
 					array_push($data, $item->toArray());
 				}
 			});
+
+			$chk = [];
+			foreach ($data as $key => $value) {
+				foreach ($value['parameters'] as $k => $v) {
+					if (!empty($v['lab_result_ug_sample'])) {
+						$chk['lab_result_ug_sample'] = '&#956;g/sample';
+					}
+					if (!empty($v['lab_result_mg_sample'])) {
+						$chk['lab_result_mg_sample'] = 'mg/sample';
+					}
+					if (!empty($v['lab_result_mg_m3'])) {
+						$chk['lab_result_mg_m3'] = 'mg/m<sup>3</sup>';
+					}
+					if (!empty($v['lab_result_ppm'])) {
+						$chk['lab_result_ppm'] = 'ppm';
+					}
+					if (!empty($v['lab_result_ug_g_creatinine'])) {
+						$chk['lab_result_ug_g_creatinine'] = '&#956;g/creatinine';
+					}
+					if (!empty($v['lab_result_mg_g_creatinine'])) {
+						$chk['lab_result_mg_g_creatinine'] = 'mg/creatinine';
+					}
+					if (!empty($v['lab_result_percent_w_v'])) {
+						$chk['lab_result_percent_w_v'] = '% w/v';
+					}
+					if (!empty($v['lab_result_percent_w_w'])) {
+						$chk['lab_result_percent_w_w'] = '% w/w';
+					}
+					if (!empty($v['lab_result_mg_l'])) {
+						$chk['lab_result_mg_l'] = 'mg/l';
+					}
+					if (!empty($v['lab_result_ug_l'])) {
+						$chk['lab_result_ug_l'] = '&#956;g/l';
+					}
+					if (!empty($v['lab_result_mg_kg'])) {
+						$chk['lab_result_mg_kg'] = 'mg/kg';
+					}
+					if (!empty($v['lab_result_ug_dl'])) {
+						$chk['lab_result_ug_dl'] = '&#956;g/dl';
+					}
+					if (!empty($v['lab_result_fiber_cc'])) {
+						$chk['lab_result_fiber_cc'] = 'fiber/cc';
+					}
+					if (!empty($v['lab_result_dfu_m3'])) {
+						$chk['lab_result_dfu_m3'] = 'cfu/m<sup>3</sup>';
+					}
+					if (!empty($v['lab_result_percent_sio2'])) {
+						$chk['lab_result_percent_sio2'] = '% SiO<sub>2</sub>';
+					}
+					if (!empty($v['lab_result_ug_tube'])) {
+						$chk['lab_result_ug_tube'] = '&#956;g/tube';
+					}
+				}
+			}
 		$htm = "
 		<div class=\"modal fade modal-fullscreen font-prompt\" id=\"view-modal-lg-center\" data-keyboard=\"false\" data-backdrop=\"static\" tabindex=\"-1\" role=\"dialog\" aria-hidden=\"true\">
 			<form class=\"modal-dialog modal-dialog-centered\" action=\"".route('sample.analyze.result.upload.file')."\" method=\"POST\" enctype=\"multipart/form-data\" role=\"document\">
@@ -622,25 +688,13 @@ class SampleAnalyzeController extends Controller
 											<th rowspan=\"2\" style=\"vertical-align:middle;text-align:center;\">Amount</th>
 											<th rowspan=\"2\" style=\"vertical-align:middle;text-align:center;\">ปริมาตรอากาศ (l.)</th>
 											<th rowspan=\"2\" style=\"vertical-align:middle;text-align:center;\">น้ำหนักดิน(g.)</th>
-											<th colspan=\"15\" style=\"vertical-align:middle;text-align:center;\">ผลการทดสอบ</th>
+											<th colspan=\"".count($chk)."\" style=\"vertical-align:middle;text-align:center;\">ผลการทดสอบ</th>
 										</tr>
-										<tr>
-											<th style=\"vertical-align:middle;text-align:center;\">&#956;g/sample</th>
-											<th style=\"vertical-align:middle;text-align:center;\">mg/sample</th>
-											<th style=\"vertical-align:middle;text-align:center;\">mg/m<sup>3</sup></th>
-											<th style=\"vertical-align:middle;text-align:center;\">ppm</th>
-											<th style=\"vertical-align:middle;text-align:center;\">&#956;g/ creatinine</th>
-											<th style=\"vertical-align:middle;text-align:center;\">mg/ creatinine</th>
-											<th style=\"vertical-align:middle;text-align:center;\">% w/v</th>
-											<th style=\"vertical-align:middle;text-align:center;\">% w/w</th>
-											<th style=\"vertical-align:middle;text-align:center;\">mg/l</th>
-											<th style=\"vertical-align:middle;text-align:center;\">&#956;g/l</th>
-											<th style=\"vertical-align:middle;text-align:center;\">mg/kg</th>
-											<th style=\"vertical-align:middle;text-align:center;\">&#956;g/dl</th>
-											<th style=\"vertical-align:middle;text-align:center;\">fiber/cc</th>
-											<th style=\"vertical-align:middle;text-align:center;\">cfu/m<sup>3</sup></th>
-											<th style=\"vertical-align:middle;text-align:center;\">% SiO<sub>2</sub></th>
-										</tr>
+										<tr>";
+										foreach ($chk as $key => $value) {
+											$htm .= "<th style=\"vertical-align:middle;text-align:center;\">".$value."</>";
+										}
+										$htm .= "</tr>
 									</thead>
 									<tbody>";
 									foreach ($data as $key => $value) {
@@ -654,23 +708,57 @@ class SampleAnalyzeController extends Controller
 												<td><div style=\"width:100px\">".$v['lab_result_blank']."</div></td>
 												<td><div style=\"width:100px\">".$v['lab_result_amount']."</div></td>
 												<td><div style=\"width:130px\">".$value['air_volume']."</div></td>
-												<td><div style=\"width:130px\">100</div></td>
-												<td><div style=\"width:100px\">".$v['lab_result_ug_sample']."</div></td>
-												<td><div style=\"width:100px\">".$v['lab_result_mg_sample']."</div></td>
-												<td><div style=\"width:100px\">".$v['lab_result_mg_m3']."</div></td>
-												<td><div style=\"width:100px\">".$v['lab_result_ppm']."</div></td>
-												<td><div style=\"width:130px\">".$v['lab_result_ug_g_creatinine']."</div></td>
-												<td><div style=\"width:130px\">".$v['lab_result_mg_g_creatinine']."</div></td>
-												<td><div style=\"width:100px\">".$v['lab_result_percent_w_v']."</div></td>
-												<td><div style=\"width:100px\">".$v['lab_result_percent_w_w']."</div></td>
-												<td><div style=\"width:100px\">".$v['lab_result_mg_l']."</div></td>
-												<td><div style=\"width:100px\">".$v['lab_result_ug_l']."</div></td>
-												<td><div style=\"width:100px\">".$v['lab_result_mg_kg']."</div></td>
-												<td><div style=\"width:100px\">".$v['lab_result_ug_dl']."</div></td>
-												<td><div style=\"width:100px\">".$v['lab_result_fiber_cc']."</div></td>
-												<td><div style=\"width:100px\">".$v['lab_result_dfu_m3']."</div></td>
-												<td><div style=\"width:100px\">".$v['lab_result_percent_sio2']."</div></td>
-											</tr>";
+												<td><div style=\"width:130px\">".$value['weight_sample']."</div></td>";
+
+												if (!empty($v['lab_result_ug_sample'])) {
+													$htm .= "<td><div style=\"width:100px\">".$v['lab_result_ug_sample']."</div></td>";
+												}
+												if (!empty($v['lab_result_mg_sample'])) {
+													$htm .= "<td><div style=\"width:100px\">".$v['lab_result_mg_sample']."</div></td>";
+												}
+												if (!empty($v['lab_result_mg_m3'])) {
+													$htm .= "<td><div style=\"width:100px\">".$v['lab_result_mg_m3']."</div></td>";
+												}
+												if (!empty($v['lab_result_ppm'])) {
+													$htm .= "<td><div style=\"width:100px\">".$v['lab_result_ppm']."</div></td>";
+												}
+												if (!empty($v['lab_result_ug_g_creatinine'])) {
+													$htm .= "<td><div style=\"width:130px\">".$v['lab_result_ug_g_creatinine']."</div></td>";
+												}
+												if (!empty($v['lab_result_mg_g_creatinine'])) {
+													$htm .= "<td><div style=\"width:130px\">".$v['lab_result_mg_g_creatinine']."</div></td>";
+												}
+												if (!empty($v['lab_result_percent_w_v'])) {
+													$htm .= "<td><div style=\"width:100px\">".$v['lab_result_percent_w_v']."</div></td>";
+												}
+												if (!empty($v['lab_result_percent_w_w'])) {
+													$htm .= "<td><div style=\"width:100px\">".$v['lab_result_percent_w_w']."</div></td>";
+												}
+												if (!empty($v['lab_result_mg_l'])) {
+													$htm .= "<td><div style=\"width:100px\">".$v['lab_result_mg_l']."</div></td>";
+												}
+												if (!empty($v['lab_result_ug_l'])) {
+													$htm .= "<td><div style=\"width:100px\">".$v['lab_result_ug_l']."</div></td>";
+												}
+												if (!empty($v['lab_result_mg_kg'])) {
+													$htm .= "<td><div style=\"width:100px\">".$v['lab_result_mg_kg']."</div></td>";
+												}
+												if (!empty($v['lab_result_ug_dl'])) {
+													$htm .= "<td><div style=\"width:100px\">".$v['lab_result_ug_dl']."</div></td>";
+												}
+												if (!empty($v['lab_result_fiber_cc'])) {
+													$htm .= "<td><div style=\"width:100px\">".$v['lab_result_fiber_cc']."</div></td>";
+												}
+												if (!empty($v['lab_result_dfu_m3'])) {
+													$htm .= "<td><div style=\"width:100px\">".$v['lab_result_dfu_m3']."</div></td>";
+												}
+												if (!empty($v['lab_result_percent_sio2'])) {
+													$htm .= "<td><div style=\"width:100px\">".$v['lab_result_percent_sio2']."</div></td>";
+												}
+												if (!empty($v['lab_result_ug_tube'])) {
+													$htm .= "<td><div style=\"width:100px\">".$v['lab_result_ug_tube']."</div></td>";
+												}
+											$htm .= "</tr>";
 											$i++;
 										}
 									}
