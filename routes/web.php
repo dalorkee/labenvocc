@@ -12,6 +12,7 @@ use App\Http\Controllers\{
 	StaffController,
 	SampleReceiveController,
 	SampleAnalyzeController,
+	SampleQcController,
 	UserAdvertiseController,
 	SampleUploadController,
 	HospitalController,
@@ -179,6 +180,14 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 				Route::post('result/view', 'analyzeResultView')->name('analyze.result.view');
 			});
 		});
+		Route::resource('qc', SampleQcController::class);
+		Route::controller(SampleQcController::class)->prefix('qc')->group(function() {
+			Route::get('/select/lab/no/{lab_no}/order/{id}/user/{user_id}', 'sampleSelect')->name('qc.select');
+			Route::get('/select/order/{id}/user{user_id}', 'sampleSelectDt')->name('qc.select.dt');
+			Route::post('result/view/crete', 'qcResultViewModal')->name('qc.result.view.create');
+
+
+		});
 	});
 	Route::get('/admin/home', [AdminController::class, 'index'])->name('admin.index');
 	Route::get('/users/id/{id}/edit',[UsersController::class,'edit'])->name('users.edit');
@@ -203,7 +212,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 	Route::post('fetchdata/parameter', [FetchDataController::class, 'parameter'])->name('fetchdata.parameter');
 	Route::post('fetchdata/district', [FetchDataController::class, 'district'])->name('fetchdata.district');
 	Route::post('fetchdata/subdistrict', [FetchDataController::class, 'subdistrict'])->name('fetchdata.subdistrict');
-	
+
 });
 Route::get('/user/advertise/id/{id}/detail',[UserAdvertiseController::class,'detail'])->name('user.advertise.detail');
 Route::get('/user/advertise/listall/{listall}',[UserAdvertiseController::class,'listall'])->name('user.advertise.listall');
