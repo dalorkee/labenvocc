@@ -182,8 +182,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 		});
 		Route::resource('qc', SampleQcController::class);
 		Route::controller(SampleQcController::class)->prefix('qc')->group(function() {
-			Route::get('/select/lab/no/{lab_no}/order/{id}/user/{user_id}', 'sampleSelect')->name('qc.select');
-			Route::get('/select/order/{id}/user{user_id}', 'sampleSelectDt')->name('qc.select.dt');
+			Route::get('/list/data/lab/no/{lab_no}', 'listDataByLabNo')->name('qc.list.data');
+			Route::get('/list/data/lab_no/{lab_no}/datatable', 'listDataByLabNoToDataTable')->name('qc.list.data.dt');
 			Route::post('result/view/crete', 'qcResultViewModal')->name('qc.result.view.create');
 
 

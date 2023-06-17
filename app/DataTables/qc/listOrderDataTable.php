@@ -40,7 +40,7 @@ class listOrderDataTable extends DataTable
 					return $htm;
 				})
 				->addColumn('action', function($order) {
-					return "<a href=\"".route('sample.qc.select', ['lab_no' => $order->lab_no, 'id' => $order->id, 'user_id' => $this->user_id])."\" class=\"btn btn-success btn-sm\" id=\"qc_btn\">ตรวจสอบผลการทดสอบ</a>";
+					return "<a href=\"".route('sample.qc.list.data', ['lab_no' => $order->lab_no])."\" class=\"btn btn-success btn-sm\" id=\"qc_btn\">ตรวจสอบผลการทดสอบ</a>";
 				})
 				->rawColumns(['progress', 'action']);
 		} catch (\Exception $e) {

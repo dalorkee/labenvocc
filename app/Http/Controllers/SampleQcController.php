@@ -28,23 +28,16 @@ class SampleQcController extends Controller
 		return $dataTable->with('user_id', $this->user->id)->render(view: 'apps.staff.qc.create');
 	}
 
-	protected function sampleSelect(Request $request) {
-		$data = [
-			'lab_no' => $request->lab_no,
-			'order_id' => $request->order_id,
-			'user_id' => $request->user_id,
-		];
-		return view(view: 'apps.staff.qc.sample-select', data: compact('data'));
+	protected function listDataByLabNo(Request $request) {
+		$data = ['lab_no' => $request->lab_no];
+		return view(view: 'apps.staff.qc.list-data', data: compact('data'));
 	}
 
-	protected function sampleSelectDt(Request $request) {
+	protected function listDataByLabNoToDataTable(Request $request) {
 		try {
 			if ($request->ajax()) {
 				$data = [];
-				$result = OrderSample::select('id', 'order_id', 'has_parameter', 'sample_test_no')
-					->with(['parameters' => function($query) use ($request) {
-						$query->select('id', 'order_id', 'order_sample_id', 'parameter_id', 'parameter_name', 'main_analys_user_id', 'status')->where('main_analys_user_id', $request->user_id);
-				}])->whereOrder_id($request->id)->get();
+				$result = Order::with('orderSamples', 'parameters')->whereLab_no($request->lab_no)->get();
 
 				// เช็คว่่ามีพารามิเตอร์หรือไม่ ถ้ามีสถานะต้องยังไม่ถูกเเบิก */
 				$result->each(function($item, $key) use (&$data) {
@@ -64,9 +57,9 @@ class SampleQcController extends Controller
 
 				return Datatables::of($data)
 					->addIndexColumn()
-					// ->addColumn('info', function() {
-					// 	return "<button type=\"button\" class=\"btn btn-info btn-sm btn-icon rounded-circle\" id=\"get-info\"><i class=\"fal fa-info\"></i></button>";
-					// })
+                    ->addColumn('sample_test_no', function($order_sample) {
+                        return $order_sample->sample_test_no;
+                    })
 					->addColumn('paramet', function($sample) {
 						$htm = "<ul>\n";
 						foreach ($sample->parameters as $key => $value) {
@@ -77,7 +70,7 @@ class SampleQcController extends Controller
 					})
 					->addColumn('action', function($order) {
 						return "
-						<button class=\"btn btn-success btn-sm\" id=\"btn_view_result_modal\" data-view_lno="{{ $lab_no }}" data-view_oid="{{ $order_id }}" data-view_analyze_user="{{ $main_analys_user_id }}">View Result</button>
+						<button class=\"btn btn-success btn-sm\" id=\"btn_view_result_modal\" data-view_lno=\"xx\" data-view_oid=\"yy\">View Result</button>
 						<a href=\"#\" class=\"btn btn-info btn-sm\" id=\"qc_btn\">View curve & QC</a>";
 					})
 					->rawColumns(['paramet', 'action'])

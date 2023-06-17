@@ -102,7 +102,7 @@ $(document).ready(function() {
 		deferRender: true,
 		lengthMenu: [10, 20, 40],
 		language: {'url': '/vendor/DataTables/i18n/thai.json'},
-		ajax: "{{ route('sample.qc.select.dt', ['id'=>'1', 'user_id'=>'25']) }}",
+		ajax: "{{ route('sample.qc.list.data.dt', ['id'=>'1', 'user_id'=>'25', 'lab_no'=>'0000166']) }}",
 		columns: [
 			{data: 'DT_RowIndex', name: 'DT_RowIndex', width: '6%', className: 'text-center'},
 			{data: 'sample_test_no', name: 'sample_test_no'},
