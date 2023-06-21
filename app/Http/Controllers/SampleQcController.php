@@ -83,7 +83,10 @@ class SampleQcController extends Controller
 	public function showResultModal(Request $request) {
 		try {
 			$result = OrderSample::select('id', 'order_id', 'has_parameter', 'sample_test_no', 'weight_sample', 'air_volume')
-				->with('parameters')->whereOrder_id($request->order_id)->get();
+				->with('parameters')
+				->whereOrder_id($request->order_id)
+				->whereSample_test_no($request->test_no)
+				->get();
 
 				$data = [];
 				$result->each(function($item, $key) use (&$data) {
@@ -91,7 +94,6 @@ class SampleQcController extends Controller
 						array_push($data, $item->toArray());
 					}
 				});
-
 				$chk = [];
 				foreach ($data as $key => $value) {
 					foreach ($value['parameters'] as $k => $v) {
@@ -215,7 +217,7 @@ class SampleQcController extends Controller
 													if (!empty($v['lab_result_percent_w_w'])) {
 														$htm .= "<td><div style=\"width:100px\">".$v['lab_result_percent_w_w']."</div></td>";
 													}
-													if (!empty($v['lab_result_mg_l'])) {
+													if (!empty($v['lab_result_mg_l']) || !empty($v['parameter_name'])) {
 														$htm .= "<td><div style=\"width:100px\">".$v['lab_result_mg_l']."</div></td>";
 													}
 													if (!empty($v['lab_result_ug_l'])) {

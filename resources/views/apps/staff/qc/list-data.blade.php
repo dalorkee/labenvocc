@@ -115,7 +115,6 @@ $(document).ready(function() {
 		],
 		order: [[1, 'asc']]
 	});
-
 });
 function showResultModal(btn, lab_no, order_id, test_no) {
 	$.ajax({
