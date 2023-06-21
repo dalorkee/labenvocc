@@ -184,9 +184,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 		Route::controller(SampleQcController::class)->prefix('qc')->group(function() {
 			Route::get('/list/data/lab/no/{lab_no}', 'listDataByLabNo')->name('qc.list.data');
 			Route::get('/list/data/lab_no/{lab_no}/datatable', 'listDataByLabNoToDataTable')->name('qc.list.data.dt');
-			Route::post('result/view/crete', 'qcResultViewModal')->name('qc.result.view.create');
-
-
+			Route::post('show/result/modal', 'showResultModal')->name('qc.result.modal');
 		});
 	});
 	Route::get('/admin/home', [AdminController::class, 'index'])->name('admin.index');
@@ -221,3 +219,4 @@ Route::controller(PrintBundleController::class)->group(function() {
 	Route::get('/print/bank_payment', 'payment');
 	Route::get('/print/sample_env_report', 'envreport');
 });
+
