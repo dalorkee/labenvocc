@@ -40,7 +40,7 @@ class listOrderDataTable extends DataTable
 					return $htm;
 				})
 				->addColumn('action', function($order) {
-					return "<a href=\"".route('sample.qc.list.data', ['lab_no' => $order->lab_no])."\" class=\"btn btn-success btn-sm\" id=\"qc_btn\">ตรวจสอบผลการทดสอบ</a>";
+					return "<a href=\"".route('sample.qc.list.data', ['order_id'=>$order->id, 'lab_no' => $order->lab_no])."\" class=\"btn btn-success btn-sm\" id=\"qc_btn\">ตรวจสอบผลการทดสอบ</a>";
 				})
 				->rawColumns(['progress', 'action']);
 		} catch (\Exception $e) {
@@ -66,9 +66,7 @@ class listOrderDataTable extends DataTable
 				->columns($this->getColumns())
 				->minifiedAjax()
 				->responsive(true)
-				->parameters([
-					'language' => ['url' => url('/vendor/DataTables/i18n/thai.json')],
-				]);
+				->parameters(['language' => ['url' => url('/vendor/DataTables/i18n/thai.json')]]);
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
 		}

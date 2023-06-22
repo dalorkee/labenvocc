@@ -70,10 +70,10 @@
 						<div class="relative" style="height: 50px;">
 							<div class="absolute top-0 left-0">
 								<button type="button" class="btn btn-primary"><i class="fal fa-home"></i> กลับไปหน้าหลัก</button>
-								<button type="button" class="btn btn-info"><i class="fal fa-eye"></i> View All</button>
+								<button type="button" class="btn btn-info" onclick="showAllResultModal('{{ $data['order_id'] }}','{{ $data['lab_no'] }}');"><i class="fal fa-eye"></i> View All</button>
 							</div>
 							<div class="absolute top-0 right-0">
-								<button type="button" class="btn btn-success"><i class="fal fa-check-circle"></i> Approve</button>
+								<button type="button" class="btn btn-success" data-lab_no="0000166"><i class="fal fa-check-circle"></i> Approve</button>
 								<button type="button" id="ijet" class="btn btn-danger"><i class="fal fa-minus-circle"></i> Reject</button>
 							</div>
 						</div>
@@ -89,6 +89,8 @@
 	</div>
 </div>
 <div id="result-modal-wrapper"></div>
+<div id="result-curve-modal-wrapper"></div>
+<div id="result-all-modal-wrapper"></div>
 @endsection
 @push('scripts')
 <script type="text/javascript" src="{{ URL::asset('assets/js/datagrid/datatables/datatables.bundle.js') }}"></script>
@@ -123,10 +125,44 @@ function showResultModal(btn, lab_no, order_id, test_no) {
 		url: "{{ route('sample.qc.result.modal') }}",
 		dataType: "html",
 		data: {btn:btn, lab_no:lab_no, order_id:order_id, test_no:test_no},
+		beforeSend: function() {$(".loader").show()},
 		success: function(data) {
 			$('#result-modal-wrapper').html(data);
 			$('#view-modal-lg-center').modal('show');
 		},
+		complete: function() {$('.loader').hide()},
+		error: function(jqXhr, textStatus, errorMessage) {alert('Error: ' + jqXhr.status + errorMessage)}
+	});
+}
+function showCurveResultModal(order_id, lab_no) {
+	$.ajax({
+		headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+		type: "POST",
+		url: "{{ route('sample.qc.result.modal.curve') }}",
+		dataType: "html",
+		data: {order_id:order_id, lab_no:lab_no},
+		beforeSend: function() {$(".loader").show()},
+		success: function(data) {
+			$('#result-curve-modal-wrapper').html(data);
+			$('#view-curve-modal-lg-center').modal('show');
+		},
+		complete: function() {$('.loader').hide()},
+		error: function(jqXhr, textStatus, errorMessage) {alert('Error: ' + jqXhr.status + errorMessage)}
+	});
+}
+function showAllResultModal(order_id, lab_no) {
+	$.ajax({
+		headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+		type: "POST",
+		url: "{{ route('sample.qc.result.modal.all') }}",
+		dataType: "html",
+		data: {order_id:order_id, lab_no:lab_no},
+		beforeSend: function() {$(".loader").show()},
+		success: function(data) {
+			$('#result-all-modal-wrapper').html(data);
+			$('#view-all-modal-lg-center').modal('show');
+		},
+		complete: function() {$('.loader').hide()},
 		error: function(jqXhr, textStatus, errorMessage) {alert('Error: ' + jqXhr.status + errorMessage)}
 	});
 }

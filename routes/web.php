@@ -182,9 +182,11 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 		});
 		Route::resource('qc', SampleQcController::class);
 		Route::controller(SampleQcController::class)->prefix('qc')->group(function() {
-			Route::get('/list/data/lab/no/{lab_no}', 'listDataByLabNo')->name('qc.list.data');
+			Route::get('/list/data/order_id/{order_id}/lab_no/{lab_no}', 'listDataByLabNo')->name('qc.list.data');
 			Route::get('/list/data/lab_no/{lab_no}/datatable', 'listDataByLabNoToDataTable')->name('qc.list.data.dt');
-			Route::post('show/result/modal', 'showResultModal')->name('qc.result.modal');
+			Route::post('modal/show/result', 'showResultModal')->name('qc.result.modal');
+			Route::post('modal/show/result/curve', 'showCurveResultModal')->name('qc.result.modal.curve');
+			Route::post('modal/show/result/all', 'showAllResultModal')->name('qc.result.modal.all');
 		});
 	});
 	Route::get('/admin/home', [AdminController::class, 'index'])->name('admin.index');
