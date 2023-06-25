@@ -167,9 +167,8 @@ class SampleAnalyzeController extends Controller
 			}
 
 			/* Save to db */
-			/* Threat type => ประเภทตัวอย่าง = กรด ด่าง/โลหะอัลคาไลน์, จุลชีววิทยา, ฝุ่นซิลิก้า, สารอินทรีย์ระเหย, แร่ใยหิน, โลหะหนัก, อื่นๆ ... */
 			foreach ($data as $key => $value) {
-				$order_sample_parameter = OrderSampleParameter::findOr($value['order_sample_parameter_id'], fn () => Log::error('ไม่พบข้อมูล OrderSampleParameter รหัส: '.$value['order_sample_parameter_id']));
+				$order_sample_parameter = OrderSampleParameter::find($value['order_sample_parameter_id']);
 				switch($order_sample_parameter->threat_type_id) {
 					case 1: // กรด ด่าง/โลหะอัลคาไลน์
 						switch ($order_sample_parameter->sample_character_id) {
@@ -210,53 +209,25 @@ class SampleAnalyzeController extends Controller
 					case 4: // สารอินทรีย์ระเหย
 						switch ($order_sample_parameter->sample_character_id) {
 							case 1: // สารละลาย
-								/*
-								if (%VOC) {
-									ใช้อีกสูตร
-								}
-								*/
+								// มีอีกตัวคือ %VOC ใช้ %W/V
 								$mg_l = $value['lab_result_amount'];
 								$ug_l = ($value['lab_result_amount']*1000);
-								$result = [
-									'default' => ['mg_l' => $mg_l],
-									'choice_1' => ['ug_l' => $ug_l],
-									'choice_2' => []
-								];
 								break;
 							case 2: // ดิน
 								$ug_sample = ($value['weight_sample'] > 0) ? ($order_sample_parameter->lab_result_amount*1000)/$value['weight_sample'] : 0.00;
 								$mg_kg = ($value['weight_sample'] > 0) ? ($order_sample_parameter->lab_result_amount*1000)/$value['weight_sample'] : 0.00;
-								$result = [
-									'default' => ['ug_sample' => $ug_sample],
-									'choice_1' => ['mg_kg' => $mg_kg],
-									'choice_2' => []
-								];
 								break;
 							case 3: // น้ำ
 								$mg_l = $value['lab_result_amount'];
-								$result = [
-									'default' => ['mg_l' => $mg_l],
-									'choice_1' => [],
-									'choice_2' => []
-								];
 								break;
 							case 4: // น้ำมัน
 								$mg_l = $value['lab_result_amount'];
 								$ug_l = ($value['lab_result_amount']*1000);
-								$result = [
-									'default' => ['mg_l' => $mg_l],
-									'choice_1' => ['ug_l' => $ug_l],
-									'choice_2' => []
-								];
 								break;
 							case 5: // อากาศ
 								$mg_l = $value['lab_result_amount'];
 								$ug_tube = $value['lab_result_amount'];
-								$result = [
-									'default' => ['mg_l' => $mg_l],
-									'choice_1' => ['ug_tube' => $ug_tube],
-									'choice_2' => []
-								];
+
 								break;
 							case 6: // ปัสสาวะ
 								$tmp = 6;
@@ -381,29 +352,22 @@ class SampleAnalyzeController extends Controller
 				$order_sample_parameter->lab_dilution = $value['lab_dilution'];
 				$order_sample_parameter->lab_result = $value['lab_result'];
 
-				// $result = [
-				//     'default' => ['mg_l' => $mg_l],
-				//     'choice_1' => ['ug_l' => $ug_l],
-				//     'choice_2' => []
-				// ];
-				if (count($result['default']) > 0) {
-					foreach ($result['default'] as $key => $value) {
-						$order_sample_parameter->lab_result_default = $value;
-						$order_sample_parameter->lab_result_default_label = str_replace('_', '/', $key);
-					}
-				}
-				if (count($result['choice_1']) > 0) {
-					foreach ($result['choice_1'] as $key => $value) {
-						$order_sample_parameter->lab_result_choice_1 = $value;
-						$order_sample_parameter->lab_result_choice_1_label = str_replace('_', '/', $key);
-					}
-				}
-				if (count($result['choice_2']) > 0) {
-					foreach ($result['choice_2'] as $key => $value) {
-						$order_sample_parameter->lab_result_choice_2 = $value;
-						$order_sample_parameter->lab_result_choice_2_label = str_replace('_', '/', $key);
-					}
-				}
+				$order_sample_parameter->lab_result_ug_sample = $ug_sample ?? null;
+				$order_sample_parameter->lab_result_mg_sample = $mg_sample ?? null;
+				$order_sample_parameter->lab_result_mg_m3 = $mg_m3 ?? null;
+				$order_sample_parameter->lab_result_ppm = $ppm ?? null;
+				$order_sample_parameter->lab_result_ug_g_creatinine = $ug_g_creatinine ?? null;
+				$order_sample_parameter->lab_result_mg_g_creatinine = $mg_g_creatinine ?? null;
+				$order_sample_parameter->lab_result_percent_w_v = $percent_w_v ?? null;
+				$order_sample_parameter->lab_result_percent_w_w = $percent_w_w ?? null;
+				$order_sample_parameter->lab_result_mg_l = $mg_l ?? null;
+				$order_sample_parameter->lab_result_ug_l = $ug_l ?? null;
+				$order_sample_parameter->lab_result_ug_tube = $ug_tube ?? null;
+				$order_sample_parameter->lab_result_mg_kg = $mg_kg ?? null;
+				$order_sample_parameter->lab_result_ug_dl = $ug_dl ?? null;
+				$order_sample_parameter->lab_result_fiber_cc = $fiber_cc ?? null;
+				$order_sample_parameter->lab_result_dfu_m3 = $dfu_m3 ?? null;
+				$order_sample_parameter->lab_result_percent_sio2 = $percent_sio2 ?? null;
 				$order_sample_parameter->save();
 			};
 			return redirect()->back()->with('success', 'บันทึกข้อมูลสำเร็จแล้ว');

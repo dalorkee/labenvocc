@@ -12,6 +12,7 @@ use App\Http\Controllers\{
 	StaffController,
 	SampleReceiveController,
 	SampleAnalyzeController,
+	SampleQcController,
 	UserAdvertiseController,
 	SampleUploadController,
 	HospitalController,
@@ -179,6 +180,14 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 				Route::post('result/view', 'analyzeResultView')->name('analyze.result.view');
 			});
 		});
+		Route::resource('qc', SampleQcController::class);
+		Route::controller(SampleQcController::class)->prefix('qc')->group(function() {
+			Route::get('/list/data/order_id/{order_id}/lab_no/{lab_no}', 'listDataByLabNo')->name('qc.list.data');
+			Route::get('/list/data/lab_no/{lab_no}/datatable', 'listDataByLabNoToDataTable')->name('qc.list.data.dt');
+			Route::post('modal/show/result', 'showResultModal')->name('qc.result.modal');
+			Route::post('modal/show/result/curve', 'showCurveResultModal')->name('qc.result.modal.curve');
+			Route::post('modal/show/result/all', 'showAllResultModal')->name('qc.result.modal.all');
+		});
 	});
 	Route::get('/admin/home', [AdminController::class, 'index'])->name('admin.index');
 	Route::get('/users/id/{id}/edit',[UsersController::class,'edit'])->name('users.edit');
@@ -212,3 +221,4 @@ Route::controller(PrintBundleController::class)->group(function() {
 	Route::get('/print/bank_payment', 'payment');
 	Route::get('/print/sample_env_report', 'envreport');
 });
+

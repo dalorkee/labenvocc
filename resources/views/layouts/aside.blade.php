@@ -123,7 +123,7 @@
 						</li>
 					</ul>
 				</li>
-				<li class="{{ (Request::is('*sample/analyze*'))  ? 'active open' : '' }}">
+				<li class="{{ (Request::is('*sample/analyze*') || Request::is('*sample/qc*'))  ? 'active open' : '' }}">
 					<a href="#" title="งานตรวจวิเคราะห์" data-filter-tags="analyze">
 						<i class="fal fa-flask"></i>
 						<span class="nav-link-text">งานตรวจวิเคราะห์</span>
@@ -134,17 +134,17 @@
 								<span class="nav-link-text" data-i18n="nav.plugins_plugins_faq">งานวิเคราะห์</span>
 							</a>
 						</li>
-                        {{-- <li class="{{ (Request::is('*sample/analyze/result'))  ? 'active' : '' }}">
-							<a href="{{ route('sample.analyze.create') }}" title="ผลการทดสอบ" data-filter-tags="sample_analyze">
-								<span class="nav-link-text" data-i18n="nav.plugins_plugins_faq">ผลการทดสอบ</span>
+						<li class="{{ (Request::is('*sample/qc*'))  ? 'active' : '' }}">
+							<a href="{{ route('sample.qc.create') }}" title="งานควบคุมคุณภาพ" data-filter-tags="sample_qc">
+								<span class="nav-link-text" data-i18n="nav.plugins_plugins_faq">งานควบคุมคุณภาพ</span>
 							</a>
-						</li> --}}
-                        <li class="{{ (Request::is('*sample/analyze/report'))  ? 'active' : '' }}">
+						</li>
+						<li class="{{ (Request::is('*sample/analyze/report'))  ? 'active' : '' }}">
 							<a href="{{ route('sample.analyze.create') }}" title="ใบรายงานผล" data-filter-tags="sample_analyze">
 								<span class="nav-link-text" data-i18n="nav.plugins_plugins_faq">ใบรายงานผล</span>
 							</a>
 						</li>
-                        <li class="{{ (Request::is('*sample/analyze/history'))  ? 'active' : '' }}">
+						<li class="{{ (Request::is('*sample/analyze/history'))  ? 'active' : '' }}">
 							<a href="{{ route('sample.analyze.create') }}" title="ประวัติการวิเคราะห์" data-filter-tags="sample_analyze">
 								<span class="nav-link-text" data-i18n="nav.plugins_plugins_faq">ประวัติการวิเคราะห์</span>
 							</a>
