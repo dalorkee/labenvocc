@@ -598,7 +598,7 @@ class SampleAnalyzeController extends Controller
 	}
 
 	protected function analyzeResultViewModal(Request $request) {
-		$lab_no = $request->view_lab_no;
+		// $lab_no = $request->view_lab_no;
 		$result = OrderSample::select('id', 'order_id', 'has_parameter', 'sample_test_no', 'weight_sample', 'air_volume')
 			->with(['parameters' => function($query) use ($request) {
 				$query->select('*')->where('main_analys_user_id', $request->view_analyze_user);

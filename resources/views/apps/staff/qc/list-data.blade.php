@@ -89,8 +89,6 @@
 	</div>
 </div>
 <div id="result-modal-wrapper"></div>
-<div id="result-curve-modal-wrapper"></div>
-<div id="result-all-modal-wrapper"></div>
 @endsection
 @push('scripts')
 <script type="text/javascript" src="{{ URL::asset('assets/js/datagrid/datatables/datatables.bundle.js') }}"></script>
@@ -99,6 +97,9 @@
 <script type="text/javascript">
 $(document).ready(function() {
 	$.ajaxSetup({headers:{'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')}});
+	let route = "{{ route('sample.qc.list.data.dt', ['order_id'=>':order_id', 'lab_no'=>':lab_no']) }}";
+	route = route.replace(":order_id", "{{ $data['order_id'] }}");
+	route = route.replace(":lab_no", "{{ $data['lab_no'] }}");
 	var table = $('#tbl_data').DataTable({
 		processing: true,
 		serverSide: true,
@@ -108,7 +109,7 @@ $(document).ready(function() {
 		deferRender: true,
 		lengthMenu: [10, 20, 40],
 		language: {'url': '/vendor/DataTables/i18n/thai.json'},
-		ajax: "{{ route('sample.qc.list.data.dt', ['id'=>'1', 'user_id'=>'25', 'lab_no'=>'0000166']) }}",
+		ajax: route,
 		columns: [
 			{data: 'DT_RowIndex', name: 'DT_RowIndex', width: '6%', className: 'text-center'},
 			{data: 'sample_test_no', name: 'sample_test_no'},
@@ -134,16 +135,16 @@ function showResultModal(btn, lab_no, order_id, test_no) {
 		error: function(jqXhr, textStatus, errorMessage) {alert('Error: ' + jqXhr.status + errorMessage)}
 	});
 }
-function showCurveResultModal(order_id, lab_no) {
+function showCurveAndQcResultModal(btn, lab_no, order_id, test_no) {
 	$.ajax({
 		headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
 		type: "POST",
 		url: "{{ route('sample.qc.result.modal.curve') }}",
 		dataType: "html",
-		data: {order_id:order_id, lab_no:lab_no},
+		data: {btn:btn, lab_no:lab_no, order_id:order_id, test_no:test_no},
 		beforeSend: function() {$(".loader").show()},
 		success: function(data) {
-			$('#result-curve-modal-wrapper').html(data);
+			$('#result-modal-wrapper').html(data);
 			$('#view-curve-modal-lg-center').modal('show');
 		},
 		complete: function() {$('.loader').hide()},
@@ -159,7 +160,7 @@ function showAllResultModal(order_id, lab_no) {
 		data: {order_id:order_id, lab_no:lab_no},
 		beforeSend: function() {$(".loader").show()},
 		success: function(data) {
-			$('#result-all-modal-wrapper').html(data);
+			$('#result-modal-wrapper').html(data);
 			$('#view-all-modal-lg-center').modal('show');
 		},
 		complete: function() {$('.loader').hide()},

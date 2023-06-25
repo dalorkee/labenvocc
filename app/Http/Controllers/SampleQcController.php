@@ -2,9 +2,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\{Str,Arr};
 use Illuminate\Support\Facades\{Auth,Storage,File,Log};
 use App\DataTables\qc\{listOrderDataTable};
-use App\Models\{Order,OrderSample,OrderSampleParameter};
+use App\Models\{Order,OrderSample,OrderSampleParameter,FileUpload};
 use Yajra\DataTables\Facades\DataTables;
 
 class SampleQcController extends Controller
@@ -66,8 +67,8 @@ class SampleQcController extends Controller
 					})
 					->addColumn('btn', function($item) {
 						return "
-						<button type=\"button\" class=\"btn btn-info btn-sm\" onClick=\"showResultModal('rs_btn', '".$item['lab_no']."','".$item['order_id']."','".$item['sample_test_no']."');\">View result</button>
-						<button type=\"button\" class=\"btn btn-info btn-sm\" onClick=\"showCurveResultModal('rs_btn', '".$item['lab_no']."','".$item['order_id']."','".$item['sample_test_no']."');\">View curve & QC</button>";
+						<button type=\"button\" class=\"btn btn-info btn-sm\" onClick=\"showResultModal('show_result_btn', '".$item['lab_no']."','".$item['order_id']."','".$item['sample_test_no']."');\">View result</button>
+						<button type=\"button\" class=\"btn btn-info btn-sm\" onClick=\"showCurveAndQcResultModal('show_file_btn', '".$item['lab_no']."','".$item['order_id']."','".$item['sample_test_no']."');\">View curve & QC</button>";
 					})
 					->rawColumns(['paramet', 'btn'])
 					->make(true);
@@ -262,8 +263,34 @@ class SampleQcController extends Controller
 		}
 	}
 
-	public function showCurveResultModal(Request $request) {
+	protected function showCurveAndQcResultModal(Request $request) {
 		try {
+			$order_id = Arr::wrap(null);
+			$file_id = Arr::wrap(null);
+			$orders = Order::select('id', 'analyze_result_files')->whereLab_no($request->lab_no)->get();
+			$orders->each(function($item, $key) use (&$order_id, &$file_id) {
+				array_push($order_id, $item['id']);
+				if (!is_null($item['analyze_result_files']) && !empty($item['analyze_result_files'])) {
+					$exp = Str::of($item['analyze_result_files'])->explode(',');
+					$exp->each(function($exp_item, $exp_key) use (&$file_id) {
+						array_push($file_id, $exp_item);
+					});
+				}
+			});
+			$order_sample_parameter = OrderSampleParameter::select('id', 'order_id', 'lab_result_files')?->whereIn('order_id', $order_id)->get();
+			if ($order_sample_parameter->count() > 0) {
+				$order_sample_parameter->each(function($item, $key) use (&$file_id) {
+					if (!is_null($item->lab_result_files) && !empty($item->lab_result_files)) {
+						array_push($file_id, $item->lab_result_files);
+					}
+				});
+			}
+
+			/* get files from files table */
+			$files = FileUpload::whereIn('id', $file_id)->get()->toArray();
+
+			// dd($files);
+
 			$htm = "
 			<div class=\"modal fade modal-fullscreen font-prompt\" id=\"view-curve-modal-lg-center\" data-keyboard=\"false\" data-backdrop=\"static\" tabindex=\"-1\" role=\"dialog\" aria-hidden=\"true\">
 				<form class=\"modal-dialog modal-dialog-centered\" action=\"".route('sample.analyze.result.upload.file')."\" method=\"POST\" enctype=\"multipart/form-data\" role=\"document\">
@@ -276,11 +303,48 @@ class SampleQcController extends Controller
 						</div>
 						<div class=\"modal-body\">
 						<div class=\"row\">
-							<div class=\"col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3\">
-								<div class=\"table-responsive\">
 
+
+							<div id=\"carouselExampleKitchenSink\" class=\"carousel slide\" data-ride=\"carousel\">
+								<ol class=\"carousel-indicators\">
+									<li data-target=\"#carouselExampleKitchenSink\" data-slide-to=\"0\" class=\"\"></li>
+									<li data-target=\"#carouselExampleKitchenSink\" data-slide-to=\"1\" class=\"active\"></li>
+									<li data-target=\"#carouselExampleKitchenSink\" data-slide-to=\"2\" class=\"\"></li>
+								</ol>
+								<div class=\"carousel-inner\">
+									<div class=\"carousel-item\">
+										<img class=\"d-block w-100\" src=\"img/demo/relax-full.jpg\" alt=\"First slide\">
+										<div class=\"carousel-caption d-none d-md-block\">
+											<h5 class=\"color-white opacity-70\">First slide label</h5>
+											<p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
+										</div>
+									</div>
+									<div class=\"carousel-item active\">
+										<img class=\"d-block w-100\" src=\"img/demo/peace-full.jpg\" alt=\"Second slide\">
+										<div class=\"carousel-caption d-none d-md-block\">
+											<h5 class=\"color-white opacity-70\">Second slide label</h5>
+											<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+										</div>
+									</div>
+									<div class=\"carousel-item\">
+										<img class=\"d-block w-100\" src=\"img/demo/sea-full.jpg\" alt=\"Third slide\">
+										<div class=\"carousel-caption d-none d-md-block\">
+											<h5 class=\"color-white opacity-70\">Third slide label</h5>
+											<p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>
+										</div>
+									</div>
 								</div>
+								<a class=\"carousel-control-prev\" href=\"#carouselExampleKitchenSink\" role=\"button\" data-slide=\"prev\">
+									<span class=\"carousel-control-prev-icon\" aria-hidden=\"true\"></span>
+									<span class=\"sr-only\">Previous</span>
+								</a>
+								<a class=\"carousel-control-next\" href=\"#carouselExampleKitchenSink\" role=\"button\" data-slide=\"next\">
+									<span class=\"carousel-control-next-icon\" aria-hidden=\"true\"></span>
+									<span class=\"sr-only\">Next</span>
+								</a>
 							</div>
+
+
 						</div>
 						<div class=\"modal-footer\">
 							<button type=\"button\" class=\"btn btn-info\" data-dismiss=\"modal\" style=\"width: 120px\">Close</button>
