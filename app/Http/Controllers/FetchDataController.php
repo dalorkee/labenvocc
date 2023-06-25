@@ -4,7 +4,15 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\{Auth, Log};
-use App\Models\{Order, User, SampleCharacter, RefParameter, Province, District, SubDistrict};
+use App\Models\{
+	OrderSampleParameter,
+	User,
+	SampleCharacter,
+	RefParameter,
+	Province,
+	District,
+	SubDistrict
+};
 
 class FetchDataController extends Controller
 {
@@ -28,7 +36,7 @@ class FetchDataController extends Controller
 		return view(view: 'fetchdata.index', data: compact('provinces'));
 	}
 
-	public function sampletype(Request $request, SampleCharacter $sample_type): string {
+	public function sampleType(Request $request, SampleCharacter $sample_type): string {
 		$sample_type = $sample_type
 			->select('id', 'sample_character_name')
 				->when($request->id == "1", function($c) use ($request){
@@ -39,15 +47,15 @@ class FetchDataController extends Controller
 				})
 			->get()
 			->keyBy('id');
-		if($request->id == "0"){
-			$html = "<option value=\"\">เลือกทั้งหมด</option>";
-		}
-		elseif($request->id > "0"){
+		if($request->id != ""){
 			$html = "<option value=\"\">เลือก</option>";
 			foreach ($sample_type as $key => $val) {
 				$html .= "<option value=\"".$key."\">".$val['sample_character_name']."</option>";
 			}
-		}		
+		}	
+		else {
+			$html = "<option value=\"\">เลือก</option>";
+		}	
 		return $html;
 	}
 
@@ -76,16 +84,16 @@ class FetchDataController extends Controller
 					return $c->where('threat_type_id', $request->id);
 				})
 			->get()
-			->keyBy('id');
-		if($request->id == "0"){
-			$html = "<option value=\"\">เลือกทั้งหมด</option>";
-		}
-		elseif($request->id > "0"){
+			->keyBy('id');		
+		if($request->id != ""){
 			$html = "<option value=\"\">เลือก</option>";
 			foreach ($threat_type as $key => $val) {
 				$html .= "<option value=\"".$key."\">".$val['parameter_name']."</option>";
 			}
-		}		
+		}
+		else{
+			$html = "<option value=\"\">เลือก</option>";
+		}
 		return $html;
 	}
 
@@ -96,7 +104,7 @@ class FetchDataController extends Controller
 			->get()
 			->keyBy('district_id');
 		if($request->id >= "0"){
-			$html = "<option value=\"\">เลือกทั้งหมด</option>";
+			$html = "<option value=\"0\">เลือกทั้งหมด</option>";
 			foreach ($district as $key => $val) {
 				$html .= "<option value=\"".$key."\">".$val['district_name']."</option>";
 			}
@@ -104,18 +112,71 @@ class FetchDataController extends Controller
 		return $html;
 	}
 
-	public function SubDistrict(Request $request, SubDistrict $sub_district): string {
+	public function subDistrict(Request $request, SubDistrict $sub_district): string {
 		$sub_district = $sub_district
 			->select('sub_district_id', 'sub_district_name')
 			->where('district_id', $request->id)
 			->get()
 			->keyBy('sub_district_id');
 		if($request->id >= "0"){
-			$html = "<option value=\"\">เลือกทั้งหมด</option>";
+			$html = "<option value=\"0\">เลือกทั้งหมด</option>";
 			foreach ($sub_district as $key => $val) {
 				$html .= "<option value=\"".$key."\">".$val['sub_district_name']."</option>";
 			}
 		}		
 		return $html;
+	}
+
+	public function dataFetch(Request $request) {
+		$this->validate($request,[
+			'sample_type'=>'required',
+			'sample_character'=>'required',
+			'type_of_work'=>'required',
+			'original_threat'=>'required_if:sample_type,==,1',
+			'factory_type'=>'required_if:sample_type,==,2',
+			'parameter_group'=>'required',
+			'parameter'=>'required',
+			'province'=>'required',
+			'district'=>'required',
+			'sub_district'=>'required',
+			'date_start'=>'required',
+			'date_end'=>'required',
+			]);
+		if($request->sample_type == '1'){
+			// dd($request);
+			$bio_order = OrderSampleParameter::select(
+				'order_sample_parameter.sample_type_name',
+				'order_sample_parameter.sample_character_name',
+				'order_sample.sample_test_no',
+				'order_sample.firstname',
+				'order_sample.lastname',
+				'order_sample.age_year',
+				'orders.type_of_work_name',
+				'order_sample.origin_threat_name',
+				'order_sample_parameter.threat_type_name',
+				'order_sample_parameter.parameter_name',
+				'order_sample.sample_location_place_province_name',
+				'order_sample.sample_location_place_district_name',
+				'order_sample.sample_location_place_sub_district_name',
+				'order_sample.sample_receive_date'
+			)
+			->join('orders', 'orders.id', '=' ,'order_sample_parameter.order_id')
+			->join('order_sample','order_sample.id','=','order_sample_parameter.order_sample_id')
+			// ->where('order_sample_parameter.sample_type_id', '=', $request->sample_type)
+			// ->where('order_sample_parameter.sample_character_id', $request->sample_character)
+			// ->where('orders.type_of_work', $request->type_of_work)
+			// ->where('order_sample.origin_threat_id', $request->original_threat)
+			// ->where('order_sample_parameter.threat_type_id', $request->parameter_group)
+			// ->where('order_sample_parameter.parameter_id', $request->parameter)
+			// ->where('order_sample.sample_location_place_province', $request->province)
+			// ->where('order_sample.sample_location_place_district', $request->district)
+			// ->where('order_sample.sample_location_place_sub_district', $request->sub_district)
+			->whereBetween('order_sample.sample_receive_date', [$request->date_start, $request->date_end])
+			->get();
+			dd($bio_order);
+		}
+		elseif($request->sample_type=='2'){
+			dd('this is 2');
+		}
 	}
 }
