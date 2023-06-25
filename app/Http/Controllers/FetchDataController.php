@@ -127,7 +127,7 @@ class FetchDataController extends Controller
 		return $html;
 	}
 
-	public function dataFetch(Request $request): object {
+	public function dataFetch(Request $request) {
 		$this->validate($request,[
 			'sample_type'=>'required',
 			'sample_character'=>'required',
@@ -142,22 +142,38 @@ class FetchDataController extends Controller
 			'date_start'=>'required',
 			'date_end'=>'required',
 			]);
-		if($request->sample_type=='1'){
-			$order = OrderSampleParameter::join('order', 'orders.id', '=' ,'order_sample_parameter.order_id')
+		if($request->sample_type == '1'){
+			// dd($request);
+			$bio_order = OrderSampleParameter::select(
+				'order_sample_parameter.sample_type_name',
+				'order_sample_parameter.sample_character_name',
+				'order_sample.sample_test_no',
+				'order_sample.firstname',
+				'order_sample.lastname',
+				'order_sample.age_year',
+				'orders.type_of_work_name',
+				'order_sample.origin_threat_name',
+				'order_sample_parameter.threat_type_name',
+				'order_sample_parameter.parameter_name',
+				'order_sample.sample_location_place_province_name',
+				'order_sample.sample_location_place_district_name',
+				'order_sample.sample_location_place_sub_district_name',
+				'order_sample.sample_receive_date'
+			)
+			->join('orders', 'orders.id', '=' ,'order_sample_parameter.order_id')
 			->join('order_sample','order_sample.id','=','order_sample_parameter.order_sample_id')
-			->where('order_sample_parameter.sample_type_id',$request->sample_type)
-			->where('order_sample_parameter.sample_character_id',$request->sample_character)
-			->where('orders.type_of_work',$request->type_of_work)
-			->where('order_sample.origin_threat_id',$request->original_threat)
-			->where('order_sample_parameter.threat_type_id',$request->parameter_group)
-			->where('order_sample_parameter.parameter_id',$request->parameter)
-			->where('order_sample.sample_location_place_province')
-			->where('order_sample.sample_location_place_district')
-			->where('order_sample.sample_location_place_sub_district')
-			->where('order_sample.sample_receive_date','>=',$request->date_start)
-			->where('order_sample.sample_receive_date','<=',$request->date_end)
+			// ->where('order_sample_parameter.sample_type_id', '=', $request->sample_type)
+			// ->where('order_sample_parameter.sample_character_id', $request->sample_character)
+			// ->where('orders.type_of_work', $request->type_of_work)
+			// ->where('order_sample.origin_threat_id', $request->original_threat)
+			// ->where('order_sample_parameter.threat_type_id', $request->parameter_group)
+			// ->where('order_sample_parameter.parameter_id', $request->parameter)
+			// ->where('order_sample.sample_location_place_province', $request->province)
+			// ->where('order_sample.sample_location_place_district', $request->district)
+			// ->where('order_sample.sample_location_place_sub_district', $request->sub_district)
+			->whereBetween('order_sample.sample_receive_date', [$request->date_start, $request->date_end])
 			->get();
-			dd($order);
+			dd($bio_order);
 		}
 		elseif($request->sample_type=='2'){
 			dd('this is 2');
