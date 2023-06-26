@@ -19,6 +19,7 @@
 	table.dataTable thead .dt-checkboxes-select-all {text-align: center}
 	div.dataTables_wrapper span.select-info,
 	div.dataTables_wrapper span.select-item {margin-left: 0.5em}
+    ol.carousel-indicators li {background:#bb1bf4!important; width:18px; height: 0px;}
 	@media screen and (max-width: 640px) {div.dataTables_wrapper span.select-info,div.dataTables_wrapper span.select-item {margin-left: 0;display: block}}
 	</style>
 @endsection
@@ -146,7 +147,7 @@ function showCurveAndQcResultModal(btn, lab_no, order_id, test_no) {
 		beforeSend: function() {$(".loader").show()},
 		success: function(data) {
 			$('#result-modal-wrapper').html(data);
-			$('#view-curve-modal-lg-center').modal('show');
+			$('#view-curve-modal').modal('show');
 		},
 		complete: function() {$('.loader').hide()},
 		error: function(jqXhr, textStatus, errorMessage) {alert('Error: ' + jqXhr.status + errorMessage)}

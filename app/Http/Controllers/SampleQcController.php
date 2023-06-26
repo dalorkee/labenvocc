@@ -265,9 +265,12 @@ class SampleQcController extends Controller
 
 	protected function showCurveAndQcResultModal(Request $request) {
 		try {
+
 			$order_id = Arr::wrap(null);
 			$file_id = Arr::wrap(null);
-			$orders = Order::select('id', 'analyze_result_files')->whereLab_no($request->lab_no)->get();
+			$data = Arr::wrap(null);
+
+			$orders = Order::select('id', 'analyze_result_files')?->whereId($request->order_id)?->whereLab_no($request->lab_no)->get();
 			$orders->each(function($item, $key) use (&$order_id, &$file_id) {
 				array_push($order_id, $item['id']);
 				if (!is_null($item['analyze_result_files']) && !empty($item['analyze_result_files'])) {
@@ -277,23 +280,31 @@ class SampleQcController extends Controller
 					});
 				}
 			});
-			$order_sample_parameter = OrderSampleParameter::select('id', 'order_id', 'lab_result_files')?->whereIn('order_id', $order_id)->get();
-			if ($order_sample_parameter->count() > 0) {
-				$order_sample_parameter->each(function($item, $key) use (&$file_id) {
-					if (!is_null($item->lab_result_files) && !empty($item->lab_result_files)) {
-						array_push($file_id, $item->lab_result_files);
+
+			$order_sample = OrderSample::select('id', 'order_id', 'sample_test_no')
+				?->with('parameters', function($query) {
+					$query->select('id', 'order_id', 'order_sample_id', 'lab_result_files');
+				})
+				?->whereSample_test_no($request->test_no)
+				?->get();
+
+			$order_sample->each(function($item, $key) use ($file_id, &$data) {
+				$tmp['order_id'] = $item->order_id;
+				$tmp['sample_test_no'] = $item->sample_test_no;
+				$tmp['file_id'] = $file_id;
+				$lab_result_files_coll = $item->parameters?->where('order_sample_id', $item->id)?->pluck('lab_result_files');
+				foreach($lab_result_files_coll as $key => $value) {
+					if (!is_null($value) && !empty($value)) {
+						array_push($tmp['file_id'], $value);
 					}
-				});
-			}
-
-			/* get files from files table */
-			$files = FileUpload::whereIn('id', $file_id)->get()->toArray();
-
-			// dd($files);
+				}
+				$tmp['files'] = FileUpload::find($tmp['file_id'])->toArray();
+				array_push($data, $tmp);
+			});
 
 			$htm = "
-			<div class=\"modal fade font-prompt\" id=\"view-curve-modal-lg-center\" data-keyboard=\"false\" data-backdrop=\"static\" tabindex=\"-1\" role=\"dialog\" aria-hidden=\"true\">
-				<form class=\"modal-dialog modal-lg modal-dialog-centered\" action=\"".route('sample.analyze.result.upload.file')."\" method=\"POST\" enctype=\"multipart/form-data\" role=\"document\">
+			<div class=\"modal fade font-prompt\" id=\"view-curve-modal\" data-keyboard=\"false\" data-backdrop=\"static\" tabindex=\"-1\" role=\"dialog\" aria-hidden=\"true\">
+				<div class=\"modal-dialog modal-lg modal-dialog-centered\" role=\"document\">
 					<div class=\"modal-content\">
 						<div class=\"modal-header bg-info text-white\">
 							<h5 class=\"modal-title\">Lab No: นอเปี๊ยว</h5>
@@ -303,64 +314,52 @@ class SampleQcController extends Controller
 						</div>
 						<div class=\"modal-body\">
 							<div class=\"row\">
-								<div class=\"col-xl-12 mb-3\">";
-
-								$htm .= '
-
-									<div id="panel-1" class="panel">
-										<div class="panel-container show">
-											<div class="panel-content">
-												<div id="carouselExampleKitchenSink" class="carousel slide" data-ride="carousel">
-													<ol class="carousel-indicators">
-														<li data-target="#carouselExampleKitchenSink" data-slide-to="0" class=""></li>
-														<li data-target="#carouselExampleKitchenSink" data-slide-to="1" class="active"></li>
-														<li data-target="#carouselExampleKitchenSink" data-slide-to="2" class=""></li>
+								<div class=\"col-xl-12 mb-3\">
+									<div class=\"panel\">
+										<div class=\"panel-container show\">
+											<div class=\"panel-content\">
+												<div id=\"carouselExampleCaptions\" class=\"carousel slide\" data-ride=\"carousel\">
+													<ol class=\"carousel-indicators\">";
+													$active = "active";
+														foreach ($data[0]['file_id'] as $key => $value) {
+															$htm .= "<li data-target=\"#carouselExampleCaptions\" data-slide-to=\"".$key."\" class=\"".$active."\">xx</li>\n";
+															$active = "";
+														}
+													$htm .= "
 													</ol>
-													<div class="carousel-inner">
-														<div class="carousel-item">
-															<img class="d-block w-100" src="'.asset("images/nav-bg.png").'" alt="First slide">
-															<div class="carousel-caption d-none d-md-block">
-																<h5 class="color-white opacity-70">First slide label</h5>
-																<p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
-															</div>
-														</div>
-														<div class="carousel-item active">
-															<img class="d-block w-100" src="'.asset("images/nav-bg.png").'" alt="Second slide">
-															<div class="carousel-caption d-none d-md-block">
-																<h5 class="color-white opacity-70">Second slide label</h5>
-																<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-															</div>
-														</div>
-														<div class="carousel-item">
-															<img class="d-block w-100" src="'.asset("images/nav-bg.png").'" alt="Third slide">
-															<div class="carousel-caption d-none d-md-block">
-																<h5 class="color-white opacity-70">Third slide label</h5>
-																<p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>
-															</div>
-														</div>
+													<div class=\"carousel-inner\">";
+													$active = "active";
+													foreach ($data[0]['files'] as $key => $value) {
+														$htm .= "
+														<div class=\"carousel-item ".$active."\">
+															<img class=\"d-block w-100\" src=\"".asset('images/test.png')."\" alt=\"First slide\">
+														</div>";
+														$active = "";
+													}
+													$htm .= "
 													</div>
-													<a class="carousel-control-prev" href="#carouselExampleKitchenSink" role="button" data-slide="prev">
-														<span class="carousel-control-prev-icon" aria-hidden="true"></span>
-														<span class="sr-only">Previous</span>
+													<a class=\"carousel-control-prev\" href=\"#carouselExampleCaptions\" role=\"button\" data-slide=\"prev\">
+														<span class=\"carousel-control-prev-icon\" aria-hidden=\"true\"></span>
+														<span class=\"sr-only\">Previous</span>
 													</a>
-													<a class="carousel-control-next" href="#carouselExampleKitchenSink" role="button" data-slide="next">
-														<span class="carousel-control-next-icon" aria-hidden="true"></span>
-														<span class="sr-only">Next</span>
+													<a class=\"carousel-control-next\" href=\"#carouselExampleCaptions\" role=\"button\" data-slide=\"next\">
+														<span class=\"carousel-control-next-icon\" aria-hidden=\"true\"></span>
+														<span class=\"sr-only\">Next</span>
 													</a>
 												</div>
 											</div>
 										</div>
-									</div>';
-								$htm .= "
+									</div>
 								</div>
 							</div>
 						<div class=\"modal-footer\">
 							<button type=\"button\" class=\"btn btn-info\" data-dismiss=\"modal\" style=\"width: 120px\">Close</button>
 						</div>
 					</div>
-				</form>
+				</div>
 			</div>";
-			return $htm;
+			$data = preg_replace(pattern: "/\r|\n|\t/", replacement: "", subject: $htm);
+			return $data;
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
 		}
