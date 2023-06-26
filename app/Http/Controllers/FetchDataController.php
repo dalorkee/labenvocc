@@ -52,14 +52,14 @@ class FetchDataController extends Controller
 			foreach ($sample_type as $key => $val) {
 				$html .= "<option value=\"".$key."\">".$val['sample_character_name']."</option>";
 			}
-		}	
+		}
 		else {
 			$html = "<option value=\"\">เลือก</option>";
-		}	
+		}
 		return $html;
 	}
 
-	public function parameter(Request $request, RefParameter $threat_type): string {		
+	public function parameter(Request $request, RefParameter $threat_type): string {
 		$threat_type = $threat_type
 			->select('id', 'parameter_name')
 				->when($request->id == "1", function($c) use ($request){
@@ -84,7 +84,7 @@ class FetchDataController extends Controller
 					return $c->where('threat_type_id', $request->id);
 				})
 			->get()
-			->keyBy('id');		
+			->keyBy('id');
 		if($request->id != ""){
 			$html = "<option value=\"\">เลือก</option>";
 			foreach ($threat_type as $key => $val) {
@@ -108,7 +108,7 @@ class FetchDataController extends Controller
 			foreach ($district as $key => $val) {
 				$html .= "<option value=\"".$key."\">".$val['district_name']."</option>";
 			}
-		}		
+		}
 		return $html;
 	}
 
@@ -123,7 +123,7 @@ class FetchDataController extends Controller
 			foreach ($sub_district as $key => $val) {
 				$html .= "<option value=\"".$key."\">".$val['sub_district_name']."</option>";
 			}
-		}		
+		}
 		return $html;
 	}
 

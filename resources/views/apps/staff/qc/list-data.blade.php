@@ -93,6 +93,7 @@
 @push('scripts')
 <script type="text/javascript" src="{{ URL::asset('assets/js/datagrid/datatables/datatables.bundle.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/buttons.server-side.js') }}"></script>
+<script type="text/javascript" src="{{ URL::asset('js/holder.js') }}"></script>
 {{-- <script type="text/javascript" src="{{ URL::asset('assets/js/notifications/sweetalert2/sweetalert2.bundle.js') }}"></script> --}}
 <script type="text/javascript">
 $(document).ready(function() {

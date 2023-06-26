@@ -292,8 +292,8 @@ class SampleQcController extends Controller
 			// dd($files);
 
 			$htm = "
-			<div class=\"modal fade modal-fullscreen font-prompt\" id=\"view-curve-modal-lg-center\" data-keyboard=\"false\" data-backdrop=\"static\" tabindex=\"-1\" role=\"dialog\" aria-hidden=\"true\">
-				<form class=\"modal-dialog modal-dialog-centered\" action=\"".route('sample.analyze.result.upload.file')."\" method=\"POST\" enctype=\"multipart/form-data\" role=\"document\">
+			<div class=\"modal fade font-prompt\" id=\"view-curve-modal-lg-center\" data-keyboard=\"false\" data-backdrop=\"static\" tabindex=\"-1\" role=\"dialog\" aria-hidden=\"true\">
+				<form class=\"modal-dialog modal-lg modal-dialog-centered\" action=\"".route('sample.analyze.result.upload.file')."\" method=\"POST\" enctype=\"multipart/form-data\" role=\"document\">
 					<div class=\"modal-content\">
 						<div class=\"modal-header bg-info text-white\">
 							<h5 class=\"modal-title\">Lab No: นอเปี๊ยว</h5>
@@ -302,50 +302,58 @@ class SampleQcController extends Controller
 							</button>
 						</div>
 						<div class=\"modal-body\">
-						<div class=\"row\">
+							<div class=\"row\">
+								<div class=\"col-xl-12 mb-3\">";
 
+								$htm .= '
 
-							<div id=\"carouselExampleKitchenSink\" class=\"carousel slide\" data-ride=\"carousel\">
-								<ol class=\"carousel-indicators\">
-									<li data-target=\"#carouselExampleKitchenSink\" data-slide-to=\"0\" class=\"\"></li>
-									<li data-target=\"#carouselExampleKitchenSink\" data-slide-to=\"1\" class=\"active\"></li>
-									<li data-target=\"#carouselExampleKitchenSink\" data-slide-to=\"2\" class=\"\"></li>
-								</ol>
-								<div class=\"carousel-inner\">
-									<div class=\"carousel-item\">
-										<img class=\"d-block w-100\" src=\"img/demo/relax-full.jpg\" alt=\"First slide\">
-										<div class=\"carousel-caption d-none d-md-block\">
-											<h5 class=\"color-white opacity-70\">First slide label</h5>
-											<p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
+									<div id="panel-1" class="panel">
+										<div class="panel-container show">
+											<div class="panel-content">
+												<div id="carouselExampleKitchenSink" class="carousel slide" data-ride="carousel">
+													<ol class="carousel-indicators">
+														<li data-target="#carouselExampleKitchenSink" data-slide-to="0" class=""></li>
+														<li data-target="#carouselExampleKitchenSink" data-slide-to="1" class="active"></li>
+														<li data-target="#carouselExampleKitchenSink" data-slide-to="2" class=""></li>
+													</ol>
+													<div class="carousel-inner">
+														<div class="carousel-item">
+															<img class="d-block w-100" src="'.asset("images/nav-bg.png").'" alt="First slide">
+															<div class="carousel-caption d-none d-md-block">
+																<h5 class="color-white opacity-70">First slide label</h5>
+																<p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
+															</div>
+														</div>
+														<div class="carousel-item active">
+															<img class="d-block w-100" src="'.asset("images/nav-bg.png").'" alt="Second slide">
+															<div class="carousel-caption d-none d-md-block">
+																<h5 class="color-white opacity-70">Second slide label</h5>
+																<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+															</div>
+														</div>
+														<div class="carousel-item">
+															<img class="d-block w-100" src="'.asset("images/nav-bg.png").'" alt="Third slide">
+															<div class="carousel-caption d-none d-md-block">
+																<h5 class="color-white opacity-70">Third slide label</h5>
+																<p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>
+															</div>
+														</div>
+													</div>
+													<a class="carousel-control-prev" href="#carouselExampleKitchenSink" role="button" data-slide="prev">
+														<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+														<span class="sr-only">Previous</span>
+													</a>
+													<a class="carousel-control-next" href="#carouselExampleKitchenSink" role="button" data-slide="next">
+														<span class="carousel-control-next-icon" aria-hidden="true"></span>
+														<span class="sr-only">Next</span>
+													</a>
+												</div>
+											</div>
 										</div>
-									</div>
-									<div class=\"carousel-item active\">
-										<img class=\"d-block w-100\" src=\"img/demo/peace-full.jpg\" alt=\"Second slide\">
-										<div class=\"carousel-caption d-none d-md-block\">
-											<h5 class=\"color-white opacity-70\">Second slide label</h5>
-											<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-										</div>
-									</div>
-									<div class=\"carousel-item\">
-										<img class=\"d-block w-100\" src=\"img/demo/sea-full.jpg\" alt=\"Third slide\">
-										<div class=\"carousel-caption d-none d-md-block\">
-											<h5 class=\"color-white opacity-70\">Third slide label</h5>
-											<p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>
-										</div>
-									</div>
+									</div>';
+								$htm .= "
 								</div>
-								<a class=\"carousel-control-prev\" href=\"#carouselExampleKitchenSink\" role=\"button\" data-slide=\"prev\">
-									<span class=\"carousel-control-prev-icon\" aria-hidden=\"true\"></span>
-									<span class=\"sr-only\">Previous</span>
-								</a>
-								<a class=\"carousel-control-next\" href=\"#carouselExampleKitchenSink\" role=\"button\" data-slide=\"next\">
-									<span class=\"carousel-control-next-icon\" aria-hidden=\"true\"></span>
-									<span class=\"sr-only\">Next</span>
-								</a>
 							</div>
-
-
-						</div>
 						<div class=\"modal-footer\">
 							<button type=\"button\" class=\"btn btn-info\" data-dismiss=\"modal\" style=\"width: 120px\">Close</button>
 						</div>
