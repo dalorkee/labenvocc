@@ -187,6 +187,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 			Route::post('modal/show/result', 'showResultModal')->name('qc.result.modal');
 			Route::post('modal/show/result/curve/file', 'showCurveAndQcResultModal')->name('qc.result.modal.curve');
 			Route::post('modal/show/result/all', 'showAllResultModal')->name('qc.result.modal.all');
+			Route::post('approved', 'approved')->name('qc.approved');
 		});
 	});
 	Route::get('/admin/home', [AdminController::class, 'index'])->name('admin.index');

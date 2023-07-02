@@ -74,8 +74,8 @@
 								<button type="button" class="btn btn-info" onclick="showAllResultModal('{{ $data['order_id'] }}','{{ $data['lab_no'] }}');"><i class="fal fa-eye"></i> View All</button>
 							</div>
 							<div class="absolute top-0 right-0">
-								<button type="button" class="btn btn-success" data-lab_no="0000166"><i class="fal fa-check-circle"></i> Approve</button>
-								<button type="button" id="ijet" class="btn btn-danger"><i class="fal fa-minus-circle"></i> Reject</button>
+								<button type="button" class="btn btn-success" onclick="approved('{{ $data['order_id'] }}','{{ $data['lab_no'] }}');"><i class="fal fa-eye"></i> Approve</button>
+								<button type="button" class="btn btn-danger"><i class="fal fa-minus-circle"></i> Reject</button>
 							</div>
 						</div>
 					</div>
@@ -164,6 +164,21 @@ function showAllResultModal(order_id, lab_no) {
 		success: function(data) {
 			$('#result-modal-wrapper').html(data);
 			$('#view-all-modal-lg-center').modal('show');
+		},
+		complete: function() {$('.loader').hide()},
+		error: function(jqXhr, textStatus, errorMessage) {alert('Error: ' + jqXhr.status + errorMessage)}
+	});
+}
+function approved(order_id, lab_no) {
+	$.ajax({
+		headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+		type: "POST",
+		url: "{{ route('sample.qc.approved') }}",
+		dataType: "html",
+		data: {order_id:order_id, lab_no:lab_no},
+		beforeSend: function() {$(".loader").show()},
+		success: function(responsed) {
+            alert(responsed);
 		},
 		complete: function() {$('.loader').hide()},
 		error: function(jqXhr, textStatus, errorMessage) {alert('Error: ' + jqXhr.status + errorMessage)}

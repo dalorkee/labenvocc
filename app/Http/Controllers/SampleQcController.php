@@ -545,4 +545,19 @@ class SampleQcController extends Controller
 			Log::error($e->getMessage());
 		}
 	}
+
+	protected function approved(Request $request) {
+		try {
+			$order = Order::findOr(1000, fn () => 'ไม่พบข้อมูล Order นี้');
+			if ($order->count() > 0 && $order->lab_no = $request->lab_no) {
+				$order->status = 'approved';
+				$order->save();
+				return "บันทึกข้อมูล Order: ".$request->order_id." Lab No: ".$request->lab_no." สำเร็จ";
+			} else {
+				return "บันทึกข้อมูล Order: ".$request->order_id." Lab No: ".$request->lab_no." ผิดพลาด";
+			}
+		} catch (\Exception $e) {
+			Log::error($e->getMessage());
+		}
+	}
 }
