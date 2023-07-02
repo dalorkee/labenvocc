@@ -3,7 +3,7 @@
 @section('style')
 <link type="text/css" rel="stylesheet" href="{{ URL::asset('css/pj-step.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/css/datagrid/datatables/datatables.bundle.css') }}">
-{{-- <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/css/notifications/sweetalert2/sweetalert2.bundle.css') }}" media="screen, print"> --}}
+<link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/css/notifications/sweetalert2/sweetalert2.bundle.css') }}" media="screen, print">
 <style type="text/css">
 	.input-date:read-only{background:#fefefe!important}
 	.btn-group {margin:0 0 5px 0;padding:0}
@@ -19,7 +19,8 @@
 	table.dataTable thead .dt-checkboxes-select-all {text-align: center}
 	div.dataTables_wrapper span.select-info,
 	div.dataTables_wrapper span.select-item {margin-left: 0.5em}
-    ol.carousel-indicators li {background:#bb1bf4!important; width:18px; height: 0px;}
+	ol.carousel-indicators li {background:#bb1bf4!important; width:18px; height: 0px;}
+	.modal {text-align: center}
 	@media screen and (max-width: 640px) {div.dataTables_wrapper span.select-info,div.dataTables_wrapper span.select-item {margin-left: 0;display: block}}
 	</style>
 @endsection
@@ -27,7 +28,7 @@
 <ol class="breadcrumb page-breadcrumb text-sm font-prompt">
 	<li class="breadcrumb-item"><i class="fal fa-home mr-1"></i> <a href="{{ route('sample.received.index') }}">งานตรวจวิเคราะห์</a></li>
 	<li class="breadcrumb-item"><a href="#">รายการตัวอย่าง</a></li>
-	<li class="breadcrumb-item">Lab xxx</li>
+	<li class="breadcrumb-item">Lab No. {{ $data['lab_no'] }}</li>
 </ol>
 <div class="row text-sm font-prompt">
 	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -41,8 +42,10 @@
 				</div>
 			</div>
 			<div class="panel-container show">
-				<form name="qcData" action="" method="POST" enctype="multipart/form-data">
-					@csrf
+				<form name="qcData" action="{{ route('sample.qc.approved') }}" method="POST" enctype="multipart/form-data">
+					<input type="hidden" name="_token" value="{{ csrf_token() }}">
+					<input type="hidden" name="order_id" value="{{ $data['order_id'] }}">
+					<input type="hidden" name="lab_no" value="{{ $data['lab_no'] }}">
 					<div class="panel-content">
 						<ul class="steps">
 							<li class="undone"><a href="{{ route('sample.received.create') }}"><span class="d-none d-sm-inline">รายการคำขอ</span></a></li>
@@ -74,8 +77,9 @@
 								<button type="button" class="btn btn-info" onclick="showAllResultModal('{{ $data['order_id'] }}','{{ $data['lab_no'] }}');"><i class="fal fa-eye"></i> View All</button>
 							</div>
 							<div class="absolute top-0 right-0">
-								<button type="button" class="btn btn-success" onclick="approved('{{ $data['order_id'] }}','{{ $data['lab_no'] }}');"><i class="fal fa-eye"></i> Approve</button>
-								<button type="button" class="btn btn-danger"><i class="fal fa-minus-circle"></i> Reject</button>
+								{{-- <button type="button" class="btn btn-success" onclick="approved('{{ $data['order_id'] }}','{{ $data['lab_no'] }}');"><i class="fal fa-eye"></i> Approve</button> --}}
+								<button type="submit" class="btn btn-success"><i class="fal fa-eye"></i> Approve</button>
+								<button type="button" class="btn btn-danger" onclick="reject('{{ $data['order_id'] }}','{{ $data['lab_no'] }}');"><i class="fal fa-minus-circle"></i> Reject</button>
 							</div>
 						</div>
 					</div>
@@ -95,7 +99,7 @@
 <script type="text/javascript" src="{{ URL::asset('assets/js/datagrid/datatables/datatables.bundle.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/buttons.server-side.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/holder.js') }}"></script>
-{{-- <script type="text/javascript" src="{{ URL::asset('assets/js/notifications/sweetalert2/sweetalert2.bundle.js') }}"></script> --}}
+<script type="text/javascript" src="{{ URL::asset('assets/js/notifications/sweetalert2/sweetalert2.bundle.js') }}"></script>
 <script type="text/javascript">
 $(document).ready(function() {
 	$.ajaxSetup({headers:{'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')}});
@@ -169,16 +173,28 @@ function showAllResultModal(order_id, lab_no) {
 		error: function(jqXhr, textStatus, errorMessage) {alert('Error: ' + jqXhr.status + errorMessage)}
 	});
 }
-function approved(order_id, lab_no) {
+function reject(order_id, lab_no) {
 	$.ajax({
 		headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
 		type: "POST",
-		url: "{{ route('sample.qc.approved') }}",
+		url: "{{ route('sample.qc.reject') }}",
 		dataType: "html",
 		data: {order_id:order_id, lab_no:lab_no},
 		beforeSend: function() {$(".loader").show()},
 		success: function(responsed) {
-            alert(responsed);
+            const msg = JSON.parse(responsed);
+			var swalWithBootstrapButtons = Swal.mixin({
+				customClass:{confirmButton: "btn btn-danger"},
+				buttonsStyling: false
+			});
+			swalWithBootstrapButtons.fire({
+				type: msg.type,
+				title: msg.title,
+				text: msg.text,
+				confirmButtonText: "ตกลง",
+				allowOutsideClick: false,
+				footer: "<a>Lab-EnvOcc</a>"
+			});
 		},
 		complete: function() {$('.loader').hide()},
 		error: function(jqXhr, textStatus, errorMessage) {alert('Error: ' + jqXhr.status + errorMessage)}
