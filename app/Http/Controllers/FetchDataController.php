@@ -48,13 +48,13 @@ class FetchDataController extends Controller
 			->get()
 			->keyBy('id');
 		if($request->id != ""){
-			$html = "<option value=\"\">เลือก</option>";
+			$html = "<option value=\"seall\">เลือกทั้งหมด</option>";
 			foreach ($sample_type as $key => $val) {
 				$html .= "<option value=\"".$key."\">".$val['sample_character_name']."</option>";
 			}
 		}	
 		else {
-			$html = "<option value=\"\">เลือก</option>";
+			$html = "<option value=\"seall\">เลือกทั้งหมด</option>";
 		}	
 		return $html;
 	}
@@ -86,13 +86,13 @@ class FetchDataController extends Controller
 			->get()
 			->keyBy('id');		
 		if($request->id != ""){
-			$html = "<option value=\"\">เลือก</option>";
+			$html = "<option value=\"seall\">เลือกทั้งหมด</option>";
 			foreach ($threat_type as $key => $val) {
 				$html .= "<option value=\"".$key."\">".$val['parameter_name']."</option>";
 			}
 		}
 		else{
-			$html = "<option value=\"\">เลือก</option>";
+			$html = "<option value=\"seall\">เลือกทั้งหมด</option>";
 		}
 		return $html;
 	}
@@ -104,7 +104,7 @@ class FetchDataController extends Controller
 			->get()
 			->keyBy('district_id');
 		if($request->id >= "0"){
-			$html = "<option value=\"0\">เลือกทั้งหมด</option>";
+			$html = "<option value=\"seall\">เลือกทั้งหมด</option>";
 			foreach ($district as $key => $val) {
 				$html .= "<option value=\"".$key."\">".$val['district_name']."</option>";
 			}
@@ -119,7 +119,7 @@ class FetchDataController extends Controller
 			->get()
 			->keyBy('sub_district_id');
 		if($request->id >= "0"){
-			$html = "<option value=\"0\">เลือกทั้งหมด</option>";
+			$html = "<option value=\"seall\">เลือกทั้งหมด</option>";
 			foreach ($sub_district as $key => $val) {
 				$html .= "<option value=\"".$key."\">".$val['sub_district_name']."</option>";
 			}
@@ -130,21 +130,11 @@ class FetchDataController extends Controller
 	public function dataFetch(Request $request) {
 		$this->validate($request,[
 			'sample_type'=>'required',
-			'sample_character'=>'required',
-			'type_of_work'=>'required',
-			'original_threat'=>'required_if:sample_type,==,1',
-			'factory_type'=>'required_if:sample_type,==,2',
-			'parameter_group'=>'required',
-			'parameter'=>'required',
-			'province'=>'required',
-			'district'=>'required',
-			'sub_district'=>'required',
 			'date_start'=>'required',
 			'date_end'=>'required',
-			]);
-		if($request->sample_type == '1'){
-			// dd($request);
-			$bio_order = OrderSampleParameter::select(
+			]);		
+		if($request->sample_type == '1'){			
+			$ep_query = OrderSampleParameter::select(
 				'order_sample_parameter.sample_type_name',
 				'order_sample_parameter.sample_character_name',
 				'order_sample.sample_test_no',
@@ -159,24 +149,60 @@ class FetchDataController extends Controller
 				'order_sample.sample_location_place_district_name',
 				'order_sample.sample_location_place_sub_district_name',
 				'order_sample.sample_receive_date'
-			)
-			->join('orders', 'orders.id', '=' ,'order_sample_parameter.order_id')
-			->join('order_sample','order_sample.id','=','order_sample_parameter.order_sample_id')
-			// ->where('order_sample_parameter.sample_type_id', '=', $request->sample_type)
-			// ->where('order_sample_parameter.sample_character_id', $request->sample_character)
-			// ->where('orders.type_of_work', $request->type_of_work)
-			// ->where('order_sample.origin_threat_id', $request->original_threat)
-			// ->where('order_sample_parameter.threat_type_id', $request->parameter_group)
-			// ->where('order_sample_parameter.parameter_id', $request->parameter)
-			// ->where('order_sample.sample_location_place_province', $request->province)
-			// ->where('order_sample.sample_location_place_district', $request->district)
-			// ->where('order_sample.sample_location_place_sub_district', $request->sub_district)
-			->whereBetween('order_sample.sample_receive_date', [$request->date_start, $request->date_end])
-			->get();
-			dd($bio_order);
+			);
 		}
-		elseif($request->sample_type=='2'){
-			dd('this is 2');
+		elseif($request->sample_type == '2'){			
+			$ep_query = OrderSampleParameter::select(
+				'order_sample_parameter.sample_type_name', 
+				'order_sample_parameter.sample_character_name',
+				'order_sample.sample_test_no',
+				'order_sample.firstname', 
+				'order_sample.lastname', 
+				'order_sample.age_year',
+				'order_sample.sample_position',
+				'order_sample.division', 
+				'orders.type_of_work_name', 
+				'orders.type_of_factory_name',
+				'order_sample_parameter.parameter_name', 
+				'order_sample.sample_location_place_province_name', 
+				'order_sample.sample_location_place_district_name', 
+				'order_sample.sample_location_place_sub_district_name', 
+				'order_sample.sample_receive_date'
+			);
 		}
+		$ep_query = $ep_query
+		->join('orders', 'orders.id', '=' ,'order_sample_parameter.order_id')
+		->join('order_sample','order_sample.id','=','order_sample_parameter.order_sample_id')
+		->where('order_sample_parameter.sample_type_id', $request->sample_type)
+		->whereBetween('order_sample.sample_receive_date', [$request->date_start, $request->date_end])
+		->when($request->sample_character != "seall", function($cond_sam_char) use ($request){
+			return $cond_sam_char->where('order_sample_parameter.sample_character_id', $request->sample_character);
+		})
+		->when($request->type_of_work != "seall", function($cond_type_work) use ($request){
+			return $cond_type_work->where('orders.type_of_work', $request->type_of_work);
+		})
+		->when($request->original_threat != "seall" || !is_null($request->original_threat), function($cond_ori_threat) use ($request){
+			return $cond_ori_threat->where('order_sample.origin_threat_id', $request->original_threat);
+		})
+		->when($request->factory_type != "seall", function($cond_fact) use ($request){
+			return $cond_fact->where('orders.type_of_factory', $request->factory_type);
+		})
+		->when($request->parameter_group != "seall", function($cond_para_group) use ($request){
+			return $cond_para_group->where('order_sample_parameter.threat_type_id', $request->parameter_group);
+		})
+		->when($request->parameter != "seall", function($cond_para) use ($request){
+			return $cond_para->where('order_sample_parameter.parameter_id', $request->parameter);
+		})
+		->when($request->province != "seall", function($cond_prov) use ($request){
+			return $cond_prov->where('order_sample.sample_location_place_province', $request->province);
+		})
+		->when($request->district != "seall", function($cond_distr) use ($request){
+			return $cond_distr->where('order_sample.sample_location_place_district', $request->district);
+		})
+		->when($request->sub_district != "seall", function($cond_subdistr) use ($request){
+			return $cond_subdistr->where('order_sample.sample_location_place_sub_district', $request->sub_district);
+		})
+		->toSql();
+		dd($ep_query);
 	}
 }

@@ -38,13 +38,13 @@
                                         <div class="col-4 sample_character">
                                             <label class="form-label" for="sample_character">ชนิดตัวอย่าง</label>
                                             <select class="custom-select" id="sample_character" name="sample_character">
-                                                <option value="">เลือก</option>
+                                                <option value="seall">เลือกทั้งหมด</option>
                                             </select>
                                         </div>
                                         <div class="col-4">
                                             <label class="form-label" for="type_of_work">ประเภทงาน</label>
                                             <select class="custom-select" id="type_of_work" name="type_of_work">
-                                                <option value="">เลือก</option>
+                                                <option value="seall">เลือกทั้งหมด</option>
                                                 <option value="1">บริการ</option>
                                                 <option value="2">วิจัย</option>
                                                 <option value="3">เฝ้าระวัง</option>
@@ -58,7 +58,7 @@
                                         <div class="col-3 orgt">
                                             <label class="form-label" for="original_threat">ประเภทแหล่งมลพิษ</label>
                                             <select class="custom-select" id="original_threat" name="original_threat" disabled>
-                                                <option value="">เลือก</option>
+                                                <option value="seall">เลือกทั้งหมด</option>
                                                 <option value="1">ขยะ</option>
                                                 <option value="2">มลพิษอากาศ</option>
                                                 <option value="3">โลหะหนัก</option>
@@ -71,7 +71,7 @@
                                         <div class="col-3 fact">
                                             <label class="form-label" for="factory_type">ประเภทสถานประกอบการ</label>
                                             <select class="custom-select" id="factory_type" name="factory_type" disabled>
-                                                <option value="">เลือก</option>
+                                                <option value="seall">เลือกทั้งหมด</option>
                                                 <option value="1">โรงโม่</option>
                                                 <option value="2">ประกอบชิ้นส่วน</option>
                                                 <option value="3">ปิโตรเคมี</option>
@@ -81,7 +81,7 @@
                                         <div class="col-3 prmg">
                                             <label class="form-label" for="parameter_group">กลุ่มพารามิเตอร์</label>
                                             <select class="custom-select" id="parameter_group" name="parameter_group">
-                                                <option value="0">เลือกทั้งหมด</option>
+                                                <option value="seall">เลือกทั้งหมด</option>
                                                 <option value="1">กลุ่มกรด ด่าง/โลหะอัลคาไลน์</option>
                                                 <option value="2">กลุ่มจุลชีววิยา</option>
                                                 <option value="3">กลุ่มฝุ่นซิลิก้า</option>
@@ -94,7 +94,7 @@
                                         <div class="col-3 prm">
                                             <label class="form-label" for="parameter">พารามิเตอร์</label>
                                             <select class="custom-select" id="parameter" name="parameter" disabled>
-                                                <option value="">เลือก</option>
+                                                <option value="seall">เลือกทั้งหมด</option>
                                             </select>                                            
                                         </div>                                        
                                     </div>
@@ -103,7 +103,7 @@
                                         <div class="col-4">
                                             <label class="form-label" for="province">จังหวัด</label>
                                             <select class="custom-select" id="province" name="province">
-                                                <option value="0">เลือกทั้งหมด</option>
+                                                <option value="seall">เลือกทั้งหมด</option>
                                             @foreach ($provinces as $province)
                                                 <option value="{{ $province->province_id }}">{{ $province->province_name }}</option>
                                             @endforeach
@@ -112,13 +112,13 @@
                                         <div class="col-4">
                                             <label class="form-label" for="district">อำเภอ</label>
                                             <select class="custom-select" id="district" name="district">
-                                                <option value="0">เลือกทั้งหมด</option>
+                                                <option value="seall">เลือกทั้งหมด</option>
                                             </select>
                                         </div>
                                         <div class="col-4">
                                             <label class="form-label" for="sub_district">ตำบล</label>
                                             <select class="custom-select" id="sub_district" name="sub_district">
-                                                <option value="0">เลือกทั้งหมด</option>
+                                                <option value="seall">เลือกทั้งหมด</option>
                                             </select>                                            
                                         </div>
                                     </div>
@@ -196,7 +196,7 @@
                 $('#factory_type').prop('disabled', false);
             }
             else if(st == ''){
-                $('#sample_character').find('option').remove().end().append('<option value="">เลือก</option>');
+                $('#sample_character').find('option').remove().end().append('<option value="seall">เลือกทั้งหมด</option>');
                 $('.orgt').hide();
                 $('.fact').hide();
                 $('#original_threat').prop('disabled', true);
