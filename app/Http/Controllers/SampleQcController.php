@@ -2,9 +2,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\{Str,Arr};
 use Illuminate\Support\Facades\{Auth,Storage,File,Log};
 use App\DataTables\qc\{listOrderDataTable};
-use App\Models\{Order,OrderSample,OrderSampleParameter};
+use App\Models\{Order,OrderSample,OrderSampleParameter,FileUpload};
+use Exception;
 use Yajra\DataTables\Facades\DataTables;
 
 class SampleQcController extends Controller
@@ -66,8 +68,8 @@ class SampleQcController extends Controller
 					})
 					->addColumn('btn', function($item) {
 						return "
-						<button type=\"button\" class=\"btn btn-info btn-sm\" onClick=\"showResultModal('rs_btn', '".$item['lab_no']."','".$item['order_id']."','".$item['sample_test_no']."');\">View result</button>
-						<button type=\"button\" class=\"btn btn-info btn-sm\" onClick=\"showCurveResultModal('rs_btn', '".$item['lab_no']."','".$item['order_id']."','".$item['sample_test_no']."');\">View curve & QC</button>";
+						<button type=\"button\" class=\"btn btn-info btn-sm\" onClick=\"showResultModal('show_result_btn', '".$item['lab_no']."','".$item['order_id']."','".$item['sample_test_no']."');\">View result</button>
+						<button type=\"button\" class=\"btn btn-info btn-sm\" onClick=\"showCurveAndQcResultModal('show_file_btn', '".$item['lab_no']."','".$item['order_id']."','".$item['sample_test_no']."');\">View curve & QC</button>";
 					})
 					->rawColumns(['paramet', 'btn'])
 					->make(true);
@@ -262,33 +264,103 @@ class SampleQcController extends Controller
 		}
 	}
 
-	public function showCurveResultModal(Request $request) {
+	protected function showCurveAndQcResultModal(Request $request) {
 		try {
+
+			$order_id = Arr::wrap(null);
+			$file_id = Arr::wrap(null);
+			$data = Arr::wrap(null);
+
+			$orders = Order::select('id', 'analyze_result_files')?->whereId($request->order_id)?->whereLab_no($request->lab_no)->get();
+			$orders->each(function($item, $key) use (&$order_id, &$file_id) {
+				array_push($order_id, $item['id']);
+				if (!is_null($item['analyze_result_files']) && !empty($item['analyze_result_files'])) {
+					$exp = Str::of($item['analyze_result_files'])->explode(',');
+					$exp->each(function($exp_item, $exp_key) use (&$file_id) {
+						array_push($file_id, $exp_item);
+					});
+				}
+			});
+
+			$order_sample = OrderSample::select('id', 'order_id', 'sample_test_no')
+				?->with('parameters', function($query) {
+					$query->select('id', 'order_id', 'order_sample_id', 'lab_result_files');
+				})
+				?->whereSample_test_no($request->test_no)
+				?->get();
+
+			$order_sample->each(function($item, $key) use ($file_id, &$data) {
+				$tmp['order_id'] = $item->order_id;
+				$tmp['sample_test_no'] = $item->sample_test_no;
+				$tmp['file_id'] = $file_id;
+				$lab_result_files_coll = $item->parameters?->where('order_sample_id', $item->id)?->pluck('lab_result_files');
+				foreach($lab_result_files_coll as $key => $value) {
+					if (!is_null($value) && !empty($value)) {
+						array_push($tmp['file_id'], $value);
+					}
+				}
+				$tmp['files'] = FileUpload::find($tmp['file_id'])->toArray();
+				array_push($data, $tmp);
+			});
+
 			$htm = "
-			<div class=\"modal fade modal-fullscreen font-prompt\" id=\"view-curve-modal-lg-center\" data-keyboard=\"false\" data-backdrop=\"static\" tabindex=\"-1\" role=\"dialog\" aria-hidden=\"true\">
-				<form class=\"modal-dialog modal-dialog-centered\" action=\"".route('sample.analyze.result.upload.file')."\" method=\"POST\" enctype=\"multipart/form-data\" role=\"document\">
+			<div class=\"modal image-modal fade font-prompt\" id=\"view-curve-modal\" data-keyboard=\"false\" data-backdrop=\"static\" tabindex=\"-1\" role=\"dialog\" aria-hidden=\"true\">
+				<div class=\"modal-dialog modal-lg modal-dialog-centered\" role=\"document\">
 					<div class=\"modal-content\">
 						<div class=\"modal-header bg-info text-white\">
-							<h5 class=\"modal-title\">Lab No: นอเปี๊ยว</h5>
+							<h5 class=\"modal-title\">Lab No: ".$request->lab_no."</h5>
 							<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">
 								<span aria-hidden=\"true\"><i class=\"fal fa-times\"></i></span>
 							</button>
 						</div>
 						<div class=\"modal-body\">
-						<div class=\"row\">
-							<div class=\"col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3\">
-								<div class=\"table-responsive\">
-
+							<div class=\"row\">
+								<div class=\"col-xl-12 mb-3\">
+									<div class=\"panel\">
+										<div class=\"panel-container show\">
+											<div class=\"panel-content\">
+												<div id=\"carouselExampleCaptions\" class=\"carousel slide\" data-ride=\"carousel\">
+													<ol class=\"carousel-indicators\">";
+													$active = "active";
+														foreach ($data[0]['file_id'] as $key => $value) {
+															$htm .= "<li data-target=\"#carouselExampleCaptions\" data-slide-to=\"".$key."\" class=\"".$active."\">xx</li>\n";
+															$active = "";
+														}
+													$htm .= "
+													</ol>
+													<div class=\"carousel-inner\">";
+													$active = "active";
+													foreach ($data[0]['files'] as $key => $value) {
+														$htm .= "
+														<div class=\"carousel-item ".$active."\">
+															<img class=\"d-block\" src=\"".asset('images/test.png')."\" alt=\"".$value['file_name']."\">
+														</div>";
+														$active = "";
+													}
+													$htm .= "
+													</div>
+													<a class=\"carousel-control-prev\" href=\"#carouselExampleCaptions\" role=\"button\" data-slide=\"prev\">
+														<span class=\"carousel-control-prev-icon\" aria-hidden=\"true\"></span>
+														<span class=\"sr-only\">Previous</span>
+													</a>
+													<a class=\"carousel-control-next\" href=\"#carouselExampleCaptions\" role=\"button\" data-slide=\"next\">
+														<span class=\"carousel-control-next-icon\" aria-hidden=\"true\"></span>
+														<span class=\"sr-only\">Next</span>
+													</a>
+												</div>
+											</div>
+										</div>
+									</div>
 								</div>
 							</div>
-						</div>
 						<div class=\"modal-footer\">
 							<button type=\"button\" class=\"btn btn-info\" data-dismiss=\"modal\" style=\"width: 120px\">Close</button>
 						</div>
 					</div>
-				</form>
+				</div>
 			</div>";
-			return $htm;
+			$data = preg_replace(pattern: "/\r|\n|\t/", replacement: "", subject: $htm);
+			return $data;
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
 		}
@@ -472,6 +544,49 @@ class SampleQcController extends Controller
 			return $htm;
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
+		}
+	}
+
+	protected function approved(Request $request): mixed {
+		try {
+			$order = Order::findOr($request->order_id, fn () => throw new \Exception('ไม่พบข้อมูล Order ที่เรียก ID: '.$request->order_id));
+			if (($order->count() > 0)) {
+				switch($order->order_status) {
+					case 'pending':
+					case 'preparing':
+						$order->order_status = 'approved';
+						$order->save();
+						return redirect()->back()->with('success', 'บันทึกข้อมูล Order: '.$request->order_id.' สำเร็จ');
+						break;
+					default:
+						return redirect()->back()->with('error', 'Order ID: '.$request->order_id.' ไม่อยู่ในสถานะที่จะ Approved ได้');
+				};
+			}
+		} catch (\Exception $e) {
+			Log::error($e->getMessage());
+			return redirect()->back()->with('error', $e->getMessage());
+		}
+	}
+
+	protected function reject(Request $request): mixed {
+		try {
+			$order = Order::findOr($request->order_id, fn () => throw new \Exception('ไม่พบข้อมูล Order ที่เรียก ID: '.$request->order_id));
+			if (($order->count() > 0)) {
+				switch($order->order_status) {
+					case 'pending':
+					case 'preparing':
+						$order->order_status = 'reject';
+						$order->save();
+						$msg = json_encode(['type' => 'success', 'title' => 'Success', 'text' => 'Reject Order: '.$request->order_id.' สำเร็จ']);
+						break;
+					default:
+						$msg = json_encode(['type' => 'error', 'title' => 'Error!', 'text' => 'Order ID: '.$request->order_id.' ไม่อยู่ในสถานะที่จะ Reject ได้']);
+				};
+				return $msg;
+			}
+		} catch (\Exception $e) {
+			Log::error($e->getMessage());
+			return json_encode(['type' => 'error', 'title' => 'Error!', 'text' => $e->getMessage()]);
 		}
 	}
 }
