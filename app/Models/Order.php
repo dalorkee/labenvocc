@@ -91,6 +91,16 @@ class Order extends Model
 		);
 	}
 
+	protected function orderDestroyDate(): Attribute {
+		return new Attribute(
+			get: fn ($value) => $this->convertMySQLDateToJs(date: $value),
+			set: fn ($value) => $this->convertJsDateToMySQL(date: $value),
+		);
+	}
+
+
+
+
 	// public function getBookDateJsAttribute(): string {
 	// 	if (!is_null($this->book_date) && !empty($this->book_date)) {
 	// 		$exp = explode("-", $this->book_date);

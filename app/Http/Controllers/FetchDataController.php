@@ -55,7 +55,7 @@ class FetchDataController extends Controller
 		}
 		else {
 			$html = "<option value=\"seall\">เลือกทั้งหมด</option>";
-		}	
+		}
 		return $html;
 	}
 
@@ -132,8 +132,8 @@ class FetchDataController extends Controller
 			'sample_type'=>'required',
 			'date_start'=>'required',
 			'date_end'=>'required',
-			]);		
-		if($request->sample_type == '1'){			
+			]);
+		if($request->sample_type == '1'){
 			$ep_query = OrderSampleParameter::select(
 				'order_sample_parameter.sample_type_name',
 				'order_sample_parameter.sample_character_name',
@@ -151,22 +151,22 @@ class FetchDataController extends Controller
 				'order_sample.sample_receive_date'
 			);
 		}
-		elseif($request->sample_type == '2'){			
+		elseif($request->sample_type == '2'){
 			$ep_query = OrderSampleParameter::select(
-				'order_sample_parameter.sample_type_name', 
+				'order_sample_parameter.sample_type_name',
 				'order_sample_parameter.sample_character_name',
 				'order_sample.sample_test_no',
-				'order_sample.firstname', 
-				'order_sample.lastname', 
+				'order_sample.firstname',
+				'order_sample.lastname',
 				'order_sample.age_year',
 				'order_sample.sample_position',
-				'order_sample.division', 
-				'orders.type_of_work_name', 
+				'order_sample.division',
+				'orders.type_of_work_name',
 				'orders.type_of_factory_name',
-				'order_sample_parameter.parameter_name', 
-				'order_sample.sample_location_place_province_name', 
-				'order_sample.sample_location_place_district_name', 
-				'order_sample.sample_location_place_sub_district_name', 
+				'order_sample_parameter.parameter_name',
+				'order_sample.sample_location_place_province_name',
+				'order_sample.sample_location_place_district_name',
+				'order_sample.sample_location_place_sub_district_name',
 				'order_sample.sample_receive_date'
 			);
 		}

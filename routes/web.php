@@ -13,6 +13,7 @@ use App\Http\Controllers\{
 	SampleReceiveController,
 	SampleAnalyzeController,
 	SampleQcController,
+	SampleDestroyController,
 	UserAdvertiseController,
 	SampleUploadController,
 	HospitalController,
@@ -190,6 +191,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 			Route::post('approved', 'approved')->name('qc.approved');
 			Route::post('reject', 'reject')->name('qc.reject');
 		});
+		Route::resource('destroy', SampleDestroyController::class);
 	});
 	Route::get('/admin/home', [AdminController::class, 'index'])->name('admin.index');
 	Route::get('/users/id/{id}/edit',[UsersController::class,'edit'])->name('users.edit');

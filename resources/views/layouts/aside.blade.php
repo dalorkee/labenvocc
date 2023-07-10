@@ -139,7 +139,7 @@
 								<span class="nav-link-text" data-i18n="nav.plugins_plugins_faq">งานควบคุมคุณภาพ</span>
 							</a>
 						</li>
-						<li class="{{ (Request::is('*sample/analyze/report'))  ? 'active' : '' }}">
+						{{-- <li class="{{ (Request::is('*sample/analyze/report'))  ? 'active' : '' }}">
 							<a href="{{ route('sample.analyze.create') }}" title="ใบรายงานผล" data-filter-tags="sample_analyze">
 								<span class="nav-link-text" data-i18n="nav.plugins_plugins_faq">ใบรายงานผล</span>
 							</a>
@@ -148,7 +148,7 @@
 							<a href="{{ route('sample.analyze.create') }}" title="ประวัติการวิเคราะห์" data-filter-tags="sample_analyze">
 								<span class="nav-link-text" data-i18n="nav.plugins_plugins_faq">ประวัติการวิเคราะห์</span>
 							</a>
-						</li>
+						</li> --}}
 					</ul>
 				</li>
 				<li>
@@ -157,8 +157,8 @@
 						<span class="nav-link-text">รายงานผล</span>
 					</a>
 				</li>
-				<li>
-					<a href="#" title="งานทำลายตัวอย่าง" data-filter-tags="destroy">
+				<li class="{{ (Request::is('*sample/destroy*'))  ? 'active' : '' }}">
+					<a href="{{ route('sample.destroy.create') }}" title="งานทำลายตัวอย่าง" data-filter-tags="destroy">
 						<i class="fal fa-burn"></i>
 						<span class="nav-link-text">งานทำลายตัวอย่าง</span>
 					</a>
