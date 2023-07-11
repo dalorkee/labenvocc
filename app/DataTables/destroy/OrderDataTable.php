@@ -5,10 +5,10 @@ use Illuminate\Http\Request;
 use Yajra\DataTables\Html\{Button,Column};
 use Yajra\DataTables\Services\DataTable;
 use Illuminate\Support\Facades\{Log};
-use App\Models\{Order,OrderSample,OrderSampleParameter};
+use App\Models\Order;
 use App\Traits\CommonTrait;
 
-class listOrderDataTable extends DataTable
+class OrderDataTable extends DataTable
 {
 	use CommonTrait;
 
@@ -40,9 +40,10 @@ class listOrderDataTable extends DataTable
 					return $htm;
 				})
 				->addColumn('action', function($order) {
+					$checked = ($order->order_destroy_status == 'approved') ? ' checked' : '';
 					return "<div class=\"custom-control custom-checkbox\">
-						<input type=\"checkbox\" name=\"lab_no[]\" class=\"custom-control-input\" value=\"".$order->lab_no."\" id=\"lab_no_\"".$order->lab_no."\" checked=\"\" readonly />
-						<label class=\"custom-control-label\" for=\"lab_no_\"".$order->lab_no."\">&nbsp;</label>
+						<input type=\"checkbox\" name=\"lab_no[]\" class=\"custom-control-input\" value=\"".$order->lab_no."\" id=\"lab_no_".$order->lab_no."\"".$checked." />
+						<label class=\"custom-control-label\" for=\"lab_no_".$order->lab_no."\">&nbsp;</label>
 						</div>";
 				})
 				->rawColumns(['order_destroy_status', 'action']);
@@ -51,14 +52,15 @@ class listOrderDataTable extends DataTable
 		}
 	}
 
-	public function query() {
-		// $order_sample_id_arr = [];
-		// OrderSampleParameter::select('order_sample_id')?->get()?->each(function($item, $key) use (&$order_sample_id_arr) {
-		// 	array_push($order_sample_id_arr, $item->order_sample_id);
-		// });
-		// OrderSample::select('order_id')->whereIn('id', $order_sample_id_arr)->whereSample_verified_status('complete')->whereSample_received_status('y')->get();
-		// $order_id =  (!empty($samples[0]['order_id'])) ? $samples[0]['order_id'] : 0;
-		return Order::whereOrder_status('approved')->with('parameters')->orderBy('id', 'ASC');
+	public function query(Order $order) {
+		return $order?->select(
+			'id',
+			'lab_no',
+			'received_order_date',
+			'order_destroy_status',
+			'report_due_date',
+			'order_destroy_date'
+			)->whereOrder_status('approved');
 	}
 
 	public function html() {

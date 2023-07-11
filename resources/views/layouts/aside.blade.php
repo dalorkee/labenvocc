@@ -157,11 +157,28 @@
 						<span class="nav-link-text">รายงานผล</span>
 					</a>
 				</li>
-				<li class="{{ (Request::is('*sample/destroy*'))  ? 'active' : '' }}">
-					<a href="{{ route('sample.destroy.create') }}" title="งานทำลายตัวอย่าง" data-filter-tags="destroy">
+				<li class="{{ (Request::is('*sample/destroy*'))  ? 'active open' : '' }}">
+					<a href="#" title="งานทำลายตัวอย่าง" data-filter-tags="destroy">
 						<i class="fal fa-burn"></i>
 						<span class="nav-link-text">งานทำลายตัวอย่าง</span>
 					</a>
+					<ul>
+						<li class="{{ (Request::is('*sample/destroy/order/show')) ? 'active' : '' }}">
+							<a href="{{ route('sample.destroy.order.show') }}" title="รายการข้อมูล" data-filter-tags="destroy_all">
+								<span class="nav-link-text" data-i18n="nav.plugins_plugins_faq">รายการข้อมูล</span>
+							</a>
+						</li>
+						<li class="{{ (Request::is('*sample/destroy/order/approve'))  ? 'active' : '' }}">
+							<a href="{{ route('sample.destroy.order.approve') }}" title="อนุมัติทำลายตัวอย่าง" data-filter-tags="destroy_approve">
+								<span class="nav-link-text" data-i18n="nav.plugins_plugins_faq">อนุมัติทำลายตัวอย่าง</span>
+							</a>
+						</li>
+						{{-- <li class="{{ (Request::is('*sample/destroy'))  ? 'active' : '' }}">
+							<a href="{{ route('sample.destroy') }}" title="" data-filter-tags="destroy_approve">
+								<span class="nav-link-text" data-i18n="nav.plugins_plugins_faq">อนุมัติทำลายตัวอย่าง</span>
+							</a>
+						</li> --}}
+					</ul>
 				</li>
 				<li>
 					<a href="{{ route('fetchdata.index') }}" title="ดึงข้อมูล" data-filter-tags="fetchdata">

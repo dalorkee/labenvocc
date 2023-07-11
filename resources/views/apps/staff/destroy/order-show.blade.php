@@ -28,7 +28,7 @@ div.dataTables_wrapper span.select-item {margin-left: 0.5em;}
 @endsection
 @section('content')
 <ol class="breadcrumb page-breadcrumb text-sm font-prompt">
-	<li class="breadcrumb-item"><i class="fal fa-home mr-1"></i> <a href="{{ route('sample.received.index') }}">งานทำลายตัวอย่าง</a></li>
+	<li class="breadcrumb-item"><i class="fal fa-home mr-1"></i> <a href="{{ route('sample.destroy.order.show') }}">งานทำลายตัวอย่าง</a></li>
 	<li class="breadcrumb-item">รายการตัวอย่าง</li>
 </ol>
 <div class="row text-sm font-prompt">
@@ -43,7 +43,7 @@ div.dataTables_wrapper span.select-item {margin-left: 0.5em;}
 				</div>
 			</div>
 			<div class="panel-container show">
-				<form name="requisition_form" action="{{ route('sample.destroy.store') }}" method="POST">
+				<form name="destroy_approve_frm" action="#" id="destroy_approve_frm" method="POST">
 					<input type="hidden" name="_token" value="{{ csrf_token() }}" />
 					<div class="panel-content">
 						<ul class="steps">
@@ -62,8 +62,8 @@ div.dataTables_wrapper span.select-item {margin-left: 0.5em;}
 						</div>
 					</div>
 					<div class="panel-content border-faded border-left-0 border-right-0 border-bottom-0 text-right">
-						<a href="{{ route('sample.destroy.index') }}" class="btn btn-primary"><i class="fal fa-home"></i> กลับไปหน้าแรก</a>
-						<button type="submit" class="btn btn-danger"><i class="fal fa-save"></i> บันทึก</button>
+						<a href="{{ route('sample.destroy.order.show') }}" class="btn btn-primary"><i class="fal fa-home"></i> กลับไปหน้าแรก</a>
+						<button type="button" class="btn btn-danger" id="btn_submit"><i class="fal fa-save"></i> บันทึก</button>
 					</div>
 				</form>
 			</div>
@@ -80,8 +80,30 @@ div.dataTables_wrapper span.select-item {margin-left: 0.5em;}
 <script type="text/javascript" src="{{ URL::asset('vendor/jquery-datatables-checkboxes/dataTables.checkboxes.min.js') }}"></script>
 {{ $dataTable->scripts() }}
 <script type="text/javascript">
-$(document).ready(function() {
-	$.ajaxSetup({headers:{'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')}});
-});
-</script>
+	$(document).ready(function() {
+		$.ajaxSetup({headers:{'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')}});
+		$('#btn_submit').click(function(e) {
+			 e.preventDefault();
+			let $form = $('form#destroy_approve_frm');
+		 	Swal.fire({
+		 		type: "info",
+		 		title: "<span class='text-danger'>ยืนยันบันทึกข้อมูล</span>",
+		 		html: "<span class='text-primary'>โปรดตรวจสอบข้อมูลให้ถูกต้องเสมอ </span> <p class='text-danger'>ต้องการการบันทึกข้อมูลใช่หรือไม่ ?</p>" ,
+		 		showCancelButton: true,
+		 		cancelButtonColor: '#dd3333',
+		 		cancelButtonText: "ยกเลิก",
+				confirmButtonColor: '#3085d6',
+		 		confirmButtonText: "ตกลง",
+		 		footer: "Lab Env-Occ",
+		 		allowOutsideClick: false
+		 	}).then((result) => {
+		  		if (result.value == true) {
+					 $form.submit();
+		 		} else {
+		 			return false;
+		 		}
+		 	});
+		 });
+	});
+	</script>
 @endpush
