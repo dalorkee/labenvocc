@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\{Log};
 use App\Models\Order;
 use App\Traits\CommonTrait;
 
-class ApproveOrderDataTable extends DataTable
+class DestroyOrderDataTable extends DataTable
 {
 	use CommonTrait;
 
@@ -45,8 +45,15 @@ class ApproveOrderDataTable extends DataTable
 					};
 					return $htm;
 				})
+				->addColumn('approved_destroy_status', function($status) {
+					$htm = match ($status->order_destroy_status) {
+						"approved" => "<div class=\"text-success text-center\"><i class=\"fas fa-star\"></i></div>",
+						default => "<div class=\"text-danger text-center\"><i class=\"fas fa-star\"></i></div>",
+					};
+					return $htm;
+				})
 				->addColumn('action', function($order) {
-					if ($order->order_destroy_status == 'pending') {
+					if ($order->order_destroy_status == 'approved') {
 						$htm = "
 						<div class=\"custom-control custom-checkbox\">
 							<input type=\"checkbox\" name=\"lab_no[]\" class=\"custom-control-input\" value=\"".$order->lab_no."\" id=\"lab_no_".$order->lab_no."\" />
@@ -55,20 +62,31 @@ class ApproveOrderDataTable extends DataTable
 					} else {
 						$htm = "
 						<div class=\"custom-control custom-checkbox\">
-							<input type=\"checkbox\" name=\"approved_lab_no[]\" class=\"custom-control-input\" value=\"".$order->lab_no."\" id=\"approved_lab_no_".$order->lab_no."\" checked disabled />
-							<label class=\"custom-control-label\" for=\"approved_lab_no_".$order->lab_no."\">&nbsp;</label>
+							<input type=\"checkbox\" name=\"pending_lab_no[]\" class=\"custom-control-input\" value=\"".$order->lab_no."\" id=\"pending_lab_no_".$order->lab_no."\" disabled />
+							<label class=\"custom-control-label\" for=\"pending_lab_no_".$order->lab_no."\">&nbsp;</label>
 						</div>";
 					}
 					return $htm;
 				})
-				->rawColumns(['order_destroy_status', 'action']);
+				->rawColumns(['order_destroy_status', 'approved_destroy_status', 'action']);
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
 		}
 	}
 
 	public function query(Order $order) {
-		return $order?->whereNotNull('lab_no')?->whereNotNull('received_order_date')?->whereOrder_status('approved');
+		return $order?->select(
+			'id',
+			'lab_no',
+			'received_order_date',
+			'order_destroy_status',
+			'report_due_date',
+			'order_destroy_date'
+			)
+			?->whereNotNull('lab_no')
+			?->whereNotNull('received_order_date')
+			?->whereOrder_status('approved')
+            ?->whereIn('order_destroy_status', ['pending', 'approved']);
 	}
 
 	public function html() {
@@ -92,9 +110,10 @@ class ApproveOrderDataTable extends DataTable
 				Column::make('lab_no')->title('Lab No.'),
 				Column::make('received_order_date')->title('รับตัวอย่าง'),
 				Column::make('order_destroy_status')->title('สถานะรอทำลายตัวอย่าง'),
+				Column::make('approved_destroy_status')->title('อนุมัติทำลายตัวอย่าง')->width('12%'),
 				Column::make('report_due_date')->title('กำหนดส่ง'),
 				Column::make('order_destroy_date')->title('วันทำลายตัวอย่าง'),
-				Column::computed('action')->title('อนุมัติ')->width('15%')->addClass('text-center')
+				Column::computed('action')->title('บันทึก')->width('15%')->addClass('text-center')
 			];
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());

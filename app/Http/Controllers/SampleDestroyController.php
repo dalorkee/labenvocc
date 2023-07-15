@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\{Auth,Log};
-use App\DataTables\destroy\{OrderDataTable,ApproveOrderDataTable};
+use App\DataTables\destroy\{ApproveOrderDataTable,DestroyOrderDataTable};
 use App\Models\Order;
 // use Yajra\DataTables\Facades\DataTables;
 
@@ -25,21 +25,36 @@ class SampleDestroyController extends Controller
 		});
 	}
 
-	protected function showOrder(OrderDataTable $dataTable): ?object {
-		return $dataTable?->render(view: 'apps.staff.destroy.order-show');
-	}
-
-	protected function approveOrder(ApproveOrderDataTable $dataTable): ?object {
+	protected function showApproveOrder(ApproveOrderDataTable $dataTable): ?object {
 		return $dataTable?->render(view: 'apps.staff.destroy.order-approve');
 	}
 
-	protected function approveOrderStore(Request $request, Order $order): ?object {
+	protected function storeApproveOrder(Request $request, Order $order): ?object {
 		try {
 			if (isset($request->lab_no) && count($request->lab_no) > 0) {
-				$order->whereIn('lab_no', $request->lab_no)->update(['order_destroy_status' => 'approved', 'order_destroy_date' => date('Y-m-d')]);
+				$order->whereIn('lab_no', $request->lab_no)->update(['order_destroy_status' => 'approved']);
 				return redirect()->back()->with('success', 'บันทึกข้อมูลสำเร็จแล้ว');
+			} else {
+				return redirect()->back()->with('warning', 'ไม่สามารถบันทึกข้อมูลได้ โปรดตรวจสอบความถูกต้อง');
 			}
-			return redirect()->back()->with('warning', 'Warning! บันทึกไม่สำเร็จ โปรดตรวจสอบความถูกต้อง');
+		} catch (\Exception $e) {
+			Log::error($e->getMessage());
+			return redirect()->back()->with('error', $e->getMessage());
+		}
+	}
+
+	protected function showDestroyOrder(DestroyOrderDataTable $dataTable): ?object {
+		return $dataTable?->render(view: 'apps.staff.destroy.order-show');
+	}
+
+	protected function storeDestroyOrder(Request $request, Order $order): ?object {
+		try {
+			if (isset($request->lab_no) && count($request->lab_no) > 0) {
+				$order->whereIn('lab_no', $request->lab_no)->update(['order_destroy_status' => 'destroyed', 'order_destroy_date' => date('Y-m-d')]);
+				return redirect()->back()->with('success', 'บันทึกข้อมูลสำเร็จแล้ว');
+			} else {
+				return redirect()->back()->with('warning', 'ไม่สามารถบันทึกข้อมูลได้ โปรดตรวจสอบความถูกต้อง');
+			}
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
 			return redirect()->back()->with('error', $e->getMessage());

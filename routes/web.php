@@ -192,10 +192,10 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 			Route::post('reject', 'reject')->name('qc.reject');
 		});
 		Route::controller(SampleDestroyController::class)->prefix('destroy')->group(function() {
-			Route::get('/order/show', 'showOrder')->name('destroy.order.show');
-			Route::get('/order/approve', 'approveOrder')->name('destroy.order.approve');
-			Route::post('order/approve/store', 'approveOrderStore')->name('destroy.order.approve.store');
-			// Route::get('/', 'process')->name('destroy.approve');
+			Route::get('/order/approve/show', 'showApproveOrder')->name('destroy.order.approve.show');
+			Route::post('order/approve/store', 'storeApproveOrder')->name('destroy.order.approve.store');
+			Route::get('/order/show', 'showDestroyOrder')->name('destroy.order.show');
+			Route::post('order/show/store', 'storeDestroyOrder')->name('destroy.order.store');
 		});
 	});
 	Route::get('/admin/home', [AdminController::class, 'index'])->name('admin.index');

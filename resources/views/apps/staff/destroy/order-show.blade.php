@@ -4,7 +4,7 @@
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/pj-step.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/css/datagrid/datatables/datatables.bundle.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('vendor/jquery-contextmenu/css/jquery.contextMenu.min.css') }}">
-<link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/css/notifications/sweetalert2/sweetalert2.bundle.css') }}" media="screen, print">
+{{-- <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/css/notifications/sweetalert2/sweetalert2.bundle.css') }}" media="screen, print"> --}}
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/css/formplugins/bootstrap-datepicker/bootstrap-datepicker.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('vendor/jquery-datatables-checkboxes/dataTables.checkboxes.css') }}">
 <style>
@@ -43,7 +43,7 @@ div.dataTables_wrapper span.select-item {margin-left: 0.5em;}
 				</div>
 			</div>
 			<div class="panel-container show">
-				<form name="destroy_approve_frm" action="#" id="destroy_approve_frm" method="POST">
+				<form name="destroy_order_frm" action="{{ route('sample.destroy.order.store') }}" id="destroy_order_frm" method="POST">
 					<input type="hidden" name="_token" value="{{ csrf_token() }}" />
 					<div class="panel-content">
 						<ul class="steps">
@@ -62,8 +62,8 @@ div.dataTables_wrapper span.select-item {margin-left: 0.5em;}
 						</div>
 					</div>
 					<div class="panel-content border-faded border-left-0 border-right-0 border-bottom-0 text-right">
-						<a href="{{ route('sample.destroy.order.show') }}" class="btn btn-primary"><i class="fal fa-home"></i> กลับไปหน้าแรก</a>
-						<button type="button" class="btn btn-danger" id="btn_submit"><i class="fal fa-save"></i> บันทึก</button>
+						{{-- <a href="{{ route('sample.destroy.order.show') }}" class="btn btn-primary"><i class="fal fa-home"></i> กลับไปหน้าแรก</a> --}}
+						<button type="button" class="btn btn-danger" id="btn_submit"><i class="fal fa-save"></i> บันทึกข้อมูล</button>
 					</div>
 				</form>
 			</div>
@@ -75,7 +75,7 @@ div.dataTables_wrapper span.select-item {margin-left: 0.5em;}
 <script type="text/javascript" src="{{ URL::asset('assets/js/datagrid/datatables/datatables.bundle.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/buttons.server-side.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('vendor/jquery-contextmenu/js/jquery.contextMenu.min.js') }}"></script>
-<script type="text/javascript" src="{{ URL::asset('assets/js/notifications/sweetalert2/sweetalert2.bundle.js') }}"></script>
+{{-- <script type="text/javascript" src="{{ URL::asset('assets/js/notifications/sweetalert2/sweetalert2.bundle.js') }}"></script> --}}
 <script type="text/javascript" src="{{ URL::asset('assets/js/formplugins/bootstrap-datepicker/bootstrap-datepicker.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('vendor/jquery-datatables-checkboxes/dataTables.checkboxes.min.js') }}"></script>
 {{ $dataTable->scripts() }}
@@ -84,7 +84,7 @@ div.dataTables_wrapper span.select-item {margin-left: 0.5em;}
 		$.ajaxSetup({headers:{'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')}});
 		$('#btn_submit').click(function(e) {
 			 e.preventDefault();
-			let $form = $('form#destroy_approve_frm');
+			let $form = $('form#destroy_order_frm');
 		 	Swal.fire({
 		 		type: "info",
 		 		title: "<span class='text-danger'>ยืนยันบันทึกข้อมูล</span>",

@@ -1,6 +1,7 @@
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/cookie-consent.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/fonts.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/app.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/css/fa-solid.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('fonts/fontawesome/font-awesome.css') }}">
 @role('customer')
 	<link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/css/vendors.bundle.css') }}" media="screen, print">
