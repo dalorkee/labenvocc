@@ -1,7 +1,5 @@
 @extends('layouts.index')
-@section('token')
-<meta name="csrf-token" content="{{ csrf_token() }}">
-@endsection
+@section('token')<meta name="csrf-token" content="{{ csrf_token() }}">@endsection
 @section('style')
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/css/datagrid/datatables/datatables.bundle.css') }}">
 <style>
@@ -44,8 +42,8 @@
 						<div class="btn-group" role="group">
 							<button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown"><i class="fal fa-plus-circle"></i> <span class="d-none d-sm-inline">สร้างคำขอส่งตัวอย่าง</span></button>
 							<div class="dropdown-menu">
-								<a class="dropdown-item" href="{{ route('customer.info.create', ['order_id' => 'new']) }}">ตัวอย่างชีวภาพ</a>
-								<a class="dropdown-item" href="javascript:void(0)">ตัวอย่างสิ่งแวดล้อม</a>
+								<a class="dropdown-item" href="{{ route('customer.info.create', ['order_id' => 'new', 'order_type' => 'bio']) }}">ตัวอย่างชีวภาพ</a>
+								<a class="dropdown-item" href="{{ route('customer.info.create', ['order_id' => 'new', 'order_type' => 'env']) }}">ตัวอย่างสิ่งแวดล้อม</a>
 							</div>
 						</div>
 					</div>

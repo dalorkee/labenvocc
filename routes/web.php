@@ -109,7 +109,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 	});
 	Route::name('customer.')->group(function() {
 		Route::prefix('customer/info')->controller(CustomerController::class)->group(function() {
-			Route::get('/create/order/{order_id}', 'createInfo')->name('info.create');
+			Route::get('/create/order/{order_id}/type/{order_type}', 'createInfo')->name('info.create');
 			Route::post('store/order', 'storeInfo')->name('info.store');
 		});
 		Route::prefix('customer/parameter')->controller(CustomerController::class)->group(function() {
