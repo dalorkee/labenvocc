@@ -39,8 +39,8 @@ class CustomerController extends Controller
 			$type_of_work = $this->typeOfWork();
 			$titleName = $this->titleName();
 			$order_type_arr = $this->OrderType();
-			$bio_labor_target_group = ($request->order_type == 'env') ? $this->bioLaborTargetGroup() : null;
-			$order = ($request->order_id == 'new') ? null : Order::whereId($request->order_id)->with(relations: 'uploads')->get();
+			//$env_labor_target_group = ($request->order_type == 'env') ? $this->envLaborTargetGroup() : null;
+			$order = ($request->order_id == 'new') ? null : Order::whereId($request->order_id)?->with(relations: 'uploads')?->get();
 			return view(
 				view: 'apps.customers.info',
 				data: [
@@ -49,7 +49,7 @@ class CustomerController extends Controller
 					'order_type' => $request->order_type,
 					'order' => $order,
 					'titleName' => $titleName,
-					'bio_labor_target_group' => $bio_labor_target_group
+					//'env_labor_target_group' => $env_labor_target_group
 				]
 			);
 		} catch (\Exception $e) {
@@ -118,7 +118,7 @@ class CustomerController extends Controller
 				}
 			}
 			if ($order == true) {
-				return redirect()->route(route: 'customer.info.create', parameters: ['order_id' => $last_insert_order_id])->with(key: 'success', value: 'บันทึกร่างข้อมูลทั่วไปแล้ว โปรดทำขั้นตอนต่อไป');
+				return redirect()->route(route: 'customer.info.create', parameters: ['order_id' => $last_insert_order_id, 'order_type' => $request->order_type])->with(key: 'success', value: 'บันทึกร่างข้อมูลทั่วไปแล้ว โปรดทำขั้นตอนต่อไป');
 			} else {
 				return redirect()->back()->with(key: 'error', value: 'บันทึกร่าง "ข้อมูลทั่วไป" ผิดพลาด โปรดตรวจสอบ');
 			}

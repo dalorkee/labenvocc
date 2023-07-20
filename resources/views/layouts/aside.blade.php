@@ -90,97 +90,106 @@
 						<span class="nav-link-text">หน้าหลัก</span>
 					</a>
 				</li>
-				<li class="{{ (Request::is('*sample/received*')) ? 'active open' : '' }}">
-					<a href="#" title="งานรับตัวอย่าง" data-filter-tags="receive">
-						<i class="fal fa-cube"></i>
-						<span class="nav-link-text">งานรับตัวอย่าง</span>
-					</a>
-					<ul>
-						<li class="{{ (Request::is('*sample/received') || Request::is('*sample/received/*/step*'))  ? 'active' : '' }}">
-							<a href="{{ route('sample.received.index') }}" title="รับตัวอย่าง" data-filter-tags="sample_receive">
-								<span class="nav-link-text" data-i18n="nav.plugins_plugins_faq">รับตัวอย่าง</span>
+				@switch(auth()->user()->userStaff->duty)
+					@case('1')
+						<li class="{{ (Request::is('*sample/received*')) ? 'active open' : '' }}">
+							<a href="#" title="งานรับตัวอย่าง" data-filter-tags="receive">
+								<i class="fal fa-cube"></i>
+								<span class="nav-link-text">งานรับตัวอย่าง</span>
 							</a>
+							<ul>
+								<li class="{{ (Request::is('*sample/received') || Request::is('*sample/received/*/step*'))  ? 'active' : '' }}">
+									<a href="{{ route('sample.received.index') }}" title="รับตัวอย่าง" data-filter-tags="sample_receive">
+										<span class="nav-link-text" data-i18n="nav.plugins_plugins_faq">รับตัวอย่าง</span>
+									</a>
+								</li>
+								<li class="{{ (Request::is('*sample/received/order/test/number/*'))  ? 'active' : '' }}">
+									<a href="{{ Route('sample.received.test.no.create') }}" title="กำหนดหมายเลขทดสอบ" data-filter-tags="sample_receive">
+										<span class="nav-link-text" data-i18n="nav.plugins_plugins_faq">กำหนดหมายเลขทดสอบ</span>
+									</a>
+								</li>
+								<li class="{{ (Request::is('*sample/received/order/requisition/*'))  ? 'active' : '' }}">
+									<a href="{{ Route('sample.received.requisition.create') }}" title="เบิกตัวอย่าง" data-filter-tags="sample_receive">
+										<span class="nav-link-text" data-i18n="nav.plugins_plugins_faq">เบิกตัวอย่าง</span>
+									</a>
+								</li>
+								<li class="{{ (Request::is('*sample/received/order/report/*'))  ? 'active' : '' }}">
+									<a href="{{ Route('sample.received.report.create') }}" title="ออกรายงาน" data-filter-tags="sample_receive">
+										<span class="nav-link-text" data-i18n="nav.plugins_plugins_faq">ออกรายงาน</span>
+									</a>
+								</li>
+								<li class="{{ (Request::is('*sample/received/order/return/*'))  ? 'active' : '' }}">
+									<a href="{{ Route('sample.received.return.create') }}" title="คืนผลลูกค้า" data-filter-tags="sample_receive">
+										<span class="nav-link-text" data-i18n="nav.plugins_plugins_faq">คืนผลลูกค้า</span>
+									</a>
+								</li>
+							</ul>
 						</li>
-						<li class="{{ (Request::is('*sample/received/order/test/number/*'))  ? 'active' : '' }}">
-							<a href="{{ Route('sample.received.test.no.create') }}" title="กำหนดหมายเลขทดสอบ" data-filter-tags="sample_receive">
-								<span class="nav-link-text" data-i18n="nav.plugins_plugins_faq">กำหนดหมายเลขทดสอบ</span>
+						@break
+					@casae('2')
+						<li class="{{ (Request::is('*sample/analyze*') || Request::is('*sample/qc*'))  ? 'active open' : '' }}">
+							<a href="#" title="งานตรวจวิเคราะห์" data-filter-tags="analyze">
+								<i class="fal fa-flask"></i>
+								<span class="nav-link-text">งานตรวจวิเคราะห์</span>
 							</a>
+							<ul>
+								<li class="{{ (Request::is('*sample/analyze/create') || Request::is('*sample/analyze/select/*') || Request::is('*sample/analyze/result/*'))  ? 'active' : '' }}">
+									<a href="{{ route('sample.analyze.create') }}" title="งานวิเคราะห์" data-filter-tags="sample_analyze">
+										<span class="nav-link-text" data-i18n="nav.plugins_plugins_faq">งานวิเคราะห์</span>
+									</a>
+								</li>
+								<li class="{{ (Request::is('*sample/qc*'))  ? 'active' : '' }}">
+									<a href="{{ route('sample.qc.create') }}" title="งานควบคุมคุณภาพ" data-filter-tags="sample_qc">
+										<span class="nav-link-text" data-i18n="nav.plugins_plugins_faq">งานควบคุมคุณภาพ</span>
+									</a>
+								</li>
+								{{-- <li class="{{ (Request::is('*sample/analyze/report'))  ? 'active' : '' }}">
+									<a href="{{ route('sample.analyze.create') }}" title="ใบรายงานผล" data-filter-tags="sample_analyze">
+										<span class="nav-link-text" data-i18n="nav.plugins_plugins_faq">ใบรายงานผล</span>
+									</a>
+								</li>
+								<li class="{{ (Request::is('*sample/analyze/history'))  ? 'active' : '' }}">
+									<a href="{{ route('sample.analyze.create') }}" title="ประวัติการวิเคราะห์" data-filter-tags="sample_analyze">
+										<span class="nav-link-text" data-i18n="nav.plugins_plugins_faq">ประวัติการวิเคราะห์</span>
+									</a>
+								</li> --}}
+							</ul>
 						</li>
-						<li class="{{ (Request::is('*sample/received/order/requisition/*'))  ? 'active' : '' }}">
-							<a href="{{ Route('sample.received.requisition.create') }}" title="เบิกตัวอย่าง" data-filter-tags="sample_receive">
-								<span class="nav-link-text" data-i18n="nav.plugins_plugins_faq">เบิกตัวอย่าง</span>
+						@break
+					@case('5')
+						<li class="{{ (Request::is('*sample/destroy*'))  ? 'active open' : '' }}">
+							<a href="#" title="งานทำลายตัวอย่าง" data-filter-tags="destroy">
+								<i class="fal fa-burn"></i>
+								<span class="nav-link-text">งานทำลายตัวอย่าง</span>
 							</a>
+							<ul>
+								<li class="{{ (Request::is('*sample/destroy/order/approve/show'))  ? 'active' : '' }}">
+									<a href="{{ route('sample.destroy.order.approve.show') }}" title="อนุมัติทำลายตัวอย่าง" data-filter-tags="destroy_approve">
+										<span class="nav-link-text" data-i18n="nav.plugins_plugins_faq">อนุมัติทำลายตัวอย่าง</span>
+									</a>
+								</li>
+								<li class="{{ (Request::is('*sample/destroy/order/show')) ? 'active' : '' }}">
+									<a href="{{ route('sample.destroy.order.show') }}" title="ทำลายตัวอย่าง" data-filter-tags="destroy_all">
+										<span class="nav-link-text" data-i18n="nav.plugins_plugins_faq">ทำลายตัวอย่าง</span>
+									</a>
+								</li>
+
+								{{-- <li class="{{ (Request::is('*sample/destroy'))  ? 'active' : '' }}">
+									<a href="{{ route('sample.destroy') }}" title="" data-filter-tags="destroy_approve">
+										<span class="nav-link-text" data-i18n="nav.plugins_plugins_faq">อนุมัติทำลายตัวอย่าง</span>
+									</a>
+								</li> --}}
+							</ul>
 						</li>
-						<li class="{{ (Request::is('*sample/received/order/report/*'))  ? 'active' : '' }}">
-							<a href="{{ Route('sample.received.report.create') }}" title="ออกรายงาน" data-filter-tags="sample_receive">
-								<span class="nav-link-text" data-i18n="nav.plugins_plugins_faq">ออกรายงาน</span>
-							</a>
-						</li>
-						<li class="{{ (Request::is('*sample/received/order/return/*'))  ? 'active' : '' }}">
-							<a href="{{ Route('sample.received.return.create') }}" title="คืนผลลูกค้า" data-filter-tags="sample_receive">
-								<span class="nav-link-text" data-i18n="nav.plugins_plugins_faq">คืนผลลูกค้า</span>
-							</a>
-						</li>
-					</ul>
-				</li>
-				<li class="{{ (Request::is('*sample/analyze*') || Request::is('*sample/qc*'))  ? 'active open' : '' }}">
-					<a href="#" title="งานตรวจวิเคราะห์" data-filter-tags="analyze">
-						<i class="fal fa-flask"></i>
-						<span class="nav-link-text">งานตรวจวิเคราะห์</span>
-					</a>
-					<ul>
-						<li class="{{ (Request::is('*sample/analyze/create') || Request::is('*sample/analyze/select/*') || Request::is('*sample/analyze/result/*'))  ? 'active' : '' }}">
-							<a href="{{ route('sample.analyze.create') }}" title="งานวิเคราะห์" data-filter-tags="sample_analyze">
-								<span class="nav-link-text" data-i18n="nav.plugins_plugins_faq">งานวิเคราะห์</span>
-							</a>
-						</li>
-						<li class="{{ (Request::is('*sample/qc*'))  ? 'active' : '' }}">
-							<a href="{{ route('sample.qc.create') }}" title="งานควบคุมคุณภาพ" data-filter-tags="sample_qc">
-								<span class="nav-link-text" data-i18n="nav.plugins_plugins_faq">งานควบคุมคุณภาพ</span>
-							</a>
-						</li>
-						{{-- <li class="{{ (Request::is('*sample/analyze/report'))  ? 'active' : '' }}">
-							<a href="{{ route('sample.analyze.create') }}" title="ใบรายงานผล" data-filter-tags="sample_analyze">
-								<span class="nav-link-text" data-i18n="nav.plugins_plugins_faq">ใบรายงานผล</span>
-							</a>
-						</li>
-						<li class="{{ (Request::is('*sample/analyze/history'))  ? 'active' : '' }}">
-							<a href="{{ route('sample.analyze.create') }}" title="ประวัติการวิเคราะห์" data-filter-tags="sample_analyze">
-								<span class="nav-link-text" data-i18n="nav.plugins_plugins_faq">ประวัติการวิเคราะห์</span>
-							</a>
-						</li> --}}
-					</ul>
-				</li>
+						@break
+				@endswitch
 				<li>
 					<a href="#" title="รายงานผล" data-filter-tags="report">
 						<i class="fal fa-clipboard"></i>
 						<span class="nav-link-text">รายงานผล</span>
 					</a>
 				</li>
-				<li class="{{ (Request::is('*sample/destroy*'))  ? 'active open' : '' }}">
-					<a href="#" title="งานทำลายตัวอย่าง" data-filter-tags="destroy">
-						<i class="fal fa-burn"></i>
-						<span class="nav-link-text">งานทำลายตัวอย่าง</span>
-					</a>
-					<ul>
-                        <li class="{{ (Request::is('*sample/destroy/order/approve/show'))  ? 'active' : '' }}">
-							<a href="{{ route('sample.destroy.order.approve.show') }}" title="อนุมัติทำลายตัวอย่าง" data-filter-tags="destroy_approve">
-								<span class="nav-link-text" data-i18n="nav.plugins_plugins_faq">อนุมัติทำลายตัวอย่าง</span>
-							</a>
-						</li>
-						<li class="{{ (Request::is('*sample/destroy/order/show')) ? 'active' : '' }}">
-							<a href="{{ route('sample.destroy.order.show') }}" title="ทำลายตัวอย่าง" data-filter-tags="destroy_all">
-								<span class="nav-link-text" data-i18n="nav.plugins_plugins_faq">ทำลายตัวอย่าง</span>
-							</a>
-						</li>
 
-						{{-- <li class="{{ (Request::is('*sample/destroy'))  ? 'active' : '' }}">
-							<a href="{{ route('sample.destroy') }}" title="" data-filter-tags="destroy_approve">
-								<span class="nav-link-text" data-i18n="nav.plugins_plugins_faq">อนุมัติทำลายตัวอย่าง</span>
-							</a>
-						</li> --}}
-					</ul>
-				</li>
 				<li>
 					<a href="{{ route('fetchdata.index') }}" title="ดึงข้อมูล" data-filter-tags="fetchdata">
 						<i class="fal fa-database"></i>

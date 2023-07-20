@@ -63,7 +63,7 @@ class CustomersDataTable extends DataTable
 					return $htm;
 				})
 				->addColumn('action', function($order) {
-					if (is_null($order->order_confirmed)) {
+					if (is_null($order->order_confirmed_date) || empty($order->order_confirmed_date)) {
 						return "
 							<a href=\"".route('customer.info.create', ['order_id' => $order->id, 'order_type' => $order->order_type])."\" title=\"แก้ไข\" class=\"btn btn-warning btn-sm \"><i class=\"fal fa-pencil\"></i> แก้ไข</a>
 							<a href=\"#\" class=\"btn btn-danger btn-sm \">ลบ <i class=\"fal fa-times\"></i></a>";
@@ -87,7 +87,7 @@ class CustomersDataTable extends DataTable
 	 */
 	public function query(Order $order): object {
 		return $order?->whereUser_id($this->user_id)
-			?->whereIn('order_status', ['pending', 'progress', 'completed'])
+			?->whereIn('order_status', ['pending', 'preparing', 'approved', 'completed'])
 			?->with('parameters')
 			?->orderBy('id', 'ASC');
 	}

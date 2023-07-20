@@ -40,7 +40,7 @@ trait CommonTrait {
 	public function calcPercent($data=0, $allData=0): float {
 		return (($data*100)/$allData);
 	}
-    public function bioLaborTargetGroup(): array {
+    public function envLaborTargetGroup(): array {
 		return [1=>'แรงงานในระบบ', 2=>'แรงงานนอกระบบ', 3=>'วิสาหกิจชุมชน'];
 	}
 	// public function convertJsDateToMySQL($date='00/00/0000', $separator='/'): ?string {
