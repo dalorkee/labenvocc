@@ -199,13 +199,13 @@
 				@break
 			@case('root')
 			@case('admin')
-				<li class="{{ (Request::is('admin/*'))  ? 'active' : '' }}">
+				<li class="{{ (Request::is('*staff/home'))  ? 'active' : '' }}">
 					<a href="{{ route('staff.index') }}" title="หน้าหลัก" data-filter-tags="home">
 						<i class="fal fa-home"></i>
 						<span class="nav-link-text">หน้าหลัก</span>
 					</a>
 				</li>
-				<li>
+				<li class="{{ (Request::is('*admin/*'))  ? 'active' : '' }}">
 					<a href="{{ route('admin.index') }}" title="Application Intel" data-filter-tags="application intel">
 						<i class="fal fa-cog"></i>
 						<span class="nav-link-text" data-i18n="nav.application_intel">จัดการข้อมูล</span>
