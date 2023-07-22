@@ -127,7 +127,7 @@ class FetchDataController extends Controller
 		return $html;
 	}
 
-	public function dataFetch(Request $request) {
+	public function dataFetch(Request $request) {		
 		$this->validate($request,[
 			'sample_type'=>'required',
 			'date_start'=>'required',
@@ -181,16 +181,16 @@ class FetchDataController extends Controller
 		->when($request->type_of_work != "seall", function($cond_type_work) use ($request){
 			return $cond_type_work->where('orders.type_of_work', $request->type_of_work);
 		})
-		->when($request->original_threat != "seall" || !is_null($request->original_threat), function($cond_ori_threat) use ($request){
-			return $cond_ori_threat->where('order_sample.origin_threat_id', $request->original_threat);
+		->when(!empty($request->original_threat) && $request->original_threat != "seall", function($cond_ori_threat) use ($request){
+				return $cond_ori_threat->where('order_sample.origin_threat_id', $request->original_threat);
 		})
-		->when($request->factory_type != "seall", function($cond_fact) use ($request){
+		->when(!empty($request->factory_type) && $request->factory_type != "seall", function($cond_fact) use ($request){
 			return $cond_fact->where('orders.type_of_factory', $request->factory_type);
 		})
 		->when($request->parameter_group != "seall", function($cond_para_group) use ($request){
 			return $cond_para_group->where('order_sample_parameter.threat_type_id', $request->parameter_group);
 		})
-		->when($request->parameter != "seall", function($cond_para) use ($request){
+		->when(!empty($request->parameter) && $request->parameter != "seall", function($cond_para) use ($request){
 			return $cond_para->where('order_sample_parameter.parameter_id', $request->parameter);
 		})
 		->when($request->province != "seall", function($cond_prov) use ($request){
@@ -202,7 +202,7 @@ class FetchDataController extends Controller
 		->when($request->sub_district != "seall", function($cond_subdistr) use ($request){
 			return $cond_subdistr->where('order_sample.sample_location_place_sub_district', $request->sub_district);
 		})
-		->toSql();
+		->get();
 		dd($ep_query);
 	}
 }
