@@ -2,7 +2,6 @@
 @section('token')<meta name="csrf-token" content="{{ csrf_token() }}">@endsection
 @section('style')
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/pj-step.css') }}">
-{{-- <link rel="stylesheet" type="text/css" href="{{ URL::asset('vendor/jquery-contextmenu/css/jquery.contextMenu.min.css') }}"> --}}
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/css/datagrid/datatables/datatables.bundle.css') }}">
 @endsection
 @section('content')
@@ -19,7 +18,6 @@
 			<li class="undone"><p><span class="d-none d-sm-inline">รายงานผล</span></p></li>
 		</ul>
 	</div>
-
 </div>
 <div class="row text-sm font-prompt">
 	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -57,7 +55,6 @@
 </div>
 @endsection
 @section('script')
-{{-- <script type="text/javascript" src="{{ URL::asset('vendor/jquery-contextmenu/js/jquery.contextMenu.min.js') }}"></script> --}}
 <script type="text/javascript" src="{{ URL::asset('assets/js/datagrid/datatables/datatables.bundle.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/buttons.server-side.js') }}"></script>
 <script type="text/javascript">
@@ -85,28 +82,6 @@ $(document).ready(function() {
 			{data: 'action', name: 'action', className: 'text-center'},
 		]
 	});
-
-/* 	$.contextMenu({
-		selector: '.context-nav',
-		trigger: 'left',
-		delay: 500,
-		className: 'data-title',
-		callback: function(item, opt) {
-			switch (item) {
-				case 'step01':
-					break;
-			}
-		},
-		items: {
-			'step01': {name: 'รับตัวอย่าง', icon: 'fal fa-edit'},
-			'sep1': '---------',
-			'parameter': {name: 'พารามิเตอร์', icon: 'fal fa-tachometer'},
-			'sep2': '---------',
-			'delete': {name: 'ลบข้อมูล', icon: 'fal fa-trash-alt'},
-			'sep3': '---------',
-			'quit': {name: 'ปิด', icon: 'fal fa-times'}
-		}
-	}); */
 });
 </script>
 @endsection

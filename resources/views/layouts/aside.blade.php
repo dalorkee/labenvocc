@@ -183,13 +183,15 @@
 						</li>
 						@break
 				@endswitch
+				<!--
+					** ยังไม่มีข้อมูลใน Slide ppt
 				<li>
 					<a href="#" title="รายงานผล" data-filter-tags="report">
 						<i class="fal fa-clipboard"></i>
 						<span class="nav-link-text">รายงานผล</span>
 					</a>
 				</li>
-
+			-->
 				<li>
 					<a href="{{ route('fetchdata.index') }}" title="ดึงข้อมูล" data-filter-tags="fetchdata">
 						<i class="fal fa-database"></i>

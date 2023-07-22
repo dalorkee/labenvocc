@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\DataTables\ReceivedExampleDataTable;
+// use App\DataTables\ReceivedExampleDataTable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\{Response,DB,Storage,Log};
 use App\Services\OrderService;
 use App\Traits\{DateTimeTrait,CommonTrait,DbBoundaryTrait};
 use App\Exceptions\{OrderNotFoundException,InvalidOrderException};
-use App\Models\{User,Order,OrderSample,OrderSampleParameter,FileUpload,Parameter};
+use App\Models\{User,UserCustomer,Order,OrderSample,OrderSampleParameter,FileUpload,Parameter};
 use Yajra\DataTables\Facades\DataTables;
 use Barryvdh\DomPDF\Facade\Pdf;
 
@@ -41,17 +41,26 @@ class SampleReceiveController extends Controller
 			$orders = OrderService::getOrderwithCount(relations: ['orderSamples', 'parameters'], order_year: $order_year, order_status: ['pending', 'preparing', 'completed']);
 			return Datatables::of($orders)
 				->addColumn('total', fn ($order) => $order->order_samples_count.'/'.$order->parameters_count)
-				->editColumn('order_confirmed_date', fn($order) => $this->setJsDateTimeToJsDate($order->order_confirmed_date))
+				->editColumn('order_confirmed_date', fn ($order) => $this->setJsDateTimeToJsDate($order->order_confirmed_date))
 				->addColumn('action', function ($order) {
 					if (!empty($order->order_confirmed_date)) {
-						if ($order->order_status != 'pending') {
-							return "
-							<a href=\"#\" class=\"btn btn-sm btn-secondary\" style=\"width:70px\" disable>รับ</a>\n
-							<a href=\"#\" class=\"btn btn-sm btn-secondary\" style=\"width:70px\" disabled>แก้ไข</a>\n";
-						} else {
-							return "
-								<a href=\"".route('sample.received.step01', ['order_id' => $order->id])."\" class=\"btn btn-sm btn-success\" style=\"width:70px\">รับ</a>\n
-								<a href=\"#edit-".$order->id."\" class=\"btn btn-sm btn-warning\" style=\"width:70px\">แก้ไข</a>\n";
+						switch ($order->order_status) {
+							case 'pending':
+								return "
+									<a href=\"".route('sample.received.step01', ['order_id' => $order->id])."\" class=\"btn btn-sm btn-success\" style=\"width:70px\">รับ</a>\n
+									<button type=\"button\" class=\"btn btn-sm btn-secondary\" style=\"width:70px\">แก้ไข</button>\n";
+									break;
+							// case 'preparing':
+							// case 'approved':
+							// 	return "
+							// 		<a href=\"".route('sample.received.step01', ['order_id' => $order->id])."\" class=\"btn btn-sm btn-success\" style=\"width:70px\">รับ</a>\n
+							// 		<a href=\"#edit-".$order->id."\" class=\"btn btn-sm btn-warning\" style=\"width:70px\">แก้ไข</a>\n";
+							// 		break;
+							default:
+								return "
+									<button type=\"button\" class=\"btn btn-sm btn-secondary\" style=\"width:70px\" disable>รับ</button>\n
+									<button type=\"button\" class=\"btn btn-sm btn-secondary\" style=\"width:70px\" disabled>แก้ไข</button>\n";
+									break;
 						}
 					} else {
 						return "<button class=\"btn btn-sm btn-warning\" style=\"width:140px\" disable>ไม่สมบูรณ์</button>";
@@ -65,10 +74,6 @@ class SampleReceiveController extends Controller
 		}
 	}
 
-	/**
-	* Create Sample Step 01
-	* @Get('sample.received.step01')
-	*/
 	private function setLabNo($order_id=0, $created_at=null, $lab_no=0): string {
 		$exp1 = explode(" ", $created_at);
 		$exp2 = explode("-", $exp1[0]);
@@ -80,6 +85,11 @@ class SampleReceiveController extends Controller
 		}
 		return $lab_no;
 	}
+
+	/**
+	* Create Sample Step 01
+	* @Get('sample.received.step01')
+	*/
 	protected function step01(Request $request) {
 		try {
 			$order = OrderService::get(id: $request->order_id);
@@ -135,7 +145,6 @@ class SampleReceiveController extends Controller
 		]);
 
 		if (empty($request->session()->get(key: 'order'))) {
-			// $order = OrderService::create();
 			$order = new Order();
 			$order->fill(attributes: $validated);
 			$request->session()->put(key: 'order', value: $order);
@@ -235,29 +244,28 @@ class SampleReceiveController extends Controller
 		try {
 			$user_staff = User::find(auth()->user()->id)->userStaff;
 			$user_staff_full_name = $user_staff->first_name." ".$user_staff->last_name;
-			$now_date = date('Y-m-d');
 			$order_id = $request->order_id;
 			$sample_result = $request->session()->get(key: 'sample_result');
 			$order_arr = $request->session()->get(key: 'order')->toArray();
 			$order = OrderService::get($order_id);
 			$order->fill(attributes: $order_arr);
-			DB::transaction(function() use ($sample_result, $order, $now_date, $user_staff_full_name) {
+			// DB::transaction(function() use ($sample_result, $order, $user_staff_full_name) {
 				foreach ($sample_result as $key => $value) {
-					$order_sample = OrderService::findOrderSample($value['id']);
+					$order_sample = OrderSample::findOr($value['id'], fn () => throw new \Exception('ไม่พบข้อมูล Order Sample id: '.$value['id']));
 					$order_sample->sample_verified_status = $value['sample_verified_status_'.$value['id']];
 					$order_sample->sample_received_status = $value['sample_received_status_'.$value['id']];
-					$order_sample->sample_receive_date = $now_date;
+					$order_sample->sample_received_date = date('Y-m-d');
 					$order_sample->save();
 				}
-				$order->fill(attributes: ['order_status' => 'preparing', 'received_order_name' => $user_staff_full_name, 'received_order_date' => $now_date]);
+				$order->fill(attributes: ['order_status' => 'preparing', 'received_order_name' => $user_staff_full_name, 'received_order_date' => date('d/m/Y')]);
 				$order->save();
-			});
-			// return redirect()->route('sample.received.index')->with(key: 'success', value: 'บันทึกข้อมูลสำเร็จแล้ว !!');
+			// });
 			return view('apps.staff.receive.step04', compact('order_id', 'order_arr'));
 		} catch (OrderNotFoundException $e) {
 			report($e->getMessage());
 			return redirect()->back()->with(key: 'error', value: $e->getMessage());
 		} catch (\Exception $e) {
+			dd($e->getMessage());
 			Log::error($e->getMessage());
 			return redirect()->route('sample.received.index')->with(key: 'error', value: $e->getMessage());
 		}
@@ -265,21 +273,25 @@ class SampleReceiveController extends Controller
 
 	protected function print(Request $request) {
 		try {
-			$order = Order::with(['orderSamples' => fn($q) => $q->where('sample_received_status', '=', 'y')])->whereId($request->order_id)->get();
+			$order = Order::with(['orderSamples' => fn ($q) => $q->where('sample_received_status', '=', 'y')])->whereId($request->order_id)->get();
 			$file_name = 'sample_receipt_order_'.$request->order_id.'_lab_'.$order[0]->lab_no.'.pdf';
 			if ($order[0]->receipt_status != 'y') {
-				$order_sample_id_arr = $order[0]->orderSamples->map(fn($value, $key) => $value->id)->toArray();
+				$order_sample_id_arr = $order[0]->orderSamples->map(fn ($value, $key) => $value->id)->toArray();
 				$parameters = OrderSampleParameter::whereIn('order_sample_id', $order_sample_id_arr)->get();
 				$parameters_total_price = $parameters->reduce(fn($sum, $value) => ($sum+$value->price_name));
 				$user_id_arr = str_split(sprintf("%04d", auth()->user()->id));
 				$lab_no_arr = str_split($order[0]->lab_no);
-				$user_prov = $this->provinceNameByProvId(auth()->user()->userCustomer->province) ?? '';
-				$user_dist = $this->districtNameByDistId(auth()->user()->userCustomer->district) ?? '';
-				$user_sub_dist = $this->subDistrictNameBySubDistId(auth()->user()->userCustomer->sub_district) ?? '';
-				$contact_user_prov = $this->provinceNameByProvId(auth()->user()->userCustomer->contact_province) ?? '';
-				$contact_user_dist = $this->districtNameByDistId(auth()->user()->userCustomer->contact_district) ?? '';
-				$contact_user_sub_dist = $this->subDistrictNameBySubDistId(auth()->user()->userCustomer->contact_sub_district) ?? '';
-				$parameters_count_deep = $parameters->countBy(fn($q) => $q->sample_character_id);
+
+				$user_customer = UserCustomer::whereUser_id($order[0]->user_id)->get();
+
+				$user_prov = $this->provinceNameByProvId($user_customer[0]->province) ?? '';
+				$user_dist = $this->districtNameByDistId($user_customer[0]->district) ?? '';
+				$user_sub_dist = $this->subDistrictNameBySubDistId($user_customer[0]->sub_district) ?? '';
+				$contact_user_prov = $this->provinceNameByProvId($user_customer[0]->contact_province) ?? '';
+				$contact_user_dist = $this->districtNameByDistId($user_customer[0]->contact_district) ?? '';
+				$contact_user_sub_dist = $this->subDistrictNameBySubDistId($user_customer[0]->contact_sub_district) ?? '';
+
+				$parameters_count_deep = $parameters->countBy(fn ($q) => $q->sample_character_id);
 				$parameters_count_deep->all();
 
 				$data = collect([
@@ -295,20 +307,20 @@ class SampleReceiveController extends Controller
 					'parameters_count_deep' => $parameters_count_deep->toArray(),
 					'origin_threat_id' => $order[0]->orderSamples[0]->origin_threat_id,
 					'customer_agency_name' => $order[0]->customer_agency_name,
-					'customer_address' => auth()->user()->userCustomer->address.' ต.'.$user_sub_dist.' อ.'.$user_dist.' จ.'.$user_prov.' '.auth()->user()->userCustomer->postcode,
-					'customer_mobile' => auth()->user()->userCustomer->mobile,
+					'customer_address' => $user_customer[0]->address.' ต.'.$user_sub_dist.' อ.'.$user_dist.' จ.'.$user_prov.' '.$user_customer[0]->postcode,
+					'customer_mobile' => $user_customer[0]->mobile,
 					'deliver_method' => $order[0]->deliver_method,
 					'book_no' => $order[0]->book_no,
 					'book_date' => $order[0]->book_date,
-					'first_name' => auth()->user()->userCustomer->first_name,
-					'last_name' => auth()->user()->userCustomer->last_name,
-					'mobile' => auth()->user()->userCustomer->mobile,
-					'contact_first_name' => auth()->user()->userCustomer->first_name,
-					'contact_last_name' => auth()->user()->userCustomer->last_name,
-					'contact_mobile' => auth()->user()->userCustomer->mobile,
-					'contact_address'=> auth()->user()->userCustomer->address.' ต.'.$contact_user_sub_dist.' อ.'.$contact_user_dist.' จ.'.$contact_user_prov.' '.auth()->user()->userCustomer->contact_postcode,
+					'first_name' => $user_customer[0]->first_name,
+					'last_name' => $user_customer[0]->last_name,
+					'mobile' => $user_customer[0]->mobile,
+					'contact_first_name' => $user_customer[0]->first_name,
+					'contact_last_name' => $user_customer[0]->last_name,
+					'contact_mobile' => $user_customer[0]->mobile,
+					'contact_address'=> $user_customer[0]->address.' ต.'.$contact_user_sub_dist.' อ.'.$contact_user_dist.' จ.'.$contact_user_prov.' '.$user_customer[0]->contact_postcode,
 					'order_created_at' => substr($this->convertMySQLDateTimeToJs($order[0]->created_at), 0, 10),
-					'contact_addr_opt' => auth()->user()->userCustomer->contact_addr_opt,
+					'contact_addr_opt' => $user_customer[0]->contact_addr_opt,
 					'report_result_receive_method' => $order[0]->report_result_receive_method,
 					'sample_sumary' => $request->session()->get(key: 'sample_sumary'),
 					'sample_verify_desc' => $order[0]->sample_verify_desc,
@@ -318,6 +330,7 @@ class SampleReceiveController extends Controller
 					'review_order_date' => $order[0]->review_order_date,
 					'parameters_total_price' => $parameters_total_price,
 				]);
+
 				switch($data['contact_addr_opt']) {
 					case "1":
 						$data->put('report_result_receive_first_name', $data['first_name']);
@@ -333,6 +346,7 @@ class SampleReceiveController extends Controller
 						break;
 				}
 				$data = $data->all();
+
 
 				/* put file to storage */
 				$pdf = Pdf::loadView('print.sample-receipt', $data);
@@ -446,7 +460,7 @@ class SampleReceiveController extends Controller
 									}
 								$htm .= "</td>";
 								$htm .= "<td>".$value['sample_count']."</td>";
-								$htm .= "<td><input type=\"text\" name=\"sample_no[]\" value=\"".$value['sample_test_no']."\" class=\"custom-control-input\" readonly /></td>";
+								$htm .= "<td><input type=\"text\" name=\"sample_no[]\" value=\"".$value['sample_test_no']."\" class=\"form-control\" readonly /></td>";
 							$htm .= "</tr>";
 							$i++;
 						}
