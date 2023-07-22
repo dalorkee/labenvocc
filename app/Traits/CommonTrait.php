@@ -29,16 +29,19 @@ trait CommonTrait {
 		return [130=>'ศูนย์อ้างอิง', 131=>'ศูนย์ระยอง'];
 	}
 	public function typeOfWork(): array {
-		return [1=>'บริการ', 2=>'วิจัย', 3=>'เฝ้าระวัง', 4=>'SRRT/สอบสวนโรค', 5=>'อื่นๆ'];
+		return [1=>'บริการ', 2=>'วิจัย', 3=>'เฝ้าระวัง', 4=>'SRRT/สอบสวนโรค', 5=>'งานร้องเรียน', 6=>'อื่นๆ'];
 	}
 	public function sampleOfficeCategory(): array {
 		return [1=>'สถานประกอบการ', 2=>'สถานพยาบาล', 3=>'ด่านควบคุมโรค', 4=>'อื่นๆ'];
 	}
 	public function OrderType(): array {
-		return [1=>'ตัวอย่างชีวภาพ', 2=>'ตัวอย่างสิ่งแวดล้อม'];
+		return ['bio'=>'ตัวอย่างชีวภาพ', 'env'=>'ตัวอย่างสิ่งแวดล้อม'];
 	}
 	public function calcPercent($data=0, $allData=0): float {
 		return (($data*100)/$allData);
+	}
+    public function envLaborTargetGroup(): array {
+		return [1=>'แรงงานในระบบ', 2=>'แรงงานนอกระบบ', 3=>'วิสาหกิจชุมชน'];
 	}
 	// public function convertJsDateToMySQL($date='00/00/0000', $separator='/'): ?string {
 	// 	if (!is_null($date) && !empty($date)) {

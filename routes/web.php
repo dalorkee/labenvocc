@@ -13,6 +13,7 @@ use App\Http\Controllers\{
 	SampleReceiveController,
 	SampleAnalyzeController,
 	SampleQcController,
+	SampleDestroyController,
 	UserAdvertiseController,
 	SampleUploadController,
 	HospitalController,
@@ -90,10 +91,6 @@ Route::name('register.')->group(function() {
 Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 	Route::resources([
 		'customer' => CustomerController::class,
-		'office' => OfficeController::class,
-		'paramet' => ParametController::class,
-		'users' => UsersController::class,
-		'advertise' => AdvertiseController::class,
 		'sampleupload' => SampleUploadController::class,
 		'fetchdata' => FetchDataController::class,
 	]);
@@ -108,7 +105,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 	});
 	Route::name('customer.')->group(function() {
 		Route::prefix('customer/info')->controller(CustomerController::class)->group(function() {
-			Route::get('/create/order/{order_id}', 'createInfo')->name('info.create');
+			Route::get('/create/order/{order_id}/type/{order_type}', 'createInfo')->name('info.create');
 			Route::post('store/order', 'storeInfo')->name('info.store');
 		});
 		Route::prefix('customer/parameter')->controller(CustomerController::class)->group(function() {
@@ -190,11 +187,28 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 			Route::post('approved', 'approved')->name('qc.approved');
 			Route::post('reject', 'reject')->name('qc.reject');
 		});
+		Route::controller(SampleDestroyController::class)->prefix('destroy')->group(function() {
+			Route::get('/order/approve/show', 'showApproveOrder')->name('destroy.order.approve.show');
+			Route::post('order/approve/store', 'storeApproveOrder')->name('destroy.order.approve.store');
+			Route::get('/order/show', 'showDestroyOrder')->name('destroy.order.show');
+			Route::post('order/show/store', 'storeDestroyOrder')->name('destroy.order.store');
+		});
 	});
-	Route::get('/admin/home', [AdminController::class, 'index'])->name('admin.index');
-	Route::get('/users/id/{id}/edit',[UsersController::class,'edit'])->name('users.edit');
+
+	Route::prefix('admin')->group(function() {
+		Route::resources([
+			'users' => UsersController::class,
+			'office' => OfficeController::class,
+			'advertise' => AdvertiseController::class,
+			'paramet' => ParametController::class,
+		]);
+		Route::get('home', [AdminController::class, 'index'])->name('admin.index');
+		Route::controller(UsersController::class)->group(function() {
+			Route::get('/users/id/{id}/edit', 'edit')->name('users.edit');
+			Route::get('/users/id/{id}/allow', 'allow')->name('users.allow');
+		});
+	});
 	Route::get('/users/id/{id}/destroy',[UsersController::class,'destroy'])->name('users.destroy');
-	Route::get('/users/id/{id}/allow',[UsersController::class,'allow'])->name('users.allow');
 	Route::get('/users/id/{id}/deny',[UsersController::class,'deny'])->name('users.deny');
 	Route::get('/office/id/{id}/edit',[OfficeController::class,'edit'])->name('office.edit');
 	Route::get('/office/id/{id}/destroy',[OfficeController::class,'destroy'])->name('office.destroy');
@@ -216,6 +230,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 	Route::post('fetchdata/subdistrict', [FetchDataController::class, 'subDistrict'])->name('fetchdata.subdistrict');
 	Route::post('fetchdata/datafetch', [FetchDataController::class, 'dataFetch'])->name('fetchdata.datafetch');
 });
+
 Route::get('/user/advertise/id/{id}/detail',[UserAdvertiseController::class,'detail'])->name('user.advertise.detail');
 Route::get('/user/advertise/listall/{listall}',[UserAdvertiseController::class,'listall'])->name('user.advertise.listall');
 Route::controller(PrintBundleController::class)->group(function() {

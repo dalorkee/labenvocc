@@ -446,7 +446,7 @@ class SampleReceiveController extends Controller
 									}
 								$htm .= "</td>";
 								$htm .= "<td>".$value['sample_count']."</td>";
-								$htm .= "<td><input type=\"text\" name=\"sample_no[]\" value=\"".$value['sample_test_no']."\" class=\"form-control\" readonly /></td>";
+								$htm .= "<td><input type=\"text\" name=\"sample_no[]\" value=\"".$value['sample_test_no']."\" class=\"custom-control-input\" readonly /></td>";
 							$htm .= "</tr>";
 							$i++;
 						}

@@ -4,18 +4,18 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\{Hash,DB,Auth,Log};
-use App\Models\User;
+use App\Models\{User,UserCustomer};
 use Illuminate\Http\Request;
 use App\DataTables\UsersDataTable;
 
 class UsersController extends Controller
 {
-    private object $user;
+	private object $user;
+	private string $user_role;
 
 	public function __construct() {
 		$this->middleware('auth');
 		$this->middleware(['role:root|admin']);
-		$this->middleware('is_order_confirmed');
 		$this->middleware(function($request, $next) {
 			$this->user = Auth::user();
 			$user_role_arr = $this->user->roles->pluck('name')->all();
@@ -23,197 +23,113 @@ class UsersController extends Controller
 			return $next($request);
 		});
 	}
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index(UsersDataTable $dataTable) {
-        return $dataTable->render('admin.users.index');
-    }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create(){
-        //
-    }
+	protected function index(UsersDataTable $dataTable): object {
+		return $dataTable->render(view: 'admin.users.index');
+	}
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request){
-        //
-    }
+	protected function edit(Request $request): object {
+		$userCus = User::join('users_customer_detail','users.id','=','users_customer_detail.user_id')
+			->where('users.user_type','customer')
+			->where('users_customer_detail.user_id', $request->id)
+			->get();
+		return view(view: 'admin.users.edit', data: compact('userCus'));
+	}
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\User  $users
-     * @return \Illuminate\Http\Response
-     */
-    public function show(User $users){
-        //
-    }
+	protected function update(Request $request) {
+		$this->validate($request, [
+			'user_id' => 'required',
+			'user_status' => 'required',
+			'password' => 'required_if:change_password,pw_chk'
+		]);
+		try {
+			$user_find = User::findOr($request->user_id, fn () => throw new \Exception(message: 'ไม่พบข้อมูลผู้ใช้นี้'));
+			if (!empty($request->password) && !empty($request->change_password)) {
+				$new_password = Hash::make($request->password);
+				$user_find->password = $new_password;
+				$user_find->password_confirmation = $new_password;
+			}
+			$user_find->user_status = $request->user_status;
+			$user_find->approved = ($request->user_status == 'อนุญาต') ? 'y' : 'n';
+			$user_find->deleted_at = ($request->user_status == 'อนุญาต') ? null : date('Y-m-d H:i:s');
+			$user_find->save();
+			$user_cus_find = UserCustomer::whereUser_id($request->user_id)?->firstOrFail();
+			$user_cus_find->first_name = $request->first_name;
+			$user_cus_find->last_name = $request->last_name;
+			$user_cus_find->ref_office_lab_code = $request->ref_office_lab_code;
+			$user_cus_find->ref_office_env_code = $request->ref_office_env_code;
+			$user_cus_find->agency_code = $request->agency_code;
+			$user_cus_find->agency_name = $request->agency_name;
+			$user_cus_find->deleted_at = ($request->user_status == 'อนุญาต') ? null : date('Y-m-d H:i:s');
+			$user_cus_find->save();
+			if ($user_find->user_status == 'อนุญาต' && $user_find->approved == 'y') {
+				DB::table('model_has_roles')->updateOrInsert(
+					['role_id' => '4', 'model_type' => 'App\Models\User', 'model_id' => $request->user_id],
+					['model_id' => $request->user_id]
+				);
+			} else {
+				DB::table('model_has_roles')->where('model_id', '=', $request->user_id)->delete();
+			}
+			return redirect()->back()->with(key: 'success', value: 'บันทึกข้อมูลสำเร็จแล้ว');
+		} catch (\Exception $e) {
+			Log::error(message: $e->getMessage());
+			return redirect()->back()->with(key: 'error', value: $e->getMessage());
+		}
+	}
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\User  $users
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Request $request){
-        $userCus = User::join('users_customer_detail','users.id','=','users_customer_detail.user_id')
-            ->where('users.user_type','customer')
-            ->where('users_customer_detail.user_id',$request->id)
-            ->get();
+	protected function allow(Request $request) {
+		try {
+			$user_find = User::findOr($request->id, fn () => throw new \Exception('ไม่พบผู้ใช้รหัสนี้ โปรดตรวจสอบ'));
+			if ($user_find->approved == 'y' && $user_find->user_status = 'อนุญาต') {
+				return redirect()->back()->with(key: 'warning', value: 'ผู้ใช้รหัสนี้ มีสิทธิ์ใช้งานระบบอยู่แล้ว');
+			}
+			$user_find->approved = 'y';
+			$user_find->user_status = 'อนุญาต';
+			$user_find->deleted_at = null;
+			$user_find->save();
+			UserCustomer::where('user_id', $request->id)->update(['deleted_at' => null]);
+			DB::table('model_has_roles')->updateOrInsert(
+				['role_id' => '4', 'model_type' => 'App\Models\User', 'model_id' => $request->id],
+				['model_id' => $request->id]
+			);
+			return redirect()->back()->with(key: 'success', value: 'อนุญาตผู้ใช้แล้ว');
+		} catch (\Exception $e) {
+			Log::error($e->getMessage());
+			return redirect()->back()->with(key: 'error', value: $e->getMessage());
+		}
+	}
 
-        return view('admin.users.edit',compact('userCus'));
-    }
+	public function destroy(Request $request) {
+		try {
+			$now = date('Y-m-d H:i:s');
+			$user_find = User::findOr($request->id, fn () => throw new \Exception('ไม่พบผู้ใช้รหัสนี้ โปรดตรวจสอบ'));
+			$user_find->approved = 'n';
+			$user_find->user_status = 'ไม่อนุญาต';
+			$user_find->deleted_at = $now;
+			$user_find->save();
+			UserCustomer::where('user_id', $request->id)->update(['deleted_at' => $now]);
+			DB::table('model_has_roles')->where('model_id', '=', $request->id)->delete();
+			return redirect()->back()->with(key: 'success', value: 'ลบข้อมูลผู้ใช้แล้ว');
+		} catch (\Exception $e) {
+			Log::error($e->getMessage());
+			return redirect()->back()->with(key: 'error', value: $e->getMessage());
+		}
+	}
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\User  $users
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, User $users){
-        $this->validate($request,[
-            'user_id'=>'required',
-            'user_status'=>'required',
-        ]);
-        $user_find = $users->find($request->user_id);
-        if($request->change_password == 'pw_chk' && $request->password != ''){
-            $request->password = Hash::make($request->password);
-            $user_find->password = $request->password;
-            $user_find->password_confirmation = $request->password;
-        }
-        elseif($request->change_password == 'pw_chk' && $request->password == ''){
-            return redirect()->route('users.edit',$request->user_id)->with('error', 'password require');
-        }
-        elseif($request->change_password == '' && $request->password != ''){
-            return redirect()->route('users.edit',$request->user_id)->with('error', 'check password condition');
-        }
-        $u_pw = $user_find->save();
-        if($u_pw == true){
-            $user_cus_find = $user_find->userCustomer;
-            $user_cus_find->first_name = $request->first_name;
-            $user_cus_find->last_name = $request->last_name;
-            $user_cus_find->ref_office_lab_code = $request->ref_office_lab_code;
-            $user_cus_find->ref_office_env_code = $request->ref_office_env_code;
-            $user_cus_find->agency_code = $request->agency_code;
-            $user_cus_find->agency_name = $request->agency_name;
-            $uc_up = $user_cus_find->save();
-            if($uc_up==true){
-                if($request->user_status === 'อนุญาต' AND $user_find->user_status !== 'อนุญาต'){
-                    $user_find->user_status = $request->user_status;
-                    $user_find->approved = 'y';
-                    DB::table('model_has_roles')->insert([
-                        'role_id'=>'4',
-                        'model_type'=>'App\Models\User',
-                        'model_id'=>$request->user_id,
-                    ]);
-                }
-                elseif($request->user_status !== 'อนุญาต' AND $user_find->user_status === 'อนุญาต'){
-                    $user_find->approved = 'n';
-                    $user_find->user_status = $request->user_status;
-                    DB::table('model_has_roles')->where('model_id',$request->user_id)->delete();
-                }
-                elseif($request->user_status === 'อนุญาต' AND $user_find->user_status === 'อนุญาต'){
-                    return redirect()->route('users.index')->with('success', 'updated successfully');
-                }
-                elseif($request->user_status !== 'อนุญาต' AND $user_find->user_status !== 'อนุญาต'){
-                    $user_find->user_status = $request->user_status;
-                }
-                else{
-                    return redirect()->route('users.edit',$request->user_id)->with('error', 'permissions unsuccessful');
-                }
-                $u_up = $user_find->save();
-                if($u_up==true){
-                    return redirect()->route('users.index')->with('success', 'updated successfully');
-                }
-                else{
-                    return redirect()->route('users.edit',$request->user_id)->with('error', 'permission update unsuccessfully');
-                }
-            }
-            else{
-                return redirect()->route('users.edit',$request->user_id)->with('error', 'update profile unsuccessfully');
-            }
-        }
-        else{
-            return redirect()->route('users.edit',$request->user_id)->with('error', 'unsuccessfully');
-        }
-
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\User  $users
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Request $request,User $users){
-        $d_now = date('Y-m-d H:i:s');
-        $user_find = $users->find($request->id);
-        $user_find->approved = 'n';
-        $user_find->user_status = 'ไม่อนุญาต';
-        $user_find->deleted_at = $d_now;
-        $u_del = $user_find->save();
-        if($u_del==true){
-            $user_cus_find = $user_find->userCustomer;
-            $user_cus_find->deleted_at = $d_now;
-            $ucus_del = $user_cus_find->save();
-            if($ucus_del==true){
-                $del = DB::table('model_has_roles')->where('model_id', '=', $request->id)->delete();
-                if($del==true){
-                    return redirect()->route('users.index')->with('success', 'delete successfully');
-                }
-                else{
-                    return redirect()->route('users.index')->with('error', 'unsuccessfully');
-                }
-            }
-            else{
-                return redirect()->route('users.index')->with('error', 'unsuccessfully');
-            }
-        }
-        else{
-            return redirect()->route('users.index')->with('error', 'unsuccessfully');
-        }
-    }
-    public function allow(Request $request,User $users){
-        $user_find = $users->find($request->id);
-        $user_find->approved = 'y';
-        $user_find->user_status = 'อนุญาต';
-        $u_allow = $user_find->save();
-        if($u_allow==true){
-            DB::table('model_has_roles')->insert([
-                'role_id'=>'4',
-                'model_type'=>'App\Models\User',
-                'model_id'=>$request->id,
-            ]);
-            return redirect()->route('users.index')->with('success', 'allow successfully');
-        }
-        else{
-            return redirect()->route('users.edit',$request->id)->with('error', 'unsuccessfully');
-        }
-    }
-    public function deny(Request $request,User $users){
-        $user_find = $users->find($request->id);
-        $user_find->approved = 'n';
-        $user_find->user_status = 'ไม่อนุญาต';
-        $u_deny = $user_find->save();
-        if($u_deny==true){
-            DB::table('model_has_roles')->where('model_id', '=', $request->id)->delete();
-            return redirect()->route('users.index')->with('success', 'deny successfully');
-        }
-        else{
-            return redirect()->route('users.index')->with('error', 'unsuccessfully');
-        }
-    }
+	public function deny(Request $request) {
+		try {
+			$now = date('Y-m-d H:i:s');
+			$user_find = User::findOr($request->id, fn () => throw new \Exception('ไม่พบผู้ใช้รหัสนี้ โปรดตรวจสอบ'));
+			$user_find->approved = 'n';
+			$user_find->user_status = 'ไม่อนุญาต';
+			$user_find->deleted_at = $now;
+			$user_find->save();
+			UserCustomer::where('user_id', $request->id)->update(['deleted_at' => $now]);
+			DB::table('model_has_roles')->where('model_id', '=', $request->id)->delete();
+			return redirect()->back()->with(key: 'success', value: 'ยกเลิกผู้ใช้แล้ว');
+		} catch (\Exception $e) {
+			Log::error($e->getMessage());
+			return redirect()->back()->with(key: 'error', value: $e->getMessage());
+		}
+	}
 }

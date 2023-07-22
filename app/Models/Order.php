@@ -22,6 +22,8 @@ class Order extends Model
 		'customer_type',
 		'customer_agency_code',
 		'customer_agency_name',
+		'type_of_factory',
+		'type_of_factory_name',
 		'type_of_work',
 		'type_of_work_name',
 		'type_of_work_other',
@@ -42,6 +44,9 @@ class Order extends Model
 		'report_result_receive_method',
 		'sample_verify_desc',
 		'receipt_status',
+		'analyze_result_files',
+		'order_destroy_status',
+		'order_destroy_date',
 	];
 
 	public function orderSamples() {
@@ -90,6 +95,16 @@ class Order extends Model
 			set: fn ($value) => $this->convertJsDateToMySQL(date: $value),
 		);
 	}
+
+	protected function orderDestroyDate(): Attribute {
+		return new Attribute(
+			get: fn ($value) => $this->convertMySQLDateToJs(date: $value),
+			set: fn ($value) => $this->convertJsDateToMySQL(date: $value),
+		);
+	}
+
+
+
 
 	// public function getBookDateJsAttribute(): string {
 	// 	if (!is_null($this->book_date) && !empty($this->book_date)) {

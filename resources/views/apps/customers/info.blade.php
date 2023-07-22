@@ -19,7 +19,7 @@
 	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
 		<div id="panel-customer" class="panel">
 			<div class="panel-hdr">
-				<h2 class="text-gray-600"><i class="fal fa-clipboard"></i>&nbsp;คำขอส่งตัวอย่างชีวภาพ</h2>
+				<h2 class="text-gray-600"><i class="fal fa-clipboard"></i>&nbsp;คำขอส่งตัวอย่าง{{ ($order_type == 'bio') ? 'ชีวภาพ' : 'สิ่งแวดล้อม' }}</h2>
 				<div class="panel-toolbar">
 					<button class="btn btn-panel bg-transparent fs-xl w-auto h-auto rounded-0" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="Collapse"><i class="fal fa-window-minimize"></i></button>
 					<button class="btn btn-panel bg-transparent fs-xl w-auto h-auto rounded-0" data-action="panel-fullscreen" data-toggle="tooltip" data-offset="0,10" data-original-title="Fullscreen"><i class="fal fa-expand"></i></button>
@@ -30,8 +30,8 @@
 				<form name="saveInfo" action="{{ route('customer.info.store') }}" method="POST" enctype="multipart/form-data">
 					@csrf
 					<input type="hidden" name="order_id" value="{{ $order[0]->id ?? null }}">
-					<input type="hidden" name="order_type" value="1">
-					<input type="hidden" name="order_type_name" value="ตัวอย่างชีวภาพ">
+					<input type="hidden" name="order_type" value="{{ $order[0]->order_type ?? $order_type }}">
+					<input type="hidden" name="order_type_name" value="{{ $order[0]->order_type_name ?? $order_type_arr[$order_type] }}">
 					<div class="panel-content">
 						<ul class="steps">
 							<li class="active"><a href=""><i class="fal fa-user"></i> <span class="d-none d-sm-inline">ข้อมูลทั่วไป</span></a></li>
@@ -75,7 +75,7 @@
 							</div>
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
 								<label class="form-label" for="type_of_work_other">ประเภทงานอื่นๆ ระบุ</label>
-								<input type="text" name="type_of_work_other" value="{{ $order[0]->type_of_work_other ?? '' }}" id="type_of_work_other" class="form-control @error('type_of_work_other') is-invalid @enderror" {{ ((isset($order[0]->type_of_work) && $order[0]->type_of_work == 5) || old('type_of_work_other') == 5) ? null : 'disabled' }}>
+								<input type="text" name="type_of_work_other" value="{{ $order[0]->type_of_work_other ?? '' }}" id="type_of_work_other" class="form-control @error('type_of_work_other') is-invalid @enderror" {{ ((isset($order[0]->type_of_work) && $order[0]->type_of_work == 6) || old('type_of_work_other') == 6) ? null : 'disabled' }}>
 								@error('type_of_work_other')
 									<div class="invalid-feedback" role="alert">{{ $message }}</div>
 								@enderror
@@ -118,12 +118,27 @@
 								@enderror
 							</div>
 						</div>
+						<!-- for env on future
+						if ($order_type == 'env')
+							<div class="form-row">
+								<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
+									<label class="form-label" for="book_no">กลุ่มเป้าหมาย</label>
+									<select name="env_labor_target_group" class="form-control">
+										<option value="">-- โปรดเลือก --</option>
+										foreach ($env_labor_target_group as $key => $val)
+											<option value=" $key "> $val </option>
+										endforeach
+									</select>
+								</div>
+							</div>
+						endif
+						-->
 					</div>
 					<div class="panel-content border-faded border-left-0 border-right-0 border-bottom-0 d-flex flex-row align-items-center">
 						<div class="form-row">
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
 								@if (!is_null($order) && count($order) > 0)
-									<button type="submit" class="btn btn-warning ml-auto"><i class="fal fa-pencil"></i> แก้ไขข้อมูล</button>
+									<button type="submit" class="btn btn-success ml-auto"><i class="fal fa-save"></i> บันทึก</button>
 									<a href="{{ route('customer.parameter.create', ['order_id' => $order[0]->id]) }}" class="btn btn-info ml-auto">ถัดไป <i class="fal fa-arrow-alt-right"></i></a>
 								@else
 									<button type="submit" class="btn btn-primary ml-auto"><i class="fal fa-save"></i> บันทึกร่าง</button>
@@ -158,7 +173,7 @@ $(document).ready(function() {
 	$('input[name="type_of_work"]').on('change', function() {
 		$('input[name="' + this.name + '"]').not(this).prop('checked', false);
 		let chk = this.value;
-		if (chk === '5|อื่นๆ') {
+		if (chk === '6|อื่นๆ') {
 			$('#type_of_work_other').prop('disabled', false);
 		} else {
 			$('#type_of_work_other').val('');

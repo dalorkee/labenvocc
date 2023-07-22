@@ -30,7 +30,7 @@ class CustomerController extends Controller
 
 	#[Route('customer.index', methods: ['RESOURCE'])]
 	protected function index(CustomersDataTable $dataTable, int $user_id=0): object {
-		return $dataTable->with('user_id', (int)$this->user->id)->render(view: 'apps.customers.index');
+		return $dataTable?->with('user_id', (int)$this->user->id)?->render(view: 'apps.customers.index');
 	}
 
 	#[Route('customer.info.create', methods: ['GET'])]
@@ -38,12 +38,20 @@ class CustomerController extends Controller
 		try {
 			$type_of_work = $this->typeOfWork();
 			$titleName = $this->titleName();
-			if ($request->order_id == 'new') {
-				$order = null;
-			} else {
-				$order = Order::whereId($request->order_id)->with(relations: 'uploads')->get();
-			}
-			return view(view: 'apps.customers.info', data: ['type_of_work' => $type_of_work, 'order' => $order, 'titleName' => $titleName]);
+			$order_type_arr = $this->OrderType();
+			//$env_labor_target_group = ($request->order_type == 'env') ? $this->envLaborTargetGroup() : null;
+			$order = ($request->order_id == 'new') ? null : Order::whereId($request->order_id)?->with(relations: 'uploads')?->get();
+			return view(
+				view: 'apps.customers.info',
+				data: [
+					'type_of_work' => $type_of_work,
+					'order_type_arr' => $order_type_arr,
+					'order_type' => $request->order_type,
+					'order' => $order,
+					'titleName' => $titleName,
+					//'env_labor_target_group' => $env_labor_target_group
+				]
+			);
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
 			return redirect()->back()->with(key: 'error', value: $e->getMessage());
@@ -61,20 +69,19 @@ class CustomerController extends Controller
 		]);
 		try {
 			$typeOfWork = $this->explodeStrToArr(str: $request->type_of_work, separator: '|');
-			$order = Order::updateOrCreate([
-				'id' => $request->order_id],[
-					'order_type' => $request->order_type,
-					'order_type_name' => $request->order_type_name,
-					'user_id' => $this->user->userCustomer->user->id,
-					'customer_type' => $this->user->userCustomer->customer_type,
-					'customer_agency_code' => $this->user->userCustomer->agency_code,
-					'customer_agency_name' => $request->customer_name,
-					'type_of_work' => $typeOfWork[0] ?? null,
-					'type_of_work_name' => $typeOfWork[1] ?? null,
-					'type_of_work_other' => $request->type_of_work_other ?? null,
-					'book_no' => $request->book_no ?? null,
-					'book_date' => $request->book_date,
-					'book_upload' => ($request->hasFile('book_file')) ? 'y' : 'n',
+			$order = Order::updateOrCreate(['id' => $request->order_id],[
+				'order_type' => $request->order_type,
+				'order_type_name' => $request->order_type_name,
+				'user_id' => $this->user->userCustomer->user->id,
+				'customer_type' => $this->user->userCustomer->customer_type,
+				'customer_agency_code' => $this->user->userCustomer->agency_code,
+				'customer_agency_name' => $request->customer_name,
+				'type_of_work' => $typeOfWork[0] ?? null,
+				'type_of_work_name' => $typeOfWork[1] ?? null,
+				'type_of_work_other' => $request->type_of_work_other ?? null,
+				'book_no' => $request->book_no ?? null,
+				'book_date' => $request->book_date,
+				'book_upload' => ($request->hasFile('book_file')) ? 'y' : 'n',
 			]);
 			$last_insert_order_id = $order->id;
 			if ($request->hasFile('book_file')) {
@@ -111,7 +118,7 @@ class CustomerController extends Controller
 				}
 			}
 			if ($order == true) {
-				return redirect()->route(route: 'customer.info.create', parameters: ['order_id' => $last_insert_order_id])->with(key: 'success', value: 'บันทึกร่างข้อมูลทั่วไปแล้ว โปรดทำขั้นตอนต่อไป');
+				return redirect()->route(route: 'customer.info.create', parameters: ['order_id' => $last_insert_order_id, 'order_type' => $request->order_type])->with(key: 'success', value: 'บันทึกร่างข้อมูลทั่วไปแล้ว โปรดทำขั้นตอนต่อไป');
 			} else {
 				return redirect()->back()->with(key: 'error', value: 'บันทึกร่าง "ข้อมูลทั่วไป" ผิดพลาด โปรดตรวจสอบ');
 			}

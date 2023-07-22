@@ -1,5 +1,4 @@
 <?php
-
 namespace App\DataTables;
 
 use Yajra\DataTables\Html\{Button,Column};
@@ -21,14 +20,9 @@ class CustomersDataTable extends DataTable
 	 */
 	public function dataTable($query) {
 		try {
-			//$type_of_work_arr = $this->typeOfWork();
 			return datatables()
 				->eloquent($query)
-				->editColumn('order_confirmed_date', function($order) {
-					// return (!empty($order->order_confirmed)) ? Carbon::createFromFormat('d/m/Y', $order->order_confirmed_date)->format('d/m/Y') : null;
-					// return Carbon::parse($order->order_confirmed)->format('d/m/Y');
-					return $order->order_confirmed_date;
-				})
+				->editColumn('order_confirmed_date', fn ($order) => $order->order_confirmed_date)
 				->addColumn('lab', function ($order) {
 					return $order->parameters->map(function($parameter) {
 						return "
@@ -69,14 +63,14 @@ class CustomersDataTable extends DataTable
 					return $htm;
 				})
 				->addColumn('action', function($order) {
-					if (is_null($order->order_confirmed)) {
+					if (is_null($order->order_confirmed_date) || empty($order->order_confirmed_date)) {
 						return "
-							<a href=\"".route('customer.info.create', ['order_id' => $order->id])."\" title=\"แก้ไข\" class=\"btn btn-warning btn-sm \"><i class=\"fal fa-pencil\"></i> แก้ไข</a>
-							<a href=\"javascript:void(0);\" class=\"btn btn-danger btn-sm \">ลบ <i class=\"fal fa-times\"></i></a>";
+							<a href=\"".route('customer.info.create', ['order_id' => $order->id, 'order_type' => $order->order_type])."\" title=\"แก้ไข\" class=\"btn btn-warning btn-sm \"><i class=\"fal fa-pencil\"></i> แก้ไข</a>
+							<a href=\"#\" class=\"btn btn-danger btn-sm \">ลบ <i class=\"fal fa-times\"></i></a>";
 					} else {
 						return "
-							<a href=\"javascript:void(0);\" class=\"btn btn-secondary btn-sm \"><i class=\"fal fa-pencil\"></i> แก้ไข</a>
-							<a href=\"javascript:void(0);\" class=\"btn btn-secondary btn-sm \">ลบ <i class=\"fal fa-times\"></i></a>";
+							<a href=\"#\" class=\"btn btn-secondary btn-sm \"><i class=\"fal fa-pencil\"></i> แก้ไข</a>
+							<a href=\"#\" class=\"btn btn-secondary btn-sm \">ลบ <i class=\"fal fa-times\"></i></a>";
 					}
 				 })
 				->rawColumns(['lab', 'status', 'detail', 'action']);
@@ -92,10 +86,10 @@ class CustomersDataTable extends DataTable
 	 * @return \Illuminate\Database\Eloquent\Builder
 	 */
 	public function query(Order $order): object {
-		return $order->whereUser_id($this->user_id)
-			->whereIn('order_status', ['pending', 'progress', 'completed'])
-			->with('parameters')
-			->orderBy('id', 'ASC');
+		return $order?->whereUser_id($this->user_id)
+			?->whereIn('order_status', ['pending', 'preparing', 'approved', 'completed'])
+			?->with('parameters')
+			?->orderBy('id', 'ASC');
 	}
 
 	/**
