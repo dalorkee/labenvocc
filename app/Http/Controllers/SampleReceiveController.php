@@ -392,7 +392,21 @@ class SampleReceiveController extends Controller
 				$order = Order::select('id')->whereLab_no($request->lab_no)->get();
 				$result = [];
 				if (count($order) > 0) {
-					$order_sample = OrderSample::whereOrder_id($order[0]->id)->with('parameters')->whereSample_received_status('y')->get();
+					$order_sample = OrderSample::select(
+						'id',
+						'order_id',
+						'has_parameter',
+						'sample_verified_status',
+						'sample_received_status',
+						'sample_received_date',
+						'sample_test_no'
+					)
+					?->with('parameters')
+					?->whereOrder_id($order[0]->id)
+					?->whereSample_received_status('y')
+					?->where('sample_test_no', '=', '')
+					?->orWhereNull('sample_test_no')
+					?->get();
 					$order_sample->each(function($item, $key) use (&$result) {
 						$tmp['sample_id'] = $item->id;
 						$tmp['sample_count'] = $item->parameters->count();
@@ -412,7 +426,7 @@ class SampleReceiveController extends Controller
 						array_push($result, $tmp);
 					});
 				}
-				$htm_component = $this->orderSampleComponent($result);
+				$htm_component = $this->orderSampleComponent(data: $result, lab_no: $request->lab_no);
 				return $htm_component;
 			}
 		} catch (\Exception $e) {
@@ -420,7 +434,7 @@ class SampleReceiveController extends Controller
 		}
 	}
 
-	protected function orderSampleComponent($data=array()) {
+	protected function orderSampleComponent($data=array(), $lab_no=0) {
 		$htm = "
 			<div class=\"table-responsive\">
 				<table class=\"table table-striped\" style=\"width: 100%\">
@@ -467,7 +481,7 @@ class SampleReceiveController extends Controller
 					} else {
 						$htm .= "<tr>";
 							$htm .= "<td colspan=\"6\">";
-								$htm .= "<div class=\"alert alert-danger\" role=\"alert\"><strong>ไม่พบข้อมูล</strong></div>";
+								$htm .= "<div class=\"alert alert-warning\" role=\"alert\"><strong><i class=\"fa fa-info-circle\"></i> ไม่พบข้อมูลหรือกำหนดหมายเลขทดสอบแล้ว Lab No. ".$lab_no."</strong></div>";
 							$htm .= "</td>";
 						$htm .= "</tr>";
 					}
@@ -480,9 +494,9 @@ class SampleReceiveController extends Controller
 
 	private function generateTestNo(): string {
 		do {
-			$test_no = mt_rand(1000000000, 9999999999);
-		} while (OrderSample::whereSample_test_no($test_no)->exists());
-		return $test_no;
+			$rand_number = mt_rand(min: 1000000000, max: 9999999999);
+		} while (OrderSample::whereSample_test_no($rand_number)->exists());
+		return $rand_number;
 	}
 
 	protected function setTestNo(Request $request) {
@@ -490,8 +504,7 @@ class SampleReceiveController extends Controller
 			$data = $request->all();
 			if (!empty($data['sample_id']) && count($data['sample_id']) > 0) {
 				foreach ($data['sample_id'] as $key => $value) {
-					$order_sample = OrderSample::find($value);
-					// $order_sample->sample_test_no = $data['sample_no'][$key];
+					$order_sample = OrderSample::findOr($value, fn () => throw new \Exception(message: 'ไม่พบข้อมูล Order Sample id: '.$value));
 					if (empty($order_sample->sample_test_no)) {
 						$order_sample->sample_test_no = $this->generateTestNo();
 						$order_sample->save();

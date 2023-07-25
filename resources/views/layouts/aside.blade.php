@@ -91,7 +91,7 @@
 					</a>
 				</li>
 				@switch(auth()->user()->userStaff->duty)
-					@case('1')
+					@case(1)
 						<li class="{{ (Request::is('*sample/received*')) ? 'active open' : '' }}">
 							<a href="#" title="งานรับตัวอย่าง" data-filter-tags="receive">
 								<i class="fal fa-cube"></i>
@@ -126,7 +126,7 @@
 							</ul>
 						</li>
 						@break
-					@casae('2')
+					@case(2)
 						<li class="{{ (Request::is('*sample/analyze*') || Request::is('*sample/qc*'))  ? 'active open' : '' }}">
 							<a href="#" title="งานตรวจวิเคราะห์" data-filter-tags="analyze">
 								<i class="fal fa-flask"></i>
@@ -156,7 +156,7 @@
 							</ul>
 						</li>
 						@break
-					@case('5')
+					@case(5)
 						<li class="{{ (Request::is('*sample/destroy*'))  ? 'active open' : '' }}">
 							<a href="#" title="งานทำลายตัวอย่าง" data-filter-tags="destroy">
 								<i class="fal fa-burn"></i>

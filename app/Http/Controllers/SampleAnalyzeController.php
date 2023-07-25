@@ -18,7 +18,7 @@ class SampleAnalyzeController extends Controller
 	public function __construct() {
 		$this->middleware('auth');
 		$this->middleware(['role:root|admin|customer|staff']);
-		$this->middleware('is_order_confirmed');
+		// $this->middleware('is_order_confirmed');
 		$this->middleware(function($request, $next) {
 			$this->user = Auth::user();
 			$user_role_arr = $this->user->roles->pluck('name')->all();
@@ -27,8 +27,8 @@ class SampleAnalyzeController extends Controller
 		});
 	}
 
-	protected function create(listOrderDataTable $dataTable): object {
-		return $dataTable->with('user_id', $this->user->id)->render(view: 'apps.staff.analyze.create');
+	protected function create(listOrderDataTable $dataTable): ?object {
+		return $dataTable?->with(key: 'user_id', value: $this->user->id)?->render(view: 'apps.staff.analyze.create');
 	}
 
 	protected function sampleSelect(Request $request) {
@@ -105,10 +105,10 @@ class SampleAnalyzeController extends Controller
 		}
 	}
 
-	protected function labResultCreate(Request $request) {
+	protected function labResultCreate(Request $request): object {
 		try {
 			$lab_no = $request->lab_no;
-			$result = OrderSample::select('id', 'order_id', 'has_parameter', 'sample_test_no', 'weight_sample', 'air_volume')
+			$result = OrderSample::select('id', 'order_id', 'has_parameter', 'sample_test_no', 'air_volume', 'weight_sample')
 				->with(['parameters' => function($query) use ($request) {
 					$query->select(
 						'id',
@@ -144,233 +144,351 @@ class SampleAnalyzeController extends Controller
 	protected function labResultSave(Request $request) {
 		try {
 			$req = $request->toArray();
-			$data = [];
-			$machine = RefMachine::select('id', 'machine_name')->get()->keyBy('id')->toArray();
+			if (count($req['ref_order_id']) > 0) {
+				$data = [];
+				$machine = RefMachine::select('id', 'machine_name')->get()->keyBy('id')->toArray();
 
-			/* Prepare data */
-			for ($i=0; $i<count($req['ref_order_id']); $i++) {
-				$tmp['order_id'] = $req['ref_order_id'][$i];
-				$tmp['order_sample_id'] = $req['ref_order_sample_id'][$i];
-				$tmp['sample_test_no'] = $req['sample_test_no'][$i];
-				$tmp['order_sample_parameter_id'] = $req['order_sample_parameter_id'][$i];
-				$tmp['parameter_id'] = $req['parameter_id'][$i];
-				$tmp['parameter_name'] = preg_replace("/\r|\n/", "", $req['parameter_name'][$i]);
-				$tmp['machine_id'] = $req['machine_id'][$i];
-				$tmp['machine_name'] = $machine[$req['machine_id'][$i]]['machine_name'];
-				$tmp['lab_result_blank'] = $req['lab_result_blank'][$i];
-				$tmp['lab_result_amount'] = $req['lab_result_amount'][$i];
-				$tmp['weight_sample'] = $req['weight_sample'][$i];
-				$tmp['air_volume'] = $req['air_volume'][$i];
-				$tmp['lab_dilution'] = $req['lab_dilution'][$i];
-				$tmp['lab_result'] = $req['lab_result'][$i];
-				array_push($data, $tmp);
-			}
-
-			/* Save to db */
-			foreach ($data as $key => $value) {
-				$order_sample_parameter = OrderSampleParameter::find($value['order_sample_parameter_id']);
-				switch($order_sample_parameter->threat_type_id) {
-					case 1: // กรด ด่าง/โลหะอัลคาไลน์
-						switch ($order_sample_parameter->sample_character_id) {
-							case 1: // สารละลาย
-								$tmp = 1;
-								break;
-							case 2: // ดิน
-								$tmp = 2;
-								break;
-							case 3: // น้ำ
-								$tmp = 4;
-								break;
-							case 5: // อากาศ
-								$tmp = 5;
-								break;
-							default:
-								redirect()->back()->with('error', 'ไม่พบข้อมูลการคำนวณ กรด,ด่าง/โลหะอัลคาไลน์');
-						}
-						break;
-					case 2: // จุลชีววิทยา
-						switch ($order_sample_parameter->sample_character_id) {
-							case 5: // อากาศ
-								$tmp = 5;
-								break;
-							default:
-								redirect()->back()->with('error', 'ไม่พบข้อมูลการคำนวณ จุลชีววิทยา');
-						}
-						break;
-					case 3: // ฝุ่นซิลิก้า
-						switch ($order_sample_parameter->sample_character_id) {
-							case 5: // อากาศ
-								$tmp = 5;
-								break;
-							default:
-								redirect()->back()->with('error', 'ไม่พบข้อมูลการคำนวณ จุลชีววิทยา');
-						}
-						break;
-					case 4: // สารอินทรีย์ระเหย
-						switch ($order_sample_parameter->sample_character_id) {
-							case 1: // สารละลาย
-								// มีอีกตัวคือ %VOC ใช้ %W/V
-								$mg_l = $value['lab_result_amount'];
-								$ug_l = ($value['lab_result_amount']*1000);
-								break;
-							case 2: // ดิน
-								$ug_sample = ($value['weight_sample'] > 0) ? ($order_sample_parameter->lab_result_amount*1000)/$value['weight_sample'] : 0.00;
-								$mg_kg = ($value['weight_sample'] > 0) ? ($order_sample_parameter->lab_result_amount*1000)/$value['weight_sample'] : 0.00;
-								break;
-							case 3: // น้ำ
-								$mg_l = $value['lab_result_amount'];
-								break;
-							case 4: // น้ำมัน
-								$mg_l = $value['lab_result_amount'];
-								$ug_l = ($value['lab_result_amount']*1000);
-								break;
-							case 5: // อากาศ
-								$mg_l = $value['lab_result_amount'];
-								$ug_tube = $value['lab_result_amount'];
-
-								break;
-							case 6: // ปัสสาวะ
-								$tmp = 6;
-								break;
-							case 7: // Wipes
-								$tmp = 7;
-								break;
-							case 8: // เลือด
-								$tmp = 8;
-								break;
-							case 9: // นำเหลือง
-								$tmp = 9;
-								break;
-							default:
-								redirect()->back()->with('error', 'ไม่พบข้อมูลการคำนวณ สารอินทรีย์ระเหย');
-						}
-						break;
-					case 5: // แร่ใยหิน
-						switch ($order_sample_parameter->sample_character_id) {
-							case 1: // สารละลาย
-								$tmp = 1;
-								break;
-							case 2: // ดิน
-								$tmp = 2;
-								break;
-							case 3: // น้ำ
-								$tmp = 3;
-								break;
-							case 4: // น้ำมัน
-								$tmp = 4;
-								break;
-							case 5: // อากาศ
-								$tmp = 5;
-								break;
-							case 6: // ปัสสาวะ
-								$tmp = 6;
-								break;
-							case 7: // Wipes
-								$tmp = 7;
-								break;
-							case 8: // เลือด
-								$tmp = 8;
-								break;
-							case 9: // นำเหลือง
-								$tmp = 9;
-								break;
-							default:
-								redirect()->back()->with('error', 'ไม่พบข้อมูลการคำนวณ แร่ใยหิน');
-						}
-						break;
-					case 6: // โลหะหนัก
-						switch ($order_sample_parameter->sample_character_id) {
-							case 1: // สารละลาย
-								$tmp = 1;
-								break;
-							case 2: // ดิน
-								$tmp = 2;
-								break;
-							case 3: // น้ำ
-								$tmp = 3;
-								break;
-							case 4: // น้ำมัน
-								$tmp = 4;
-								break;
-							case 5: // อากาศ
-								$tmp = 5;
-								break;
-							case 6: // ปัสสาวะ
-								$tmp = 6;
-								break;
-							case 7: // Wipes
-								$tmp = 7;
-								break;
-							case 8: // เลือด
-								$tmp = 8;
-								break;
-							case 9: // นำเหลือง
-								$tmp = 9;
-								break;
-							default:
-								redirect()->back()->with('error', 'ไม่พบข้อมูลการคำนวณ โลหะหนัก');
-						}
-						break;
-					case 7: // อื่นๆ
-						switch ($order_sample_parameter->sample_character_id) {
-							case 1: // สารละลาย
-								$tmp = 1;
-								break;
-							case 2: // ดิน
-								$tmp = 2;
-								break;
-							case 3: // น้ำ
-								$tmp = 3;
-								break;
-							case 4: // น้ำมัน
-								$tmp = 4;
-								break;
-							case 5: // อากาศ
-								$tmp = 5;
-								break;
-							case 6: // ปัสสาวะ
-								$tmp = 6;
-								break;
-							case 7: // Wipes
-								$tmp = 7;
-								break;
-							case 8: // เลือด
-								$tmp = 8;
-								break;
-							case 9: // นำเหลือง
-								$tmp = 9;
-								break;
-							default:
-								redirect()->back()->with('error', 'ไม่พบข้อมูลการคำนวณ อื่นๆ');
-						}
-						break;
+				/* Prepare data */
+				for ($i=0; $i<count($req['ref_order_id']); $i++) {
+					$tmp['order_id'] = $req['ref_order_id'][$i];
+					$tmp['order_sample_id'] = $req['ref_order_sample_id'][$i];
+					$tmp['sample_test_no'] = $req['sample_test_no'][$i];
+					$tmp['order_sample_parameter_id'] = $req['order_sample_parameter_id'][$i];
+					$tmp['parameter_id'] = $req['parameter_id'][$i];
+					$tmp['parameter_name'] = preg_replace("/\r|\n/", "", $req['parameter_name'][$i]);
+					$tmp['machine_id'] = $req['machine_id'][$i];
+					$tmp['machine_name'] = $machine[$req['machine_id'][$i]]['machine_name'];
+					$tmp['lab_result_blank'] = $req['lab_result_blank'][$i];
+					$tmp['lab_result_amount'] = $req['lab_result_amount'][$i];
+					$tmp['air_volume'] = $req['air_volume'][$i];
+					$tmp['weight_sample'] = $req['weight_sample'][$i];
+					$tmp['lab_dilution'] = $req['lab_dilution'][$i];
+					$tmp['lab_result'] = $req['lab_result'][$i];
+					array_push($data, $tmp);
 				}
-				$order_sample_parameter->machine_id = $value['machine_id'];
-				$order_sample_parameter->machine_name = $value['machine_name'];
-				$order_sample_parameter->lab_result_blank = $value['lab_result_blank'];
-				$order_sample_parameter->lab_result_amount = $value['lab_result_amount'];
-				$order_sample_parameter->lab_dilution = $value['lab_dilution'];
-				$order_sample_parameter->lab_result = $value['lab_result'];
 
-				$order_sample_parameter->lab_result_ug_sample = $ug_sample ?? null;
-				$order_sample_parameter->lab_result_mg_sample = $mg_sample ?? null;
-				$order_sample_parameter->lab_result_mg_m3 = $mg_m3 ?? null;
-				$order_sample_parameter->lab_result_ppm = $ppm ?? null;
-				$order_sample_parameter->lab_result_ug_g_creatinine = $ug_g_creatinine ?? null;
-				$order_sample_parameter->lab_result_mg_g_creatinine = $mg_g_creatinine ?? null;
-				$order_sample_parameter->lab_result_percent_w_v = $percent_w_v ?? null;
-				$order_sample_parameter->lab_result_percent_w_w = $percent_w_w ?? null;
-				$order_sample_parameter->lab_result_mg_l = $mg_l ?? null;
-				$order_sample_parameter->lab_result_ug_l = $ug_l ?? null;
-				$order_sample_parameter->lab_result_ug_tube = $ug_tube ?? null;
-				$order_sample_parameter->lab_result_mg_kg = $mg_kg ?? null;
-				$order_sample_parameter->lab_result_ug_dl = $ug_dl ?? null;
-				$order_sample_parameter->lab_result_fiber_cc = $fiber_cc ?? null;
-				$order_sample_parameter->lab_result_dfu_m3 = $dfu_m3 ?? null;
-				$order_sample_parameter->lab_result_percent_sio2 = $percent_sio2 ?? null;
-				$order_sample_parameter->save();
-			};
-			return redirect()->back()->with('success', 'บันทึกข้อมูลสำเร็จแล้ว');
+				/* Save to db */
+				foreach ($data as $key => $value) {
+					$order_sample_parameter = OrderSampleParameter::findOr($value['order_sample_parameter_id'], fn () => throw new \Exception("บันทึกผลแลป::ไม่พบข้อมูลพารามิเตอร์ id: ".$value['order_sample_parameter_id']));
+					switch($order_sample_parameter->threat_type_id) {
+						case 1: /*กรด ด่าง/โลหะอัลคาไลน์ */
+							switch ($order_sample_parameter->sample_character_id) {
+								case 1: // สารละลาย
+									$unit_value = $value['lab_result']; // หน่วยจากเครื่องมือ
+									// customer
+									$unit_customer_value = null;
+									// choice1
+									$unit_choice1_value = null;
+									//choice2
+									$unit_choice2_value = null;
+									break;
+								case 2: // ดิน
+									$unit_value = $value['lab_result']; // หน่วยจากเครื่องมือ
+									// customer
+									$unit_customer_value = null;
+									// choice1
+									$unit_choice1_value = null;
+									//choice2
+									$unit_choice2_value = null;
+									break;
+								case 3: // น้ำ
+									$unit_value = $value['lab_result']; // หน่วยจากเครื่องมือ
+									// customer
+									$unit_customer_value = null;
+									// choice1
+									$unit_choice1_value = null;
+									//choice2
+									$unit_choice2_value = null;
+									break;
+								case 5: // อากาศ
+									$unit_value = $value['lab_result']; // หน่วยจากเครื่องมือ
+									// customer
+									$unit_customer_value = null;
+									// choice1
+									$unit_choice1_value = null;
+									//choice2
+									$unit_choice2_value = null;
+									break;
+								default:
+									redirect()->back()->with('error', 'ไม่พบข้อมูลการคำนวณ กรด,ด่าง/โลหะอัลคาไลน์');
+							}
+							break;
+						case 2: /* จุลชีววิทยา */
+							switch ($order_sample_parameter->sample_character_id) {
+								case 5: // อากาศ
+									$unit_value = $value['lab_result']; // หน่วยจากเครื่องมือ
+									// customer
+									$unit_customer_value = null;
+									// choice1
+									$unit_choice1_value = null;
+									//choice2
+									$unit_choice2_value = null;
+									break;
+								default:
+									redirect()->back()->with('error', 'ไม่พบข้อมูลการคำนวณ จุลชีววิทยา');
+							}
+							break;
+						case 3: /* ฝุ่นซิลิก้า */
+							switch ($order_sample_parameter->sample_character_id) {
+								case 5: // อากาศ
+									$unit_value = $value['lab_result']; // หน่วยจากเครื่องมือ
+									// customer
+									$unit_customer_value = null;
+									// choice1
+									$unit_choice1_value = null;
+									//choice2
+									$unit_choice2_value = null;
+									break;
+								default:
+									redirect()->back()->with('error', 'ไม่พบข้อมูลการคำนวณ จุลชีววิทยา');
+							}
+							break;
+						case 4: /* สารอินทรีย์ระเหย */
+							switch ($order_sample_parameter->sample_character_id) {
+								case 1: // สารละลาย
+									$unit_value = $value['lab_result']; // หน่วยจากเครื่องมือ
+									// customer
+									$unit_customer_value = ($unit_value*1000); // (หน่วยจากเครื่องมือx1000)
+									// choice1
+									$unit_choice1_value = null;
+									//choice2
+									$unit_choice2_value = null;
+									break;
+								case 2: // ดิน
+									$unit_value = $value['lab_result']; // หน่วยจากเครื่องมือ
+									// customer
+									$unit_customer_value = (($unit_value*1000)/$value['weight_sample']); // (หน่วยจากเครื่องมือx1000)/น้ำหนักดิน(กรัม)
+									// choice1
+									$unit_choice1_value = null;
+									//choice2
+									$unit_choice2_value = null;
+									break;
+								case 3: // น้ำ
+									$unit_value = $value['lab_result']; // หน่วยจากเครื่องมือ
+									// customer
+									$unit_customer_value = $unit_value; // หน่วยจากเครื่องมือ
+									// choice1
+									$unit_choice1_value = ($unit_value*1000); // หน่วยรายงานผลx1000
+									//choice2
+									$unit_choice2_value = null;
+									break;
+								case 4: // น้ำมัน
+									$unit_value = $value['lab_result']; // หน่วยจากเครื่องมือ
+									// customer
+									$unit_customer_value = $unit_value; // หน่วยจากเครื่องมือ
+									// choice1
+									$unit_choice1_value = ($unit_value*1000); // หน่วยรายงานผลx1000
+									//choice2
+									$unit_choice2_value = null;
+									break;
+								case 5: // อากาศ
+									$unit_value = $value['lab_result']; // หน่วยจากเครื่องมือ
+									// customer
+									$match_value = strtolower(trim($order_sample_parameter->unit_customer_name));
+									$rs = match ($match_value) {
+										'μg/tube', 'μg/sample', 'ppm', 'mg/m3' => $value['lab_result'], // หน่วยจากเครื่องมือ
+										default => null
+									};
+									$unit_customer_value = $rs;
+									// choice1
+									$match_value = strtolower(trim($order_sample_parameter->unit_choice1_name));
+									$rs = match ($match_value) {
+										'mg/m3' => ($unit_value/$value['air_volume']), // หน่วยรายงานผล/ปริมาตรอากาศ
+										'ppm' => null,
+										default => null
+									};
+									$unit_choice1_value = $rs;
+									// choice2
+									$match_value = strtolower(trim($order_sample_parameter->unit_choice2_name));
+									$rs = match ($match_value) {
+										'ppm' => (($unit_choice1_value*24.45)/$value['weight_molecule']), // (หน่วยทางเลือก1x24.45)/น้ำหนักโมเลกุล
+										default => null
+									};
+									$unit_choice2_value = $rs;
+									break;
+								case 6: // ปัสสาวะ
+									$unit_value = $value['lab_result']; // หน่วยจากเครื่องมือ
+									// customer
+									$match_value = strtolower(trim($order_sample_parameter->unit_customer_name));
+									$rs = match ($match_value) {
+										'mg/l' => $value['lab_result'], // หน่วยจากเครื่องมือ
+										'g/g creatinine' => (($value['lab_result']/1000)/$value['lab_result_creatinine']), // (หน่วยจากเครื่องมือ/1000 )/ค่า Creatinine
+										'mg/g creatinine' => ($value['lab_result']/$value['lab_result_creatinine']), // หน่วยจากเครื่องมือ/ค่า Creatinine
+										'μg/g creatinine' => (($value['lab_result']*1000)/$value['lab_result_creatinine']), // (หน่วยจากเครื่องมือx1000)/ค่า Creatinine
+										default => null
+									};
+									$unit_customer_value = $rs;
+									// choice1
+									$match_value = strtolower(trim($order_sample_parameter->unit_choice1_name));
+									$rs = match ($match_value) {
+										'μg/l' => ($value['lab_result']*1000),
+										'mg/l' => $value['lab_result'],
+										default => null
+									};
+									$unit_choice1_value = $rs;
+									// choice2
+									$unit_choice2_value = null;
+									break;
+								case 8: // เลือด
+									$unit_value = $value['lab_result']; // หน่วยจากเครื่องมือ
+									// customer
+									$unit_customer_value = $unit_value;
+									// choice1
+									$unit_choice1_value = ($unit_value*1000); // (หน่วยจากเครื่องมือx1000)
+									//choice2
+									$unit_choice2_value = null;
+									break;
+								default:
+									redirect()->back()->with('error', 'ไม่พบข้อมูลการคำนวณ สารอินทรีย์ระเหย');
+							}
+							break;
+						case 5: // แร่ใยหิน
+							switch ($order_sample_parameter->sample_character_id) {
+								case 5: // อากาศ
+									$unit_value = $value['lab_result']; // หน่วยจากเครื่องมือ
+									// customer
+									$unit_customer_value = null;
+									// choice1
+									$unit_choice1_value = null;
+									//choice2
+									$unit_choice2_value = null;
+									break;
+								default:
+									redirect()->back()->with('error', 'ไม่พบข้อมูลการคำนวณ แร่ใยหิน');
+							}
+							break;
+						case 6: // โลหะหนัก
+							switch ($order_sample_parameter->sample_character_id) {
+								case 2: // ดิน
+									$unit_value = $value['lab_result']; // หน่วยจากเครื่องมือ
+									// customer
+									$unit_customer_value = null;
+									// choice1
+									$unit_choice1_value = null;
+									//choice2
+									$unit_choice2_value = null;
+									break;
+								case 3: // น้ำ
+									$unit_value = $value['lab_result']; // หน่วยจากเครื่องมือ
+									// customer
+									$unit_customer_value = null;
+									// choice1
+									$unit_choice1_value = null;
+									//choice2
+									$unit_choice2_value = null;
+									break;
+								case 5: // อากาศ
+									$unit_value = $value['lab_result']; // หน่วยจากเครื่องมือ
+									// customer
+									$unit_customer_value = null;
+									// choice1
+									$unit_choice1_value = null;
+									//choice2
+									$unit_choice2_value = null;
+									break;
+								case 6: // ปัสสาวะ
+									$unit_value = $value['lab_result']; // หน่วยจากเครื่องมือ
+									// customer
+									$unit_customer_value = null;
+									// choice1
+									$unit_choice1_value = null;
+									//choice2
+									$unit_choice2_value = null;
+									break;
+								case 7: // Wipes
+									$unit_value = $value['lab_result']; // หน่วยจากเครื่องมือ
+									// customer
+									$unit_customer_value = null;
+									// choice1
+									$unit_choice1_value = null;
+									//choice2
+									$unit_choice2_value = null;
+									break;
+								case 8: // เลือด
+									$unit_value = $value['lab_result']; // หน่วยจากเครื่องมือ
+									// customer
+									$unit_customer_value = null;
+									// choice1
+									$unit_choice1_value = null;
+									//choice2
+									$unit_choice2_value = null;
+									break;
+								case 9: // น้ำเหลือง
+									$unit_value = $value['lab_result']; // หน่วยจากเครื่องมือ
+									// customer
+									$unit_customer_value = null;
+									// choice1
+									$unit_choice1_value = null;
+									//choice2
+									$unit_choice2_value = null;
+									break;
+								default:
+									redirect()->back()->with('error', 'ไม่พบข้อมูลการคำนวณ โลหะหนัก');
+							}
+							break;
+						case 7: // อื่นๆ
+							switch ($order_sample_parameter->sample_character_id) {
+								case 6: // ปัสสาวะ
+									$unit_value = $value['lab_result']; // หน่วยจากเครื่องมือ
+									// customer
+									$match_value = strtolower(trim($order_sample_parameter->unit_customer_name));
+									$rs = match ($match_value) {
+										'g/l' => null,
+										'mg/dg' => $value['lab_result'], // หน่วยจากเครื่องมือ
+										default => null
+									};
+									$unit_customer_value = $rs;
+									// choice1
+									$match_value = strtolower(trim($order_sample_parameter->unit_choice1_name));
+									$rs = match ($match_value) {
+										'μg/l' => ($value['lab_result']*1000),
+										'mg/l' => $value['lab_result'],
+										default => null
+									};
+									$unit_choice1_value = $rs;
+									// choice2
+									$unit_choice2_value = null;
+									break;
+								default:
+									redirect()->back()->with('error', 'ไม่พบข้อมูลการคำนวณ อื่นๆ');
+							}
+							break;
+					}
+					$order_sample_parameter->machine_id = $value['machine_id'];
+					$order_sample_parameter->machine_name = $value['machine_name'];
+					$order_sample_parameter->lab_result_blank = $value['lab_result_blank'];
+					$order_sample_parameter->lab_result_amount = $value['lab_result_amount'];
+					$order_sample_parameter->lab_dilution = $value['lab_dilution'];
+					$order_sample_parameter->lab_result = $value['lab_result'];
+
+					$order_sample_parameter->unit_value = $unit_value ?? null;
+					$order_sample_parameter->unit_customer_value = $unit_customer_value ?? null;
+					$order_sample_parameter->unit_choice1_value = $unit_choice1_value ?? null;
+					$order_sample_parameter->unit_choice2_value = $unit_choice2_value ?? null;
+
+					// $order_sample_parameter->lab_result_ug_sample = $ug_sample ?? null;
+					// $order_sample_parameter->lab_result_mg_sample = $mg_sample ?? null;
+					// $order_sample_parameter->lab_result_mg_m3 = $mg_m3 ?? null;
+					// $order_sample_parameter->lab_result_ppm = $ppm ?? null;
+					// $order_sample_parameter->lab_result_ug_g_creatinine = $ug_g_creatinine ?? null;
+					// $order_sample_parameter->lab_result_mg_g_creatinine = $mg_g_creatinine ?? null;
+					// $order_sample_parameter->lab_result_percent_w_v = $percent_w_v ?? null;
+					// $order_sample_parameter->lab_result_percent_w_w = $percent_w_w ?? null;
+					// $order_sample_parameter->lab_result_mg_l = $mg_l ?? null;
+					// $order_sample_parameter->lab_result_ug_l = $ug_l ?? null;
+					// $order_sample_parameter->lab_result_ug_tube = $ug_tube ?? null;
+					// $order_sample_parameter->lab_result_mg_kg = $mg_kg ?? null;
+					// $order_sample_parameter->lab_result_ug_dl = $ug_dl ?? null;
+					// $order_sample_parameter->lab_result_fiber_cc = $fiber_cc ?? null;
+					// $order_sample_parameter->lab_result_cfu = $cfu ?? null;
+					// $order_sample_parameter->lab_result_cfu_m3 = $cfu_m3 ?? null;
+					// $order_sample_parameter->lab_result_percent_sio2 = $percent_sio2 ?? null;
+					// $order_sample_parameter->lab_result_mg_dl = $mg_dl ?? null;
+					// $order_sample_parameter->lab_result_g_l = $g_l ?? null;
+					$order_sample_parameter->save();
+				};
+				return redirect()->back()->with('success', 'บันทึกข้อมูลสำเร็จแล้ว');
+			}
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
 			return redirect()->back()->with('error', $e->getMessage());
