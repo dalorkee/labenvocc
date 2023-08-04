@@ -50,16 +50,14 @@ class SampleReceiveController extends Controller
 									<a href=\"".route('sample.received.step01', ['order_id' => $order->id])."\" class=\"btn btn-sm btn-success\" style=\"width:70px\">รับ</a>\n
 									<button type=\"button\" class=\"btn btn-sm btn-secondary\" style=\"width:70px\">แก้ไข</button>\n";
 									break;
-							// case 'preparing':
-							// case 'approved':
-							// 	return "
-							// 		<a href=\"".route('sample.received.step01', ['order_id' => $order->id])."\" class=\"btn btn-sm btn-success\" style=\"width:70px\">รับ</a>\n
-							// 		<a href=\"#edit-".$order->id."\" class=\"btn btn-sm btn-warning\" style=\"width:70px\">แก้ไข</a>\n";
-							// 		break;
+							case 'preparing':
+							case 'approved':
+								return "
+                                <button type=\"button\" class=\"btn btn-sm btn-success\" style=\"width:140px\" disabled>รับตัวอย่างแล้ว</button>\n";
+									break;
 							default:
 								return "
-									<button type=\"button\" class=\"btn btn-sm btn-secondary\" style=\"width:70px\" disable>รับ</button>\n
-									<button type=\"button\" class=\"btn btn-sm btn-secondary\" style=\"width:70px\" disabled>แก้ไข</button>\n";
+									<button type=\"button\" class=\"btn btn-sm btn-secondary\" style=\"width:140px\" disabled>ไม่ทราบสถานะ</button>\n";
 									break;
 						}
 					} else {
