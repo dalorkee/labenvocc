@@ -52,13 +52,11 @@ class SampleReceiveController extends Controller
 									break;
 							case 'preparing':
 							case 'approved':
-								return "
-                                <button type=\"button\" class=\"btn btn-sm btn-success\" style=\"width:140px\" disabled>รับตัวอย่างแล้ว</button>\n";
-									break;
+								return "<button type=\"button\" class=\"btn btn-sm btn-success\" style=\"width:140px\" disabled>รับตัวอย่างแล้ว</button>\n";
+								break;
 							default:
-								return "
-									<button type=\"button\" class=\"btn btn-sm btn-secondary\" style=\"width:140px\" disabled>ไม่ทราบสถานะ</button>\n";
-									break;
+								return "<button type=\"button\" class=\"btn btn-sm btn-secondary\" style=\"width:140px\" disabled>ไม่ทราบสถานะ</button>\n";
+								break;
 						}
 					} else {
 						return "<button class=\"btn btn-sm btn-warning\" style=\"width:140px\" disable>ไม่สมบูรณ์</button>";
@@ -68,19 +66,17 @@ class SampleReceiveController extends Controller
 			report($e->getMessage());
 			return redirect()->back()->with(key: 'error', value: $e->getMessage());
 		} catch (\Exception $e) {
+			Log::error($e->getMessage());
 			return view(view: 'errors.show', data: ['error' => $e->getMessage()]);
 		}
 	}
 
-	private function setLabNo($order_id=0, $created_at=null, $lab_no=0): string {
+	private function setLabNo($order_id=0, $created_at=null): string {
 		$exp1 = explode(" ", $created_at);
 		$exp2 = explode("-", $exp1[0]);
 		$th_year = substr((intval($exp2[0])+543), -2);
-		if (empty($lab_no) || $lab_no == 0) {
-			$tmp = sprintf('%05d', $order_id);
-			$new_lab_no = $tmp.$th_year;
-			$lab_no = $new_lab_no;
-		}
+		$tmp = sprintf('%05d', $order_id);
+		$lab_no = $tmp.$th_year;
 		return $lab_no;
 	}
 
@@ -91,10 +87,8 @@ class SampleReceiveController extends Controller
 	protected function step01(Request $request) {
 		try {
 			$order = OrderService::get(id: $request->order_id);
-			if (empty($order->lab_no)) {
-				$new_lab_no = $this->setLabNo($order->id, $order->created_at, $order->lab_no);
-				$order->lab_no = $new_lab_no;
-			}
+			$order->lab_no = (empty($order->lab_no)) ? $this->setLabNo(order_id: $order->id, created_at: $order->created_at) : $order->lab_no;
+			// $order->lab_no = $new_lab_no;
 			$sample_character_name = [];
 			$work_group = [];
 			$order_parameter = $order->parameters
