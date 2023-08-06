@@ -31,14 +31,14 @@ class SampleReceiveController extends Controller
 	*/
 	protected function create(Request $request): object {
 		try {
-			/* clear all step session  */
+			/* clear all session for page step */
 			$request->session()->forget(keys: 'order');
 			$request->session()->forget(keys: 'sample_result');
 			$request->session()->forget(keys: 'sample_sumary');
 
 			/* begin query */
 			$order_year = (date('Y'));
-			$orders = OrderService::getOrderwithCount(relations: ['orderSamples', 'parameters'], order_year: $order_year, order_status: ['pending', 'preparing', 'completed']);
+			$orders = OrderService::getOrderwithCount(relations: ['orderSamples', 'parameters'], order_year: $order_year, order_status: ['pending', 'preparing', 'approved', 'completed']);
 			return Datatables::of($orders)
 				->addColumn('total', fn ($order) => $order->order_samples_count.'/'.$order->parameters_count)
 				->editColumn('order_confirmed_date', fn ($order) => $this->setJsDateTimeToJsDate($order->order_confirmed_date))
@@ -88,7 +88,6 @@ class SampleReceiveController extends Controller
 		try {
 			$order = OrderService::get(id: $request->order_id);
 			$order->lab_no = (empty($order->lab_no)) ? $this->setLabNo(order_id: $order->id, created_at: $order->created_at) : $order->lab_no;
-			// $order->lab_no = $new_lab_no;
 			$sample_character_name = [];
 			$work_group = [];
 			$order_parameter = $order->parameters
@@ -266,111 +265,116 @@ class SampleReceiveController extends Controller
 	protected function print(Request $request) {
 		try {
 			$order = Order::with(['orderSamples' => fn ($q) => $q->where('sample_received_status', '=', 'y')])->whereId($request->order_id)->get();
-			$file_name = 'sample_receipt_order_'.$request->order_id.'_lab_'.$order[0]->lab_no.'.pdf';
-			if ($order[0]->receipt_status != 'y') {
-				$order_sample_id_arr = $order[0]->orderSamples->map(fn ($value, $key) => $value->id)->toArray();
-				$parameters = OrderSampleParameter::whereIn('order_sample_id', $order_sample_id_arr)->get();
-				$parameters_total_price = $parameters->reduce(fn($sum, $value) => ($sum+$value->price_name));
-				$user_id_arr = str_split(sprintf("%04d", auth()->user()->id));
-				$lab_no_arr = str_split($order[0]->lab_no);
+			if ($order[0]->orderSamples->count() > 0) {
+				$file_name = 'sample_receipt_order_'.$request->order_id.'_lab_'.$order[0]->lab_no.'.pdf';
+				if ($order[0]->receipt_status != 'y') {
+					$order_sample_id_arr = $order[0]->orderSamples->map(fn ($value, $key) => $value->id)->toArray();
+					$parameters = OrderSampleParameter::whereIn('order_sample_id', $order_sample_id_arr)->get();
+					$parameters_total_price = $parameters->reduce(fn($sum, $value) => ($sum+$value->price_name));
+					$user_id_arr = str_split(sprintf("%04d", auth()->user()->id));
+					$lab_no_arr = str_split($order[0]->lab_no);
 
-				$user_customer = UserCustomer::whereUser_id($order[0]->user_id)->get();
+					$user_customer = UserCustomer::whereUser_id($order[0]->user_id)->get();
 
-				$user_prov = $this->provinceNameByProvId($user_customer[0]->province) ?? '';
-				$user_dist = $this->districtNameByDistId($user_customer[0]->district) ?? '';
-				$user_sub_dist = $this->subDistrictNameBySubDistId($user_customer[0]->sub_district) ?? '';
-				$contact_user_prov = $this->provinceNameByProvId($user_customer[0]->contact_province) ?? '';
-				$contact_user_dist = $this->districtNameByDistId($user_customer[0]->contact_district) ?? '';
-				$contact_user_sub_dist = $this->subDistrictNameBySubDistId($user_customer[0]->contact_sub_district) ?? '';
+					$user_prov = $this->provinceNameByProvId($user_customer[0]->province) ?? '';
+					$user_dist = $this->districtNameByDistId($user_customer[0]->district) ?? '';
+					$user_sub_dist = $this->subDistrictNameBySubDistId($user_customer[0]->sub_district) ?? '';
+					$contact_user_prov = $this->provinceNameByProvId($user_customer[0]->contact_province) ?? '';
+					$contact_user_dist = $this->districtNameByDistId($user_customer[0]->contact_district) ?? '';
+					$contact_user_sub_dist = $this->subDistrictNameBySubDistId($user_customer[0]->contact_sub_district) ?? '';
 
-				$parameters_count_deep = $parameters->countBy(fn ($q) => $q->sample_character_id);
-				$parameters_count_deep->all();
+					$parameters_count_deep = $parameters->countBy(fn ($q) => $q->sample_character_id);
+					$parameters_count_deep->all();
 
-				$data = collect([
-					'order_id' => $request->order_id,
-					'user_id_arr' => $user_id_arr,
-					'lab_no' => $order[0]->lab_no,
-					'lab_no_arr' => $lab_no_arr,
-					'report_due_date' => $order[0]->report_due_date,
-					'type_of_work' => $order[0]->type_of_work,
-					'order_type' => $order[0]->order_type,
-					'order_samples_count' => $order[0]->orderSamples->count(),
-					'parameters_count' => $parameters->count(),
-					'parameters_count_deep' => $parameters_count_deep->toArray(),
-					'origin_threat_id' => $order[0]->orderSamples[0]->origin_threat_id,
-					'customer_agency_name' => $order[0]->customer_agency_name,
-					'customer_address' => $user_customer[0]->address.' ต.'.$user_sub_dist.' อ.'.$user_dist.' จ.'.$user_prov.' '.$user_customer[0]->postcode,
-					'customer_mobile' => $user_customer[0]->mobile,
-					'deliver_method' => $order[0]->deliver_method,
-					'book_no' => $order[0]->book_no,
-					'book_date' => $order[0]->book_date,
-					'first_name' => $user_customer[0]->first_name,
-					'last_name' => $user_customer[0]->last_name,
-					'mobile' => $user_customer[0]->mobile,
-					'contact_first_name' => $user_customer[0]->first_name,
-					'contact_last_name' => $user_customer[0]->last_name,
-					'contact_mobile' => $user_customer[0]->mobile,
-					'contact_address'=> $user_customer[0]->address.' ต.'.$contact_user_sub_dist.' อ.'.$contact_user_dist.' จ.'.$contact_user_prov.' '.$user_customer[0]->contact_postcode,
-					'order_created_at' => substr($this->convertMySQLDateTimeToJs($order[0]->created_at), 0, 10),
-					'contact_addr_opt' => $user_customer[0]->contact_addr_opt,
-					'report_result_receive_method' => $order[0]->report_result_receive_method,
-					'sample_sumary' => $request->session()->get(key: 'sample_sumary'),
-					'sample_verify_desc' => $order[0]->sample_verify_desc,
-					'received_order_name' => $order[0]->received_order_name,
-					'received_order_date' => $order[0]->received_order_date,
-					'review_order_name' => $order[0]->review_order_name,
-					'review_order_date' => $order[0]->review_order_date,
-					'parameters_total_price' => $parameters_total_price,
-				]);
+					$data = collect([
+						'order_id' => $request->order_id,
+						'user_id_arr' => $user_id_arr,
+						'lab_no' => $order[0]->lab_no,
+						'lab_no_arr' => $lab_no_arr,
+						'report_due_date' => $order[0]->report_due_date,
+						'type_of_work' => $order[0]->type_of_work,
+						'order_type' => $order[0]->order_type,
+						'order_samples_count' => $order[0]->orderSamples->count(),
+						'parameters_count' => $parameters->count(),
+						'parameters_count_deep' => $parameters_count_deep->toArray(),
+						'origin_threat_id' => $order[0]->orderSamples[0]->origin_threat_id,
+						'customer_agency_name' => $order[0]->customer_agency_name,
+						'customer_address' => $user_customer[0]->address.' ต.'.$user_sub_dist.' อ.'.$user_dist.' จ.'.$user_prov.' '.$user_customer[0]->postcode,
+						'customer_mobile' => $user_customer[0]->mobile,
+						'deliver_method' => $order[0]->deliver_method,
+						'book_no' => $order[0]->book_no,
+						'book_date' => $order[0]->book_date,
+						'first_name' => $user_customer[0]->first_name,
+						'last_name' => $user_customer[0]->last_name,
+						'mobile' => $user_customer[0]->mobile,
+						'contact_first_name' => $user_customer[0]->first_name,
+						'contact_last_name' => $user_customer[0]->last_name,
+						'contact_mobile' => $user_customer[0]->mobile,
+						'contact_address'=> $user_customer[0]->address.' ต.'.$contact_user_sub_dist.' อ.'.$contact_user_dist.' จ.'.$contact_user_prov.' '.$user_customer[0]->contact_postcode,
+						'order_created_at' => substr($this->convertMySQLDateTimeToJs($order[0]->created_at), 0, 10),
+						'contact_addr_opt' => $user_customer[0]->contact_addr_opt,
+						'report_result_receive_method' => $order[0]->report_result_receive_method,
+						'sample_sumary' => $request->session()->get(key: 'sample_sumary'),
+						'sample_verify_desc' => $order[0]->sample_verify_desc,
+						'received_order_name' => $order[0]->received_order_name,
+						'received_order_date' => $order[0]->received_order_date,
+						'review_order_name' => $order[0]->review_order_name,
+						'review_order_date' => $order[0]->review_order_date,
+						'parameters_total_price' => $parameters_total_price,
+					]);
 
-				switch($data['contact_addr_opt']) {
-					case "1":
-						$data->put('report_result_receive_first_name', $data['first_name']);
-						$data->put('report_result_receive_last_name', $data['last_name']);
-						$data->put('report_result_receive_mobile', $data['mobile']);
-						$data->put('report_result_receive_addr', $data['customer_address']);
-						break;
-					case "2":
-						$data->put('report_result_receive_first_name', $data['contact_first_name']);
-						$data->put('report_result_receive_last_name', $data['contact_last_name']);
-						$data->put('report_result_receive_mobile', $data['contact_mobile']);
-						$data->put('report_result_receive_addr', $data['contact_address']);
-						break;
-				}
-				$data = $data->all();
+					switch($data['contact_addr_opt']) {
+						case "1":
+							$data->put('report_result_receive_first_name', $data['first_name']);
+							$data->put('report_result_receive_last_name', $data['last_name']);
+							$data->put('report_result_receive_mobile', $data['mobile']);
+							$data->put('report_result_receive_addr', $data['customer_address']);
+							break;
+						case "2":
+							$data->put('report_result_receive_first_name', $data['contact_first_name']);
+							$data->put('report_result_receive_last_name', $data['contact_last_name']);
+							$data->put('report_result_receive_mobile', $data['contact_mobile']);
+							$data->put('report_result_receive_addr', $data['contact_address']);
+							break;
+					}
+					$data = $data->all();
 
 
-				/* put file to storage */
-				$pdf = Pdf::loadView('print.sample-receipt', $data);
-				$content = $pdf->download()->getOriginalContent();
-				Storage::disk('receipt')->put($file_name ,$content);
+					/* put file to storage */
+					$pdf = Pdf::loadView('print.sample-receipt', $data);
+					$content = $pdf->download()->getOriginalContent();
+					Storage::disk('receipt')->put($file_name ,$content);
 
-				/* insert file detail to table */
-				$file_upload = new FileUpload;
-				$file_upload->ref_user_id = auth()->user()->id;
-				$file_upload->order_id = $request->order_id;
-				$file_upload->file_name = $file_name;
-				$file_upload->file_mime = Storage::disk('receipt')->mimeType($file_name);
-				$file_upload->file_path = '/receipt';
-				$file_upload->file_size =  (round(Storage::disk('receipt')->size($file_name)/1024)) ?? 0;
-				$file_upload->note = 'ใบรับตัวอย่าง';
-				$file_upload->save();
+					/* insert file detail to table */
+					$file_upload = new FileUpload;
+					$file_upload->ref_user_id = auth()->user()->id;
+					$file_upload->order_id = $request->order_id;
+					$file_upload->file_name = $file_name;
+					$file_upload->file_mime = Storage::disk('receipt')->mimeType($file_name);
+					$file_upload->file_path = '/receipt';
+					$file_upload->file_size =  (round(Storage::disk('receipt')->size($file_name)/1024)) ?? 0;
+					$file_upload->note = 'ใบรับตัวอย่าง';
+					$file_upload->save();
 
-				/* update receipt status */
-				$order_model = Order::find($request->order_id);
-				$order_model->receipt_status = 'y';
-				$order_model->save();
+					/* update receipt status */
+					$order_model = Order::find($request->order_id);
+					$order_model->receipt_status = 'y';
+					$order_model->save();
 
-				if (!Storage::disk('receipt')->missing($file_name)) {
-					return Storage::disk('receipt')->download($file_name);
+					if (!Storage::disk('receipt')->missing($file_name)) {
+						return Storage::disk('receipt')->download($file_name);
+					} else {
+						return false;
+					}
 				} else {
-					return false;
+					return redirect()->route(route: 'sample.received.index')->with(key: 'error', value: 'ข้อมูลรายการนี้ ถูกพิมพ์ครบกำหนดแล้ว');
 				}
 			} else {
-				return redirect()->route('sample.received.index')->with('error', 'ข้อมูลรายการนี้ ถูกพิมพ์ครบกำหนดแล้ว');
+				return redirect()->route(route: 'sample.received.index')->with(key: 'error', value: 'ข้อมูลรายการนี้ อยู่ในสถานะยกเลิกหรือไม่สมบูรณ์');
 			}
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
+			return redirect()->route(route: 'sample.received.index')->with(key: 'error', value: $e->getMessage());
 		}
 	}
 
@@ -660,7 +664,7 @@ class SampleReceiveController extends Controller
 						} else {
 							$htm .= "<tr>";
 								$htm .= "<td colspan=\"6\">";
-									$htm .= "<div class=\"alert alert-danger\" role=\"alert\"><strong>ไม่พบข้อมูล</strong></div>";
+									$htm .= "<div class=\"alert alert-danger\" role=\"alert\"><strong>ไม่พบข้อมูลที่ค้นหา</strong></div>";
 								$htm .= "</td>";
 							$htm .= "</tr>";
 						}

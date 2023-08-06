@@ -64,10 +64,10 @@ class listOrderDataTable extends DataTable
 				->each(function($item, $key) use (&$order_sample_id_arr) {
 					array_push($order_sample_id_arr, $item->order_sample_id);
 				});
-			$samples = OrderSample::select('order_id')->whereIn('id', $order_sample_id_arr)->whereSample_verified_status('complete')->whereSample_received_status('y')->get();
-			$order_id =  (!empty($samples[0]['order_id'])) ? $samples[0]['order_id'] : 0;
-			$data = Order::whereId($order_id)->whereIn('order_status', ['pending', 'preparing', 'approved', 'completed'])->with('parameters')->orderBy('id', 'ASC');
-			return $data;
+				$samples = OrderSample::select('order_id')->whereIn('id', $order_sample_id_arr)->whereSample_verified_status('complete')->whereSample_received_status('y')->get();
+				$order_id =  (!empty($samples[0]['order_id'])) ? $samples[0]['order_id'] : 0;
+				$data = Order::whereId($order_id)->whereIn('order_status', ['pending', 'preparing', 'approved', 'completed'])->with('parameters')->orderBy('id', 'ASC');
+				return $data;
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
 		}

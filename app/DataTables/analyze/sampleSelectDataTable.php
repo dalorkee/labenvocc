@@ -18,7 +18,7 @@ class sampleSelectDataTable extends DataTable
 			->addColumn('paramet', function($sample) {
 				$htm = "<ul>\n";
 				foreach ($sample->parameters as $key => $value) {
-					$htm .= "<li>".$value['parameter_name']."</li>\n";
+					$htm .= "<li><span class=\"badge badge-\">".$value['parameter_name']."</span></li>\n";
 				}
 				$htm .= "</ul>\n";
 				return $htm;

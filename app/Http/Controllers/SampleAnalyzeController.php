@@ -64,7 +64,6 @@ class SampleAnalyzeController extends Controller
 						}
 					}
 				});
-
 				return Datatables::of($data)
 					->addIndexColumn()
 					->addColumn('info', function() {
@@ -73,7 +72,7 @@ class SampleAnalyzeController extends Controller
 					->addColumn('paramet', function($sample) {
 						$htm = "<ul>\n";
 						foreach ($sample->parameters as $key => $value) {
-							$htm .= "<li>".$value['parameter_name']."</li>\n";
+							$htm .= "<li><span class=\"badge badge-success\">".$value['parameter_name']."</span></li>\n";
 						}
 					$htm .= "</ul>\n";
 					return $htm;
@@ -81,10 +80,10 @@ class SampleAnalyzeController extends Controller
 					->rawColumns(['info', 'paramet', 'action'])
 					->make(true);
 			} else {
-				dd('ไม่พบข้อมูล Ajax');
+				Log::error('ไม่พบข้อมูล Ajax::sampleSelectDt()');
 			}
 		} catch (\Exception $e) {
-			dd($e->getMessage());
+			Log::error($e->getMessage());
 		}
 	}
 

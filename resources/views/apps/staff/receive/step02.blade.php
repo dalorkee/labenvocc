@@ -29,6 +29,7 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 				<form name="received_step02_frm" action="{{ route('sample.received.step02.post') }}" method="POST" enctype="multipart/form-data">
 					<input type="hidden" name="_token" value="{{ csrf_token() }}">
 					<input type="hidden" name="id" value="{{ $order['id'] ?? old('id') }}">
+					<input type="hidden" name="order_id" value="{{ $order['id'] ?? old('order_id') }}">
 					<input type="hidden" name="order_no" value="{{ $order['order_no'] ?? old('order_no') }}">
 					<input type="hidden" name="order_no_ref" value="{{ $order['order_no'] ?? old('order_no_ref') }}">
 					<input type="hidden" name="order_type" value="{{ $order['order_type'] ?? old('order_type') }}">
