@@ -19,15 +19,21 @@ class listOrderDataTable extends DataTable
 				->addIndexColumn()
 				->addColumn('progress', function($status) {
 					switch ($status->order_status) {
-						case "preparing":
+						case "pending":
 							$htm = "
 							<div class=\"progress progress-md\">
 								<div class=\"progress-bar bg-info\" role=\"progressbar\" style=\"width: 25%;\" aria-valuenow=\"25\" aria-valuemin=\"0\" aria-valuemax=\"100\">25%</div>
 							</div>";
 							break;
-						case "approved": $htm = "
+						case "preparing":
+							$htm = "
 							<div class=\"progress progress-md\">
 								<div class=\"progress-bar bg-info\" role=\"progressbar\" style=\"width: 50%;\" aria-valuenow=\"50\" aria-valuemin=\"0\" aria-valuemax=\"100\">50%</div>
+							</div>";
+							break;
+						case "approved": $htm = "
+							<div class=\"progress progress-md\">
+								<div class=\"progress-bar bg-info\" role=\"progressbar\" style=\"width: 75%;\" aria-valuenow=\"75\" aria-valuemin=\"0\" aria-valuemax=\"100\">75%</div>
 							</div>";
 							break;
 						case "completed": $htm = "

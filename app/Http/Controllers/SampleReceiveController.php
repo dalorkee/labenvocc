@@ -40,9 +40,9 @@ class SampleReceiveController extends Controller
 			$order_year = (date('Y'));
 			$orders = OrderService::getOrderwithCount(relations: ['orderSamples', 'parameters'], order_year: $order_year, order_status: ['pending', 'preparing', 'approved', 'completed']);
 			return Datatables::of($orders)
-				->addColumn('total', fn ($order) => $order->order_samples_count.'/'.$order->parameters_count)
-				->editColumn('order_confirmed_date', fn ($order) => $this->setJsDateTimeToJsDate($order->order_confirmed_date))
-				->addColumn('action', function ($order) {
+				?->addColumn('total', fn ($order) => $order->order_samples_count.'/'.$order->parameters_count)
+				?->editColumn('order_confirmed_date', fn ($order) => $this->setJsDateTimeToJsDate($order->order_confirmed_date))
+				?->addColumn('action', function ($order) {
 					if (!empty($order->order_confirmed_date)) {
 						switch ($order->order_status) {
 							case 'pending':
@@ -52,7 +52,10 @@ class SampleReceiveController extends Controller
 									break;
 							case 'preparing':
 							case 'approved':
-								return "<button type=\"button\" class=\"btn btn-sm btn-success\" style=\"width:140px\" disabled>รับตัวอย่างแล้ว</button>\n";
+								return "<button type=\"button\" class=\"btn btn-sm btn-warning\" style=\"width:140px\" disabled>รับตัวอย่าง</button>\n";
+								break;
+							case 'completed':
+								return "<button type=\"button\" class=\"btn btn-sm btn-success\" style=\"width:140px\" disabled>เสร็จสิ้น</button>\n";
 								break;
 							default:
 								return "<button type=\"button\" class=\"btn btn-sm btn-secondary\" style=\"width:140px\" disabled>ไม่ทราบสถานะ</button>\n";
@@ -638,22 +641,13 @@ class SampleReceiveController extends Controller
 										$htm .= "<td>".$value['paramet_name']."</td>";
 										$htm .= "<td>".$value['main_analys_name']."</td>";
 										match ($value['status']) {
-											'pending' => $htm .= "
-												<td>
-													<button type=\"button\" class=\"btn btn-info btn-sm\" style=\"width:100px;\" disabled>รอจอง</button>
-												</td>",
+											'pending' => $htm .= "<td><button type=\"button\" class=\"btn btn-info btn-sm\" style=\"width:100px;\" disabled>รอจอง</button></td>",
 											'reserved' => $htm .= "
 												<td>
 													<button type=\"button\" class=\"btn btn-success btn-sm requisition-btn\" style=\"width:100px;\" onClick='updateRequisitionStatus(\"".$value['lab_no']."\", \"".$value['main_analys_user_id']."\", \"".$value['order_sample_parameter_id']."\")'>เบิก</button>
 												</td>",
-											'analyzing' => $htm .= "
-												<td>
-													<button type=\"button\" class=\"btn btn-warning btn-sm\" style=\"width:100px;\" disabled>วิเคราะห์</button>
-												</td>",
-											'completed' => $htm .= "
-												<td>
-													<button type=\"button\" class=\"btn btn-primary btn-sm\" style=\"width:100px;\" disabled>เสร็จสิ้น</button>
-												</td>",
+											'analyzing' => $htm .= "<td><button type=\"button\" class=\"btn btn-warning btn-sm\" style=\"width:100px;\" disabled>วิเคราะห์</button></td>",
+											'completed' => $htm .= "<td><button type=\"button\" class=\"btn btn-primary btn-sm\" style=\"width:100px;\" disabled>เสร็จสิ้น</button></td>",
 										};
 									$htm .= "</tr>";
 								} else {

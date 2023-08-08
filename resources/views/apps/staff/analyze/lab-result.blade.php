@@ -2,9 +2,11 @@
 @section('token')<meta name="csrf-token" content="{{ csrf_token() }}">@endsection
 @section('style')
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/pj-step.css') }}">
-{{-- <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/css/notifications/sweetalert2/sweetalert2.bundle.css') }}" media="screen, print"> --}}
 <style type="text/css">
-	table#example_table thead {background-color:#2D8AC9;color:white}
+	table#example_table thead {background-color:#0e629b;color:white}
+    .v-wp {display:flex; flex-direction:row; justify-content:space-between; width:130px; margin:0; padding:0}
+    .v-wp div {width:90px;}
+    .v-wp div+div {width:40px; font-size: .80em}
 </style>
 @endsection
 @section('content')
