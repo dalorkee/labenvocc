@@ -13,6 +13,9 @@ use App\Models\{
 	District,
 	SubDistrict
 };
+use Illuminate\Support\Arr;
+use App\Exports\ExportSample;
+use Maatwebsite\Excel\Facades\Excel;
 
 class FetchDataController extends Controller
 {
@@ -127,82 +130,24 @@ class FetchDataController extends Controller
 		return $html;
 	}
 
-	public function dataFetch(Request $request) {		
+	public function dataFetch(Request $request) {	
 		$this->validate($request,[
 			'sample_type'=>'required',
 			'date_start'=>'required',
 			'date_end'=>'required',
 			]);
-		if($request->sample_type == '1'){
-			$ep_query = OrderSampleParameter::select(
-				'order_sample_parameter.sample_type_name',
-				'order_sample_parameter.sample_character_name',
-				'order_sample.sample_test_no',
-				'order_sample.firstname',
-				'order_sample.lastname',
-				'order_sample.age_year',
-				'orders.type_of_work_name',
-				'order_sample.origin_threat_name',
-				'order_sample_parameter.threat_type_name',
-				'order_sample_parameter.parameter_name',
-				'order_sample.sample_location_place_province_name',
-				'order_sample.sample_location_place_district_name',
-				'order_sample.sample_location_place_sub_district_name',
-				'order_sample.sample_receive_date'
-			);
+		$file_date = Date('YmdHis');
+		switch($request->sample_type){
+			case '1':
+				$name_file = 'bio';
+			break;
+			case '2':
+				$name_file = 'env';
+			break;
+			default:
+				$name_file = 'NA';
 		}
-		elseif($request->sample_type == '2'){
-			$ep_query = OrderSampleParameter::select(
-				'order_sample_parameter.sample_type_name',
-				'order_sample_parameter.sample_character_name',
-				'order_sample.sample_test_no',
-				'order_sample.firstname',
-				'order_sample.lastname',
-				'order_sample.age_year',
-				'order_sample.sample_position',
-				'order_sample.division',
-				'orders.type_of_work_name',
-				'orders.type_of_factory_name',
-				'order_sample_parameter.parameter_name',
-				'order_sample.sample_location_place_province_name',
-				'order_sample.sample_location_place_district_name',
-				'order_sample.sample_location_place_sub_district_name',
-				'order_sample.sample_receive_date'
-			);
-		}
-		$ep_query = $ep_query
-		->join('orders', 'orders.id', '=' ,'order_sample_parameter.order_id')
-		->join('order_sample','order_sample.id','=','order_sample_parameter.order_sample_id')
-		->where('order_sample_parameter.sample_type_id', $request->sample_type)
-		->whereBetween('order_sample.sample_receive_date', [$request->date_start, $request->date_end])
-		->when($request->sample_character != "seall", function($cond_sam_char) use ($request){
-			return $cond_sam_char->where('order_sample_parameter.sample_character_id', $request->sample_character);
-		})
-		->when($request->type_of_work != "seall", function($cond_type_work) use ($request){
-			return $cond_type_work->where('orders.type_of_work', $request->type_of_work);
-		})
-		->when(!empty($request->original_threat) && $request->original_threat != "seall", function($cond_ori_threat) use ($request){
-				return $cond_ori_threat->where('order_sample.origin_threat_id', $request->original_threat);
-		})
-		->when(!empty($request->factory_type) && $request->factory_type != "seall", function($cond_fact) use ($request){
-			return $cond_fact->where('orders.type_of_factory', $request->factory_type);
-		})
-		->when($request->parameter_group != "seall", function($cond_para_group) use ($request){
-			return $cond_para_group->where('order_sample_parameter.threat_type_id', $request->parameter_group);
-		})
-		->when(!empty($request->parameter) && $request->parameter != "seall", function($cond_para) use ($request){
-			return $cond_para->where('order_sample_parameter.parameter_id', $request->parameter);
-		})
-		->when($request->province != "seall", function($cond_prov) use ($request){
-			return $cond_prov->where('order_sample.sample_location_place_province', $request->province);
-		})
-		->when($request->district != "seall", function($cond_distr) use ($request){
-			return $cond_distr->where('order_sample.sample_location_place_district', $request->district);
-		})
-		->when($request->sub_district != "seall", function($cond_subdistr) use ($request){
-			return $cond_subdistr->where('order_sample.sample_location_place_sub_district', $request->sub_district);
-		})
-		->get();
-		dd($ep_query);
+		$split_request = Arr::except($request->toArray(), ['_token']);
+		return Excel::download(new ExportSample($split_request), $name_file.'_'.$file_date.'.xlsx');
 	}
 }

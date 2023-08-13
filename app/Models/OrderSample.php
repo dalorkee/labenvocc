@@ -51,7 +51,7 @@ class OrderSample extends Model
 		'sample_verified_status',
 		'sample_received_status',
 		'sample_test_no',
-		'sample_receive_date',
+		'sample_received_date',
 		'analys_complete_date',
 		'report_result_date',
 	];
