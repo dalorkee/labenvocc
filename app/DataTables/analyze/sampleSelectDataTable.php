@@ -14,18 +14,16 @@ class sampleSelectDataTable extends DataTable
 	public function dataTable($query) {
 		return datatables()
 			->eloquent($query)
-			->addColumn('info', function() {
-				return "<a href=\"javascript:void(0);\" class=\"btn btn-info btn-sm btn-icon rounded-circle\"><i class=\"fal fa-info\"></i></a>";
-			})
+			->addColumn('info', fn () => "<a href=\"javascript:void(0);\" class=\"btn btn-info btn-sm btn-icon rounded-circle\"><i class=\"fal fa-info\"></i></a>")
 			->addColumn('paramet', function($sample) {
 				$htm = "<ul>\n";
 				foreach ($sample->parameters as $key => $value) {
-					$htm .= "<li>".$value['parameter_name']."</li>\n";
+					$htm .= "<li><span class=\"badge badge-\">".$value['parameter_name']."</span></li>\n";
 				}
-			$htm .= "</ul>\n";
-			return $htm;
+				$htm .= "</ul>\n";
+				return $htm;
 			})
-			->addColumn('action', '<button>xxx</button>')
+			->addColumn('action', '<button>pjx</button>')
 			->rawColumns(['info', 'paramet', 'action']);
 	}
 	public function query(OrderSample $model) {
@@ -38,10 +36,6 @@ class sampleSelectDataTable extends DataTable
 				array_push($data, $key);
 			}
 		});
-		// foreach ($data as $value) {
-		//     $sample->forget($value);
-		// }
-		// dd($sample);
 		return $sample;
 	}
 	public function html() {
@@ -51,9 +45,7 @@ class sampleSelectDataTable extends DataTable
 		->columns($this->getColumns())
 		->minifiedAjax()
 		->responsive(true)
-		->parameters([
-			'language' => ['url' => url('/vendor/DataTables/i18n/thai.json')],
-		]);
+		->parameters(['language' => ['url' => url('/vendor/DataTables/i18n/thai.json')]]);
 	}
 	protected function getColumns() {
 		return [
@@ -65,13 +57,7 @@ class sampleSelectDataTable extends DataTable
 		];
 	}
 
-	/**
-	 * Get filename for export.
-	 *
-	 * @return string
-	 */
-	protected function filename()
-	{
+	protected function filename() {
 		return 'sampleSelect_' . date('YmdHis');
 	}
 }

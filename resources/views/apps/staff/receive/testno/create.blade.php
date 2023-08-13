@@ -74,12 +74,8 @@ $(document).ready(function() {
 				url: "{{ route('sample.search.by.lab.no') }}",
 				data: {lab_no: lab_no},
 				dataType: "html",
-				success: function(response) {
-					$('#order_sample_table').html(response);
-				},
-				error: function(jqXhr, textStatus, errorMessage) {
-					alert('Error code: ' + jqXhr.status + errorMessage);
-				}
+				success: (response) => {$('#order_sample_table').html(response)},
+				error: (jqXhr, textStatus, errorMessage) => {alert('Error code: ' + jqXhr.status + errorMessage)}
 			});
 		} else {
 			$('#set_test_no_btn').prop('disabled', true);

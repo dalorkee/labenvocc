@@ -2,9 +2,11 @@
 @section('token')<meta name="csrf-token" content="{{ csrf_token() }}">@endsection
 @section('style')
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/pj-step.css') }}">
-<link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/css/notifications/sweetalert2/sweetalert2.bundle.css') }}" media="screen, print">
 <style type="text/css">
-	table#example_table thead {background-color:#2D8AC9;color:white}
+	table#example_table thead {background-color:#0e629b;color:white}
+    .v-wp {display:flex; flex-direction:row; justify-content:space-between; width:130px; margin:0; padding:0}
+    .v-wp div {width:90px;}
+    .v-wp div+div {width:40px; font-size: .80em}
 </style>
 @endsection
 @section('content')
@@ -80,8 +82,8 @@
 														</td>
 														<td><input type="text" name="lab_result_blank[]" value="{{ $v['lab_result_blank'] }}" class="form-control" style="width: 100px;"></td>
 														<td><input type="text" name="lab_result_amount[]" value="{{ $v['lab_result_amount'] }} " class="form-control" style="width: 100px;"></td>
-														<td><input type="text" name="weight_sample[]" value="{{ $val['weight_sample'] }}" class="form-control"style="width: 100px;" readonly></td>
 														<td><input type="text" name="air_volume[]" value="{{ $val['air_volume'] }}" class="form-control" style="width: 100px;" readonly></td>
+														<td><input type="text" name="weight_sample[]" value="{{ $val['weight_sample'] }}" class="form-control"style="width: 100px;" readonly></td>
 														<td><input type="text" name="lab_dilution[]" value="{{ $v['lab_dilution'] }}" class="form-control" style="width: 100px;"></td>
 														<td><input type="text" name="lab_result[]" value="{{ $v['lab_result'] }}" class="form-control" style="width: 100px;"></td>
 														<td style="width: 200px; text-center;">
@@ -125,7 +127,7 @@
 <div id="view_modal_wrapper"></div>
 @endsection
 @push('scripts')
-<script type="text/javascript" src="{{ URL::asset('assets/js/notifications/sweetalert2/sweetalert2.bundle.js') }}"></script>
+{{-- <script type="text/javascript" src="{{ URL::asset('assets/js/notifications/sweetalert2/sweetalert2.bundle.js') }}"></script> --}}
 <script type="text/javascript">
 $(document).ready(function() {
 	$.ajaxSetup({headers:{'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')}});

@@ -26,13 +26,13 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 				<form name="received_step03_frm" id="received_step03_frm" action="{{ route('sample.received.step03.post') }}" method="POST" enctype="multipart/form-data">
 					<input type="hidden" name="_token" value="{{ csrf_token() }}">
 					<input type="hidden" name="order_id" value="{{ $order_id ?? old('order_id') }}">
-					<input type="hidden" name="order_type" value="1">
-					<input type="hidden" name="order_type_name" value="ตัวอย่างชีวภาพ">
+					<input type="hidden" name="order_type" value="{{ $order['order_type'] ?? old('order_type') }}">
+					<input type="hidden" name="order_type_name" value="{{ $order['order_type_name'] ?? old('order_type_name') }}">
 					<div class="panel-content">
 						<ul class="steps">
 							<li class="undone"><a href="{{ route('sample.received.create') }}"><span class="d-none d-sm-inline">รายการคำขอ</span></a></li>
 							<li class="active"><p><span class="d-none d-sm-inline">รับตัวอย่าง</span></p></li>
-							<li class="undone"><p><span class="d-none d-sm-inline">การตรวจวิเคราะห์</span></&p></li>
+							<li class="undone"><p><span class="d-none d-sm-inline">การตรวจวิเคราะห์</span></p></li>
 							<li class="undone"><p><span class="d-none d-sm-inline">รายงานผล</span></p></li>
 						</ul>
 						<div class="row">

@@ -4,9 +4,6 @@
 <link type="text/css" rel="stylesheet" href="{{ URL::asset('vendor/bootstrap-table/dist/bootstrap-table.min.css') }}">
 <link type="text/css" rel="stylesheet" href="{{ URL::asset('vendor/jquery-datatables-checkboxes/dataTables.checkboxes.css') }}">
 <link type="text/css" rel="stylesheet" href="{{ URL::asset('assets/css/formplugins/select2/select2.bundle.css') }}">
-
-
-{{-- <link type="text/css" rel="stylesheet" href="{{ URL::asset('vendor/bootstrap-datepicker/dist/css/bootstrap-datetimepicker.min.css') }}"> --}}
 <link type="text/css" rel="stylesheet" href="{{ URL::asset('css/pj-step.css') }}">
 <style type="text/css">
 table#example_table thead {background-color:#2D8AC9;color: white;}
@@ -31,6 +28,7 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 			<div class="panel-container show">
 				<form name="received_step02_frm" action="{{ route('sample.received.step02.post') }}" method="POST" enctype="multipart/form-data">
 					<input type="hidden" name="_token" value="{{ csrf_token() }}">
+					<input type="hidden" name="id" value="{{ $order['id'] ?? old('id') }}">
 					<input type="hidden" name="order_id" value="{{ $order['id'] ?? old('order_id') }}">
 					<input type="hidden" name="order_no" value="{{ $order['order_no'] ?? old('order_no') }}">
 					<input type="hidden" name="order_no_ref" value="{{ $order['order_no'] ?? old('order_no_ref') }}">
@@ -61,7 +59,7 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 														<th>จำนวนรายการทดสอบ</th>
 														<th>เลือก</th>
 														<th>สถานะ</th>
-														<th>หมายเหตุ</th>
+														{{-- <th>หมายเหตุ</th> --}}
 													</tr>
 												</thead>
 												<tfoot></tfoot>
@@ -115,7 +113,7 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 																	<option value="n" {{ (!is_null($session_sample_result) && $session_sample_result[$val['sample_id']]['sample_received_status_'.$val['sample_id']] == 'n') ? 'selected' : '' }}>ปฏิเสธ</option>
 																</select>
 															</td>
-															<td><button type="button" value="{{ $val['sample_id'] }}" class="btn btn-sm btn-warning sample_note">หมายเหตุ</button></td>
+															{{-- <td><button type="button" value="{{ $val['sample_id'] }}" class="btn btn-sm btn-warning sample_note">หมายเหตุ</button></td> --}}
 														</tr>
 													@endforeach
 												</tbody>
@@ -176,7 +174,6 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 <script type="text/javascript" src="{{ URL::asset('vendor/bootstrap-table/dist/bootstrap-table.min.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('vendor/bootstrap-table/dist/locale/bootstrap-table-th-TH.min.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('assets/js/formplugins/select2/select2.bundle.js') }}"></script>
-{{-- <script type="text/javascript" src="{{ URL::asset('vendor/bootstrap-datepicker/dist/js/bootstrap-datetimepicker.min.js') }}"></script> --}}
 <script type="text/javascript" src="{{ URL::asset('js/buttons.server-side.js') }}"></script>
 <script type="text/javascript">
 $(document).ready(function() {

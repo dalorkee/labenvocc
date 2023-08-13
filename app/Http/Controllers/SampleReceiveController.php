@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\DataTables\ReceivedExampleDataTable;
+// use App\DataTables\ReceivedExampleDataTable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\{Response,DB,Storage,Log};
 use App\Services\OrderService;
 use App\Traits\{DateTimeTrait,CommonTrait,DbBoundaryTrait};
 use App\Exceptions\{OrderNotFoundException,InvalidOrderException};
-use App\Models\{User,Order,OrderSample,OrderSampleParameter,FileUpload,Parameter};
+use App\Models\{User,UserCustomer,Order,OrderSample,OrderSampleParameter,FileUpload,Parameter};
 use Yajra\DataTables\Facades\DataTables;
 use Barryvdh\DomPDF\Facade\Pdf;
 
@@ -31,27 +31,35 @@ class SampleReceiveController extends Controller
 	*/
 	protected function create(Request $request): object {
 		try {
-			/* clear all step session  */
+			/* clear all session for page step */
 			$request->session()->forget(keys: 'order');
 			$request->session()->forget(keys: 'sample_result');
 			$request->session()->forget(keys: 'sample_sumary');
 
 			/* begin query */
 			$order_year = (date('Y'));
-			$orders = OrderService::getOrderwithCount(relations: ['orderSamples', 'parameters'], order_year: $order_year, order_status: ['pending', 'preparing', 'completed']);
+			$orders = OrderService::getOrderwithCount(relations: ['orderSamples', 'parameters'], order_year: $order_year, order_status: ['pending', 'preparing', 'approved', 'completed']);
 			return Datatables::of($orders)
-				->addColumn('total', fn ($order) => $order->order_samples_count.'/'.$order->parameters_count)
-				->editColumn('order_confirmed_date', fn($order) => $this->setJsDateTimeToJsDate($order->order_confirmed_date))
-				->addColumn('action', function ($order) {
+				?->addColumn('total', fn ($order) => $order->order_samples_count.'/'.$order->parameters_count)
+				?->editColumn('order_confirmed_date', fn ($order) => $this->setJsDateTimeToJsDate($order->order_confirmed_date))
+				?->addColumn('action', function ($order) {
 					if (!empty($order->order_confirmed_date)) {
-						if ($order->order_status != 'pending') {
-							return "
-							<a href=\"#\" class=\"btn btn-sm btn-secondary\" style=\"width:70px\" disable>รับ</a>\n
-							<a href=\"#\" class=\"btn btn-sm btn-secondary\" style=\"width:70px\" disabled>แก้ไข</a>\n";
-						} else {
-							return "
-								<a href=\"".route('sample.received.step01', ['order_id' => $order->id])."\" class=\"btn btn-sm btn-success\" style=\"width:70px\">รับ</a>\n
-								<a href=\"#edit-".$order->id."\" class=\"btn btn-sm btn-warning\" style=\"width:70px\">แก้ไข</a>\n";
+						switch ($order->order_status) {
+							case 'pending':
+								return "
+									<a href=\"".route('sample.received.step01', ['order_id' => $order->id])."\" class=\"btn btn-sm btn-success\" style=\"width:70px\">รับ</a>\n
+									<button type=\"button\" class=\"btn btn-sm btn-secondary\" style=\"width:70px\">แก้ไข</button>\n";
+									break;
+							case 'preparing':
+							case 'approved':
+								return "<button type=\"button\" class=\"btn btn-sm btn-warning\" style=\"width:140px\" disabled>รับตัวอย่าง</button>\n";
+								break;
+							case 'completed':
+								return "<button type=\"button\" class=\"btn btn-sm btn-success\" style=\"width:140px\" disabled>เสร็จสิ้น</button>\n";
+								break;
+							default:
+								return "<button type=\"button\" class=\"btn btn-sm btn-secondary\" style=\"width:140px\" disabled>ไม่ทราบสถานะ</button>\n";
+								break;
 						}
 					} else {
 						return "<button class=\"btn btn-sm btn-warning\" style=\"width:140px\" disable>ไม่สมบูรณ์</button>";
@@ -61,32 +69,28 @@ class SampleReceiveController extends Controller
 			report($e->getMessage());
 			return redirect()->back()->with(key: 'error', value: $e->getMessage());
 		} catch (\Exception $e) {
+			Log::error($e->getMessage());
 			return view(view: 'errors.show', data: ['error' => $e->getMessage()]);
 		}
+	}
+
+	private function setLabNo($order_id=0, $created_at=null): string {
+		$exp1 = explode(" ", $created_at);
+		$exp2 = explode("-", $exp1[0]);
+		$th_year = substr((intval($exp2[0])+543), -2);
+		$tmp = sprintf('%05d', $order_id);
+		$lab_no = $tmp.$th_year;
+		return $lab_no;
 	}
 
 	/**
 	* Create Sample Step 01
 	* @Get('sample.received.step01')
 	*/
-	private function setLabNo($order_id=0, $created_at=null, $lab_no=0): string {
-		$exp1 = explode(" ", $created_at);
-		$exp2 = explode("-", $exp1[0]);
-		$th_year = substr((intval($exp2[0])+543), -2);
-		if (empty($lab_no) || $lab_no == 0) {
-			$tmp = sprintf('%05d', $order_id);
-			$new_lab_no = $tmp.$th_year;
-			$lab_no = $new_lab_no;
-		}
-		return $lab_no;
-	}
 	protected function step01(Request $request) {
 		try {
 			$order = OrderService::get(id: $request->order_id);
-			if (empty($order->lab_no)) {
-				$new_lab_no = $this->setLabNo($order->id, $order->created_at, $order->lab_no);
-				$order->lab_no = $new_lab_no;
-			}
+			$order->lab_no = (empty($order->lab_no)) ? $this->setLabNo(order_id: $order->id, created_at: $order->created_at) : $order->lab_no;
 			$sample_character_name = [];
 			$work_group = [];
 			$order_parameter = $order->parameters
@@ -135,7 +139,6 @@ class SampleReceiveController extends Controller
 		]);
 
 		if (empty($request->session()->get(key: 'order'))) {
-			// $order = OrderService::create();
 			$order = new Order();
 			$order->fill(attributes: $validated);
 			$request->session()->put(key: 'order', value: $order);
@@ -235,29 +238,28 @@ class SampleReceiveController extends Controller
 		try {
 			$user_staff = User::find(auth()->user()->id)->userStaff;
 			$user_staff_full_name = $user_staff->first_name." ".$user_staff->last_name;
-			$now_date = date('Y-m-d');
 			$order_id = $request->order_id;
 			$sample_result = $request->session()->get(key: 'sample_result');
 			$order_arr = $request->session()->get(key: 'order')->toArray();
 			$order = OrderService::get($order_id);
 			$order->fill(attributes: $order_arr);
-			DB::transaction(function() use ($sample_result, $order, $now_date, $user_staff_full_name) {
+			// DB::transaction(function() use ($sample_result, $order, $user_staff_full_name) {
 				foreach ($sample_result as $key => $value) {
-					$order_sample = OrderService::findOrderSample($value['id']);
+					$order_sample = OrderSample::findOr($value['id'], fn () => throw new \Exception('ไม่พบข้อมูล Order Sample id: '.$value['id']));
 					$order_sample->sample_verified_status = $value['sample_verified_status_'.$value['id']];
 					$order_sample->sample_received_status = $value['sample_received_status_'.$value['id']];
-					$order_sample->sample_receive_date = $now_date;
+					$order_sample->sample_received_date = date('Y-m-d');
 					$order_sample->save();
 				}
-				$order->fill(attributes: ['order_status' => 'preparing', 'received_order_name' => $user_staff_full_name, 'received_order_date' => $now_date]);
+				$order->fill(attributes: ['order_status' => 'preparing', 'received_order_name' => $user_staff_full_name, 'received_order_date' => date('d/m/Y')]);
 				$order->save();
-			});
-			// return redirect()->route('sample.received.index')->with(key: 'success', value: 'บันทึกข้อมูลสำเร็จแล้ว !!');
+			// });
 			return view('apps.staff.receive.step04', compact('order_id', 'order_arr'));
 		} catch (OrderNotFoundException $e) {
 			report($e->getMessage());
 			return redirect()->back()->with(key: 'error', value: $e->getMessage());
 		} catch (\Exception $e) {
+			dd($e->getMessage());
 			Log::error($e->getMessage());
 			return redirect()->route('sample.received.index')->with(key: 'error', value: $e->getMessage());
 		}
@@ -265,106 +267,117 @@ class SampleReceiveController extends Controller
 
 	protected function print(Request $request) {
 		try {
-			$order = Order::with(['orderSamples' => fn($q) => $q->where('sample_received_status', '=', 'y')])->whereId($request->order_id)->get();
-			$file_name = 'sample_receipt_order_'.$request->order_id.'_lab_'.$order[0]->lab_no.'.pdf';
-			if ($order[0]->receipt_status != 'y') {
-				$order_sample_id_arr = $order[0]->orderSamples->map(fn($value, $key) => $value->id)->toArray();
-				$parameters = OrderSampleParameter::whereIn('order_sample_id', $order_sample_id_arr)->get();
-				$parameters_total_price = $parameters->reduce(fn($sum, $value) => ($sum+$value->price_name));
-				$user_id_arr = str_split(sprintf("%04d", auth()->user()->id));
-				$lab_no_arr = str_split($order[0]->lab_no);
-				$user_prov = $this->provinceNameByProvId(auth()->user()->userCustomer->province) ?? '';
-				$user_dist = $this->districtNameByDistId(auth()->user()->userCustomer->district) ?? '';
-				$user_sub_dist = $this->subDistrictNameBySubDistId(auth()->user()->userCustomer->sub_district) ?? '';
-				$contact_user_prov = $this->provinceNameByProvId(auth()->user()->userCustomer->contact_province) ?? '';
-				$contact_user_dist = $this->districtNameByDistId(auth()->user()->userCustomer->contact_district) ?? '';
-				$contact_user_sub_dist = $this->subDistrictNameBySubDistId(auth()->user()->userCustomer->contact_sub_district) ?? '';
-				$parameters_count_deep = $parameters->countBy(fn($q) => $q->sample_character_id);
-				$parameters_count_deep->all();
+			$order = Order::with(['orderSamples' => fn ($q) => $q->where('sample_received_status', '=', 'y')])->whereId($request->order_id)->get();
+			if ($order[0]->orderSamples->count() > 0) {
+				$file_name = 'sample_receipt_order_'.$request->order_id.'_lab_'.$order[0]->lab_no.'.pdf';
+				if ($order[0]->receipt_status != 'y') {
+					$order_sample_id_arr = $order[0]->orderSamples->map(fn ($value, $key) => $value->id)->toArray();
+					$parameters = OrderSampleParameter::whereIn('order_sample_id', $order_sample_id_arr)->get();
+					$parameters_total_price = $parameters->reduce(fn($sum, $value) => ($sum+$value->price_name));
+					$user_id_arr = str_split(sprintf("%04d", auth()->user()->id));
+					$lab_no_arr = str_split($order[0]->lab_no);
 
-				$data = collect([
-					'order_id' => $request->order_id,
-					'user_id_arr' => $user_id_arr,
-					'lab_no' => $order[0]->lab_no,
-					'lab_no_arr' => $lab_no_arr,
-					'report_due_date' => $order[0]->report_due_date,
-					'type_of_work' => $order[0]->type_of_work,
-					'order_type' => $order[0]->order_type,
-					'order_samples_count' => $order[0]->orderSamples->count(),
-					'parameters_count' => $parameters->count(),
-					'parameters_count_deep' => $parameters_count_deep->toArray(),
-					'origin_threat_id' => $order[0]->orderSamples[0]->origin_threat_id,
-					'customer_agency_name' => $order[0]->customer_agency_name,
-					'customer_address' => auth()->user()->userCustomer->address.' ต.'.$user_sub_dist.' อ.'.$user_dist.' จ.'.$user_prov.' '.auth()->user()->userCustomer->postcode,
-					'customer_mobile' => auth()->user()->userCustomer->mobile,
-					'deliver_method' => $order[0]->deliver_method,
-					'book_no' => $order[0]->book_no,
-					'book_date' => $order[0]->book_date,
-					'first_name' => auth()->user()->userCustomer->first_name,
-					'last_name' => auth()->user()->userCustomer->last_name,
-					'mobile' => auth()->user()->userCustomer->mobile,
-					'contact_first_name' => auth()->user()->userCustomer->first_name,
-					'contact_last_name' => auth()->user()->userCustomer->last_name,
-					'contact_mobile' => auth()->user()->userCustomer->mobile,
-					'contact_address'=> auth()->user()->userCustomer->address.' ต.'.$contact_user_sub_dist.' อ.'.$contact_user_dist.' จ.'.$contact_user_prov.' '.auth()->user()->userCustomer->contact_postcode,
-					'order_created_at' => substr($this->convertMySQLDateTimeToJs($order[0]->created_at), 0, 10),
-					'contact_addr_opt' => auth()->user()->userCustomer->contact_addr_opt,
-					'report_result_receive_method' => $order[0]->report_result_receive_method,
-					'sample_sumary' => $request->session()->get(key: 'sample_sumary'),
-					'sample_verify_desc' => $order[0]->sample_verify_desc,
-					'received_order_name' => $order[0]->received_order_name,
-					'received_order_date' => $order[0]->received_order_date,
-					'review_order_name' => $order[0]->review_order_name,
-					'review_order_date' => $order[0]->review_order_date,
-					'parameters_total_price' => $parameters_total_price,
-				]);
-				switch($data['contact_addr_opt']) {
-					case "1":
-						$data->put('report_result_receive_first_name', $data['first_name']);
-						$data->put('report_result_receive_last_name', $data['last_name']);
-						$data->put('report_result_receive_mobile', $data['mobile']);
-						$data->put('report_result_receive_addr', $data['customer_address']);
-						break;
-					case "2":
-						$data->put('report_result_receive_first_name', $data['contact_first_name']);
-						$data->put('report_result_receive_last_name', $data['contact_last_name']);
-						$data->put('report_result_receive_mobile', $data['contact_mobile']);
-						$data->put('report_result_receive_addr', $data['contact_address']);
-						break;
-				}
-				$data = $data->all();
+					$user_customer = UserCustomer::whereUser_id($order[0]->user_id)->get();
 
-				/* put file to storage */
-				$pdf = Pdf::loadView('print.sample-receipt', $data);
-				$content = $pdf->download()->getOriginalContent();
-				Storage::disk('receipt')->put($file_name ,$content);
+					$user_prov = $this->provinceNameByProvId($user_customer[0]->province) ?? '';
+					$user_dist = $this->districtNameByDistId($user_customer[0]->district) ?? '';
+					$user_sub_dist = $this->subDistrictNameBySubDistId($user_customer[0]->sub_district) ?? '';
+					$contact_user_prov = $this->provinceNameByProvId($user_customer[0]->contact_province) ?? '';
+					$contact_user_dist = $this->districtNameByDistId($user_customer[0]->contact_district) ?? '';
+					$contact_user_sub_dist = $this->subDistrictNameBySubDistId($user_customer[0]->contact_sub_district) ?? '';
 
-				/* insert file detail to table */
-				$file_upload = new FileUpload;
-				$file_upload->ref_user_id = auth()->user()->id;
-				$file_upload->order_id = $request->order_id;
-				$file_upload->file_name = $file_name;
-				$file_upload->file_mime = Storage::disk('receipt')->mimeType($file_name);
-				$file_upload->file_path = '/receipt';
-				$file_upload->file_size =  (round(Storage::disk('receipt')->size($file_name)/1024)) ?? 0;
-				$file_upload->note = 'ใบรับตัวอย่าง';
-				$file_upload->save();
+					$parameters_count_deep = $parameters->countBy(fn ($q) => $q->sample_character_id);
+					$parameters_count_deep->all();
 
-				/* update receipt status */
-				$order_model = Order::find($request->order_id);
-				$order_model->receipt_status = 'y';
-				$order_model->save();
+					$data = collect([
+						'order_id' => $request->order_id,
+						'user_id_arr' => $user_id_arr,
+						'lab_no' => $order[0]->lab_no,
+						'lab_no_arr' => $lab_no_arr,
+						'report_due_date' => $order[0]->report_due_date,
+						'type_of_work' => $order[0]->type_of_work,
+						'order_type' => $order[0]->order_type,
+						'order_samples_count' => $order[0]->orderSamples->count(),
+						'parameters_count' => $parameters->count(),
+						'parameters_count_deep' => $parameters_count_deep->toArray(),
+						'origin_threat_id' => $order[0]->orderSamples[0]->origin_threat_id,
+						'customer_agency_name' => $order[0]->customer_agency_name,
+						'customer_address' => $user_customer[0]->address.' ต.'.$user_sub_dist.' อ.'.$user_dist.' จ.'.$user_prov.' '.$user_customer[0]->postcode,
+						'customer_mobile' => $user_customer[0]->mobile,
+						'deliver_method' => $order[0]->deliver_method,
+						'book_no' => $order[0]->book_no,
+						'book_date' => $order[0]->book_date,
+						'first_name' => $user_customer[0]->first_name,
+						'last_name' => $user_customer[0]->last_name,
+						'mobile' => $user_customer[0]->mobile,
+						'contact_first_name' => $user_customer[0]->first_name,
+						'contact_last_name' => $user_customer[0]->last_name,
+						'contact_mobile' => $user_customer[0]->mobile,
+						'contact_address'=> $user_customer[0]->address.' ต.'.$contact_user_sub_dist.' อ.'.$contact_user_dist.' จ.'.$contact_user_prov.' '.$user_customer[0]->contact_postcode,
+						'order_created_at' => substr($this->convertMySQLDateTimeToJs($order[0]->created_at), 0, 10),
+						'contact_addr_opt' => $user_customer[0]->contact_addr_opt,
+						'report_result_receive_method' => $order[0]->report_result_receive_method,
+						'sample_sumary' => $request->session()->get(key: 'sample_sumary'),
+						'sample_verify_desc' => $order[0]->sample_verify_desc,
+						'received_order_name' => $order[0]->received_order_name,
+						'received_order_date' => $order[0]->received_order_date,
+						'review_order_name' => $order[0]->review_order_name,
+						'review_order_date' => $order[0]->review_order_date,
+						'parameters_total_price' => $parameters_total_price,
+					]);
 
-				if (!Storage::disk('receipt')->missing($file_name)) {
-					return Storage::disk('receipt')->download($file_name);
+					switch($data['contact_addr_opt']) {
+						case "1":
+							$data->put('report_result_receive_first_name', $data['first_name']);
+							$data->put('report_result_receive_last_name', $data['last_name']);
+							$data->put('report_result_receive_mobile', $data['mobile']);
+							$data->put('report_result_receive_addr', $data['customer_address']);
+							break;
+						case "2":
+							$data->put('report_result_receive_first_name', $data['contact_first_name']);
+							$data->put('report_result_receive_last_name', $data['contact_last_name']);
+							$data->put('report_result_receive_mobile', $data['contact_mobile']);
+							$data->put('report_result_receive_addr', $data['contact_address']);
+							break;
+					}
+					$data = $data->all();
+
+
+					/* put file to storage */
+					$pdf = Pdf::loadView('print.sample-receipt', $data);
+					$content = $pdf->download()->getOriginalContent();
+					Storage::disk('receipt')->put($file_name ,$content);
+
+					/* insert file detail to table */
+					$file_upload = new FileUpload;
+					$file_upload->ref_user_id = auth()->user()->id;
+					$file_upload->order_id = $request->order_id;
+					$file_upload->file_name = $file_name;
+					$file_upload->file_mime = Storage::disk('receipt')->mimeType($file_name);
+					$file_upload->file_path = '/receipt';
+					$file_upload->file_size =  (round(Storage::disk('receipt')->size($file_name)/1024)) ?? 0;
+					$file_upload->note = 'ใบรับตัวอย่าง';
+					$file_upload->save();
+
+					/* update receipt status */
+					$order_model = Order::find($request->order_id);
+					$order_model->receipt_status = 'y';
+					$order_model->save();
+
+					if (!Storage::disk('receipt')->missing($file_name)) {
+						return Storage::disk('receipt')->download($file_name);
+					} else {
+						return false;
+					}
 				} else {
-					return false;
+					return redirect()->route(route: 'sample.received.index')->with(key: 'error', value: 'ข้อมูลรายการนี้ ถูกพิมพ์ครบกำหนดแล้ว');
 				}
 			} else {
-				return redirect()->route('sample.received.index')->with('error', 'ข้อมูลรายการนี้ ถูกพิมพ์ครบกำหนดแล้ว');
+				return redirect()->route(route: 'sample.received.index')->with(key: 'error', value: 'ข้อมูลรายการนี้ อยู่ในสถานะยกเลิกหรือไม่สมบูรณ์');
 			}
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
+			return redirect()->route(route: 'sample.received.index')->with(key: 'error', value: $e->getMessage());
 		}
 	}
 
@@ -378,7 +391,21 @@ class SampleReceiveController extends Controller
 				$order = Order::select('id')->whereLab_no($request->lab_no)->get();
 				$result = [];
 				if (count($order) > 0) {
-					$order_sample = OrderSample::whereOrder_id($order[0]->id)->with('parameters')->whereSample_received_status('y')->get();
+					$order_sample = OrderSample::select(
+						'id',
+						'order_id',
+						'has_parameter',
+						'sample_verified_status',
+						'sample_received_status',
+						'sample_received_date',
+						'sample_test_no'
+					)
+					?->with('parameters')
+					?->whereOrder_id($order[0]->id)
+					?->whereSample_received_status('y')
+					?->where('sample_test_no', '=', '')
+					?->orWhereNull('sample_test_no')
+					?->get();
 					$order_sample->each(function($item, $key) use (&$result) {
 						$tmp['sample_id'] = $item->id;
 						$tmp['sample_count'] = $item->parameters->count();
@@ -398,7 +425,7 @@ class SampleReceiveController extends Controller
 						array_push($result, $tmp);
 					});
 				}
-				$htm_component = $this->orderSampleComponent($result);
+				$htm_component = $this->orderSampleComponent(data: $result, lab_no: $request->lab_no);
 				return $htm_component;
 			}
 		} catch (\Exception $e) {
@@ -406,7 +433,7 @@ class SampleReceiveController extends Controller
 		}
 	}
 
-	protected function orderSampleComponent($data=array()) {
+	protected function orderSampleComponent($data=array(), $lab_no=0) {
 		$htm = "
 			<div class=\"table-responsive\">
 				<table class=\"table table-striped\" style=\"width: 100%\">
@@ -446,14 +473,14 @@ class SampleReceiveController extends Controller
 									}
 								$htm .= "</td>";
 								$htm .= "<td>".$value['sample_count']."</td>";
-								$htm .= "<td><input type=\"text\" name=\"sample_no[]\" value=\"".$value['sample_test_no']."\" class=\"custom-control-input\" readonly /></td>";
+								$htm .= "<td><input type=\"text\" name=\"sample_no[]\" value=\"".$value['sample_test_no']."\" class=\"form-control\" readonly /></td>";
 							$htm .= "</tr>";
 							$i++;
 						}
 					} else {
 						$htm .= "<tr>";
 							$htm .= "<td colspan=\"6\">";
-								$htm .= "<div class=\"alert alert-danger\" role=\"alert\"><strong>ไม่พบข้อมูล</strong></div>";
+								$htm .= "<div class=\"alert alert-warning\" role=\"alert\"><strong><i class=\"fa fa-info-circle\"></i> ไม่พบข้อมูลหรือกำหนดหมายเลขทดสอบแล้ว Lab No. ".$lab_no."</strong></div>";
 							$htm .= "</td>";
 						$htm .= "</tr>";
 					}
@@ -466,9 +493,9 @@ class SampleReceiveController extends Controller
 
 	private function generateTestNo(): string {
 		do {
-			$test_no = mt_rand(1000000000, 9999999999);
-		} while (OrderSample::whereSample_test_no($test_no)->exists());
-		return $test_no;
+			$rand_number = mt_rand(min: 1000000000, max: 9999999999);
+		} while (OrderSample::whereSample_test_no($rand_number)->exists());
+		return $rand_number;
 	}
 
 	protected function setTestNo(Request $request) {
@@ -476,8 +503,7 @@ class SampleReceiveController extends Controller
 			$data = $request->all();
 			if (!empty($data['sample_id']) && count($data['sample_id']) > 0) {
 				foreach ($data['sample_id'] as $key => $value) {
-					$order_sample = OrderSample::find($value);
-					// $order_sample->sample_test_no = $data['sample_no'][$key];
+					$order_sample = OrderSample::findOr($value, fn () => throw new \Exception(message: 'ไม่พบข้อมูล Order Sample id: '.$value));
 					if (empty($order_sample->sample_test_no)) {
 						$order_sample->sample_test_no = $this->generateTestNo();
 						$order_sample->save();
@@ -615,22 +641,13 @@ class SampleReceiveController extends Controller
 										$htm .= "<td>".$value['paramet_name']."</td>";
 										$htm .= "<td>".$value['main_analys_name']."</td>";
 										match ($value['status']) {
-											'pending' => $htm .= "
-												<td>
-													<button type=\"button\" class=\"btn btn-info btn-sm\" style=\"width:100px;\" disabled>รอจอง</button>
-												</td>",
+											'pending' => $htm .= "<td><button type=\"button\" class=\"btn btn-info btn-sm\" style=\"width:100px;\" disabled>รอจอง</button></td>",
 											'reserved' => $htm .= "
 												<td>
 													<button type=\"button\" class=\"btn btn-success btn-sm requisition-btn\" style=\"width:100px;\" onClick='updateRequisitionStatus(\"".$value['lab_no']."\", \"".$value['main_analys_user_id']."\", \"".$value['order_sample_parameter_id']."\")'>เบิก</button>
 												</td>",
-											'analyzing' => $htm .= "
-												<td>
-													<button type=\"button\" class=\"btn btn-warning btn-sm\" style=\"width:100px;\" disabled>วิเคราะห์</button>
-												</td>",
-											'completed' => $htm .= "
-												<td>
-													<button type=\"button\" class=\"btn btn-primary btn-sm\" style=\"width:100px;\" disabled>เสร็จสิ้น</button>
-												</td>",
+											'analyzing' => $htm .= "<td><button type=\"button\" class=\"btn btn-warning btn-sm\" style=\"width:100px;\" disabled>วิเคราะห์</button></td>",
+											'completed' => $htm .= "<td><button type=\"button\" class=\"btn btn-primary btn-sm\" style=\"width:100px;\" disabled>เสร็จสิ้น</button></td>",
 										};
 									$htm .= "</tr>";
 								} else {
@@ -641,7 +658,7 @@ class SampleReceiveController extends Controller
 						} else {
 							$htm .= "<tr>";
 								$htm .= "<td colspan=\"6\">";
-									$htm .= "<div class=\"alert alert-danger\" role=\"alert\"><strong>ไม่พบข้อมูล</strong></div>";
+									$htm .= "<div class=\"alert alert-danger\" role=\"alert\"><strong>ไม่พบข้อมูลที่ค้นหา</strong></div>";
 								$htm .= "</td>";
 							$htm .= "</tr>";
 						}

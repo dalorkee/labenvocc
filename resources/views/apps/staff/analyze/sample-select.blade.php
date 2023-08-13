@@ -48,7 +48,7 @@
 						<ul class="steps">
 							<li class="undone"><a href="{{ route('sample.received.create') }}"><span class="d-none d-sm-inline">รายการคำขอ</span></a></li>
 							<li class="undone"><p><span class="d-none d-sm-inline">รับตัวอย่าง</span></p></li>
-							<li class="active"><p><span class="d-none d-sm-inline">การตรวจวิเคราะห์</span></&p></li>
+							<li class="active"><p><span class="d-none d-sm-inline">การตรวจวิเคราะห์</span></p></li>
 							<li class="undone"><p><span class="d-none d-sm-inline">รายงานผล</span></p></li>
 						</ul>
 						<div class="row">
