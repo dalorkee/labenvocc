@@ -29,7 +29,6 @@
 						<div class="chk-box"><span class="chk-mark">{{ ($type_of_work == 2) ? '✔' : '' }}</span></div><span style="margin-right: 22px"> วิจัย</span>
 						<div class="chk-box"><span class="chk-mark">{{ ($type_of_work == 3 || $type_of_work == 4) ? '✔' : '' }}</span></div><span style="margin-right: 22px"> เฝ้าระวัง SSRT/สอบสวนโรค</span>
 						<div class="chk-box"><span class="chk-mark">{{ ($type_of_work == 5) ? '✔' : '' }}</span></div><span style="margin-right: 22px"> อื่นๆ</span>
-						{{-- <div style="font-family: DejaVu Sans, sans-serif;">✗</div> --}}
 					</td>
 				</tr>
 				<tr>

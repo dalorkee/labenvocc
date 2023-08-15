@@ -699,14 +699,15 @@ class SampleAnalyzeController extends Controller
 		$result = OrderSample::select('id', 'order_id', 'has_parameter', 'sample_test_no', 'weight_sample', 'air_volume')
 			->with(['parameters' => function($query) use ($request) {
 				$query->select('*')->where('main_analys_user_id', $request->view_analyze_user);
-			}])->whereOrder_id($request->view_order_id)->get();
+			}])->whereOrder_id($request->view_order_id)
+			->get();
 
-			$data = [];
-			$result->each(function($item, $key) use (&$data) {
-				if (count($item->parameters) > 0) {
-					array_push($data, $item->toArray());
-				}
-			});
+		$data = [];
+		$result->each(function($item, $key) use (&$data) {
+			if (count($item->parameters) > 0) {
+				array_push($data, $item->toArray());
+			}
+		});
 		$htm = "
 		<div class=\"modal fade modal-fullscreen font-prompt\" id=\"view-modal-lg-center\" data-keyboard=\"false\" data-backdrop=\"static\" tabindex=\"-1\" role=\"dialog\" aria-hidden=\"true\">
 			<form class=\"modal-dialog modal-dialog-centered\" action=\"".route('sample.analyze.result.upload.file')."\" method=\"POST\" enctype=\"multipart/form-data\" role=\"document\">

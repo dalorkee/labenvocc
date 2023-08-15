@@ -3,7 +3,7 @@
 @section('style')
 <link type="text/css" rel="stylesheet" href="{{ URL::asset('css/pj-step.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/css/datagrid/datatables/datatables.bundle.css') }}">
-<link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/css/notifications/sweetalert2/sweetalert2.bundle.css') }}" media="screen, print">
+{{-- <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/css/notifications/sweetalert2/sweetalert2.bundle.css') }}" media="screen, print"> --}}
 <style type="text/css">
 	.input-date:read-only{background:#fefefe!important}
 	.btn-group {margin:0 0 5px 0;padding:0}
@@ -12,7 +12,7 @@
 	.buttons-create {float:left;margin-left:12px}
 	.buttons-create:after {content:'';clear:both}
 	.dt-btn {margin:0;padding:0}
-	table thead {background-color:#297FB0;color: white}
+	table thead {background-color:#2357e6;color: white}
 	.row-completed {width:180px;padding-right:14px;position:absolute;top:82px;right:10px;text-align:right}
 	table.dataTable.dt-checkboxes-select tbody tr,
 	table.dataTable thead .dt-checkboxes-select-all {cursor: pointer}
@@ -21,6 +21,10 @@
 	div.dataTables_wrapper span.select-item {margin-left: 0.5em}
 	ol.carousel-indicators li {background:#bb1bf4!important; width:18px; height: 0px;}
 	.modal {text-align: center}
+    table#result_table thead {background-color:#0e629b;color:white}
+    .v-wp {display:flex; flex-direction:row; justify-content:space-between; width:130px; margin:0; padding:0}
+    .v-wp div {width:90px;}
+    .v-wp div+div {width:40px; font-size: .80em}
 	@media screen and (max-width: 640px) {div.dataTables_wrapper span.select-info,div.dataTables_wrapper span.select-item {margin-left: 0;display: block}}
 	</style>
 @endsection
@@ -56,12 +60,12 @@
 						<div class="row">
 							<div class="table-responsive col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mt-4 mb-3">
 								<table class="table table-striped" id="tbl_data" width="100%">
-									<thead class="bg-primary-100">
+									<thead>
 										<tr>
 											<th>ลำดับ</th>
 											<th>หมายเลขทดสอบ</th>
 											<th>พารามิเตอร์</th>
-											<th></th>
+											<th>#</th>
 										</tr>
 									</thead>
 									<tfoot></tfoot>
@@ -99,7 +103,7 @@
 <script type="text/javascript" src="{{ URL::asset('assets/js/datagrid/datatables/datatables.bundle.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/buttons.server-side.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/holder.js') }}"></script>
-<script type="text/javascript" src="{{ URL::asset('assets/js/notifications/sweetalert2/sweetalert2.bundle.js') }}"></script>
+{{-- <script type="text/javascript" src="{{ URL::asset('assets/js/notifications/sweetalert2/sweetalert2.bundle.js') }}"></script> --}}
 <script type="text/javascript">
 $(document).ready(function() {
 	$.ajaxSetup({headers:{'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')}});
@@ -167,7 +171,7 @@ function showAllResultModal(order_id, lab_no) {
 		beforeSend: function() {$(".loader").show()},
 		success: function(data) {
 			$('#result-modal-wrapper').html(data);
-			$('#view-all-modal-lg-center').modal('show');
+			$('#view-modal-lg-center').modal('show');
 		},
 		complete: function() {$('.loader').hide()},
 		error: function(jqXhr, textStatus, errorMessage) {alert('Error: ' + jqXhr.status + errorMessage)}

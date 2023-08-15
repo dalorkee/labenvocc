@@ -30,6 +30,11 @@ class listOrderDataTable extends DataTable
 								<div class=\"progress-bar bg-info\" role=\"progressbar\" style=\"width: 50%;\" aria-valuenow=\"50\" aria-valuemin=\"0\" aria-valuemax=\"100\">50%</div>
 							</div>";
 							break;
+						case "approved": $htm = "
+							<div class=\"progress progress-md\">
+								<div class=\"progress-bar bg-info\" role=\"progressbar\" style=\"width: 75%;\" aria-valuenow=\"75\" aria-valuemin=\"0\" aria-valuemax=\"100\">75%</div>
+							</div>";
+							break;
 						case "completed": $htm = "
 							<div class=\"progress progress-md\">
 								<div class=\"progress-bar bg-success\" role=\"progressbar\" style=\"width: 100%;\" aria-valuenow=\"100\" aria-valuemin=\"0\" aria-valuemax=\"100\">100%</div>
@@ -55,7 +60,7 @@ class listOrderDataTable extends DataTable
 		});
 		$samples = $orderSample->select('order_id')->whereIn('id', $order_sample_id_arr)->whereSample_verified_status('complete')->whereSample_received_status('y')->get();
 		$order_id =  (!empty($samples[0]['order_id'])) ? $samples[0]['order_id'] : 0;
-		return $order::whereId($order_id)->whereIn('order_status', ['pending', 'preparing', 'completed'])->with('parameters')->orderBy('id', 'ASC');
+		return $order::whereId($order_id)->whereIn('order_status', ['pending', 'preparing', 'approved', 'completed'])->with('parameters')->orderBy('id', 'ASC');
 	}
 
 	public function html() {

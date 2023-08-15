@@ -52,7 +52,7 @@ class SampleReceiveController extends Controller
 									break;
 							case 'preparing':
 							case 'approved':
-								return "<button type=\"button\" class=\"btn btn-sm btn-warning\" style=\"width:140px\" disabled>รับตัวอย่าง</button>\n";
+								return "<button type=\"button\" class=\"btn btn-sm btn-warning\" style=\"width:140px\" disabled>รับตัวอย่างแล้ว</button>\n";
 								break;
 							case 'completed':
 								return "<button type=\"button\" class=\"btn btn-sm btn-success\" style=\"width:140px\" disabled>เสร็จสิ้น</button>\n";
@@ -341,7 +341,6 @@ class SampleReceiveController extends Controller
 							break;
 					}
 					$data = $data->all();
-
 
 					/* put file to storage */
 					$pdf = Pdf::loadView('print.sample-receipt', $data);
@@ -707,7 +706,7 @@ class SampleReceiveController extends Controller
 
 			if (count($order) > 0) {
 				$order_sample = OrderSample::whereOrder_id($order[0]->id)->with('parameters', function($query) {
-					$query->whereIn('status', ['requisition']);
+					$query->whereIn('status', ['pending', 'reserved', 'analyzing', 'completed']);
 				})->whereSample_received_status('y')->get();
 
 				$result = [
@@ -725,9 +724,9 @@ class SampleReceiveController extends Controller
 
 				$order_sample->each(function($item, $key) use (&$result, $request) {
 					foreach ($item->parameters as $k => $v) {
-						if (!empty($request->analyze_user) && $v['main_analys_user_id'] != $request->analyze_user) {
-							continue;
-						} else {
+						// if (!empty($request->analyze_user) && $v['main_analys_user_id'] != $request->analyze_user) {
+						// 	continue;
+						// } else {
 							$tmp['order_id'] = $v['order_id'];
 							$tmp['order_sample_id'] = $v['order_sample_id'];
 							$tmp['order_sample_parameter_id'] = $v['id'];
@@ -746,12 +745,13 @@ class SampleReceiveController extends Controller
 								$result['order_main_control_analys_name'][$v['main_control_user_id']] = $v['main_control'];
 							}
 							array_push($result['order_sample_paramet'], $tmp);
-						}
+						// }
 					};
 				});
 				$result['order']['paramet_amount'] = count($result['order_sample_paramet']);
 			}
 		}
+        // dd($result);
 		return view(view: 'apps.staff.receive.requisition.print', data: compact('result'));
 	}
 

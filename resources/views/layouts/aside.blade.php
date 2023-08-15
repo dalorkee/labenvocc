@@ -127,7 +127,7 @@
 						</li>
 						@break
 					@case(2)
-						<li class="{{ (Request::is('*sample/analyze*') || Request::is('*sample/qc*'))  ? 'active open' : '' }}">
+						<li class="{{ (Request::is('*sample/analyze*' ))  ? 'active open' : '' }}">
 							<a href="#" title="งานตรวจวิเคราะห์" data-filter-tags="analyze">
 								<i class="fal fa-flask"></i>
 								<span class="nav-link-text">งานตรวจวิเคราะห์</span>
@@ -138,11 +138,11 @@
 										<span class="nav-link-text" data-i18n="nav.plugins_plugins_faq">งานวิเคราะห์</span>
 									</a>
 								</li>
-								<li class="{{ (Request::is('*sample/qc*'))  ? 'active' : '' }}">
+								{{-- <li class="{{ (Request::is('*sample/qc*'))  ? 'active' : '' }}">
 									<a href="{{ route('sample.qc.create') }}" title="งานควบคุมคุณภาพ" data-filter-tags="sample_qc">
 										<span class="nav-link-text" data-i18n="nav.plugins_plugins_faq">งานควบคุมคุณภาพ</span>
 									</a>
-								</li>
+								</li> --}}
 								{{-- <li class="{{ (Request::is('*sample/analyze/report'))  ? 'active' : '' }}">
 									<a href="{{ route('sample.analyze.create') }}" title="ใบรายงานผล" data-filter-tags="sample_analyze">
 										<span class="nav-link-text" data-i18n="nav.plugins_plugins_faq">ใบรายงานผล</span>
@@ -153,6 +153,21 @@
 										<span class="nav-link-text" data-i18n="nav.plugins_plugins_faq">ประวัติการวิเคราะห์</span>
 									</a>
 								</li> --}}
+							</ul>
+						</li>
+						@break
+					@case(4)
+						<li class="{{ (Request::is('*sample/qc*'))  ? 'active open' : '' }}">
+							<a href="#" title="งานควบคุมคุณภาพ" data-filter-tags="qc">
+								<i class="fal fa-flask"></i>
+								<span class="nav-link-text">งานควบคุมคุณภาพ</span>
+							</a>
+							<ul>
+								<li class="{{ (Request::is('*sample/qc*'))  ? 'active' : '' }}">
+									<a href="{{ route('sample.qc.create') }}" title="ควบคุมคุณภาพ" data-filter-tags="sample_qc">
+										<span class="nav-link-text" data-i18n="nav.plugins_plugins_faq">ควบคุมคุณภาพ</span>
+									</a>
+								</li>
 							</ul>
 						</li>
 						@break
