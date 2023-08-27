@@ -672,7 +672,7 @@ class SampleReceiveController extends Controller
 			}
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
-			return redirect()->back()->with('error', $e->getMessage());
+			return redirect()->back()->with(key: 'error', value: $e->getMessage());
 		}
 	}
 
@@ -703,7 +703,6 @@ class SampleReceiveController extends Controller
 	protected function printRequisition(Request $request) {
 		if (!empty($request->lab_no)) {
 			$order = Order::select('id', 'type_of_work', 'received_order_date', 'lab_no', 'report_due_date')->whereLab_no(trim($request->lab_no))->get();
-
 			if (count($order) > 0) {
 				$order_sample = OrderSample::whereOrder_id($order[0]->id)->with('parameters', function($query) {
 					$query->whereIn('status', ['pending', 'reserved', 'analyzing', 'completed']);
@@ -749,10 +748,10 @@ class SampleReceiveController extends Controller
 					};
 				});
 				$result['order']['paramet_amount'] = count($result['order_sample_paramet']);
+				return view(view: 'apps.staff.receive.requisition.print', data: compact('result'));
 			}
 		}
-        // dd($result);
-		return view(view: 'apps.staff.receive.requisition.print', data: compact('result'));
+		return redirect()->back()->with(key: 'error', value: 'ไม่พบ Lab No. โปรดตรงจสอบ');
 	}
 
 	protected function createReport(): object {
