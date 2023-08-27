@@ -1,8 +1,13 @@
 /node_modules
 /public/hot
-/public/storage
-/public/uploads
+/public/downloads
+/public/exports
 /public/labs
+/public/pdf
+/public/qrcode
+/public/receipt
+/public/uploads
+/public/storage
 /storage/*.key
 /vendor
 .env
