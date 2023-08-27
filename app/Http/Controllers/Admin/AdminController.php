@@ -13,7 +13,6 @@ class AdminController extends Controller
 	public function __construct() {
 		$this->middleware('auth');
 		$this->middleware(['role:root|admin']);
-		$this->middleware('is_order_confirmed');
 		$this->middleware(function($request, $next) {
 			$this->user = Auth::user();
 			$user_role_arr = $this->user->roles->pluck('name')->all();
