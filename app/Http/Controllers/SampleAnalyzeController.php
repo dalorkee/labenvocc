@@ -525,7 +525,7 @@ class SampleAnalyzeController extends Controller
 				$file = $request->file('lab_result_file');
 				$file_mime = $file->getMimeType();
 				$file_size_byte = $file->getSize();
-				$file_size = ($file_size_byte/1024);
+				$file_size = round(($file_size_byte/1024), 2);
 				$file_name = $file->getClientOriginalName();
 				$file_extension = $file->extension();
 				$new_name = $this->renameFile(prefix: 'lab_rs', free_txt: $this->user->id, file_extension: $file_extension);
@@ -654,7 +654,7 @@ class SampleAnalyzeController extends Controller
 				$file = $request->file('analyze_result_file');
 				$file_mime = $file->getMimeType();
 				$file_size_byte = $file->getSize();
-				$file_size = ($file_size_byte/1024);
+				$file_size = round(($file_size_byte/1024), 2);
 				$file_name = $file->getClientOriginalName();
 				$file_extension = $file->extension();
 				$new_name = $this->renameFile(prefix: 'lab_rsc', free_txt: $this->user->id, file_extension: $file_extension);

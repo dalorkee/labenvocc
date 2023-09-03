@@ -84,23 +84,23 @@ class CustomerController extends Controller
 				'book_upload' => ($request->hasFile('book_file')) ? 'y' : 'n',
 			]);
 			$last_insert_order_id = $order->id;
-			if ($request->hasFile('book_file')) {
-				/* Delete older files */
+			if ($request->hasFile(key: 'book_file')) {
+				/* Delete older files when upload new files*/
 				FileUpload::select('id', 'file_name')->whereOrder_id($request->order_id)->whereRef_user_id($this->user->id)->each(function($item, $key) {
-					if (Storage::disk('uploads')->exists($item->file_name)) {
+					if (Storage::disk(name: 'uploads')->exists(path: $item->file_name)) {
 						FileUpload::find($item->id)->delete();
-						Log::warning($this->user->userCustomer->first_name.' ลบไฟล์หนังสือนำส่ง [id:'.$item->id.']');
+						Log::warning(message: $this->user->userCustomer->first_name.' ลบไฟล์หนังสือนำส่ง [id:'.$item->id.']');
 					}
 				});
 				/* Create new file */
-				$file = $request->file('book_file');
-				$file_mime = $file->getMimeType();
+				$file = $request->file(key: 'book_file');
+				$file_mime = $file->getClientMimeType();
 				$file_size_byte = $file->getSize();
-				$file_size = ($file_size_byte/1024);
+				$file_size = round(($file_size_byte/1024), 2);
 				$file_name = $file->getClientOriginalName();
-				$file_extension = $file->extension();
+				$file_extension = $file->getClientOriginalExtension();
 				$new_name = $this->renameFile(prefix: 'cust_book', free_txt: $this->user->userCustomer->user->id, file_extension: $file_extension);
-				$uploaded = Storage::disk('uploads')->put($new_name, File::get($file));
+				$uploaded = Storage::disk(name: 'uploads')->put(path: $new_name, contents: File::get(path: $file));
 				if ($uploaded) {
 					$file_upload = new FileUpload;
 					$file_upload->ref_user_id = $this->user->id;
@@ -112,9 +112,9 @@ class CustomerController extends Controller
 					$file_upload->file_size = $file_size;
 					$file_upload->note = 'หนังสือนำส่ง';
 					$file_upload->save();
-					Log::notice($this->user->userCustomer->first_name.' อับโหลดไฟล์หนังสือนำส่ง '.$new_name);
+					Log::notice(message: $this->user->userCustomer->first_name.' อับโหลดไฟล์หนังสือนำส่ง '.$new_name);
 				} else {
-					Log::warning($this->user->userCustomer->first_name.' อับโหลดไฟล์หนังสือนำส่งไม่สำเร็จ');
+					Log::warning(message: $this->user->userCustomer->first_name.' อับโหลดไฟล์หนังสือนำส่งไม่สำเร็จ');
 				}
 			}
 			if ($order == true) {

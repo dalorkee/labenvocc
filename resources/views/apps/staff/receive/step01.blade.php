@@ -83,7 +83,7 @@ table#example_table thead {background-color:#2D8AC9;color: white}
 								<input type="text" name="group_of_work" value="{{ old('group_of_work') }}" class="form-control" maxlength="60">
 							</div> --}}
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
-								<label class="form-label" for="book_no">เลขที่หนังสือนำส่ง</label>
+								<label class="form-label" for="book_no">หนังสือนำส่ง</label>
 								<input type="text" name="book_no" value="{{ $order['book_no'] ?? old('book_no') }}" class="form-control @error('book_no') is-invalid @enderror">
 								@error('book_no')
 									<div class="invalid-feedback" role="alert">{{ $message }}</div>

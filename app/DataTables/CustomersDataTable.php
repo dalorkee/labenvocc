@@ -22,8 +22,8 @@ class CustomersDataTable extends DataTable
 		try {
 			return datatables()
 				->eloquent($query)
-				->editColumn('order_confirmed_date', fn ($order) => $order->order_confirmed_date)
-				->addColumn('lab', function ($order) {
+				->editColumn(name: 'order_confirmed_date', content: fn ($order) => $order->order_confirmed_date)
+				->addColumn(name: 'lab', content: function ($order) {
 					return $order->parameters->map(function($parameter) {
 						return "
 						<div>
@@ -32,7 +32,7 @@ class CustomersDataTable extends DataTable
 						</div>";
 					})->implode('<br>');
 				})
-				->addColumn('status', function($order) {
+				->addColumn(name: 'status', content: function($order) {
 					$htm = "<form>";
 					$htm .= "<div class=\"custom-control custom-checkbox\">";
 					$htm .= "<input type=\"checkbox\" class=\"custom-control-input\"";
@@ -57,12 +57,12 @@ class CustomersDataTable extends DataTable
 					$htm .= "</form>";
 					return $htm;
 				})
-				->editColumn('detail', function($order) {
+				->editColumn(name: 'detail', content: function($order) {
 					$htm = "<ul><li><a href=\"".$order->id."\"><i class=\"fal fa-print\"></i> ใบปะนำส่ง</a></li>";
 					$htm .= "<li><a href=\"".$order->id."\"><i class=\"fal fa-print\"></i> รายงานผล</a></li></ul>";
 					return $htm;
 				})
-				->addColumn('action', function($order) {
+				->addColumn(name: 'action', content: function($order) {
 					if (is_null($order->order_confirmed_date) || empty($order->order_confirmed_date)) {
 						return "
 							<a href=\"".route('customer.info.create', ['order_id' => $order->id, 'order_type' => $order->order_type])."\" title=\"แก้ไข\" class=\"btn btn-warning btn-sm \"><i class=\"fal fa-pencil\"></i> แก้ไข</a>
