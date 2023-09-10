@@ -236,8 +236,9 @@ class SampleReceiveController extends Controller
 
 	protected function step03Post(Request $request) {
 		try {
-			$user_staff = User::find(auth()->user()->id)->userStaff;
+			$user_staff = auth()->user()->userStaff;
 			$user_staff_full_name = $user_staff->first_name." ".$user_staff->last_name;
+
 			$order_id = $request->order_id;
 			$sample_result = $request->session()->get(key: 'sample_result');
 			$order_arr = $request->session()->get(key: 'order')->toArray();
@@ -251,7 +252,12 @@ class SampleReceiveController extends Controller
 					$order_sample->sample_received_date = date('Y-m-d');
 					$order_sample->save();
 				}
-				$order->fill(attributes: ['order_status' => 'preparing', 'received_order_name' => $user_staff_full_name, 'received_order_date' => date('d/m/Y')]);
+				$order->fill(attributes: [
+					'order_receive_status' => 'received',
+					'order_status' => 'received',
+					'order_receiver_name' => $user_staff_full_name,
+					'order_received_date' => date('d/m/Y')
+				]);
 				$order->save();
 			// });
 			return view('apps.staff.receive.step04', compact('order_id', 'order_arr'));
@@ -259,7 +265,6 @@ class SampleReceiveController extends Controller
 			report($e->getMessage());
 			return redirect()->back()->with(key: 'error', value: $e->getMessage());
 		} catch (\Exception $e) {
-			dd($e->getMessage());
 			Log::error($e->getMessage());
 			return redirect()->route('sample.received.index')->with(key: 'error', value: $e->getMessage());
 		}

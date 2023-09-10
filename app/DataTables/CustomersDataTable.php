@@ -37,21 +37,25 @@ class CustomersDataTable extends DataTable
 					$htm .= "<div class=\"custom-control custom-checkbox\">";
 					$htm .= "<input type=\"checkbox\" class=\"custom-control-input\"";
 					(!is_null($order->order_confirmed_date)) ? $htm .= " checked" : $htm .= "";
-					$htm .=" disabled>";
+					$htm .= " disabled>";
 					$htm .= "<label class=\"custom-control-label\" for=\"receive\">ส่งคำขอ</label>";
 					$htm .= "</div>";
 					$htm .= "<div class=\"custom-control custom-checkbox\">";
 					$htm .= "<input type=\"checkbox\" class=\"custom-control-input\"";
-					(!is_null($order->order_)) ? $htm .= " checked" : $htm .= "";
+					($order->order == 'received') ? $htm .= " checked" : $htm .= "";
 					$htm .= " disabled>";
 					$htm .= "<label class=\"custom-control-label\" for=\"receive\">รับตัวอย่าง</label>";
 					$htm .= "</div>";
 					$htm .= "<div class=\"custom-control custom-checkbox\">";
-					$htm .= "<input type=\"checkbox\" class=\"custom-control-input\" disabled>";
+					$htm .= "<input type=\"checkbox\" class=\"custom-control-input\"";
+                    (!is_null($order->order_payment_date)) ? $htm .= " checked" : $htm .= "";
+                    $htm .= " disabled>";
 					$htm .= "<label class=\"custom-control-label\" for=\"pending\">ชำระเงิน</label>";
 					$htm .= "</div>";
 					$htm .= "<div class=\"custom-control custom-checkbox\">";
-					$htm .= "<input type=\"checkbox\" class=\"custom-control-input\" disabled>";
+					$htm .= "<input type=\"checkbox\" class=\"custom-control-input\"";
+                    (!is_null($order->order_sent_date)) ? $htm .= " checked" : $htm .= "";
+                    $htm .= " disabled>";
 					$htm .= "<label class=\"custom-control-label\" for=\"success\">เสร็จสิ้น</label>";
 					$htm .= "</div>";
 					$htm .= "</form>";
@@ -69,8 +73,8 @@ class CustomersDataTable extends DataTable
 							<a href=\"#\" class=\"btn btn-danger btn-sm \">ลบ <i class=\"fal fa-times\"></i></a>";
 					} else {
 						return "
-							<a href=\"#\" class=\"btn btn-secondary btn-sm \"><i class=\"fal fa-pencil\"></i> แก้ไข</a>
-							<a href=\"#\" class=\"btn btn-secondary btn-sm \">ลบ <i class=\"fal fa-times\"></i></a>";
+							<a href=\"#\" class=\"btn btn-secondary btn-sm \">แก้ไข</a>
+							<a href=\"#\" class=\"btn btn-secondary btn-sm \">ลบ</a>";
 					}
 				 })
 				->rawColumns(['lab', 'status', 'detail', 'action']);
