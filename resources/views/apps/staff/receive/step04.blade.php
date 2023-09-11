@@ -2,9 +2,7 @@
 @section('token')<meta name="csrf-token" content="{{ csrf_token() }}">@endsection
 @section('style')
 <link type="text/css" rel="stylesheet" href="{{ URL::asset('css/pj-step.css') }}">
-<style type="text/css">
-table#example_table thead {background-color:#2D8AC9;color: white;}
-</style>
+<style type="text/css">table#example_table thead {background-color:#2D8AC9;color: white;}</style>
 @endsection
 @section('content')
 <ol class="breadcrumb page-breadcrumb text-sm font-prompt">
@@ -87,30 +85,6 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 @push('scripts')
 <script type="text/javascript" src="{{ URL::asset('js/buttons.server-side.js') }}"></script>
 <script type="text/javascript">
-$(document).ready(function() {
-	$.ajaxSetup({headers:{'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')}});
-	// $('#btn_submit').click(function(e) {
-	// 	 e.preventDefault();
-	// 	let $form = $('form#received_step03_frm');
-	//  	Swal.fire({
-	//  		type: "warning",
-	//  		title: "<span class='text-danger'>ยืนยันบันทึกข้อมูล</span>",
-	//  		html: "<span class='text-primary'>โปรดตรวจสอบข้อมูลให้ถูกต้องเสมอ </span> <p class='text-danger'>ต้องการการบันทึกข้อมูลใช่หรือไม่ ?</p>" ,
-	//  		showCancelButton: true,
-	//  		cancelButtonColor: '#dd3333',
-	//  		cancelButtonText: "ยกเลิก",
-	// 		confirmButtonColor: '#3085d6',
-	//  		confirmButtonText: "ตกลง",
-	//  		footer: "Lab Env-Occ",
-	//  		allowOutsideClick: false
-	//  	}).then((result) => {
- 	//  		if (result.value == true) {
-	// 			 $form.submit();
-	//  		} else {
-	//  			return false;
-	//  		}
-	//  	});
-	//  });
-});
+$(document).ready(function() {$.ajaxSetup({headers:{'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')}});});
 </script>
 @endpush

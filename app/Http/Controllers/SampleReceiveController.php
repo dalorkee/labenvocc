@@ -38,7 +38,7 @@ class SampleReceiveController extends Controller
 
 			/* begin query */
 			$order_year = (date('Y'));
-			$orders = OrderService::getOrderwithCount(relations: ['orderSamples', 'parameters'], order_year: $order_year, order_status: ['pending', 'preparing', 'approved', 'completed']);
+			$orders = OrderService::getOrderwithCount(relations: ['orderSamples', 'parameters'], order_year: $order_year, order_status: ['pending', 'received', 'analyzed', 'sent', 'destroy']);
 			return Datatables::of($orders)
 				?->addColumn('total', fn ($order) => $order->order_samples_count.'/'.$order->parameters_count)
 				?->editColumn('order_confirmed_date', fn ($order) => $this->setJsDateTimeToJsDate($order->order_confirmed_date))
@@ -47,22 +47,23 @@ class SampleReceiveController extends Controller
 						switch ($order->order_status) {
 							case 'pending':
 								return "
-									<a href=\"".route('sample.received.step01', ['order_id' => $order->id])."\" class=\"btn btn-sm btn-success\" style=\"width:70px\">รับ</a>\n
-									<button type=\"button\" class=\"btn btn-sm btn-secondary\" style=\"width:70px\">แก้ไข</button>\n";
+									<a href=\"".route('sample.received.step01', ['order_id' => $order->id])."\" class=\"btn btn-sm btn-primary\" style=\"width:60px\">รับ</a>\n
+									<button type=\"button\" class=\"btn btn-sm btn-secondary\" style=\"width:60px\">แก้ไข</button>\n";
 									break;
-							case 'preparing':
-							case 'approved':
-								return "<button type=\"button\" class=\"btn btn-sm btn-warning\" style=\"width:140px\" disabled>รับตัวอย่างแล้ว</button>\n";
+							case 'received':
+							case 'analyzed':
+								return "<button type=\"button\" class=\"btn btn-sm btn-info\" style=\"width:120px\" disabled>รับตัวอย่างแล้ว</button>\n";
 								break;
-							case 'completed':
-								return "<button type=\"button\" class=\"btn btn-sm btn-success\" style=\"width:140px\" disabled>เสร็จสิ้น</button>\n";
+							case 'sent':
+							case 'destroy':
+								return "<button type=\"button\" class=\"btn btn-sm btn-success\" style=\"width:120px\" disabled>เสร็จสิ้น</button>\n";
 								break;
 							default:
-								return "<button type=\"button\" class=\"btn btn-sm btn-secondary\" style=\"width:140px\" disabled>ไม่ทราบสถานะ</button>\n";
+								return "<button type=\"button\" class=\"btn btn-sm btn-secondary\" style=\"width:120px\" disabled>ไม่ทราบสถานะ</button>\n";
 								break;
 						}
 					} else {
-						return "<button class=\"btn btn-sm btn-warning\" style=\"width:140px\" disable>ไม่สมบูรณ์</button>";
+						return "<button class=\"btn btn-sm btn-warning\" style=\"width:140px\" disable>ไม่พบสถานะ</button>";
 					}
 				})->make(true);
 		} catch (InvalidOrderException $e) {
@@ -272,7 +273,9 @@ class SampleReceiveController extends Controller
 
 	protected function print(Request $request) {
 		try {
-			$order = Order::with(['orderSamples' => fn ($q) => $q->where('sample_received_status', '=', 'y')])->whereId($request->order_id)->get();
+			$order = Order::with(['orderSamples' => fn ($q) => $q->where('sample_received_status', '=', 'y')])
+				?->whereId($request->order_id)
+				?->get();
 			if ($order[0]->orderSamples->count() > 0) {
 				$file_name = 'sample_receipt_order_'.$request->order_id.'_lab_'.$order[0]->lab_no.'.pdf';
 				if ($order[0]->receipt_status != 'y') {
@@ -324,8 +327,8 @@ class SampleReceiveController extends Controller
 						'report_result_receive_method' => $order[0]->report_result_receive_method,
 						'sample_sumary' => $request->session()->get(key: 'sample_sumary'),
 						'sample_verify_desc' => $order[0]->sample_verify_desc,
-						'received_order_name' => $order[0]->received_order_name,
-						'received_order_date' => $order[0]->received_order_date,
+						'received_order_name' => $order[0]->order_receiver_name,
+						'received_order_date' => $order[0]->order_received_date,
 						'review_order_name' => $order[0]->review_order_name,
 						'review_order_date' => $order[0]->review_order_date,
 						'parameters_total_price' => $parameters_total_price,
@@ -391,10 +394,10 @@ class SampleReceiveController extends Controller
 
 	protected function searchOrderSampleByLabNo(Request $request): string {
 		try {
+			$result = [];
 			if (!empty($request->lab_no)) {
-				$order = Order::select('id')->whereLab_no($request->lab_no)->get();
-				$result = [];
-				if (count($order) > 0) {
+				$order = Order::select('id')?->whereLab_no($request->lab_no)?->get();
+				if ($order->count() > 0) {
 					$order_sample = OrderSample::select(
 						'id',
 						'order_id',
@@ -407,7 +410,7 @@ class SampleReceiveController extends Controller
 					?->with('parameters')
 					?->whereOrder_id($order[0]->id)
 					?->whereSample_received_status('y')
-					?->where('sample_test_no', '=', '')
+					// ->where('sample_test_no', '=', '')
 					?->orWhereNull('sample_test_no')
 					?->get();
 					$order_sample->each(function($item, $key) use (&$result) {
@@ -429,9 +432,9 @@ class SampleReceiveController extends Controller
 						array_push($result, $tmp);
 					});
 				}
-				$htm_component = $this->orderSampleComponent(data: $result, lab_no: $request->lab_no);
-				return $htm_component;
 			}
+			$htm_component = $this->orderSampleComponent(data: $result, lab_no: $request->lab_no);
+			return $htm_component;
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
 		}
@@ -515,21 +518,24 @@ class SampleReceiveController extends Controller
 				}
 				return $this->createTestNoBarcode(lab_no: $data['set_test_no_search'], message: 'บันทึกหมายเลขทดสอบแล้ว');
 			} else {
-				return redirect()->back()->with('error', 'โปรดตรวจสอบรายการข้อมูล');
+				return redirect()->back()->with(key: 'error', value: 'ไม่สามารถกำหนดหมายเลขทดสอบได้ โปรดตรวจสอบ!!');
 			}
 		} catch (\Exception $e) {
-			Log::error($e->getMessage());
-			return redirect()->back()->with('error', $e->getMessage());
+			Log::error($e->getMessage().' :: สร้าง Test No. ไม่ได้');
+			return redirect()->route(route: 'sample.received.test.no.create')->with(key: 'error', value: $e->getMessage());
 		}
 	}
 
 	protected function createTestNoBarcode($lab_no=null, $message=null) {
 		try {
+			$result = [];
 			if (!empty($lab_no)) {
 				$order = Order::select('id')->whereLab_no($lab_no)->get();
-				$result = [];
-				if (count($order) > 0) {
-					$order_sample = OrderSample::whereOrder_id($order[0]->id)->with('parameters')->whereSample_received_status('y')->get();
+				if ($order->count() > 0) {
+					$order_sample = OrderSample::whereOrder_id($order[0]->id)
+						?->with('parameters')
+						?->whereSample_received_status('y')
+						?->get();
 					$order_sample->each(function($item, $key) use (&$result) {
 						$tmp['sample_id'] = $item->id;
 						$tmp['sample_count'] = $item->parameters->count();
@@ -564,17 +570,22 @@ class SampleReceiveController extends Controller
 				$file_name = 'sample_test_no_barcode_'.time().'.pdf';
 				$data = ['sample_no' => $req['sample_no']];
 				$pdf = Pdf::loadView('print.test-no-barcode', $data);
-				return $pdf->download($file_name);
+				return $pdf->download(filename: $file_name);
 			}
+
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
-			return redirect()->back()->with('error', $e->getMessage());
+			return redirect()->back()->with(key: 'error', value: $e->getMessage());
 		}
 	}
 
 	protected function createRequisition(Request $request) {
 		/* get analyze user for select option */
-		$parameters = Parameter::select('main_analys_user_id', 'main_analys')->groupBy('main_analys_user_id')->orderBy('main_analys')->get()->toArray();
+		$parameters = Parameter::select('main_analys_user_id', 'main_analys')
+			->groupBy('main_analys_user_id')
+			->orderBy('main_analys')
+			->get()
+			->toArray();
 		foreach ($parameters as $key => $value) {
 			if (!is_null($value['main_analys_user_id'])) {
 				$analyze_user[$value['main_analys_user_id']] = $value['main_analys'];
@@ -651,7 +662,7 @@ class SampleReceiveController extends Controller
 													<button type=\"button\" class=\"btn btn-success btn-sm requisition-btn\" style=\"width:100px;\" onClick='updateRequisitionStatus(\"".$value['lab_no']."\", \"".$value['main_analys_user_id']."\", \"".$value['order_sample_parameter_id']."\")'>เบิก</button>
 												</td>",
 											'analyzing' => $htm .= "<td><button type=\"button\" class=\"btn btn-warning btn-sm\" style=\"width:100px;\" disabled>วิเคราะห์</button></td>",
-											'completed' => $htm .= "<td><button type=\"button\" class=\"btn btn-primary btn-sm\" style=\"width:100px;\" disabled>เสร็จสิ้น</button></td>",
+											'completed' => $htm .= "<td><button type=\"button\" class=\"btn btn-success btn-sm\" style=\"width:100px;\" disabled>เสร็จสิ้น</button></td>",
 										};
 									$htm .= "</tr>";
 								} else {
@@ -766,11 +777,11 @@ class SampleReceiveController extends Controller
 	protected function createReportAjax(Request $request) {
 		try {
 			if (!empty($request->lab_no)) {
-				$order = Order::select('id', 'lab_no', 'order_status', 'report_due_date')->whereLab_no(trim($request->lab_no))->get();
-				if (count($order) > 0) {
+				$order = Order::select('id', 'lab_no', 'order_status', 'report_due_date')?->whereLab_no(trim($request->lab_no))?->get();
+				if ($order->count() > 0) {
 					$order_sample = OrderSample::whereOrder_id($order[0]->id)->with('parameters', function($query) {
-						$query->whereIn('status', ['pending', 'requisition']);
-					})->whereSample_received_status('y')->get();
+						$query->whereIn('status', ['pending', 'reserved', 'analyzing', 'completed']);
+					})?->whereSample_received_status('y')?->get();
 					$result = [
 						'order' => []
 					];
@@ -816,37 +827,47 @@ class SampleReceiveController extends Controller
 											$htm .= "<td>".$value['lab_no']."</td>";
 											$htm .= "<td>".$value['main_analys_name']."</td>";
 											$htm .= "<td>".$value['report_due_date']."</td>";
-											match ($value['order_status']) {
+											match ($value['status']) {
 												"pending" => $htm .= "
 													<td>
-														<div class=\"progress\">
+														<div class=\"progress progress-lg\">
 															<div class=\"progress-bar bg-danger\" role=\"progressbar\" style=\"width: 25%;\" aria-valuenow=\"25\" aria-valuemin=\"0\" aria-valuemax=\"100\">25%</div>
 														</div>
 													</td>
 													<td class=\"text-center\">
-													<button type=\"button\" class=\"btn btn-secondary btn-sm\" style=\"width:86px;\" disabled>พิมพ์</button>
-													<button type=\"button\" class=\"btn btn-secondary btn-sm\" style=\"width:86px;\" disabled>ส่งผล</button>
+													<button type=\"button\" class=\"btn btn-secondary btn-sm\" style=\"width:60px;\" disabled>พิมพ์</button>
+													<button type=\"button\" class=\"btn btn-secondary btn-sm\" style=\"width:60px;\" disabled>ส่งผล</button>
 												</td>",
-												"preparing" => $htm .= "
+												"reserved" => $htm .= "
 													<td>
-														<div class=\"progress progress-md\">
+														<div class=\"progress progress-lg\">
 															<div class=\"progress-bar bg-danger\" role=\"progressbar\" style=\"width: 50%;\" aria-valuenow=\"50\" aria-valuemin=\"0\" aria-valuemax=\"100\">50%</div>
 														</div>
 													</td>
 													<td class=\"text-center\">
-														<button type=\"button\" class=\"btn btn-secondary btn-sm\" style=\"width:86px;\" disabled>พิมพ์</button>
-														<button type=\"button\" class=\"btn btn-secondary btn-sm\" style=\"width:86px;\" disabled>ส่งผล</button>
+														<button type=\"button\" class=\"btn btn-secondary btn-sm\" style=\"width:60px;\" disabled>พิมพ์</button>
+														<button type=\"button\" class=\"btn btn-secondary btn-sm\" style=\"width:60px;\" disabled>ส่งผล</button>
 													</td>",
-												"completed" => $htm .= "
+												"analyzing" => $htm .= "
 													<td>
-														<div class=\"progress progress-md\">
+														<div class=\"progress progress-lg\">
+															<div class=\"progress-bar bg-danger\" role=\"progressbar\" style=\"width: 75%;\" aria-valuenow=\"75\" aria-valuemin=\"0\" aria-valuemax=\"100\">75%</div>
+														</div>
+													</td>
+													<td class=\"text-center\">
+														<button type=\"button\" class=\"btn btn-secondary btn-sm\" style=\"width:60px;\" disabled>พิมพ์</button>
+														<button type=\"button\" class=\"btn btn-secondary btn-sm\" style=\"width:60px;\" disabled>ส่งผล</button>
+													</td>",
+												"completed", => $htm .= "
+													<td>
+														<div class=\"progress progress-lg\">
 															<div class=\"progress-bar bg-success\" role=\"progressbar\" style=\"width: 100%;\" aria-valuenow=\"100\" aria-valuemin=\"0\" aria-valuemax=\"100\">100%</div>
 														</div>
 													</td>
 													<td class=\"text-center\">
-														<a href=\"".route('sample.received.report.print', ['lab_no' => $value['lab_no'], 'analys_user' => $value['main_analys_user_id']])."\" type=\"button\" class=\"btn btn-success btn-sm\" style=\"width:86px;\">พิมพ์</a>
-														<button type=\"button\" class=\"btn btn-success btn-sm\" style=\"width:86px;\">ส่งผล</button>
-												</td>"
+														<a href=\"".route('sample.received.report.print', ['lab_no' => $value['lab_no'], 'analys_user' => $value['main_analys_user_id']])."\" type=\"button\" class=\"btn btn-success btn-sm\" style=\"width:60px\">พิมพ์</a>
+														<button type=\"button\" class=\"btn btn-success btn-sm\" style=\"width:60px;\">ส่งผล</button>
+													</td>",
 											};
 
 										$htm .= "</tr>";
@@ -878,88 +899,95 @@ class SampleReceiveController extends Controller
 
 	protected function printReport(Request $request) {
 		try {
-			if (!empty($request->lab_no)) {
-				$order = Order::select('id', 'order_no', 'user_id', 'customer_agency_name', 'type_of_work', 'received_order_date', 'lab_no', 'report_due_date')->whereLab_no(trim($request->lab_no))->get();
+			$order = Order::select(
+				'id',
+				'order_no',
+				'user_id',
+				'customer_agency_name',
+				'type_of_work',
+				'order_received_date',
+				'lab_no',
+				'report_due_date')
+				?->whereLab_no(trim($request->lab_no))
+				?->get();
 
-				if (count($order) > 0) {
-					$user = User::select('id', 'user_type')->with('userCustomer')->whereId($order[0]->user_id)->get();
-					$staff = User::select('id', 'user_type')->with('userStaff')->whereId(auth()->user()->id)->get();
-					dump($user);
-					dd($staff);
+			if ($order->count() > 0) {
+				$user = User::select('id', 'user_type')->with('userCustomer')->whereId($order[0]->user_id)->get();
+				$staff = User::select('id', 'user_type')->with('userStaff')->whereId(auth()->user()->id)->get();
 
-					$order_sample = OrderSample::whereOrder_id($order[0]->id)->with('parameters', function($query) {
-						$query->whereIn('status', ['requisition', 'print']);
-					})->whereSample_received_status('y')->get();
+				$order_sample = OrderSample::whereOrder_id($order[0]->id)->with('parameters', function($query) {
+					$query->where('status', '=', 'completed');
+				})->whereSample_received_status('y')->get();
 
-					$result = [
-						'customer' => [
-							'user_id' => $user[0]->userCustomer->user_id,
-							'user_type' => $user[0]->user_type,
-							'agency_code' => $user[0]->userCustomer->agency_code,
-							'agency_name' => $user[0]->userCustomer->agency_name,
-							'address' => $user[0]->userCustomer->address,
-							'sub_district' => $user[0]->userCustomer->sub_district,
-							'district' => $user[0]->userCustomer->district,
-							'province' => $user[0]->userCustomer->province,
-							'postcode' => $user[0]->userCustomer->postcode
-						],
-						'order' => [
-							'order_id' => $order[0]->id,
-							'order_no' => $order[0]->order_no,
-							'lab_no' => $order[0]->lab_no,
-						],
-						'order_sample' => [
-							'sample_test_no' => $order_sample[0]->sample_test_no,
-							'sample_receive_date' => $order_sample[0]->sample_receive_date,
-							'analys_complete_date' => $order_sample[0]->analys_complete_date,
-							'report_result_date' => $order_sample[0]->report_result_date,
-						],
-						'order_sample_paramet' => [],
-						'order_sample_paramet_unique' => [
-							'sample_character_name' => [],
-							'technical_name' => []
-						],
-					];
+				$result = [
+					'customer' => [
+						'user_id' => $user[0]->userCustomer->user_id,
+						'user_type' => $user[0]->user_type,
+						'agency_code' => $user[0]->userCustomer->agency_code,
+						'agency_name' => $user[0]->userCustomer->agency_name,
+						'address' => $user[0]->userCustomer->address,
+						'sub_district' => $user[0]->userCustomer->sub_district,
+						'district' => $user[0]->userCustomer->district,
+						'province' => $user[0]->userCustomer->province,
+						'postcode' => $user[0]->userCustomer->postcode
+					],
+					'order' => [
+						'order_id' => $order[0]->id,
+						'order_no' => $order[0]->order_no,
+						'lab_no' => $order[0]->lab_no,
+					],
+					'order_sample' => [
+						'sample_test_no' => $order_sample[0]->sample_test_no,
+						'sample_receive_date' => $order_sample[0]->sample_receive_date,
+						'analys_complete_date' => $order_sample[0]->analys_complete_date,
+						'report_result_date' => $order_sample[0]->report_result_date,
+					],
+					'order_sample_paramet' => [],
+					'order_sample_paramet_unique' => [
+						'sample_character_name' => [],
+						'technical_name' => []
+					],
+				];
 
-					// dd($result);
+				// dd($result);
 
-					$order_sample->each(function($item, $key) use (&$result, $request) {
-						foreach ($item->parameters as $k => $v) {
-							if (!empty($request->analys_user) && $v['main_analys_user_id'] != $request->analys_user) {
-								continue;
-							} else {
-								$tmp['order_id'] = $v['order_id'];
-								$tmp['order_sample_id'] = $v['order_sample_id'];
-								$tmp['order_sample_parameter_id'] = $v['id'];
-								$tmp['order_no'] = $result['order']['order_no'];
-								$tmp['sample_test_no'] = $result['order_sample']['sample_test_no'];
-								$tmp['paramet_id'] = $v['parameter_id'];
-								$tmp['paramet_name'] = $v['parameter_name'];
-								$tmp['sample_character_id'] = $v['sample_character_id'];
-								$tmp['sample_character_name'] = $v['sample_character_name'];
-								$tmp['main_analys_user_id'] = $v['main_analys_user_id'];
-								$tmp['main_analys_name'] = $v['main_analys_name'];
-								$tmp['main_analys_position'] = $this->getPositionById($v['main_analys_user_id']);
-								$tmp['control_analys_name'] = $v['control_analys_name'];
-								$tmp['technical_name'] = $v['technical_name'];
-								$tmp['status'] = $v['status'];
-								$tmp['sample_test_no'] = $item->sample_test_no;
-								array_push($result['order_sample_paramet'], $tmp);
-							}
-						};
-					});
-
-					foreach ($result['order_sample_paramet'] as $key => $val) {
-						if (!in_array(trim($val['sample_character_name']), $result['order_sample_paramet_unique']['sample_character_name'], false)) {
-							array_push($result['order_sample_paramet_unique']['sample_character_name'], $val['sample_character_name']);
+				$order_sample->each(function($item, $key) use (&$result, $request) {
+					foreach ($item->parameters as $k => $v) {
+						if (!empty($request->analys_user) && $v['main_analys_user_id'] != $request->analys_user) {
+							continue;
+						} else {
+							$tmp['order_id'] = $v['order_id'];
+							$tmp['order_sample_id'] = $v['order_sample_id'];
+							$tmp['order_sample_parameter_id'] = $v['id'];
+							$tmp['order_no'] = $result['order']['order_no'];
+							$tmp['sample_test_no'] = $result['order_sample']['sample_test_no'];
+							$tmp['paramet_id'] = $v['parameter_id'];
+							$tmp['paramet_name'] = $v['parameter_name'];
+							$tmp['sample_character_id'] = $v['sample_character_id'];
+							$tmp['sample_character_name'] = $v['sample_character_name'];
+							$tmp['main_analys_user_id'] = $v['main_analys_user_id'];
+							$tmp['main_analys_name'] = $v['main_analys_name'];
+							$tmp['main_analys_position'] = $this->getPositionById($v['main_analys_user_id']);
+							$tmp['control_analys_name'] = $v['control_analys_name'];
+							$tmp['technical_name'] = $v['technical_name'];
+							$tmp['status'] = $v['status'];
+							$tmp['sample_test_no'] = $item->sample_test_no;
+							array_push($result['order_sample_paramet'], $tmp);
 						}
-						if (!in_array(trim($val['technical_name']), $result['order_sample_paramet_unique']['technical_name'], false)) {
-							array_push($result['order_sample_paramet_unique']['technical_name'], $val['technical_name']);
-						}
+					};
+				});
+
+				foreach ($result['order_sample_paramet'] as $key => $val) {
+					if (!in_array(trim($val['sample_character_name']), $result['order_sample_paramet_unique']['sample_character_name'], false)) {
+						array_push($result['order_sample_paramet_unique']['sample_character_name'], $val['sample_character_name']);
 					}
-
+					if (!in_array(trim($val['technical_name']), $result['order_sample_paramet_unique']['technical_name'], false)) {
+						array_push($result['order_sample_paramet_unique']['technical_name'], $val['technical_name']);
+					}
 				}
+
 			}
+
 
 			// dd($result);
 			return view(view: 'apps.staff.receive.report.print', data: compact('result'));

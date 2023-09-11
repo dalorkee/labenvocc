@@ -5,10 +5,7 @@
 <link type="text/css" rel="stylesheet" href="{{ URL::asset('vendor/jquery-datatables-checkboxes/dataTables.checkboxes.css') }}">
 <link type="text/css" rel="stylesheet" href="{{ URL::asset('vendor/bootstrap-datepicker/dist/css/bootstrap-datetimepicker.min.css') }}">
 <link type="text/css" rel="stylesheet" href="{{ URL::asset('css/pj-step.css') }}">
-<style type="text/css">
-table#example_table thead {background-color:#2D8AC9;color: white}
-.input-date {background: none !important}
-</style>
+<style type="text/css">table#example_table thead {background-color:#2D8AC9;color: white}.input-date {background: none !important}</style>
 @endsection
 @section('content')
 <ol class="breadcrumb page-breadcrumb text-sm font-prompt">
@@ -111,7 +108,7 @@ table#example_table thead {background-color:#2D8AC9;color: white}
 						<div class="row">
 							<div class="table-responsive col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mt-4 mb-3">
 								<table class="table table-striped">
-									<thead class="bg-primary-100">
+									<thead class="bg-primary-200">
 										<tr>
 											<th>ชนิดตัวอย่าง</th>
 											<th>จำนวนตัวอย่าง</th>

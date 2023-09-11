@@ -2,9 +2,7 @@
 @section('token')<meta name="csrf-token" content="{{ csrf_token() }}">@endsection
 @section('style')
 <link type="text/css" rel="stylesheet" href="{{ URL::asset('css/pj-step.css') }}">
-<style type="text/css">
-table#example_table thead {background-color:#2D8AC9;color: white;}
-</style>
+<style type="text/css">table#example_table thead {background-color:#2D8AC9;color: white;}</style>
 @endsection
 @section('content')
 <ol class="breadcrumb page-breadcrumb text-sm font-prompt">
@@ -75,7 +73,7 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 					</div>
 					<div class="panel-content border-faded border-left-0 border-right-0 border-bottom-0">
 						<a href="{{ route('sample.received.step02', ['order_id' => $order_id]) }}" class="btn btn-primary" style="width:120px"> <i class="fal fa-arrow-alt-left"></i> ก่อนหน้า</a>
-						<button type="button" class="btn btn-success" id="btn_submit" style="width:120px"><i class="fal fa-save"></i> บันทึกข้อมูล</button>
+						<button type="button" class="btn btn-warning" id="btn_submit" style="width:120px"><i class="fal fa-save"></i> บันทึกข้อมูล</button>
 					</div>
 				</form>
 			</div>
@@ -88,7 +86,7 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 <script type="text/javascript">
 $(document).ready(function() {
 	$.ajaxSetup({headers:{'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')}});
-    $('#btn_submit').click(function(e) {
+	$('#btn_submit').click(function(e) {
 		 e.preventDefault();
 		let $form = $('form#received_step03_frm');
 	 	Swal.fire({

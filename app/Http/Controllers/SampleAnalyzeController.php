@@ -453,6 +453,9 @@ class SampleAnalyzeController extends Controller
 							}
 							break;
 					}
+
+                    $order_sample_parameter->status = 'completed';
+
 					$order_sample_parameter->machine_id = $value['machine_id'];
 					$order_sample_parameter->machine_name = $value['machine_name'];
 					$order_sample_parameter->lab_result_blank = $value['lab_result_blank'];

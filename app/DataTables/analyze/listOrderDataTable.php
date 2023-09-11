@@ -80,19 +80,22 @@ class listOrderDataTable extends DataTable
 		try {
 			$order_sample_id_arr = [];
 			OrderSampleParameter::select('id', 'order_id', 'order_sample_id', 'status')
-				->whereMain_analys_user_id($this->user_id)
-				->get()
-				->each(function($item, $key) use (&$order_sample_id_arr) {
+				?->whereMain_analys_user_id($this->user_id)
+				?->get()
+				?->each(function($item, $key) use (&$order_sample_id_arr) {
 					array_push($order_sample_id_arr, $item->order_sample_id);
 				});
+			if (count($order_sample_id_arr) > 0) {
 				$samples = OrderSample::select('order_id')
-					->whereIn('id', $order_sample_id_arr)
-					->whereSample_verified_status('complete')
-					->whereSample_received_status('y')
-					->get();
-					$order_id = (!empty($samples[0]['order_id'])) ? $samples[0]['order_id'] : 0;
-					$data = Order::whereId($order_id)?->where('order_receive_status', '!=', 'reject')?->with('parameters')?->orderBy('id', 'ASC');
-					return $data;
+					?->whereIn('id', $order_sample_id_arr)
+					?->whereSample_verified_status('complete')
+					?->whereSample_received_status('y')
+					?->whereNotNull('sample_test_no')
+					?->get();
+				$order_id = (!empty($samples[0]['order_id'])) ? $samples[0]['order_id'] : 0;
+				$data = Order::whereId($order_id)?->where('order_receive_status', '!=', 'reject')?->with('parameters')?->orderBy('id', 'ASC');
+			}
+			return $data ?? null;
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
 		}

@@ -79,6 +79,17 @@ $(document).ready(function() {
 			});
 		} else {
 			$('#set_test_no_btn').prop('disabled', true);
+			let swalWithBootstrapButtons = Swal.mixin({
+				customClass:{confirmButton: "btn btn-danger"},
+				buttonsStyling: false
+			});
+			swalWithBootstrapButtons.fire({
+				type: "error",
+				title: "โปรดกรอกข้อมูล Lab No.",
+				confirmButtonText: "ตกลง",
+				allowOutsideClick: false,
+				footer: "<a>Lab-EnvOcc</a>"
+			});
 		}
 	});
 });

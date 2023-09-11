@@ -5,9 +5,7 @@
 <link type="text/css" rel="stylesheet" href="{{ URL::asset('vendor/jquery-datatables-checkboxes/dataTables.checkboxes.css') }}">
 <link type="text/css" rel="stylesheet" href="{{ URL::asset('assets/css/formplugins/select2/select2.bundle.css') }}">
 <link type="text/css" rel="stylesheet" href="{{ URL::asset('css/pj-step.css') }}">
-<style type="text/css">
-table#example_table thead {background-color:#2D8AC9;color: white;}
-</style>
+<style type="text/css">table#example_table thead {background-color:#2D8AC9;color: white;}</style>
 @endsection
 @section('content')
 <ol class="breadcrumb page-breadcrumb text-sm font-prompt">
@@ -18,7 +16,7 @@ table#example_table thead {background-color:#2D8AC9;color: white;}
 	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
 		<div id="panel-1" class="panel">
 			<div class="panel-hdr">
-				<h2><span class="text-blue-500"><i class="fal fa-th-list"></i>&nbsp;ตัวอย่าง</span></h2>
+				<h2><span class="text-primary"><i class="fal fa-th-list"></i>&nbsp;รายการตัวอย่าง</span></h2>
 				<div class="panel-toolbar">
 					<button class="btn btn-panel bg-transparent fs-xl w-auto h-auto rounded-0" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="Collapse"><i class="fal fa-window-minimize"></i></button>
 					<button class="btn btn-panel bg-transparent fs-xl w-auto h-auto rounded-0" data-action="panel-fullscreen" data-toggle="tooltip" data-offset="0,10" data-original-title="Fullscreen"><i class="fal fa-expand"></i></button>
