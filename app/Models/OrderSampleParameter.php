@@ -13,6 +13,7 @@ class OrderSampleParameter extends Model
 	protected $primaryKey = 'id';
 
 	protected $fillable = [
+		'id',
 		'order_id',
 		'order_sample_id',
 		'parameter_id',
@@ -25,7 +26,16 @@ class OrderSampleParameter extends Model
 		'threat_type_name',
 		'unit_id',
 		'unit_name',
+		'unit_value',
+		'unit_customer_id',
 		'unit_customer_name',
+		'unit_customer_value',
+		'unit_choice1_id',
+		'unit_choice1_name',
+		'unit_choice1_value',
+		'unit_choice2_id',
+		'unit_choice2_name',
+		'unit_choice2_value',
 		'price_id',
 		'price_name',
 		'main_analys_user_id',
@@ -49,7 +59,7 @@ class OrderSampleParameter extends Model
 		'lab_result',
 		'lab_result_files',
 		'lab_result_comment',
-		'lab_result_chart_files'
+		'lab_result_creatinine'
 	];
 
 	public function orderSample() {

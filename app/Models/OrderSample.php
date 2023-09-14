@@ -13,6 +13,7 @@ class OrderSample extends Model
 	protected $table = 'order_sample';
 	protected $primaryKey = 'id';
 	protected $fillable = [
+		'id',
 		'order_id',
 		'id_card',
 		'passport',
@@ -20,6 +21,7 @@ class OrderSample extends Model
 		'firstname',
 		'lastname',
 		'age_year',
+		'sample_position',
 		'division',
 		'work_life_year',
 		'sample_date',
@@ -43,17 +45,19 @@ class OrderSample extends Model
 		'sample_location_place_postal',
 		'sample_collection_method',
 		'kind_of_sample',
-		'collection_point',
+		'collect_point',
+		'style_of_sample',
 		'weight_sample',
 		'air_volume',
+		'weight_molecule',
 		'note',
 		'has_parameter',
 		'sample_verified_status',
 		'sample_received_status',
-		'sample_test_no',
 		'sample_received_date',
+		'sample_test_no',
 		'analys_complete_date',
-		'report_result_date',
+		'report_result_date'
 	];
 
 	public function order() {

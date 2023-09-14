@@ -12,43 +12,43 @@ class listOrderDataTable extends DataTable
 {
 	use CommonTrait;
 
-	public function dataTable($query): object {
+	public function dataTable($query) {
 		try {
 			return datatables()
 				->eloquent($query)
 				->addIndexColumn()
-				->addColumn('progress', function($status) {
-					switch ($status->order_status) {
+				->addColumn('progress', function($order) {
+					switch ($order->order_status) {
 						case "pending":
 							$htm = "
-							<div class=\"progress progress-md\">
+							<div class=\"progress progress-lg\">
 								<div class=\"progress-bar bg-info\" role=\"progressbar\" style=\"width: 20%;\" aria-valuenow=\"20\" aria-valuemin=\"0\" aria-valuemax=\"100\">20%</div>
 							</div>";
 							break;
 						case "received":
 							$htm = "
-							<div class=\"progress progress-md\">
+							<div class=\"progress progress-lg\">
 								<div class=\"progress-bar bg-info\" role=\"progressbar\" style=\"width: 40%;\" aria-valuenow=\"40\" aria-valuemin=\"0\" aria-valuemax=\"100\">40%</div>
 							</div>";
 							break;
 						case "analyzed": $htm = "
-							<div class=\"progress progress-md\">
+							<div class=\"progress progress-lg\">
 								<div class=\"progress-bar bg-info\" role=\"progressbar\" style=\"width: 60%;\" aria-valuenow=\"60\" aria-valuemin=\"0\" aria-valuemax=\"100\">60%</div>
 							</div>";
 							break;
 						case "sent": $htm = "
-							<div class=\"progress progress-md\">
+							<div class=\"progress progress-lg\">
 								<div class=\"progress-bar bg-success\" role=\"progressbar\" style=\"width: 80%;\" aria-valuenow=\"80\" aria-valuemin=\"0\" aria-valuemax=\"100\">80%</div>
 							</div>";
 							break;
 						case "destroy": $htm = "
-							<div class=\"progress progress-md\">
+							<div class=\"progress progress-lg\">
 								<div class=\"progress-bar bg-success\" role=\"progressbar\" style=\"width: 100%;\" aria-valuenow=\"100\" aria-valuemin=\"0\" aria-valuemax=\"100\">100%</div>
 							</div>";
 							break;
 						default:
 							$htm = "
-							<div class=\"progress progress-md\">
+							<div class=\"progress progress-lg\">
 								<div class=\"progress-bar bg-info\" role=\"progressbar\" style=\"width: 0%;\" aria-valuenow=\"0\" aria-valuemin=\"0\" aria-valuemax=\"100\">0%</div>
 							</div>";
 					};
@@ -58,9 +58,8 @@ class listOrderDataTable extends DataTable
 					switch($order->order_status) {
 						case 'pending':
 						case 'received':
-							$htm = "
-							<a href=\"".route('sample.analyze.select', ['lab_no' => $order->lab_no, 'id' => $order->id, 'user_id' => $this->user_id])."\" class=\"btn btn-success btn-sm\" id=\"reserved\">เบิกตัวอย่าง</a>
-							<a href=\"".route('sample.analyze.lab.result.create', ['lab_no' => $order->lab_no, 'id' => $order->id, 'user_id' => $this->user_id])."\" class=\"btn btn-primary btn-sm\">ผลการทดสอบ</a>";
+							$htm = "<a href=\"".route('sample.analyze.select', ['lab_no' => $order->lab_no, 'id' => $order->id, 'user_id' => $this->user_id])."\" class=\"btn btn-success btn-sm\" id=\"reserved\">เบิกตัวอย่าง</a>
+									<a href=\"".route('sample.analyze.lab.result.create', ['lab_no' => $order->lab_no, 'id' => $order->id, 'user_id' => $this->user_id])."\" class=\"btn btn-primary btn-sm\">ผลการทดสอบ</a>";
 							break;
 						default:
 							$htm = "
@@ -76,15 +75,18 @@ class listOrderDataTable extends DataTable
 		}
 	}
 
-	public function query(): ?object {
+	public function query() {
 		try {
 			$order_sample_id_arr = [];
-			OrderSampleParameter::select('id', 'order_id', 'order_sample_id', 'status')
+			$order_sample_paramet = OrderSampleParameter::select('id', 'order_id', 'order_sample_id', 'status')
 				?->whereMain_analys_user_id($this->user_id)
-				?->get()
-				?->each(function($item, $key) use (&$order_sample_id_arr) {
-					array_push($order_sample_id_arr, $item->order_sample_id);
-				});
+				?->whereIn('status', ['pending', 'reserved', 'analyzing', 'completed'])
+				?->get();
+
+			$order_sample_paramet->each(function($item, $key) use (&$order_sample_id_arr) {
+				array_push($order_sample_id_arr, $item->order_sample_id);
+			});
+
 			if (count($order_sample_id_arr) > 0) {
 				$samples = OrderSample::select('order_id')
 					?->whereIn('id', $order_sample_id_arr)
@@ -92,10 +94,20 @@ class listOrderDataTable extends DataTable
 					?->whereSample_received_status('y')
 					?->whereNotNull('sample_test_no')
 					?->get();
-				$order_id = (!empty($samples[0]['order_id'])) ? $samples[0]['order_id'] : 0;
-				$data = Order::whereId($order_id)?->where('order_receive_status', '!=', 'reject')?->with('parameters')?->orderBy('id', 'ASC');
+
+				$order_id_arr = [];
+				$samples->each(function($item, $key) use (&$order_id_arr) {
+					array_push($order_id_arr, $item->order_id);
+				});
+
+				$data = Order::with('parameters')
+					?->whereIn('id', $order_id_arr)
+					?->where('order_receive_status', '!=', 'reject')
+					?->orderBy('id', 'ASC');
+			} else {
+				$data = Order::with('parameters')->whereId(0);
 			}
-			return $data ?? null;
+			return $data;
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
 		}

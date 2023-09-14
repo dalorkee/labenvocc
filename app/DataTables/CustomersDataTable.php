@@ -48,14 +48,14 @@ class CustomersDataTable extends DataTable
 					$htm .= "</div>";
 					$htm .= "<div class=\"custom-control custom-checkbox\">";
 					$htm .= "<input type=\"checkbox\" class=\"custom-control-input\"";
-                    (!is_null($order->order_payment_date)) ? $htm .= " checked" : $htm .= "";
-                    $htm .= " disabled>";
+					(!is_null($order->order_payment_date)) ? $htm .= " checked" : $htm .= "";
+					$htm .= " disabled>";
 					$htm .= "<label class=\"custom-control-label\" for=\"pending\">ชำระเงิน</label>";
 					$htm .= "</div>";
 					$htm .= "<div class=\"custom-control custom-checkbox\">";
 					$htm .= "<input type=\"checkbox\" class=\"custom-control-input\"";
-                    (!is_null($order->order_sent_date)) ? $htm .= " checked" : $htm .= "";
-                    $htm .= " disabled>";
+					(!is_null($order->order_sent_date)) ? $htm .= " checked" : $htm .= "";
+					$htm .= " disabled>";
 					$htm .= "<label class=\"custom-control-label\" for=\"success\">เสร็จสิ้น</label>";
 					$htm .= "</div>";
 					$htm .= "</form>";

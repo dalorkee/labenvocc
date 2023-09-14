@@ -87,27 +87,34 @@ class SampleAnalyzeController extends Controller
 		}
 	}
 
-	protected function sampleReserve(Request $request) {
+	protected function sampleReserve(Request $request): object {
 		try {
 			if (!empty($request->paramets) && count($request->paramets) > 0) {
 				OrderSampleParameter::whereMain_analys_user_id($this->user->id)
 					?->orWhere('sub_analys_user_id', $this->user->id)
 					?->whereIn('id', $request->paramets)
 					?->update(['status' => 'reserved']);
-				return response()->json(['status' => true, 'msg' => 'จองตัวอย่างที่เลือกเรียบร้อยแล้ว']);
+				$response = ['status' => true, 'msg' => 'จองตัวอย่างที่เลือกเรียบร้อยแล้ว'];
 			} else {
-				return response()->json(['status' => false, 'msg' => 'โปรดเลือกตัวอย่างที่ต้องการจอง !!']);
+				$response = ['status' => false, 'msg' => 'โปรดเลือกตัวอย่างที่ต้องการจอง !!'];
 			}
+			return response()->json($response);
 		} catch (\Exception $e) {
-			Log::error($e->getMessage());
+			Log::error('จองตัวอย่าง: '.$e->getMessage());
 			return response()->json(['status' => false, 'msg' => 'Error! ไม่สามารถจองตัวอย่างนี้ได้ โปรดตรวจสอบ']);
 		}
 	}
 
 	protected function labResultCreate(Request $request): object {
 		try {
-			$lab_no = $request->lab_no;
-			$result = OrderSample::select('id', 'order_id', 'has_parameter', 'sample_test_no', 'air_volume', 'weight_sample')
+			$result = OrderSample::select(
+					'id',
+					'order_id',
+					'has_parameter',
+					'sample_test_no',
+					'air_volume',
+					'weight_sample'
+				)
 				->with(['parameters' => function($query) use ($request) {
 					$query->select(
 						'id',
@@ -122,18 +129,30 @@ class SampleAnalyzeController extends Controller
 						'lab_dilution',
 						'lab_result',
 						'status'
-					)->where('main_analys_user_id', $request->user_id);
-			}])->whereOrder_id($request->id)->get();
+					)
+					->where('main_analys_user_id', $request->user_id)
+					->whereIn('status', ['analyzing', 'completed']);
+				}])
+			->whereOrder_id($request->id)
+			->get();
+
 			$order_id = $result[0]->order_id;
+			$lab_no = $request->lab_no;
 			$main_analys_user_id = $request->user_id;
+
 			$data = [];
 			$result->each(function($item, $key) use (&$data) {
 				if (count($item->parameters) > 0) {
 					array_push($data, $item->toArray());
 				}
 			});
-			$machine = (count($data) > 0) ? RefMachine::select('id', 'machine_name')->get()->toArray() : [];
-			return view(view: 'apps.staff.analyze.lab-result', data: compact('order_id', 'lab_no', 'data', 'machine', 'main_analys_user_id'));
+
+			if (count($data) > 0) {
+				$machine = (count($data) > 0) ? RefMachine::select('id', 'machine_name')->get()->toArray() : [];
+				return view(view: 'apps.staff.analyze.lab-result', data: compact('order_id', 'lab_no', 'data', 'machine', 'main_analys_user_id'));
+			} else {
+				return redirect()->back()->with(key: 'warning', value: 'ไม่พบข้อมูล โปรดตรวจสอบการอนุมัติจากเจ้าหน้าที่ธุรการ');
+			}
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
 			return redirect()->back()->with('error', $e->getMessage());
@@ -257,13 +276,14 @@ class SampleAnalyzeController extends Controller
 									$unit_value = $value['lab_result']; // หน่วยจากเครื่องมือ
 									// customer
 									$unit_customer_value = (($unit_value*1000)/$value['weight_sample']); // (หน่วยจากเครื่องมือx1000)/น้ำหนักดิน(กรัม)
+									$unit_customier_name = 'μg/l';
 									// choice1
 									$unit_choice1_value = null;
 									//choice2
 									$unit_choice2_value = null;
 									break;
 								case 3: // น้ำ
-									$unit_value = $value['lab_result']; // หน่วยจากเครื่องมือ
+									$unit_value = (int)$value['lab_result']; // หน่วยจากเครื่องมือ
 									// customer
 									$unit_customer_value = $unit_value; // หน่วยจากเครื่องมือ
 									// choice1
@@ -454,19 +474,20 @@ class SampleAnalyzeController extends Controller
 							break;
 					}
 
-                    $order_sample_parameter->status = 'completed';
+					$order_sample_parameter->status = 'completed';
 
 					$order_sample_parameter->machine_id = $value['machine_id'];
 					$order_sample_parameter->machine_name = $value['machine_name'];
+
+					$order_sample_parameter->unit_value = $unit_value;
+					$order_sample_parameter->unit_customer_value = $unit_customer_value;
+					$order_sample_parameter->unit_choice1_value = $unit_choice1_value;
+					$order_sample_parameter->unit_choice2_value = $unit_choice2_value;
+
 					$order_sample_parameter->lab_result_blank = $value['lab_result_blank'];
 					$order_sample_parameter->lab_result_amount = $value['lab_result_amount'];
 					$order_sample_parameter->lab_dilution = $value['lab_dilution'];
 					$order_sample_parameter->lab_result = $value['lab_result'];
-
-					$order_sample_parameter->unit_value = $unit_value ?? null;
-					$order_sample_parameter->unit_customer_value = $unit_customer_value ?? null;
-					$order_sample_parameter->unit_choice1_value = $unit_choice1_value ?? null;
-					$order_sample_parameter->unit_choice2_value = $unit_choice2_value ?? null;
 
 					$order_sample_parameter->save();
 				};
@@ -532,7 +553,7 @@ class SampleAnalyzeController extends Controller
 				$file_name = $file->getClientOriginalName();
 				$file_extension = $file->extension();
 				$new_name = $this->renameFile(prefix: 'lab_rs', free_txt: $this->user->id, file_extension: $file_extension);
-				$uploaded = Storage::disk('labs')->put($new_name, File::get($file));
+				$uploaded = Storage::disk(name: 'labs')->put(path: $new_name, contents: File::get($file));
 				if ($uploaded) {
 					$file_upload = new FileUpload;
 					$file_upload->ref_user_id = $this->user->id;
@@ -671,7 +692,7 @@ class SampleAnalyzeController extends Controller
 					$file_upload->file_mime = $file_mime;
 					$file_upload->file_path = '/labs';
 					$file_upload->file_size = $file_size;
-					$file_upload->note = 'ไฟล์ผลแลป';
+					$file_upload->note = 'ไฟล์ผลแลป/chart';
 					$file_upload->save();
 					$file_upload_last_id = $file_upload->id;
 
@@ -738,9 +759,9 @@ class SampleAnalyzeController extends Controller
 											<th colspan=\"3\" style=\"vertical-align:middle;text-align:center;\">ผลการทดสอบ</th>
 										</tr>
 										<tr>
-											<th style=\"vertical-align:middle;text-align:center;\">หน่วยรายงานผล</th>
-											<th style=\"vertical-align:middle;text-align:center;\">หน่วยทางเลือก 1</th>
-											<th style=\"vertical-align:middle;text-align:center;\">หน่วยทางเลือก 2</th>
+											<th style=\"vertical-align:middle;text-align:center;\">".($data[0]['parameters'][0]['unit_customer_name'] ?? '')."</th>
+											<th style=\"vertical-align:middle;text-align:center;\">".($data[0]['parameters'][0]['unit_choice1_name'] ?? '')."</th>
+											<th style=\"vertical-align:middle;text-align:center;\">".($data[0]['parameters'][0]['unit_choice2_name'] ?? '')."</th>
 										</tr>
 									</thead>
 									<tbody>";
@@ -756,9 +777,9 @@ class SampleAnalyzeController extends Controller
 												<td><div style=\"width:100px\">".$v['lab_result_amount']."</div></td>
 												<td><div style=\"width:130px\">".$value['air_volume']."</div></td>
 												<td><div style=\"width:130px\">".$value['weight_sample']."</div></td>
-												<td><div class=\"v-wp\"><div>".$v['unit_customer_value']."</div><div>".$v['unit_customer_name']."</div></div></td>
-												<td><div class=\"v-wp\"><div>".$v['unit_choice1_value']."</div><div>".$v['unit_choice1_name']."</div></div></td>
-												<td><div class=\"v-wp\"><div>".$v['unit_choice2_value']."</div><div>".$v['unit_choice2_name']."</div></div></td>
+												<td><div style=\"width:40px\">".$v['unit_customer_value']."</div></td>
+												<td><div style=\"width:40px\">".$v['unit_choice1_value']."</div></td>
+												<td><div style=\"width:40px\">".$v['unit_choice2_value']."</div></td>
 											</tr>";
 											$i++;
 										}

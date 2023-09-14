@@ -43,16 +43,16 @@ table tr th, table tr td {height:30px; font-size:16px; border:1px solid #bbb}
 .form-name{position: absolute; top: 24px; right: 24px;  height: 20px; line-height: 20px}
 .text-center {text-align: center}
 #printBtn, #homeBtn {
-  background: #5E5DF0;
-  border-radius: 10px;
-  box-sizing: border-box;
-  color: #FFFFFF;
-  cursor: pointer;
-  font-family:"THsarabunNew",sans-serif;;
-  font-size: 1.275em;
-  padding: 8px 10px;
-  border: 0;
-  text-decoration: none;
+	background: #5E5DF0;
+	border-radius: 10px;
+	box-sizing: border-box;
+	color: #FFFFFF;
+	cursor: pointer;
+	font-family:"THsarabunNew",sans-serif;;
+	font-size: 1.275em;
+	padding: 8px 10px;
+	border: 0;
+	text-decoration: none;
 }
 @page {size:A4 landscape; margin:0}
 @media print {
@@ -73,7 +73,7 @@ table tr th, table tr td {height:30px; font-size:16px; border:1px solid #bbb}
 		</div>
 		<div class="heading-detail">
 			<p class="lab-no">Lab No : {{ $result['order']['lab_no'] }}</p>
-			<p class="sample-date">วันที่รับตัวอย่าง : {{ $result['order']['received_order_date'] }}</p>
+			<p class="sample-date">วันที่รับตัวอย่าง : {{ $result['order']['order_receive_status'] }}</p>
 			@switch($result['order']['type_of_work'])
 				@case(1)
 					<p class="work-type">ประเภทงาน : [✔] บริการ [ ] วิจัย [ ] เฝ้าระวัง [ ] SRRT/สอบสวนโรค [ ] อื่นๆ</p>
@@ -94,23 +94,28 @@ table tr th, table tr td {height:30px; font-size:16px; border:1px solid #bbb}
 					<p class="work-type">ประเภทงาน : [ ] บริการ [ ] วิจัย [ ] เฝ้าระวัง [ ] SRRT/สอบสวนโรค [ ] อื่นๆ</p>
 				@endswitch
 			<p class="sample-amount">จำนวนตัวอย่าง : {{ $result['order']['paramet_amount'] }}</p>
-			<p class="sample-report-date">กำหนดส่งรายงานผลลูกค้า : {{ $result['order']['received_order_date'] }}</p>
+			<p class="sample-report-date">กำหนดส่งรายงานผลลูกค้า : {{ $result['order']['order_receive_status'] }}</p>
 		</div>
 		<div class="table-wrapper">
 			<table cellpadding="0" cellspacing="0" width="100%">
 				<thead>
 					<tr>
-						<th style="width: 4%">ลำดับที่</th>
-						<th>หมายเลขทดสอบ</th>
-						<th>รหัสตัวอย่าง (ลูกค้า)</th>
-						<th>วิธีเก็บตัวอย่าง</th>
-						<th>ชนิดตัวอย่าง</th>
-						<th>ลักษณะตัวอย่าง</th>
-						<th>จุดที่เก็บ</th>
-						<th>น้ำหนักตัวอย่าง (กรัม)</th>
-						<th>ปริมาตรอากาศ (ลิตร)</th>
-						<th style="width: 20%">พารามิเตอร์ที่ทดสอบ</th>
+						<th rowspan="3" style="width: 4%">ลำดับที่</th>
+						<th rowspan="3">หมายเลขทดสอบ</th>
+						<th rowspan="3">รหัสตัวอย่าง (ลูกค้า)</th>
+						<th rowspan="3">วิธีเก็บตัวอย่าง</th>
+						<th rowspan="3">ชนิดตัวอย่าง</th>
+						<th rowspan="3">ลักษณะตัวอย่าง</th>
+						<th rowspan="3">จุดที่เก็บ</th>
+						<th rowspan="3">น้ำหนักตัวอย่าง (กรัม)</th>
+						<th rowspan="3">ปริมาตรอากาศ (ลิตร)</th>
+						<th rowspan="3" style="width: 20%">พารามิเตอร์ที่ทดสอบ</th>
 						<th colspan="3">ผลการทดสอบ (หน่วย)</th>
+					</tr>
+						<th>{{ $result['order_sample_paramet'][0]['unit_customer_name'] }}</th>
+						<th>{{ $result['order_sample_paramet'][0]['unit_choice1_name'] }}</th>
+						<th>{{ $result['order_sample_paramet'][0]['unit_choice2_name'] }}</th>
+					<tr>
 					</tr>
 				</thead>
 				<tfoot></tfoot>
@@ -122,15 +127,14 @@ table tr th, table tr td {height:30px; font-size:16px; border:1px solid #bbb}
 							<td class="text-center">{{ $value['order_sample_parameter_id'] }}</td>
 							<td>&nbsp;</td>
 							<td class="text-center">{{ $value['sample_character_name'] }}</td>
-							<td>&nbsp;</td>
-							<td>&nbsp;</td>
-							<td>&nbsp;</td>
-							<td>&nbsp;</td>
+							<td>&nbsp;c</td>
+							<td>&nbsp;d</td>
+							<td>&nbsp;e</td>
+							<td>&nbsp;f</td>
 							<td>{{ $value['paramet_name'] }}</td>
-							<td></td>
-							<td></td>
-							<td></td>
-
+							<td>{{ $value['unit_customer_value'] }}</td>
+							<td>{{ $value['unit_choice1_value'] }}</td>
+							<td>{{ $value['unit_choice2_value'] }}</td>
 						</tr>
 					@empty
 						<tr>
@@ -142,18 +146,18 @@ table tr th, table tr td {height:30px; font-size:16px; border:1px solid #bbb}
 		</div>
 		<div class="footer">
 			<p class="tester-name">ผู้ทดสอบ:
-                @foreach ($result['order_main_analys_name'] as $key => $val)
-                    <span>{{ $val }}</span>
-                @endforeach
-            </p>
+				@foreach ($result['order_main_analys_name'] as $key => $val)
+					<span>{{ $val }}</span>
+				@endforeach
+			</p>
 			<p class="test-date">วันที่ทดสอบเสร็จ: </p>
 			<p class="supervisor-name">ผู้ควบคุม:
-                @foreach ($result['order_main_control_analys_name'] as $key => $val)
-                    {{ $val }}
-                @endforeach
-            </p>
+				@foreach ($result['order_main_control_analys_name'] as $key => $val)
+					{{ $val }}
+				@endforeach
+			</p>
 			<p class="verify-date">วันที่ตรวจสอบ: </p>
-            <p class="form-name">FM-704-04 Rev.00</p>
+			<p class="form-name">FM-704-04 Rev.00</p>
 		</div>
 		<div style="width: 100%; margin: 20px auto 0 auto; text-align: center">
 			<button type="button" id="printBtn" onClick="window.print();">พิมพ์หน้านี้</button>

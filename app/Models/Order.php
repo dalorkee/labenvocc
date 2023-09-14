@@ -39,7 +39,6 @@ class Order extends Model
 		'order_receiver_name',
 		'order_payment_date',
 		'order_analyzed_date',
-		'order_sent_date',
 		'order_destroy_date',
 		'review_order_date',
 		'review_order_name',
@@ -48,14 +47,14 @@ class Order extends Model
 		'report_result_receive_method',
 		'sample_verify_desc',
 		'receipt_status',
-		'analyze_result_files',
+		'analyze_result_files'
 	];
 
 	public function orderSamples() {
 		return $this->hasMany(related: OrderSample::class);
 	}
 
-	public function parameters(){
+	public function parameters() {
 		return $this->hasManyThrough(related: OrderSampleParameter::class, through: OrderSample::class);
 	}
 
@@ -99,13 +98,6 @@ class Order extends Model
 	}
 
 	protected function orderAnalyzedDate(): Attribute {
-		return new Attribute(
-			get: fn ($value) => $this->convertMySQLDateToJs(date: $value),
-			set: fn ($value) => $this->convertJsDateToMySQL(date: $value),
-		);
-	}
-
-	protected function orderSentDate(): Attribute {
 		return new Attribute(
 			get: fn ($value) => $this->convertMySQLDateToJs(date: $value),
 			set: fn ($value) => $this->convertJsDateToMySQL(date: $value),

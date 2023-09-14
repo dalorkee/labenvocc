@@ -53,7 +53,7 @@ class sampleSelectDataTable extends DataTable
 			Column::make('sample_test_no')->title('หมายเลขทดสอบ'),
 			Column::make('info')->title('รายละเอียด'),
 			Column::make('paramet')->title('พารามิเตอร์'),
-			Column::computed('action')->title('#')->width('24%')->addClass('text-center')
+			Column::computed('action')->title('เลือก')->width('24%')->addClass('text-center')
 		];
 	}
 

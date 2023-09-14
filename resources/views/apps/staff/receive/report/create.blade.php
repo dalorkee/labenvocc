@@ -2,6 +2,7 @@
 @section('token')<meta name="csrf-token" content="{{ csrf_token() }}">@endsection
 @section('style')
 <link type="text/css" rel="stylesheet" href="{{ URL::asset('css/pj-step.css') }}">
+<link href="{{ URL::asset('assets/css/formplugins/bootstrap-datepicker/bootstrap-datepicker.css') }}" rel="stylesheet" type="text/css">
 <style type="text/css">table#example_table thead {background-color:#2D8AC9;color:white;}</style>
 <style type="text/css">
 fieldset {
@@ -26,7 +27,7 @@ legend {
 	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
 		<div id="panel-1" class="panel">
 			<div class="panel-hdr">
-				<h2><span class="text-blue-500"><i class="fal fa-th-list"></i>&nbsp;ตัวอย่าง</span></h2>
+				<h2><span class="text-primary"><i class="fal fa-th-list"></i>&nbsp;ออกรายงาน</span></h2>
 				<div class="panel-toolbar">
 					<button class="btn btn-panel bg-transparent fs-xl w-auto h-auto rounded-0" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="Collapse"><i class="fal fa-window-minimize"></i></button>
 					<button class="btn btn-panel bg-transparent fs-xl w-auto h-auto rounded-0" data-action="panel-fullscreen" data-toggle="tooltip" data-offset="0,10" data-original-title="Fullscreen"><i class="fal fa-expand"></i></button>
@@ -39,9 +40,9 @@ legend {
 					<div class="panel-content">
 						<ul class="steps">
 							<li class="undone"><a href="{{ route('sample.received.create') }}"><span class="d-none d-sm-inline">รายการคำขอ</span></a></li>
-							<li class="active"><p><span class="d-none d-sm-inline">รับตัวอย่าง</span></p></li>
+							<li class="undone"><p><span class="d-none d-sm-inline">รับตัวอย่าง</span></p></li>
 							<li class="undone"><p><span class="d-none d-sm-inline">การตรวจวิเคราะห์</span></p></li>
-							<li class="undone"><p><span class="d-none d-sm-inline">รายงานผล</span></p></li>
+							<li class="active"><p><span class="d-none d-sm-inline">รายงานผล</span></p></li>
 						</ul>
 						<h4>ออกรายงาน</h4>
 						{{-- <form name="requisition_form" action="#" method="GET"> --}}
@@ -80,8 +81,10 @@ legend {
 		</div>
 	</div>
 </div>
+<div id="parcel_post_modal_wrapper"></div>
 @endsection
 @push('scripts')
+<script type="text/javascript" src="{{ URL::asset('assets/js/formplugins/bootstrap-datepicker/bootstrap-datepicker.js') }}"></script>
 <script type="text/javascript">
 $(document).ready(function() {
 	$.ajaxSetup({headers:{'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')}});
@@ -93,25 +96,25 @@ $(document).ready(function() {
 			url: "{{ route('sample.received.report.create.ajax') }}",
 			data: {lab_no: lab_no},
 			dataType: "html",
-			beforeSend: function() {
-				$('#loader').removeClass('hidden');
-			},
-			success: function(res) {
-				$('#order_sample_table').html(res);
-			},
-			complete: function() {
-				$('#loader').addClass('hidden');
-			},
-			error: function(xhr, status, error) {
-				console.log('Error code: ' + xhr.status + ':' + xhr.responseText);
-			}
+			beforeSend: function() { $('#loader').removeClass('hidden')},
+			success: function(res) { $('#order_sample_table').html(res)},
+			complete: function() { $('#loader').addClass('hidden')},
+			error: function(xhr, status, error) { console.log('Error code: ' + xhr.status + ':' + xhr.responseText)}
 		});
 	});
 });
+function parcelPost(lab_no) {
+		$.ajax({
+			method: "GET",
+			url: "{{ route('sample.received.return.parcel.post.modal') }}",
+			dataType: "html",
+			data: {lab_no: lab_no},
+			success: function(response) {
+				$('#parcel_post_modal_wrapper').html(response);
+				$('#pacel_post_modal').modal('show');
+			},
+			error: function(jqXhr, textStatus, errorMessage) {alert('Error: ' + jqXhr.status + errorMessage)}
+		});
+}
 </script>
-<script type='text/javascript'>
-    function printReport(lab_no) {
-
-    }
-    </script>
 @endpush

@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\{Response,DB,Storage,Log};
 use App\Services\OrderService;
 use App\Traits\{DateTimeTrait,CommonTrait,DbBoundaryTrait};
 use App\Exceptions\{OrderNotFoundException,InvalidOrderException};
-use App\Models\{User,UserCustomer,Order,OrderSample,OrderSampleParameter,FileUpload,Parameter};
+use App\Models\{User,UserCustomer,Order,OrderSample,OrderSampleParameter,FileUpload,Parameter,Parcel};
 use Yajra\DataTables\Facades\DataTables;
 use Barryvdh\DomPDF\Facade\Pdf;
 
@@ -692,34 +692,36 @@ class SampleReceiveController extends Controller
 		}
 	}
 
-	protected function updateRequisition(Request $request) {
+	protected function updateRequisition(Request $request): object {
 		try {
 			if (!empty($request->order_sample_parameter_id)) {
-				$order_sample_paramet = OrderSampleParameter::findOrFail($request->order_sample_parameter_id);
+				$order_sample_paramet = OrderSampleParameter::findOr($request->order_sample_parameter_id, fn () => throw new \Exception('ธุรการเบิกตัวอย่างรหัส '.$request->order_sample_parameter_id.' ไม่ได้'));
 				$order_sample_paramet->status = 'analyzing';
-				$saved = $order_sample_paramet->save();
-				if ($saved) {
-					return response()->json([
-						'success' => true,
-						'lab_no' => $request->lab_no,
-						'analyze_user' => $request->analyze_user,
-						'order_sample_parameter_id' => $request->order_sample_parameter_id
-					]);
-				} else {
-					return response()->json(['success' => false, 'message' => 'เบิกตัวอย่างไม่ได้']);
-				}
-			} else {
-				return response()->json(['success' => false, 'message' => 'ไม่พบรหัส Parameter ที่เลือก']);
+				$order_sample_paramet->save();
+				return response()->json([
+					'success' => true,
+					'lab_no' => $request->lab_no,
+					'analyze_user' => $request->analyze_user,
+					'order_sample_parameter_id' => $request->order_sample_parameter_id
+				]);
 			}
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
+			return response()->json(['success' => false, 'message' => $e->getMessage()]);
 		}
 	}
 
 	protected function printRequisition(Request $request) {
 		if (!empty($request->lab_no)) {
-			$order = Order::select('id', 'type_of_work', 'received_order_date', 'lab_no', 'report_due_date')->whereLab_no(trim($request->lab_no))->get();
-			if (count($order) > 0) {
+			$order = Order::select(
+				'id',
+				'type_of_work',
+				'order_receive_status',
+				'lab_no',
+				'report_due_date')
+			?->whereLab_no(trim($request->lab_no))
+			?->get();
+			if ($order->count() > 0) {
 				$order_sample = OrderSample::whereOrder_id($order[0]->id)->with('parameters', function($query) {
 					$query->whereIn('status', ['pending', 'reserved', 'analyzing', 'completed']);
 				})->whereSample_received_status('y')->get();
@@ -730,7 +732,7 @@ class SampleReceiveController extends Controller
 						'type_of_work' => $order[0]->type_of_work,
 						'report_due_date' => $order[0]->report_due_date,
 						'lab_no' => $order[0]->lab_no,
-						'received_order_date' => $order[0]->received_order_date,
+						'order_receive_status' => $order[0]->order_receive_status,
 					],
 					'order_sample_paramet' => [],
 					'order_main_analys_name' => [],
@@ -751,8 +753,24 @@ class SampleReceiveController extends Controller
 							$tmp['sample_character_name'] = $v['sample_character_name'];
 							$tmp['main_analys_user_id'] = $v['main_analys_user_id'];
 							$tmp['main_analys_name'] = $v['main_analys_name'];
+
+							$tmp['unit_id'] = $v['unit_id'];
+							$tmp['unit_name'] = $v['unit_name'];
+							$tmp['unit_value'] = $v['unit_value'];
+							$tmp['unit_customer_id'] = $v['unit_customer_id'];
+							$tmp['unit_customer_name'] = $v['unit_customer_name'];
+							$tmp['unit_customer_value'] = $v['unit_customer_value'];
+
+							$tmp['unit_choice1_name'] = $v['unit_choice1_name'];
+							$tmp['unit_choice1_value'] = $v['unit_choice1_value'];
+							$tmp['unit_choice2_name'] = $v['unit_choice2_name'];
+							$tmp['unit_choice2_value'] = $v['unit_choice2_value'];
+							$tmp['unit_choice3_name'] = $v['unit_choice3_name'];
+							$tmp['unit_choice3_value'] = $v['unit_choice3_value'];
+
 							$tmp['status'] = $v['status'];
 							$tmp['sample_test_no'] = $item->sample_test_no;
+
 							if (!empty($v['main_analys_user_id'])) {
 								$result['order_main_analys_name'][$v['main_analys_user_id']] = $v['main_analys_name'];
 							}
@@ -866,7 +884,7 @@ class SampleReceiveController extends Controller
 													</td>
 													<td class=\"text-center\">
 														<a href=\"".route('sample.received.report.print', ['lab_no' => $value['lab_no'], 'analys_user' => $value['main_analys_user_id']])."\" type=\"button\" class=\"btn btn-success btn-sm\" style=\"width:60px\">พิมพ์</a>
-														<button type=\"button\" class=\"btn btn-success btn-sm\" style=\"width:60px;\">ส่งผล</button>
+														<button type=\"button\" class=\"btn btn-success btn-sm\" style=\"width:60px\" onClick=\"parcelPost('{$value['lab_no']}','25')\" >ส่งผล</button>
 													</td>",
 											};
 
@@ -897,7 +915,7 @@ class SampleReceiveController extends Controller
 		}
 	}
 
-	protected function printReport(Request $request) {
+	protected function printReport(Request $request): object {
 		try {
 			$order = Order::select(
 				'id',
@@ -908,16 +926,19 @@ class SampleReceiveController extends Controller
 				'order_received_date',
 				'lab_no',
 				'report_due_date')
-				?->whereLab_no(trim($request->lab_no))
-				?->get();
+			?->whereLab_no(trim($request->lab_no))
+			?->get();
 
 			if ($order->count() > 0) {
 				$user = User::select('id', 'user_type')->with('userCustomer')->whereId($order[0]->user_id)->get();
 				$staff = User::select('id', 'user_type')->with('userStaff')->whereId(auth()->user()->id)->get();
 
-				$order_sample = OrderSample::whereOrder_id($order[0]->id)->with('parameters', function($query) {
-					$query->where('status', '=', 'completed');
-				})->whereSample_received_status('y')->get();
+				$order_sample = OrderSample::whereOrder_id($order[0]->id)
+				->with('parameters', function($q) {
+					$q->where('status', 'completed');
+				})
+				->whereSample_received_status('y')
+				->get();
 
 				$result = [
 					'customer' => [
@@ -949,8 +970,6 @@ class SampleReceiveController extends Controller
 					],
 				];
 
-				// dd($result);
-
 				$order_sample->each(function($item, $key) use (&$result, $request) {
 					foreach ($item->parameters as $k => $v) {
 						if (!empty($request->analys_user) && $v['main_analys_user_id'] != $request->analys_user) {
@@ -965,6 +984,31 @@ class SampleReceiveController extends Controller
 							$tmp['paramet_name'] = $v['parameter_name'];
 							$tmp['sample_character_id'] = $v['sample_character_id'];
 							$tmp['sample_character_name'] = $v['sample_character_name'];
+
+							$tmp['sample_type_id'] = $v['sample_type_id'];
+							$tmp['sample_type_name'] = $v['sample_type_name'];
+							$tmp['threat_type_id'] = $v['threat_type_id'];
+							$tmp['threat_type_name'] = $v['threat_type_name'];
+
+							$tmp['collect_point'] = $v['collect_point'];
+							$tmp['style_of_sample'] = $v['style_of_sample'];
+
+							$tmp['unit_id'] = $v['unit_id'];
+							$tmp['unit_name'] = $v['unit_name'];
+							$tmp['unit_value'] = $v['unit_value'];
+
+							$tmp['unit_customer_id'] = $v['unit_customer_id'];
+							$tmp['unit_customer_name'] = $v['unit_customer_name'];
+							$tmp['unit_customer_value'] = $v['unit_customer_value'];
+
+							$tmp['unit_choice1_id'] = $v['unit_choice1_id'];
+							$tmp['unit_choice1_name'] = $v['unit_choice1_name'];
+							$tmp['unit_choice1_value'] = $v['unit_choice1_value'];
+
+							$tmp['unit_choice2_id'] = $v['unit_choice2_id'];
+							$tmp['unit_choice2_name'] = $v['unit_choice2_name'];
+							$tmp['unit_choice2_value'] = $v['unit_choice2_value'];
+
 							$tmp['main_analys_user_id'] = $v['main_analys_user_id'];
 							$tmp['main_analys_name'] = $v['main_analys_name'];
 							$tmp['main_analys_position'] = $this->getPositionById($v['main_analys_user_id']);
@@ -985,16 +1029,79 @@ class SampleReceiveController extends Controller
 						array_push($result['order_sample_paramet_unique']['technical_name'], $val['technical_name']);
 					}
 				}
-
 			}
-
-
-			// dd($result);
 			return view(view: 'apps.staff.receive.report.print', data: compact('result'));
-
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
 		}
+	}
+
+	protected function sentParcelPostModal(Request $request) {
+        $parcel = Parcel::whereLab_no($request->lab_no)->whereUser_id($request->user_id)->get();
+		return "
+		<div class=\"modal fade font-prompt\" id=\"pacel_post_modal\" data-keyboard=\"false\" data-backdrop=\"static\" tabindex=\"-1\" role=\"dialog\" aria-hidden=\"true\">
+			<form class=\"modal-dialog modal-lg modal-dialog-centered\" action=\"".route('sample.analyze.lab.result.upload.file')."\" method=\"POST\" enctype=\"multipart/form-data\" role=\"document\">
+				<div class=\"modal-content\">
+					<div class=\"modal-header bg-primary text-white\">
+						<h5 class=\"modal-title\">ส่งผล Lab No: ".$request->lab_no."</h5>
+						<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">
+							<span aria-hidden=\"true\"><i class=\"fal fa-times\"></i></span>
+						</button>
+					</div>
+					<div class=\"modal-body\">
+						<input type=\"hidden\" name=\"_token\" value=\"".csrf_token()."\">
+						<input type=\"hidden\" name=\"lab_no\" value=\"".$request->lab_no."\">
+
+						<div class=\"form-row\">
+							<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3\">
+								<label class=\"form-label\" for=\"parcel_post_no\">เลขพัสดุ</label>
+								<input type=\"text\" name=\"parcel_post_no\" class=\"form-control\" placeholder=\"เลขพัสดุ\">
+							</div>
+							<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3\">
+								<label class=\"form-label\" for=\"parcel_post_date\">วันที่ส่ง</label>
+								<div class=\"input-group\">
+									<input type=\"text\" name=\"parcel_post_date\" placeholder=\"วันที่\" class=\"form-control input-date\" id=\"datepicker_parcel_post_date\">
+									<div class=\"input-group-append\">
+										<span class=\"input-group-text fs-xl\">
+											<i class=\"fal fa-calendar-alt\"></i>
+										</span>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class=\"form-row\">
+							<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3\">
+								<label class=\"form-label\" for=\"sent_status\">สถานะการจัดส่ง</label>
+								<select name=\"parcel_post_status\" class=\"form-control\">
+									<option value=\"\">-- โปรดเลือก --</option>
+									<option value=\"preparing\">เตรียมจัดส่ง</option>
+									<option value=\"in_transit\">กำลังเดินทาง</option>
+									<option value=\"arrived\">ถึงผู้รับ</option>
+								</select>
+							</div>
+						</div>
+
+					</div>
+					<div class=\"modal-footer\">
+						<button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">ปิด</button>
+						<button type=\"submit\" class=\"btn btn-primary\">บันทึก</button>
+					</div>
+				</div>
+			</form>
+		</div>
+		<script type=\"text/javascript\">
+			var controls = {leftArrow: '<i class=\"fal fa-angle-left\" style=\"font-size: 1.25rem\"></i>',rightArrow: '<i class=\"fal fa-angle-right\" style=\"font-size: 1.25rem\"></i>'}
+			var runDatePicker = function() {
+				$('#datepicker_parcel_post_date').datepicker({
+					format: 'dd/mm/yyyy',
+					todayHighlight: true,
+					orientation: 'bottom left',
+					templates: controls,
+					autoclose: true,
+				});
+			}
+	        runDatePicker();
+		</script>";
 	}
 
 	protected function createReturn(): object {

@@ -19,26 +19,23 @@
 }
 * {box-sizing:border-box;-moz-box-sizing:border-box;font-family:"THsarabunNew",sans-serif}
 h1,h2,h3,h4,h5,h6 {font-family:"THsarabunNew",sans-serif}
- body{width:100%; height:100%; margin:0; padding:0; background-color:#fff; font-family:"THsarabunNew",sans-serif; font-size:1em}
+body{width:100%; height:100%; margin:0; padding:0; background-color:#fff; font-family:"THsarabunNew",sans-serif; font-size:1em}
+.font-dejavu {font-family: "DejaVuSansMono"!important}
 .container {width:100%; height:100%; margin:10px auto; padding:10px}
 .page {position:relative; width:297mm; min-height:210mm; height: 210mm; padding:10px; margin:0 auto}
 .page-no {width:100%; height:20px}
 .page-no span {display:inline-block; width:100%; text-align:right}
-
 .heading {width: 100%; height: 120px}
 .border-top {border-top: 1px solid #585858}
 .border-right {border-right: 1px solid #585858}
 .border-bottom {border-bottom: 1px solid #585858}
 .border-left {border-left: 1px solid #585858}
-
 .heading-logo-left {width:20%; height:120px; padding-top: 10px; float:left;text-align: center}
 .heading-title {width:60%; height:120px; float:left; text-align:center}
 .heading-logo-right {width:20%; height:120px; float:left; padding-top: 10px; float:left;text-align: center}
 .heading p {height:22px; line-height:22px; margin:0; padding: 4px 0}
 .heading:after, .row:after {content:''; display:block; clear:both}
-
 .heading-detail {width:100%;}
-
 .font-bold {font-weight:400}
 .font-14px {font-size:14px}
 .font-16px {font-size:16px}
@@ -53,10 +50,9 @@ h1,h2,h3,h4,h5,h6 {font-family:"THsarabunNew",sans-serif}
 .row {width:100%}
 .float-left {float:left}
 .text-center {text-align: center}
-
+.font-16 {font-size: 16px!important}
 table {border-collapse:collapse; font-size:16px; font-family:"THsarabunNew"}
 table tr th, table tr td {height:30px; font-size:16px; border:1px solid #585858}
-
 .footer {
 	position: absolute;
 	width: 100%;
@@ -95,7 +91,6 @@ table tr th, table tr td {height:30px; font-size:16px; border:1px solid #585858}
 	bottom: 5px;
 	text-align: center;
 }
-
 #printBtn, #homeBtn {
 	background: #5E5DF0;
 	border-radius: 10px;
@@ -134,8 +129,8 @@ table tr th, table tr td {height:30px; font-size:16px; border:1px solid #585858}
 				<p class="font-14px">โทรศัพท์ 0 2968 7633 โทรสาร 0 2968 7631</p>
 			</div>
 			<div class="heading-logo-right">
-				<img src="{{ URL::asset('images/ddc-logo-90x90.png') }}" />
-				<img src="{{ URL::asset('images/ddc-logo-90x90.png') }}" />
+				<img src="{{ URL::asset('images/pseudo-logo.png') }}" />
+				<img src="{{ URL::asset('images/pseudo-logo.png') }}" />
 
 			</div>
 		</div>
@@ -180,24 +175,24 @@ table tr th, table tr td {height:30px; font-size:16px; border:1px solid #585858}
 							<th colspan="3">ปริมาณที่พบ (หน่วย)</th>
 						</tr>
 						<tr>
-							<th>&#181;g/sample</th>
-							<th>mg/m<sup>3</sup></th>
-							<th>ppm</th>
+							<th class="font-dejavu">{{ $result['order_sample_paramet'][0]['unit_customer_name'] ?? '' }}</th>
+							<th class="font-dejavu">{{ $result['order_sample_paramet'][0]['unit_choice1_name'] ?? '' }}</th>
+							<th class="font-dejavu">{{ $result['order_sample_paramet'][0]['unit_choice2_name'] ?? '' }}</th>
 						</tr>
 					</thead>
 					<tfoot></tfoot>
 					<tbody>
 						@foreach ($result['order_sample_paramet'] as $key => $val)
 							<tr>
-								<td>{{ $loop->iteration }}</td>
-								<td>{{ $val['sample_test_no'] }}</td>
-								<td>{{ $val['order_no'] }}</td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
+								<td class="text-center">{{ $loop->iteration }}</td>
+								<td class="text-center">{{ $val['sample_test_no'] }}</td>
+								<td class="text-center">{{ $val['order_no'] }}</td>
+								<td class="text-center">{{ $val['style_of_sample'] }}</td>
+								<td class="text-center">{{ $val['collect_point'] }}</td>
+								<td>&nbsp;</td>
+								<td class="text-center">{{ $val['unit_customer_value'] }}</td>
+								<td class="text-center">{{ $val['unit_choice1_value'] }}</td>
+								<td class="text-center">{{ $val['unit_choice2_value'] }}</td>
 							</tr>
 						@endforeach
 

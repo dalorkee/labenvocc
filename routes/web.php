@@ -157,6 +157,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 			Route::post('/report/create/ajax', 'createReportAjax')->name('received.report.create.ajax');
 			Route::get('/report/print/lab/{lab_no}/analys_user/{analys_user}', 'printReport')->name('received.report.print');
 			Route::get('/return/create', 'createReturn')->name('received.return.create');
+			Route::get('/return/create/parcel/post', 'sentParcelPostModal')->name('received.return.parcel.post.modal');
 			Route::post('/return/create/ajax', 'createReturnAjax')->name('received.return.create.ajax');
 		});
 		Route::resource('analyze', SampleAnalyzeController::class);

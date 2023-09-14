@@ -18,7 +18,7 @@
 	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
 		<div id="panel-1" class="panel">
 			<div class="panel-hdr">
-				<h2><span class="text-blue-500"><i class="fal fa-th-list"></i>&nbsp;ตัวอย่าง</span></h2>
+				<h2><span class="text-primary"><i class="fal fa-th"></i>&nbsp;รายการตัวอย่าง</span></h2>
 				<div class="panel-toolbar">
 					<button class="btn btn-panel bg-transparent fs-xl w-auto h-auto rounded-0" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="Collapse"><i class="fal fa-window-minimize"></i></button>
 					<button class="btn btn-panel bg-transparent fs-xl w-auto h-auto rounded-0" data-action="panel-fullscreen" data-toggle="tooltip" data-offset="0,10" data-original-title="Fullscreen"><i class="fal fa-expand"></i></button>
@@ -35,7 +35,7 @@
 							<li class="active"><p><span class="d-none d-sm-inline">การตรวจวิเคราะห์</span></p></li>
 							<li class="undone"><p><span class="d-none d-sm-inline">รายงานผล</span></p></li>
 						</ul>
-						<h4>Lab No. {{ $lab_no }}</h4>
+						<h4><span class="badge badge-danger p-2 m-0">Lab No. {{ $lab_no }}</span></h4>
 						<div class="row">
 							<div class="col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mt-4">
 								<div class="table-responsive">

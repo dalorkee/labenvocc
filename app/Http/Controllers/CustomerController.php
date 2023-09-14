@@ -272,37 +272,42 @@ class CustomerController extends Controller
 			$paramet_arr = $request->paramet_id_arr;
 			$i = 0;
 			foreach ($paramet_arr as $key => $val) {
-				$paramet = Parameter::findOrfail($val);
+				$paramet = Parameter::findOr($val, fn() => throw new \Exception('Customer::ไม่พบ Parameter รหัส:'.$val));
 				$upserted = OrderSampleParameter::updateOrcreate([
 						'order_id' => $request->hidden_order_id,
 						'order_sample_id' => $request->hidden_order_sample_id,
 						'parameter_id' => $paramet->id
 					],[
 						'parameter_name' => $paramet->parameter_name,
-						'sample_character_id'=> (int)$paramet->sample_character_type_id,
+						'sample_character_id'=> (int)$paramet->sample_character_type_id ?? null,
 						'sample_character_name' => $paramet->sample_character_name,
-						'sample_type_id' => (int)$paramet->sample_type_id,
+						'sample_type_id' => (int)$paramet->sample_type_id ?? null,
 						'sample_type_name' => $paramet->sample_type_name,
-						'threat_type_id' => (int)$paramet->threat_type_id,
+						'threat_type_id' => (int)$paramet->threat_type_id ?? null,
 						'threat_type_name' => $paramet->threat_type_name,
-						'unit_id' => (int)$paramet->unit_id,
+						'unit_id' => (int)$paramet->unit_id ?? null,
 						'unit_name' => $paramet->unit_name,
+						'unit_customer_id' => (int)$paramet->unit_customer_id ?? null,
 						'unit_customer_name' => $paramet->unit_customer_name,
-						'price_id' => (int)$paramet->price_id,
-						'price_name' => (double)$paramet->price_name,
-						'main_analys_user_id' => (int)$paramet->main_analys_user_id,
+						'unit_choice1_id' => (int)$paramet->unit_choice1_id ?? null,
+						'unit_choice1_name' => $paramet->unit_choice1_name,
+						'unit_choice2_id' => (int)$paramet->unit_choice2_id ?? null,
+						'unit_choice2_name' => $paramet->unit_choice2_name,
+						'price_id' => (int)$paramet->price_id ?? null,
+						'price_name' => (double)$paramet->price_name ?? null,
+						'main_analys_user_id' => (int)$paramet->main_analys_user_id ?? null,
 						'main_analys_name' => $paramet->main_analys,
-						'sub_analys_user_id' => (int)$paramet->sub_analys_user_id,
+						'sub_analys_user_id' => (int)$paramet->sub_analys_user_id ?? null,
 						'sub_analys_name' => $paramet->sub_analys,
-						'control_analys_user_id' => (int)$paramet->main_control_user_id,
+						'control_analys_user_id' => (int)$paramet->main_control_user_id ?? null,
 						'control_analys_name' => $paramet->main_control,
-						'technical_id' => (int)$paramet->technic_id,
+						'technical_id' => (int)$paramet->technic_id ?? null,
 						'technical_name' => $paramet->technic_name,
-						'method_analys_id' => (int)$paramet->method_analys_id,
+						'method_analys_id' => (int)$paramet->method_analys_id ?? null,
 						'method_analys_name' => $paramet->method_name,
-						'machine_id' => (int)$paramet->machine_id,
+						'machine_id' => (int)$paramet->machine_id ?? null,
 						'machine_name' => $paramet->machine_name,
-						'office_id' => (int)$paramet->office_id,
+						'office_id' => (int)$paramet->office_id ?? null,
 						'office_name' => $paramet->office_name
 					]);
 				$i++;

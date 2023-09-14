@@ -138,10 +138,10 @@
 						<div class="form-row">
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
 								@if (!is_null($order) && count($order) > 0)
-									<button type="submit" class="btn btn-success ml-auto"><i class="fal fa-save"></i> บันทึก</button>
+									<button type="submit" class="btn btn-primary ml-auto"><i class="fal fa-save"></i> บันทึก</button>
 									<a href="{{ route('customer.parameter.create', ['order_id' => $order[0]->id]) }}" class="btn btn-info ml-auto">ถัดไป <i class="fal fa-arrow-alt-right"></i></a>
 								@else
-									<button type="submit" class="btn btn-primary ml-auto"><i class="fal fa-save"></i> บันทึกร่าง</button>
+									<button type="submit" class="btn btn-warning ml-auto"><i class="fal fa-save"></i> บันทึกร่าง</button>
 								@endif
 							</div>
 						</div>
@@ -154,7 +154,7 @@
 @endsection
 @section('script')
 <script type="text/javascript" src="{{ URL::asset('assets/js/formplugins/bootstrap-datepicker/bootstrap-datepicker.js') }}"></script>
-<script>
+<script type="text/javascript">
 var controls = {leftArrow: '<i class="fal fa-angle-left" style="font-size: 1.25rem"></i>',rightArrow: '<i class="fal fa-angle-right" style="font-size: 1.25rem"></i>'}
 var runDatePicker = function() {
 	$('#datepicker_book_date').datepicker({
