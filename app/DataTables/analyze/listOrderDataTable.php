@@ -31,12 +31,12 @@ class listOrderDataTable extends DataTable
 								<div class=\"progress-bar bg-info\" role=\"progressbar\" style=\"width: 40%;\" aria-valuenow=\"40\" aria-valuemin=\"0\" aria-valuemax=\"100\">40%</div>
 							</div>";
 							break;
-						case "analyzed": $htm = "
+						case "analyzing": $htm = "
 							<div class=\"progress progress-lg\">
 								<div class=\"progress-bar bg-info\" role=\"progressbar\" style=\"width: 60%;\" aria-valuenow=\"60\" aria-valuemin=\"0\" aria-valuemax=\"100\">60%</div>
 							</div>";
 							break;
-						case "sent": $htm = "
+						case "analyzed": $htm = "
 							<div class=\"progress progress-lg\">
 								<div class=\"progress-bar bg-success\" role=\"progressbar\" style=\"width: 80%;\" aria-valuenow=\"80\" aria-valuemin=\"0\" aria-valuemax=\"100\">80%</div>
 							</div>";

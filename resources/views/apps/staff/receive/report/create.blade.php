@@ -96,25 +96,25 @@ $(document).ready(function() {
 			url: "{{ route('sample.received.report.create.ajax') }}",
 			data: {lab_no: lab_no},
 			dataType: "html",
-			beforeSend: function() { $('#loader').removeClass('hidden')},
-			success: function(res) { $('#order_sample_table').html(res)},
-			complete: function() { $('#loader').addClass('hidden')},
+			beforeSend: function() {$('#loader').removeClass('hidden')},
+			success: function(res) {$('#order_sample_table').html(res)},
+			complete: function() {$('#loader').addClass('hidden')},
 			error: function(xhr, status, error) { console.log('Error code: ' + xhr.status + ':' + xhr.responseText)}
 		});
 	});
 });
-function parcelPost(lab_no) {
-		$.ajax({
-			method: "GET",
-			url: "{{ route('sample.received.return.parcel.post.modal') }}",
-			dataType: "html",
-			data: {lab_no: lab_no},
-			success: function(response) {
-				$('#parcel_post_modal_wrapper').html(response);
-				$('#pacel_post_modal').modal('show');
-			},
-			error: function(jqXhr, textStatus, errorMessage) {alert('Error: ' + jqXhr.status + errorMessage)}
-		});
+function parcelPost(order,o_sample,os_paramet,lab,user) {
+	$.ajax({
+		method: "POST",
+		url: "{{ route('sample.received.return.parcel.post.modal.create') }}",
+		dataType: "html",
+		data: {order:order,o_sample:o_sample,os_paramet:os_paramet,lab:lab,user:user},
+		success: function(response) {
+			$('#parcel_post_modal_wrapper').html(response);
+			$('#pacel_post_modal').modal('show');
+		},
+		error: function(jqXhr, textStatus, errorMessage) {console.log('Error: ' + jqXhr.status + errorMessage)}
+	});
 }
 </script>
 @endpush

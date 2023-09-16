@@ -12,6 +12,7 @@ use App\Exceptions\{OrderNotFoundException,InvalidOrderException};
 use App\Models\{User,UserCustomer,Order,OrderSample,OrderSampleParameter,FileUpload,Parameter,Parcel};
 use Yajra\DataTables\Facades\DataTables;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Egulias\EmailValidator\Validation\Exception\EmptyValidationList;
 
 class SampleReceiveController extends Controller
 {
@@ -54,7 +55,10 @@ class SampleReceiveController extends Controller
 							case 'analyzed':
 								return "<button type=\"button\" class=\"btn btn-sm btn-info\" style=\"width:120px\" disabled>รับตัวอย่างแล้ว</button>\n";
 								break;
-							case 'sent':
+							case 'analyzing':
+								return "<button type=\"button\" class=\"btn btn-sm btn-warning\" style=\"width:120px\" disabled>กำลังวิเคราะห์</button>\n";
+								break;
+							case 'analyzed':
 							case 'destroy':
 								return "<button type=\"button\" class=\"btn btn-sm btn-success\" style=\"width:120px\" disabled>เสร็จสิ้น</button>\n";
 								break;
@@ -800,9 +804,7 @@ class SampleReceiveController extends Controller
 					$order_sample = OrderSample::whereOrder_id($order[0]->id)->with('parameters', function($query) {
 						$query->whereIn('status', ['pending', 'reserved', 'analyzing', 'completed']);
 					})?->whereSample_received_status('y')?->get();
-					$result = [
-						'order' => []
-					];
+					$result = ['order' => []];
 					$order_sample->each(function($item, $key) use (&$result, $request, $order) {
 						foreach ($item->parameters as $k => $v) {
 							if (array_key_exists($v['main_analys_user_id'], $result['order'])) {
@@ -884,7 +886,18 @@ class SampleReceiveController extends Controller
 													</td>
 													<td class=\"text-center\">
 														<a href=\"".route('sample.received.report.print', ['lab_no' => $value['lab_no'], 'analys_user' => $value['main_analys_user_id']])."\" type=\"button\" class=\"btn btn-success btn-sm\" style=\"width:60px\">พิมพ์</a>
-														<button type=\"button\" class=\"btn btn-success btn-sm\" style=\"width:60px\" onClick=\"parcelPost('{$value['lab_no']}','25')\" >ส่งผล</button>
+														<button
+															type=\"button\"
+															class=\"btn btn-success btn-sm\"
+															style=\"width:60px\"
+															onClick=\"parcelPost(
+																'{$value['order_id']}',
+																'{$value['order_sample_id']}',
+																'{$value['order_sample_parameter_id']}',
+																'{$value['lab_no']}',
+																'{$value['main_analys_user_id']}'
+															)\">ส่งผล
+														</button>
 													</td>",
 											};
 
@@ -1036,31 +1049,34 @@ class SampleReceiveController extends Controller
 		}
 	}
 
-	protected function sentParcelPostModal(Request $request) {
-        $parcel = Parcel::whereLab_no($request->lab_no)->whereUser_id($request->user_id)->get();
+	protected function createParcelPostModal(Request $request) {
+		$data = Parcel::whereOrder_sample_parameter_id($request->os_paramet)->get();
 		return "
 		<div class=\"modal fade font-prompt\" id=\"pacel_post_modal\" data-keyboard=\"false\" data-backdrop=\"static\" tabindex=\"-1\" role=\"dialog\" aria-hidden=\"true\">
-			<form class=\"modal-dialog modal-lg modal-dialog-centered\" action=\"".route('sample.analyze.lab.result.upload.file')."\" method=\"POST\" enctype=\"multipart/form-data\" role=\"document\">
+			<form class=\"modal-dialog modal-lg modal-dialog-centered\" action=\"".route('sample.received.return.parcel.post.modal.store')."\" method=\"POST\" role=\"document\">
 				<div class=\"modal-content\">
 					<div class=\"modal-header bg-primary text-white\">
-						<h5 class=\"modal-title\">ส่งผล Lab No: ".$request->lab_no."</h5>
+						<h5 class=\"modal-title\">ส่งผล Lab No: ".(!empty($data[0]['lab_no']) ? $data[0]['lab_no'] : $request->lab)."</h5>
 						<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">
 							<span aria-hidden=\"true\"><i class=\"fal fa-times\"></i></span>
 						</button>
 					</div>
 					<div class=\"modal-body\">
 						<input type=\"hidden\" name=\"_token\" value=\"".csrf_token()."\">
-						<input type=\"hidden\" name=\"lab_no\" value=\"".$request->lab_no."\">
-
+						<input type=\"hidden\" name=\"order_id\" value=\"".(!empty($data[0]['order_id']) ? $data[0]['order_id'] : $request->order)."\">
+						<input type=\"hidden\" name=\"order_sample_id\" value=\"".(!empty($data[0]['order_sample_id']) ? $data[0]['order_sample_id'] : $request->o_sample)."\">
+						<input type=\"hidden\" name=\"order_sample_parameter_id\" value=\"".(!empty($data[0]['order_sample_parameter_id']) ? $data[0]['order_sample_parameter_id'] : $request->os_paramet)."\">
+						<input type=\"hidden\" name=\"lab_no\" value=\"".(!empty($data[0]['lab_no']) ? $data[0]['lab_no'] : $request->lab)."\">
+						<input type=\"hidden\" name=\"user_id\" value=\"".(!empty($data[0]['user_id']) ? $data[0]['user_id'] : $request->user)."\">
 						<div class=\"form-row\">
 							<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3\">
 								<label class=\"form-label\" for=\"parcel_post_no\">เลขพัสดุ</label>
-								<input type=\"text\" name=\"parcel_post_no\" class=\"form-control\" placeholder=\"เลขพัสดุ\">
+								<input type=\"text\" name=\"parcel_post_no\" value=\"".(!empty($data[0]['post_no']) ? $data[0]['post_no'] : '')."\" class=\"form-control\" placeholder=\"เลขพัสดุ\">
 							</div>
 							<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3\">
 								<label class=\"form-label\" for=\"parcel_post_date\">วันที่ส่ง</label>
 								<div class=\"input-group\">
-									<input type=\"text\" name=\"parcel_post_date\" placeholder=\"วันที่\" class=\"form-control input-date\" id=\"datepicker_parcel_post_date\">
+									<input type=\"text\" name=\"parcel_post_date\" value=\"".(!empty($data[0]['post_date']) ? $data[0]['post_date'] : '')."\" placeholder=\"วันที่\" class=\"form-control input-date\" id=\"datepicker_parcel_post_date\">
 									<div class=\"input-group-append\">
 										<span class=\"input-group-text fs-xl\">
 											<i class=\"fal fa-calendar-alt\"></i>
@@ -1074,9 +1090,9 @@ class SampleReceiveController extends Controller
 								<label class=\"form-label\" for=\"sent_status\">สถานะการจัดส่ง</label>
 								<select name=\"parcel_post_status\" class=\"form-control\">
 									<option value=\"\">-- โปรดเลือก --</option>
-									<option value=\"preparing\">เตรียมจัดส่ง</option>
-									<option value=\"in_transit\">กำลังเดินทาง</option>
-									<option value=\"arrived\">ถึงผู้รับ</option>
+									<option value=\"preparing\"".(!empty($data[0]['post_status']) && $data[0]['post_status'] == 'preparing' ? ' selected' : '').">เตรียมจัดส่ง</option>
+									<option value=\"in_transit\"".(!empty($data[0]['post_status']) && $data[0]['post_status'] == 'in_transit' ? ' selected' : '').">กำลังเดินทาง</option>
+									<option value=\"received\"".(!empty($data[0]['post_status']) && $data[0]['post_status'] == 'received' ? ' selected' : '').">ถึงผู้รับ</option>
 								</select>
 							</div>
 						</div>
@@ -1100,8 +1116,35 @@ class SampleReceiveController extends Controller
 					autoclose: true,
 				});
 			}
-	        runDatePicker();
+			runDatePicker();
 		</script>";
+	}
+
+
+	protected function storeParcelPostModal(Request $request) {
+		try {
+			$chkParametCompletedStatus = OrderSampleParameter::whereId($request->order_sample_parameter_id)->whereStatus('completed')->count();
+			if ($chkParametCompletedStatus == 1) {
+				$parcel = Parcel::updateOrCreate(
+					['order_sample_parameter_id' => $request->order_sample_parameter_id],
+					[
+						'order_id' => $request->order_id,
+						'order_sample_id' => $request->order_sample_id,
+						'lab_no' => $request->lab_no,
+						'user_id' => $request->user_id,
+						'post_no' => $request->parcel_post_no,
+						'post_date' => $request->parcel_post_date,
+						'post_status' => $request->parcel_post_status
+					]
+				);
+				return redirect()->back()->with('success', 'บันทึกข้อมูลสำเร็จ');
+			} else {
+				return redirect()->back()->with('warning', 'ข้อมูลรหัสนี้ ยังมีสถานะการวิเคราะห์ไม่เสร็จสิ้น');
+			}
+		} catch (\Exception $e) {
+			Log::error($e->getMessage());
+			return redirect()->back()->with('error', 'Parcel:: '.$e->getMessage());
+		}
 	}
 
 	protected function createReturn(): object {
@@ -1111,10 +1154,18 @@ class SampleReceiveController extends Controller
 	protected function createReturnAjax(Request $request) {
 		try {
 			if (!empty($request->lab_no)) {
-				$order = Order::select('id', 'lab_no', 'order_status', 'report_due_date')->whereLab_no(trim($request->lab_no))->whereOrder_status('completed')->get();
+				$order = Order::select(
+					'id',
+					'lab_no',
+					'order_status',
+					'report_due_date'
+				)
+				->whereLab_no(trim($request->lab_no))
+				->whereIn('order_status', ['pending', 'received', 'analyzing', 'analyzing', 'destroy'])
+				->get();
 				if (count($order) > 0) {
 					$order_sample = OrderSample::whereOrder_id($order[0]->id)->with('parameters', function($query) {
-						$query->whereIn('status', ['pending', 'requisition', 'print']);
+						$query->whereIn('status', ['completed']);
 					})->whereSample_received_status('y')->get();
 					$result = [
 						'order' => []
@@ -1161,38 +1212,6 @@ class SampleReceiveController extends Controller
 											$htm .= "<td>".$value['lab_no']."</td>";
 											$htm .= "<td>".$value['main_analys_name']."</td>";
 											$htm .= "<td>".$value['report_due_date']."</td>";
-											match ($value['order_status']) {
-												"pending" => $htm .= "
-													<td>
-														<div class=\"progress\">
-															<div class=\"progress-bar bg-danger\" role=\"progressbar\" style=\"width: 25%;\" aria-valuenow=\"25\" aria-valuemin=\"0\" aria-valuemax=\"100\">25%</div>
-														</div>
-													</td>
-													<td class=\"text-center\">
-													<button type=\"button\" class=\"btn btn-secondary btn-sm\" style=\"width:86px;\" disabled>พิมพ์</button>
-													<button type=\"button\" class=\"btn btn-secondary btn-sm\" style=\"width:86px;\" disabled>ส่งผล</button>
-												</td>",
-												"preparing" => $htm .= "
-													<td>
-														<div class=\"progress progress-md\">
-															<div class=\"progress-bar bg-danger\" role=\"progressbar\" style=\"width: 50%;\" aria-valuenow=\"50\" aria-valuemin=\"0\" aria-valuemax=\"100\">50%</div>
-														</div>
-													</td>
-													<td class=\"text-center\">
-														<button type=\"button\" class=\"btn btn-secondary btn-sm\" style=\"width:86px;\" disabled>พิมพ์</button>
-														<button type=\"button\" class=\"btn btn-secondary btn-sm\" style=\"width:86px;\" disabled>ส่งผล</button>
-													</td>",
-												"completed" => $htm .= "
-													<td>
-														<div class=\"progress progress-md\">
-															<div class=\"progress-bar bg-success\" role=\"progressbar\" style=\"width: 100%;\" aria-valuenow=\"100\" aria-valuemin=\"0\" aria-valuemax=\"100\">100%</div>
-														</div>
-													</td>
-													<td class=\"text-center\">
-														<a href=\"".route('sample.received.report.print', ['lab_no' => $value['lab_no'], 'analys_user' => $value['main_analys_user_id']])."\" type=\"button\" class=\"btn btn-success btn-sm\" style=\"width:86px;\">พิมพ์</a>
-														<button type=\"button\" class=\"btn btn-success btn-sm\" style=\"width:86px;\">ส่งผล</button>
-												</td>"
-											};
 
 										$htm .= "</tr>";
 									} else {
