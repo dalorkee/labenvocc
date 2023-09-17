@@ -57,8 +57,8 @@
                 }
             },
             items: {
-                // "edit": {name: "แก้ไข", icon: "fal fa-edit"},
-                // "sep1":"--------",
+                "edit": {name: "แก้ไข", icon: "fal fa-edit"},
+                "sep1":"--------",
                 "allow": {name: "เปิดใช้งาน", icon: "fal fa-lock-open-alt"},
                 "deny": {name: "ปิดใช้งาน", icon: "fal fa-lock-alt"},
             }

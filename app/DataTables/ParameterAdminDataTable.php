@@ -12,7 +12,7 @@ class ParameterAdminDataTable extends DataTable
 	public function dataTable($query): object {
 		return datatables()
 			->eloquent($query)
-			->editColumn('deleted_at',function($delchk){
+			->editColumn('status',function($delchk){
 				if($delchk->deleted_at != null){
 					return '<span class="badge badge-warning">ปิด</span>';
 				}
@@ -21,7 +21,7 @@ class ParameterAdminDataTable extends DataTable
 				}
 			})
 			->addColumn('action', '<button type="button" class="parameter-manage-nav btn btn-sm btn-info" data-id="{{$id}}">จัดการ<i class="fal fa-angle-down"></i> </button>')
-			->rawColumns(['deleted_at','action']);
+			->rawColumns(['status','action']);
 	}
 
 	public function query(Parameter $parameter) {
@@ -51,6 +51,7 @@ class ParameterAdminDataTable extends DataTable
 			Column::make('sample_type_name')->title('ประเภทใบคำขอ'),
 			Column::make('threat_type_name')->title('ประเภทมลพิษ'),
 			Column::make('office_name')->title('หน่วยงาน'),
+			Column::make('status')->title('สถานะ'),
 			Column::make('action')->title('จัดการ'),
 		];
 	}

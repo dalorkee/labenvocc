@@ -210,9 +210,15 @@ class ParametController extends Controller
 
     public function deny(Request $request)
     {
-        $parameters = Parameter::find($request->id)->delete();
+        $parameters = Parameter::find($request->id);
+        if(!is_null($parameters)){
+            $parameters->delete();
+        }
+        else{
+            return redirect()->route('paramet.index')->with('success', 'update successfully');
+        }
         if($parameters == true){
-            return redirect()->route('paramet.index')->with('success', 'deny successfully');
+            return redirect()->route('paramet.index')->with('success', 'update successfully');
         }
         else{
             return redirect()->route('paramet.index')->with('error', 'unsuccessfully');
