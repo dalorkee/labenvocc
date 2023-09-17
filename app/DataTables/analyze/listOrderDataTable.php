@@ -121,9 +121,7 @@ class listOrderDataTable extends DataTable
 				->columns($this->getColumns())
 				->minifiedAjax()
 				->responsive(true)
-				->parameters([
-					'language' => ['url' => url('/vendor/DataTables/i18n/thai.json')],
-				]);
+				->parameters(['language' => ['url' => url('/vendor/DataTables/i18n/thai.json')],]);
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
 		}

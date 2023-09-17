@@ -6,7 +6,6 @@ use Illuminate\Support\{Str,Arr};
 use Illuminate\Support\Facades\{Auth,Storage,File,Log};
 use App\DataTables\qc\{listOrderDataTable};
 use App\Models\{Order,OrderSample,OrderSampleParameter,FileUpload};
-use Exception;
 use Yajra\DataTables\Facades\DataTables;
 
 class SampleQcController extends Controller

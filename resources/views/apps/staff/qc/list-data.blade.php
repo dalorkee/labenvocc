@@ -3,7 +3,6 @@
 @section('style')
 <link type="text/css" rel="stylesheet" href="{{ URL::asset('css/pj-step.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/css/datagrid/datatables/datatables.bundle.css') }}">
-{{-- <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/css/notifications/sweetalert2/sweetalert2.bundle.css') }}" media="screen, print"> --}}
 <style type="text/css">
 	.input-date:read-only{background:#fefefe!important}
 	.btn-group {margin:0 0 5px 0;padding:0}
@@ -21,10 +20,10 @@
 	div.dataTables_wrapper span.select-item {margin-left: 0.5em}
 	ol.carousel-indicators li {background:#bb1bf4!important; width:18px; height: 0px;}
 	.modal {text-align: center}
-    table#result_table thead {background-color:#0e629b;color:white}
-    .v-wp {display:flex; flex-direction:row; justify-content:space-between; width:130px; margin:0; padding:0}
-    .v-wp div {width:90px;}
-    .v-wp div+div {width:40px; font-size: .80em}
+	table#result_table thead {background-color:#0e629b;color:white}
+	.v-wp {display:flex; flex-direction:row; justify-content:space-between; width:130px; margin:0; padding:0}
+	.v-wp div {width:90px;}
+	.v-wp div+div {width:40px; font-size: .80em}
 	@media screen and (max-width: 640px) {div.dataTables_wrapper span.select-info,div.dataTables_wrapper span.select-item {margin-left: 0;display: block}}
 	</style>
 @endsection
@@ -186,7 +185,7 @@ function reject(order_id, lab_no) {
 		data: {order_id:order_id, lab_no:lab_no},
 		beforeSend: function() {$(".loader").show()},
 		success: function(responsed) {
-            const msg = JSON.parse(responsed);
+			const msg = JSON.parse(responsed);
 			var swalWithBootstrapButtons = Swal.mixin({
 				customClass:{confirmButton: "btn btn-danger"},
 				buttonsStyling: false

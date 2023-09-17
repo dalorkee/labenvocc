@@ -20,6 +20,7 @@ class Parcel extends Model
 		'order_sample_parameter_id',
 		'lab_no',
 		'user_id',
+		'post_service',
 		'post_no',
 		'post_date',
 		'post_status',
