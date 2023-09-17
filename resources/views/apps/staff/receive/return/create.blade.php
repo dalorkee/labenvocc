@@ -2,8 +2,8 @@
 @section('token')<meta name="csrf-token" content="{{ csrf_token() }}">@endsection
 @section('style')
 <link type="text/css" rel="stylesheet" href="{{ URL::asset('css/pj-step.css') }}">
-<style type="text/css">table#example_table thead {background-color:#2D8AC9;color:white;}</style>
 <style type="text/css">
+table#example_table thead {background-color:#2D8AC9;color:white}
 fieldset {
 	border: 1px solid #93c5fd;
 	padding: 0 20px 20px 20px;

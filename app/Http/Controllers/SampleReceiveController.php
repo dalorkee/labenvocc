@@ -12,7 +12,7 @@ use App\Exceptions\{OrderNotFoundException,InvalidOrderException};
 use App\Models\{User,UserCustomer,Order,OrderSample,OrderSampleParameter,FileUpload,Parameter,Parcel};
 use Yajra\DataTables\Facades\DataTables;
 use Barryvdh\DomPDF\Facade\Pdf;
-use Egulias\EmailValidator\Validation\Exception\EmptyValidationList;
+use App\Enums\PostStatus;
 
 class SampleReceiveController extends Controller
 {
@@ -1167,27 +1167,41 @@ class SampleReceiveController extends Controller
 					$order_sample = OrderSample::whereOrder_id($order[0]->id)->with('parameters', function($query) {
 						$query->whereIn('status', ['completed']);
 					})->whereSample_received_status('y')->get();
-					$result = [
-						'order' => []
-					];
+					$result = ['order' => []];
+
 					$order_sample->each(function($item, $key) use (&$result, $request, $order) {
 						foreach ($item->parameters as $k => $v) {
 							if (array_key_exists($v['main_analys_user_id'], $result['order'])) {
 								continue;
 							} else {
-								$tmp['lab_no'] = $request->lab_no;
-								$tmp['report_due_date'] = $order[0]->report_due_date;
-								$tmp['order_status'] = $order[0]->order_status;
 								$tmp['order_id'] = $v['order_id'];
-								$tmp['order_sample_id'] = $v['order_sample_id'];
 								$tmp['order_sample_parameter_id'] = $v['id'];
+								$tmp['order_sample_id'] = $v['order_sample_id'];
 								$tmp['main_analys_user_id'] = $v['main_analys_user_id'];
 								$tmp['main_analys_name'] = $v['main_analys_name'];
+								$tmp['lab_no'] = $request->lab_no;
+								$tmp['report_due_date'] = $order[0]->report_due_date;
 								$tmp['status'] = $v['status'];
+
+								$parcel = Parcel::whereOrder_sample_parameter_id($v['order_sample_id'])
+									->whereUser_id($v['main_analys_user_id'])
+									->get();
+
+								$tmp['post_date'] = $parcel[0]->post_date;
+								$tmp['post_no'] = $parcel[0]->post_no;
+								$tmp['post_status'] = $parcel[0]->post_status;
+								$tmp['post_status_th'] = match ($parcel[0]->post_status) {
+									'preparing' => PostStatus::preparing->value,
+									'in_transit' => PostStatus::in_transit->value,
+									'received' => PostStatus::received->value,
+									default => PostStatus::unknown->value,
+								};
+
 								$result['order'][$v['main_analys_user_id']] = $tmp;
 							}
 						}
 					});
+
 					$htm = "
 					<div class=\"table-responsive\">
 						<table class=\"table table-striped\" style=\"width: 100%\">
@@ -1195,10 +1209,10 @@ class SampleReceiveController extends Controller
 								<tr class=\"bg-primary text-white\">
 									<th class=\"text-center\">ลำดับ</th>
 									<th>Lab No</th>
-									<th>ผู้วิเคราะห์</th>
-									<th>กำหนดส่งงาน</th>
-									<th>สถานะ</th>
-									<th style=\"width:20%;text-align:center\"></th>
+									<th>กำหนดส่ง</th>
+									<th>วันที่ส่ง</th>
+									<th>เลขพัสดุ</th>
+									<th>สถานะพัสดุ</th>
 								</tr>
 							</thead>
 							<tfoot></tfoot>
@@ -1210,9 +1224,10 @@ class SampleReceiveController extends Controller
 										$htm .= "<tr>";
 											$htm .= "<td class=\"text-center\">".$i."</td>";
 											$htm .= "<td>".$value['lab_no']."</td>";
-											$htm .= "<td>".$value['main_analys_name']."</td>";
 											$htm .= "<td>".$value['report_due_date']."</td>";
-
+											$htm .= "<td>".$value['post_date']."</td>";
+											$htm .= "<td>".$value['post_no']."</td>";
+											$htm .= "<td>".$value['post_status_th']."</td>";
 										$htm .= "</tr>";
 									} else {
 										continue;
