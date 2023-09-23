@@ -723,7 +723,8 @@ class SampleAnalyzeController extends Controller
 		$result = OrderSample::select('id', 'order_id', 'has_parameter', 'sample_test_no', 'weight_sample', 'air_volume')
 			->with(['parameters' => function($query) use ($request) {
 				$query->select('*')->where('main_analys_user_id', $request->view_analyze_user);
-			}])->whereOrder_id($request->view_order_id)
+			}])
+			->whereOrder_id($request->view_order_id)
 			->get();
 
 		$data = [];

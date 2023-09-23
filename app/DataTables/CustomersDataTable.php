@@ -91,7 +91,7 @@ class CustomersDataTable extends DataTable
 	 */
 	public function query(Order $order): object {
 		return $order?->whereUser_id($this->user_id)
-			?->whereIn('order_status', ['pending', 'preparing', 'approved', 'completed'])
+			/* ?->whereIn('order_status', ['pending', 'received', 'analyzing', 'analyzed', 'destroy']) */
 			?->with('parameters')
 			?->orderBy('id', 'ASC');
 	}

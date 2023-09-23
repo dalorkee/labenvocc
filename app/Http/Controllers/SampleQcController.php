@@ -29,7 +29,7 @@ class SampleQcController extends Controller
 		return $dataTable->with('user_id', $this->user->id)->render(view: 'apps.staff.qc.create');
 	}
 
-	protected function listDataByLabNo(Request $request) {
+	protected function listDataByLabNo(Request $request): object {
 		$data = ['order_id' => $request->order_id, 'lab_no' => $request->lab_no];
 		return view(view: 'apps.staff.qc.list-data', data: compact('data'));
 	}
@@ -38,7 +38,7 @@ class SampleQcController extends Controller
 		try {
 			if ($request->ajax()) {
 				$data = [];
-				$orders = Order::with('orderSamples', 'parameters')->whereLab_no($request->lab_no)->get();
+				$orders = Order::with(relations: ['orderSamples', 'parameters'])->whereLab_no($request->lab_no)->get();
 				$orders->each(function($order, $order_key) use ($request, &$data) {
 					if ($order->orderSamples->count() > 0) {
 						foreach ($order->orderSamples as $key => $value) {
@@ -54,9 +54,7 @@ class SampleQcController extends Controller
 				});
 				return Datatables::of($data)
 					->addIndexColumn()
-					->addColumn('sample_test_no', function($item) {
-						return $item['sample_test_no'];
-					})
+					->addColumn('sample_test_no', fn ($item) => $item['sample_test_no'])
 					->addColumn('paramet', function($item) {
 						$htm = "<ul>\n";
 						foreach ($item['parameters'] as $key => $value) {
@@ -73,28 +71,28 @@ class SampleQcController extends Controller
 					->rawColumns(['paramet', 'btn'])
 					->make(true);
 			} else {
-				return redirect()->back()->with('error', 'ไม่พบข้อมูลที่เรียก');
+				return redirect()->back()->with(key: 'error', value: 'ไม่พบข้อมูลที่เรียก');
 			}
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
-			return redirect()->back()->with('error', $e->getMessage());
+			return redirect()->back()->with(key: 'error', value: $e->getMessage());
 		}
 	}
 
 	public function showResultModal(Request $request) {
 		try {
 			$result = OrderSample::select('id', 'order_id', 'has_parameter', 'sample_test_no', 'weight_sample', 'air_volume')
-				->whereOrder_id($request->order_id)
 				->whereSample_test_no($request->test_no)
 				->with('parameters')
+				->whereOrder_id($request->order_id)
 				->get();
 
-				$data = [];
-				$result->each(function($item, $key) use (&$data) {
-					if (count($item->parameters) > 0) {
-						array_push($data, $item->toArray());
-					}
-				});
+			$data = [];
+			$result->each(function($item, $key) use (&$data) {
+				if (count($item->parameters) > 0) {
+					array_push($data, $item->toArray());
+				}
+			});
 				$htm = "
 				<div class=\"modal fade modal-fullscreen font-prompt\" id=\"view-modal-lg-center\" data-keyboard=\"false\" data-backdrop=\"static\" tabindex=\"-1\" role=\"dialog\" aria-hidden=\"true\">
 					<form class=\"modal-dialog modal-dialog-centered\" action=\"#\" method=\"POST\" enctype=\"multipart/form-data\" role=\"document\">
@@ -122,9 +120,9 @@ class SampleQcController extends Controller
 													<th colspan=\"3\" style=\"vertical-align:middle;text-align:center;\">ผลการทดสอบ</th>
 												</tr>
 												<tr>
-													<th style=\"vertical-align:middle;text-align:center;\">หน่วยรายงานผล</th>
-													<th style=\"vertical-align:middle;text-align:center;\">หน่วยทางเลือก 1</th>
-													<th style=\"vertical-align:middle;text-align:center;\">หน่วยทางเลือก 2</th>
+													<th style=\"vertical-align:middle;text-align:center;\">".($data[0]['parameters'][0]['unit_customer_name'] ?? '')."</th>
+													<th style=\"vertical-align:middle;text-align:center;\">".($data[0]['parameters'][0]['unit_choice1_name'] ?? '')."</th>
+													<th style=\"vertical-align:middle;text-align:center;\">".($data[0]['parameters'][0]['unit_choice2_name'] ?? '')."</th>
 												</tr>
 											</thead>
 											<tbody>";
@@ -135,14 +133,14 @@ class SampleQcController extends Controller
 													<tr>
 														<td><div style=\"width:40px\">".$i."</div></td>
 														<td><div style=\"width:120px\">".$value['sample_test_no']."</td>
-														<td><div style=\"width:300px\">".preg_replace("/\r|\n/", "", $v['parameter_name'])."</div></td>
+														<td><div style=\"width:300px;text-align:left;\">".preg_replace("/\r|\n/", "", $v['parameter_name'])."</div></td>
 														<td><div style=\"width:100px\">".$v['lab_result_blank']."</div></td>
 														<td><div style=\"width:100px\">".$v['lab_result_amount']."</div></td>
 														<td><div style=\"width:130px\">".$value['air_volume']."</div></td>
 														<td><div style=\"width:130px\">".$value['weight_sample']."</div></td>
-														<td><div class=\"v-wp\"><div>".$v['unit_customer_value']."</div><div>".$v['unit_customer_name']."</div></div></td>
-														<td><div class=\"v-wp\"><div>".$v['unit_choice1_value']."</div><div>".$v['unit_choice1_name']."</div></div></td>
-														<td><div class=\"v-wp\"><div>".$v['unit_choice2_value']."</div><div>".$v['unit_choice2_name']."</div></div></td>
+														<td><div style=\"width:40px\">".$v['unit_customer_value']."</div></td>
+														<td><div style=\"width:40px\">".$v['unit_choice1_value']."</div></td>
+														<td><div style=\"width:40px\">".$v['unit_choice2_value']."</div></td>
 													</tr>";
 													$i++;
 												}
@@ -167,11 +165,15 @@ class SampleQcController extends Controller
 	protected function showCurveAndQcResultModal(Request $request) {
 		try {
 
-			$order_id = Arr::wrap(null);
-			$file_id = Arr::wrap(null);
-			$data = Arr::wrap(null);
+			$order_id = [];
+			$file_id = [];
+			$data = [];
 
-			$orders = Order::select('id', 'analyze_result_files')?->whereId($request->order_id)?->whereLab_no($request->lab_no)->get();
+			$orders = Order::select('id', 'analyze_result_files')
+				->whereId($request->order_id)
+				->whereLab_no($request->lab_no)
+				->get();
+
 			$orders->each(function($item, $key) use (&$order_id, &$file_id) {
 				array_push($order_id, $item['id']);
 				if (!is_null($item['analyze_result_files']) && !empty($item['analyze_result_files'])) {
@@ -202,7 +204,6 @@ class SampleQcController extends Controller
 				$tmp['files'] = FileUpload::find($tmp['file_id'])->toArray();
 				array_push($data, $tmp);
 			});
-
 			$htm = "
 			<div class=\"modal image-modal fade font-prompt\" id=\"view-curve-modal\" data-keyboard=\"false\" data-backdrop=\"static\" tabindex=\"-1\" role=\"dialog\" aria-hidden=\"true\">
 				<div class=\"modal-dialog modal-lg modal-dialog-centered\" role=\"document\">
@@ -231,10 +232,12 @@ class SampleQcController extends Controller
 													<div class=\"carousel-inner\">";
 													$active = "active";
 													foreach ($data[0]['files'] as $key => $value) {
-														$htm .= "
-														<div class=\"carousel-item ".$active."\">
-															<img class=\"d-block\" src=\"".asset('images/test.png')."\" alt=\"".$value['file_name']."\">
-														</div>";
+														$htm .= "<div class=\"carousel-item ".$active."\">";
+														$htm .= "<h1>".$value['note']."</h1>";
+														$htm .= "<img class=\"d-block\" src=\"";
+														$htm .= asset("labs/".$value['file_name']);
+														$htm .= "\" alt=\"".$value['file_name']."\">";
+														$htm .= "</div>";
 														$active = "";
 													}
 													$htm .= "

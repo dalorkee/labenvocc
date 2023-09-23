@@ -132,7 +132,7 @@ class listOrderDataTable extends DataTable
 			return [
 				Column::make('id')->title('ลำดับ'),
 				Column::make('lab_no')->title('Lab No.'),
-				Column::make('order_receive_status')->title('รับตัวอย่าง'),
+				Column::make('order_received_date')->title('รับตัวอย่าง'),
 				Column::make('report_due_date')->title('กำหนดส่งงาน'),
 				Column::make('progress')->title('สถานะ'),
 				Column::computed('action')->title('#')->width('24%')->addClass('text-center')

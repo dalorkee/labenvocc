@@ -76,8 +76,7 @@
 					<div class="panel-content border-faded border-left-0 border-right-0 border-bottom-0">
 						<div class="relative" style="height: 50px;">
 							<div class="absolute top-0 left-0">
-								<button type="button" class="btn btn-primary"><i class="fal fa-home"></i> กลับไปหน้าหลัก</button>
-								<button type="button" class="btn btn-info" onclick="showAllResultModal('{{ $data['order_id'] }}','{{ $data['lab_no'] }}');"><i class="fal fa-eye"></i> View All</button>
+								<a href="{{ route('sample.qc.create') }}" class="btn btn-primary"><i class="fal fa-home"></i> กลับไปหน้าหลัก</a>
 							</div>
 							<div class="absolute top-0 right-0">
 								{{-- <button type="button" class="btn btn-success" onclick="approved('{{ $data['order_id'] }}','{{ $data['lab_no'] }}');"><i class="fal fa-eye"></i> Approve</button> --}}
