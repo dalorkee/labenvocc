@@ -35,17 +35,20 @@ class Order extends Model
 		'order_confirmed_date',
 		'report_due_date',
 		'order_status',
+		'order_reviewer_name',
+		'order_reviewer_date',
 		'order_receive_status',
 		'order_received_date',
 		'order_receiver_name',
+		'order_payment_status',
 		'order_payment_date',
-		'order_analyz_date',
-		'order_approve_status',
-		'order_approve_date',
+		'order_analyze_date',
+		'tm_verify_status',
+		'tm_verify_date',
+		'qm_verify_status',
+		'qm_verify_date',
 		'order_destroy_status',
 		'order_destroy_date',
-		'review_order_date',
-		'review_order_name',
 		'lab_no',
 		'report_result_receive_method',
 		'sample_verify_desc',
@@ -86,6 +89,13 @@ class Order extends Model
 		);
 	}
 
+	protected function orderReviewerDate(): Attribute {
+		return new Attribute(
+			get: fn ($value) => $this->convertMySQLDateToJs(date: $value),
+			set: fn ($value) => $this->convertJsDateToMySQL(date: $value),
+		);
+	}
+
 	protected function orderReceivedDate(): Attribute {
 		return new Attribute(
 			get: fn ($value) => $this->convertMySQLDateToJs(date: $value),
@@ -107,7 +117,14 @@ class Order extends Model
 		);
 	}
 
-	protected function orderApproveDate(): Attribute {
+	protected function tmVerifyDate(): Attribute {
+		return new Attribute(
+			get: fn ($value) => $this->convertMySQLDateTimeToJs(date: $value),
+			set: fn ($value) => $this->convertJsDateTimeToMySQL(date: $value),
+		);
+	}
+
+	protected function qmVerifyDate(): Attribute {
 		return new Attribute(
 			get: fn ($value) => $this->convertMySQLDateTimeToJs(date: $value),
 			set: fn ($value) => $this->convertJsDateTimeToMySQL(date: $value),
@@ -115,13 +132,6 @@ class Order extends Model
 	}
 
 	protected function orderDestroyDate(): Attribute {
-		return new Attribute(
-			get: fn ($value) => $this->convertMySQLDateToJs(date: $value),
-			set: fn ($value) => $this->convertJsDateToMySQL(date: $value),
-		);
-	}
-
-	protected function reviewOrderDate(): Attribute {
 		return new Attribute(
 			get: fn ($value) => $this->convertMySQLDateToJs(date: $value),
 			set: fn ($value) => $this->convertJsDateToMySQL(date: $value),

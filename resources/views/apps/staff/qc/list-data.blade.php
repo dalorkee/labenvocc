@@ -79,9 +79,13 @@
 								<a href="{{ route('sample.qc.create') }}" class="btn btn-primary"><i class="fal fa-home"></i> กลับไปหน้าหลัก</a>
 							</div>
 							<div class="absolute top-0 right-0">
-								{{-- <button type="button" class="btn btn-success" onclick="approved('{{ $data['order_id'] }}','{{ $data['lab_no'] }}');"><i class="fal fa-eye"></i> Approve</button> --}}
-								<button type="submit" class="btn btn-success"><i class="fal fa-eye"></i> Approve</button>
-								<button type="button" class="btn btn-danger" onclick="reject('{{ $data['order_id'] }}','{{ $data['lab_no'] }}');"><i class="fal fa-minus-circle"></i> Reject</button>
+								@if ($data['tm_verify'] == 'pending')
+									<button type="submit" class="btn btn-success"><i class="fal fa-eye"></i> Approve</button>
+									<button type="button" class="btn btn-danger" onclick="reject('{{ $data['order_id'] }}','{{ $data['lab_no'] }}');"><i class="fal fa-minus-circle"></i> Reject</button>
+								@else
+									<button type="button" class="btn btn-secondary"><i class="fal fa-eye"></i> Approve</button>
+									<button type="button" class="btn btn-secondary"><i class="fal fa-minus-circle"></i> Reject</button>
+								@endif
 							</div>
 						</div>
 					</div>
@@ -101,13 +105,13 @@
 <script type="text/javascript" src="{{ URL::asset('assets/js/datagrid/datatables/datatables.bundle.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/buttons.server-side.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/holder.js') }}"></script>
-{{-- <script type="text/javascript" src="{{ URL::asset('assets/js/notifications/sweetalert2/sweetalert2.bundle.js') }}"></script> --}}
 <script type="text/javascript">
 $(document).ready(function() {
 	$.ajaxSetup({headers:{'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')}});
-	let route = "{{ route('sample.qc.list.data.dt', ['order_id'=>':order_id', 'lab_no'=>':lab_no']) }}";
+	let route = "{{ route('sample.qc.list.data.dt', ['order_id'=>':order_id', 'lab_no'=>':lab_no', 'tm_verify'=>':tm_verify']) }}";
 	route = route.replace(":order_id", "{{ $data['order_id'] }}");
 	route = route.replace(":lab_no", "{{ $data['lab_no'] }}");
+	route = route.replace(":tm_verify", "{{ $data['tm_verify'] }}");
 	var table = $('#tbl_data').DataTable({
 		processing: true,
 		serverSide: true,

@@ -30,7 +30,7 @@ class SampleQcController extends Controller
 	}
 
 	protected function listDataByLabNo(Request $request): object {
-		$data = ['order_id' => $request->order_id, 'lab_no' => $request->lab_no];
+		$data = ['order_id' => $request->order_id, 'lab_no' => $request->lab_no, 'tm_verify' => $request->tm_verify];
 		return view(view: 'apps.staff.qc.list-data', data: compact('data'));
 	}
 
@@ -93,70 +93,71 @@ class SampleQcController extends Controller
 					array_push($data, $item->toArray());
 				}
 			});
-				$htm = "
-				<div class=\"modal fade modal-fullscreen font-prompt\" id=\"view-modal-lg-center\" data-keyboard=\"false\" data-backdrop=\"static\" tabindex=\"-1\" role=\"dialog\" aria-hidden=\"true\">
-					<form class=\"modal-dialog modal-dialog-centered\" action=\"#\" method=\"POST\" enctype=\"multipart/form-data\" role=\"document\">
-						<div class=\"modal-content\">
-							<div class=\"modal-header bg-info text-white\">
-								<h5 class=\"modal-title\">บันทึกการทวนสอบผลการวิเคราะห์ Lab No: ".$request->view_lab_no."</h5>
-								<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">
-									<span aria-hidden=\"true\"><i class=\"fal fa-times\"></i></span>
-								</button>
-							</div>
-							<div class=\"modal-body\">
-							<div class=\"row\">
-								<div class=\"col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3\">
-									<div class=\"table-responsive\">
-										<table id=\"result_table\" class=\"table table-bordered table-striped responsive\">
-											<thead class=\"m-0\" style=\"background: #b0d7f1; color: #1b6394\">
+
+			$htm = "
+			<div class=\"modal fade modal-fullscreen font-prompt\" id=\"view-modal-lg-center\" data-keyboard=\"false\" data-backdrop=\"static\" tabindex=\"-1\" role=\"dialog\" aria-hidden=\"true\">
+				<form class=\"modal-dialog modal-dialog-centered\" action=\"#\" method=\"POST\" enctype=\"multipart/form-data\" role=\"document\">
+					<div class=\"modal-content\">
+						<div class=\"modal-header bg-info text-white\">
+							<h5 class=\"modal-title\">บันทึกการทวนสอบผลการวิเคราะห์ Lab No: ".$request->view_lab_no."</h5>
+							<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">
+								<span aria-hidden=\"true\"><i class=\"fal fa-times\"></i></span>
+							</button>
+						</div>
+						<div class=\"modal-body\">
+						<div class=\"row\">
+							<div class=\"col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3\">
+								<div class=\"table-responsive\">
+									<table id=\"result_table\" class=\"table table-bordered table-striped responsive\">
+										<thead class=\"m-0\" style=\"background: #b0d7f1; color: #1b6394\">
+											<tr>
+												<th rowspan=\"2\" style=\"vertical-align:middle;text-align:center;\">ลำดับ</th>
+												<th rowspan=\"2\" style=\"vertical-align:middle;text-align:center;\">หมายเลขทดสอบ</th>
+												<th rowspan=\"2\" style=\"vertical-align:middle;text-align:center;\">พารามิเตอร์</th>
+												<th rowspan=\"2\" style=\"vertical-align:middle;text-align:center;\">Blank</th>
+												<th rowspan=\"2\" style=\"vertical-align:middle;text-align:center;\">Amount</th>
+												<th rowspan=\"2\" style=\"vertical-align:middle;text-align:center;\">ปริมาตรอากาศ (l.)</th>
+												<th rowspan=\"2\" style=\"vertical-align:middle;text-align:center;\">น้ำหนักดิน(g.)</th>
+												<th colspan=\"3\" style=\"vertical-align:middle;text-align:center;\">ผลการทดสอบ</th>
+											</tr>
+											<tr>
+												<th style=\"vertical-align:middle;text-align:center;\">".($data[0]['parameters'][0]['unit_customer_name'] ?? '')."</th>
+												<th style=\"vertical-align:middle;text-align:center;\">".($data[0]['parameters'][0]['unit_choice1_name'] ?? '')."</th>
+												<th style=\"vertical-align:middle;text-align:center;\">".($data[0]['parameters'][0]['unit_choice2_name'] ?? '')."</th>
+											</tr>
+										</thead>
+										<tbody>";
+										foreach ($data as $key => $value) {
+											$i = 1;
+											foreach ($value['parameters'] as $k => $v) {
+												$htm .= "
 												<tr>
-													<th rowspan=\"2\" style=\"vertical-align:middle;text-align:center;\">ลำดับ</th>
-													<th rowspan=\"2\" style=\"vertical-align:middle;text-align:center;\">หมายเลขทดสอบ</th>
-													<th rowspan=\"2\" style=\"vertical-align:middle;text-align:center;\">พารามิเตอร์</th>
-													<th rowspan=\"2\" style=\"vertical-align:middle;text-align:center;\">Blank</th>
-													<th rowspan=\"2\" style=\"vertical-align:middle;text-align:center;\">Amount</th>
-													<th rowspan=\"2\" style=\"vertical-align:middle;text-align:center;\">ปริมาตรอากาศ (l.)</th>
-													<th rowspan=\"2\" style=\"vertical-align:middle;text-align:center;\">น้ำหนักดิน(g.)</th>
-													<th colspan=\"3\" style=\"vertical-align:middle;text-align:center;\">ผลการทดสอบ</th>
-												</tr>
-												<tr>
-													<th style=\"vertical-align:middle;text-align:center;\">".($data[0]['parameters'][0]['unit_customer_name'] ?? '')."</th>
-													<th style=\"vertical-align:middle;text-align:center;\">".($data[0]['parameters'][0]['unit_choice1_name'] ?? '')."</th>
-													<th style=\"vertical-align:middle;text-align:center;\">".($data[0]['parameters'][0]['unit_choice2_name'] ?? '')."</th>
-												</tr>
-											</thead>
-											<tbody>";
-											foreach ($data as $key => $value) {
-												$i = 1;
-												foreach ($value['parameters'] as $k => $v) {
-													$htm .= "
-													<tr>
-														<td><div style=\"width:40px\">".$i."</div></td>
-														<td><div style=\"width:120px\">".$value['sample_test_no']."</td>
-														<td><div style=\"width:300px;text-align:left;\">".preg_replace("/\r|\n/", "", $v['parameter_name'])."</div></td>
-														<td><div style=\"width:100px\">".$v['lab_result_blank']."</div></td>
-														<td><div style=\"width:100px\">".$v['lab_result_amount']."</div></td>
-														<td><div style=\"width:130px\">".$value['air_volume']."</div></td>
-														<td><div style=\"width:130px\">".$value['weight_sample']."</div></td>
-														<td><div style=\"width:40px\">".$v['unit_customer_value']."</div></td>
-														<td><div style=\"width:40px\">".$v['unit_choice1_value']."</div></td>
-														<td><div style=\"width:40px\">".$v['unit_choice2_value']."</div></td>
-													</tr>";
-													$i++;
-												}
+													<td><div style=\"width:40px\">".$i."</div></td>
+													<td><div style=\"width:120px\">".$value['sample_test_no']."</td>
+													<td><div style=\"width:300px;text-align:left;\">".preg_replace("/\r|\n/", "", $v['parameter_name'])."</div></td>
+													<td><div style=\"width:100px\">".$v['lab_result_blank']."</div></td>
+													<td><div style=\"width:100px\">".$v['lab_result_amount']."</div></td>
+													<td><div style=\"width:130px\">".$value['air_volume']."</div></td>
+													<td><div style=\"width:130px\">".$value['weight_sample']."</div></td>
+													<td><div style=\"width:40px\">".$v['unit_customer_value']."</div></td>
+													<td><div style=\"width:40px\">".$v['unit_choice1_value']."</div></td>
+													<td><div style=\"width:40px\">".$v['unit_choice2_value']."</div></td>
+												</tr>";
+												$i++;
 											}
-											$htm .= "</tbody>
-										</table>
-									</div>
+										}
+										$htm .= "</tbody>
+									</table>
 								</div>
 							</div>
-							<div class=\"modal-footer\">
-								<button type=\"button\" class=\"btn btn-info\" data-dismiss=\"modal\" style=\"width: 120px\">Close</button>
-							</div>
 						</div>
-					</form>
-				</div>";
-				return $htm;
+						<div class=\"modal-footer\">
+							<button type=\"button\" class=\"btn btn-info\" data-dismiss=\"modal\" style=\"width: 120px\">Close</button>
+						</div>
+					</div>
+				</form>
+			</div>";
+			return $htm;
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
 		}
@@ -164,15 +165,14 @@ class SampleQcController extends Controller
 
 	protected function showCurveAndQcResultModal(Request $request) {
 		try {
-
 			$order_id = [];
 			$file_id = [];
 			$data = [];
 
 			$orders = Order::select('id', 'analyze_result_files')
-				->whereId($request->order_id)
-				->whereLab_no($request->lab_no)
-				->get();
+				?->whereId($request->order_id)
+				?->whereLab_no($request->lab_no)
+				?->get();
 
 			$orders->each(function($item, $key) use (&$order_id, &$file_id) {
 				array_push($order_id, $item['id']);
@@ -195,15 +195,20 @@ class SampleQcController extends Controller
 				$tmp['order_id'] = $item->order_id;
 				$tmp['sample_test_no'] = $item->sample_test_no;
 				$tmp['file_id'] = $file_id;
-				$lab_result_files_coll = $item->parameters?->where('order_sample_id', $item->id)?->pluck('lab_result_files');
+				$lab_result_files_coll = $item->parameters
+					?->where('order_sample_id', $item->id)
+					?->pluck('lab_result_files');
+
 				foreach($lab_result_files_coll as $key => $value) {
 					if (!is_null($value) && !empty($value)) {
 						array_push($tmp['file_id'], $value);
 					}
 				}
+
 				$tmp['files'] = FileUpload::find($tmp['file_id'])->toArray();
 				array_push($data, $tmp);
 			});
+
 			$htm = "
 			<div class=\"modal image-modal fade font-prompt\" id=\"view-curve-modal\" data-keyboard=\"false\" data-backdrop=\"static\" tabindex=\"-1\" role=\"dialog\" aria-hidden=\"true\">
 				<div class=\"modal-dialog modal-lg modal-dialog-centered\" role=\"document\">
@@ -219,7 +224,11 @@ class SampleQcController extends Controller
 								<div class=\"col-xl-12 mb-3\">
 									<div class=\"panel\">
 										<div class=\"panel-container show\">
-											<div class=\"panel-content\">
+											<div class=\"panel-content\">";
+											if (count($data[0]['file_id']) <= 0) {
+												$htm .= "<span class=\"badge badge-lg badge-danger\">ไม่พบข้อมูล</span>";
+											} else {
+												$htm .= "
 												<div id=\"carouselExampleCaptions\" class=\"carousel slide\" data-ride=\"carousel\">
 													<ol class=\"carousel-indicators\">";
 													$active = "active";
@@ -250,7 +259,9 @@ class SampleQcController extends Controller
 														<span class=\"carousel-control-next-icon\" aria-hidden=\"true\"></span>
 														<span class=\"sr-only\">Next</span>
 													</a>
-												</div>
+												</div>";
+											}
+											$htm .= "
 											</div>
 										</div>
 									</div>
@@ -355,20 +366,17 @@ class SampleQcController extends Controller
 		try {
 			$order = Order::findOr($request->order_id, fn () => throw new \Exception('ไม่พบข้อมูล Order ที่เรียก ID: '.$request->order_id));
 			if (($order->count() > 0)) {
-				switch($order->order_status) {
-					case 'pending':
-					case 'preparing':
-						$order->order_status = 'approved';
-						$order->save();
-						return redirect()->back()->with('success', 'บันทึกข้อมูล Order: '.$request->order_id.' สำเร็จ');
-						break;
-					default:
-						return redirect()->back()->with('error', 'Order ID: '.$request->order_id.' ไม่อยู่ในสถานะที่จะ Approved ได้');
+				if ($order->order_status == 'analyzed' && $order->tm_verify_status = 'pending') {
+					$order->tm_verify_status = 'approve';
+					$order->save();
+					return redirect()->back()->with(key: 'success', value: 'Approved Lab No: '.$request->lab_no.' สำเร็จ');
+				} else {
+					return redirect()->back()->with(key: 'error', value: 'Lab No: '.$request->lab_no.' ไม่อยู่ในสถานะที่จะ Approved ได้ โปรดตรวจสอบความครบถ้วนของข้อมูล');
 				};
 			}
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
-			return redirect()->back()->with('error', $e->getMessage());
+			return redirect()->back()->with(key: 'error', value: $e->getMessage());
 		}
 	}
 
@@ -376,15 +384,12 @@ class SampleQcController extends Controller
 		try {
 			$order = Order::findOr($request->order_id, fn () => throw new \Exception('ไม่พบข้อมูล Order ที่เรียก ID: '.$request->order_id));
 			if (($order->count() > 0)) {
-				switch($order->order_status) {
-					case 'pending':
-					case 'preparing':
-						$order->order_status = 'reject';
-						$order->save();
-						$msg = json_encode(['type' => 'success', 'title' => 'Success', 'text' => 'Reject Order: '.$request->order_id.' สำเร็จ']);
-						break;
-					default:
-						$msg = json_encode(['type' => 'error', 'title' => 'Error!', 'text' => 'Order ID: '.$request->order_id.' ไม่อยู่ในสถานะที่จะ Reject ได้']);
+				if ($order->order_status == 'analyzed' &&  $order->tm_verify_status = 'pending') {
+					$order->order_status = 'reject';
+					$order->save();
+					$msg = json_encode(['type' => 'success', 'title' => 'Success', 'text' => 'Reject Lab No: '.$request->lab_no.' สำเร็จ']);
+				} else {
+					$msg = json_encode(['type' => 'error', 'title' => 'Error!', 'text' => 'Lab No: '.$request->lab_no.' ไม่อยู่ในสถานะที่จะ Reject ได้']);
 				};
 				return $msg;
 			}
