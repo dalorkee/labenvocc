@@ -29,13 +29,18 @@ class SampleDestroyController extends Controller
 		return $dataTable?->render(view: 'apps.staff.destroy.order-approve');
 	}
 
-	protected function storeApproveOrder(Request $request, Order $order): ?object {
+	protected function storeApproveOrder(Request $request): ?object {
 		try {
-			if (isset($request->lab_no) && count($request->lab_no) > 0) {
-				$order->whereIn('lab_no', $request->lab_no)->update(['order_destroy_status' => 'approved']);
-				return redirect()->back()->with('success', 'บันทึกข้อมูลสำเร็จแล้ว');
+            dd($request->approve_order_id);
+			if (!empty($request->approve_order_id) && count($request->approve_order_id) > 0) {
+				foreach ($request->approve_order_id as $key => $value) {
+					$order = Order::findOr($value, fn () => throw new \Exception('ไม่พบข้อมูลรหัส: '.$value));
+					$order->destroy_status = 'approved';
+					$order->save();
+				}
+				return redirect()->back()->with(key: 'success', value: 'บันทึกข้อมูลสำเร็จแล้ว');
 			} else {
-				return redirect()->back()->with('warning', 'ไม่สามารถบันทึกข้อมูลได้ โปรดตรวจสอบความถูกต้อง');
+				return redirect()->back()->with(key: 'warning', value: 'ไม่สามารถบันทึกข้อมูลได้ โปรดตรวจสอบความถูกต้อง');
 			}
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());

@@ -35,7 +35,7 @@ div.dataTables_wrapper span.select-item {margin-left: 0.5em;}
 	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
 		<div id="panel-1" class="panel">
 			<div class="panel-hdr">
-				<h2><span class="text-blue-500"><i class="fal fa-th-list"></i>&nbsp;ตัวอย่าง</span></h2>
+				<h2><span class="text-primary"><i class="fal fa-th-list"></i>&nbsp;ตัวอย่าง</span></h2>
 				<div class="panel-toolbar">
 					<button class="btn btn-panel bg-transparent fs-xl w-auto h-auto rounded-0" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="Collapse"><i class="fal fa-window-minimize"></i></button>
 					<button class="btn btn-panel bg-transparent fs-xl w-auto h-auto rounded-0" data-action="panel-fullscreen" data-toggle="tooltip" data-offset="0,10" data-original-title="Fullscreen"><i class="fal fa-expand"></i></button>
@@ -44,7 +44,7 @@ div.dataTables_wrapper span.select-item {margin-left: 0.5em;}
 			</div>
 			<div class="panel-container show">
 				<form name="destroy_approve_frm" action="{{ route('sample.destroy.order.approve.store') }}" id="destroy_approve_frm" method="POST">
-					<input type="hidden" name="_token" value="{{ csrf_token() }}" />
+					<input type="hidden" name="_token" value="{{ csrf_token() }}">
 					<div class="panel-content">
 						<ul class="steps">
 							<li class="undone"><a href="{{ route('sample.received.create') }}"><span class="d-none d-sm-inline">รายการคำขอ</span></a></li>
@@ -63,7 +63,7 @@ div.dataTables_wrapper span.select-item {margin-left: 0.5em;}
 					</div>
 					<div class="panel-content border-faded border-left-0 border-right-0 border-bottom-0 text-right">
 						{{-- <a href="#" class="btn btn-primary"><i class="fal fa-home"></i> กลับไปหน้าแรก</a> --}}
-						<button type="button" class="btn btn-info" id="btn_submit"><i class="fal fa-save"></i> บันทึกข้อมูล</button>
+						<button type="button" class="btn btn-success" id="btn_submit"><i class="fal fa-save"></i> บันทึกข้อมูล</button>
 					</div>
 				</form>
 			</div>

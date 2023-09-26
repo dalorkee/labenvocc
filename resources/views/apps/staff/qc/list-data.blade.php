@@ -79,7 +79,7 @@
 								<a href="{{ route('sample.qc.create') }}" class="btn btn-primary"><i class="fal fa-home"></i> กลับไปหน้าหลัก</a>
 							</div>
 							<div class="absolute top-0 right-0">
-								@if ($data['tm_verify'] == 'pending')
+								@if ($data['order_status'] == 'analyzed' && $data['tm_verify'] == 'pending')
 									<button type="submit" class="btn btn-success"><i class="fal fa-eye"></i> Approve</button>
 									<button type="button" class="btn btn-danger" onclick="reject('{{ $data['order_id'] }}','{{ $data['lab_no'] }}');"><i class="fal fa-minus-circle"></i> Reject</button>
 								@else
@@ -108,9 +108,10 @@
 <script type="text/javascript">
 $(document).ready(function() {
 	$.ajaxSetup({headers:{'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')}});
-	let route = "{{ route('sample.qc.list.data.dt', ['order_id'=>':order_id', 'lab_no'=>':lab_no', 'tm_verify'=>':tm_verify']) }}";
+	let route = "{{ route('sample.qc.list.data.dt', ['order_id'=>':order_id', 'lab_no'=>':lab_no', 'order_status'=>':order_status', 'tm_verify'=>':tm_verify']) }}";
 	route = route.replace(":order_id", "{{ $data['order_id'] }}");
 	route = route.replace(":lab_no", "{{ $data['lab_no'] }}");
+	route = route.replace(":order_status", "{{ $data['order_status'] }}");
 	route = route.replace(":tm_verify", "{{ $data['tm_verify'] }}");
 	var table = $('#tbl_data').DataTable({
 		processing: true,
@@ -190,7 +191,7 @@ function reject(order_id, lab_no) {
 		success: function(responsed) {
 			const msg = JSON.parse(responsed);
 			var swalWithBootstrapButtons = Swal.mixin({
-				customClass:{confirmButton: "btn btn-danger"},
+				customClass:{confirmButton: "btn btn-primary"},
 				buttonsStyling: false
 			});
 			swalWithBootstrapButtons.fire({
@@ -199,7 +200,12 @@ function reject(order_id, lab_no) {
 				text: msg.text,
 				confirmButtonText: "ตกลง",
 				allowOutsideClick: false,
+				reverseButtons: true,
 				footer: "<a>Lab-EnvOcc</a>"
+			}).then((result) => {
+				if (result['value'] === true) {
+					window.location.href = "{{ route('sample.qc.create') }}";
+				}
 			});
 		},
 		complete: function() {$('.loader').hide()},

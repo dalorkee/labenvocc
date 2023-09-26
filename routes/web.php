@@ -181,7 +181,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 		});
 		Route::resource('qc', SampleQcController::class);
 		Route::controller(SampleQcController::class)->prefix('qc')->group(function() {
-			Route::get('/list/data/order_id/{order_id}/lab_no/{lab_no}/tm_verify/{tm_verify}', 'listDataByLabNo')->name('qc.list.data');
+			Route::get('/list/data/order_id/{order_id}/lab_no/{lab_no}/order_status/{order_status}/tm_verify/{tm_verify}', 'listDataByLabNo')->name('qc.list.data');
 			Route::get('/list/data/lab_no/{lab_no}/datatable', 'listDataByLabNoToDataTable')->name('qc.list.data.dt');
 			Route::post('modal/show/result', 'showResultModal')->name('qc.result.modal');
 			Route::post('modal/show/result/curve/file', 'showCurveAndQcResultModal')->name('qc.result.modal.curve');

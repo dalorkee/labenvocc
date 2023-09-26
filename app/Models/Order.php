@@ -34,6 +34,7 @@ class Order extends Model
 		'detail',
 		'order_confirmed_date',
 		'report_due_date',
+		'lab_no',
 		'order_status',
 		'order_reviewer_name',
 		'order_reviewer_date',
@@ -47,9 +48,8 @@ class Order extends Model
 		'tm_verify_date',
 		'qm_verify_status',
 		'qm_verify_date',
-		'order_destroy_status',
-		'order_destroy_date',
-		'lab_no',
+		'destroy_status',
+		'destroy_date',
 		'report_result_receive_method',
 		'sample_verify_desc',
 		'receipt_status',
@@ -131,7 +131,7 @@ class Order extends Model
 		);
 	}
 
-	protected function orderDestroyDate(): Attribute {
+	protected function destroyDate(): Attribute {
 		return new Attribute(
 			get: fn ($value) => $this->convertMySQLDateToJs(date: $value),
 			set: fn ($value) => $this->convertJsDateToMySQL(date: $value),

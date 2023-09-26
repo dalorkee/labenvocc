@@ -55,7 +55,13 @@ class listOrderDataTable extends DataTable
 					return $htm;
 				})
 				->addColumn('action', function($order) {
-					return "<a href=\"".route('sample.qc.list.data', ['order_id' => $order->id, 'lab_no' => $order->lab_no, 'tm_verify' => $order->tm_verify_status])."\" class=\"btn btn-success btn-sm\" id=\"qc_btn\">ตรวจสอบผลการทดสอบ</a>";
+					return "<a href=\"".route(
+						'sample.qc.list.data', [
+							'order_id' => $order->id,
+							'lab_no' => $order->lab_no,
+							'order_status' => $order->order_status,
+							'tm_verify' => $order->tm_verify_status
+						])."\" class=\"btn btn-success btn-sm\" id=\"qc_btn\">ตรวจสอบผลการทดสอบ</a>";
 				})
 				->rawColumns(['progress', 'action']);
 		} catch (\Exception $e) {

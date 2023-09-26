@@ -30,7 +30,12 @@ class SampleQcController extends Controller
 	}
 
 	protected function listDataByLabNo(Request $request): object {
-		$data = ['order_id' => $request->order_id, 'lab_no' => $request->lab_no, 'tm_verify' => $request->tm_verify];
+		$data = [
+			'order_id' => $request->order_id,
+			'lab_no' => $request->lab_no,
+			'order_status' => $request->order_status,
+			'tm_verify' => $request->tm_verify
+		];
 		return view(view: 'apps.staff.qc.list-data', data: compact('data'));
 	}
 
@@ -367,7 +372,7 @@ class SampleQcController extends Controller
 			$order = Order::findOr($request->order_id, fn () => throw new \Exception('ไม่พบข้อมูล Order ที่เรียก ID: '.$request->order_id));
 			if (($order->count() > 0)) {
 				if ($order->order_status == 'analyzed' && $order->tm_verify_status = 'pending') {
-					$order->tm_verify_status = 'approve';
+					$order->tm_verify_status = 'approved';
 					$order->save();
 					return redirect()->back()->with(key: 'success', value: 'Approved Lab No: '.$request->lab_no.' สำเร็จ');
 				} else {
@@ -385,7 +390,7 @@ class SampleQcController extends Controller
 			$order = Order::findOr($request->order_id, fn () => throw new \Exception('ไม่พบข้อมูล Order ที่เรียก ID: '.$request->order_id));
 			if (($order->count() > 0)) {
 				if ($order->order_status == 'analyzed' &&  $order->tm_verify_status = 'pending') {
-					$order->order_status = 'reject';
+					$order->tm_verify_status = 'rejected';
 					$order->save();
 					$msg = json_encode(['type' => 'success', 'title' => 'Success', 'text' => 'Reject Lab No: '.$request->lab_no.' สำเร็จ']);
 				} else {
