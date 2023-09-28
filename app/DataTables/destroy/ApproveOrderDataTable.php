@@ -17,15 +17,12 @@ class ApproveOrderDataTable extends DataTable
 			return datatables()
 				->eloquent($query)
 				->addIndexColumn()
-				->addColumn('destroy_status', function($status) {
-					switch ($status->destroy_status) {
+				->addColumn('destroy_status', function($order) {
+					switch ($order->order_status) {
 						case "pending":
-							$htm = "
-							<div class=\"progress progress-lg\">
-								<div class=\"progress-bar bg-info\" role=\"progressbar\" style=\"width:0%;\" aria-valuenow=\"0\" aria-valuemin=\"0\" aria-valuemax=\"100\">0%</div>
-							</div>";
-							break;
-						case "approved":
+						case "received":
+						case "analyzing":
+						case "analyzed":
 							$htm = "
 							<div class=\"progress progress-lg\">
 								<div class=\"progress-bar bg-info\" role=\"progressbar\" style=\"width:60%;\" aria-valuenow=\"60\" aria-valuemin=\"0\" aria-valuemax=\"100\">60%</div>
@@ -34,7 +31,7 @@ class ApproveOrderDataTable extends DataTable
 						case "destroyed":
 							$htm = "
 							<div class=\"progress progress-lg\">
-								<div class=\"progress-bar bg-success\" role=\"progressbar\" style=\"width:100%;\" aria-valuenow=\"100\" aria-valuemin=\"0\" aria-valuemax=\"100\"></div>
+								<div class=\"progress-bar bg-success\" role=\"progressbar\" style=\"width:100%;\" aria-valuenow=\"100\" aria-valuemin=\"0\" aria-valuemax=\"100\">100%</div>
 							</div>";
 							break;
 						default:
@@ -46,29 +43,15 @@ class ApproveOrderDataTable extends DataTable
 					return $htm;
 				})
 				->addColumn('action', function($order) {
-					switch ($order->destroy_status) {
-						case 'pending':
-							$htm = "
-							<div class=\"custom-control custom-checkbox\">
-								<input type=\"checkbox\" name=\"approve_order_id[]\" class=\"custom-control-input\" value=\"".$order->id."\" id=\"approved_status".$order->lab_no."\">
-								<label class=\"custom-control-label\" for=\"approved_status".$order->lab_no."\">&nbsp;</label>
-							</div>";
-							break;
-						case 'approved':
-							$htm = "
-							<div class=\"custom-control custom-checkbox\">
-								<input type=\"checkbox\" name=\"approve_order_id[]\" class=\"custom-control-input\" value=\"".$order->id."\" id=\"approved_status".$order->lab_no."\">
-								<label class=\"custom-control-label\" for=\"approved_status".$order->lab_no."\">&nbsp;</label>
-							</div>";
-							break;
-						case 'destroyed':
-							$htm = "
-							<div class=\"custom-control custom-checkbox\">
-								<input type=\"checkbox\" name=\"destroyed[]\" class=\"custom-control-input\" value=\"".$order->lab_no."\" id=\"destroyed_status".$order->lab_no."\" checked disabled>
-								<label class=\"custom-control-label\" for=\"destroyed_status".$order->lab_no."\">&nbsp;</label>
-							</div>";
-							break;
-					}
+					$checked = match ($order->destroy_approve_status) {
+						'y' => ' checked disabled',
+						default => ''
+					};
+					$htm = "
+					<div class=\"custom-control custom-checkbox\">
+						<input type=\"checkbox\" name=\"approve_order[]\" class=\"custom-control-input\" value=\"".$order->id."\" id=\"status".$order->id."\"".$checked.">
+						<label class=\"custom-control-label\" for=\"status".$order->id."\">&nbsp;</label>
+					</div>";
 					return $htm;
 				})
 				->rawColumns(['destroy_status', 'action']);
@@ -78,9 +61,7 @@ class ApproveOrderDataTable extends DataTable
 	}
 
 	public function query(Order $order) {
-		return $order?->whereNotNull('lab_no')
-			?->whereNotNull('order_received_date')
-			?->where('order_status', '!=', 'destroyed');
+		return $order->whereNotNull('lab_no')->whereNotNull('order_received_date');
 	}
 
 	public function html() {

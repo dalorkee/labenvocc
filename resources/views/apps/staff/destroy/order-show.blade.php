@@ -5,8 +5,8 @@
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/css/datagrid/datatables/datatables.bundle.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('vendor/jquery-contextmenu/css/jquery.contextMenu.min.css') }}">
 {{-- <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/css/notifications/sweetalert2/sweetalert2.bundle.css') }}" media="screen, print"> --}}
-<link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/css/formplugins/bootstrap-datepicker/bootstrap-datepicker.css') }}">
-<link rel="stylesheet" type="text/css" href="{{ URL::asset('vendor/jquery-datatables-checkboxes/dataTables.checkboxes.css') }}">
+{{-- <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/css/formplugins/bootstrap-datepicker/bootstrap-datepicker.css') }}"> --}}
+{{-- <link rel="stylesheet" type="text/css" href="{{ URL::asset('vendor/jquery-datatables-checkboxes/dataTables.checkboxes.css') }}"> --}}
 <style>
 /* * {box-sizing:border-box;-moz-box-sizing:border-box;font-family:"THsarabunNew",sans-serif} */
 .input-date:read-only{background:#fefefe!important}
@@ -16,14 +16,8 @@
 .buttons-create {float:left;margin-left:12px;}
 .buttons-create:after {content:'';clear:both;}
 .dt-btn {margin:0;padding:0;}
-#order-table thead {background-color:#297FB0;color: white;}
-.row-completed {width:180px;padding-right:14px;position:absolute;top:82px;right:10px;text-align:right;}
-table.dataTable.dt-checkboxes-select tbody tr,
-table.dataTable thead .dt-checkboxes-select-all {cursor: pointer;}
-table.dataTable thead .dt-checkboxes-select-all {text-align: center;}
-div.dataTables_wrapper span.select-info,
-div.dataTables_wrapper span.select-item {margin-left: 0.5em;}
-@media screen and (max-width: 640px) {div.dataTables_wrapper span.select-info,div.dataTables_wrapper span.select-item {margin-left: 0;display: block;}}
+#order-table thead {background-color:#297FB0;color: white; width:100%}
+
 </style>
 @endsection
 @section('content')
@@ -55,7 +49,7 @@ div.dataTables_wrapper span.select-item {margin-left: 0.5em;}
 						<h4>รายการตัวอย่าง</h4>
 						<div class="row">
 							<div class="col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mt-4">
-								<div id="order-table">
+								<div id="order-table" class="responsive">
 									{{ $dataTable->table() }}
 								</div>
 							</div>
@@ -75,9 +69,9 @@ div.dataTables_wrapper span.select-item {margin-left: 0.5em;}
 <script type="text/javascript" src="{{ URL::asset('assets/js/datagrid/datatables/datatables.bundle.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/buttons.server-side.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('vendor/jquery-contextmenu/js/jquery.contextMenu.min.js') }}"></script>
-{{-- <script type="text/javascript" src="{{ URL::asset('assets/js/notifications/sweetalert2/sweetalert2.bundle.js') }}"></script> --}}
-<script type="text/javascript" src="{{ URL::asset('assets/js/formplugins/bootstrap-datepicker/bootstrap-datepicker.js') }}"></script>
-<script type="text/javascript" src="{{ URL::asset('vendor/jquery-datatables-checkboxes/dataTables.checkboxes.min.js') }}"></script>
+<script type="text/javascript" src="{{ URL::asset('assets/js/dataTables.fixedColumns.min.js') }}"></script>
+{{-- <script type="text/javascript" src="{{ URL::asset('assets/js/formplugins/bootstrap-datepicker/bootstrap-datepicker.js') }}"></script> --}}
+{{-- <script type="text/javascript" src="{{ URL::asset('vendor/jquery-datatables-checkboxes/dataTables.checkboxes.min.js') }}"></script> --}}
 {{ $dataTable->scripts() }}
 <script type="text/javascript">
 	$(document).ready(function() {

@@ -48,7 +48,7 @@ class Order extends Model
 		'tm_verify_date',
 		'qm_verify_status',
 		'qm_verify_date',
-		'destroy_status',
+		'destroy_approve_status',
 		'destroy_date',
 		'report_result_receive_method',
 		'sample_verify_desc',

@@ -17,24 +17,21 @@ class DestroyOrderDataTable extends DataTable
 			return datatables()
 				->eloquent($query)
 				->addIndexColumn()
-				->addColumn('order_destroy_status', function($status) {
-					switch ($status->order_destroy_status) {
+				->addColumn('destroy_status', function($order) {
+					switch ($order->order_status) {
 						case "pending":
+						case "received":
+						case "analyzing":
+						case "analyzed":
 							$htm = "
 							<div class=\"progress progress-lg\">
-								<div class=\"progress-bar bg-warning\" role=\"progressbar\" style=\"width:60%;color:#444444;\" aria-valuenow=\"60\" aria-valuemin=\"0\" aria-valuemax=\"100\">60%</div>
-							</div>";
-							break;
-						case "approved":
-							$htm = "
-							<div class=\"progress progress-lg\">
-								<div class=\"progress-bar bg-success\" role=\"progressbar\" style=\"width:100%;\" aria-valuenow=\"100\" aria-valuemin=\"0\" aria-valuemax=\"100\">100%</div>
+								<div class=\"progress-bar bg-info\" role=\"progressbar\" style=\"width:60%;\" aria-valuenow=\"60\" aria-valuemin=\"0\" aria-valuemax=\"100\">60%</div>
 							</div>";
 							break;
 						case "destroyed":
 							$htm = "
 							<div class=\"progress progress-lg\">
-								<div class=\"progress-bar bg-danger\" role=\"progressbar\" style=\"width:100%;\" aria-valuenow=\"100\" aria-valuemin=\"0\" aria-valuemax=\"100\">ทำลายแล้ว</div>
+								<div class=\"progress-bar bg-success\" role=\"progressbar\" style=\"width:100%;\" aria-valuenow=\"100\" aria-valuemin=\"0\" aria-valuemax=\"100\">100%</div>
 							</div>";
 							break;
 						default:
@@ -45,58 +42,46 @@ class DestroyOrderDataTable extends DataTable
 					};
 					return $htm;
 				})
-				->addColumn('approved_destroy_status', function($status) {
-					$htm = match ($status->order_destroy_status) {
-						"approved" => "<div class=\"text-success text-center\"><i class=\"fas fa-star\"></i></div>",
+				->addColumn('destroy_approve_status', function($status) {
+					$htm = match ($status->destroy_approve_status) {
+						"y" => "<div class=\"text-success text-center\"><i class=\"fas fa-star\"></i></div>",
 						default => "<div class=\"text-danger text-center\"><i class=\"fas fa-star\"></i></div>",
 					};
 					return $htm;
 				})
 				->addColumn('action', function($order) {
-					if ($order->order_destroy_status == 'approved') {
-						$htm = "
-						<div class=\"custom-control custom-checkbox\">
-							<input type=\"checkbox\" name=\"lab_no[]\" class=\"custom-control-input\" value=\"".$order->lab_no."\" id=\"lab_no_".$order->lab_no."\" />
-							<label class=\"custom-control-label\" for=\"lab_no_".$order->lab_no."\">&nbsp;</label>
-						</div>";
-					} else {
-						$htm = "
-						<div class=\"custom-control custom-checkbox\">
-							<input type=\"checkbox\" name=\"pending_lab_no[]\" class=\"custom-control-input\" value=\"".$order->lab_no."\" id=\"pending_lab_no_".$order->lab_no."\" disabled />
-							<label class=\"custom-control-label\" for=\"pending_lab_no_".$order->lab_no."\">&nbsp;</label>
-						</div>";
-					}
+					$checked = match ($order->order_status) {
+						'destroyed' => ' checked disabled',
+						default => ''
+					};
+					$htm = "
+					<div class=\"from-check ml-2 inline-block\">
+						<input type=\"checkbox\" name=\"destroy_order[]\" class=\"form-check-input\" value=\"".$order->id."\" id=\"destroy_".$order->id."\"".$checked.">
+						<label class=\"form-check-label\" for=\"destroy".$order->id."\">&nbsp;</label>
+					</div>";
 					return $htm;
 				})
-				->rawColumns(['order_destroy_status', 'approved_destroy_status', 'action']);
+				->rawColumns(['destroy_status', 'destroy_approve_status', 'action']);
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
 		}
 	}
 
 	public function query(Order $order) {
-		return $order?->select(
-			'id',
-			'lab_no',
-			'received_order_date',
-			'order_destroy_status',
-			'report_due_date',
-			'order_destroy_date'
-			)
-			?->whereNotNull('lab_no')
-			?->whereNotNull('received_order_date')
-			?->whereOrder_status('approved')
-            ?->whereIn('order_destroy_status', ['pending', 'approved']);
+		return $order->whereNotNull('lab_no')->whereNotNull('order_received_date');
 	}
 
 	public function html() {
 		try {
 			return $this->builder()
-				->setTableId("order-table-list")
+				->setTableId("destory_table")
 				->setTableAttribute("class", "table table-bordered table-hover table-striped w-100")
 				->columns($this->getColumns())
 				->minifiedAjax()
+				// ->fixedHeader(true)
 				->responsive(true)
+				// ->scrollCollapse(true)
+				// ->scrollX(300)
 				->parameters(['language' => ['url' => url('/vendor/DataTables/i18n/thai.json')]]);
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
@@ -108,12 +93,12 @@ class DestroyOrderDataTable extends DataTable
 			return [
 				Column::make('id')->title('ลำดับ'),
 				Column::make('lab_no')->title('Lab No.'),
-				Column::make('received_order_date')->title('รับตัวอย่าง'),
-				Column::make('order_destroy_status')->title('สถานะรอทำลายตัวอย่าง'),
-				Column::make('approved_destroy_status')->title('อนุมัติทำลายตัวอย่าง')->width('12%'),
+				Column::make('order_received_date')->title('รับตัวอย่าง'),
+				Column::make('destroy_status')->title('สถานะรอทำลายตัวอย่าง'),
+				Column::make('destroy_approve_status')->title('อนุมัติทำลายตัวอย่าง'),
 				Column::make('report_due_date')->title('กำหนดส่ง'),
-				Column::make('order_destroy_date')->title('วันทำลายตัวอย่าง'),
-				Column::computed('action')->title('บันทึก')->width('15%')->addClass('text-center')
+				Column::make('destroy_date')->title('วันทำลายตัวอย่าง'),
+				Column::computed('action')->title('บันทึก')->addClass('text-center')
 			];
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());

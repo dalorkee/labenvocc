@@ -31,11 +31,33 @@ class SampleDestroyController extends Controller
 
 	protected function storeApproveOrder(Request $request): ?object {
 		try {
-            dd($request->approve_order_id);
-			if (!empty($request->approve_order_id) && count($request->approve_order_id) > 0) {
-				foreach ($request->approve_order_id as $key => $value) {
-					$order = Order::findOr($value, fn () => throw new \Exception('ไม่พบข้อมูลรหัส: '.$value));
-					$order->destroy_status = 'approved';
+			if (!empty($request->approve_order) && count($request->approve_order) > 0) {
+				foreach ($request->approve_order as $key => $value) {
+					$order = Order::findOr($value, fn () => throw new \Exception('[Approve:อนุมัติทำลายตัวอย่าง] ไม่พบข้อมูลรหัส: '.$value));
+					$order->destroy_approve_status = 'y';
+					$order->save();
+				}
+				return redirect()->back()->with(key: 'success', value: 'บันทึกข้อมูลสำเร็จแล้ว');
+			} else {
+				return redirect()->back()->with(key: 'warning', value: 'ไม่พบข้อมูลที่ต้องการ Approve โปรดตรวจสอบ');
+			}
+		} catch (\Exception $e) {
+			Log::error($e->getMessage());
+			return redirect()->back()->with(key: 'error', value: $e->getMessage());
+		}
+	}
+
+	protected function showDestroyOrder(DestroyOrderDataTable $dataTable): ?object {
+		return $dataTable?->render(view: 'apps.staff.destroy.order-show');
+	}
+
+	protected function storeDestroyOrder(Request $request): ?object {
+		try {
+			if (!empty($request->destroy_order) && count($request->destroy_order) > 0) {
+				foreach ($request->destroy_order as $key => $value) {
+					$order = Order::findOr($value, fn () => throw new \Exception('[Approve:ทำลายตัวอย่าง] ไม่พบข้อมูลรหัส: '.$value));
+					$order->order_status = 'destroyed';
+					$order->destroy_date = date('Y-m-d');
 					$order->save();
 				}
 				return redirect()->back()->with(key: 'success', value: 'บันทึกข้อมูลสำเร็จแล้ว');
@@ -44,29 +66,8 @@ class SampleDestroyController extends Controller
 			}
 		} catch (\Exception $e) {
 			Log::error($e->getMessage());
-			return redirect()->back()->with('error', $e->getMessage());
+			return redirect()->back()->with(key: 'error', value: $e->getMessage());
 		}
 	}
-
-	protected function showDestroyOrder(DestroyOrderDataTable $dataTable): ?object {
-		return $dataTable?->render(view: 'apps.staff.destroy.order-show');
-	}
-
-	protected function storeDestroyOrder(Request $request, Order $order): ?object {
-		try {
-			if (isset($request->lab_no) && count($request->lab_no) > 0) {
-				$order->whereIn('lab_no', $request->lab_no)->update(['order_destroy_status' => 'destroyed', 'order_destroy_date' => date('Y-m-d')]);
-				return redirect()->back()->with('success', 'บันทึกข้อมูลสำเร็จแล้ว');
-			} else {
-				return redirect()->back()->with('warning', 'ไม่สามารถบันทึกข้อมูลได้ โปรดตรวจสอบความถูกต้อง');
-			}
-		} catch (\Exception $e) {
-			Log::error($e->getMessage());
-			return redirect()->back()->with('error', $e->getMessage());
-		}
-	}
-
-
-
 
 }
