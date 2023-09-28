@@ -90,10 +90,11 @@ class SampleAnalyzeController extends Controller
 	protected function sampleReserve(Request $request): object {
 		try {
 			if (!empty($request->paramets) && count($request->paramets) > 0) {
-				OrderSampleParameter::whereMain_analys_user_id($this->user->id)
-					?->orWhere('sub_analys_user_id', $this->user->id)
-					?->whereIn('id', $request->paramets)
-					?->update(['status' => 'reserved']);
+				foreach ($request->paramets as $key => $value) {
+					$paramet = OrderSampleParameter::findOr($value, fn () => throw new \Exception('[จองตัวอย่าง] ไม่พบข้อมูลพารามิเตอร์รหัส: '.$value));
+					$paramet->status = 'reserved';
+					$paramet->save();
+				}
 				$response = ['status' => true, 'msg' => 'จองตัวอย่างที่เลือกเรียบร้อยแล้ว'];
 			} else {
 				$response = ['status' => false, 'msg' => 'โปรดเลือกตัวอย่างที่ต้องการจอง !!'];

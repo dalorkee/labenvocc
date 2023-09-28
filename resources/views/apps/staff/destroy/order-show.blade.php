@@ -56,8 +56,8 @@
 						</div>
 					</div>
 					<div class="panel-content border-faded border-left-0 border-right-0 border-bottom-0 text-right">
-						{{-- <a href="{{ route('sample.destroy.order.show') }}" class="btn btn-primary"><i class="fal fa-home"></i> กลับไปหน้าแรก</a> --}}
-						<button type="button" class="btn btn-danger" id="btn_submit"><i class="fal fa-save"></i> บันทึกข้อมูล</button>
+						{{-- <a href="" class="btn btn-primary"><i class="fal fa-home"></i> กลับไปหน้าแรก</a> --}}
+						<button type="button" class="btn btn-warning" id="btn_submit"><i class="fal fa-save"></i> บันทึกข้อมูล</button>
 					</div>
 				</form>
 			</div>

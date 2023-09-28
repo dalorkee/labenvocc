@@ -57,7 +57,7 @@ class SampleDestroyController extends Controller
 				foreach ($request->destroy_order as $key => $value) {
 					$order = Order::findOr($value, fn () => throw new \Exception('[Approve:ทำลายตัวอย่าง] ไม่พบข้อมูลรหัส: '.$value));
 					$order->order_status = 'destroyed';
-					$order->destroy_date = date('Y-m-d');
+					$order->destroy_date = date('d/m/Y');
 					$order->save();
 				}
 				return redirect()->back()->with(key: 'success', value: 'บันทึกข้อมูลสำเร็จแล้ว');

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-// use App\DataTables\ReceivedExampleDataTable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\{Response,DB,Storage,Log};
@@ -699,9 +698,17 @@ class SampleReceiveController extends Controller
 	protected function updateRequisition(Request $request): object {
 		try {
 			if (!empty($request->order_sample_parameter_id)) {
-				$order_sample_paramet = OrderSampleParameter::findOr($request->order_sample_parameter_id, fn () => throw new \Exception('ธุรการเบิกตัวอย่างรหัส '.$request->order_sample_parameter_id.' ไม่ได้'));
+				$order_sample_paramet = OrderSampleParameter::findOr($request->order_sample_parameter_id, fn () => throw new \Exception('ธุรการเบิกตัวอย่างรหัส: '.$request->order_sample_parameter_id.' ไม่ได้'));
 				$order_sample_paramet->status = 'analyzing';
 				$order_sample_paramet->save();
+
+				/* เปลี่ยนสถานะ order เป็น analyzing */
+				$order = Order::findOr($order_sample_paramet->order_id, fn () => throw new \Exception('ธุรการเบิกตัวอย่าง: เปลี่ยนสถานะ Order ไม่สำเร็จ'));
+				if ($order->order_status != 'analyzing') {
+					$order->order_status = 'analyzing';
+					$order->save();
+				}
+
 				return response()->json([
 					'success' => true,
 					'lab_no' => $request->lab_no,
