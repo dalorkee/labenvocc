@@ -55,7 +55,7 @@
 										<label class="form-label" for="office_name">หน่วยงานที่ส่งตัวอย่าง <span class="text-red-600">*</span></label>
 										<input type="text" name="customer_name" value="{{ $order[0]->customer_agency_name ?? auth()->user()->userCustomer->agency_name }}" class="form-control @error('customer_name') is-invalid @enderror" maxlength="80" readonly>
 										@error('customer_name')
-											<div class="invalid-feedback" role="alert">{{ $message }}</div>
+											<div class="text-danger text-xs pt-2" role="alert">{{ $message }}</div>
 										@enderror
 									</div>
 								</div>
@@ -77,20 +77,20 @@
 								<label class="form-label" for="type_of_work_other">ประเภทงานอื่นๆ ระบุ</label>
 								<input type="text" name="type_of_work_other" value="{{ $order[0]->type_of_work_other ?? '' }}" id="type_of_work_other" class="form-control @error('type_of_work_other') is-invalid @enderror" {{ ((isset($order[0]->type_of_work) && $order[0]->type_of_work == 6) || old('type_of_work_other') == 6) ? null : 'disabled' }}>
 								@error('type_of_work_other')
-									<div class="invalid-feedback" role="alert">{{ $message }}</div>
+									<div class="text-danger text-xs pt-2" role="alert">{{ $message }}</div>
 								@enderror
 							</div>
 						</div>
 						<div class="form-row">
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
-								<label class="form-label" for="book_no">เลขที่หนังสือนำส่ง</label>
+								<label class="form-label" for="book_no">เลขที่หนังสือนำส่ง <span class="text-red-600">*</span></label>
 								<input type="text" name="book_no" value="{{ $order[0]->book_no ?? null }}" class="form-control @error('book_no') is-invalid @enderror">
 								@error('book_no')
-									<div class="invalid-feedback" role="alert">{{ $message }}</div>
+									<div class="text-danger text-xs pt-2" role="alert">{{ $message }}</div>
 								@enderror
 							</div>
 							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
-								<label class="form-label" for="book_date">ลงวันที่</label>
+								<label class="form-label" for="book_date">ลงวันที่ <span class="text-red-600">*</span></label>
 								<div class="input-group">
 									<input type="text" name="book_date" value="{{ $order[0]->book_date ?? '' }}" placeholder="เลือกวันที่" class="form-control @error('book_date') is-invalid @enderror input-date" id="datepicker_book_date" readonly >
 									<div class="input-group-append">
@@ -100,13 +100,13 @@
 									</div>
 								</div>
 								@error('book_date')
-									<div class="invalid-feedback" role="alert">{{ $message }}</div>
+									<div class="text-danger text-xs pt-2" role="alert">{{ $message }}</div>
 								@enderror
 							</div>
 						</div>
 						<div class="form-row">
-							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
-								<label class="form-label" for="inputGroupFile01">แนบไฟล์หนังสือนำส่ง</label>
+							<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
+								<label class="form-label" for="inputGroupFile01">แนบไฟล์หนังสือนำส่ง <span class="text-red-600">*</span></label>
 								<div class="input-group">
 									<div class="custom-file">
 										<input type="file" name="book_file" class="custom-file-input @error('book_file') is-invalid @enderror" id="bookFile01" aria-describedby="bookFile01">
@@ -114,7 +114,7 @@
 									</div>
 								</div>
 								@error('book_file')
-									<div class="invalid-feedback" role="alert">{{ $message }}</div>
+									<div class="text-danger text-xs pt-2" role="alert">{{ $message }}</div>
 								@enderror
 							</div>
 						</div>

@@ -34,15 +34,21 @@
 			@case('customer')
 				<li class="nav-title">Specimen</li>
 				<li class="active open">
-					<a href="{{ route('customer.index') }}" title="คำขอส่งตัวอย่าง" data-filter-tags="home">
+					<a href="{{ route('customer.index') }}" title="คำขอส่งตัวอย่าง" data-filter-tags="request">
 						<i class="fal fa-clipboard"></i>
 						<span class="nav-link-text">คำขอส่งตัวอย่าง</span>
 					</a>
 				</li>
 				<li>
+					<a href="#" title="ประวัติของฉัน" data-filter-tags="history">
+						<i class="fal fa-clone"></i>
+						<span class="nav-link-text">ประวัติของฉัน</span>
+					</a>
+				</li>
+				<li>
 					<a href="#" title="Upload" data-filter-tags="upload">
 						<i class="fal fa-upload"></i>
-						<span class="nav-link-text" data-i18n="nav.upload">ส่งตัวอย่าง(Upload)</span>
+						<span class="nav-link-text" data-i18n="nav.upload">ส่งตัวอย่าง (Upload)</span>
 					</a>
 					<ul>
 						<li>

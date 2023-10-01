@@ -38,7 +38,11 @@ class SampleReceiveController extends Controller
 
 			/* begin query */
 			$order_year = (date('Y'));
-			$orders = OrderService::getOrderwithCount(relations: ['orderSamples', 'parameters'], order_year: $order_year, order_status: ['pending', 'received', 'analyzed', 'sent', 'destroy']);
+			$orders = OrderService::getOrderwithCount(
+				relations: ['orderSamples', 'parameters'],
+				order_year: $order_year,
+				order_status: ['pending', 'received', 'analyzing', 'analyzed', 'destroyed']
+			);
 			return Datatables::of($orders)
 				?->addColumn('total', fn ($order) => $order->order_samples_count.'/'.$order->parameters_count)
 				?->editColumn('order_confirmed_date', fn ($order) => $this->setJsDateTimeToJsDate($order->order_confirmed_date))
@@ -47,22 +51,23 @@ class SampleReceiveController extends Controller
 						switch ($order->order_status) {
 							case 'pending':
 								return "
-									<a href=\"".route('sample.received.step01', ['order_id' => $order->id])."\" class=\"btn btn-sm btn-primary\" style=\"width:60px\">รับ</a>\n
-									<button type=\"button\" class=\"btn btn-sm btn-secondary\" style=\"width:60px\">แก้ไข</button>\n";
-									break;
+								<a href=\"".route('sample.received.step01', ['order_id' => $order->id])."\" class=\"btn btn-sm btn-success\" style=\"width:60px\">รับ</a>
+								<button type=\"button\" class=\"btn btn-sm btn-secondary\" style=\"width:60px\">แก้ไข</button>\n";
+								break;
 							case 'received':
-							case 'analyzed':
-								return "<button type=\"button\" class=\"btn btn-sm btn-info\" style=\"width:120px\" disabled>รับตัวอย่างแล้ว</button>\n";
+								return "<button type=\"button\" class=\"btn btn-sm btn-info\" style=\"width:120px\" disabled>รับตัวอย่างแล้ว</button>";
 								break;
 							case 'analyzing':
-								return "<button type=\"button\" class=\"btn btn-sm btn-warning\" style=\"width:120px\" disabled>กำลังวิเคราะห์</button>\n";
+								return "<button type=\"button\" class=\"btn btn-sm btn-warning\" style=\"width:120px\" disabled>กำลังวิเคราะห์</button>";
 								break;
 							case 'analyzed':
-							case 'destroy':
-								return "<button type=\"button\" class=\"btn btn-sm btn-success\" style=\"width:120px\" disabled>เสร็จสิ้น</button>\n";
+								return "<button type=\"button\" class=\"btn btn-sm btn-success\" style=\"width:120px\" disabled>วิเคราะห์เสร็จสิ้น</button>";
+								break;
+							case 'destroyed':
+								return "<button type=\"button\" class=\"btn btn-sm btn-danger\" style=\"width:120px\" disabled>ทำลายตัวอย่างแล้ว</button>";
 								break;
 							default:
-								return "<button type=\"button\" class=\"btn btn-sm btn-secondary\" style=\"width:120px\" disabled>ไม่ทราบสถานะ</button>\n";
+								return "<button type=\"button\" class=\"btn btn-sm btn-secondary\" style=\"width:120px\" disabled>ไม่ทราบสถานะ</button>";
 								break;
 						}
 					} else {
@@ -644,7 +649,7 @@ class SampleReceiveController extends Controller
 								<th>Lab No</th>
 								<th>รายการทดสอบ</th>
 								<th>ผู้วิเคราะห์</th>
-								<th>เลือก</th>
+								<th>กดเลือก</th>
 							</tr>
 						</thead>
 						<tfoot></tfoot>
@@ -1168,7 +1173,7 @@ class SampleReceiveController extends Controller
 					'report_due_date'
 				)
 				->whereLab_no(trim($request->lab_no))
-				->whereIn('order_status', ['pending', 'received', 'analyzing', 'analyzing', 'destroy'])
+				->whereIn('order_status', ['pending', 'received', 'analyzing', 'analyzed', 'destroyed'])
 				->get();
 				if (count($order) > 0) {
 					$order_sample = OrderSample::whereOrder_id($order[0]->id)->with('parameters', function($query) {

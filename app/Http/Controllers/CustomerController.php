@@ -18,8 +18,8 @@ class CustomerController extends Controller
 
 	public function __construct() {
 		$this->middleware('auth');
-		$this->middleware(['role:root|admin|customer']);
-		$this->middleware('is_order_confirmed');
+		$this->middleware(['role:root|customer']);
+		// $this->middleware('is_order_confirmed');
 		$this->middleware(function($request, $next) {
 			$this->user = Auth::user();
 			$user_role_arr = $this->user->roles->pluck('name')->all();
@@ -29,7 +29,7 @@ class CustomerController extends Controller
 	}
 
 	#[Route('customer.index', methods: ['RESOURCE'])]
-	protected function index(CustomersDataTable $dataTable, int $user_id=0): object {
+	protected function index(CustomersDataTable $dataTable, int $user_id=0): ?object {
 		return $dataTable?->with('user_id', (int)$this->user->id)?->render(view: 'apps.customers.index');
 	}
 
@@ -62,10 +62,16 @@ class CustomerController extends Controller
 	protected function storeInfo(Request $request): object {
 		$request->validate([
 			'customer_name'=>'bail|required',
-			'type_of_work'=>'required'
+			'type_of_work'=>'required',
+			'book_no'=>'required',
+			'book_date'=>'required',
+			'book_file'=>'required|mimes:png,jpg,jpeg,pdf|max:2048'
 		],[
 			'customer_name.required'=>'โปรดกรอกผู้ส่งตัวอย่าง',
-			'type_of_work.required'=>'โปรดกรอกประเภทงาน'
+			'type_of_work.required'=>'โปรดกรอกประเภทงาน',
+			'book_no.required'=>'โปรดกรอกเลขที่หนังสือนำส่ง',
+			'book_date.required'=>'โปรดกรอกวันที่',
+			'book_file.required'=>'โปรดแนบไฟล์หนังสือนำส่ง',
 		]);
 		try {
 			$typeOfWork = $this->explodeStrToArr(str: $request->type_of_work, separator: '|');

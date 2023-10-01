@@ -371,12 +371,17 @@ class SampleQcController extends Controller
 		try {
 			$order = Order::findOr($request->order_id, fn () => throw new \Exception('ไม่พบข้อมูล Order ที่เรียก ID: '.$request->order_id));
 			if (($order->count() > 0)) {
-				if ($order->order_status == 'analyzed' && $order->tm_verify_status = 'pending') {
+				if ($order->order_status == 'analyzed' && $order->tm_verify_status == 'pending') {
 					$order->tm_verify_status = 'approved';
+					$order->tm_verify_date = date('d/m/Y H:i:s');
 					$order->save();
 					return redirect()->back()->with(key: 'success', value: 'Approved Lab No: '.$request->lab_no.' สำเร็จ');
+				} elseif ($order->order_status == 'analyzed' && $order->tm_verify_status == 'approved') {
+					return redirect()->back()->with(key: 'error', value: 'Lab No: '.$request->lab_no.' อยู่ในสถานะ Approved แล้ว');
+				} elseif ($order->order_status == 'analyzed' && $order->tm_verify_status == 'reject') {
+					return redirect()->back()->with(key: 'error', value: 'Lab No: '.$request->lab_no.' อยู่ในสถานะ reject แล้ว');
 				} else {
-					return redirect()->back()->with(key: 'error', value: 'Lab No: '.$request->lab_no.' ไม่อยู่ในสถานะที่จะ Approved ได้ โปรดตรวจสอบความครบถ้วนของข้อมูล');
+					return redirect()->back()->with(key: 'error', value: 'Lab No: '.$request->lab_no.' ไม่อยู่ในสถานะที่จะ Approved ได้ โปรดตรวจสอบ');
 				};
 			}
 		} catch (\Exception $e) {
@@ -389,8 +394,9 @@ class SampleQcController extends Controller
 		try {
 			$order = Order::findOr($request->order_id, fn () => throw new \Exception('ไม่พบข้อมูล Order ที่เรียก ID: '.$request->order_id));
 			if (($order->count() > 0)) {
-				if ($order->order_status == 'analyzed' &&  $order->tm_verify_status = 'pending') {
+				if ($order->order_status == 'analyzed' &&  $order->tm_verify_status == 'pending') {
 					$order->tm_verify_status = 'rejected';
+					$order->tm_verify_date = date('d/m/Y H:i:s');
 					$order->save();
 					$msg = json_encode(['type' => 'success', 'title' => 'Success', 'text' => 'Reject Lab No: '.$request->lab_no.' สำเร็จ']);
 				} else {

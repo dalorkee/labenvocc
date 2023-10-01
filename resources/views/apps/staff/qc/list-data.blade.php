@@ -80,7 +80,7 @@
 							</div>
 							<div class="absolute top-0 right-0">
 								@if ($data['order_status'] == 'analyzed' && $data['tm_verify'] == 'pending')
-									<button type="submit" class="btn btn-success"><i class="fal fa-eye"></i> Approve</button>
+									<button type="submit" class="btn btn-primary"><i class="fal fa-eye"></i> Approve</button>
 									<button type="button" class="btn btn-danger" onclick="reject('{{ $data['order_id'] }}','{{ $data['lab_no'] }}');"><i class="fal fa-minus-circle"></i> Reject</button>
 								@else
 									<button type="button" class="btn btn-secondary"><i class="fal fa-eye"></i> Approve</button>

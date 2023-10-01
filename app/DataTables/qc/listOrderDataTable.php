@@ -38,10 +38,10 @@ class listOrderDataTable extends DataTable
 							break;
 						case "analyzed": $htm = "
 							<div class=\"progress progress-lg\">
-								<div class=\"progress-bar bg-success\" role=\"progressbar\" style=\"width: 80%;\" aria-valuenow=\"80\" aria-valuemin=\"0\" aria-valuemax=\"100\">80%</div>
+								<div class=\"progress-bar bg-info\" role=\"progressbar\" style=\"width: 80%;\" aria-valuenow=\"80\" aria-valuemin=\"0\" aria-valuemax=\"100\">80%</div>
 							</div>";
 							break;
-						case "destroy": $htm = "
+						case "destroyed": $htm = "
 							<div class=\"progress progress-lg\">
 								<div class=\"progress-bar bg-success\" role=\"progressbar\" style=\"width: 100%;\" aria-valuenow=\"100\" aria-valuemin=\"0\" aria-valuemax=\"100\">100%</div>
 							</div>";
@@ -61,7 +61,7 @@ class listOrderDataTable extends DataTable
 							'lab_no' => $order->lab_no,
 							'order_status' => $order->order_status,
 							'tm_verify' => $order->tm_verify_status
-						])."\" class=\"btn btn-success btn-sm\" id=\"qc_btn\">ตรวจสอบผลการทดสอบ</a>";
+						])."\" class=\"btn btn-warning btn-sm\" id=\"qc_btn\">ตรวจสอบผลการทดสอบ</a>";
 				})
 				->rawColumns(['progress', 'action']);
 		} catch (\Exception $e) {

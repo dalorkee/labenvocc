@@ -60,6 +60,7 @@
 												@foreach ($val['parameters'] as $k => $v)
 													<tr>
 														<td style="width: 100px;">
+                                                            <input type="hidden" name="lab_no" value="{{ $lab_no }}">
 															<input type="hidden" name="ref_order_id[]" value="{{ $val['order_id'] }}">
 															<input type="hidden" name="ref_order_sample_id[]" value="{{ $val['id'] }}">
 															<input type="hidden" name="has_parameter[]" value="{{ $val['has_parameter'] }}">
@@ -104,7 +105,7 @@
 						<div class="relative" style="height: 50px;">
 							<div class="absolute top-0 left-0">
 								<button type="button" id="btn_upload_chart" class="btn btn-success" data-zlno="{{ $lab_no }}" data-zoid="{{ $order_id }}"><i class="fal fa-file"></i> Add File</button>
-								<button type="submit" class="btn btn-primary"><i class="fal fa-save"></i> Save</button>
+								<button type="submit" class="btn btn-danger"><i class="fal fa-save"></i> Save</button>
 							</div>
 							<div class="absolute top-0 right-0">
 								<button type="button" class="btn btn-info" id="btn_view_modal" data-view_lno="{{ $lab_no }}" data-view_oid="{{ $order_id }}" data-view_analyze_user="{{ $main_analys_user_id }}"><i class="fal fa-eye"></i> View</button>

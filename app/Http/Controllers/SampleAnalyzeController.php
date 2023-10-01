@@ -492,6 +492,16 @@ class SampleAnalyzeController extends Controller
 
 					$order_sample_parameter->save();
 				};
+
+				/* ตรวจสอบว่าแต่ละ parameter สถานะ completed หรือยัง ถ้าครบทั้ง lab no ให้เปลี่ยนสถานะ order เป็น Analyzed */
+				if (!empty($req['ref_order_id'])) {
+					$chkNotCompleteStatus = OrderSampleParameter::whereOrder_id($req['ref_order_id'][0])->where('status', '!=', 'completed')->count();
+					if ($chkNotCompleteStatus == 0) {
+						$order = Order::findOr($req['ref_order_id'][0], fn () => throw new \Exception('บันทึกผลการทดสอบ::เปลี่ยนสถานะ Order => analyzed ไม่ได้'));
+						$order->order_status = 'analyzed';
+						$order->save();
+					}
+				}
 				return redirect()->back()->with('success', 'บันทึกข้อมูลสำเร็จแล้ว');
 			}
 		} catch (\Exception $e) {
@@ -545,6 +555,11 @@ class SampleAnalyzeController extends Controller
 	}
 
 	protected function labResultUploadFile(Request $request) {
+		$request->validate([
+			'lab_result_file'=>'required|mimes:png,jpg,jpeg,pdf|max:2048'
+		],[
+			'lab_result_file.required'=>'โปรดแนบไฟล์',
+		]);
 		try {
 			if ($request->hasFile('lab_result_file')) {
 				$file = $request->file('lab_result_file');
@@ -674,6 +689,11 @@ class SampleAnalyzeController extends Controller
 	}
 
 	protected function analyzeResultUploadFile(Request $request) {
+		$request->validate([
+			'analyze_result_file'=>'required|mimes:png,jpg,jpeg,pdf|max:2048'
+		],[
+			'analyze_result_file.required'=>'โปรดแนบไฟล์',
+		]);
 		try {
 			if ($request->hasFile('analyze_result_file')) {
 				$file = $request->file('analyze_result_file');

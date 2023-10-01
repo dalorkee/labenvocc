@@ -41,7 +41,7 @@ class listOrderDataTable extends DataTable
 								<div class=\"progress-bar bg-success\" role=\"progressbar\" style=\"width: 80%;\" aria-valuenow=\"80\" aria-valuemin=\"0\" aria-valuemax=\"100\">80%</div>
 							</div>";
 							break;
-						case "destroy": $htm = "
+						case "destroyed": $htm = "
 							<div class=\"progress progress-lg\">
 								<div class=\"progress-bar bg-success\" role=\"progressbar\" style=\"width: 100%;\" aria-valuenow=\"100\" aria-valuemin=\"0\" aria-valuemax=\"100\">100%</div>
 							</div>";
@@ -58,13 +58,15 @@ class listOrderDataTable extends DataTable
 					switch($order->order_status) {
 						case 'pending':
 						case 'received':
-							$htm = "<a href=\"".route('sample.analyze.select', ['lab_no' => $order->lab_no, 'id' => $order->id, 'user_id' => $this->user_id])."\" class=\"btn btn-success btn-sm\" id=\"reserved\">เบิกตัวอย่าง</a>
-									<a href=\"".route('sample.analyze.lab.result.create', ['lab_no' => $order->lab_no, 'id' => $order->id, 'user_id' => $this->user_id])."\" class=\"btn btn-primary btn-sm\">ผลการทดสอบ</a>";
+                        case 'analyzing':
+							$htm = "
+								<a href=\"".route('sample.analyze.select', ['lab_no' => $order->lab_no, 'id' => $order->id, 'user_id' => $this->user_id])."\" class=\"btn btn-success btn-sm\" id=\"reserved\">เบิกตัวอย่าง</a>
+								<a href=\"".route('sample.analyze.lab.result.create', ['lab_no' => $order->lab_no, 'id' => $order->id, 'user_id' => $this->user_id])."\" class=\"btn btn-primary btn-sm\">ผลการทดสอบ</a>";
 							break;
 						default:
 							$htm = "
-							<button class=\"btn btn-success btn-sm\" id=\"reserved\">เบิกตัวอย่าง</button>
-							<button class=\"btn btn-primary btn-sm\">ผลการทดสอบ</button>";
+							<button class=\"btn btn-secondary btn-sm\" id=\"reserved\">เบิกตัวอย่าง</button>
+							<button class=\"btn btn-secondary btn-sm\">ผลการทดสอบ</button>";
 					}
 					return $htm;
 				})
