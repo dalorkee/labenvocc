@@ -33,14 +33,14 @@
 		@switch(auth()->user()->user_type)
 			@case('customer')
 				<li class="nav-title">Specimen</li>
-				<li class="active open">
+				<li class="{{ (Request::is('*customer'))  ? 'active' : '' }}">
 					<a href="{{ route('customer.index') }}" title="คำขอส่งตัวอย่าง" data-filter-tags="request">
 						<i class="fal fa-clipboard"></i>
 						<span class="nav-link-text">คำขอส่งตัวอย่าง</span>
 					</a>
 				</li>
-				<li>
-					<a href="#" title="ประวัติของฉัน" data-filter-tags="history">
+				<li class="{{ (Request::is('*customerHistory'))  ? 'active' : '' }}">
+					<a href="{{ route('customerHistory.index') }}" title="ประวัติของฉัน" data-filter-tags="history">
 						<i class="fal fa-clone"></i>
 						<span class="nav-link-text">ประวัติของฉัน</span>
 					</a>

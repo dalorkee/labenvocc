@@ -11,7 +11,7 @@ trait DbBoundaryTrait {
 		return $postcode;
 	}
 
-	public function provinceNameByProvId($prov_id=0): string  {
+	public function provinceNameByProvId($prov_id=0): ?string  {
 		$prov = Province::select('province_name')->whereProvince_id($prov_id)->get();
 		return $prov[0]->province_name;
 	}

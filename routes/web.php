@@ -9,6 +9,7 @@ use App\Http\Controllers\{
 	RegisterGovernmentController,
 	RegisterStaffController,
 	CustomerController,
+	CustomerHistoryController,
 	StaffController,
 	SampleReceiveController,
 	SampleAnalyzeController,
@@ -91,6 +92,7 @@ Route::name('register.')->group(function() {
 Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 	Route::resources([
 		'customer' => CustomerController::class,
+		'customerHistory' => CustomerHistoryController::class,
 		'sampleupload' => SampleUploadController::class,
 		'fetchdata' => FetchDataController::class,
 	]);
