@@ -3,7 +3,7 @@
 @section('content')
 <ol class="breadcrumb page-breadcrumb font-prompt">
 	<li class="breadcrumb-item"><a href="#">Admin</a></li>
-	<li class="breadcrumb-item">จัดการข้อมูล</li>
+	<li class="breadcrumb-item">จัดการข้อมูลลูกค้า</li>
 </ol>
 @if (Session::get('success'))
 	<div class="alert alert-success">
