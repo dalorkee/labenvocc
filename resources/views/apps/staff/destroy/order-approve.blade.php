@@ -96,5 +96,5 @@ div.dataTables_wrapper span.select-item {margin-left: 0.5em;}
 		 	});
 		 });
 	});
-	</script>
+</script>
 @endpush
