@@ -9,8 +9,11 @@
 @section('content')
 <ol class="breadcrumb page-breadcrumb font-prompt">
 	<li class="breadcrumb-item"><a href="#">Admin</a></li>
-	<li class="breadcrumb-item">จัดการข้อมูล</li>
+	<li class="breadcrumb-item">จัดการข้อมูลลูกค้า</li>
 </ol>
+<div class="subheader">
+	<h1 class="subheader-title"><small>จัดการข้อมูลลูกค้า</small></h1>
+</div>
 <div class="fs-lg fw-300 p-5 bg-white border-faded rounded mb-g font-prompt">
 	<div class="frame-wrap">
 		{{ $dataTable->table() }}
@@ -36,7 +39,7 @@
 					case 'edit':
 						let userCusEditUrl = '{{ route("users.edit", ":id") }}';
 						userCusEditUrl = userCusEditUrl.replace(':id', userCusId);
-						window.open(userCusEditUrl, '_self');
+						window.open(userCusEditUrl, 'blank');
 					break;
 					case 'allow':
 						let userCusAllowUrl = '{{ route("users.allow", ":id") }}';

@@ -88,6 +88,18 @@ class ParametController extends Controller
      */
     public function store(Request $request, Parameter $z_parameter)
     {
+        $this->validate($request,[
+            'parameter_id'=>'required',
+            'sample_character_id'=>'required',
+            'sample_type_id'=>'required',
+            'threat_type_id'=>'required',
+            'unit_id'=>'required',
+            'unit_customer_id'=>'required',
+            'price_id'=>'required',
+            'main_analys_id'=>'required',
+            'main_control_id'=>'required',
+            'office_id'=>'required'
+        ]);
         $parameter = RefParameter::select('id', 'parameter_name')->where('id', $request->parameter_id)->get();
         $sample_character = SampleCharacter::select('id','sample_character_name')->where('id', $request->sample_character_id)->get();
         $sample_type = $request->sample_type_id === '1' ? 'ชีวภาพ' : 'สิ่งแวดล้อม' ;
@@ -169,8 +181,32 @@ class ParametController extends Controller
      */
     public function edit(Request $request)
     {
-        // $parameters = Parameter::find($request->id);
-        // return view('admin.paramet.edit', compact('parameters'));
+        $z_parameter = Parameter::find($request->id);
+        $parameters = RefParameter::all();
+        $sample_characters = SampleCharacter::all();
+        $threat_types = RefThreatType::all();
+        $units = RefUnit::all();
+        $unit_customers = RefUnitCustomer::all();
+        $unit_choice1 = RefUnitChoice1::all();
+        $prices = RefPrice::all();
+        $user_stuffs = UserStaff::all();
+        $technicals = RefTechnical::all();
+        $method_analys = RefMethodAnalys::all();
+        $machines = RefMachine::all();
+        return view('admin.paramet.edit', compact(
+            'z_parameter',
+            'parameters',
+            'sample_characters',
+            'threat_types',
+            'units',
+            'unit_customers',
+            'unit_choice1',
+            'prices',
+            'user_stuffs',
+            'technicals',
+            'method_analys',
+            'machines'
+        ));
     }
 
     /**
@@ -180,9 +216,82 @@ class ParametController extends Controller
      * @param  \App\Models\Admin\Paramet  $paramet
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Parameter $parameter)
+    public function update(Request $request)
     {
-        //
+        $this->validate($request,[
+            'parameter_id'=>'required',
+            'sample_character_id'=>'required',
+            'sample_type_id'=>'required',
+            'threat_type_id'=>'required',
+            'unit_id'=>'required',
+            'unit_customer_id'=>'required',
+            'price_id'=>'required',
+            'main_analys_id'=>'required',
+            'main_control_id'=>'required',
+            'office_id'=>'required'
+        ]);
+
+        $z_parameter = Parameter::find($request->z_parameter_id);
+        $parameter = RefParameter::select('id', 'parameter_name')->where('id', $request->parameter_id)->get();
+        $sample_character = SampleCharacter::select('id','sample_character_name')->where('id', $request->sample_character_id)->get();
+        $sample_type = $request->sample_type_id === '1' ? 'ชีวภาพ' : 'สิ่งแวดล้อม' ;
+        $threat_type = RefThreatType::select('id','threat_type_name')->where('id',$request->threat_type_id)->get();
+        $unit = RefUnit::select('id','unit_name')->where('id',$request->unit_id)->get();
+        $unit_customer = RefUnitCustomer::select('id','unit_customer_name')->where('id',$request->unit_customer_id)->get();
+        $unit_choice1 = $request->unit_choice1_id != null ? RefUnitChoice1::select('id','unit_choice1_name')->where('id',$request->unit_choice1_id)->get() : null;
+        $unit_choice2 = $request->unit_choice2_id === '1' ? 'ppm' : null;
+        $price = RefPrice::select('id','price_name')->where('id',$request->price_id)->get();
+        $main_analys = UserStaff::select('user_id','first_name','last_name')->where('user_id',$request->main_analys_id)->get();
+        $sub_analys = UserStaff::select('user_id','first_name','last_name')->where('user_id',$request->sub_analys_id)->get();
+        $main_control = UserStaff::select('user_id','first_name','last_name')->where('user_id',$request->main_control_id)->get();
+        $sub_control = $request->sub_control_id != null ? UserStaff::select('user_id','first_name','last_name')->where('user_id',$request->sub_control_id)->get() : null;
+        $technical = $request->technic_id != null ? RefTechnical::select('id','technic_name')->where('id',$request->technic_id)->get() : null;
+        $method_analy = $request->method_id != null ?RefMethodAnalys::select('id','method_name')->where('id',$request->method_id)->get() : null;
+        $machine = $request->machine_id != null ? RefMachine::select('id','machine_name')->where('id',$request->machine_id)->get() : null;
+        $office_name = $request->offfice_id === '130' ? 'ศูนย์อ้างอิงทางห้องปฏิบัติการและพิษวิทยา' : 'ห้องปฏิบัติการ ศูนย์พัฒนาวิชาการอาชีวอนามัยและสิ่งแวดล้อม จังหวัดระยอง';
+
+        $z_parameter->parameter_name = $parameter[0]['parameter_name'];
+        $z_parameter->parameter_id = $parameter[0]['id'];
+        $z_parameter->sample_character_name = $sample_character[0]['sample_character_name'];
+        $z_parameter->sample_character_type_id = $sample_character[0]['id'];
+        $z_parameter->sample_type_name = $sample_type;
+        $z_parameter->sample_type_id = $request->sample_type_id;
+        $z_parameter->threat_type_name = $threat_type[0]['threat_type_name'];
+        $z_parameter->threat_type_id = $threat_type[0]['id'];
+        $z_parameter->unit_name = $unit[0]['unit_name'];
+        $z_parameter->unit_id = $unit[0]['id'];
+        $z_parameter->unit_customer_name = $unit_customer[0]['unit_customer_name'];
+        $z_parameter->unit_customer_id = $unit_customer[0]['id'];
+        $z_parameter->unit_choice1_name = $unit_choice1 != null ? $unit_choice1[0]['unit_choice1_name'] : null;
+        $z_parameter->unit_choice1_id = $unit_choice1 != null ? $unit_choice1[0]['id'] : null;
+        $z_parameter->unit_choice2_name = $unit_choice2;
+        $z_parameter->unit_choice2_id = $request->unit_choice2_id;
+        $z_parameter->price_name = $price[0]['price_name'];
+        $z_parameter->price_id = $price[0]['id'];
+        $z_parameter->main_analys = $main_analys[0]['first_name'].' '.$main_analys[0]['last_name'];
+        $z_parameter->main_analys_user_id = $main_analys[0]['user_id'];
+        $z_parameter->sub_analys = $sub_analys[0]['first_name'].' '.$sub_analys[0]['last_name'];
+        $z_parameter->sub_analys_user_id = $sub_analys[0]['user_id'];
+        $z_parameter->main_control = $main_control[0]['first_name'].' '.$main_control[0]['last_name'];
+        $z_parameter->main_control_user_id = $main_control[0]['user_id'];
+        $z_parameter->sub_control = $sub_control != null ? $sub_control[0]['first_name'].' '.$sub_control[0]['last_name'] : null;
+        $z_parameter->sub_control_user_id = $sub_control != null ? $sub_control[0]['user_id'] : null;
+        $z_parameter->technic_name = $technical[0]['technic_name'];
+        $z_parameter->technic_id = $technical != null ? $technical[0]['id'] : null;
+        $z_parameter->method_name = $method_analy != null ? $method_analy[0]['method_name'] : null;
+        $z_parameter->method_analys_id = $method_analy != null ? $method_analy[0]['id'] : null;
+        $z_parameter->machine_name = $machine != null ? $machine[0]['machine_name'] : null;
+        $z_parameter->machine_id = $machine != null ? $machine[0]['id'] : null;
+        $z_parameter->office_name = $office_name;
+        $z_parameter->office_id = $request->office_id;
+        $z_para_save = $z_parameter->save();
+
+        if($z_para_save == true){
+            return redirect()->route('paramet.index')->with('success', 'insert successfully');
+        }
+        else{
+            return redirect()->route('paramet.edit', $request->z_parameter_id)->with('error', 'unsuccessfully');
+        }
     }
 
     /**

@@ -9,7 +9,7 @@
 @section('content')
 <ol class="breadcrumb page-breadcrumb">
 	<li class="breadcrumb-item"><a href="javascript:void(0);">Admin</a></li>
-	<li class="breadcrumb-item">User Staff Manage</li>
+	<li class="breadcrumb-item">จัดการข้อมูลเจ้าหน้าที่</li>
 </ol>
 <div class="subheader">
 	<h1 class="subheader-title"><small>จัดการข้อมูลเจ้าหน้าที่</small></h1>

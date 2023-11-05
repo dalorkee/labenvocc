@@ -36,11 +36,11 @@
             callback: function(key, options) {
                 var parameter_id = $(this).data('id');
                 switch(key){
-                    // case 'edit':
-                    //     let parameter_edit_url = '{{ route("paramet.edit", ":id") }}';
-                    //     parameter_edit_url = parameter_edit_url.replace(':id', parameter_id);
-                    //     window.open(parameter_edit_url, '_self');
-                    // break;
+                    case 'edit':
+                        let parameter_edit_url = '{{ route("paramet.edit", ":id") }}';
+                        parameter_edit_url = parameter_edit_url.replace(':id', parameter_id);
+                        window.open(parameter_edit_url, '_self');
+                    break;
                     case 'allow':
                         let parameter_allow_url = '{{ route("paramet.allow", ":id") }}';
                         parameter_allow_url = parameter_allow_url.replace(':id', parameter_id);
