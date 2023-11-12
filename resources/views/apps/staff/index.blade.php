@@ -27,7 +27,59 @@
 						<div class="panel-container">
 							<div class="panel-content">
 								<div class="row">
-									<div class="col-12">
+									<div class="col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6 mb-3">
+										<div class="card">
+											<div class="card-body">
+												<div class="row">
+													<div class="col-sm-3">
+														<p class="mb-0">ชื่อ-นามสกุล</p>
+													</div>
+													<div class="col-sm-9">
+														<p class="text-muted mb-0">{{ $data['first_name']." ".$data['last_name'] }}</p>
+													</div>
+												</div>
+												<hr>
+												<div class="row">
+													<div class="col-sm-3">
+														<p class="mb-0">ตำแหน่ง</p>
+													</div>
+													<div class="col-sm-9">
+														<p class="text-muted mb-0">{{ $data['position'][0]['name'] }}</p>
+													</div>
+												</div>
+												<hr>
+												<div class="row">
+													<div class="col-sm-3">
+														<p class="mb-0">สังกัด</p>
+													</div>
+													<div class="col-sm-9">
+														<p class="text-muted mb-0">{{ $data['affiliation'] }}</p>
+													</div>
+												</div>
+												<hr>
+												<div class="row">
+													<div class="col-sm-3">
+														<p class="mb-0">หน้าที่รับผิดชอบ</p>
+													</div>
+													<div class="col-sm-9">
+														<p class="text-muted mb-0">{{ $data['duty'][0]['duty_name'] }}</p>
+													</div>
+												</div>
+												<hr>
+											</div>
+										</div>
+									</div>
+									<div class="col-xs-12 col-sm-12 col-md-6 col-xl-6 col-lg-6 mb-3">
+										<div class="card">
+											<div class="card-body text-center">
+												<img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar" class="rounded-circle img-fluid" style="width: 150px;">
+												<h5 class="my-3">John Smith</h5>
+												<p class="text-muted mb-1">Full Stack Developer</p>
+												<p class="text-muted mb-4">Bay Area, San Francisco, CA</p>
+											</div>
+										</div>
+									</div>
+									{{-- <div class="col-12">
 										<div class="d-flex flex-column align-items-center justify-content-center p-4">
 											<img src="{{ URL::asset('images/small-moph-logo-32x32.png') }}" class="rounded-circle shadow-2 img-thumbnail" alt="">
 											<h5 class="mb-0 fw-700 text-center mt-2">
@@ -69,7 +121,7 @@
 										<div class="p-3 text-center">
 											<a href="javascript:void(0);" class="btn-link font-weight-bold">แก้ไขข้อมูล</a>
 										</div>
-									</div>
+									</div> --}}
 								</div>
 							</div>
 						</div>

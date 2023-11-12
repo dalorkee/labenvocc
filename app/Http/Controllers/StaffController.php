@@ -4,13 +4,17 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\{Auth,Log};
-use App\Models\Order;
 use Yajra\DataTables\Facades\DataTables;
+use App\Models\{Order,Position};
+use App\Traits\CommonTrait;
+use Carbon\Traits\Comparison;
 
 class StaffController extends Controller
 {
 	private object $user;
 	private string $user_role;
+
+	use CommonTrait;
 
 	public function __construct() {
 		$this->middleware('auth');
@@ -24,7 +28,15 @@ class StaffController extends Controller
 	}
 
 	public function index(): object {
-		return view(view: 'apps.staff.index');
+		$affiliation = $this->affiliation();
+		$data = [
+			'first_name' => Auth::user()->userStaff->first_name ,
+			'last_name' => Auth::user()->userStaff->last_name,
+			'position' => $this->getPositionById(Auth::user()->userStaff->position),
+			'affiliation' => $affiliation[Auth::user()->userStaff->affiliation],
+			'duty' => $this->getStaffDutyById(Auth::user()->userStaff->duty),
+		];
+		return view(view: 'apps.staff.index', data: compact('data'));
 	}
 
 	public function getInbox() {

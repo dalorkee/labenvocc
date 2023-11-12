@@ -76,9 +76,8 @@ trait CommonTrait {
 		});
 		return $result;
 	}
-	public function getPositionById($id=0):array {
-		$result = Position::select('id', 'name')->whereId($id)->get()->toArray();
-		return $result;
+	public function getPositionById($id=0): array {
+		return Position::select('id', 'name')->whereId($id)->get()->toArray();
 	}
 	public function getPositionLevel(): array {
 		$result = [];
@@ -93,6 +92,9 @@ trait CommonTrait {
 			$result[$value->id] = $value->duty_name;
 		});
 		return $result;
+	}
+    public function getStaffDutyById($id=0): array {
+		return Duty::select('id', 'duty_name')->whereId($id)->get()->toArray();
 	}
 	public function getSampleCharacter(): array {
 		$result = [];
