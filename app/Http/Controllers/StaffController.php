@@ -5,9 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\{Auth,Log};
 use Yajra\DataTables\Facades\DataTables;
-use App\Models\{Order,Position};
+use App\Models\{Order};
 use App\Traits\CommonTrait;
-use Carbon\Traits\Comparison;
 
 class StaffController extends Controller
 {

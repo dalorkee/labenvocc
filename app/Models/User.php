@@ -31,7 +31,7 @@ class User extends Authenticatable
 		'user_status',
 		'approved',
 		'approved_by_user',
-		'profile_photo_url',
+		'profile_photo',
 		'is_admin'
 	];
 

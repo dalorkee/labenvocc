@@ -131,7 +131,6 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 	});
 	Route::name('staff.')->prefix('staff')->controller(StaffController::class)->group(function() {
 		Route::get('/home', 'index')->name('index');
-		Route::get('/profile', 'profile')->name('profile');
 		Route::get('/inbox', 'inbox')->name('inbox');
 		Route::get('/inbox/list', 'getInbox')->name('get.inbox');
 		Route::get('/calendar', 'calendar')->name('calendar');
