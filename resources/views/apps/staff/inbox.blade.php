@@ -40,7 +40,7 @@
 				<div class="col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
 					<div class="panel">
 						<div class="panel-hdr">
-							<h2>กล่องข้อความ</h2>
+							<h2 style="visibility: hidden">กล่องข้อความ</h2>
 							<div class="panel-toolbar">
 								<button class="btn btn-panel bg-transparent fs-xl w-auto h-auto rounded-0" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="Collapse"><i class="fal fa-window-minimize"></i></button>
 								<button class="btn btn-panel bg-transparent fs-xl w-auto h-auto rounded-0" data-action="panel-fullscreen" data-toggle="tooltip" data-offset="0,10" data-original-title="Fullscreen"><i class="fal fa-expand"></i></button>
@@ -51,19 +51,27 @@
 							<div class="panel-content">
 								<div class="row">
 									<div class="col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
-										<table id="inbox_table" class="table table-bordered text-sm">
-											<thead class="bg-green-300">
+										<table id="inbox_table" class="table table-bordered table-striped">
+											<thead>
 												<tr>
-													<th>Id</th>
-													<th>order_no</th>
-													<th>order_type</th>
+													<th><i class="fal fa-envelope"></i> กล่องข้อความ <sup><span class="badge badge-icon">{{ $total }}</span></sup></th>
 												</tr>
 											</thead>
-											<tfoot></tfoot>
-											<tbody></tbody>
+											<tbody>
+												@foreach ($data as $key => $value)
+												<tr>
+													<td>{!! $value !!}</td>
+												</tr>
+												@endforeach
+											</tbody>
 										</table>
+										{{-- {{ $dataTable->table() }} --}}
 									</div>
 								</div>
+							</div>
+							<div class="panel-content py-2 rounded-bottom border-faded border-left-0 border-right-0 border-bottom-0 text-muted d-flex">
+								<i class="fa fa-circle mr-2 text-success"></i>สถานะดำเนินการแล้ว
+								<i class="fa fa-circle mr-2 ml-4 text-danger"></i>สถานะยังไม่ดำเนินการ
 							</div>
 						</div>
 					</div>
@@ -79,19 +87,7 @@
 <script type="text/javascript">
 $(document).ready(function() {
 	$.ajaxSetup({headers:{'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')}});
-	// 	$('#talek_team').dataTable().fnClearTable();
-	// 	$('#talek_team').dataTable().fnDestroy();
-		$('#inbox_table').DataTable({
-			processing: true,
-			serverSide: true,
-			ajax: "{{ route('staff.get.inbox') }}",
-			columns: [
-				{ data: 'id', name: 'id' },
-				{ data: 'order_no', name: 'order_no' },
-				{ data: 'order_type', name: 'order_type' }
-			]
-		});
 });
 </script>
-
+{{-- {{ $dataTable->scripts(attributes: ['type' => 'module']) }} --}}
 @endsection

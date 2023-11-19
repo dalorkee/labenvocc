@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\{Auth,Log};
-use Yajra\DataTables\Facades\DataTables;
-use App\Models\{Order};
+use App\DataTables\InboxesDataTable;
 use App\Traits\CommonTrait;
+use App\Models\Order;
 
 class StaffController extends Controller
 {
@@ -26,7 +26,7 @@ class StaffController extends Controller
 		});
 	}
 
-	public function index(): object {
+	protected function index(): object {
 		$affiliation = $this->affiliation();
 		$data = [
 			'first_name' => Auth::user()->userStaff->first_name ,
@@ -38,19 +38,49 @@ class StaffController extends Controller
 		return view(view: 'apps.staff.index', data: compact('data'));
 	}
 
-	public function getInbox() {
-		try {
-			return Datatables::of(Order::query())->make(true);
-		} catch (\Exception $e) {
-			Log::error($e->getMessage());
+	// protected function inbox(InboxesDataTable $dataTable): ?object {
+	// 	return $dataTable->render('apps.staff.inbox');
+	// }
+
+	protected function inbox(Order $order): ?object {
+		$data = [];
+		$new = $order->select('id', 'order_no', 'lab_no')
+			->where('order_status', '=', 'pending')
+			->whereNotIn('order_receive_status', ['received', 'rejected'])
+			->withCount('parameters')
+			->get();
+		foreach ($new as $key => $value) {
+			array_push($data, "<span class=\"text-danger\"><i class=\"fa fa-circle\"></i></span> งานใหม่ Lab NO. ".$value->lab_no." จำนวน ".number_format($value->parameters_count)." test");
 		}
+
+		$new_received = $order->select('id', 'order_no', 'lab_no')
+			->where('order_status', '=', 'pending')
+			->where('order_receive_status', '=', 'received')
+			->withCount('parameters')
+			->get();
+		foreach ($new_received as $key => $value) {
+			array_push($data, "<span class=\"text-success\"><i class=\"fa fa-circle\"></i></span> งานใหม่ Lab NO. ".$value->lab_no." จำนวน ".number_format($value->parameters_count)." test");
+		}
+
+		$reject = $order->select('id', 'order_no', 'lab_no')
+			->where('order_receive_status', '=', 'rejected')
+			->get();
+		foreach ($reject as $key => $value) {
+			array_push($data, "<span class=\"text-danger\"><i class=\"fa fa-circle\"></i></span> งานถูก Reject Lab NO. ".$value->lab_no);
+		}
+
+		$today = date('Y-m-d');
+		$overdue = $order->select('id', 'order_no', 'lab_no', 'report_due_date')
+		->where('report_due_date', '<', $today)
+		->get();
+		foreach ($reject as $key => $value) {
+			array_push($data, "<span class=\"text-danger\"><i class=\"fa fa-circle\"></i></span> งานเกินกำหนดส่ง Lab NO. ".$value->lab_no);
+		}
+        $total = count($data);
+		return view('apps.staff.inbox', compact('data', 'total'));
 	}
 
-	public function inbox() {
-		return view('apps.staff.inbox');
-	}
-
-	public function calendar() {
+	protected function calendar() {
 		return view('apps.staff.calendar');
 	}
 }
