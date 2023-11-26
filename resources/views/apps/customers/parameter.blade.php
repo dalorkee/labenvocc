@@ -385,7 +385,7 @@ $(document).ready(function() {
 		callback: function(itemKey, opt) {
 			switch (itemKey) {
 				case 'editt':
-				let edit_order_sample_id = $(this).data('id');
+					let edit_order_sample_id = $(this).data('id');
 					let edit_url = "{{ route('customer.parameter.personal.edit', ['order_sample_id'=>':order_sample_id']) }}";
 					edit_url = edit_url.replace(':order_sample_id', edit_order_sample_id);
 					$.ajax({

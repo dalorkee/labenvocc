@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\{Auth,Log};
 use App\DataTables\InboxesDataTable;
 use App\Traits\CommonTrait;
-use App\Models\Order;
+use App\Models\{Order,Calendar};
 
 class StaffController extends Controller
 {
@@ -37,10 +37,6 @@ class StaffController extends Controller
 		];
 		return view(view: 'apps.staff.index', data: compact('data'));
 	}
-
-	// protected function inbox(InboxesDataTable $dataTable): ?object {
-	// 	return $dataTable->render('apps.staff.inbox');
-	// }
 
 	protected function inbox(Order $order): ?object {
 		$data = [];
@@ -76,11 +72,12 @@ class StaffController extends Controller
 		foreach ($reject as $key => $value) {
 			array_push($data, "<span class=\"text-danger\"><i class=\"fa fa-circle\"></i></span> งานเกินกำหนดส่ง Lab NO. ".$value->lab_no);
 		}
-        $total = count($data);
-		return view('apps.staff.inbox', compact('data', 'total'));
+		$total = count($data);
+		return view(view: 'apps.staff.inbox', data: compact('data', 'total'));
 	}
 
 	protected function calendar() {
-		return view('apps.staff.calendar');
+		$calendar = Calendar::Where('user_id', '=', $this->user->id)->get();
+		return view(view: 'apps.staff.calendar', data: compact('calendar'));
 	}
 }

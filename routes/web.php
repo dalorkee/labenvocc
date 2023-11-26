@@ -20,6 +20,7 @@ use App\Http\Controllers\{
 	HospitalController,
 	PrintBundleController,
 	FetchDataController,
+	CalendarController
 };
 use App\Http\Controllers\Admin\{
 	AdminController,
@@ -95,6 +96,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 		'customerHistory' => CustomerHistoryController::class,
 		'sampleupload' => SampleUploadController::class,
 		'fetchdata' => FetchDataController::class,
+		'calendar' => CalendarController::class,
 	]);
 	Route::get('/dashboard', fn() => view('dashboard'))->name('dashboard');
 	Route::name('boundary.')->controller(BoundaryController::class)->group(function() {
