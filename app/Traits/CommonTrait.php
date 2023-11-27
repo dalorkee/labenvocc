@@ -40,7 +40,7 @@ trait CommonTrait {
 	public function calcPercent($data=0, $allData=0): float {
 		return (($data*100)/$allData);
 	}
-    public function envLaborTargetGroup(): array {
+	public function envLaborTargetGroup(): array {
 		return [1=>'แรงงานในระบบ', 2=>'แรงงานนอกระบบ', 3=>'วิสาหกิจชุมชน'];
 	}
 	// public function convertJsDateToMySQL($date='00/00/0000', $separator='/'): ?string {
@@ -93,7 +93,7 @@ trait CommonTrait {
 		});
 		return $result;
 	}
-    public function getStaffDutyById($id=0): array {
+	public function getStaffDutyById($id=0): array {
 		return Duty::select('id', 'duty_name')->whereId($id)->get()->toArray();
 	}
 	public function getSampleCharacter(): array {

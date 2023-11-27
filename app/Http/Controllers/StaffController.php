@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\{Auth,Log};
 use App\DataTables\InboxesDataTable;
-use App\Traits\CommonTrait;
+use App\Traits\{CommonTrait, ColorTrait};
 use App\Models\{Order,Calendar};
 
 class StaffController extends Controller
@@ -13,7 +13,7 @@ class StaffController extends Controller
 	private object $user;
 	private string $user_role;
 
-	use CommonTrait;
+	use CommonTrait, ColorTrait;
 
 	public function __construct() {
 		$this->middleware('auth');
@@ -78,6 +78,7 @@ class StaffController extends Controller
 
 	protected function calendar() {
 		$calendar = Calendar::Where('user_id', '=', $this->user->id)->get();
-		return view(view: 'apps.staff.calendar', data: compact('calendar'));
+		$color = $this->colorClass();
+		return view(view: 'apps.staff.calendar', data: compact('calendar', 'color'));
 	}
 }

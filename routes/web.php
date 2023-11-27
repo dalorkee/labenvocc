@@ -96,7 +96,6 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 		'customerHistory' => CustomerHistoryController::class,
 		'sampleupload' => SampleUploadController::class,
 		'fetchdata' => FetchDataController::class,
-		'calendar' => CalendarController::class,
 	]);
 	Route::get('/dashboard', fn() => view('dashboard'))->name('dashboard');
 	Route::name('boundary.')->controller(BoundaryController::class)->group(function() {
@@ -136,6 +135,11 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 		Route::get('/inbox', 'inbox')->name('inbox');
 		Route::get('/inbox/list', 'getInbox')->name('get.inbox');
 		Route::get('/calendar', 'calendar')->name('calendar');
+	});
+	Route::resource('calendar', CalendarController::class)->except(['update', 'destroy']);
+	Route::name('calendar.')->prefix('calendar')->controller(CalendarController::class)->group(function() {
+		Route::post('/update/id/{id}', 'update')->name('update');
+		Route::get('/delete/id/{id}', 'destroy')->name('destroy');
 	});
 	Route::name('sample.')->prefix('sample')->group(function() {
 		Route::resource('received', SampleReceiveController::class);

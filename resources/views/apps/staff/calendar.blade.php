@@ -42,7 +42,7 @@
 	</div>
 </div>
 <div class="modal fade" id="modal_add" tabindex="-1" role="dialog" aria-hidden="true">
-	<div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+	<div class="modal-dialog modal-lg modal-dialog-centered font-prompt" role="document">
 		<div class="modal-content">
 			<form name="store" action="{{ route('calendar.store') }}" method="POST">
 				@csrf
@@ -62,7 +62,7 @@
 						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
 							<label class="form-label" for="start">เริ่ม <span class="text-red-600">*</span></label>
 							<div class="input-group">
-								<input type="text" name="start" placeholder="วันที่เริ่ม" class="form-control @error('start') is-invalid @enderror input-date" id="date_start">
+								<input type="text" name="start" id="date_start" class="form-control @error('start') is-invalid @enderror" placeholder="วันที่เริ่ม">
 								<div class="input-group-append">
 									<span class="input-group-text fs-xl">
 										<i class="fal fa-calendar-alt"></i>
@@ -74,7 +74,7 @@
 						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
 							<label class="form-label" for="end">สิ้นสุด <span class="text-red-600">*</span></label>
 							<div class="input-group">
-								<input type="text" name="end" placeholder="วันที่สิ้นสุด" class="form-control @error('end') is-invalid @enderror input-date" id="date_end">
+								<input type="text" name="end" id="date_end" class="form-control @error('end') is-invalid @enderror" placeholder="วันที่สิ้นสุด">
 								<div class="input-group-append">
 									<span class="input-group-text fs-xl">
 										<i class="fal fa-calendar-alt"></i>
@@ -90,13 +90,10 @@
 						</div>
 						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
 							<label class="form-label" for="color">เลือกสีพื้นหลัง</label>
-							<select name="class_name" class="form-control">
-								<option value="bg-white border-primary text-primary">สีขาว</option>
-								<option value="bg-primary border-primary text-white">สีน้ำเงิน</option>
-								<option value="bg-info border-info text-white">สีม่วง</option>
-								<option value="bg-success border-success text-white">สีเขียว</option>
-								<option value="bg-warning text-dark border-warning">สีส้ม</option>
-								<option value="bg-danger border-danger text-white">สีแดง</option>
+							<select name="color" class="form-control">
+								@foreach ($color as $key => $val)
+									<option value="{{ $key }}">{{ $key }}</option>
+								@endforeach
 							</select>
 						</div>
 					</div>
@@ -110,10 +107,9 @@
 	</div>
 </div>
 <div class="modal fade" id="modal_show" tabindex="-1" role="dialog" aria-hidden="true">
-	<div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+	<div class="modal-dialog modal-lg modal-dialog-centered font-prompt" role="document">
 		<div class="modal-content">
-			<form name="show" action="{{ route('calendar.show', ['calendar' => 1]) }}" method="POST">
-				@csrf
+			<form name="edit_calendar" id="edit_calendar" action="#" method="GET">
 				<div class="modal-header bg-warning text-dark">
 					<h5 class="modal-title">แก้ไข/ลบ งานในปฏิทิน</h5>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -123,55 +119,51 @@
 				<div class="modal-body">
 					<div class="form-row">
 						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
-							<label class="form-label" for="etitle">หัวข้อ <span class="text-red-600">*</span></label>
-							<input type="text" name="etitle" id="etitle" class="form-control @error('etitle') is-invalid @enderror">
-							@error('etitle')<div class="text-danger text-xs pt-2" role="alert">{{ $message }}</div>@enderror
+							<label class="form-label" for="edit_title">หัวข้อ <span class="text-red-600">*</span></label>
+							<input type="hidden" name="_token" value="{{ csrf_token() }}">
+							<input type="hidden" name="edit_idx" id="edit_idx">
+							<input type="text" name="edit_title" id="edit_title" class="form-control @error('edit_title') is-invalid @enderror">
+							@error('edit_title')<div class="text-danger text-xs pt-2" role="alert">{{ $message }}</div>@enderror
 						</div>
 						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
-							<label class="form-label" for="date_estart">เริ่ม <span class="text-red-600">*</span></label>
+							<label class="form-label" for="date_edit_start">เริ่ม <span class="text-red-600">*</span></label>
 							<div class="input-group">
-								<input type="text" name="estart" id="date_estart" class="form-control @error('start') is-invalid @enderror input-date">
+								<input type="text" name="date_edit_start" id="date_edit_start" class="form-control @error('date_edit_start') is-invalid @enderror">
 								<div class="input-group-append">
 									<span class="input-group-text fs-xl">
 										<i class="fal fa-calendar-alt"></i>
 									</span>
 								</div>
 							</div>
-							@error('start')<div class="text-danger text-xs pt-2" role="alert">{{ $message }}</div>@enderror
+							@error('date_edit_start')<div class="text-danger text-xs pt-2" role="alert">{{ $message }}</div>@enderror
 						</div>
 						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-6 col-lg-6 mb-3">
-							<label class="form-label" for="end">สิ้นสุด <span class="text-red-600">*</span></label>
+							<label class="form-label" for="date_edit_end">สิ้นสุด <span class="text-red-600">*</span></label>
 							<div class="input-group">
-								<input type="text" name="end" placeholder="วันที่สิ้นสุด" class="form-control @error('end') is-invalid @enderror input-date" id="datepicker_end">
+								<input type="text" name="date_edit_end" id="date_edit_end" class="form-control @error('date_edit_end') is-invalid @enderror">
 								<div class="input-group-append">
 									<span class="input-group-text fs-xl">
 										<i class="fal fa-calendar-alt"></i>
 									</span>
 								</div>
 							</div>
-							@error('end')<div class="text-danger text-xs pt-2" role="alert">{{ $message }}</div>@enderror
+							@error('date_edit_end')<div class="text-danger text-xs pt-2" role="alert">{{ $message }}</div>@enderror
 						</div>
 						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
-							<label class="form-label" for="description">รายละเอียด</label>
-							<textarea type="text" name="description" class="form-control"></textarea>
-							@error('description')<div class="text-danger text-xs pt-2" role="alert">{{ $message }}</div>@enderror
+							<label class="form-label" for="edit_description">รายละเอียด</label>
+							<textarea type="text" name="edit_description" id="edit_description" class="form-control"></textarea>
+							@error('edit_description')<div class="text-danger text-xs pt-2" role="alert">{{ $message }}</div>@enderror
 						</div>
 						<div class="form-group col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
-							<label class="form-label" for="color">เลือกสีพื้นหลัง</label>
-							<select name="class_name" class="form-control">
-								<option value="bg-white border-primary text-primary">สีขาว</option>
-								<option value="bg-primary border-primary text-white">สีน้ำเงิน</option>
-								<option value="bg-info border-info text-white">สีม่วง</option>
-								<option value="bg-success border-success text-white">สีเขียว</option>
-								<option value="bg-warning text-dark border-warning">สีส้ม</option>
-								<option value="bg-danger border-danger text-white">สีแดง</option>
-							</select>
+							<label class="form-label" for="edit_color">สีพื้นหลัง</label>
+							<select name="edit_color" id="edit_color" class="form-control"></select>
 						</div>
 					</div>
 				</div>
 				<div class="modal-footer">
+					<button type="submit" class="btn btn-warning">แก้ไข</button>
+					<a type="" class="btn btn-danger">ลบ</a>
 					<button type="button" class="btn btn-secondary" data-dismiss="modal">ปิด</button>
-					<button type="submit" class="btn btn-primary">บันทึก</button>
 				</div>
 			</form>
 		</div>
@@ -199,7 +191,14 @@ $(document).ready(function() {
 		showTodayButton: true,
 		format: "DD/MM/YYYY HH:mm:ss",
 	});
-    $('#date_estart').datetimepicker({
+	$('#date_edit_start').datetimepicker({
+		allowInputToggle: true,
+		showClose: true,
+		showClear: true,
+		showTodayButton: true,
+		format: "DD/MM/YYYY HH:mm:ss",
+	});
+	$('#date_edit_end').datetimepicker({
 		allowInputToggle: true,
 		showClose: true,
 		showClear: true,
@@ -253,16 +252,16 @@ $(document).ready(function() {
 			editable: true,
 			eventLimit: true,
 			events: [
-			@foreach ($calendar as $key => $val)
-			{
-				id: {!! "'".$val->id."'" !!},
-				title: {!! "'".$val->title."'" !!},
-				start: {!! "'".$val->start."'" !!},
-				end: {!! "'".$val->end."'" !!},
-				description: {!! "'".$val->description."'" !!},
-				className: {!! "'".$val->class_name."'" !!}
-			},
-			@endforeach
+				@foreach ($calendar as $key => $val)
+				{
+					id: {!! "'".$val->id."'" !!},
+					title: {!! "'".$val->title."'" !!},
+					start: {!! "'".$val->start."'" !!},
+					end: {!! "'".$val->end."'" !!},
+					description: {!! "'".$val->description."'" !!},
+					className: {!! "'".$color[$val->color]."'" !!}
+				},
+				@endforeach
 			],
 			eventClick: function(info) {
 				let id = info.event.id;
@@ -271,10 +270,14 @@ $(document).ready(function() {
 				$.ajax({
 					method: "GET",
 					url: url,
-					dataType: "JSON",
+					dataType: "json",
 					success: function(calendar) {
-						$('#etitle').val(calendar.title);
-						$('#date_estart').val(moment(calendar.start).format('DD/MM/YYYY HH:mm:ss'));
+						$('#edit_idx').val(calendar.id);
+						$('#edit_title').val(calendar.title);
+						$('#date_edit_start').val(moment(calendar.start).format('DD/MM/YYYY HH:mm:ss'));
+						$('#date_edit_end').val(moment(calendar.end).format('DD/MM/YYYY HH:mm:ss'));
+						$('#edit_description').val(calendar.description);
+						$('#edit_color').empty().append(calendar.color);
 						$('#modal_show').modal({backdrop: 'static', keyboard: false});
 					},
 					error: function(data, status, error) {alert(error);}
@@ -284,5 +287,28 @@ $(document).ready(function() {
 		});
 		calendar.render();
 	});
+</script>
+<script type="text/javascript">
+$('#edit_calendar').on('submit', function(e) {
+	e.preventDefault();
+	let id = $('#edit_idx').val();
+	let url = "{{ route('calendar.update', ['id' => ':id']) }}";
+	url = url.replace(':id', id);
+	var data = $(this).serialize();
+	$.ajax({
+		method: "POST",
+		url: url,
+		dataType: "json",
+		data: data,
+		success: function(response) {
+			if (response) {
+				document.location.href = "{{ route('staff.calendar') }}";
+			}
+		},
+		error: function(error) {
+			alert(error);
+		}
+	});
+});
 </script>
 @endsection

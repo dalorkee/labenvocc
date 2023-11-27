@@ -12,14 +12,14 @@ class Calendar extends Model
 
 	protected $table = 'calendar';
 	protected $primaryKey = 'id';
-    public $timestamps = true;
+	public $timestamps = true;
 	protected $fillable = [
 		'user_id',
 		'title',
 		'start',
 		'end',
 		'description',
-		'class_name',
+		'color',
 	];
 
 	protected function start(): Attribute {
