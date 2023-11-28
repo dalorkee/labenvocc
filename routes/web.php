@@ -139,7 +139,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 	Route::resource('calendar', CalendarController::class)->except(['update', 'destroy']);
 	Route::name('calendar.')->prefix('calendar')->controller(CalendarController::class)->group(function() {
 		Route::post('/update/id/{id}', 'update')->name('update');
-		Route::get('/delete/id/{id}', 'destroy')->name('destroy');
+		Route::post('/delete/id/{id}', 'destroy')->name('destroy');
 	});
 	Route::name('sample.')->prefix('sample')->group(function() {
 		Route::resource('received', SampleReceiveController::class);

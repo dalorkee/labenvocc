@@ -5,6 +5,9 @@
 @section('style')
 <link href="{{ URL::asset('vendor/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css') }}" rel="stylesheet" type="text/css">
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/css/miscellaneous/fullcalendar/fullcalendar.bundle.css') }}" media="screen, print">
+<style type="text/css">
+.calendar-header {background-color: #00abf7!important}
+</style>
 @endsection
 @section('content')
 <ol class="breadcrumb page-breadcrumb text-sm font-prompt">
@@ -22,8 +25,8 @@
 			<div class="row mt-3">
 				<div class="col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 mb-3">
 					<div class="panel">
-						<div class="panel-hdr">
-							<h2>ปฏิทินงาน</span></h2>
+						<div class="panel-hdr calendar-header">
+							<h2 class="text-white"><i class="fa fa-calendar"></i>&nbsp;ปฏิทินงาน</h2>
 							<div class="panel-toolbar">
 								<button class="btn btn-panel bg-transparent fs-xl w-auto h-auto rounded-0" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="Collapse"><i class="fal fa-window-minimize"></i></button>
 								<button class="btn btn-panel bg-transparent fs-xl w-auto h-auto rounded-0" data-action="panel-fullscreen" data-toggle="tooltip" data-offset="0,10" data-original-title="Fullscreen"><i class="fal fa-expand"></i></button>
@@ -46,7 +49,7 @@
 		<div class="modal-content">
 			<form name="store" action="{{ route('calendar.store') }}" method="POST">
 				@csrf
-				<div class="modal-header bg-primary text-white">
+				<div class="modal-header bg-success text-white">
 					<h5 class="modal-title">เพิ่มงานในปฏิทิน</h5>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true"><i class="fal fa-times"></i></span>
@@ -99,8 +102,8 @@
 					</div>
 				</div>
 				<div class="modal-footer">
+					<button type="submit" class="btn btn-success">บันทึก</button>
 					<button type="button" class="btn btn-secondary" data-dismiss="modal">ปิด</button>
-					<button type="submit" class="btn btn-primary">บันทึก</button>
 				</div>
 			</form>
 		</div>
@@ -109,7 +112,7 @@
 <div class="modal fade" id="modal_show" tabindex="-1" role="dialog" aria-hidden="true">
 	<div class="modal-dialog modal-lg modal-dialog-centered font-prompt" role="document">
 		<div class="modal-content">
-			<form name="edit_calendar" id="edit_calendar" action="#" method="GET">
+			<form name="edit_calendar" id="edit_event" action="#" method="POST">
 				<div class="modal-header bg-warning text-dark">
 					<h5 class="modal-title">แก้ไข/ลบ งานในปฏิทิน</h5>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -162,7 +165,7 @@
 				</div>
 				<div class="modal-footer">
 					<button type="submit" class="btn btn-warning">แก้ไข</button>
-					<a type="" class="btn btn-danger">ลบ</a>
+					<button type="button" id="del_event" class="btn btn-danger">ลบ</button>
 					<button type="button" class="btn btn-secondary" data-dismiss="modal">ปิด</button>
 				</div>
 			</form>
@@ -177,6 +180,7 @@
 <script type="text/javascript">
 $(document).ready(function() {
 	$.ajaxSetup({headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}});
+	$('.fc-addEventButton-button').removeClass('btn-default').addClass('btn-success');
 	$('#date_start').datetimepicker({
 		allowInputToggle: true,
 		showClose: true,
@@ -242,7 +246,6 @@ $(document).ready(function() {
 			customButtons: {
 				addEventButton: {
 					text: 'เพิ่มงานใหม่',
-					className: 'btn btn-primary',
 					click: function() {
 						$('#modal_add').modal();
 					}
@@ -289,7 +292,7 @@ $(document).ready(function() {
 	});
 </script>
 <script type="text/javascript">
-$('#edit_calendar').on('submit', function(e) {
+$('#edit_event').on('submit', function(e) {
 	e.preventDefault();
 	let id = $('#edit_idx').val();
 	let url = "{{ route('calendar.update', ['id' => ':id']) }}";
@@ -305,8 +308,27 @@ $('#edit_calendar').on('submit', function(e) {
 				document.location.href = "{{ route('staff.calendar') }}";
 			}
 		},
-		error: function(error) {
-			alert(error);
+		error: function(request, status, error) {
+			alert(request.responseText);
+		}
+	});
+});
+$('#del_event').on('click', function() {
+	let id = $('#edit_idx').val();
+	let url = "{{ route('calendar.destroy', ['id' => ':id']) }}";
+	url = url.replace(':id', id);
+	$.ajax({
+		method: "POST",
+		url: url,
+		dataType: "json",
+		data: {id: id},
+		success: function(response) {
+			if (response) {
+				document.location.href = "{{ route('staff.calendar') }}";
+			}
+		},
+		error: function(request, status, error) {
+			alert(request.responseText);
 		}
 	});
 });
