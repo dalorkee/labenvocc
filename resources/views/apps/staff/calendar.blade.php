@@ -19,7 +19,7 @@
 		<div class="border px-3 pt-3 pb-0 rounded">
 			<ul class="nav">
 				<li class="nav-item"><a class="nav-link" href="{{ route('staff.index') }}"><i class="fal fa-user mr-1"></i>ข้อมูลส่วนตัว</a></li>
-				<li class="nav-item"><a class="nav-link" href="{{ route('staff.inbox') }}"><i class="fal fa-envelope mr-1"></i>กล่องข้อความ</a></li>
+				<li class="nav-item"><a class="nav-link" href="{{ route('staff.inbox') }}"><i class="fal fa-envelope mr-1"></i>กล่องข้อความ <sup><span class="badge badge-icon">{{ $total }}</span></sup></a></li>
 				<li class="nav-item"><a class="nav-link btn btn-sm btn-primary" href="{{ route('staff.calendar') }}"><i class="fal fa-calendar-check mr-1"></i>ปฏิทินงาน</a></li>
 			</ul>
 			<div class="row mt-3">
@@ -252,7 +252,7 @@ $(document).ready(function() {
 				}
 			},
 			// height: 700,
-			editable: true,
+			editable: false,
 			eventLimit: true,
 			events: [
 				@foreach ($calendar as $key => $val)
