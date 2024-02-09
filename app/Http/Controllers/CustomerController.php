@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\{Auth,Log,Storage,File,Route};
-use App\Models\{Order,OrderSample,OrderSampleParameter,Fileupload,Parameter,User};
+use App\Models\{Order,OrderSample,OrderSampleParameter,FileUpload,Parameter,User};
 use App\DataTables\{CustomersDataTable,CustParameterDataTable,CustSampleDataTable,CustVerifyDataTable};
 use App\Traits\{FileTrait,CommonTrait,JsonBoundaryTrait,DbBoundaryTrait,GovernmentTrait};
 use Yajra\DataTables\Facades\DataTables;
