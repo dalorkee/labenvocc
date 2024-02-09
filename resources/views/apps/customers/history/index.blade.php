@@ -92,7 +92,7 @@
 										</a>
 										<address class="fs-sm fw-400 mt-4 text-muted">
 											<i class="fas fa-map-pin mr-2"></i> {{ $data['contact_addr']." ต.".$data['contact_sub_district']." อ.".$data['contact_district']." จ.".$data['contact_province']." ".$data['contact_postcode'] }}</address>
-										<div class="d-flex flex-row">
+										{{-- <div class="d-flex flex-row">
 											<a href="javascript:void(0);" class="mr-2 fs-xxl" style="color:#3b5998">
 												<i class="fab fa-facebook-square"></i>
 											</a>
@@ -102,7 +102,7 @@
 											<a href="javascript:void(0);" class="mr-2 fs-xxl" style="color:#0077B5">
 												<i class="fab fa-linkedin"></i>
 											</a>
-										</div>
+										</div> --}}
 									</div>
 								</div>
 							</div>
