@@ -92,7 +92,7 @@ class StaffController extends Controller
 	protected function index(): object {
 		$affiliation = $this->affiliation();
 		$data = [
-			'first_name' => Auth::user()->userStaff->first_name ,
+			'first_name' => Auth::user()->userStaff->first_name,
 			'last_name' => Auth::user()->userStaff->last_name,
 			'position' => $this->getPositionById(Auth::user()->userStaff->position),
 			'affiliation' => $affiliation[Auth::user()->userStaff->affiliation],
