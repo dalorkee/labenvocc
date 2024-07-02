@@ -45,20 +45,10 @@
 	transition-duration: 0.3s;
 	transition-property: transform, opacity;
 }
-.hoverable:hover, .hoverable:active, .hoverable:focus {
-	transform: translateY(-5px);
-}
-.hoverable:hover:before, .hoverable:active:before, .hoverable:focus:before {
-	opacity: 1;
-	transform: translateY(-5px);
-}
-.navbar-nav > li {
-	margin: 0 20px;
-}
-.swal2-popup {
-	font-size: 1rem !important;
-	font-family: "Prompt", Georgia, serif;
-}
+.hoverable:hover, .hoverable:active, .hoverable:focus {transform: translateY(-5px)}
+.hoverable:hover:before, .hoverable:active:before, .hoverable:focus:before {opacity: 1;transform: translateY(-5px)}
+.navbar-nav > li {margin: 0 20px}
+.swal2-popup {font-size: 1rem !important;font-family: "Prompt", Georgia, serif}
 </style>
 </head>
 <body>

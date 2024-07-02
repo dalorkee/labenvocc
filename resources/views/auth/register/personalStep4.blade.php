@@ -41,26 +41,6 @@
 </div>
 <div class="row font-prompt">
 	<div class="col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12">
-		<div class="alert alert-danger font-prompt text-sm">
-			<section>
-				<h2 class="text-red-900">เงื่อนไขในการกำหนด ชื่อผู้ใช้</h2>
-				<ol class="pl-2 text-red-500">
-					<li>1. มีความยาว 6-10 ตัวอักษร</li>
-					<li>2. ใช้ตัวอักษร A-Z, a-z, 0-9</li>
-				</ol>
-			</section>
-			<section class="mt-4">
-				<h2 class="text-red-900">เงื่อนไขในการกำหนด รหัสผ่าน</h2>
-				<ol class="pl-2 text-red-500">
-					<li>1. มีความยาว 8-12 ตัวอักษร</li>
-					<li>2. รหัสผ่านต้องสามารถใช้เป็น A-Z, a-z, 0-9</li>
-				</ol>
-			</section>
-		</div>
-	</div>
-</div>
-<div class="row font-prompt">
-	<div class="col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12">
 		<section>
 			<form name="step4" action="{{ route('register.personal.step4.post') }}" method="POST" class="needs-validation" novalidate>
 				@csrf
@@ -91,7 +71,7 @@
 															<div class="invalid-feedback" role="alert">@if ($errors->any()) @error('email') {{ $message }} @enderror @else {{ 'โปรดกรอกอีเมล์' }} @endif</div>
 														</div>
 														<div class="col-span-6 sm:col-span-3">
-															<label for="user_password" class="block text-base font-medium text-gray-700">รหัสผ่าน (อย่างน้อย 6 ตัว) <span class="text-red-600">*</span></label>
+															<label for="user_password" class="block text-base font-medium text-gray-700">รหัสผ่าน (8-12 ตัวอักษร) <span class="text-red-600">*</span></label>
 															<input type="password" name="password" value="{{ (isset($userLoginData->password)) ? $userLoginData->password : old('password') }}" id="user_password" class="form-control @error('password') is-invalid @enderror mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="60" size="60" required>
 															<span toggle="#user_password" class="fal fa-eye field-icon toggle-password"></span>
 															<div class="invalid-feedback" role="alert">@if ($errors->any()) @error('password') {{ $message }} @enderror @else {{ 'โปรดกรอกรหัสผ่าน' }} @endif</div>
@@ -110,6 +90,28 @@
 									</div>
 								</div>
 							</div>
+                            <div class="panel-footer">
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 pr-16 pl-16">
+                                        <div class="alert alert-danger font-prompt text-sm">
+                                            <section>
+                                                <h2 class="text-red-900">เงื่อนไขในการกำหนด ชื่อผู้ใช้</h2>
+                                                <ol class="pl-2 text-red-500">
+                                                    <li>1. มีความยาว 6-10 ตัวอักษร</li>
+                                                    <li>2. ใช้ตัวอักษร A-Z, a-z, 0-9</li>
+                                                </ol>
+                                            </section>
+                                            <section class="mt-4">
+                                                <h2 class="text-red-900">เงื่อนไขในการกำหนด รหัสผ่าน</h2>
+                                                <ol class="pl-2 text-red-500">
+                                                    <li>1. มีความยาว 8-12 ตัวอักษร</li>
+                                                    <li>2. รหัสผ่านต้องสามารถใช้เป็น A-Z, a-z, 0-9</li>
+                                                </ol>
+                                            </section>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 						</div>
 					</div>
 					<div class="text-center">
@@ -155,7 +157,7 @@ $(document).ready(function() {
 	});
 });
 </script>
-<script>
+{{-- <script>
 (function() {
 	'use strict';
 	window.addEventListener('load', function() {
@@ -172,6 +174,6 @@ $(document).ready(function() {
 		});
 	}, false);
 })();
-</script>
+</script> --}}
 @endsection
 

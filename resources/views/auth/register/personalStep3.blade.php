@@ -293,7 +293,7 @@ $(document).ready(function() {
 	});
 });
 </script>
-<script>
+{{-- <script>
 (function() {
 	'use strict';
 	window.addEventListener('load', function() {
@@ -310,6 +310,6 @@ $(document).ready(function() {
 		});
 	}, false);
 })();
-</script>
+</script> --}}
 @endsection
 

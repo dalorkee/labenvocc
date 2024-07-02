@@ -30,8 +30,8 @@ class RegisterPersonalController extends Controller
 			'first_name' => 'required|max:200',
 			'last_name' => 'required|max:200',
 			'id_card' => 'required|numeric|digits:13',
-			'taxpayer_no' => 'required|max:60',
-			'email' => 'required|unique:users_customer_detail,email',
+			'taxpayer_no' => 'required|numeric|digits:13',
+			'email' => 'required|unique:users_customer_detail,email|email:rfc,filter',
 			'mobile' => 'required|regex:/(0)[0-9]/|not_regex:/[a-z]/|min:10',
 			'address' => 'required|max:255',
 			'province' => 'required',
@@ -78,7 +78,7 @@ class RegisterPersonalController extends Controller
 			'contact_first_name' => 'required_if:contact_addr_opt,==,2',
 			'contact_last_name' => 'required_if:contact_addr_opt,==,2',
 			'contact_mobile' => 'required_if:contact_addr_opt,==,2|regex:/(0)[0-9]/|not_regex:/[a-z]/|min:10',
-			'contact_email' => 'required_if:contact_addr_opt,==,2|unique:users_customer_detail,contact_email',
+			'contact_email' => 'required_if:contact_addr_opt,==,2|unique:users_customer_detail,contact_email|email:rfc,filter',
 			'contact_addr' => 'required_if:contact_addr_opt,==,2',
 			'contact_province' => 'required_if:contact_addr_opt,==,2',
 			'contact_district' => 'required_if:contact_addr_opt,==,2',
@@ -124,9 +124,9 @@ class RegisterPersonalController extends Controller
 	protected function createPersonalStep4Post(Request $request): object {
 		$validatedLoginData = $request->validate([
 			'username' => 'required|min:6|max:10|unique:users,username|regex:/^[a-zA-Z0-9]+$/',
-			'email' => 'required|unique:users,email',
-			'password' => 'required|min:6|max:12|required_with:password_confirmation|same:password_confirmation',
-			'password_confirmation' => 'required|min:6|max:12'
+			'email' => 'required|unique:users,email|email:rfc,filter',
+			'password' => 'required|min:8|max:12|required_with:password_confirmation|same:password_confirmation',
+			'password_confirmation' => 'required|min:8|max:12'
 		]);
 		try {
 			$userLoginData = ($request->session()->missing('userLoginData')) ?  new User() : $request->session()->get('userLoginData');

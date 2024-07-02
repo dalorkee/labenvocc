@@ -6,10 +6,10 @@
 <link href="{{ URL::asset('css/step.css') }}" rel="stylesheet">
 <style type="text/css">
 .text-primary-1 {color: #1877F2 !important}
-.panel-hdr h2{font-size: 1.275em;}
-::-webkit-input-placeholder{ /* Edge */font-size: 1em;}
-:-ms-input-placeholder{ /* IE 10-11 */font-size: 1em;}
-::placeholder{font-size: 1em;}
+.panel-hdr h2{font-size: 1.275em}
+::-webkit-input-placeholder{font-size: 1em}
+:-ms-input-placeholder{font-size: 1em}
+::placeholder{font-size: 1em}
 </style>
 @endsection
 @section('content')
@@ -106,13 +106,13 @@
 														</div>
 														<div class="col-span-6 sm:col-span-3">
 															<label for="taxpayer_no" class="block text-base font-medium text-gray-800">เลขผู้เสียภาษี</label>
-															<input type="text" name="taxpayer_no" value="{{ (isset($userData->taxpayer_no)) ? $userData->taxpayer_no : old('taxpayer_no') }}" class="form-control @error('taxpayer_no') is-invalid @enderror mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="30" size="30" required>
+															<input type="text" name="taxpayer_no" value="{{ (isset($userData->taxpayer_no)) ? $userData->taxpayer_no : old('taxpayer_no') }}" class="form-control @error('taxpayer_no') is-invalid @enderror mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="13" size="13" required>
 															<span class="invalid-feedback" role="alert">@if ($errors->any()) @error('taxpayer_no') {{ $message }} @enderror @else {{ 'โปรดกรอกเลขผู้เสียภาษี' }} @endif</span>
 														</div>
 														<div class="col-span-6 sm:col-span-3">
 															<label for="email" class="block text-base font-medium text-gray-800">อีเมล์ <span class="text-red-600">*</span></label>
-															<input type="text" name="email" value="{{ (isset($userData->email)) ? $userData->email : old('email') }}" class="form-control @error('email') is-invalid @enderror mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="90" size="90" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" required>
-															<span class="invalid-feedback" role="alert">@if ($errors->any()) @error('email') {{ $message }} @enderror @else {{ 'โปรดกรอกอีเมล์' }} @endif</span>
+															<input type="text" name="email" value="{{ (isset($userData->email)) ? $userData->email : old('email') }}" class="form-control @error('email') is-invalid @enderror mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" maxlength="90" size="90" pattern="^[\w\.-]+@[a-zA-Z\d\.-]+\.[a-zA-Z]{2,}$" required>
+															<span class="invalid-feedback" role="alert">@if ($errors->any())  @error('email') {{ $message }} @enderror @else {{ 'โปรดกรอกemail' }} @endif</span>
 														</div>
 														<div class="col-span-6 sm:col-span-3">
 															<label for="mobile" class="block text-base font-medium text-gray-800">โทรศัพท์เคลื่อนที่ <span class="text-red-600">*</span></label>
@@ -190,7 +190,7 @@
 </div>
 @endsection
 @section('script')
-<script>
+<script type="text/javascript">
 $(document).ready(function() {
 	$.ajaxSetup({headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}});
 	$('input[name="title_name"]').on('change', function() {
@@ -285,7 +285,7 @@ $(document).ready(function() {
 	}
 });
 </script>
-<script>
+{{-- <script type="text/javascript">
 (function() {
 	'use strict';
 	window.addEventListener('load', function() {
@@ -303,6 +303,6 @@ $(document).ready(function() {
 		});
 	}, false);
 })();
-</script>
+</script> --}}
 @endsection
 
